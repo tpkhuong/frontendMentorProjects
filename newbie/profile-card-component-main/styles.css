@@ -1,0 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap");
+
+:root {
+  --clr-primary: hsl(185, 80%, 50%);
+  --clr-secondary: hsl(229, 23%, 23%);
+  --clr-tertiary: hsl(227, 10%, 46%);
+
+  --clr-neutral: hsl(0, 0%, 59%);
+
+  --fs-200: 1.125;
+
+  --fw-400: 400;
+  --fw-700: 700;
+
+  --mobile-width: 23.4375em;
+  --desktop-width: 90em;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+body {
+  font-family: "Kumbh Sans";
+  line-height: 1.5;
+  font-size: var(--fs-200);
+}
+
+.profile-cards {
+  background: hsl(0, 0%, 59%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.background {
+  margin: 0 auto;
+  background-color: var(--clr-primary);
+  width: 20rem;
+  height: 25rem;
+  position: relative;
+  overflow: hidden;
+  border-radius: 1em;
+  box-shadow: 0 10px 6px -6px #777;
+}
+
+.foreground {
+  background-color: #fff;
+  width: 20rem;
+  height: 15rem;
+  bottom: 0;
+  position: absolute;
+}
+
+.circle {
+  background-image: url(images/image-victor.jpg);
+  background-size: cover;
+  background-position: center;
+  width: 5em;
+  height: 5em;
+  background-color: red;
+  margin: 0 auto;
+  transform: translateY(7.5em);
+  border-radius: 50%;
+}
