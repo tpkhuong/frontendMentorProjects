@@ -22,6 +22,13 @@
   box-sizing: border-box;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+}
+
 img {
   max-width: 100%;
   height: auto;
@@ -32,6 +39,7 @@ body {
   font-family: "Kumbh Sans";
   line-height: 1.5;
   font-size: var(--fs-200);
+  margin: 0;
 }
 
 .profile-cards {
@@ -42,10 +50,10 @@ body {
 }
 
 .background {
+  background-color: #fff;
   margin: 0 auto;
-  background-color: var(--clr-primary);
   width: 20rem;
-  height: 25rem;
+  height: 23rem;
   position: relative;
   overflow: hidden;
   border-radius: 1em;
@@ -53,11 +61,12 @@ body {
 }
 
 .foreground {
-  background-color: #fff;
+  background-color: var(--clr-primary);
   width: 20rem;
-  height: 15rem;
-  bottom: 0;
-  position: absolute;
+  height: 8rem;
+  /* bottom: 0; */
+  /* if we use position:absolute we want the background to have our --clr-primary color and foreground to have the #fff */
+  /* position: absolute; */
 }
 
 .circle {
@@ -68,6 +77,41 @@ body {
   height: 5em;
   background-color: red;
   margin: 0 auto;
-  transform: translateY(7.5em);
+  transform: translateY(-2.6em);
   border-radius: 50%;
+}
+
+.content {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.city {
+  font-size: 0.9rem;
+}
+
+.light-gray,
+.city {
+  color: var(--clr-neutral);
+}
+
+.bottom-content {
+  display: flex;
+  border-top: 1px solid var(--clr-neutral);
+  justify-content: space-evenly;
+  text-align: center;
+}
+
+.bottom-content p {
+  display: inline-flex;
+  flex-direction: column;
+  font-size: var(--fs-200);
+  margin: 1.5em 0;
+  font-weight: var(--fw-700);
+}
+
+.bottom-content span {
+  font-size: 0.8rem;
+  font-weight: var(--fw-400);
+  color: var(--clr-neutral);
 }
