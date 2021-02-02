@@ -45,3 +45,9 @@ body {
   font-size: var(--fs-200);
   margin: 0;
 }
+
+.arrow-text::after {
+  content: url(images/icon-arrow-down.svg);
+  width: 3em;
+  height: 3em;
+}
