@@ -46,8 +46,84 @@ body {
   margin: 0;
 }
 
-.arrow-text::after {
-  content: url(images/icon-arrow-down.svg);
-  width: 3em;
-  height: 3em;
+/* .arrow-text::after {
+    content: url(images/icon-arrow-down.svg);
+    width: 3em;
+    height: 3em;
+} */
+
+.columns {
+  display: flex;
+}
+
+.columns > * {
+  flex-basis: 100%;
+}
+
+.columns > * + * {
+  margin: 1em 0 0 0;
+}
+
+[class*="col-"] {
+  flex-basis: var(--flex-col, 100%);
+}
+
+.col-2 {
+  --flex-col: 50%;
+}
+
+.col-3 {
+  --flex-col: 75%;
+}
+
+.col-4 {
+  --flex-col: 25%;
+}
+
+.accordion-container {
+  width: 100%;
+  min-height: 100vh;
+  max-width: var(--desktop-breakpoint);
+  background: linear-gradient(var(--clr-bg-primary), var(--clr-bg-secondary));
+  margin: 0 auto;
+  display: flex;
+}
+
+.content-container {
+  width: 85%;
+  height: 60vh;
+  border: 1px solid red;
+  margin: auto auto;
+  border-radius: 2em;
+  background-color: var(--clr-dividers);
+  box-shadow: 0 0 5rem 0 rgba(142, 13, 146, 0);
+}
+
+/* background img */
+
+.image {
+  position: relative;
+  transform: translateY(10em);
+}
+
+.image::before {
+  content: url(images/illustration-box-desktop.svg);
+  position: absolute;
+  left: -5em;
+}
+
+.bg-img {
+  background-image: url(images/bg-pattern-desktop.svg),
+    url(images/illustration-woman-online-desktop.svg);
+  background-repeat: no-repeat, no-repeat;
+  background-size: cover, auto;
+  background-position: right center, -3rem 9rem;
+  position: relative;
+}
+
+.bg-img::before {
+  content: url(images/illustration-box-desktop.svg);
+  position: absolute;
+  left: -6.5em;
+  top: 23em;
 }
