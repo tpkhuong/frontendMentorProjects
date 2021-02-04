@@ -54,6 +54,7 @@ body {
 
 .columns {
   display: flex;
+  flex-flow: column;
 }
 
 .columns > * {
@@ -69,15 +70,28 @@ body {
 }
 
 .col-2 {
-  --flex-col: 50%;
+  --flex-col: 30%;
 }
 
 .col-3 {
-  --flex-col: 75%;
+  --flex-col: 70%;
 }
 
 .col-4 {
   --flex-col: 25%;
+}
+
+/* width: 143px / 16 = 8.9375
+height: 450px / 16 = 28.125
+*/
+
+@media screen and (min-width: 71.875em) {
+  .bg-img::before {
+    content: url(images/illustration-box-desktop.svg);
+    position: absolute;
+    left: -6.5em;
+    top: 23em;
+  }
 }
 
 .accordion-container {
@@ -101,6 +115,8 @@ body {
 
 /* background img */
 
+/* mobile layout */
+
 .image {
   position: relative;
   transform: translateY(10em);
@@ -121,9 +137,16 @@ body {
   position: relative;
 }
 
-.bg-img::before {
-  content: url(images/illustration-box-desktop.svg);
+.content-container picture {
+  display: block;
+  transform: translate(1.4em, -9em);
   position: absolute;
-  left: -6.5em;
-  top: 23em;
+}
+
+.bg-img {
+  background-image: url(images/bg-pattern-mobile.svg);
+  /* url(images/illustration-woman-online-mobile.svg); */
+  background-repeat: no-repeat;
+  background-size: auto;
+  background-position: center -1px;
 }
