@@ -81,6 +81,10 @@ body {
   --flex-col: 25%;
 }
 
+.container {
+  padding: 0 1em;
+}
+
 /* width: 143px / 16 = 8.9375
 height: 450px / 16 = 28.125
 */
@@ -149,4 +153,14 @@ height: 450px / 16 = 28.125
   background-repeat: no-repeat;
   background-size: auto;
   background-position: center -1px;
+}
+
+.section-title {
+  font-size: 2rem;
+  text-transform: uppercase;
+  /* text-align: center; */
+}
+
+.question p {
+  font-size: 0.8rem;
 }
