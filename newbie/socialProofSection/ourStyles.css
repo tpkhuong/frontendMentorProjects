@@ -1,0 +1,105 @@
+@import url("https://fonts.googleapis.com/css2?family=Spartan:wght@400;500;700;900&display=swap");
+
+:root {
+  --clr-primary: hsl(300, 43%, 22%);
+  --clr-secondary: hsl(333, 80%, 67%);
+
+  --clr-neutral-200: hsl(303, 10%, 53%);
+  --clr-neutral-300: hsl(300, 24%, 96%);
+  --clr-neutral-400: hsl(0, 0%, 100%);
+
+  --fs-200: 0.9375rem;
+  --fs-300: 1rem;
+
+  --fw-400: 400;
+  --fw-500: 500;
+  --fw-600: 600;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+body {
+  font-family: "Spartan";
+  line-height: 1.5;
+  font-size: var(--fs-200);
+  margin: 0;
+}
+
+/* utilities */
+
+.flow-content > * + * {
+  margin: 1em 0 0 0;
+}
+
+.columns {
+  display: flex;
+  flex-flow: column;
+}
+
+.columns > * {
+  flex-basis: 100%;
+}
+
+.columns > * + * {
+  margin: 1em 0 0 0;
+}
+
+[class^="col-"] {
+  flex-basis: var(--flex-col, 100%);
+}
+
+.col-1 {
+  --flex-col: 25%;
+}
+.col-2 {
+  --flex-col: 50%;
+}
+.col-3 {
+  --flex-col: 75%;
+}
+
+[class^="bg-"] {
+  background: var(--bg, --clr-primary);
+  color: var(--fg, #fff);
+}
+
+.bg-dark {
+  --bg: var(--clr-primary);
+  --fg: var(--clr-neutral-300);
+}
+
+.bg-light {
+  --bg: var(--clr-neutral-200);
+  --fg: var(--clr-primary);
+}
+
+.bg-accent {
+  --fg: var(--clr-secondary);
+}
+
+/* utilities */
+
+/* typography */
+
+/* general layouts */
+
+/* general styles */
+
+/* individual sections */
