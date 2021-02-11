@@ -25,7 +25,8 @@
 h1,
 h2,
 h3,
-h4 {
+h4,
+body {
   margin: 0;
 }
 
@@ -103,3 +104,18 @@ body {
 /* general styles */
 
 /* individual sections */
+
+.hero {
+  background-image: url("images/bg-pattern-top-mobile.svg"),
+    url("images/bg-pattern-bottom-mobile.svg");
+  background-size: cover, cover;
+  background-position: 2rem -16rem, 1rem 15rem;
+}
+@media screen and (min-width: 50em) {
+  .hero {
+    background-image: url("images/bg-pattern-top-desktop.svg"),
+      url("images/bg-pattern-bottom-desktop.svg");
+    background-size: cover, cover;
+    background-position: -35rem -10rem, 10rem 45rem;
+  }
+}
