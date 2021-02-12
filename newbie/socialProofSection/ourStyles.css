@@ -22,11 +22,12 @@
   box-sizing: border-box;
 }
 
+body,
 h1,
 h2,
 h3,
 h4,
-body {
+p {
   margin: 0;
 }
 
@@ -62,7 +63,7 @@ body {
   margin: 1em 0 0 0;
 }
 
-[class^="col-"] {
+[class*="col-"] {
   flex-basis: var(--flex-col, 100%);
 }
 
@@ -76,7 +77,7 @@ body {
   --flex-col: 75%;
 }
 
-[class^="bg-"] {
+[class*="bg-"] {
   background: var(--bg, --clr-primary);
   color: var(--fg, #fff);
 }
@@ -87,7 +88,7 @@ body {
 }
 
 .bg-light {
-  --bg: var(--clr-neutral-200);
+  --bg: var(--clr-neutral-300);
   --fg: var(--clr-primary);
 }
 
@@ -101,15 +102,26 @@ body {
 
 /* general layouts */
 
+.wrapper {
+  max-width: 62.5em;
+  padding: 1.5em;
+}
+
 /* general styles */
+
+.selling-points-stat-rating,
+.customer-review {
+  border-radius: 0.5em;
+}
 
 /* individual sections */
 
+/* hero */
 .hero {
   background-image: url("images/bg-pattern-top-mobile.svg"),
     url("images/bg-pattern-bottom-mobile.svg");
   background-size: cover, cover;
-  background-position: 2rem -16rem, 1rem 15rem;
+  background-position: 30rem -10rem, 1rem 15rem;
 }
 @media screen and (min-width: 50em) {
   .hero {
@@ -118,4 +130,75 @@ body {
     background-size: cover, cover;
     background-position: -35rem -10rem, 10rem 45rem;
   }
+}
+
+/* selling-points */
+
+.selling-points {
+  margin-top: 2.5rem;
+}
+
+.selling-points-content {
+  text-align: center;
+}
+
+.selling-points-content h2 {
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--clr-primary);
+}
+.selling-points-content p {
+  margin: 3rem 0;
+}
+
+/* selling-points stars */
+
+.selling-points-star-ratings {
+  text-align: center;
+}
+
+.selling-points-stat-rating .stars-container:first-child {
+  margin-top: 1rem;
+}
+
+.selling-points-stat-rating p:last-child {
+  margin: 1rem 0;
+  font-weight: var(--fw-600);
+}
+
+.stars-container {
+  display: flex;
+  justify-content: center;
+}
+
+.stars-container > * + * {
+  margin-left: 0.3rem;
+}
+
+/* customer reviews */
+
+.customer-reviews {
+  margin-top: 3.5rem;
+}
+
+.customer-review {
+  padding: 1.5em;
+}
+
+.customer-info img {
+  border-radius: 50%;
+}
+
+.customer-info {
+  display: grid;
+  grid-template-columns: 4em 1fr;
+  align-items: center;
+}
+
+.customer-info-right-side {
+  margin-left: 2em;
+}
+
+.customer-qoute {
+  margin: 1.5em 0 0 0;
 }
