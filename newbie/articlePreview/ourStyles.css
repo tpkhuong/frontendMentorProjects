@@ -172,6 +172,15 @@ body {
   /* z-index: -1; */
 }
 
+.author-dark-container::after {
+  content: "";
+  display: inline-block;
+  max-width: 1rem;
+  min-height: 1rem;
+  border: 1em solid red;
+  position: absolute;
+}
+
 .dark-container-text {
   font-size: 1rem;
   text-transform: uppercase;
