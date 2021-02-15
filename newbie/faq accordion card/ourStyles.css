@@ -109,7 +109,7 @@ height: 450px / 16 = 28.125
     content: url(images/illustration-box-desktop.svg);
     position: absolute;
     left: -8.3em;
-    top: 16em;
+    top: 11em;
   }
 }
 
@@ -143,13 +143,13 @@ height: 450px / 16 = 28.125
 .content-container picture {
   display: block;
   position: absolute;
-  transform: translate(1.4em, -9em);
+  transform: translate(1em, -10em);
   /* top: 50%; */
 }
 
 @media screen and (min-width: 25em) {
   .content-container picture {
-    transform: translate(-55%, -200%);
+    transform: translate(-12em, -28em);
     top: 45%;
     left: 50%;
   }
@@ -267,7 +267,7 @@ input {
       url(images/illustration-woman-online-desktop.svg);
     background-repeat: no-repeat, no-repeat;
     background-size: cover, auto;
-    background-position: right center, -5.3rem 4rem;
+    background-position: right center, -5rem 1rem;
     position: relative;
   }
   .faq-content {
