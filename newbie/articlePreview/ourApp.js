@@ -27,14 +27,6 @@ function toggleBetweenBottomContainersMobile(
         console.log(event.target);
         var parentElementClassName = event.target.parentElement.className;
 
-        var { checkWidthOfThisElement } = ourSelectors();
-        /* we will apply our class based on the width of the element with the class content*/
-        if (checkWidthOfThisElement.scrollWidth > 900) {
-          console.log("content is over 900");
-        } else {
-          console.log("content less than 900");
-        }
-
         if (parentElementClassName.includes("dark")) {
           //the btn we clicked its parent has a dark background
           changeToLightBackground(event, darkBackgroundContainer);
@@ -42,6 +34,17 @@ function toggleBetweenBottomContainersMobile(
           //the btn we clicked its parent has a light
           changeToDarkBackground(event, darkBackgroundContainer);
         }
+
+        var { checkWidthOfThisElement } = ourSelectors();
+        /* 
+        don't think we need to check or run algorithm based on width of container
+        we will apply our class based on the width of the element with the class content*/
+        // if (checkWidthOfThisElement.scrollWidth > 900) {
+        //   console.log("content is over 900");
+        // } else {
+
+        //   console.log("content less than 900");
+        // }
       }
     );
   });
