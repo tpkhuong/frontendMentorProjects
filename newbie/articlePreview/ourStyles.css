@@ -140,10 +140,15 @@ body {
     margin: auto;
     background-color: #fff;
     border-radius: 1em;
-    overflow: hidden;
+    overflow: visible;
 
     display: grid;
     grid-template-columns: 25rem 1fr;
+  }
+  /* img container */
+
+  .img-container img {
+    border-radius: 1em 0 0 1em;
   }
 }
 
@@ -228,6 +233,22 @@ body {
   z-index: -1;
 }
 
+@media screen and (min-width: 56.25em) {
+  .author-dark-container::after {
+    content: "";
+    display: inline-block;
+    max-width: 1rem;
+    min-height: 1rem;
+    border-left: 1em solid transparent;
+    border-right: 1em solid transparent;
+    border-top: 1em solid var(--clr-very-dark-blue);
+    position: absolute;
+    /* move it to corrent stop */
+    bottom: 0;
+    transform: translate(8.5rem, 1rem);
+  }
+}
+
 /* desktop display: for the pointing down arrow
 
 .author-dark-container::after {
@@ -252,7 +273,7 @@ border-top: 1em solid red;
 .social-icon-container {
   display: flex;
   flex-basis: 40%;
-  margin: 0 auto;
+  margin: 0 auto 0 auto;
   justify-content: space-evenly;
 }
 
@@ -262,19 +283,36 @@ border-top: 1em solid red;
 
 @media screen and (min-width: 56.25em) {
   .author-dark-container {
-    min-width: auto;
-    /* min-height: auto; */
+    transform: translate(6.5rem, -5.3rem);
+    /* width: 15rem; */
+    min-width: 17rem;
+    min-height: 4rem;
     left: auto;
     right: 0;
     top: 0;
+    border-radius: 1em;
   }
 
+  .dark-container-text {
+    margin-left: auto;
+    font-size: 0.8rem;
+  }
   .btn-dark:last-child {
+    position: absolute;
+    transform: translate(8.3rem, 5rem);
+  }
+
+  .social-icon-container {
+    margin: 0 auto 0 0;
+    flex-basis: 45%;
+  }
+  /* might not need the code below */
+  /* .btn-dark:last-child {
     flex-basis: 9%;
     display: inline-flex;
   }
 
   .btn-dark:last-child img {
     margin: auto;
-  }
+  } */
 }
