@@ -123,6 +123,14 @@ body {
 
 /* individual sections */
 
+/* testimonials */
+
+@media screen and (min-width: 60em) {
+  .testimonial {
+    display: flex;
+  }
+}
+
 /* img container */
 
 .img-container {
@@ -169,16 +177,34 @@ body {
   color: var(--clr-grayish-blue);
 }
 
+@media screen and (min-width: 60em) {
+  .img-container {
+    flex-basis: 45%;
+    order: 1;
+  }
+  .text-container {
+    flex-basis: 55%;
+  }
+  .text-content {
+    transform: translateX(7rem);
+  }
+}
+
 /****** arrow container looking good.  ******/
 .arrows {
   /******   ******/
   /* when we use position: absolute on this element. make sure to use widht: 5rem */
   /* padding: 0.5rem; */
-  max-width: 6rem;
-  border: 2px solid red;
+  /* border: 2px solid red; */
+  width: 5rem;
   border-radius: 100vw;
   display: flex;
   justify-content: space-between;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  transform: translate(8.7rem, -1.3rem);
+  background-color: #fff;
 }
 
 [class*="-arrow"] {
@@ -188,7 +214,7 @@ body {
   /* margin: 0.5rem 0.5rem; */
   background-size: contain;
   background-repeat: no-repeat;
-  margin: 1em;
+  margin: 0.6em;
 }
 
 .left-arrow {
