@@ -137,15 +137,22 @@ body {
   background-image: url("images/pattern-bg.svg");
   background-size: cover;
   padding: 2.5em;
+
+  /* giving our img container a position: relative it was cover our text when we use transform: translateX() on our 
+  class of text-content div element. fix was to add z-index on the siling element to img-container which is text-container
+  */
+  position: relative;
 }
 
 .img-container img {
   border-radius: 0.5em;
+  box-shadow: 0 1em 1em rgba(0, 0, 0, 0.1);
 }
 
 /* text-container/text-content */
 
 .text-container {
+  z-index: 10;
   margin: 1em 0 0 0;
   min-height: 22em;
   padding: 1.5em;
@@ -179,14 +186,29 @@ body {
 
 @media screen and (min-width: 60em) {
   .img-container {
-    flex-basis: 45%;
+    flex-basis: 50%;
     order: 1;
   }
   .text-container {
-    flex-basis: 55%;
+    flex-basis: 50%;
+    background-size: 6rem, contain;
+    text-align: left;
+    transform: translateY(10rem);
   }
   .text-content {
     transform: translateX(7rem);
+  }
+  .text-content-quote {
+    font-size: 1.8rem;
+  }
+  .text-content-name {
+    flex-flow: row;
+    align-items: center;
+    font-size: 1.3rem;
+  }
+  .text-content-role {
+    margin-left: 0.5em;
+    font-size: inherit;
   }
 }
 
@@ -205,6 +227,8 @@ body {
   position: absolute;
   transform: translate(8.7rem, -1.3rem);
   background-color: #fff;
+
+  box-shadow: 0 1em 1em rgba(0, 0, 0, 0.1);
 }
 
 [class*="-arrow"] {
@@ -232,5 +256,20 @@ body {
   /* margin: 0.5rem 0.5rem; */
   /* background-size: contain;
   background-repeat: no-repeat; */
+  transform: translateX(0.4rem);
   background-image: url(images/icon-next.svg);
+}
+
+@media screen and (min-width: 60em) {
+  .arrows {
+    width: 7rem;
+    transform: translate(6rem, -1rem);
+  }
+  .right-arrow {
+    transform: translateX(0.5rem);
+  }
+  [class*="-arrow"] {
+    margin: 0.9rem;
+    padding: 0.7rem;
+  }
 }
