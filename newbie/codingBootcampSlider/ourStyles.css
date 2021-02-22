@@ -154,19 +154,19 @@ body {
 .text-container {
   z-index: 10;
   margin: 1em 0 0 0;
-  min-height: 22em;
+  min-height: 17.3em;
   padding: 1.5em;
   text-align: center;
   background-image: url("images/pattern-quotes.svg"),
     url("images/pattern-curve.svg");
 
-  background-size: 4.2rem, contain;
+  background-size: 3.7rem, 17rem;
   background-repeat: no-repeat;
-  background-position: top, bottom;
+  background-position: top, -1rem 13rem;
 }
 
 .text-content-quote {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: var(--clr-dark-blue);
   /* font-weight: var(--fw-500); */
 }
@@ -174,13 +174,13 @@ body {
 .text-content-name {
   display: inline-flex;
   flex-flow: column;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: var(--fw-700);
   margin: 0.8em 0 0 0;
 }
 
 .text-content-role {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: var(--clr-grayish-blue);
 }
 
