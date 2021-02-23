@@ -121,6 +121,13 @@ body {
   padding: 0.5em;
 }
 
+.testimonial {
+  position: absolute;
+}
+
+.testimonial:nth-of-type(2) {
+  transform: translateY(-999rem);
+}
 /* individual sections */
 
 /* testimonials */
@@ -152,7 +159,6 @@ body {
 /* text-container/text-content */
 
 .text-container {
-  z-index: 10;
   margin: 1em 0 0 0;
   min-height: 17.3em;
   padding: 1.5em;
@@ -185,15 +191,31 @@ body {
 }
 
 @media screen and (min-width: 60em) {
+  /* we have to give  */
   .img-container {
     flex-basis: 50%;
     order: 1;
+    background-size: 656px;
+    background-repeat: no-repeat;
   }
   .text-container {
+    /* the z-index on this selector is making the text in our blockquote for both profile container go on top of each other. */
+    z-index: 10;
+    /***** we have to remove the z-index: 10 declartion for .text-container selector.
+    we have to give the img container a lower z-index than our text-container.
+    if we want the female container to appear we have to give the img container of the female profile a lower z-index than the text-container of the female profile
+    so the text appears above the img. ***** we need a background-color on the text-container. *****
+    *****/
+    /***** one solution without using background-color on the profile(showing/above) or using z-index on the img-container and the text-container 
+    since both our profile container has position: aboslute we can declare transform: translateY(-999em) [not in the media query: we want this effect at mobile layout too] 
+    on the element that we dont want showing.
+    *****/
     flex-basis: 50%;
-    background-size: 6rem, contain;
+    background-size: 8rem, 550px;
     text-align: left;
-    transform: translateY(10rem);
+    max-height: 30rem;
+    transform: translateY(13rem);
+    background-position: 17rem 0rem, 0rem 21.3rem;
   }
   .text-content {
     transform: translateX(7rem);
