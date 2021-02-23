@@ -28,8 +28,3 @@ function touchFuntionality(
   });
 }
 // height 173 left 32 top 407 width 311
-
-console.log("work on swipe feature");
-console.log(
-  "change height of text container element, change font-size of blockquote and name and role"
-);
