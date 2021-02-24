@@ -125,9 +125,13 @@ body {
   position: absolute;
 }
 
-.testimonial:nth-of-type(2) {
+.move-off-screen {
   transform: translateY(-999rem);
 }
+
+/* .testimonial:nth-of-type(2) {
+  transform: translateY(-999rem);
+} */
 /* individual sections */
 
 /* testimonials */
