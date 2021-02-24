@@ -125,6 +125,10 @@ body {
   position: absolute;
 }
 
+.move-off-screen {
+  transform: translateY(-999em);
+}
+
 .testimonial:nth-of-type(2) {
   transform: translateY(-999rem);
 }
