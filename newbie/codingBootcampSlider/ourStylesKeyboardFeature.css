@@ -1,0 +1,301 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
+
+:root {
+  --clr-dark-blue: hsl(240, 38%, 20%);
+  --clr-grayish-blue: hsl(240, 18%, 77%);
+
+  --fs-200: 1rem;
+  --fs-300: 1.5rem;
+  --fs-400: 2rem;
+
+  --fw-300: 300;
+  --fw-500: 500;
+  --fw-700: 700;
+
+  --ff-inter: "Inter";
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+blockquote {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+body {
+  font-family: "Inter";
+  line-height: 1.5;
+  font-size: var(--fs-200);
+}
+
+/* utilities */
+
+.flow-content > * + * {
+  margin: 1em 0 0 0;
+}
+
+.columns {
+  display: flex;
+  flex-flow: column;
+}
+
+.columns > * {
+  flex-basis: 100%;
+}
+
+.columns > * + * {
+  margin: 1em 0 0 0;
+}
+
+/* @media screen and (min-width: 84.375em) {
+  .columns {
+    flex-flow: row;
+  }
+  .col-2 {
+    --flex-col: 40%;
+  }
+  .columns > * + * {
+    margin: 0 0 0 2em;
+  }
+} */
+
+[class*="col-"] {
+  flex-basis: var(--flex-col, 100%);
+}
+
+.col-1 {
+  --flex-col: 25%;
+}
+
+.col-3 {
+  --flex-col: 75%;
+}
+
+[class*="bg-"] {
+  background: var(--bg, --clr-primary);
+  color: var(--fg, #fff);
+}
+
+/* .bg-dark {
+  --bg: var(--clr-primary);
+  --fg: var(--clr-neutral-300);
+}
+
+.bg-light {
+  --bg: var(--clr-neutral-300);
+  --fg: var(--clr-primary);
+}
+
+.bg-accent {
+  --fg: var(--clr-secondary);
+} */
+
+/* utilities */
+
+/* general styles */
+
+/* general layout */
+
+.testimonials {
+  padding: 0.5em;
+}
+
+.testimonial {
+  position: absolute;
+}
+
+.move-off-screen {
+  transform: translateY(-999rem);
+}
+
+/* .testimonial:nth-of-type(2) {
+  transform: translateY(-999rem);
+} */
+/* individual sections */
+
+/* testimonials */
+
+@media screen and (min-width: 60em) {
+  .testimonial {
+    display: flex;
+  }
+}
+
+/* img container */
+
+.img-container {
+  background-image: url("images/pattern-bg.svg");
+  background-size: cover;
+  padding: 2.5em;
+
+  /* giving our img container a position: relative it was cover our text when we use transform: translateX() on our 
+  class of text-content div element. fix was to add z-index on the siling element to img-container which is text-container
+  */
+  position: relative;
+}
+
+.img-container img {
+  border-radius: 0.5em;
+  box-shadow: 0 1em 1em rgba(0, 0, 0, 0.1);
+}
+
+/* text-container/text-content */
+
+.text-container {
+  margin: 1em 0 0 0;
+  min-height: 17.3em;
+  padding: 1.5em;
+  text-align: center;
+  background-image: url("images/pattern-quotes.svg"),
+    url("images/pattern-curve.svg");
+
+  background-size: 3.7rem, 17rem;
+  background-repeat: no-repeat;
+  background-position: top, -1rem 13rem;
+}
+
+.text-content-quote {
+  font-size: 1rem;
+  color: var(--clr-dark-blue);
+  /* font-weight: var(--fw-500); */
+}
+
+.text-content-name {
+  display: inline-flex;
+  flex-flow: column;
+  font-size: 1rem;
+  font-weight: var(--fw-700);
+  margin: 0.8em 0 0 0;
+}
+
+.text-content-role {
+  font-size: 0.9rem;
+  color: var(--clr-grayish-blue);
+}
+
+@media screen and (min-width: 60em) {
+  /* we have to give  */
+  .img-container {
+    flex-basis: 50%;
+    order: 1;
+    background-size: 656px;
+    background-repeat: no-repeat;
+  }
+  .text-container {
+    /* the z-index on this selector is making the text in our blockquote for both profile container go on top of each other. */
+    z-index: 10;
+    /***** we have to remove the z-index: 10 declartion for .text-container selector.
+    we have to give the img container a lower z-index than our text-container.
+    if we want the female container to appear we have to give the img container of the female profile a lower z-index than the text-container of the female profile
+    so the text appears above the img. ***** we need a background-color on the text-container. *****
+    *****/
+    /***** one solution without using background-color on the profile(showing/above) or using z-index on the img-container and the text-container 
+    since both our profile container has position: aboslute we can declare transform: translateY(-999em) [not in the media query: we want this effect at mobile layout too] 
+    on the element that we dont want showing.
+    *****/
+    flex-basis: 50%;
+    background-size: 8rem, 550px;
+    text-align: left;
+    max-height: 30rem;
+    transform: translateY(13rem);
+    background-position: 17rem 0rem, 0rem 21.3rem;
+  }
+  .text-content {
+    transform: translateX(7rem);
+  }
+  .text-content-quote {
+    font-size: 1.8rem;
+  }
+  .text-content-name {
+    flex-flow: row;
+    align-items: center;
+    font-size: 1.3rem;
+  }
+  .text-content-role {
+    margin-left: 0.5em;
+    font-size: inherit;
+  }
+}
+
+/****** arrow container looking good.  ******/
+.arrows {
+  /******   ******/
+  /* when we use position: absolute on this element. make sure to use widht: 5rem */
+  /* padding: 0.5rem; */
+  /* border: 2px solid red; */
+  width: 5rem;
+  border-radius: 100vw;
+  display: flex;
+  justify-content: space-between;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  transform: translate(8.7rem, -1.3rem);
+  background-color: #fff;
+
+  box-shadow: 0 1em 1em rgba(0, 0, 0, 0.1);
+}
+
+[class*="-arrow"] {
+  flex-basis: 1em;
+  min-height: 1rem;
+  display: block;
+  /* margin: 0.5rem 0.5rem; */
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin: 0.6em;
+}
+
+.left-arrow {
+  /* using max-width when our parent container is a flex container will not work. we will have to use width or flex-basis for the flex-item */
+  /* max-width: 2em; */
+
+  background-image: url(images/icon-prev.svg);
+}
+
+.right-arrow {
+  /* max-width: 1rem; */
+  /* flex-basis: 1em;
+  min-height: 1rem;
+  display: block; */
+  /* margin: 0.5rem 0.5rem; */
+  /* background-size: contain;
+  background-repeat: no-repeat; */
+  transform: translateX(0.4rem);
+  background-image: url(images/icon-next.svg);
+}
+
+@media screen and (min-width: 60em) {
+  .arrows {
+    width: 7rem;
+    transform: translate(6rem, -1rem);
+  }
+  .right-arrow {
+    transform: translateX(0.5rem);
+  }
+  [class*="-arrow"] {
+    margin: 0.9rem;
+    padding: 0.7rem;
+  }
+}
