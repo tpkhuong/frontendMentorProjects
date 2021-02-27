@@ -122,6 +122,47 @@ button {
 
 /* general layout */
 
+/* label and input */
+
+label[id*="-display"] {
+  display: inline-block;
+  padding: 0.5em 0.5em;
+  font-size: 1rem;
+  border: 1px solid black;
+  border-radius: 0.3em;
+  cursor: pointer;
+}
+/* label and input */
+
+.label-container label:nth-child(2) {
+  margin: 0 0 0 2rem;
+}
+/* label when input is selected */
+
+[id="profile-two"]:checked ~ .label-container .highlight-label {
+  transform: translateX(8.7rem);
+  width: 8rem;
+}
+
+/* label when input is selected */
+
+.label-container {
+  position: relative;
+}
+/* high lighted span */
+.highlight-label {
+  display: block;
+  position: absolute;
+  min-height: 100%;
+  width: 6.5rem;
+  left: 0;
+  top: 0;
+  border-radius: 0.3em;
+  background-color: aquamarine;
+  z-index: -1;
+  transition: transform 0.5s linear;
+}
+/* high lighted span */
 .testimonials {
   padding: 0.5em;
 }
