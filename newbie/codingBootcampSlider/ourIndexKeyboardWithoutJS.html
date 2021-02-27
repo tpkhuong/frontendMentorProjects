@@ -7,11 +7,40 @@
     <meta name="description" content="Learning Nodejs" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="stylesheet" href="ourStylesKeyboardFeature.css" />
+    <link rel="stylesheet" href="ourStylesKeyboardWithoutJS.css" />
     <title>Coding Bootcamp Testimonials Slider</title>
   </head>
   <body>
     <div class="testimonials">
+      <input
+        type="radio"
+        id="profile-one"
+        name="profiles"
+        aria-labelledby="first-profile-display"
+      />
+      <input
+        type="radio"
+        id="profile-two"
+        name="profiles"
+        aria-labelledby="second-profile-display"
+      />
+
+      <div class="label-container" aria-label="label-container">
+        <label
+          for="profile-one"
+          id="first-profile-display"
+          aria-label="female-profile"
+          >First Profile
+        </label>
+
+        <label
+          for="profile-two"
+          id="second-profile-display"
+          aria-label="male-profile"
+          >Second Profile
+        </label>
+        <span class="highlight-label"></span>
+      </div>
       <section role="region" class="testimonial first-profile-display">
         <article class="img-container">
           <img
@@ -19,8 +48,8 @@
             alt="female wearing white t-shirt, black coat with a red scarf"
           />
           <div class="arrows">
-            <button class="left-arrow"></button>
-            <button class="right-arrow"></button>
+            <button aria-label="left-arrow" class="left-arrow"></button>
+            <button aria-label="right-arrow" class="right-arrow"></button>
           </div>
         </article>
         <article class="text-container">
@@ -31,11 +60,13 @@
               in the job of my dreams and so excited about the future. ”
             </blockquote>
             <p class="text-content-name">
-              Tanya Sinclair <span class="text-content-role">UX Engineer</span>
+              Tanya Sinclair
+              <span class="text-content-role">UX Engineer</span>
             </p>
           </div>
         </article>
       </section>
+
       <section
         role="region"
         class="testimonial second-profile-display move-off-screen"
@@ -46,8 +77,8 @@
             alt="male wearing faded navy blue t-shirt with fitbit and crossed arms."
           />
           <div class="arrows">
-            <button class="left-arrow"></button>
-            <button class="right-arrow"></button>
+            <button aria-label="left-arrow" class="left-arrow"></button>
+            <button aria-label="right-arrow" class="right-arrow"></button>
           </div>
         </article>
         <article class="text-container">
