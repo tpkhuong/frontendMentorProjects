@@ -144,6 +144,11 @@ label[id*="-display"] {
   width: 8rem;
 }
 
+[id="profile-one"]:checked ~ .second-profile-display,
+[id="profile-two"]:checked ~ .first-profile-display {
+  transform: translateY(-999em);
+}
+
 /* label when input is selected */
 
 .label-container {
@@ -163,6 +168,14 @@ label[id*="-display"] {
   transition: transform 0.5s linear;
 }
 /* high lighted span */
+
+/* making h2 heading for section disappear */
+.section-title {
+  clip-path: circle(0);
+  position: absolute;
+}
+/* making h2 heading for section disappear */
+
 .testimonials {
   padding: 0.5em;
 }
@@ -171,9 +184,17 @@ label[id*="-display"] {
   position: absolute;
 }
 
-.move-off-screen {
+/***** this move-off-screen class is used with our js code. we find the profile that is the parent or grand parents of the arrow button. we add move-off-screen to the parent element of the arrow button.
+this is based on which arrow button we click. which profile container the arrow button is in.
+*****/
+
+/* .move-off-screen {
   transform: translateY(-999rem);
-}
+} */
+
+/***** this move-off-screen class is used with our js code. we find the profile that is the parent or grand parents of the arrow button. we add move-off-screen to the parent element of the arrow button.
+this is based on which arrow button we click. which profile container the arrow button is in.
+*****/
 
 /* .testimonial:nth-of-type(2) {
   transform: translateY(-999rem);
