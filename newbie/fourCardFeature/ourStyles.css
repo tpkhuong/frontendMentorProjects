@@ -1,14 +1,195 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&display=swap");
 
 :root {
+  --clr-red: hsl(0, 78%, 62%);
+  --clr-cyan: hsl(180, 62%, 55%);
+  --clr-orange: hsl(34, 97%, 64%);
+  --clr-blue: hsl(212, 86%, 64%);
+  --clr-vary-dark: hsl(234, 12%, 34%);
+  --clr-very-light-gray: hsl(229, 6%, 66%);
+  --clr-grayish-blue: hsl(0, 0%, 98%);
+
+  --ff-poppins: "Poppins";
+
+  --fs-200: 0.9375rem;
+  --fs-300: 1rem;
+  --fs-400: 1.25rem;
+  --fs-500: 1.5rem;
+  --fs-600: 1.75rem;
+  --fs-700: 2rem;
+
+  --fw-200: 200;
+  --fw-400: 400;
+  --fw-500: 500;
+
+  --spacer-xxs: 0.5rem;
+  --spacer-xs: 0.8rem;
+  --spacer-s: 1rem;
+  --spacer-m: 1.5rem;
+  --spacer-l: 2rem;
 }
 
 /* reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1;
+}
+
+p {
+  line-height: 1.4;
+  font-size: var(--fs-300);
+}
+
+/* ul[class],
+li[class] {
+  list-style: none;
+  padding: 0;
+} */
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove all animations and transitions for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+a {
+  text-decoration: none;
+  color: var(--ling-fg, #000);
+}
+
+body {
+  font-family: var(--ff-poppins);
+  color: var(--clr-vary-dark);
+}
 /* utilities */
+
+.h1 {
+  font-size: var(--fs-600);
+}
+
+.flow-content > * + * {
+  margin: var(--spacer-s) 0 0 0;
+}
+
+.columns {
+  display: flex;
+  flex-flow: column;
+}
+
+.columns > * {
+  flex-basis: 100%;
+}
+
+[class^="col-"] {
+  flex-basis: var(--flex-col, 100%);
+}
+
+.col-1 {
+  --flex-col: 25%;
+}
+.col-2 {
+  --flex-col: 50%;
+}
+.col-3 {
+  --flex-col: 75%;
+}
+
+[class*="fg-"] {
+  background: var(--bg, #fff);
+  color: var(--fg, #000);
+}
+
+.bg-dark {
+}
+
+.fg-light {
+  --fg: var(--clr-very-light-gray);
+}
+
+.bg-accent {
+}
+
+/* hide h2 which are title for our section element */
+.visually-hidden:not(:focus):not(:active) {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* hide h2 which are title for our section element */
+
+/* typography */
+.feature-content-title {
+  font-size: var(--fs-500);
+  font-weight: var(--fw-200);
+  line-height: 1.4;
+}
+
+.highlight-title {
+  font-weight: 700;
+}
+
+[class*="-description"] {
+  font-size: var(--fs-200);
+  line-height: 1.7;
+}
+/* typography */
 
 /* general styles */
 
 /* general layout */
 
+.wrapper {
+  max-width: 70rem;
+  padding: calc(var(--spacer-l) * 2) var(--spacer-l);
+}
+
+.feature-content-text {
+  margin: 0 0 4rem 0;
+}
+
+.feature-description {
+  margin: 1em 0 0 0;
+}
 /* individual sections */
