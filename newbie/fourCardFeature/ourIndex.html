@@ -7,10 +7,75 @@
     <meta name="description" content="Learning Nodejs" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link
+      rel="shortcut icon"
+      href="images/favicon-32x32.png"
+      type="image/x-icon"
+    />
     <link rel="stylesheet" href="ourStyles.css" />
-    <title></title>
+    <title>Four Card Feature</title>
   </head>
   <body>
+    <section class="features" role="region">
+      <h2 class="section-title visually-hidden">Feature Section</h2>
+
+      <div class="wrapper">
+        <article class="feature-content-text">
+          <h2 class="feature-content-title h1">
+            Reliable, efficient delivery
+            <strong class="highlight-title">Powered by Technology</strong>
+          </h2>
+          <p class="feature-description fg-light">
+            Our Artificial Intelligence powered tools use millions of project
+            data points to ensure that your project is successful
+          </p>
+        </article>
+        <article class="feature-content-cards">
+          <article class="feature-content-card">
+            <h3 class="feature-content-card-title">Supervisor</h3>
+            <p class="feature-content-card-description fg-light">
+              Monitors activity to identify project roadblocks
+            </p>
+            <div class="img-container">
+              <img src="images/icon-supervisor.svg" alt="magnifying glass" />
+            </div>
+          </article>
+          <div class="feature-content-two-cards-container">
+            <article class="feature-content-card">
+              <h3 class="feature-content-card-title">Team Builder</h3>
+              <p class="feature-content-card-description fg-light">
+                Scans our talent network to create the optimal team for your
+                project
+              </p>
+              <div class="img-container">
+                <img
+                  src="images/icon-team-builder.svg"
+                  alt="red house with gray background"
+                />
+              </div>
+            </article>
+            <article class="feature-content-card">
+              <h3 class="feature-content-card-title">Karma</h3>
+              <p class="feature-content-card-description fg-light">
+                Regularly evaluates our talent to ensure quality
+              </p>
+              <div class="img-container">
+                <img src="images/icon-karma.svg" alt="light bulb" />
+              </div>
+            </article>
+          </div>
+          <article class="feature-content-card">
+            <h3 class="feature-content-card-title">Calculator</h3>
+            <p class="feature-content-card-description fg-light">
+              Uses data from past projects to provide better delivery estimates
+            </p>
+            <div class="img-container">
+              <img src="images/icon-calculator.svg" alt="computer monitor" />
+            </div>
+          </article>
+        </article>
+      </div>
+    </section>
     <script src="ourApp.js"></script>
   </body>
 </html>
