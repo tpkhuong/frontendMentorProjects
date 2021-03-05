@@ -1,0 +1,176 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&display=swap");
+
+:root {
+  --clr-primary-red: hsl(0, 36%, 70%);
+  --clr-secondary-red: hsl(0, 93%, 68%);
+  --clr-neutral-red: hsl(0, 6%, 24%);
+
+  --clr-linear-grad: 135deg, hsl(0, 0%, 100%), hsl(0, 100%, 98%);
+  --clr-linear-secondary-grad: 135deg, hsl(0, 80%, 86%), hsl(0, 74%, 74%);
+  --ff-Josefin: "Josefin Sans";
+
+  --fs-200: 0.9375rem;
+  --fs-300: 1rem;
+  --fs-400: 1.25rem;
+  --fs-500: 1.5rem;
+  --fs-600: 1.75rem;
+  --fs-700: 2rem;
+
+  --fw-200: 200;
+  --fw-400: 400;
+  --fw-500: 500;
+
+  --spacer-xxs: 0.5rem;
+  --spacer-xs: 0.8rem;
+  --spacer-s: 1rem;
+  --spacer-m: 1.5rem;
+  --spacer-l: 2rem;
+}
+
+/* reset */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+body {
+  margin: 0;
+  /* figure, dl, and dd have default margin */
+  /* font-weight: 100; */
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1;
+}
+
+p {
+  line-height: 1.4;
+  font-size: var(--fs-400);
+}
+
+a {
+  text-decoration: none;
+  color: var(--link-fg, var(--clr-neutral-900));
+  font-weight: var(--fw-700);
+  font-size: var(--fs-300);
+}
+
+img {
+  /* using object-fit for images. we have to set a height or a min-height on the image and the width of 100% 
+  exception to the rule of setting a height. we can sometime use it on a child element.
+  */
+  max-width: 100%;
+  /* we use max-width: 100% so when we have an img element inside of a div and we want to use flex which means the div will be a flex item
+    the img will shrink and grow as its parent element shrink and grows
+    */
+  display: block;
+  height: auto;
+}
+
+/* ul[class],
+li[class] {
+  list-style: none;
+  padding: 0;
+} */
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove all animations and transitions for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  line-height: 1.5;
+  font-family: var(--ff-Oswald);
+}
+
+/* reset */
+
+/* utilities */
+
+.columns {
+  display: flex;
+  flex-flow: column;
+}
+
+.columns > * {
+  flex-basis: 100%;
+}
+
+.columns > * + * {
+  margin: var(--gap, 1rem) 0 0 0;
+}
+
+[class*="col-"] {
+  flex-basis: var(--percent-col, 100%);
+}
+
+.col-1 {
+  --percent-col: 25%;
+}
+.col-2 {
+  --percent-col: 50%;
+}
+.col-3 {
+  --percent-col: 75%;
+}
+
+.flow-content > * + * {
+  margin: var(--flow-gap, 1em) 0 0 0;
+}
+
+[class*="bg-"] {
+  background-color: var(--bg, #fff);
+  color: var(--fg, #000);
+}
+
+.bg-light {
+}
+
+.bg-dark {
+}
+
+.bg-accent {
+}
+
+/* utilities */
+
+/* typography */
+
+/* typography */
+
+/* general layout */
+
+/* general layout */
+
+/* general styles */
+
+/* general styles */
+
+/* individual sections */
+
+/* individual sections */
