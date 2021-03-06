@@ -89,6 +89,7 @@ button,
 textarea,
 select {
   font: inherit;
+  color: inherit;
 }
 
 /* Remove all animations and transitions for people that prefer not to see them */
@@ -105,7 +106,7 @@ select {
 
 body {
   line-height: 1.5;
-  font-family: var(--ff-Oswald);
+  font-family: var(--ff-Josefin);
 }
 
 /* reset */
@@ -157,6 +158,19 @@ body {
 .bg-accent {
 }
 
+/* hide h2 which are title for our section element */
+.visually-hidden:not(:focus):not(:active) {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* hide h2 which are title for our section element */
+
 /* utilities */
 
 /* typography */
@@ -168,6 +182,57 @@ body {
 /* general layout */
 
 /* general styles */
+
+.landing-content {
+  display: flex;
+  flex-flow: column;
+}
+
+.landing-content-texts-container {
+  color: var(--clr-primary-red);
+  text-align: center;
+  padding: 4em 2.2em;
+  --flow-gap: calc(1rem + 0.5rem);
+}
+
+.landng-content-img-container {
+  max-width: 11rem;
+  padding: 2em;
+}
+
+.landing-content-bg-img-container {
+  min-height: 15rem;
+  background-image: url("images/hero-mobile.jpg");
+  background-size: cover;
+}
+
+.landing-content-texts-title {
+  text-transform: uppercase;
+  font-size: calc(var(--fs-700) + 1rem);
+  letter-spacing: 0.6rem;
+  font-weight: var(--fw-200);
+}
+
+.highlighted {
+  color: #000;
+}
+
+.landing-content-texts-description {
+  padding: 2rem 0;
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+input[type="email"] {
+  min-width: 100%;
+  padding: 0.8rem;
+  border: 0.1em solid var(--clr-primary-red);
+}
+
+.button-container,
+input[type="email"] {
+  border-radius: 100vw;
+}
 
 /* general styles */
 
