@@ -22,7 +22,7 @@
         <article class="landng-content-img-container">
           <img src="images/logo.svg" alt="Base Apparel" />
         </article>
-        <article class="landing-content-bg-img-container"></article>
+
         <article class="landing-content-texts-container">
           <h2 class="landing-content-texts-title h1">
             We're <strong class="highlighted">coming soon</strong>
@@ -32,23 +32,26 @@
             store. Add your email below to stay up-to-date with announcements
             and our launch deals.
           </p>
-          <div class="button-container">
-            <label class="visually-hidden" for="email">Enter Email</label
-            ><input
-              type="email"
-              required
-              id="email"
-              placeholder="ex:johndoe@youremail.com"
-            />
-            <span class="email-btn">
-              <img
-                class="email-arrow-icon"
-                src="images/icon-arrow.svg"
-                alt="Right arrow"
+          <form novalidate action="#">
+            <button type="submit" class="button-container">
+              <label class="visually-hidden" for="email">Enter Email</label
+              ><input
+                type="email"
+                required
+                id="email"
+                placeholder="ex:johndoe@youremail.com"
               />
-            </span>
-          </div>
+              <span class="email-btn">
+                <img
+                  class="email-arrow-icon"
+                  src="images/icon-arrow.svg"
+                  alt="Right arrow"
+                />
+              </span>
+            </button>
+          </form>
         </article>
+        <article class="landing-content-bg-img-container"></article>
       </article>
     </section>
 
