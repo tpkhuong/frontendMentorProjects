@@ -184,8 +184,38 @@ body {
 /* general styles */
 
 .landing-content {
-  display: flex;
-  flex-flow: column;
+  /* display: flex;
+  flex-flow: column; */
+  display: grid;
+  grid-template-columns: 1fr;
+  /* grid-template-rows: 1fr; */
+  grid-template-areas:
+    "img-container"
+    "bg-img-container"
+    "texts-container";
+}
+
+@media screen and (min-width: 68.75rem) {
+  .landing-content {
+    grid-template-columns: 40rem 1fr;
+    background-image: url("images/bg-pattern-desktop.svg");
+    background-size: 43rem;
+    background-repeat: no-repeat;
+    /* background-position: -10rem -15rem; */
+    grid-template-areas:
+      "img-container bg-img-container"
+      "texts-container bg-img-container";
+  }
+}
+
+/* .landing-content > * {
+  flex-basis: 100%;
+} */
+
+.landng-content-img-container {
+  max-width: 11rem;
+  padding: 2em;
+  grid-area: img-container;
 }
 
 .landing-content-texts-container {
@@ -193,17 +223,30 @@ body {
   text-align: center;
   padding: 4em 2.2em;
   --flow-gap: calc(1rem + 0.5rem);
-}
-
-.landng-content-img-container {
-  max-width: 11rem;
-  padding: 2em;
+  order: 1;
+  grid-area: texts-container;
 }
 
 .landing-content-bg-img-container {
   min-height: 15rem;
   background-image: url("images/hero-mobile.jpg");
   background-size: cover;
+  grid-area: bg-img-container;
+}
+
+@media screen and (min-width: 68.75rem) {
+  .landng-content-img-container {
+    max-width: 20rem;
+    padding: 3em 0 0 8em;
+  }
+  .landing-content-texts-container {
+    text-align: left;
+    padding: 2.2em 8em;
+  }
+  .landing-content-bg-img-container {
+    background-image: url("images/hero-desktop.jpg");
+    height: 100vh;
+  }
 }
 
 .landing-content-texts-title {
@@ -223,6 +266,19 @@ body {
   line-height: 1.7;
 }
 
+@media screen and (min-width: 68.75rem) {
+  .landing-content-texts-title {
+    font-size: calc(var(--fs-700) + 2.1rem);
+    letter-spacing: 1.1rem;
+  }
+  .highlighted {
+    font-weight: var(--fw-500);
+  }
+  .landing-content-texts-description {
+    font-size: calc(var(--fs-300) + 0.1rem);
+  }
+}
+
 input[type="email"] {
   min-width: 100%;
   padding: 0.8rem;
@@ -236,6 +292,9 @@ input[type="email"] {
 
 .button-container {
   position: relative;
+  min-width: 100%;
+  padding: 0;
+  border: 0;
 }
 
 .email-btn {
