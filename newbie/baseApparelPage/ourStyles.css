@@ -281,8 +281,12 @@ body {
 
 input[type="email"] {
   min-width: 100%;
-  padding: 0.8rem;
-  border: 0.1em solid var(--clr-primary-red);
+  padding: 1em 2em;
+  border: 0.2px solid black;
+}
+
+input:required {
+  box-shadow: none;
 }
 
 .button-container,
@@ -294,7 +298,6 @@ input[type="email"] {
   position: relative;
   min-width: 100%;
   padding: 0;
-  border: 0;
 }
 
 .email-btn {
@@ -307,11 +310,27 @@ input[type="email"] {
   justify-content: center;
   box-shadow: 0 1em 1em rgba(255, 255, 255, 0.4);
   border-radius: 100vw;
+  border: 0;
 }
 
 .email-arrow-icon {
   align-self: center;
 }
+
+.invalid-message{
+    display: inline-block;
+    margin: .5rem 0 0 2em;
+}
+
+
+@media screen and (min-width: 68.75rem) {
+  .email-btn {
+    width: 5.1em;
+  }
+}
+
+.
+
 /* general styles */
 
 /* individual sections */
