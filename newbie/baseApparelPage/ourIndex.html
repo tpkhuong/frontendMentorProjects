@@ -32,23 +32,25 @@
             store. Add your email below to stay up-to-date with announcements
             and our launch deals.
           </p>
-          <form novalidate action="#">
-            <button type="submit" class="button-container">
+          <form action="#">
+            <div class="button-container">
               <label class="visually-hidden" for="email">Enter Email</label
               ><input
+                aria-autocomplete
                 type="email"
                 required
                 id="email"
                 placeholder="ex:johndoe@youremail.com"
               />
-              <span class="email-btn">
+              <button type="submit" class="email-btn">
                 <img
                   class="email-arrow-icon"
                   src="images/icon-arrow.svg"
                   alt="Right arrow"
                 />
-              </span>
-            </button>
+              </button>
+              <span class="invalid-message">Please provide a valid email</span>
+            </div>
           </form>
         </article>
         <article class="landing-content-bg-img-container"></article>
