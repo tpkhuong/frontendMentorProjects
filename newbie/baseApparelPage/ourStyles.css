@@ -285,6 +285,8 @@ input[type="email"] {
   border: 0.2px solid black;
 }
 
+
+
 input:required {
   box-shadow: none;
 }
@@ -298,6 +300,46 @@ input[type="email"] {
   position: relative;
   min-width: 100%;
   padding: 0;
+}
+
+/* invalid and valid state */
+
+input[type="email"]:invalid{
+    border: 2px solid red;
+}
+
+input[type="email"]:invalid ~ .invalid-message{
+    opacity: 1;
+}
+
+input[type="email"]:invalid ~ .error-img-container{
+    opacity: 1;
+}
+
+input[type="email"]:valid ~ .error-img-container{
+    opacity: 0;
+}
+
+input[type="email"]:valid ~ .invalid-message{
+    opacity: 0;
+}
+
+.invalid-message{
+    position: absolute;
+    display: inline-block;
+    margin: .5rem 0 0 2em;
+}
+
+.error-img-container {
+    position: absolute;
+    transform: translate(17em, -2.6em)
+}
+
+/* invalid and valid state */
+
+/* looking to get rid of the outline */
+input[type="email"]:focus{
+    outline: 2px solid black;
 }
 
 .email-btn {
@@ -315,11 +357,6 @@ input[type="email"] {
 
 .email-arrow-icon {
   align-self: center;
-}
-
-.invalid-message{
-    display: inline-block;
-    margin: .5rem 0 0 2em;
 }
 
 
