@@ -247,7 +247,7 @@ article {
 }
 
 .wrapper {
-  max-width: 50rem;
+  max-width: 40rem;
   border: 1px solid red;
   margin: auto;
   display: grid;
@@ -269,6 +269,18 @@ article {
 
 .choose-us {
   grid-area: choose;
+}
+
+@media screen and (min-width: 83.125rem) {
+  .wrapper {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+      "join join"
+      "subscript choose";
+  }
+  article {
+    padding: 2.5em;
+  }
 }
 
 /* general layout */
