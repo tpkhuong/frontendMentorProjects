@@ -162,11 +162,12 @@ body {
 
 [class*="bg-"] {
   background-color: var(--bg, hsl(0, 100%, 100%));
-  /* color: var(--fg, hsl(0, 0%, 0%)); */
+  color: var(--fg, hsl(0, 0%, 0%));
 }
 
 .bg-dark {
-  --bg: var(--clr-primary-cyan);
+  --bg: hsl(0, 100%, 100%);
+  --fg: var(--clr-primary-blue);
 }
 
 .bg-light {
@@ -271,6 +272,12 @@ input.invalid-message-ring {
   border: 2px solid red;
 }
 
+[type="submit"]:focus,
+[type="email"]:focus {
+  outline: 0.3em dashed hsl(209, 33%, 12%);
+  outline-offset: 0.2em;
+}
+
 /* button selector */
 
 [type="submit"] {
@@ -290,10 +297,6 @@ input.invalid-message-ring {
   margin-top: 4rem;
 }
 
-.social-icons {
-  color: var(--clr-primary-blue);
-}
-
 .social-icons > * + * {
   margin: 0 0 0 0.5rem;
 }
@@ -302,12 +305,25 @@ input.invalid-message-ring {
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--hov-bg, hsl(0, 100%, 100%));
+  color: var(--hov-fg, var(--clr-primary-blue));
   width: 3.5rem;
   height: 3.5rem;
   border: 1px solid var(--clr-secondary-blue);
   font-size: 2rem;
   border-radius: 50%;
 }
+
+/* hover effect */
+
+.icon-containers:hover {
+  cursor: pointer;
+  border: 1px solid hsl(0, 100%, 100%);
+  --hov-bg: var(--fg);
+  --hov-fg: var(--bg);
+}
+
+/* hover effect */
 
 .copy-right {
   color: var(--clr-neutral-gray);
