@@ -199,6 +199,8 @@ body {
   overflow: hidden;
 }
 
+/* hide h2 which are title for our section element */
+
 /* utilities */
 
 /* general layouts */
