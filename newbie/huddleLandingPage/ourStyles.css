@@ -122,6 +122,19 @@ input {
 
 /* utilties */
 
+/* container wrapper */
+
+.max-width {
+  /* or the width we want our container/parent element to be */
+  max-width: 200px;
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+  padding-inline-start: 16px;
+  padding-inline-end: 16px;
+}
+
+/* container wrapper */
+
 .flow-content > * + * {
   margin: var(--gap, 1rem) 0 0 0;
 }
@@ -197,7 +210,7 @@ input {
 
 html,
 body {
-  min-height: 100vh;
+  height: 100%;
 }
 
 body {
@@ -244,7 +257,8 @@ body {
   }
   .landing-page {
     padding: 3rem 4rem;
-    height: 100vh;
+    height: 100%;
+    background-size: cover;
   }
   .content-container {
     display: flex;
@@ -252,9 +266,6 @@ body {
 
   .content-container > * {
     flex-basis: 100%;
-  }
-  .landing-page {
-    background-size: cover;
   }
 }
 
