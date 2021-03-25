@@ -133,6 +133,11 @@ input {
 
 /* utilties */
 
+html,
+body {
+  height: 100%;
+}
+
 /* container wrapper */
 
 .max-width {
@@ -221,6 +226,16 @@ input {
 
 /* hide h2 which are title for our section element */
 
+/* accessibility */
+
+.hamburger:focus,
+button:focus,
+a:focus {
+  outline-offset: 5px;
+  outline: 3px dashed hsl(0, 0%, 0%);
+}
+/* accessibility */
+
 /* utilities */
 
 /* general styles */
@@ -230,4 +245,89 @@ input {
 /* general layout  */
 
 /* individual sections */
+
+/* header */
+
+.landing {
+  padding: 1.5rem;
+  color: hsl(0, 0%, 100%);
+  min-height: 100%;
+  background-image: url("images/bg-pattern-intro.svg"),
+    linear-gradient(
+      to bottom right,
+      var(--clr-gradient-very-light-red),
+      var(--clr-gradient-light-red)
+    );
+  background-size: 80rem 80rem;
+  background-position: -25rem -15rem;
+  border-radius: 0 0 0 25%;
+}
+
+.logo-hamburger-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-container {
+  max-width: 4rem;
+}
+
+/* hamburger */
+
+.hamburger-line,
+.hamburger-line::before,
+.hamburger-line::after {
+  background-color: hsl(0, 0%, 100%);
+  display: inline-block;
+  /* border: 1px solid red; */
+  width: 1.8rem;
+  height: 2px;
+}
+
+.hamburger-line {
+  transition: transform 1s linear opacity 0.5s linear;
+  transform: translateY(0.7rem);
+}
+
+.hamburger-line::before {
+  content: "";
+  /* display: none; */
+
+  transform: translateY(-0.5rem);
+}
+
+.hamburger-line::after {
+  content: "";
+  transform: translateY(-1.3rem);
+}
+
+/* toggle navbar */
+
+.open .hamburger-line {
+  transform: translateY(1rem) rotate(45deg);
+}
+
+.open .hamburger-line::before {
+  opacity: 0;
+}
+
+.open .hamburger-line::after {
+  transform: translateY(-30.7px) rotate(90deg);
+}
+
+/* toggle navbar */
+
+/* hamburger */
+
+/* nav-login-container */
+
+.nav-login-container {
+  display: none;
+}
+
+/* nav-login-container */
+
+/* header */
+
 /* individual sections */
