@@ -52,7 +52,8 @@ h2,
 h3,
 h4,
 p,
-body {
+body,
+ul {
   margin: 0;
   /* figure, dl, and dd have default margin */
   /* font-weight: 100; */
@@ -93,11 +94,11 @@ img {
   height: auto;
 }
 
-/* ul[class],
+ul[class],
 li[class] {
   list-style: none;
   padding: 0;
-} */
+}
 
 /* Inherit fonts for inputs and buttons */
 input,
@@ -136,6 +137,15 @@ input {
 html,
 body {
   height: 100%;
+}
+
+body {
+  color: var(--clr-dark-grayish-blue);
+  font-family: var(--ff-overpass);
+}
+
+button {
+  border: none;
 }
 
 /* container wrapper */
@@ -260,7 +270,7 @@ a:focus {
     );
   background-size: 80rem 80rem;
   background-position: -25rem -15rem;
-  border-radius: 0 0 0 25%;
+  border-radius: 0 0 0 15%;
 }
 
 .logo-hamburger-container {
@@ -299,7 +309,7 @@ a:focus {
 
 .hamburger-line::after {
   content: "";
-  transform: translateY(-1.3rem);
+  transform: translateY(-1.5rem);
 }
 
 /* toggle navbar */
@@ -313,7 +323,7 @@ a:focus {
 }
 
 .open .hamburger-line::after {
-  transform: translateY(-30.7px) rotate(90deg);
+  transform: translateY(-2.1rem) rotate(90deg);
 }
 
 /* toggle navbar */
@@ -323,11 +333,133 @@ a:focus {
 /* nav-login-container */
 
 .nav-login-container {
-  display: none;
+  /* display: none; */
+  text-align: center;
+  background-color: hsl(0, 0%, 100%);
+  color: var(--clr-vary-dark-blue);
+  border-radius: 0.3rem;
+  padding: 16px;
 }
+
+.btn-link {
+  position: relative;
+  background-color: transparent;
+  width: 100%;
+}
+
+.header-items:nth-of-type(1) .arrow-icon {
+  top: 12px;
+  left: 188px;
+}
+.header-items:nth-of-type(2) .arrow-icon {
+  top: 13px;
+  left: 188px;
+}
+.header-items:nth-of-type(3) .arrow-icon {
+  top: 12px;
+  left: 188px;
+}
+
+.header-items:nth-of-type(3) .header-sublist {
+  margin-bottom: 24px;
+}
+
+.arrow-icon {
+  /* border have to go above border-width or else we will get a box with four borders */
+  border: solid var(--clr-primary-light-red);
+  border-width: 0 2px 2px 0;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+}
+
+/* submenu */
+
+ul.header-sublist {
+  /* border: 1px solid red; */
+  border-radius: 8px;
+  padding: 16px 0;
+  margin: 16px 0;
+  background-color: hsl(214, 12%, 89%);
+}
+
+/* submenu */
 
 /* nav-login-container */
 
+/* login */
+
+.login-container {
+  display: flex;
+  flex-flow: column;
+  border-top: 1px solid hsl(214, 12%, 89%);
+  padding: 24px 0;
+}
+
+/* login */
+
 /* header */
+
+/* text-container */
+
+.text-container {
+  text-align: center;
+  padding: 96px 16px;
+}
+
+.primary-title {
+  line-height: 1.5;
+  margin-block-end: 8px;
+  padding: 0 40px;
+}
+
+.text-container p {
+  font-size: 0.8rem;
+  padding: 0 40px;
+  margin-block-end: 32px;
+}
+
+/* buttons */
+
+[class*="btn-"] {
+  font-size: 0.7rem;
+  padding: 0.8em 1em;
+  font-weight: var(--fw-700);
+  border-radius: 100vw;
+}
+
+[class*="start"] {
+  background-color: hsl(0, 0%, 100%);
+  color: var(--clr-primary-light-red);
+  margin-inline-end: 16px;
+}
+
+[class*="learn"] {
+  background-color: transparent;
+  border: 1px solid hsl(0, 0%, 100%);
+}
+
+[class*="btn-login"] {
+  background-color: transparent;
+  color: var(--clr-dark-grayish-blue);
+  font-size: inherit;
+  margin-block-end: 8px;
+}
+
+[class*="signup"] {
+  font-size: inherit;
+  padding: 0.6em 2em;
+  color: hsl(0, 0%, 100%);
+  background-image: linear-gradient(
+    to bottom right,
+    var(--clr-gradient-very-light-red),
+    var(--clr-gradient-light-red)
+  );
+  align-self: center;
+}
+
+/* buttons */
+/* text-container */
 
 /* individual sections */
