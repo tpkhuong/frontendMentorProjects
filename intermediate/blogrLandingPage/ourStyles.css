@@ -51,7 +51,6 @@ h1,
 h2,
 h3,
 h4,
-p,
 body,
 ul {
   margin: 0;
@@ -259,7 +258,7 @@ a:focus {
 /* header */
 
 .landing {
-  padding: 1.5rem;
+  padding: 24px;
   color: hsl(0, 0%, 100%);
   min-height: 100%;
   background-image: url("images/bg-pattern-intro.svg"),
@@ -270,7 +269,7 @@ a:focus {
     );
   background-size: 80rem 80rem;
   background-position: -25rem -15rem;
-  border-radius: 0 0 0 15%;
+  border-radius: 0 0 0 72px;
 }
 
 .logo-hamburger-container {
@@ -280,7 +279,7 @@ a:focus {
 }
 
 .logo-container {
-  max-width: 4rem;
+  max-width: 64px;
 }
 
 /* hamburger */
@@ -291,7 +290,7 @@ a:focus {
   background-color: hsl(0, 0%, 100%);
   display: inline-block;
   /* border: 1px solid red; */
-  width: 1.8rem;
+  width: 32px;
   height: 2px;
 }
 
@@ -348,16 +347,20 @@ a:focus {
 }
 
 .header-items:nth-of-type(1) .arrow-icon {
+  /* top: 12px;
+  left: 188px; */
   top: 12px;
-  left: 188px;
+  right: 96px;
 }
 .header-items:nth-of-type(2) .arrow-icon {
   top: 13px;
-  left: 188px;
+  /* left: 188px; */
+  right: 96px;
 }
 .header-items:nth-of-type(3) .arrow-icon {
   top: 12px;
-  left: 188px;
+  /* left: 188px; */
+  right: 96px;
 }
 
 .header-items:nth-of-type(3) .header-sublist {
@@ -403,7 +406,7 @@ ul.header-sublist {
 
 /* text-container */
 
-.text-container {
+.landing .text-container {
   text-align: center;
   padding: 96px 16px;
 }
@@ -414,7 +417,7 @@ ul.header-sublist {
   padding: 0 40px;
 }
 
-.text-container p {
+.landing .text-container p {
   font-size: 0.8rem;
   padding: 0 40px;
   margin-block-end: 32px;
@@ -461,5 +464,148 @@ ul.header-sublist {
 
 /* buttons */
 /* text-container */
+
+/* main */
+
+/* design-content */
+
+.designer-content .container {
+  padding: 64px 24px;
+  text-align: center;
+}
+
+.design-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "design-img"
+    "design-text";
+}
+
+.design-wrapper .text-container {
+  grid-area: design-text;
+}
+
+.design-wrapper .img-container {
+  grid-area: design-img;
+  margin: 40px -24px;
+}
+
+.design-wrapper h3 {
+  font-size: var(--fs-400);
+  padding: 0 64px;
+}
+
+.design-wrapper p {
+  font-size: calc(var(--fs-200) - 0.2rem);
+  padding: 0 32px;
+  line-height: 1.8;
+}
+
+.designer-content .sub-text-container:nth-of-type(2) {
+  margin-block-start: 40px;
+}
+
+/* design-content */
+
+/* performance-content */
+
+.performance-content {
+  margin-block-start: 120px;
+  background-image: url("images/bg-pattern-circles.svg"),
+    linear-gradient(
+      to bottom right,
+      var(--clr-gradient-gray-blue),
+      var(--clr-gradient-desaturated-blue)
+    );
+  border-radius: 0 80px 0 72px;
+  background-size: cover, cover;
+  background-repeat: no-repeat;
+  background-position: -72px -200px, center;
+  color: hsl(0, 0%, 100%);
+}
+
+.performance-content .container {
+  padding: 56px 24px;
+  padding-block-start: 0.01px;
+}
+
+.performance-content .img-container {
+  margin-block-start: -136px;
+}
+
+.performance-content .text-container {
+  /* max-width: 300px;
+  margin: 0 auto; */
+  margin-block-end: 56px;
+  text-align: center;
+}
+
+.performance-content h2 {
+  font-size: 1.7rem;
+  line-height: 1.5;
+}
+
+.performance-content p {
+  max-width: 300px;
+  font-size: calc(var(--fs-200) - 0.2rem);
+  padding: 0 32px;
+  line-height: 2;
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+}
+
+/* performance-content */
+
+/* tools-content */
+
+.tools-content .container {
+  padding: 56px 24px;
+}
+
+.tools-content .img-container {
+  margin-inline-start: -24px;
+  margin-inline-end: -24px;
+  margin-block-end: 40px;
+}
+
+.tools-content .text-container {
+  text-align: center;
+}
+
+.tools-content h3 {
+  font-size: 1.4rem;
+  margin-block-end: 24px;
+}
+
+.tools-content p {
+  padding: 0 24px;
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+.tools-content .sub-text-container:nth-of-type(1) p {
+  margin-block-end: 24px;
+}
+
+/* tools-content */
+
+/* main */
+
+/* footer */
+
+.footer-logo-nav-container {
+  background-color: var(--clr-vary-dark-blue);
+  border-radius: 0 72px 0 0;
+  color: hsl(0, 0%, 100%);
+  text-align: center;
+}
+
+[class*="-nav-container"] .logo-container {
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+}
+
+/* footer */
 
 /* individual sections */
