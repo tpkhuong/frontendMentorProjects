@@ -341,6 +341,10 @@ a:focus {
   margin-block-start: 24px;
 }
 
+.header-nav {
+  box-shadow: 2px 2px 20px hsla(248deg, 80%, 40%, 0.33);
+}
+
 .header-items:nth-of-type(1) .arrow-icon {
   /* top: 12px;
   left: 188px; */
@@ -372,6 +376,10 @@ a:focus {
   transform: rotate(45deg);
 }
 
+button.btn-link[aria-expanded="true"] span.arrow-icon {
+  transform: rotate(-135deg);
+}
+
 /* submenu */
 
 ul.header-sublist {
@@ -381,6 +389,25 @@ ul.header-sublist {
   margin: 16px 0;
   background-color: hsl(214, 12%, 89%);
 }
+
+/* hide or show submenu */
+
+button.btn-link[aria-expanded="false"] ~ ul.header-sublist {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  overflow: hidden;
+}
+
+button.btn-link[aria-expanded="true"] ~ ul.header-sublist {
+  position: static;
+}
+
+ul.header-sublist:focus-within .header-sublinks {
+  position: static;
+}
+
+/* hide or show submenu */
 
 /* submenu */
 
