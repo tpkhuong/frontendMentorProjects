@@ -222,6 +222,17 @@ button {
   width: 1px;
 }
 
+.visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+}
+
 .hide {
   display: none;
 }
@@ -388,7 +399,8 @@ a.btn-link[aria-expanded="true"] span.arrow-icon {
 
 /* submenu */
 
-ul.header-sublist {
+ul.header-sublist,
+ul.header-sublist-submenu {
   /* border: 1px solid red; */
   border-radius: 8px;
   padding: 16px 0;
@@ -416,6 +428,17 @@ ul.header-sublist:focus-within .header-sublinks {
 /* hide or show submenu */
 
 /* submenu */
+
+/* menu of submenu */
+
+ul.header-sublist-submenu {
+  background-color: hsl(8.2, 100%, 71.2%);
+  box-shadow: inset 0 0 10px #000000;
+  /* padding-block-start: 8px;
+  padding-block-end: 8px; */
+}
+
+/* menu of submenu */
 
 /* nav-login-container */
 
