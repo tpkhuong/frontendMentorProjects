@@ -187,6 +187,7 @@ function showSubmenu({ headerNav, btnElements } = ourSelectors()) {
       }
     }
   });
+
   headerNav.addEventListener("mouseover", function toggleSubmenu(event) {
     // var arrOfSubmenuElements = Array.from(
     //   event.target.nextElementSibling.children
