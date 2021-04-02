@@ -2,24 +2,26 @@ function ourSelectors() {
   var hamburgerElement = document.querySelector(".hamburger");
   var navContainer = document.querySelector(".nav-login-container");
   var headerNav = document.querySelector(".header-nav");
-  var btnElements = Array.from(
-    document.querySelectorAll("a.btn-link[aria-expanded]")
+  var ulHeaderlist = document.querySelector(".header-list");
+  var btnElementsSublist = Array.from(
+    document.querySelectorAll(".header-items > a.btn-link[aria-expanded]")
   );
 
   return {
     hamburgerElement,
     navContainer,
     headerNav,
-    btnElements,
+    btnElementsSublist,
+    ulHeaderlist,
   };
 }
 
 toggleNavMenu();
 
 function toggleNavMenu(
-  { hamburgerElement, navContainer, btnElements } = ourSelectors()
+  { hamburgerElement, navContainer, btnElementsSublist } = ourSelectors()
 ) {
-  console.log(btnElements);
+  console.log(btnElementsSublist);
   hamburgerElement.addEventListener("click", function addClass(event) {
     this.classList.toggle("open");
     navContainer.classList.toggle("hide-off-left");
@@ -44,12 +46,148 @@ function toggleNavMenu(
   );
 }
 
-showSubmenu();
+// showSubmenu();
+showSublistKeydown();
+showSublistHover();
+showSublistFocusElement();
+// showSublistClickUsingMouse();
 keyboardFunctionality();
 
-function showSubmenu({ headerNav, btnElements } = ourSelectors()) {
+function showSublistKeydown(
+  { headerNav, btnElementsSublist } = ourSelectors()
+) {
   headerNav.addEventListener("keydown", function toggleSubmenu(event) {
-    var [productBtn, companyBtn, connectBtn] = btnElements;
+    var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
+    var keyPressed = event.code;
+    if (keyPressed == "Space") {
+      event.preventDefault();
+      let arrOfSubmenuElements = Array.from(
+        event.target.nextElementSibling.children
+      );
+      var [firstLiElementSubmenu] = arrOfSubmenuElements;
+      firstLiElementSubmenu.firstElementChild.focus();
+
+      var strTextOfBtnElement = event.target.innerText;
+      switch (strTextOfBtnElement) {
+        case "Product":
+          console.log(productBtn.attributes["aria-expanded"].value);
+          productBtn.attributes["aria-expanded"].value = true;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = false;
+          break;
+        case "Company":
+          // firstLiElementSubmenu.focus();
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = true;
+          connectBtn.attributes["aria-expanded"].value = false;
+          break;
+        case "Connect":
+          // firstLiElementSubmenu.focus();
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = true;
+          break;
+      }
+    }
+    if (keyPressed == "Enter") {
+      event.preventDefault();
+      let arrOfSubmenuElements = Array.from(
+        event.target.nextElementSibling.children
+      );
+      var [firstLiElementSubmenu] = arrOfSubmenuElements;
+      firstLiElementSubmenu.firstElementChild.focus();
+
+      var strTextOfBtnElement = event.target.innerText;
+      switch (strTextOfBtnElement) {
+        case "Product":
+          console.log(productBtn.attributes["aria-expanded"].value);
+          productBtn.attributes["aria-expanded"].value = true;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = false;
+          break;
+        case "Company":
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = true;
+          connectBtn.attributes["aria-expanded"].value = false;
+          break;
+        case "Connect":
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = true;
+          break;
+      }
+    }
+  });
+}
+
+function showSublistFocusElement(
+  { headerNav, btnElementsSublist } = ourSelectors()
+) {
+  headerNav.addEventListener("focusin", function toggleSubmenu(event) {
+    var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
+
+    var classOfAnchorElement = event.target.className;
+    if (classOfAnchorElement.includes("header-sublinks")) {
+      var grandParentElementInnerText =
+        event.target.parentElement.parentElement.previousElementSibling
+          .innerText;
+      console.log(grandParentElementInnerText);
+      switch (grandParentElementInnerText) {
+        case "Product":
+          console.log(productBtn.attributes["aria-expanded"].value);
+          productBtn.attributes["aria-expanded"].value = true;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = false;
+          break;
+        case "Company":
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = true;
+          connectBtn.attributes["aria-expanded"].value = false;
+          break;
+        case "Connect":
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = true;
+          break;
+      }
+    }
+  });
+}
+
+function showSublistHover({ headerNav, btnElementsSublist } = ourSelectors()) {
+  headerNav.addEventListener("mouseover", function toggleSubmenu(event) {
+    // var arrOfSubmenuElements = Array.from(
+    //   event.target.nextElementSibling.children
+    // );
+    // var [firstSubmenuElement] = arrOfSubmenuElements;
+    // firstSubmenuElement.firstElementChild.focus();
+    var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
+    var btnElementInnerText = event.target.innerText;
+    if (event.target.className.includes("btn-link")) {
+      switch (btnElementInnerText) {
+        case "Product":
+          productBtn.attributes["aria-expanded"].value = true;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = false;
+          break;
+        case "Company":
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = true;
+          connectBtn.attributes["aria-expanded"].value = false;
+          break;
+        case "Connect":
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = true;
+          break;
+      }
+    }
+  });
+}
+
+function showSubmenu({ headerNav, btnElementsSublist } = ourSelectors()) {
+  headerNav.addEventListener("keydown", function toggleSubmenu(event) {
+    var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
     var keyPressed = event.code;
     if (keyPressed == "Space") {
       event.preventDefault();
@@ -111,7 +249,7 @@ function showSubmenu({ headerNav, btnElements } = ourSelectors()) {
     }
   });
   headerNav.addEventListener("click", function toggleSubmenu(event) {
-    var [productBtn, companyBtn, connectBtn] = btnElements;
+    var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
     var classOfClickElement = event.target.className;
     if (classOfClickElement.includes("btn-link")) {
       var strTextOfBtnElement = event.target.innerText;
@@ -159,7 +297,7 @@ function showSubmenu({ headerNav, btnElements } = ourSelectors()) {
   });
 
   headerNav.addEventListener("focusin", function toggleSubmenu(event) {
-    var [productBtn, companyBtn, connectBtn] = btnElements;
+    var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
 
     var classOfAnchorElement = event.target.className;
     if (classOfAnchorElement.includes("header-sublinks")) {
@@ -194,7 +332,7 @@ function showSubmenu({ headerNav, btnElements } = ourSelectors()) {
     // );
     // var [firstSubmenuElement] = arrOfSubmenuElements;
     // firstSubmenuElement.firstElementChild.focus();
-    var [productBtn, companyBtn, connectBtn] = btnElements;
+    var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
     var btnElementInnerText = event.target.innerText;
     if (event.target.className.includes("btn-link")) {
       switch (btnElementInnerText) {
@@ -218,8 +356,63 @@ function showSubmenu({ headerNav, btnElements } = ourSelectors()) {
   });
 }
 
-function keyboardFunctionality({ headerNav, btnElements } = ourSelectors()) {}
+function showSublistSubmenu({ ulHeaderlist } = ourSelectors()) {}
 
+function keyboardFunctionality(
+  { headerNav, btnElementsSublist } = ourSelectors()
+) {}
+
+function showSublistClickUsingMouse(
+  { headerNav, btnElementsSublist } = ourSelectors()
+) {
+  headerNav.addEventListener("click", function toggleSubmenu(event) {
+    var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
+    var classOfClickElement = event.target.className;
+    if (classOfClickElement.includes("btn-link")) {
+      var strTextOfBtnElement = event.target.innerText;
+
+      switch (strTextOfBtnElement) {
+        case "Product":
+          console.log(productBtn.attributes["aria-expanded"].value);
+          productBtn.attributes["aria-expanded"].value = true;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = false;
+          break;
+        case "Company":
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = true;
+          connectBtn.attributes["aria-expanded"].value = false;
+          break;
+        case "Connect":
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = true;
+          break;
+      }
+    } else if (classOfClickElement.includes("arrow-icon")) {
+      let parentBtnElement = event.target.parentElement.innerText;
+
+      switch (parentBtnElement) {
+        case "Product":
+          console.log(productBtn.attributes["aria-expanded"].value);
+          productBtn.attributes["aria-expanded"].value = true;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = false;
+          break;
+        case "Company":
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = true;
+          connectBtn.attributes["aria-expanded"].value = false;
+          break;
+        case "Connect":
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = true;
+          break;
+      }
+    }
+  });
+}
 /*
 
 // Replace this with a relevant selector.
