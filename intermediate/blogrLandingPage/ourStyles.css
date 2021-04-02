@@ -395,13 +395,14 @@ a {
 
 a.btn-link[aria-expanded="true"] span.arrow-icon {
   transform: rotate(-135deg);
+  top: 20px;
 }
 
 /* submenu */
 
-ul.header-sublist,
-ul.header-sublist-submenu {
+ul.header-sublist {
   /* border: 1px solid red; */
+  --gap: 0.5rem;
   border-radius: 8px;
   padding: 16px 0;
   margin: 16px 0;
@@ -432,10 +433,11 @@ ul.header-sublist:focus-within .header-sublinks {
 /* menu of submenu */
 
 ul.header-sublist-submenu {
+  --gap: 0.5rem;
   background-color: hsl(8.2, 100%, 71.2%);
   box-shadow: inset 0 0 10px #000000;
-  /* padding-block-start: 8px;
-  padding-block-end: 8px; */
+  padding-block-start: 8px;
+  padding-block-end: 8px;
 }
 
 /* menu of submenu */
