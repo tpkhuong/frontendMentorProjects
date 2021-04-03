@@ -2,7 +2,7 @@ function ourSelectors() {
   var hamburgerElement = document.querySelector(".hamburger");
   var navContainer = document.querySelector(".nav-login-container");
   var headerNav = document.querySelector(".header-nav");
-  var ulHeaderlist = document.querySelector(".header-list");
+  // var ulHeaderlist = document.querySelector(".header-list");
   var btnElementsSublist = Array.from(
     document.querySelectorAll(".header-items > a.btn-link[aria-expanded]")
   );
@@ -12,7 +12,7 @@ function ourSelectors() {
     navContainer,
     headerNav,
     btnElementsSublist,
-    ulHeaderlist,
+    // ulHeaderlist,
   };
 }
 
@@ -124,9 +124,13 @@ function showSublistFocusElement(
   { headerNav, btnElementsSublist } = ourSelectors()
 ) {
   headerNav.addEventListener("focusin", function toggleSubmenu(event) {
+    /* using this eventListener to select the submenu */
+    // var sublistSubmenuSelector = event.target.innerText;
+    /* using this eventListener to select the submenu */
     var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
-
+    console.log(event.target);
     var classOfAnchorElement = event.target.className;
+    var innerTextAnchorElement = event.target.innerText;
     if (classOfAnchorElement.includes("header-sublinks")) {
       var grandParentElementInnerText =
         event.target.parentElement.parentElement.previousElementSibling
@@ -150,6 +154,13 @@ function showSublistFocusElement(
           connectBtn.attributes["aria-expanded"].value = true;
           break;
       }
+    } else if (
+      classOfAnchorElement.includes("btn-link") &&
+      innerTextAnchorElement == "Contact"
+    ) {
+      productBtn.attributes["aria-expanded"].value = false;
+      companyBtn.attributes["aria-expanded"].value = false;
+      connectBtn.attributes["aria-expanded"].value = true;
     }
   });
 }
@@ -184,6 +195,8 @@ function showSublistHover({ headerNav, btnElementsSublist } = ourSelectors()) {
     }
   });
 }
+
+function showSublistSubmenuKeydown() {}
 
 function showSubmenu({ headerNav, btnElementsSublist } = ourSelectors()) {
   headerNav.addEventListener("keydown", function toggleSubmenu(event) {
@@ -356,7 +369,53 @@ function showSubmenu({ headerNav, btnElementsSublist } = ourSelectors()) {
   });
 }
 
-function showSublistSubmenu({ ulHeaderlist } = ourSelectors()) {}
+showSublistSubmenu();
+
+function showSublistSubmenu(focusElement) {
+  var ulHeaderlist = document.querySelector(".header-list");
+
+  ulHeaderlist.addEventListener(
+    "keydown",
+    function toggleSublistSubmenu(event) {
+      var keyPressed = event.code;
+      //let's select the submenu link that was clicked
+      if (keyPressed == "Space") {
+        event.preventDefault();
+        // let tagName = event.target.tagName;
+        let strUsedToFilterBtnElements =
+          event.target.parentElement.parentElement.previousElementSibling
+            .innerText;
+        arrOfBtnElements(strUsedToFilterBtnElements);
+        event.stopPropagation();
+      }
+    }
+  );
+}
+
+function arrOfBtnElements(strInput) {
+  console.log(strInput);
+  var submenuBtnElements = Array.from(
+    document.querySelectorAll(
+      ".header-subitems a[aria-expanded][aria-haspopup]"
+    )
+  );
+  alert("we have the array with btnElement of the ul we want to target");
+  var resultArr = submenuBtnElements.filter(function btnElementMatchStrInput(
+    eachBtnElement
+  ) {
+    var btnElementGrandParentSiblingInnerText =
+      eachBtnElement.parentElement.parentElement.previousElementSibling
+        .innerText;
+    return strInput == btnElementGrandParentSiblingInnerText;
+  });
+  console.log(resultArr);
+  // submenuBtnElements.forEach(function printParentELement(eachBtnElement) {
+  //   console.log(
+  //     eachBtnElement.parentElement.parentElement.previousElementSibling
+  //       .innerText
+  //   );
+  // });
+}
 
 function keyboardFunctionality(
   { headerNav, btnElementsSublist } = ourSelectors()
