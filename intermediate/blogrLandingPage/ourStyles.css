@@ -428,7 +428,24 @@ ul.header-sublist:focus-within .header-sublinks {
 
 /* hide or show submenu */
 
-/* submenu */
+/* sublist submenu hide or show */
+
+.header-sublist
+  a.btn-link[aria-expanded="false"][aria-haspopup="false"]
+  ~ ul.header-sublist-submenu {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  overflow: hidden;
+}
+
+.header-sublist
+  a.btn[aria-expanded="true"][aria-haspopup="true"]
+  ~ ul.header-sublist-submenu {
+  position: static;
+}
+
+/* sublist submenu hide or show */
 
 /* menu of submenu */
 
