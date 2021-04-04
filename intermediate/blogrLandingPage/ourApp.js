@@ -381,40 +381,101 @@ function showSublistSubmenu(focusElement) {
       //let's select the submenu link that was clicked
       if (keyPressed == "Space") {
         event.preventDefault();
-        // let tagName = event.target.tagName;
+        let btnElementInnerText = event.target.innerText;
         let strUsedToFilterBtnElements =
           event.target.parentElement.parentElement.previousElementSibling
             .innerText;
-        arrOfBtnElements(strUsedToFilterBtnElements);
+        let {
+          arrWithBtnWeWantToSetAriaTrue: oneOfBtnWillBeAriaTrue,
+          arrWithBtnWeWantToSetAriaFalse: turnAllBtnAriaFalse,
+        } = arrOfBtnElements(strUsedToFilterBtnElements);
+        makeBtnAriaToFalse(turnAllBtnAriaFalse);
+        makeBtnAriaTrueShowSubmenu(oneOfBtnWillBeAriaTrue, btnElementInnerText);
+        alert("focus first element");
         event.stopPropagation();
+      } else if (keyPressed == "Enter") {
+        alert("work on enter key");
       }
     }
   );
 }
 
 function arrOfBtnElements(strInput) {
-  console.log(strInput);
   var submenuBtnElements = Array.from(
     document.querySelectorAll(
       ".header-subitems a[aria-expanded][aria-haspopup]"
     )
   );
-  alert("we have the array with btnElement of the ul we want to target");
-  var resultArr = submenuBtnElements.filter(function btnElementMatchStrInput(
-    eachBtnElement
-  ) {
-    var btnElementGrandParentSiblingInnerText =
-      eachBtnElement.parentElement.parentElement.previousElementSibling
-        .innerText;
-    return strInput == btnElementGrandParentSiblingInnerText;
-  });
-  console.log(resultArr);
+  /***** this returns one arr *****/
+  var arrWithBtnWeWantToSetAriaTrue = submenuBtnElements.filter(
+    function btnElementMatchStrInput(eachBtnElement) {
+      var btnElementGrandParentSiblingInnerText =
+        eachBtnElement.parentElement.parentElement.previousElementSibling
+          .innerText;
+      return strInput == btnElementGrandParentSiblingInnerText;
+    }
+  );
+
+  var arrWithBtnWeWantToSetAriaFalse = submenuBtnElements.reduce(
+    function btnElementDoesNotMatchStr(buildingUp, currentValue) {
+      var btnElementGrandParentSiblingInnerText =
+        currentValue.parentElement.parentElement.previousElementSibling
+          .innerText;
+      if (strInput != btnElementGrandParentSiblingInnerText) {
+        return [...buildingUp, currentValue];
+      }
+      return buildingUp;
+    },
+    []
+  );
+  /***** use reduce *****/
+  // let arrOfBtnMatched = [];
+  // let arrOfBtnNotMatched = [];
+  // var ourObjOfArr = submenuBtnElements.reduce(function objWithArrays(
+  //   buildingUp,
+  //   currentValue
+  // ) {
+  //   debugger;
+  //   var btnElementGrandParentSiblingInnerText =
+  //     currentValue.parentElement.parentElement.previousElementSibling.innerText;
+  //   if (strInput == btnElementGrandParentSiblingInnerText) {
+  //     arrOfBtnMatched = arrOfBtnMatched.concat([currentValue]);
+  //     return Object.assign(buildingUp, { arrOfBtnMatched });
+  //   } else {
+  //     arrOfBtnNotMatched = arrOfBtnNotMatched.concat([currentValue]);
+  //     return Object.assign(buildingUp, { arrOfBtnNotMatched });
+  //   }
+  // },
+  // {});
+
+  /***** use reduce *****/
+  return { arrWithBtnWeWantToSetAriaTrue, arrWithBtnWeWantToSetAriaFalse };
+  /***** this returns one arr *****/
   // submenuBtnElements.forEach(function printParentELement(eachBtnElement) {
   //   console.log(
   //     eachBtnElement.parentElement.parentElement.previousElementSibling
   //       .innerText
   //   );
   // });
+}
+
+function makeBtnAriaTrueShowSubmenu(arrInput, strInput) {
+  arrInput.forEach(function findBtnMatchStrInputMakeAriaTrue(eachBtn) {
+    if (eachBtn.innerText == strInput) {
+      eachBtn.attributes["aria-expanded"].value = true;
+      eachBtn.attributes["aria-haspopup"].value = true;
+    } else {
+      eachBtn.attributes["aria-expanded"].value = false;
+      eachBtn.attributes["aria-haspopup"].value = false;
+    }
+  });
+}
+
+function makeBtnAriaToFalse(arrInput) {
+  arrInput.forEach(function turnAriaToFalse(eachBtnElement) {
+    eachBtnElement.attributes["aria-expanded"].value = false;
+    eachBtnElement.attributes["aria-haspopup"].value = false;
+  });
 }
 
 function keyboardFunctionality(
