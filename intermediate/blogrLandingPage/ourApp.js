@@ -165,18 +165,213 @@ function showSublistFocusElement(
   });
 }
 
-function showSublistHover({ headerNav, btnElementsSublist } = ourSelectors()) {
-  headerNav.addEventListener("mouseover", function toggleSubmenu(event) {
-    // var arrOfSubmenuElements = Array.from(
-    //   event.target.nextElementSibling.children
-    // );
-    // var [firstSubmenuElement] = arrOfSubmenuElements;
-    // firstSubmenuElement.firstElementChild.focus();
+/***** hover should work when on big screen, small screen we want to be able to click *****/
+windowResizeEventWrapper();
+
+function windowResizeEventWrapper() {
+  if (window.innerWidth < 770) {
+    showSublistClickUsingMouse();
+  }
+
+  // window.addEventListener("resize", function hoverEffectOnBigScreen(event) {
+  //   var smallScreenWindowWidth = event.target.innerWidth;
+  //   if (smallScreenWindowWidth > 381 && smallScreenWindowWidth < 767) {
+  //     showSublistClickUsingMouse();
+  //   }
+  // });
+
+  window.addEventListener("resize", function hoverEffectOnBigScreen(event) {
+    var windowWidth = event.target.innerWidth;
+    if (windowWidth > 771) {
+      showSublistHover();
+    }
+  });
+}
+
+function showSublistHover() {
+  var btnElementsSublist = Array.from(
+    document.querySelectorAll(".header-items > a.btn-link[aria-expanded]")
+  );
+  var headerNav = document.querySelector(".header-nav");
+  if (window.innerWidth > 768) {
+    headerNav.addEventListener("mouseover", function toggleSubmenu(event) {
+      // var arrOfSubmenuElements = Array.from(
+      //   event.target.nextElementSibling.children
+      // );
+      // var [firstSubmenuElement] = arrOfSubmenuElements;
+      // firstSubmenuElement.firstElementChild.focus();
+      var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
+      var btnElementInnerText = event.target.innerText;
+      if (event.target.className.includes("btn-link")) {
+        switch (btnElementInnerText) {
+          case "Product":
+            productBtn.attributes["aria-expanded"].value = true;
+            companyBtn.attributes["aria-expanded"].value = false;
+            connectBtn.attributes["aria-expanded"].value = false;
+            break;
+          case "Company":
+            productBtn.attributes["aria-expanded"].value = false;
+            companyBtn.attributes["aria-expanded"].value = true;
+            connectBtn.attributes["aria-expanded"].value = false;
+            break;
+          case "Connect":
+            productBtn.attributes["aria-expanded"].value = false;
+            companyBtn.attributes["aria-expanded"].value = false;
+            connectBtn.attributes["aria-expanded"].value = true;
+            break;
+        }
+      }
+    });
+  }
+}
+/***** hover should work when on big screen, small screen we want to be able to click *****/
+
+showSublistSubmenuKeydown();
+
+function showSublistSubmenuKeydown() {
+  var ulHeaderlist = document.querySelector(".header-list");
+
+  ulHeaderlist.addEventListener(
+    "keydown",
+    function toggleSublistSubmenu(event) {
+      var keyPressed = event.code;
+      //let's select the submenu link that was clicked
+      if (keyPressed == "Space") {
+        event.preventDefault();
+        let [firstSublistSubmenuElement] = Array.from(
+          event.target.nextElementSibling.children
+        );
+        let btnElementInnerText = event.target.innerText;
+        let strUsedToFilterBtnElements =
+          event.target.parentElement.parentElement.previousElementSibling
+            .innerText;
+        let {
+          arrWithBtnWeWantToSetAriaTrue: oneOfBtnWillBeAriaTrue,
+          arrWithBtnWeWantToSetAriaFalse: turnAllBtnAriaFalse,
+        } = arrOfBtnElements(strUsedToFilterBtnElements);
+        makeBtnAriaToFalse(turnAllBtnAriaFalse);
+        makeBtnAriaTrueShowSubmenu(oneOfBtnWillBeAriaTrue, btnElementInnerText);
+        firstSublistSubmenuElement.firstElementChild.focus();
+        event.stopPropagation();
+      } else if (keyPressed == "Enter") {
+        alert("work on enter key");
+      }
+    }
+  );
+}
+
+function arrOfBtnElements(strInput) {
+  var submenuBtnElements = Array.from(
+    document.querySelectorAll(
+      ".header-subitems a[aria-expanded][aria-haspopup]"
+    )
+  );
+  /***** this returns one arr *****/
+  var arrWithBtnWeWantToSetAriaTrue = submenuBtnElements.filter(
+    function btnElementMatchStrInput(eachBtnElement) {
+      var btnElementGrandParentSiblingInnerText =
+        eachBtnElement.parentElement.parentElement.previousElementSibling
+          .innerText;
+      return strInput == btnElementGrandParentSiblingInnerText;
+    }
+  );
+
+  var arrWithBtnWeWantToSetAriaFalse = submenuBtnElements.reduce(
+    function btnElementDoesNotMatchStr(buildingUp, currentValue) {
+      var btnElementGrandParentSiblingInnerText =
+        currentValue.parentElement.parentElement.previousElementSibling
+          .innerText;
+      if (strInput != btnElementGrandParentSiblingInnerText) {
+        return [...buildingUp, currentValue];
+      }
+      return buildingUp;
+    },
+    []
+  );
+  /***** use reduce *****/
+  // let arrOfBtnMatched = [];
+  // let arrOfBtnNotMatched = [];
+  // var ourObjOfArr = submenuBtnElements.reduce(function objWithArrays(
+  //   buildingUp,
+  //   currentValue
+  // ) {
+  //   debugger;
+  //   var btnElementGrandParentSiblingInnerText =
+  //     currentValue.parentElement.parentElement.previousElementSibling.innerText;
+  //   if (strInput == btnElementGrandParentSiblingInnerText) {
+  //     arrOfBtnMatched = arrOfBtnMatched.concat([currentValue]);
+  //     return Object.assign(buildingUp, { arrOfBtnMatched });
+  //   } else {
+  //     arrOfBtnNotMatched = arrOfBtnNotMatched.concat([currentValue]);
+  //     return Object.assign(buildingUp, { arrOfBtnNotMatched });
+  //   }
+  // },
+  // {});
+
+  /***** use reduce *****/
+  return { arrWithBtnWeWantToSetAriaTrue, arrWithBtnWeWantToSetAriaFalse };
+  /***** this returns one arr *****/
+  // submenuBtnElements.forEach(function printParentELement(eachBtnElement) {
+  //   console.log(
+  //     eachBtnElement.parentElement.parentElement.previousElementSibling
+  //       .innerText
+  //   );
+  // });
+}
+
+function makeBtnAriaTrueShowSubmenu(arrInput, strInput) {
+  arrInput.forEach(function findBtnMatchStrInputMakeAriaTrue(eachBtn) {
+    if (eachBtn.innerText == strInput) {
+      eachBtn.attributes["aria-expanded"].value = true;
+      eachBtn.attributes["aria-haspopup"].value = true;
+    } else {
+      eachBtn.attributes["aria-expanded"].value = false;
+      eachBtn.attributes["aria-haspopup"].value = false;
+    }
+  });
+}
+
+function makeBtnAriaToFalse(arrInput) {
+  arrInput.forEach(function turnAriaToFalse(eachBtnElement) {
+    eachBtnElement.attributes["aria-expanded"].value = false;
+    eachBtnElement.attributes["aria-haspopup"].value = false;
+  });
+}
+
+function showSublistClickUsingMouse(
+  { headerNav, btnElementsSublist } = ourSelectors()
+) {
+  headerNav.addEventListener("click", function toggleSubmenu(event) {
+    event.preventDefault();
     var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
-    var btnElementInnerText = event.target.innerText;
-    if (event.target.className.includes("btn-link")) {
-      switch (btnElementInnerText) {
+    var classOfClickElement = event.target.className;
+    if (classOfClickElement.includes("btn-link")) {
+      var strTextOfBtnElement = event.target.innerText;
+
+      switch (strTextOfBtnElement) {
         case "Product":
+          console.log(productBtn.attributes["aria-expanded"].value);
+          productBtn.attributes["aria-expanded"].value = true;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = false;
+          break;
+        case "Company":
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = true;
+          connectBtn.attributes["aria-expanded"].value = false;
+          break;
+        case "Connect":
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = true;
+          break;
+      }
+    } else if (classOfClickElement.includes("arrow-icon")) {
+      let parentBtnElement = event.target.parentElement.innerText;
+
+      switch (parentBtnElement) {
+        case "Product":
+          console.log(productBtn.attributes["aria-expanded"].value);
           productBtn.attributes["aria-expanded"].value = true;
           companyBtn.attributes["aria-expanded"].value = false;
           connectBtn.attributes["aria-expanded"].value = false;
@@ -196,7 +391,9 @@ function showSublistHover({ headerNav, btnElementsSublist } = ourSelectors()) {
   });
 }
 
-function showSublistSubmenuKeydown() {}
+function keyboardFunctionality(
+  { headerNav, btnElementsSublist } = ourSelectors()
+) {}
 
 function showSubmenu({ headerNav, btnElementsSublist } = ourSelectors()) {
   headerNav.addEventListener("keydown", function toggleSubmenu(event) {
@@ -369,170 +566,6 @@ function showSubmenu({ headerNav, btnElementsSublist } = ourSelectors()) {
   });
 }
 
-showSublistSubmenu();
-
-function showSublistSubmenu(focusElement) {
-  var ulHeaderlist = document.querySelector(".header-list");
-
-  ulHeaderlist.addEventListener(
-    "keydown",
-    function toggleSublistSubmenu(event) {
-      var keyPressed = event.code;
-      //let's select the submenu link that was clicked
-      if (keyPressed == "Space") {
-        event.preventDefault();
-        let btnElementInnerText = event.target.innerText;
-        let strUsedToFilterBtnElements =
-          event.target.parentElement.parentElement.previousElementSibling
-            .innerText;
-        let {
-          arrWithBtnWeWantToSetAriaTrue: oneOfBtnWillBeAriaTrue,
-          arrWithBtnWeWantToSetAriaFalse: turnAllBtnAriaFalse,
-        } = arrOfBtnElements(strUsedToFilterBtnElements);
-        makeBtnAriaToFalse(turnAllBtnAriaFalse);
-        makeBtnAriaTrueShowSubmenu(oneOfBtnWillBeAriaTrue, btnElementInnerText);
-        alert("focus first element");
-        event.stopPropagation();
-      } else if (keyPressed == "Enter") {
-        alert("work on enter key");
-      }
-    }
-  );
-}
-
-function arrOfBtnElements(strInput) {
-  var submenuBtnElements = Array.from(
-    document.querySelectorAll(
-      ".header-subitems a[aria-expanded][aria-haspopup]"
-    )
-  );
-  /***** this returns one arr *****/
-  var arrWithBtnWeWantToSetAriaTrue = submenuBtnElements.filter(
-    function btnElementMatchStrInput(eachBtnElement) {
-      var btnElementGrandParentSiblingInnerText =
-        eachBtnElement.parentElement.parentElement.previousElementSibling
-          .innerText;
-      return strInput == btnElementGrandParentSiblingInnerText;
-    }
-  );
-
-  var arrWithBtnWeWantToSetAriaFalse = submenuBtnElements.reduce(
-    function btnElementDoesNotMatchStr(buildingUp, currentValue) {
-      var btnElementGrandParentSiblingInnerText =
-        currentValue.parentElement.parentElement.previousElementSibling
-          .innerText;
-      if (strInput != btnElementGrandParentSiblingInnerText) {
-        return [...buildingUp, currentValue];
-      }
-      return buildingUp;
-    },
-    []
-  );
-  /***** use reduce *****/
-  // let arrOfBtnMatched = [];
-  // let arrOfBtnNotMatched = [];
-  // var ourObjOfArr = submenuBtnElements.reduce(function objWithArrays(
-  //   buildingUp,
-  //   currentValue
-  // ) {
-  //   debugger;
-  //   var btnElementGrandParentSiblingInnerText =
-  //     currentValue.parentElement.parentElement.previousElementSibling.innerText;
-  //   if (strInput == btnElementGrandParentSiblingInnerText) {
-  //     arrOfBtnMatched = arrOfBtnMatched.concat([currentValue]);
-  //     return Object.assign(buildingUp, { arrOfBtnMatched });
-  //   } else {
-  //     arrOfBtnNotMatched = arrOfBtnNotMatched.concat([currentValue]);
-  //     return Object.assign(buildingUp, { arrOfBtnNotMatched });
-  //   }
-  // },
-  // {});
-
-  /***** use reduce *****/
-  return { arrWithBtnWeWantToSetAriaTrue, arrWithBtnWeWantToSetAriaFalse };
-  /***** this returns one arr *****/
-  // submenuBtnElements.forEach(function printParentELement(eachBtnElement) {
-  //   console.log(
-  //     eachBtnElement.parentElement.parentElement.previousElementSibling
-  //       .innerText
-  //   );
-  // });
-}
-
-function makeBtnAriaTrueShowSubmenu(arrInput, strInput) {
-  arrInput.forEach(function findBtnMatchStrInputMakeAriaTrue(eachBtn) {
-    if (eachBtn.innerText == strInput) {
-      eachBtn.attributes["aria-expanded"].value = true;
-      eachBtn.attributes["aria-haspopup"].value = true;
-    } else {
-      eachBtn.attributes["aria-expanded"].value = false;
-      eachBtn.attributes["aria-haspopup"].value = false;
-    }
-  });
-}
-
-function makeBtnAriaToFalse(arrInput) {
-  arrInput.forEach(function turnAriaToFalse(eachBtnElement) {
-    eachBtnElement.attributes["aria-expanded"].value = false;
-    eachBtnElement.attributes["aria-haspopup"].value = false;
-  });
-}
-
-function keyboardFunctionality(
-  { headerNav, btnElementsSublist } = ourSelectors()
-) {}
-
-function showSublistClickUsingMouse(
-  { headerNav, btnElementsSublist } = ourSelectors()
-) {
-  headerNav.addEventListener("click", function toggleSubmenu(event) {
-    var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
-    var classOfClickElement = event.target.className;
-    if (classOfClickElement.includes("btn-link")) {
-      var strTextOfBtnElement = event.target.innerText;
-
-      switch (strTextOfBtnElement) {
-        case "Product":
-          console.log(productBtn.attributes["aria-expanded"].value);
-          productBtn.attributes["aria-expanded"].value = true;
-          companyBtn.attributes["aria-expanded"].value = false;
-          connectBtn.attributes["aria-expanded"].value = false;
-          break;
-        case "Company":
-          productBtn.attributes["aria-expanded"].value = false;
-          companyBtn.attributes["aria-expanded"].value = true;
-          connectBtn.attributes["aria-expanded"].value = false;
-          break;
-        case "Connect":
-          productBtn.attributes["aria-expanded"].value = false;
-          companyBtn.attributes["aria-expanded"].value = false;
-          connectBtn.attributes["aria-expanded"].value = true;
-          break;
-      }
-    } else if (classOfClickElement.includes("arrow-icon")) {
-      let parentBtnElement = event.target.parentElement.innerText;
-
-      switch (parentBtnElement) {
-        case "Product":
-          console.log(productBtn.attributes["aria-expanded"].value);
-          productBtn.attributes["aria-expanded"].value = true;
-          companyBtn.attributes["aria-expanded"].value = false;
-          connectBtn.attributes["aria-expanded"].value = false;
-          break;
-        case "Company":
-          productBtn.attributes["aria-expanded"].value = false;
-          companyBtn.attributes["aria-expanded"].value = true;
-          connectBtn.attributes["aria-expanded"].value = false;
-          break;
-        case "Connect":
-          productBtn.attributes["aria-expanded"].value = false;
-          companyBtn.attributes["aria-expanded"].value = false;
-          connectBtn.attributes["aria-expanded"].value = true;
-          break;
-      }
-    }
-  });
-}
 /*
 
 // Replace this with a relevant selector.
