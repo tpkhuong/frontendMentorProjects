@@ -2,7 +2,7 @@ function ourSelectors() {
   var hamburgerElement = document.querySelector(".hamburger");
   var navContainer = document.querySelector(".nav-login-container");
   var headerNav = document.querySelector(".header-nav");
-  // var ulHeaderlist = document.querySelector(".header-list");
+  var ulHeaderlist = document.querySelector(".header-list");
   var btnElementsSublist = Array.from(
     document.querySelectorAll(".header-items > a.btn-link[aria-expanded]")
   );
@@ -12,7 +12,7 @@ function ourSelectors() {
     navContainer,
     headerNav,
     btnElementsSublist,
-    // ulHeaderlist,
+    ulHeaderlist,
   };
 }
 
@@ -347,7 +347,7 @@ function showSublistClickUsingMouse(
     var classOfClickElement = event.target.className;
     if (classOfClickElement.includes("btn-link")) {
       var strTextOfBtnElement = event.target.innerText;
-
+      showSublistSubmenuClick(event.target);
       switch (strTextOfBtnElement) {
         case "Product":
           console.log(productBtn.attributes["aria-expanded"].value);
@@ -368,13 +368,15 @@ function showSublistClickUsingMouse(
       }
     } else if (classOfClickElement.includes("arrow-icon")) {
       let parentBtnElement = event.target.parentElement.innerText;
-
+      showSublistSubmenuClick(event.target);
+      // console.log(event.target);
       switch (parentBtnElement) {
         case "Product":
           console.log(productBtn.attributes["aria-expanded"].value);
           productBtn.attributes["aria-expanded"].value = true;
           companyBtn.attributes["aria-expanded"].value = false;
           connectBtn.attributes["aria-expanded"].value = false;
+          // showSublistSubmenuClick(parentBtnElement);
           break;
         case "Company":
           productBtn.attributes["aria-expanded"].value = false;
@@ -386,14 +388,73 @@ function showSublistClickUsingMouse(
           companyBtn.attributes["aria-expanded"].value = false;
           connectBtn.attributes["aria-expanded"].value = true;
           break;
+        case "Pricing":
+          break;
       }
     }
   });
 }
 
+function showSublistSubmenuClick(clickElement) {
+  // let {
+  //   arrWithBtnWeWantToSetAriaTrue: oneOfBtnWillBeAriaTrue,
+  //   arrWithBtnWeWantToSetAriaFalse: turnAllBtnAriaFalse,
+  // } = arrOfBtnElements(strInputForArrBuildUp);
+  // makeBtnAriaToFalse(turnAllBtnAriaFalse);
+  // makeBtnAriaTrueShowSubmenu(oneOfBtnWillBeAriaTrue, strInputForAriaToggle);
+  var elementInnerText = clickElement.innerText;
+  var innerTextToUseInfunc;
+  if (!elementInnerText) {
+    innerTextToUseInfunc = clickElement.parentElement.innerText;
+  } else {
+    innerTextToUseInfunc = elementInnerText;
+  }
+  console.log(innerTextToUseInfunc);
+  // alert("got the innerText of the btn submenu clicked");
+  var siblingElementStr = findSublistInnerText(clickElement);
+  console.log(siblingElementStr);
+  alert(
+    "now we have both str to use in our func where we will select the submenu btns then make two arrs which will set aria true or false"
+  );
+  function findSublistInnerText(element) {
+    var siblingElementStrUseInFunc;
+    console.log(element);
+
+    var parent = element.parentElement;
+    var whatIsThis;
+    while (parent) {
+      if (parent.className.includes("header-sublist")) {
+        let siblingElement = parent.previousElementSibling;
+        siblingElementStrUseInFunc = siblingElement.innerText;
+      }
+      parent = parent.parentElement;
+    }
+    return siblingElementStrUseInFunc;
+  }
+}
+
+// function findCulprits(elem) {
+//   if (!elem) {
+//     throw new Error("Could not find element with that selector");
+//   }
+//   let parent = elem.parentElement;
+//   while (parent) {
+//     const { transform, willChange } = getComputedStyle(parent);
+//     if (transform !== "none" || willChange === "transform") {
+//       console.warn("🚨 Found a culprit! 🚨\n", parent, {
+//         transform,
+//         willChange,
+//       });
+//     }
+//     parent = parent.parentElement;
+//   }
+// }
+
 function keyboardFunctionality(
   { headerNav, btnElementsSublist } = ourSelectors()
 ) {}
+
+/***** original code *****/
 
 function showSubmenu({ headerNav, btnElementsSublist } = ourSelectors()) {
   headerNav.addEventListener("keydown", function toggleSubmenu(event) {
