@@ -169,23 +169,30 @@ function showSublistFocusElement(
 windowResizeEventWrapper();
 
 function windowResizeEventWrapper() {
-  if (window.innerWidth < 770) {
-    showSublistClickUsingMouse();
-  }
-
-  // window.addEventListener("resize", function hoverEffectOnBigScreen(event) {
-  //   var smallScreenWindowWidth = event.target.innerWidth;
-  //   if (smallScreenWindowWidth > 381 && smallScreenWindowWidth < 767) {
-  //     showSublistClickUsingMouse();
-  //   }
-  // });
-
-  window.addEventListener("resize", function hoverEffectOnBigScreen(event) {
-    var windowWidth = event.target.innerWidth;
-    if (windowWidth > 771) {
+  window.addEventListener("load", function checkWidth(event) {
+    var windowWidth = window.innerWidth;
+    console.log(windowWidth);
+    if (windowWidth < 770) {
+      showSublistClickUsingMouse();
+    } else {
       showSublistHover();
     }
   });
+  window.addEventListener("resize", function hoverEffectOnBigScreen(event) {
+    const smallScreenWindowWidth = event.target.innerWidth;
+    if (smallScreenWindowWidth < 767) {
+      console.log("resize in < 767");
+      showSublistClickUsingMouse();
+      return;
+    }
+  });
+  // window.addEventListener("resize", function hoverEffectOnBigScreen(event) {
+  //   var windowWidth = event.target.innerWidth;
+  //   if (windowWidth > 771) {
+  //     console.log("resize in < 771");
+  //     showSublistHover();
+  //   }
+  // });
 }
 
 function showSublistHover() {
@@ -193,37 +200,57 @@ function showSublistHover() {
     document.querySelectorAll(".header-items > a.btn-link[aria-expanded]")
   );
   var headerNav = document.querySelector(".header-nav");
-  if (window.innerWidth > 768) {
-    headerNav.addEventListener("mouseover", function toggleSubmenu(event) {
-      // var arrOfSubmenuElements = Array.from(
-      //   event.target.nextElementSibling.children
-      // );
-      // var [firstSubmenuElement] = arrOfSubmenuElements;
-      // firstSubmenuElement.firstElementChild.focus();
-      var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
-      var btnElementInnerText = event.target.innerText;
-      if (event.target.className.includes("btn-link")) {
-        switch (btnElementInnerText) {
-          case "Product":
-            productBtn.attributes["aria-expanded"].value = true;
-            companyBtn.attributes["aria-expanded"].value = false;
-            connectBtn.attributes["aria-expanded"].value = false;
-            break;
-          case "Company":
-            productBtn.attributes["aria-expanded"].value = false;
-            companyBtn.attributes["aria-expanded"].value = true;
-            connectBtn.attributes["aria-expanded"].value = false;
-            break;
-          case "Connect":
-            productBtn.attributes["aria-expanded"].value = false;
-            companyBtn.attributes["aria-expanded"].value = false;
-            connectBtn.attributes["aria-expanded"].value = true;
-            break;
-        }
+  headerNav.addEventListener("mouseover", function toggleSubmenu(event) {
+    // var arrOfSubmenuElements = Array.from(
+    //   event.target.nextElementSibling.children
+    // );
+    // var [firstSubmenuElement] = arrOfSubmenuElements;
+    // firstSubmenuElement.firstElementChild.focus();
+    var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
+    var btnElementInnerText = event.target.innerText;
+    showSublistSubmenuToggle(event.target);
+    if (event.target.className.includes("btn-link")) {
+      console.log(event.target);
+      switch (btnElementInnerText) {
+        case "Product":
+          productBtn.attributes["aria-expanded"].value = true;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = false;
+          break;
+        case "Company":
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = true;
+          connectBtn.attributes["aria-expanded"].value = false;
+          break;
+        case "Connect":
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = true;
+          break;
       }
-    });
-  }
+    }
+  });
 }
+
+function showSublistSubmenuToggle(elementInput) {
+  var elementText = elementInput.innerText;
+  var strUsedInAriaFunc;
+  if (!elementText) {
+    strUsedInAriaFunc = elementInput.parentElement.innerText;
+  } else {
+    strUsedInAriaFunc = elementInput.innerText;
+  }
+
+  var siblingOfUlElementStr = findSublistInnerText(elementInput);
+
+  let {
+    arrWithBtnWeWantToSetAriaTrue: oneOfBtnWillBeAriaTrue,
+    arrWithBtnWeWantToSetAriaFalse: turnAllBtnAriaFalse,
+  } = arrOfBtnElements(siblingOfUlElementStr);
+  makeBtnAriaToFalse(turnAllBtnAriaFalse);
+  makeBtnAriaTrueShowSubmenu(oneOfBtnWillBeAriaTrue, strUsedInAriaFunc);
+}
+
 /***** hover should work when on big screen, small screen we want to be able to click *****/
 
 showSublistSubmenuKeydown();
@@ -347,7 +374,7 @@ function showSublistClickUsingMouse(
     var classOfClickElement = event.target.className;
     if (classOfClickElement.includes("btn-link")) {
       var strTextOfBtnElement = event.target.innerText;
-      showSublistSubmenuClick(event.target);
+      showSublistSubmenuToggle(event.target);
       switch (strTextOfBtnElement) {
         case "Product":
           console.log(productBtn.attributes["aria-expanded"].value);
@@ -368,7 +395,7 @@ function showSublistClickUsingMouse(
       }
     } else if (classOfClickElement.includes("arrow-icon")) {
       let parentBtnElement = event.target.parentElement.innerText;
-      showSublistSubmenuClick(event.target);
+      showSublistSubmenuToggle(event.target);
       // console.log(event.target);
       switch (parentBtnElement) {
         case "Product":
@@ -395,44 +422,20 @@ function showSublistClickUsingMouse(
   });
 }
 
-function showSublistSubmenuClick(clickElement) {
-  // let {
-  //   arrWithBtnWeWantToSetAriaTrue: oneOfBtnWillBeAriaTrue,
-  //   arrWithBtnWeWantToSetAriaFalse: turnAllBtnAriaFalse,
-  // } = arrOfBtnElements(strInputForArrBuildUp);
-  // makeBtnAriaToFalse(turnAllBtnAriaFalse);
-  // makeBtnAriaTrueShowSubmenu(oneOfBtnWillBeAriaTrue, strInputForAriaToggle);
-  var elementInnerText = clickElement.innerText;
-  var innerTextToUseInfunc;
-  if (!elementInnerText) {
-    innerTextToUseInfunc = clickElement.parentElement.innerText;
-  } else {
-    innerTextToUseInfunc = elementInnerText;
-  }
-  console.log(innerTextToUseInfunc);
-  // alert("got the innerText of the btn submenu clicked");
-  var siblingElementStr = findSublistInnerText(clickElement);
-  console.log(siblingElementStr);
-  alert(
-    "now we have both str to use in our func where we will select the submenu btns then make two arrs which will set aria true or false"
-  );
-  function findSublistInnerText(element) {
-    var siblingElementStrUseInFunc;
-    console.log(element);
+function findSublistInnerText(element) {
+  var siblingElementStrUseInFunc;
+  console.log(element);
 
-    var parent = element.parentElement;
-    var whatIsThis;
-    while (parent) {
-      if (parent.className.includes("header-sublist")) {
-        let siblingElement = parent.previousElementSibling;
-        siblingElementStrUseInFunc = siblingElement.innerText;
-      }
-      parent = parent.parentElement;
+  var parent = element.parentElement;
+  while (parent) {
+    if (parent.className.includes("header-sublist")) {
+      let siblingElement = parent.previousElementSibling;
+      siblingElementStrUseInFunc = siblingElement.innerText;
     }
-    return siblingElementStrUseInFunc;
+    parent = parent.parentElement;
   }
+  return siblingElementStrUseInFunc;
 }
-
 // function findCulprits(elem) {
 //   if (!elem) {
 //     throw new Error("Could not find element with that selector");
@@ -455,6 +458,48 @@ function keyboardFunctionality(
 ) {}
 
 /***** original code *****/
+
+function showSublistSubmenuIndividualCodeForClickAndHover() {
+  function showSublistSubmenuClick(clickElement) {
+    var elementInnerText = clickElement.innerText;
+    var innerTextToUseInfunc;
+    if (!elementInnerText) {
+      innerTextToUseInfunc = clickElement.parentElement.innerText;
+    } else {
+      innerTextToUseInfunc = elementInnerText;
+    }
+    console.log(innerTextToUseInfunc);
+    // alert("got the innerText of the btn submenu clicked");
+    var siblingElementStr = findSublistInnerText(clickElement);
+    console.log(siblingElementStr);
+
+    let {
+      arrWithBtnWeWantToSetAriaTrue: oneOfBtnWillBeAriaTrue,
+      arrWithBtnWeWantToSetAriaFalse: turnAllBtnAriaFalse,
+    } = arrOfBtnElements(siblingElementStr);
+    makeBtnAriaToFalse(turnAllBtnAriaFalse);
+    makeBtnAriaTrueShowSubmenu(oneOfBtnWillBeAriaTrue, innerTextToUseInfunc);
+  }
+
+  function showSublistSubmenuHover(hoveredElement) {
+    var hoveredElementText = hoveredElement.innerText;
+    var strUsedinAriaToggleFunc;
+    if (!hoveredElementText) {
+      strUsedinAriaToggleFunc = hoveredElement.parentElement.innerText;
+    } else {
+      strUsedinAriaToggleFunc = hoveredElement.innerText;
+    }
+
+    var siblingOfUlElementStr = findSublistInnerText(hoveredElement);
+
+    let {
+      arrWithBtnWeWantToSetAriaTrue: oneOfBtnWillBeAriaTrue,
+      arrWithBtnWeWantToSetAriaFalse: turnAllBtnAriaFalse,
+    } = arrOfBtnElements(siblingOfUlElementStr);
+    makeBtnAriaToFalse(turnAllBtnAriaFalse);
+    makeBtnAriaTrueShowSubmenu(oneOfBtnWillBeAriaTrue, strUsedinAriaToggleFunc);
+  }
+}
 
 function showSubmenu({ headerNav, btnElementsSublist } = ourSelectors()) {
   headerNav.addEventListener("keydown", function toggleSubmenu(event) {
