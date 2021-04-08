@@ -292,6 +292,19 @@ a {
   border-radius: 0 0 0 72px;
 }
 
+@media screen and (min-width: 1200px) {
+  .landing {
+    background-size: 106rem 106rem;
+    background-position: -16rem -45rem;
+    background-image: url("images/bg-pattern-intro.svg"),
+      linear-gradient(
+        to top right,
+        var(--clr-gradient-very-light-red),
+        var(--clr-gradient-light-red)
+      );
+  }
+}
+
 .logo-hamburger-container {
   display: flex;
   justify-content: space-between;
@@ -300,6 +313,12 @@ a {
 
 .heading-nav-container .logo-container {
   width: 80px;
+}
+
+@media screen and (min-width: 1200px) {
+  .heading-nav-container {
+    display: flex;
+  }
 }
 
 /* hamburger */
@@ -345,6 +364,12 @@ a {
   transform: translateY(-2.1rem) rotate(90deg);
 }
 
+@media screen and (min-width: 1200px) {
+  .hamburger {
+    display: none;
+  }
+}
+
 /* toggle navbar */
 
 /* hamburger */
@@ -360,6 +385,20 @@ a {
   padding: 16px;
   margin-block-start: 24px;
   box-shadow: 2px 2px 10px rgba(116, 116, 119, 0.856);
+}
+
+@media screen and (min-width: 1200px) {
+  .nav-login-container {
+    position: static;
+    flex-basis: 100%;
+    display: flex;
+    background-color: inherit;
+    margin-block-start: 0;
+    box-shadow: none;
+  }
+  .header-list {
+    display: flex;
+  }
 }
 
 .header-items:nth-of-type(1) .arrow-icon {
@@ -470,6 +509,14 @@ ul.header-sublist-submenu {
   padding: 24px 0;
 }
 
+@media screen and (min-width: 1200px) {
+  .login-container {
+    flex-flow: row;
+    border-top: none;
+    padding: 0;
+  }
+}
+
 /* login */
 
 /* header */
@@ -538,6 +585,12 @@ ul.header-sublist-submenu {
   background-color: transparent;
   width: 100%;
   border-radius: 0;
+}
+
+@media screen and (min-width: 1200px) {
+  [class*="btn-login"] {
+    margin-block-end: 0;
+  }
 }
 
 /* buttons */
