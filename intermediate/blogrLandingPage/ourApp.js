@@ -162,7 +162,21 @@ function showSublistFocusElement(
       companyBtn.attributes["aria-expanded"].value = false;
       connectBtn.attributes["aria-expanded"].value = true;
     }
+    showSublistSubmenuFocus(event.target);
   });
+}
+
+function showSublistSubmenuFocus(elementInput) {
+  console.log(elementInput);
+  var submenuToggleElement;
+  var parent = elementInput.parentElement;
+  while (parent) {
+    if (parent.className.includes("header-sublist-submenu")) {
+      submenuToggleElement = parent.previousElementSibling;
+    }
+    parent = parent.parentElement;
+  }
+  showSublistSubmenuToggle(submenuToggleElement);
 }
 
 /***** hover should work when on big screen, small screen we want to be able to click *****/
@@ -175,17 +189,18 @@ function windowResizeEventWrapper() {
     if (windowWidth < 770) {
       showSublistClickUsingMouse();
     } else {
+      console.log(windowWidth);
       showSublistHover();
     }
   });
-  window.addEventListener("resize", function hoverEffectOnBigScreen(event) {
-    const smallScreenWindowWidth = event.target.innerWidth;
-    if (smallScreenWindowWidth < 767) {
-      console.log("resize in < 767");
-      showSublistClickUsingMouse();
-      return;
-    }
-  });
+  // window.addEventListener("resize", function hoverEffectOnBigScreen(event) {
+  //   const smallScreenWindowWidth = event.target.innerWidth;
+  //   if (smallScreenWindowWidth < 767) {
+  //     console.log("resize in < 767");
+  //     showSublistClickUsingMouse();
+  //     return;
+  //   }
+  // });
   // window.addEventListener("resize", function hoverEffectOnBigScreen(event) {
   //   var windowWidth = event.target.innerWidth;
   //   if (windowWidth > 771) {
@@ -208,7 +223,7 @@ function showSublistHover() {
     // firstSubmenuElement.firstElementChild.focus();
     var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
     var btnElementInnerText = event.target.innerText;
-    showSublistSubmenuToggle(event.target);
+    showSublistSubmenuHover(event.target);
     if (event.target.className.includes("btn-link")) {
       console.log(event.target);
       switch (btnElementInnerText) {
@@ -233,22 +248,46 @@ function showSublistHover() {
 }
 
 function showSublistSubmenuToggle(elementInput) {
-  var elementText = elementInput.innerText;
-  var strUsedInAriaFunc;
-  if (!elementText) {
-    strUsedInAriaFunc = elementInput.parentElement.innerText;
-  } else {
-    strUsedInAriaFunc = elementInput.innerText;
+  // console.log(elementInput);
+  if (elementInput.className.includes("btn-link")) {
+    var elementText = elementInput.innerText;
+    var strUsedInAriaFunc;
+    if (!elementText) {
+      strUsedInAriaFunc = elementInput.parentElement.innerText;
+    } else {
+      strUsedInAriaFunc = elementInput.innerText;
+    }
+
+    var siblingOfUlElementStr = findSublistInnerText(elementInput);
+
+    let {
+      arrWithBtnWeWantToSetAriaTrue: oneOfBtnWillBeAriaTrue,
+      arrWithBtnWeWantToSetAriaFalse: turnAllBtnAriaFalse,
+    } = arrOfBtnElements(siblingOfUlElementStr);
+    makeBtnAriaToFalse(turnAllBtnAriaFalse);
+    makeBtnAriaTrueShowSubmenu(oneOfBtnWillBeAriaTrue, strUsedInAriaFunc);
   }
+}
 
-  var siblingOfUlElementStr = findSublistInnerText(elementInput);
+function showSublistSubmenuHover(hoveredElement) {
+  if (hoveredElement.className.includes("btn-link")) {
+    var hoveredElementText = hoveredElement.innerText;
+    var strUsedinAriaToggleFunc;
+    if (!hoveredElementText) {
+      strUsedinAriaToggleFunc = hoveredElement.parentElement.innerText;
+    } else {
+      strUsedinAriaToggleFunc = hoveredElement.innerText;
+    }
 
-  let {
-    arrWithBtnWeWantToSetAriaTrue: oneOfBtnWillBeAriaTrue,
-    arrWithBtnWeWantToSetAriaFalse: turnAllBtnAriaFalse,
-  } = arrOfBtnElements(siblingOfUlElementStr);
-  makeBtnAriaToFalse(turnAllBtnAriaFalse);
-  makeBtnAriaTrueShowSubmenu(oneOfBtnWillBeAriaTrue, strUsedInAriaFunc);
+    var siblingOfUlElementStr = findSublistInnerText(hoveredElement);
+
+    let {
+      arrWithBtnWeWantToSetAriaTrue: oneOfBtnWillBeAriaTrue,
+      arrWithBtnWeWantToSetAriaFalse: turnAllBtnAriaFalse,
+    } = arrOfBtnElements(siblingOfUlElementStr);
+    makeBtnAriaToFalse(turnAllBtnAriaFalse);
+    makeBtnAriaTrueShowSubmenu(oneOfBtnWillBeAriaTrue, strUsedinAriaToggleFunc);
+  }
 }
 
 /***** hover should work when on big screen, small screen we want to be able to click *****/
