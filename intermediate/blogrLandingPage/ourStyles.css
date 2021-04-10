@@ -779,18 +779,40 @@ ul.header-sublist-submenu {
 @media screen and (min-width: 1200px) {
   .performance-content {
     margin-block-start: 0;
+    background-size: 1160px, cover;
+    background-position: -400px -720px, center;
   }
 
   .performance-content .container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-areas: "performance-img performance-text";
+    padding: 96px 128px;
+    position: relative;
   }
   .performance-content .container .img-container {
     grid-area: performance-img;
+    margin: 0;
+    position: absolute;
+    left: -48px;
+    top: -184px;
   }
   .performance-content .container .text-container {
     grid-area: performance-text;
+    margin-block-end: 0;
+    text-align: left;
+  }
+
+  .performance-content .text-container h2 {
+    font-size: 2.2rem;
+  }
+  .performance-content .text-container p {
+    max-width: inherit;
+    font-size: 1rem;
+    line-height: 1.8;
+    opacity: 0.75;
+    margin: 0;
+    padding: 0;
   }
 }
 
@@ -825,6 +847,47 @@ ul.header-sublist-submenu {
 
 .tools-content .sub-text-container:nth-of-type(1) p {
   margin-block-end: 24px;
+}
+
+@media screen and (min-width: 1200px) {
+  .tools-content .container {
+    padding: 96px 128px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas: "tools-img tools-text";
+  }
+  .tools-content .container .img-container {
+    grid-area: tools-img;
+    margin: 0px -64px;
+    margin-inline-start: -320px;
+    position: relative;
+    top: -40px;
+    left: -168px;
+  }
+
+  .tools-content .container .text-container {
+    grid-area: tools-text;
+    text-align: left;
+    padding-block-start: 144px;
+  }
+
+  .tools-content .text-container h3 {
+    font-size: 1.5rem;
+    margin-block-end: 32px;
+  }
+
+  .tools-content .sub-text-container:nth-of-type(1) {
+    margin-block-end: 64px;
+  }
+
+  .tools-content .sub-text-container:nth-of-type(1) p {
+    margin-block-end: 0;
+  }
+
+  .tools-content .text-container p {
+    padding: 0;
+    margin: 0;
+  }
 }
 
 /* tools-content */
