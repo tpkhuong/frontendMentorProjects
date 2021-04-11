@@ -801,6 +801,7 @@ ul.header-sublist-submenu {
     grid-area: performance-text;
     margin-block-end: 0;
     text-align: left;
+    padding-inline-end: 96px;
   }
 
   .performance-content .text-container h2 {
@@ -832,6 +833,7 @@ ul.header-sublist-submenu {
 
 .tools-content .text-container {
   text-align: center;
+  padding-inline-end: 96px;
 }
 
 .tools-content h3 {
@@ -851,7 +853,7 @@ ul.header-sublist-submenu {
 
 @media screen and (min-width: 1200px) {
   .tools-content .container {
-    padding: 96px 128px;
+    padding: 96px 128px 128px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-areas: "tools-img tools-text";
@@ -861,14 +863,15 @@ ul.header-sublist-submenu {
     margin: 0px -64px;
     margin-inline-start: -320px;
     position: relative;
-    top: -40px;
-    left: -168px;
+    top: 0;
+    left: -80px;
   }
 
   .tools-content .container .text-container {
     grid-area: tools-text;
     text-align: left;
-    padding-block-start: 144px;
+    padding-inline-start: 32px;
+    padding-block-start: 200px;
   }
 
   .tools-content .text-container h3 {
@@ -932,6 +935,37 @@ ul.header-sublist-submenu {
 
 .footer-logo-nav-container .footer-list:not(:last-child) {
   margin-block-end: 16px;
+}
+
+@media screen and (min-width: 1200px) {
+  .footer-logo-nav-container {
+    padding-inline: 160px;
+    padding-block-end: 80px;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-areas: "footer-logo footer-nav footer-nav footer-nav";
+    font-size: var(--fs-200);
+  }
+  .footer-logo-nav-container .logo-container {
+    margin: 0;
+    grid-area: footer-logo;
+  }
+  .footer-logo-nav-container .footer-nav-container {
+    grid-area: footer-nav;
+  }
+
+  .footer-logo-nav-container .footer-list {
+    --gap: 16px;
+  }
+  .footer-logo-nav-container .footer-nav {
+    display: flex;
+    justify-content: space-between;
+    text-align: left;
+    padding-inline-end: 160px;
+  }
+  .footer-logo-nav-container .footer-list:not(:last-child) {
+    margin-block-end: 0;
+  }
 }
 
 /* footer */
