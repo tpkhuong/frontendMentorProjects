@@ -766,31 +766,39 @@ function findParaElements(classOrIdOfMainElement) {
   console.log(`#${classOrIdOfMainElement} p`);
 }
 
-/***** get headingss *****/
+/***** get headings *****/
 
 function getAllHeadings() {
-  var headingH1 = document.querySelectorAll("h1");
-  var headingH2 = document.querySelectorAll("h2");
-  var headingH3 = document.querySelectorAll("h3");
-  var headingH4 = document.querySelectorAll("h4");
-  var headingH5 = document.querySelectorAll("h5");
-  var headingH6 = document.querySelectorAll("h6");
+  var resultArr = [];
 
-  var printHeadings = [
-    headingH1,
-    headingH2,
-    headingH3,
-    headingH4,
-    headingH5,
-    headingH6,
-  ];
+  for (let i = 1; i < 7; i++) {
+    let arrOfHeadings = Array.from(document.querySelectorAll(`h${i}`));
+    resultArr = [...resultArr, arrOfHeadings];
+  }
+  console.log(resultArr);
+  /***** first approach *****/
+  // var headingH1 = document.querySelectorAll("h1");
+  // var headingH2 = document.querySelectorAll("h2");
+  // var headingH3 = document.querySelectorAll("h3");
+  // var headingH4 = document.querySelectorAll("h4");
+  // var headingH5 = document.querySelectorAll("h5");
+  // var headingH6 = document.querySelectorAll("h6");
 
-  printHeadings.forEach(function consoleHeadings(eachHeading) {
-    console.log(eachHeading);
-  });
+  // var printHeadings = [
+  //   headingH1,
+  //   headingH2,
+  //   headingH3,
+  //   headingH4,
+  //   headingH5,
+  //   headingH6,
+  // ];
+  // printHeadings.forEach(function consoleHeadings(eachHeading) {
+  //   console.log(eachHeading);
+  // });
+  /***** first approach *****/
 }
 
-/***** get headingss *****/
+/***** get headings *****/
 
 var allELementsOfBodyEle = Array.from(document.querySelectorAll("body *"));
 
