@@ -244,6 +244,12 @@ button {
   overflow: hidden;
 }
 
+@media screen and (min-width: 1200px) {
+  .hide-off-left {
+    overflow: visible;
+  }
+}
+
 /* hide h2 which are title for our section element */
 
 /* accessibility */
@@ -442,6 +448,13 @@ a {
 }
 
 @media screen and (min-width: 1200px) {
+  .header-items {
+    text-align: left;
+    position: relative;
+  }
+}
+
+@media screen and (min-width: 1200px) {
   .arrow-icon {
     border-color: var(--clr-white);
   }
@@ -460,6 +473,9 @@ a {
     top: 16px;
     /* left: 188px; */
     right: -8px;
+  }
+  .header-items:nth-of-type(3) .header-sublist {
+    margin-bottom: 0;
   }
 }
 
@@ -483,9 +499,9 @@ ul.header-sublist {
 
 a.btn-link[aria-expanded="false"] ~ ul.header-sublist {
   position: absolute;
-  top: -9999px;
+  /* top: -9999px;
   left: -9999px;
-  overflow: hidden;
+  overflow: hidden; */
 }
 
 a.btn-link[aria-expanded="true"] ~ ul.header-sublist {
@@ -513,6 +529,57 @@ ul.header-sublist:focus-within .header-sublinks {
   a.btn[aria-expanded="true"][aria-haspopup="true"]
   ~ ul.header-sublist-submenu {
   position: static;
+}
+
+@media screen and (min-width: 1200px) {
+  ul.header-sublist {
+    padding: 0;
+    margin: 0;
+    background-color: inherit;
+    width: 100%;
+    top: 40px;
+    left: 16px;
+    --gap: 0;
+  }
+
+  .header-sublist .header-subitems {
+    padding: 8px 16px;
+    /* width: 42px; */
+  }
+
+  .header-sublist .header-subitems:hover {
+    background-color: red;
+  }
+
+  .header-sublist .header-subitems .btn-link {
+    padding: 0;
+  }
+
+  .header-items .header-sublist .arrow-icon {
+    transform: rotate(-45deg);
+  }
+
+  .header-items:nth-of-type(1) .header-sublist .arrow-icon {
+    top: 5px;
+    /* left: 188px; */
+    right: 16px;
+  }
+  .header-items:nth-of-type(2) .header-sublist .arrow-icon {
+    top: 5px;
+    /* left: 188px; */
+    right: 24px;
+  }
+  .header-items:nth-of-type(3) .header-sublist .arrow-icon {
+    top: 5px;
+    /* left: 188px; */
+    right: 16px;
+  }
+
+  .header-sublist
+    a.btn[aria-expanded="true"][aria-haspopup="true"]
+    ~ ul.header-sublist-submenu {
+    position: absolute;
+  }
 }
 
 /* sublist submenu hide or show */
