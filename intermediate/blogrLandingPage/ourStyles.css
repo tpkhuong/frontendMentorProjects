@@ -499,9 +499,9 @@ ul.header-sublist {
 
 a.btn-link[aria-expanded="false"] ~ ul.header-sublist {
   position: absolute;
-  /* top: -9999px;
+  top: -9999px;
   left: -9999px;
-  overflow: hidden; */
+  overflow: hidden;
 }
 
 a.btn-link[aria-expanded="true"] ~ ul.header-sublist {
@@ -532,6 +532,13 @@ ul.header-sublist:focus-within .header-sublinks {
 }
 
 @media screen and (min-width: 1200px) {
+  ul[role="menu"] li[role="menuitem"] a {
+    display: block;
+    width: 100px;
+  }
+  ul[role="menu"] li[role="menuitem"] a:hover {
+    background-color: red;
+  }
   ul.header-sublist {
     padding: 0;
     margin: 0;
@@ -544,11 +551,12 @@ ul.header-sublist:focus-within .header-sublinks {
 
   .header-sublist .header-subitems {
     padding: 8px 16px;
+    position: relative;
     /* width: 42px; */
   }
 
   .header-sublist .header-subitems:hover {
-    background-color: red;
+    /* background-color: red; */
   }
 
   .header-sublist .header-subitems .btn-link {
@@ -594,6 +602,13 @@ ul.header-sublist-submenu {
   padding-block-end: 8px;
 }
 
+@media screen and (min-width: 1200px) {
+  ul.header-sublist-submenu {
+    top: 0px;
+    right: -120px;
+    padding-inline: 8px;
+  }
+}
 /* menu of submenu */
 
 /* nav-login-container */
