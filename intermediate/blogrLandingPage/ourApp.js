@@ -809,7 +809,7 @@ allELementsOfBodyEle.forEach(function findFontSize(eachElement) {
   );
 
   if (fontSizeOfElement < 16) {
-    console.dir(fontSizeOfElement);
+    console.log(fontSizeOfElement);
   }
 });
 
