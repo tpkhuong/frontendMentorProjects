@@ -248,8 +248,11 @@ function showSublistHover() {
 }
 
 function showSublistSubmenuToggle(elementInput) {
-  // console.log(elementInput);
-  if (elementInput.className.includes("btn-link")) {
+  console.log(elementInput);
+  if (
+    elementInput != undefined &&
+    elementInput.className.includes("btn-link")
+  ) {
     var elementText = elementInput.innerText;
     var strUsedInAriaFunc;
     if (!elementText) {
@@ -492,9 +495,90 @@ function findSublistInnerText(element) {
 //   }
 // }
 
+keyboardFunctionality();
+
 function keyboardFunctionality(
   { headerNav, btnElementsSublist } = ourSelectors()
-) {}
+) {
+  var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
+  headerNav.addEventListener("keydown", function toggleSubmenu(event) {
+    console.log(event);
+    event.preventDefault();
+    var keyPressed = event.key;
+    switch (keyPressed) {
+      case "ArrowLeft":
+        leftArrow(event.target, btnElementsSublist);
+        break;
+      case "ArrowRight":
+        rightArrow(event.target, btnElementsSublist);
+        break;
+      case "ArrowUp":
+        upAndDownArrow(event.target);
+        break;
+
+      case "ArrowDown":
+        upAndDownArrow(event.target);
+        break;
+    }
+  });
+}
+
+function leftArrow(elementClicked, arrOfBtn) {
+  var elementInnerText = elementClicked.innerText;
+  var [productBtn, companyBtn, connectBtn] = arrOfBtn;
+  switch (elementInnerText) {
+    case "Product":
+      connectBtn.focus();
+      break;
+    case "Company":
+      productBtn.focus();
+      break;
+    case "Connect":
+      companyBtn.focus();
+      break;
+  }
+}
+
+function rightArrow(elementClicked, arrOfBtn) {
+  var elementInnerText = elementClicked.innerText;
+  var [productBtn, companyBtn, connectBtn] = arrOfBtn;
+  switch (elementInnerText) {
+    case "Product":
+      companyBtn.focus();
+      break;
+    case "Company":
+      connectBtn.focus();
+      break;
+    case "Connect":
+      productBtn.focus();
+      break;
+    // case "Pricing":
+    //   break;
+  }
+}
+
+function upAndDownArrow(elementClicked) {
+  // var childrenOfUnorderList = Array.prototype.slice.call(
+  //   elementClicked.nextElementSibling.children
+  // );
+  var childrenOfUnorderList = Array.from(
+    elementClicked.nextElementSibling.children
+  );
+  // var focusTheseElements = childrenOfUnorderList.map(
+  //   function justAnchorElements(eachElement) {
+  //     return eachElement.firstElementChild;
+  //   }
+  // );
+
+  var focusTheseElements = childrenOfUnorderList.reduce(
+    function justAnchorElements(buildingUp, currentValue) {
+      // return [...buildingUp, currentValue.firstElementChild];
+      return buildingUp.concat([currentValue.firstElementChild]);
+    },
+    []
+  );
+  console.log(focusTheseElements);
+}
 
 /***** original code *****/
 
@@ -738,7 +822,7 @@ findCulprits(document.querySelector(selector));
 */
 
 /***** check img alt text *****/
-var imgArr = Array.from(document.querySelectorAll("img"));
+/*var imgArr = Array.from(document.querySelectorAll("img"));
 console.log(imgArr);
 console.log(`this is the array of imgs: ${imgArr}`);
 imgArr.forEach(function printAltText(eachImg) {
@@ -749,7 +833,7 @@ imgArr.forEach(function printAltText(eachImg) {
     console.log(`this has alt text: ${eachImg.alt}`);
     console.dir(eachImg);
   }
-});
+});*/
 
 /***** check img alt text *****/
 
@@ -800,7 +884,7 @@ function getAllHeadings() {
 
 /***** get headings *****/
 
-var allELementsOfBodyEle = Array.from(document.querySelectorAll("body *"));
+/*var allELementsOfBodyEle = Array.from(document.querySelectorAll("body *"));
 
 allELementsOfBodyEle.forEach(function findFontSize(eachElement) {
   console.log(getComputedStyle(eachElement).fontSize);
@@ -817,6 +901,6 @@ var allParagraphs = Array.from(document.querySelectorAll("body p"));
 
 allParagraphs.forEach(function printFont(eachPara) {
   console.log(getComputedStyle(eachPara).fontSize);
-});
+});*/
 
 /***** select all element in the body to check fontsize *****/
