@@ -483,6 +483,24 @@ a.btn-link[aria-expanded="true"] span.arrow-icon {
   transform: rotate(-135deg);
   top: 20px;
 }
+/* arrows */
+@media screen and (min-width: 1200px) {
+  ul.header-list
+    li.header-items
+    > a.btn-link[aria-expanded="true"]
+    span.arrow-icon {
+    transform: rotate(45deg);
+    top: 16px;
+  }
+  ul.header-sublist
+    li.header-subitems
+    a.btn-link[aria-expanded="true"]
+    span.arrow-icon {
+    transform: rotate(-45deg);
+    top: 5px;
+  }
+}
+/* arrows */
 
 /* submenu */
 
@@ -509,7 +527,7 @@ a.btn-link[aria-expanded="true"] ~ ul.header-sublist {
 }
 
 ul.header-sublist:focus-within .header-sublinks {
-  position: static;
+  /* position: static; */
 }
 
 /* hide or show submenu */
@@ -536,7 +554,8 @@ ul.header-sublist:focus-within .header-sublinks {
     display: block;
     width: 100px;
   }
-  ul[role="menu"] li[role="menuitem"] a:hover {
+  ul[role="menu"] li[role="menuitem"] a:hover,
+  ul[role="menu"] li[role="menuitem"] a:focus {
     background-color: red;
   }
   ul.header-sublist {
@@ -588,6 +607,22 @@ ul.header-sublist:focus-within .header-sublinks {
     ~ ul.header-sublist-submenu {
     position: absolute;
   }
+
+  /* functionality */
+
+  a.btn-link[aria-expanded="true"] ~ ul.header-sublist {
+    position: absolute;
+  }
+  /* when we had this uncommented our <a> with the class of .header-sublinks cause the issues of making the <li> of that <a> appear
+  to have no content in it because the <a> is taken out of the flow of the content
+  */
+  /* ul.header-sublist:focus-within .header-sublinks {
+    position: absolute;
+  } */
+  /* when we had this uncommented our <a> with the class of .header-sublinks cause the issues of making the <li> of that <a> appear
+  to have no content in it because the <a> is taken out of the flow of the content
+  */
+  /* functionality */
 }
 
 /* sublist submenu hide or show */
@@ -604,6 +639,7 @@ ul.header-sublist-submenu {
 
 @media screen and (min-width: 1200px) {
   ul.header-sublist-submenu {
+    position: absolute;
     top: 0px;
     right: -120px;
     padding-inline: 8px;
