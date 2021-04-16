@@ -161,6 +161,13 @@ function showSublistFocusElement(
       productBtn.attributes["aria-expanded"].value = false;
       companyBtn.attributes["aria-expanded"].value = false;
       connectBtn.attributes["aria-expanded"].value = true;
+    } else if (
+      classOfAnchorElement.includes("btn-link") &&
+      innerTextAnchorElement == "Careers"
+    ) {
+      productBtn.attributes["aria-expanded"].value = false;
+      companyBtn.attributes["aria-expanded"].value = true;
+      connectBtn.attributes["aria-expanded"].value = false;
     }
     showSublistSubmenuFocus(event.target);
   });
@@ -497,11 +504,13 @@ function findSublistInnerText(element) {
 
 keyboardFunctionality();
 
+function removeAddEventlistener() {}
+
 function keyboardFunctionality(
-  { headerNav, btnElementsSublist } = ourSelectors()
+  { ulHeaderlist, btnElementsSublist } = ourSelectors()
 ) {
   var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
-  headerNav.addEventListener("keydown", function toggleSubmenu(event) {
+  ulHeaderlist.addEventListener("keydown", function toggleSubmenu(event) {
     console.log(event);
     event.preventDefault();
     var keyPressed = event.key;
@@ -513,11 +522,11 @@ function keyboardFunctionality(
         rightArrow(event.target, btnElementsSublist);
         break;
       case "ArrowUp":
-        upAndDownArrow(event.target);
+        upArrow(event.target);
         break;
 
       case "ArrowDown":
-        upAndDownArrow(event.target);
+        downArrow(event.target);
         break;
     }
   });
@@ -557,27 +566,89 @@ function rightArrow(elementClicked, arrOfBtn) {
   }
 }
 
-function upAndDownArrow(elementClicked) {
+function upArrow(elementClicked) {
   // var childrenOfUnorderList = Array.prototype.slice.call(
   //   elementClicked.nextElementSibling.children
   // );
-  var childrenOfUnorderList = Array.from(
-    elementClicked.nextElementSibling.children
-  );
+  console.log(elementClicked);
+  var arrOfStrings = ["Product", "Company", "Connect"];
+  if (arrOfStrings.includes(elementClicked.innerText)) {
+    var childrenOfUnorderList = Array.from(
+      elementClicked.nextElementSibling.children
+    );
+    // var focusTheseElements = childrenOfUnorderList.map(
+    //   function justAnchorElements(eachElement) {
+    //     return eachElement.firstElementChild;
+    //   }
+    // );
+
+    var focusTheseElements = childrenOfUnorderList.reduce(
+      function justAnchorElements(buildingUp, currentValue) {
+        // return [...buildingUp, currentValue.firstElementChild];
+        return buildingUp.concat([currentValue.firstElementChild]);
+      },
+      []
+    );
+    console.log(focusTheseElements);
+    var lastElement = focusTheseElements[focusTheseElements.length - 1];
+    lastElement.focus();
+    // console.log(lastElement);
+  }
+}
+
+function downArrow(elementClicked) {
+  // var childrenOfUnorderList = Array.prototype.slice.call(
+  //   elementClicked.nextElementSibling.children
+  // );
+  console.log(elementClicked.parentElement.nextElementSibling);
+  var childrenOfUnorderList;
   // var focusTheseElements = childrenOfUnorderList.map(
   //   function justAnchorElements(eachElement) {
   //     return eachElement.firstElementChild;
   //   }
   // );
 
-  var focusTheseElements = childrenOfUnorderList.reduce(
-    function justAnchorElements(buildingUp, currentValue) {
-      // return [...buildingUp, currentValue.firstElementChild];
-      return buildingUp.concat([currentValue.firstElementChild]);
-    },
-    []
-  );
-  console.log(focusTheseElements);
+  var focusTheseElements;
+  var firstElement;
+
+  var arrOfStrings = ["Product", "Company", "Connect"];
+  if (arrOfStrings.includes(elementClicked.innerText)) {
+    childrenOfUnorderList = Array.from(
+      elementClicked.nextElementSibling.children
+    );
+    // console.log(focusTheseElements);
+    focusTheseElements = childrenOfUnorderList.reduce(
+      function justAnchorElements(buildingUp, currentValue) {
+        // return [...buildingUp, currentValue.firstElementChild];
+        return buildingUp.concat([currentValue.firstElementChild]);
+      },
+      []
+    );
+    firstElement = focusTheseElements[0];
+    firstElement.focus();
+    console.log(
+      firstElement.parentElement.nextElementSibling.firstElementChild
+    );
+    // console.log(focusTheseElements);
+  } else {
+    // if (elementClicked.parentElement.nextElementSibling == null) {
+    //   console.log(childrenOfUnorderList);
+    // }
+
+    let parentEle = elementClicked.parentElement;
+    console.log(parentEle.previousElementSibling.innerText);
+    while (parentEle) {
+      if (parentEle.tagName == "UL") {
+        if (arrOfStrings.includes(parentEle.previousElementSibling.innerText)) {
+          console.log(parentEle.children);
+        }
+        alert(
+          "start here tomorrow. we can select the sublist product,company, and connect children"
+        );
+      }
+      parentEle = parentEle.parentElement;
+    }
+  }
 }
 
 /***** original code *****/
