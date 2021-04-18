@@ -504,7 +504,7 @@ function findSublistInnerText(element) {
 
 keyboardFunctionality();
 
-function removeAddEventlistener() {}
+function removeEventlistener() {}
 
 function keyboardFunctionality(
   { ulHeaderlist, btnElementsSublist } = ourSelectors()
@@ -549,8 +549,10 @@ function leftArrow(elementClicked, arrOfBtn) {
   console.log(elementClicked);
 }
 
+function leftArrowSubmenu() {}
+
 function rightArrow(elementClicked, arrOfBtn) {
-  console.log(elementClicked);
+  // console.log(elementClicked);
   var elementInnerText = elementClicked.innerText;
   var [productBtn, companyBtn, connectBtn] = arrOfBtn;
   switch (elementInnerText) {
@@ -565,6 +567,72 @@ function rightArrow(elementClicked, arrOfBtn) {
       break;
     // case "Pricing":
     //   break;
+  }
+  rightArrowSubmenu(elementClicked, arrOfBtn);
+}
+
+function rightArrowSubmenu(elementInput, arrOfTopMenuBtn) {
+  var arrOfStrings = ["Product", "Company", "Connect"];
+  var [productBtn, companyBtn, connectBtn] = arrOfTopMenuBtn;
+  var parentEleOfClickedEle = elementInput.parentElement;
+  while (parentEleOfClickedEle) {
+    if (
+      parentEleOfClickedEle.tagName == "UL" &&
+      arrOfStrings.includes(
+        parentEleOfClickedEle.previousElementSibling.innerText
+      )
+    ) {
+      // var [
+      //   arrAnchorTagWithoutArrow,
+      //   arrAnchorTagWithArrow,
+      // ] = Array.prototype.slice.call(parentEleOfClickedEle.children);
+      var [arrAnchorTagWithArrow, arrAnchorTagWithoutArrow] = Array.from(
+        parentEleOfClickedEle.children
+      ).reduce(
+        function buildTwoArr(buildingUp, currentValue) {
+          var [firstSubarray] = buildingUp;
+          var [, secondSubarray] = buildingUp;
+          if (currentValue.firstElementChild.firstElementChild) {
+            return [
+              [...firstSubarray, currentValue.firstElementChild],
+              secondSubarray,
+            ];
+          } else {
+            return [
+              firstSubarray,
+              [...secondSubarray, currentValue.firstElementChild],
+            ];
+          }
+        },
+        [[], []]
+      );
+      if (
+        arrAnchorTagWithArrow.includes(elementInput) &&
+        elementInput.nextElementSibling.tagName == "UL"
+      ) {
+        // turn aria-expanded to true for the element clicked
+        arrAnchorTagWithArrow.forEach(function turnOnAria(eachAnchor) {
+          if (eachAnchor == elementInput) {
+            eachAnchor.attributes["aria-expanded"].value = true;
+          } else {
+            eachAnchor.attributes["aria-expanded"].value = false;
+          }
+        });
+        // get the child of the ul of the element clicked, the ul will be a sibling of the element clicked
+        // var [firstSubmenuAnchor] = Array.prototype.slice.call(
+        //   elementInput.nextElementSibling.children
+        // );
+        var [firstSubmenuAnchor] = Array.from(
+          elementInput.nextElementSibling.children
+        ).reduce(function justAnchorTag(buildingUp, currentValue) {
+          return [...buildingUp, currentValue.firstElementChild];
+        }, []);
+        firstSubmenuAnchor.focus();
+      } else {
+        console.log(arrOfTopMenuBtn);
+      }
+    }
+    parentEleOfClickedEle = parentEleOfClickedEle.parentElement;
   }
 }
 
@@ -649,6 +717,8 @@ function upArrow(elementClicked) {
   }
 }
 
+function upArrowSubmenu() {}
+
 function downArrow(elementClicked) {
   // var childrenOfUnorderList = Array.prototype.slice.call(
   //   elementClicked.nextElementSibling.children
@@ -730,6 +800,8 @@ function downArrow(elementClicked) {
     }
   }
 }
+
+function downArrowSubmenu() {}
 
 /***** original code *****/
 
