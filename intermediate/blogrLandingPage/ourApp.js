@@ -522,7 +522,7 @@ function keyboardFunctionality(
         rightArrow(event.target, btnElementsSublist);
         break;
       case "ArrowUp":
-        upArrow(event.target);
+        upArrow(event.target, event);
         break;
 
       case "ArrowDown":
@@ -572,74 +572,82 @@ function rightArrow(elementClicked, arrOfBtn) {
 }
 
 function rightArrowSubmenu(elementInput, arrOfTopMenuBtn) {
+  // console.log(elementInput);
+  // console.log(arrOfTopMenuBtn);
   var arrOfStrings = ["Product", "Company", "Connect"];
   var [productBtn, companyBtn, connectBtn] = arrOfTopMenuBtn;
-  var parentEleOfClickedEle = elementInput.parentElement;
-  while (parentEleOfClickedEle) {
+  var parentEleOfClickedEle = elementInput.parentElement.parentElement;
+  if (
+    parentEleOfClickedEle.tagName == "UL" &&
+    arrOfStrings.includes(
+      parentEleOfClickedEle.previousElementSibling.innerText
+    )
+  ) {
+    // var [
+    //   arrAnchorTagWithoutArrow,
+    //   arrAnchorTagWithArrow,
+    // ] = Array.prototype.slice.call(parentEleOfClickedEle.children);
+    var [arrAnchorTagWithArrow, arrAnchorTagWithoutArrow] = Array.from(
+      parentEleOfClickedEle.children
+    ).reduce(
+      function buildTwoArr(buildingUp, currentValue) {
+        var [firstSubarray] = buildingUp;
+        var [, secondSubarray] = buildingUp;
+        if (currentValue.firstElementChild.firstElementChild) {
+          return [
+            [...firstSubarray, currentValue.firstElementChild],
+            secondSubarray,
+          ];
+        } else {
+          return [
+            firstSubarray,
+            [...secondSubarray, currentValue.firstElementChild],
+          ];
+        }
+      },
+      [[], []]
+    );
     if (
-      parentEleOfClickedEle.tagName == "UL" &&
-      arrOfStrings.includes(
-        parentEleOfClickedEle.previousElementSibling.innerText
-      )
+      arrAnchorTagWithArrow.includes(elementInput) &&
+      elementInput.nextElementSibling.tagName == "UL"
     ) {
-      // var [
-      //   arrAnchorTagWithoutArrow,
-      //   arrAnchorTagWithArrow,
-      // ] = Array.prototype.slice.call(parentEleOfClickedEle.children);
-      var [arrAnchorTagWithArrow, arrAnchorTagWithoutArrow] = Array.from(
-        parentEleOfClickedEle.children
-      ).reduce(
-        function buildTwoArr(buildingUp, currentValue) {
-          var [firstSubarray] = buildingUp;
-          var [, secondSubarray] = buildingUp;
-          if (currentValue.firstElementChild.firstElementChild) {
-            return [
-              [...firstSubarray, currentValue.firstElementChild],
-              secondSubarray,
-            ];
-          } else {
-            return [
-              firstSubarray,
-              [...secondSubarray, currentValue.firstElementChild],
-            ];
-          }
-        },
-        [[], []]
-      );
-      if (
-        arrAnchorTagWithArrow.includes(elementInput) &&
-        elementInput.nextElementSibling.tagName == "UL"
-      ) {
-        // turn aria-expanded to true for the element clicked
-        arrAnchorTagWithArrow.forEach(function turnOnAria(eachAnchor) {
-          if (eachAnchor == elementInput) {
-            eachAnchor.attributes["aria-expanded"].value = true;
-          } else {
-            eachAnchor.attributes["aria-expanded"].value = false;
-          }
-        });
-        // get the child of the ul of the element clicked, the ul will be a sibling of the element clicked
-        // var [firstSubmenuAnchor] = Array.prototype.slice.call(
-        //   elementInput.nextElementSibling.children
-        // );
-        var [firstSubmenuAnchor] = Array.from(
-          elementInput.nextElementSibling.children
-        ).reduce(function justAnchorTag(buildingUp, currentValue) {
-          return [...buildingUp, currentValue.firstElementChild];
-        }, []);
-        firstSubmenuAnchor.focus();
-      } else {
-        console.log(arrOfTopMenuBtn);
-      }
+      // turn aria-expanded to true for the element clicked
+      arrAnchorTagWithArrow.forEach(function turnOnAria(eachAnchor) {
+        if (eachAnchor == elementInput) {
+          eachAnchor.attributes["aria-expanded"].value = true;
+        } else {
+          eachAnchor.attributes["aria-expanded"].value = false;
+        }
+      });
+      // get the child of the ul of the element clicked, the ul will be a sibling of the element clicked
+      // var [firstSubmenuAnchor] = Array.prototype.slice.call(
+      //   elementInput.nextElementSibling.children
+      // );
+      var [firstSubmenuAnchor] = Array.from(
+        elementInput.nextElementSibling.children
+      ).reduce(function justAnchorTag(buildingUp, currentValue) {
+        return [...buildingUp, currentValue.firstElementChild];
+      }, []);
+      firstSubmenuAnchor.focus();
+      // if (document.activeElement == firstSubmenuAnchor) {
+      //   upArrowSubmenu(elementInput);
+      //   console.log(arrOfTopMenuBtn);
+      // }
+    } else {
     }
-    parentEleOfClickedEle = parentEleOfClickedEle.parentElement;
   }
+  // while (parentEleOfClickedEle) {
+
+  //   parentEleOfClickedEle = parentEleOfClickedEle.parentElement;
+  // }
 }
 
-function upArrow(elementClicked) {
+function upArrow(elementClicked, eventInput) {
   // var childrenOfUnorderList = Array.prototype.slice.call(
   //   elementClicked.nextElementSibling.children
   // );
+  eventInput.stopPropagation();
+
   console.log(elementClicked);
   var arrOfStrings = ["Product", "Company", "Connect"];
   if (arrOfStrings.includes(elementClicked.innerText)) {
@@ -665,59 +673,74 @@ function upArrow(elementClicked) {
     // console.log(lastElement);
   } else {
     var arrOfSublistSubmenuAnchorUpArrow;
+    console.log("Product, or Company, Connect");
+    var topLevelSubmenuInnerText =
+      elementClicked.parentElement.parentElement.previousElementSibling
+        .innerText;
     if (elementClicked.parentElement.previousElementSibling == null) {
-      let parentElementOfEleClicked = elementClicked.parentElement;
-      while (parentElementOfEleClicked) {
-        if (parentElementOfEleClicked.tagName == "UL") {
-          if (
-            arrOfStrings.includes(
-              parentElementOfEleClicked.previousElementSibling.innerText
-            )
-          ) {
-            // arrOfSublistSubmenuAnchorUpArrow = Array.prototype.slice
-            //   .call(parentElementOfEleClicked.children)
-            //   .map(function onlyAnchorTags(eachValue) {
-            //     return eachValue.firstElementChild;
-            //   });
-            arrOfSublistSubmenuAnchorUpArrow = Array.from(
-              parentElementOfEleClicked.children
-            ).reduce(function onlyAnchorTags(buildingUp, currentValue) {
-              return [...buildingUp, currentValue.firstElementChild];
-            }, []);
-            console.log(arrOfSublistSubmenuAnchorUpArrow);
-            alert("use this code for escape key functionality");
-            let arrOfAnchorTagWithArrowIcon = Array.from(
-              parentElementOfEleClicked.children
-            ).reduce(function onlyAnchorTags(buildingUp, currentValue) {
-              if (
-                currentValue.firstElementChild.firstElementChild &&
-                currentValue.firstElementChild.firstElementChild.className.includes(
-                  "arrow-icon"
-                )
-              ) {
-                return [...buildingUp, currentValue.firstElementChild];
-              }
-              return buildingUp;
-            }, []);
-            console.log(arrOfAnchorTagWithArrowIcon);
-            alert("use this code for escape key functionality");
-          }
-        }
-        parentElementOfEleClicked = parentElementOfEleClicked.parentElement;
+      let parentElementOfEleClicked =
+        elementClicked.parentElement.parentElement;
+      // while (parentElementOfEleClicked) {
+      //   parentElementOfEleClicked = parentElementOfEleClicked.parentElement;
+      // }
+      let parentClassName = parentElementOfEleClicked.className.split(" ")[0];
+      if (
+        parentElementOfEleClicked.tagName == "UL" &&
+        parentClassName == "header-sublist" &&
+        arrOfStrings.includes(topLevelSubmenuInnerText)
+      ) {
+        // arrOfSublistSubmenuAnchorUpArrow = Array.prototype.slice
+        //   .call(parentElementOfEleClicked.children)
+        //   .map(function onlyAnchorTags(eachValue) {
+        //     return eachValue.firstElementChild;
+        //   });
+        arrOfSublistSubmenuAnchorUpArrow = Array.from(
+          parentElementOfEleClicked.children
+        ).reduce(function onlyAnchorTags(buildingUp, currentValue) {
+          return [...buildingUp, currentValue.firstElementChild];
+        }, []);
+        console.log(arrOfSublistSubmenuAnchorUpArrow);
+
+        // let arrOfAnchorTagWithArrowIcon = Array.from(
+        //   parentElementOfEleClicked.children
+        // ).reduce(function onlyAnchorTags(buildingUp, currentValue) {
+        //   if (
+        //     currentValue.firstElementChild.firstElementChild &&
+        //     currentValue.firstElementChild.firstElementChild.className.includes(
+        //       "arrow-icon"
+        //     )
+        //   ) {
+        //     return [...buildingUp, currentValue.firstElementChild];
+        //   }
+        //   return buildingUp;
+        // }, []);
+        let lastElementOfSublistSubmenu =
+          arrOfSublistSubmenuAnchorUpArrow[
+            arrOfSublistSubmenuAnchorUpArrow.length - 1
+          ];
+        lastElementOfSublistSubmenu.focus();
+        // if (
+        //   arrOfStrings.includes(
+        //     parentElementOfEleClicked.previousElementSibling.innerText
+        //   )
+        // ) {
+        // }
+      } else if (elementClicked.innerText == "Basic") {
+        console.log(eventInput);
       }
-      let lastElementOfSublistSubmenu =
-        arrOfSublistSubmenuAnchorUpArrow[
-          arrOfSublistSubmenuAnchorUpArrow.length - 1
-        ];
-      lastElementOfSublistSubmenu.focus();
     } else {
       //we are going from the last item of the sublistsubmenu to the top of the list.
-      let previousSiblingAnchorElement = elementClicked.parentElement.previousElementSibling.firstElementChild.focus();
+      let previousSiblingAnchorElement =
+        elementClicked.parentElement.previousElementSibling.firstElementChild;
+      previousSiblingAnchorElement.focus();
     }
   }
 }
 
-function upArrowSubmenu() {}
+function upArrowSubmenu(arrOfBtnAnchorInput) {
+  console.log("we here");
+  console.log(arrOfBtnAnchorInput);
+}
 
 function downArrow(elementClicked) {
   // var childrenOfUnorderList = Array.prototype.slice.call(
@@ -758,30 +781,39 @@ function downArrow(elementClicked) {
     //   console.log(childrenOfUnorderList);
     // }
     var arrOfSublistSubmenuAnchorDownArrow;
+    var topLevelSubmenuInnerText =
+      elementClicked.parentElement.parentElement.previousElementSibling
+        .innerText;
     if (elementClicked.parentElement.nextElementSibling == null) {
-      let parentEle = elementClicked.parentElement;
-      while (parentEle) {
-        if (parentEle.tagName == "UL") {
-          if (
-            arrOfStrings.includes(parentEle.previousElementSibling.innerText)
-          ) {
-            // arrOfSublistSubmenuAnchor = Array.prototype.slice.call(
-            //   parentEle.children
-            // );
-            // arrOfSublistSubmenuAnchor = Array.from(parentEle.children).reduce(
-            //   function onlyAnchorEle(buildingUp, currentValue) {
-            //     return buildingUp.concat([currentValue.firstElementChild]);
-            //   },
-            //   []
-            // );
-            arrOfSublistSubmenuAnchorDownArrow = Array.from(
-              parentEle.children
-            ).map(function onlyAnchorEle(eachValue) {
-              return eachValue.firstElementChild;
-            });
-          }
+      let parentEleTopLevel = elementClicked.parentElement.parentElement;
+      // while (parentEle) {
+
+      //   parentEle = parentEle.parentElement;
+      // }
+      if (
+        parentEleTopLevel.tagName == "UL" &&
+        arrOfStrings.includes(topLevelSubmenuInnerText)
+      ) {
+        if (
+          arrOfStrings.includes(
+            parentEleTopLevel.previousElementSibling.innerText
+          )
+        ) {
+          // arrOfSublistSubmenuAnchor = Array.prototype.slice.call(
+          //   parentEle.children
+          // );
+          // arrOfSublistSubmenuAnchor = Array.from(parentEle.children).reduce(
+          //   function onlyAnchorEle(buildingUp, currentValue) {
+          //     return buildingUp.concat([currentValue.firstElementChild]);
+          //   },
+          //   []
+          // );
+          arrOfSublistSubmenuAnchorDownArrow = Array.from(
+            parentEleTopLevel.children
+          ).map(function onlyAnchorEle(eachValue) {
+            return eachValue.firstElementChild;
+          });
         }
-        parentEle = parentEle.parentElement;
       }
       // console.log(arrOfSublistSubmenuAnchor);
       let lastElement =
