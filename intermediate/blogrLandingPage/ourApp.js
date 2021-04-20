@@ -51,16 +51,18 @@ showSublistKeydown();
 showSublistHover();
 showSublistFocusElement();
 // showSublistClickUsingMouse();
+showSublistSubmenuKeydown();
 keyboardFunctionality();
 
 function showSublistKeydown(
-  { headerNav, btnElementsSublist } = ourSelectors()
+  { ulHeaderlist, btnElementsSublist } = ourSelectors()
 ) {
-  headerNav.addEventListener("keydown", function toggleSubmenu(event) {
+  ulHeaderlist.addEventListener("keydown", function toggleSubmenu(event) {
     var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
     var keyPressed = event.code;
     if (keyPressed == "Space") {
       event.preventDefault();
+      console.log(event);
       let arrOfSubmenuElements = Array.from(
         event.target.nextElementSibling.children
       );
@@ -123,12 +125,12 @@ function showSublistKeydown(
 function showSublistFocusElement(
   { headerNav, btnElementsSublist } = ourSelectors()
 ) {
-  headerNav.addEventListener("focusin", function toggleSubmenu(event) {
+  headerNav.addEventListener("focus", function toggleSubmenu(event) {
     /* using this eventListener to select the submenu */
     // var sublistSubmenuSelector = event.target.innerText;
     /* using this eventListener to select the submenu */
     var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
-    console.log(event.target);
+    // console.log(event.target);
     var classOfAnchorElement = event.target.className;
     var innerTextAnchorElement = event.target.innerText;
     if (classOfAnchorElement.includes("header-sublinks")) {
@@ -176,13 +178,13 @@ function showSublistFocusElement(
 function showSublistSubmenuFocus(elementInput) {
   console.log(elementInput);
   var submenuToggleElement;
-  var parent = elementInput.parentElement;
-  while (parent) {
-    if (parent.className.includes("header-sublist-submenu")) {
-      submenuToggleElement = parent.previousElementSibling;
-    }
-    parent = parent.parentElement;
+  var parent = elementInput.parentElement.parentElement;
+  if (parent.className.includes("header-sublist-submenu")) {
+    submenuToggleElement = parent.previousElementSibling;
   }
+  // while (parent) {
+  //   parent = parent.parentElement;
+  // }
   showSublistSubmenuToggle(submenuToggleElement);
 }
 
@@ -196,7 +198,7 @@ function windowResizeEventWrapper() {
     if (windowWidth < 770) {
       showSublistClickUsingMouse();
     } else {
-      console.log(windowWidth);
+      // console.log(windowWidth);
       showSublistHover();
     }
   });
@@ -302,8 +304,6 @@ function showSublistSubmenuHover(hoveredElement) {
 
 /***** hover should work when on big screen, small screen we want to be able to click *****/
 
-showSublistSubmenuKeydown();
-
 function showSublistSubmenuKeydown() {
   var ulHeaderlist = document.querySelector(".header-list");
 
@@ -318,6 +318,7 @@ function showSublistSubmenuKeydown() {
           event.target.nextElementSibling.children
         );
         let btnElementInnerText = event.target.innerText;
+        console.log(btnElementInnerText);
         let strUsedToFilterBtnElements =
           event.target.parentElement.parentElement.previousElementSibling
             .innerText;
@@ -502,7 +503,7 @@ function findSublistInnerText(element) {
 //   }
 // }
 
-keyboardFunctionality();
+// keyboardFunctionality();
 
 function removeEventlistener() {}
 
@@ -511,24 +512,28 @@ function keyboardFunctionality(
 ) {
   var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
   ulHeaderlist.addEventListener("keydown", function toggleSubmenu(event) {
-    console.log(event);
-    event.preventDefault();
+    // console.log(event);
     var keyPressed = event.key;
+
     switch (keyPressed) {
       case "ArrowLeft":
         leftArrow(event.target, btnElementsSublist);
+        event.preventDefault();
         break;
       case "ArrowRight":
         rightArrow(event.target, btnElementsSublist);
+        event.preventDefault();
         break;
       case "ArrowUp":
         upArrow(event.target, event);
+        event.preventDefault();
         break;
-
       case "ArrowDown":
         downArrow(event.target);
+        event.preventDefault();
         break;
     }
+    event.stopPropagation();
   });
 }
 
@@ -646,9 +651,7 @@ function upArrow(elementClicked, eventInput) {
   // var childrenOfUnorderList = Array.prototype.slice.call(
   //   elementClicked.nextElementSibling.children
   // );
-  eventInput.stopPropagation();
-
-  console.log(elementClicked);
+  showSublistUpDownArrow(elementClicked.innerText);
   var arrOfStrings = ["Product", "Company", "Connect"];
   if (arrOfStrings.includes(elementClicked.innerText)) {
     var childrenOfUnorderList = Array.from(
@@ -671,69 +674,97 @@ function upArrow(elementClicked, eventInput) {
     var lastElement = focusTheseElements[focusTheseElements.length - 1];
     lastElement.focus();
     // console.log(lastElement);
-  } else {
+  } else if (elementClicked.parentElement.previousElementSibling == null) {
     var arrOfSublistSubmenuAnchorUpArrow;
     console.log("Product, or Company, Connect");
     var topLevelSubmenuInnerText =
       elementClicked.parentElement.parentElement.previousElementSibling
         .innerText;
-    if (elementClicked.parentElement.previousElementSibling == null) {
-      let parentElementOfEleClicked =
-        elementClicked.parentElement.parentElement;
-      // while (parentElementOfEleClicked) {
-      //   parentElementOfEleClicked = parentElementOfEleClicked.parentElement;
-      // }
-      let parentClassName = parentElementOfEleClicked.className.split(" ")[0];
-      if (
-        parentElementOfEleClicked.tagName == "UL" &&
-        parentClassName == "header-sublist" &&
-        arrOfStrings.includes(topLevelSubmenuInnerText)
-      ) {
-        // arrOfSublistSubmenuAnchorUpArrow = Array.prototype.slice
-        //   .call(parentElementOfEleClicked.children)
-        //   .map(function onlyAnchorTags(eachValue) {
-        //     return eachValue.firstElementChild;
-        //   });
-        arrOfSublistSubmenuAnchorUpArrow = Array.from(
-          parentElementOfEleClicked.children
-        ).reduce(function onlyAnchorTags(buildingUp, currentValue) {
-          return [...buildingUp, currentValue.firstElementChild];
-        }, []);
-        console.log(arrOfSublistSubmenuAnchorUpArrow);
+    let parentElementOfEleClicked = elementClicked.parentElement.parentElement;
+    // while (parentElementOfEleClicked) {
+    //   parentElementOfEleClicked = parentElementOfEleClicked.parentElement;
+    // }
+    let parentClassName = parentElementOfEleClicked.className.split(" ")[0];
+    if (
+      parentElementOfEleClicked.tagName == "UL" &&
+      parentClassName == "header-sublist" &&
+      arrOfStrings.includes(topLevelSubmenuInnerText)
+    ) {
+      // arrOfSublistSubmenuAnchorUpArrow = Array.prototype.slice
+      //   .call(parentElementOfEleClicked.children)
+      //   .map(function onlyAnchorTags(eachValue) {
+      //     return eachValue.firstElementChild;
+      //   });
+      arrOfSublistSubmenuAnchorUpArrow = Array.from(
+        parentElementOfEleClicked.children
+      ).reduce(function onlyAnchorTags(buildingUp, currentValue) {
+        return [...buildingUp, currentValue.firstElementChild];
+      }, []);
+      console.log(arrOfSublistSubmenuAnchorUpArrow);
 
-        // let arrOfAnchorTagWithArrowIcon = Array.from(
-        //   parentElementOfEleClicked.children
-        // ).reduce(function onlyAnchorTags(buildingUp, currentValue) {
-        //   if (
-        //     currentValue.firstElementChild.firstElementChild &&
-        //     currentValue.firstElementChild.firstElementChild.className.includes(
-        //       "arrow-icon"
-        //     )
-        //   ) {
-        //     return [...buildingUp, currentValue.firstElementChild];
-        //   }
-        //   return buildingUp;
-        // }, []);
-        let lastElementOfSublistSubmenu =
-          arrOfSublistSubmenuAnchorUpArrow[
-            arrOfSublistSubmenuAnchorUpArrow.length - 1
-          ];
-        lastElementOfSublistSubmenu.focus();
-        // if (
-        //   arrOfStrings.includes(
-        //     parentElementOfEleClicked.previousElementSibling.innerText
-        //   )
-        // ) {
-        // }
-      } else if (elementClicked.innerText == "Basic") {
-        console.log(eventInput);
-      }
-    } else {
-      //we are going from the last item of the sublistsubmenu to the top of the list.
-      let previousSiblingAnchorElement =
-        elementClicked.parentElement.previousElementSibling.firstElementChild;
-      previousSiblingAnchorElement.focus();
+      // let arrOfAnchorTagWithArrowIcon = Array.from(
+      //   parentElementOfEleClicked.children
+      // ).reduce(function onlyAnchorTags(buildingUp, currentValue) {
+      //   if (
+      //     currentValue.firstElementChild.firstElementChild &&
+      //     currentValue.firstElementChild.firstElementChild.className.includes(
+      //       "arrow-icon"
+      //     )
+      //   ) {
+      //     return [...buildingUp, currentValue.firstElementChild];
+      //   }
+      //   return buildingUp;
+      // }, []);
+      let lastElementOfSublistSubmenu =
+        arrOfSublistSubmenuAnchorUpArrow[
+          arrOfSublistSubmenuAnchorUpArrow.length - 1
+        ];
+      lastElementOfSublistSubmenu.focus();
+      // if (
+      //   arrOfStrings.includes(
+      //     parentElementOfEleClicked.previousElementSibling.innerText
+      //   )
+      // ) {
+      // }
+    } else if (
+      elementClicked.parentElement.parentElement.className.includes(
+        "header-sublist-submenu"
+      ) &&
+      elementClicked.parentElement.parentElement.previousElementSibling
+        .firstElementChild.className == "arrow-icon"
+    ) {
+      alert("selecting submenu of sublist UL");
+      console.log(elementClicked);
     }
+  } else {
+    // console.trace();
+    // console.log(elementClicked);
+    //we are going from the last item of the sublistsubmenu to the top of the list.
+    //let previousSiblingAnchorElement =
+    elementClicked.parentElement.previousElementSibling.firstElementChild.focus();
+    // previousSiblingAnchorElement.focus();
+  }
+}
+
+function showSublistUpDownArrow(strInput) {
+  var { btnElementsSublist } = ourSelectors();
+  var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
+  switch (strInput) {
+    case "Product":
+      productBtn.attributes["aria-expanded"].value = true;
+      companyBtn.attributes["aria-expanded"].value = false;
+      connectBtn.attributes["aria-expanded"].value = false;
+      break;
+    case "Company":
+      productBtn.attributes["aria-expanded"].value = false;
+      companyBtn.attributes["aria-expanded"].value = true;
+      connectBtn.attributes["aria-expanded"].value = false;
+      break;
+    case "Connect":
+      productBtn.attributes["aria-expanded"].value = false;
+      companyBtn.attributes["aria-expanded"].value = false;
+      connectBtn.attributes["aria-expanded"].value = true;
+      break;
   }
 }
 
@@ -753,10 +784,9 @@ function downArrow(elementClicked) {
   //     return eachElement.firstElementChild;
   //   }
   // );
-
   var focusTheseElements;
   var firstElement;
-
+  showSublistUpDownArrow(elementClicked.innerText);
   var arrOfStrings = ["Product", "Company", "Connect"];
   if (arrOfStrings.includes(elementClicked.innerText)) {
     childrenOfUnorderList = Array.from(
@@ -990,7 +1020,7 @@ function showSubmenu({ headerNav, btnElementsSublist } = ourSelectors()) {
     }
   });
 
-  headerNav.addEventListener("focusin", function toggleSubmenu(event) {
+  headerNav.addEventListener("focus", function toggleSubmenu(event) {
     var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
 
     var classOfAnchorElement = event.target.className;
@@ -1159,3 +1189,61 @@ allParagraphs.forEach(function printFont(eachPara) {
 });*/
 
 /***** select all element in the body to check fontsize *****/
+
+function code() {
+  var arrOfSublistSubmenuAnchorUpArrow;
+  console.log("Product, or Company, Connect");
+  var topLevelSubmenuInnerText =
+    elementClicked.parentElement.parentElement.previousElementSibling.innerText;
+  if (elementClicked.parentElement.previousElementSibling == null) {
+    let parentElementOfEleClicked = elementClicked.parentElement.parentElement;
+    // while (parentElementOfEleClicked) {
+    //   parentElementOfEleClicked = parentElementOfEleClicked.parentElement;
+    // }
+    let parentClassName = parentElementOfEleClicked.className.split(" ")[0];
+    if (
+      parentElementOfEleClicked.tagName == "UL" &&
+      parentClassName == "header-sublist" &&
+      arrOfStrings.includes(topLevelSubmenuInnerText)
+    ) {
+      // arrOfSublistSubmenuAnchorUpArrow = Array.prototype.slice
+      //   .call(parentElementOfEleClicked.children)
+      //   .map(function onlyAnchorTags(eachValue) {
+      //     return eachValue.firstElementChild;
+      //   });
+      arrOfSublistSubmenuAnchorUpArrow = Array.from(
+        parentElementOfEleClicked.children
+      ).reduce(function onlyAnchorTags(buildingUp, currentValue) {
+        return [...buildingUp, currentValue.firstElementChild];
+      }, []);
+      console.log(arrOfSublistSubmenuAnchorUpArrow);
+
+      // let arrOfAnchorTagWithArrowIcon = Array.from(
+      //   parentElementOfEleClicked.children
+      // ).reduce(function onlyAnchorTags(buildingUp, currentValue) {
+      //   if (
+      //     currentValue.firstElementChild.firstElementChild &&
+      //     currentValue.firstElementChild.firstElementChild.className.includes(
+      //       "arrow-icon"
+      //     )
+      //   ) {
+      //     return [...buildingUp, currentValue.firstElementChild];
+      //   }
+      //   return buildingUp;
+      // }, []);
+      let lastElementOfSublistSubmenu =
+        arrOfSublistSubmenuAnchorUpArrow[
+          arrOfSublistSubmenuAnchorUpArrow.length - 1
+        ];
+      lastElementOfSublistSubmenu.focus();
+      // if (
+      //   arrOfStrings.includes(
+      //     parentElementOfEleClicked.previousElementSibling.innerText
+      //   )
+      // ) {
+      // }
+    } else if (elementClicked.innerText == "Basic") {
+      console.log(eventInput);
+    }
+  }
+}
