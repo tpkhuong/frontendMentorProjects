@@ -560,19 +560,31 @@ function rightArrow(elementClicked, arrOfBtn) {
   // console.log(elementClicked);
   var elementInnerText = elementClicked.innerText;
   var [productBtn, companyBtn, connectBtn] = arrOfBtn;
-  switch (elementInnerText) {
-    case "Product":
-      companyBtn.focus();
-      break;
-    case "Company":
-      connectBtn.focus();
-      break;
-    case "Connect":
-      productBtn.focus();
-      break;
-    // case "Pricing":
-    //   break;
+
+  var topLevelAnchorBtnAriaOff = arrOfBtn.every(function findOutIfAriaOff(
+    eachBtn
+  ) {
+    return eachBtn.attributes["aria-expanded"].value == "false";
+  });
+  console.log(topLevelAnchorBtnAriaOff);
+  if (topLevelAnchorBtnAriaOff) {
+    switch (elementInnerText) {
+      case "Product":
+        companyBtn.focus();
+        break;
+      case "Company":
+        connectBtn.focus();
+        break;
+      case "Connect":
+        productBtn.focus();
+        break;
+      // case "Pricing":
+      //   break;
+    }
   }
+  arrOfBtn.forEach(function printAria(eachBtn) {
+    console.log(eachBtn.attributes["aria-expanded"].value);
+  });
   rightArrowSubmenu(elementClicked, arrOfBtn);
 }
 
@@ -638,13 +650,88 @@ function rightArrowSubmenu(elementInput, arrOfTopMenuBtn) {
       //   upArrowSubmenu(elementInput);
       //   console.log(arrOfTopMenuBtn);
       // }
+      console.log(arrAnchorTagWithArrow);
+      console.log(arrAnchorTagWithoutArrow);
     } else {
+      //click rightarrow when the cursor is on the anchor tag of the sublist. it is the group of one of these anchor tags with product, company or connect
+      var topLevelAnchorInnerText =
+        elementInput.parentElement.parentElement.previousElementSibling
+          .innerText;
+      switch (topLevelAnchorInnerText) {
+        //we want to turn off aria on the submenu of the sublist here, when we click on the right or left arrow from an item of the submenu and select the top level anchor tag
+        case "Product":
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = true;
+          connectBtn.attributes["aria-expanded"].value = false;
+          companyBtn.focus();
+          alert("want to turn aria-expaned off on the submenu of the sublist");
+          break;
+        case "Company":
+          productBtn.attributes["aria-expanded"].value = false;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = true;
+          connectBtn.focus();
+          break;
+        case "Connect":
+          productBtn.attributes["aria-expanded"].value = true;
+          companyBtn.attributes["aria-expanded"].value = false;
+          connectBtn.attributes["aria-expanded"].value = false;
+          productBtn.focus();
+          break;
+      }
+    }
+  } else if (
+    elementInput.className == "header-sublist-submenu-links" &&
+    elementInput.parentElement.className == "header-sublist-submenu-items"
+  ) {
+    let parentAtTopLevel = elementInput.parentElement;
+    console.log(elementInput);
+    let innerTextOfTopLevelMenu;
+    while (parentAtTopLevel) {
+      let [parentClassname] = parentAtTopLevel.className.split(" ");
+      // debugger;
+      if (
+        parentAtTopLevel.tagName == "UL" &&
+        parentClassname == "header-sublist" &&
+        parentAtTopLevel.attributes["role"].value == "menu"
+      ) {
+        innerTextOfTopLevelMenu =
+          parentAtTopLevel.previousElementSibling.innerText;
+        break;
+      }
+      parentAtTopLevel = parentAtTopLevel.parentElement;
+    }
+    switch (innerTextOfTopLevelMenu) {
+      case "Product":
+        productBtn.attributes["aria-expanded"].value = false;
+        companyBtn.attributes["aria-expanded"].value = true;
+        connectBtn.attributes["aria-expanded"].value = false;
+        companyBtn.focus();
+        break;
+      case "Company":
+        productBtn.attributes["aria-expanded"].value = false;
+        companyBtn.attributes["aria-expanded"].value = false;
+        connectBtn.attributes["aria-expanded"].value = true;
+        connectBtn.focus();
+        break;
+      case "Connect":
+        productBtn.attributes["aria-expanded"].value = true;
+        companyBtn.attributes["aria-expanded"].value = false;
+        connectBtn.attributes["aria-expanded"].value = false;
+        productBtn.focus();
+        break;
     }
   }
   // while (parentEleOfClickedEle) {
 
   //   parentEleOfClickedEle = parentEleOfClickedEle.parentElement;
   // }
+}
+
+function turnAriaSublistSubmenuOff() {
+  alert(
+    "we want to turn off the submenu of the sublist aria off when we right/left click on the submenu items and select the toplevel menu items"
+  );
 }
 
 function upArrow(elementClicked, eventInput) {
@@ -733,8 +820,17 @@ function upArrow(elementClicked, eventInput) {
       elementClicked.parentElement.parentElement.previousElementSibling
         .firstElementChild.className == "arrow-icon"
     ) {
-      alert("selecting submenu of sublist UL");
-      console.log(elementClicked);
+      // let anchorElementSubmenuOfUL = Array.from(
+      //   elementClicked.parentElement.parentElement.children
+      // );
+      let anchorElementSubmenuOfUL = Array.prototype.slice
+        .call(elementClicked.parentElement.parentElement.children)
+        .reduce(function justAnchorELement(buildingUp, currentValue) {
+          return [...buildingUp, currentValue.firstElementChild];
+        }, []);
+      let lastAnchorElement =
+        anchorElementSubmenuOfUL[anchorElementSubmenuOfUL.length - 1];
+      lastAnchorElement.focus();
     }
   } else {
     // console.trace();
@@ -766,11 +862,6 @@ function showSublistUpDownArrow(strInput) {
       connectBtn.attributes["aria-expanded"].value = true;
       break;
   }
-}
-
-function upArrowSubmenu(arrOfBtnAnchorInput) {
-  console.log("we here");
-  console.log(arrOfBtnAnchorInput);
 }
 
 function downArrow(elementClicked) {
@@ -844,15 +935,30 @@ function downArrow(elementClicked) {
             return eachValue.firstElementChild;
           });
         }
-      }
-      // console.log(arrOfSublistSubmenuAnchor);
-      let lastElement =
-        arrOfSublistSubmenuAnchorDownArrow[
-          arrOfSublistSubmenuAnchorDownArrow.length - 1
-        ];
-      let firstElement = arrOfSublistSubmenuAnchorDownArrow[0];
-      if (elementClicked == lastElement) {
-        firstElement.focus();
+        // console.log(arrOfSublistSubmenuAnchor);
+        let lastElement =
+          arrOfSublistSubmenuAnchorDownArrow[
+            arrOfSublistSubmenuAnchorDownArrow.length - 1
+          ];
+        let firstElement = arrOfSublistSubmenuAnchorDownArrow[0];
+        if (elementClicked == lastElement) {
+          firstElement.focus();
+        }
+      } else if (
+        elementClicked.parentElement.parentElement.className.split(" ")[0] ==
+          "header-sublist-submenu" &&
+        elementClicked.parentElement.parentElement.previousElementSibling
+          .firstElementChild.className == "arrow-icon"
+      ) {
+        let anchorElementOfSubmenuUL = Array.from(
+          elementClicked.parentElement.parentElement.children
+        ).reduce(function getAnchorTags(buildingUp, currentValue) {
+          return buildingUp.concat([currentValue.firstElementChild]);
+        }, []);
+        let firstAnchorElement = anchorElementOfSubmenuUL[0];
+        let lastAnchorElement =
+          anchorElementOfSubmenuUL[anchorElementOfSubmenuUL.length - 1];
+        if (elementClicked == lastAnchorElement) firstAnchorElement.focus();
       }
     } else {
       // we are focused on the first element of the sublist submenu
@@ -862,8 +968,6 @@ function downArrow(elementClicked) {
     }
   }
 }
-
-function downArrowSubmenu() {}
 
 /***** original code *****/
 
