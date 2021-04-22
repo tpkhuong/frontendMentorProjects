@@ -540,21 +540,58 @@ function keyboardFunctionality(
 function leftArrow(elementClicked, arrOfBtn) {
   var elementInnerText = elementClicked.innerText;
   var [productBtn, companyBtn, connectBtn] = arrOfBtn;
-  switch (elementInnerText) {
-    case "Product":
-      connectBtn.focus();
-      break;
-    case "Company":
-      productBtn.focus();
-      break;
-    case "Connect":
-      companyBtn.focus();
-      break;
+  var leftArrowTopLevelAnchorBtnAriaOff = arrOfBtn.every(function findIfAriaOff(
+    eachAnchor
+  ) {
+    return eachAnchor.attributes["aria-expanded"].value == "false";
+  });
+
+  if (leftArrowTopLevelAnchorBtnAriaOff) {
+    switch (elementInnerText) {
+      case "Product":
+        connectBtn.focus();
+        break;
+      case "Company":
+        productBtn.focus();
+        break;
+      case "Connect":
+        companyBtn.focus();
+        break;
+    }
+  } else {
+    let leftArrowInnerTextBtnClicked = elementClicked.innerText;
+    switch (leftArrowInnerTextBtnClicked) {
+      case "Product":
+        productBtn.attributes["aria-expanded"].value = false;
+        companyBtn.attributes["aria-expanded"].value = false;
+        connectBtn.attributes["aria-expanded"].value = true;
+        connectBtn.focus();
+        break;
+      case "Company":
+        productBtn.attributes["aria-expanded"].value = true;
+        companyBtn.attributes["aria-expanded"].value = false;
+        connectBtn.attributes["aria-expanded"].value = false;
+        productBtn.focus();
+        break;
+      case "Connect":
+        productBtn.attributes["aria-expanded"].value = false;
+        companyBtn.attributes["aria-expanded"].value = true;
+        connectBtn.attributes["aria-expanded"].value = false;
+        companyBtn.focus();
+        break;
+    }
   }
-  console.log(elementClicked);
+  if (elementClicked.className == "header-sublist-submenu-links") {
+    leftArrowSubmenu(elementClicked, arrOfBtn);
+  }
+  if (elementClicked.parentElement.className == "header-subitems") {
+    leftArrowSubmenu(elementClicked, arrOfBtn);
+  }
 }
 
-function leftArrowSubmenu() {}
+function leftArrowSubmenu(elementInput, arrOfTopLevelBtn) {
+  console.log(elementInput.className);
+}
 
 function rightArrow(elementClicked, arrOfBtn) {
   // console.log(elementClicked);
@@ -566,7 +603,7 @@ function rightArrow(elementClicked, arrOfBtn) {
   ) {
     return eachBtn.attributes["aria-expanded"].value == "false";
   });
-  console.log(topLevelAnchorBtnAriaOff);
+  // console.log(topLevelAnchorBtnAriaOff);
   if (topLevelAnchorBtnAriaOff) {
     switch (elementInnerText) {
       case "Product":
@@ -581,10 +618,30 @@ function rightArrow(elementClicked, arrOfBtn) {
       // case "Pricing":
       //   break;
     }
+  } else {
+    let innerTextOfBtnClicked = elementClicked.innerText;
+    switch (innerTextOfBtnClicked) {
+      case "Product":
+        productBtn.attributes["aria-expanded"].value = false;
+        companyBtn.attributes["aria-expanded"].value = true;
+        connectBtn.attributes["aria-expanded"].value = false;
+        companyBtn.focus();
+        break;
+      case "Company":
+        productBtn.attributes["aria-expanded"].value = false;
+        companyBtn.attributes["aria-expanded"].value = false;
+        connectBtn.attributes["aria-expanded"].value = true;
+        connectBtn.focus();
+        break;
+      case "Connect":
+        productBtn.attributes["aria-expanded"].value = true;
+        companyBtn.attributes["aria-expanded"].value = false;
+        connectBtn.attributes["aria-expanded"].value = false;
+        productBtn.focus();
+        break;
+    }
   }
-  arrOfBtn.forEach(function printAria(eachBtn) {
-    console.log(eachBtn.attributes["aria-expanded"].value);
-  });
+
   rightArrowSubmenu(elementClicked, arrOfBtn);
 }
 
@@ -664,7 +721,7 @@ function rightArrowSubmenu(elementInput, arrOfTopMenuBtn) {
           companyBtn.attributes["aria-expanded"].value = true;
           connectBtn.attributes["aria-expanded"].value = false;
           companyBtn.focus();
-          alert("want to turn aria-expaned off on the submenu of the sublist");
+
           break;
         case "Company":
           productBtn.attributes["aria-expanded"].value = false;
@@ -707,18 +764,21 @@ function rightArrowSubmenu(elementInput, arrOfTopMenuBtn) {
         companyBtn.attributes["aria-expanded"].value = true;
         connectBtn.attributes["aria-expanded"].value = false;
         companyBtn.focus();
+        turnAriaSublistSubmenuOff();
         break;
       case "Company":
         productBtn.attributes["aria-expanded"].value = false;
         companyBtn.attributes["aria-expanded"].value = false;
         connectBtn.attributes["aria-expanded"].value = true;
         connectBtn.focus();
+        turnAriaSublistSubmenuOff();
         break;
       case "Connect":
         productBtn.attributes["aria-expanded"].value = true;
         companyBtn.attributes["aria-expanded"].value = false;
         connectBtn.attributes["aria-expanded"].value = false;
         productBtn.focus();
+        turnAriaSublistSubmenuOff();
         break;
     }
   }
@@ -729,9 +789,20 @@ function rightArrowSubmenu(elementInput, arrOfTopMenuBtn) {
 }
 
 function turnAriaSublistSubmenuOff() {
-  alert(
-    "we want to turn off the submenu of the sublist aria off when we right/left click on the submenu items and select the toplevel menu items"
-  );
+  console.log("we here");
+  var anchorAriaOfSubitems = Array.prototype.slice
+    .call(document.querySelectorAll(".header-subitems .arrow-icon"))
+    .reduce(function getParentElement(buildingUp, currentValue) {
+      // return [...buildingUp, currentValue.parentElement];
+      return buildingUp.concat([currentValue.parentElement]);
+    }, []);
+  // var anchorAriaOfSubitems = Array.from(
+  //   document.querySelectorAll(".header-subitems .arrow-icon")
+  // );
+  console.log(anchorAriaOfSubitems);
+  anchorAriaOfSubitems.forEach(function turnAriaOff(eachAnchor) {
+    eachAnchor.attributes["aria-expanded"].value = false;
+  });
 }
 
 function upArrow(elementClicked, eventInput) {
