@@ -581,16 +581,51 @@ function leftArrow(elementClicked, arrOfBtn) {
         break;
     }
   }
-  if (elementClicked.className == "header-sublist-submenu-links") {
-    leftArrowSubmenu(elementClicked, arrOfBtn);
+  if (
+    elementClicked.parentElement.className == "header-sublist-submenu-items"
+  ) {
+    leftArrowSubmenu(elementClicked);
   }
   if (elementClicked.parentElement.className == "header-subitems") {
-    leftArrowSubmenu(elementClicked, arrOfBtn);
+    leftArrowSublistFromAnchor(elementClicked, arrOfBtn);
   }
 }
 
-function leftArrowSubmenu(elementInput, arrOfTopLevelBtn) {
-  console.log(elementInput.className);
+function leftArrowSubmenu(elementInput) {
+  var siblingOfULParentElement =
+    elementInput.parentElement.parentElement.previousElementSibling;
+  console.log(siblingOfULParentElement);
+  if (siblingOfULParentElement.firstElementChild.className == "arrow-icon") {
+    siblingOfULParentElement.focus();
+    siblingOfULParentElement.attributes["aria-expanded"].value = false;
+  }
+}
+
+function leftArrowSublistFromAnchor(elementInput, arrOfTopLevelBtn) {
+  var arrOfStrings = ["Product", "Company", "Connect"];
+  var [productBtn, companyBtn, connectBtn] = arrOfTopLevelBtn;
+  var siblingAnchorOfULElementTopLevelInnerText =
+    elementInput.parentElement.parentElement.previousElementSibling.innerText;
+  switch (siblingAnchorOfULElementTopLevelInnerText) {
+    case "Product":
+      productBtn.attributes["aria-expanded"].value = false;
+      companyBtn.attributes["aria-expanded"].value = false;
+      connectBtn.attributes["aria-expanded"].value = true;
+      connectBtn.focus();
+      break;
+    case "Company":
+      productBtn.attributes["aria-expanded"].value = true;
+      companyBtn.attributes["aria-expanded"].value = false;
+      connectBtn.attributes["aria-expanded"].value = false;
+      productBtn.focus();
+      break;
+    case "Connect":
+      productBtn.attributes["aria-expanded"].value = false;
+      companyBtn.attributes["aria-expanded"].value = true;
+      connectBtn.attributes["aria-expanded"].value = false;
+      companyBtn.focus();
+      break;
+  }
 }
 
 function rightArrow(elementClicked, arrOfBtn) {
@@ -779,13 +814,16 @@ function rightArrowSubmenu(elementInput, arrOfTopMenuBtn) {
         connectBtn.attributes["aria-expanded"].value = false;
         productBtn.focus();
         turnAriaSublistSubmenuOff();
-        break;
     }
   }
   // while (parentEleOfClickedEle) {
 
   //   parentEleOfClickedEle = parentEleOfClickedEle.parentElement;
   // }
+}
+
+function escapeKeyFunctionality() {
+  alert("work on escape key next");
 }
 
 function turnAriaSublistSubmenuOff() {
