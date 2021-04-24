@@ -60,63 +60,66 @@ function showSublistKeydown(
   ulHeaderlist.addEventListener("keydown", function toggleSubmenu(event) {
     var [productBtn, companyBtn, connectBtn] = btnElementsSublist;
     var keyPressed = event.code;
-    if (keyPressed == "Space") {
-      event.preventDefault();
-      console.log(event);
-      let arrOfSubmenuElements = Array.from(
-        event.target.nextElementSibling.children
-      );
-      var [firstLiElementSubmenu] = arrOfSubmenuElements;
-      firstLiElementSubmenu.firstElementChild.focus();
+    console.log(event.target);
+    if (event.target.parentElement.className == "header-items") {
+      if (keyPressed == "Space") {
+        event.preventDefault();
+        console.log(event);
+        let arrOfSubmenuElements = Array.from(
+          event.target.nextElementSibling.children
+        );
+        var [firstLiElementSubmenu] = arrOfSubmenuElements;
+        firstLiElementSubmenu.firstElementChild.focus();
 
-      var strTextOfBtnElement = event.target.innerText;
-      switch (strTextOfBtnElement) {
-        case "Product":
-          console.log(productBtn.attributes["aria-expanded"].value);
-          productBtn.attributes["aria-expanded"].value = true;
-          companyBtn.attributes["aria-expanded"].value = false;
-          connectBtn.attributes["aria-expanded"].value = false;
-          break;
-        case "Company":
-          // firstLiElementSubmenu.focus();
-          productBtn.attributes["aria-expanded"].value = false;
-          companyBtn.attributes["aria-expanded"].value = true;
-          connectBtn.attributes["aria-expanded"].value = false;
-          break;
-        case "Connect":
-          // firstLiElementSubmenu.focus();
-          productBtn.attributes["aria-expanded"].value = false;
-          companyBtn.attributes["aria-expanded"].value = false;
-          connectBtn.attributes["aria-expanded"].value = true;
-          break;
+        var strTextOfBtnElement = event.target.innerText;
+        switch (strTextOfBtnElement) {
+          case "Product":
+            console.log(productBtn.attributes["aria-expanded"].value);
+            productBtn.attributes["aria-expanded"].value = true;
+            companyBtn.attributes["aria-expanded"].value = false;
+            connectBtn.attributes["aria-expanded"].value = false;
+            break;
+          case "Company":
+            // firstLiElementSubmenu.focus();
+            productBtn.attributes["aria-expanded"].value = false;
+            companyBtn.attributes["aria-expanded"].value = true;
+            connectBtn.attributes["aria-expanded"].value = false;
+            break;
+          case "Connect":
+            // firstLiElementSubmenu.focus();
+            productBtn.attributes["aria-expanded"].value = false;
+            companyBtn.attributes["aria-expanded"].value = false;
+            connectBtn.attributes["aria-expanded"].value = true;
+            break;
+        }
       }
-    }
-    if (keyPressed == "Enter") {
-      event.preventDefault();
-      let arrOfSubmenuElements = Array.from(
-        event.target.nextElementSibling.children
-      );
-      var [firstLiElementSubmenu] = arrOfSubmenuElements;
-      firstLiElementSubmenu.firstElementChild.focus();
+      if (keyPressed == "Enter") {
+        event.preventDefault();
+        let arrOfSubmenuElements = Array.from(
+          event.target.nextElementSibling.children
+        );
+        var [firstLiElementSubmenu] = arrOfSubmenuElements;
+        firstLiElementSubmenu.firstElementChild.focus();
 
-      var strTextOfBtnElement = event.target.innerText;
-      switch (strTextOfBtnElement) {
-        case "Product":
-          console.log(productBtn.attributes["aria-expanded"].value);
-          productBtn.attributes["aria-expanded"].value = true;
-          companyBtn.attributes["aria-expanded"].value = false;
-          connectBtn.attributes["aria-expanded"].value = false;
-          break;
-        case "Company":
-          productBtn.attributes["aria-expanded"].value = false;
-          companyBtn.attributes["aria-expanded"].value = true;
-          connectBtn.attributes["aria-expanded"].value = false;
-          break;
-        case "Connect":
-          productBtn.attributes["aria-expanded"].value = false;
-          companyBtn.attributes["aria-expanded"].value = false;
-          connectBtn.attributes["aria-expanded"].value = true;
-          break;
+        var strTextOfBtnElement = event.target.innerText;
+        switch (strTextOfBtnElement) {
+          case "Product":
+            console.log(productBtn.attributes["aria-expanded"].value);
+            productBtn.attributes["aria-expanded"].value = true;
+            companyBtn.attributes["aria-expanded"].value = false;
+            connectBtn.attributes["aria-expanded"].value = false;
+            break;
+          case "Company":
+            productBtn.attributes["aria-expanded"].value = false;
+            companyBtn.attributes["aria-expanded"].value = true;
+            connectBtn.attributes["aria-expanded"].value = false;
+            break;
+          case "Connect":
+            productBtn.attributes["aria-expanded"].value = false;
+            companyBtn.attributes["aria-expanded"].value = false;
+            connectBtn.attributes["aria-expanded"].value = true;
+            break;
+        }
       }
     }
   });
@@ -312,26 +315,50 @@ function showSublistSubmenuKeydown() {
     function toggleSublistSubmenu(event) {
       var keyPressed = event.code;
       //let's select the submenu link that was clicked
+      console.log(event.target);
+
       if (keyPressed == "Space") {
         event.preventDefault();
-        let [firstSublistSubmenuElement] = Array.from(
-          event.target.nextElementSibling.children
-        );
-        let btnElementInnerText = event.target.innerText;
-        console.log(btnElementInnerText);
-        let strUsedToFilterBtnElements =
-          event.target.parentElement.parentElement.previousElementSibling
-            .innerText;
-        let {
-          arrWithBtnWeWantToSetAriaTrue: oneOfBtnWillBeAriaTrue,
-          arrWithBtnWeWantToSetAriaFalse: turnAllBtnAriaFalse,
-        } = arrOfBtnElements(strUsedToFilterBtnElements);
-        makeBtnAriaToFalse(turnAllBtnAriaFalse);
-        makeBtnAriaTrueShowSubmenu(oneOfBtnWillBeAriaTrue, btnElementInnerText);
-        firstSublistSubmenuElement.firstElementChild.focus();
-        event.stopPropagation();
+        if (
+          event.target.parentElement.className == "header-subitems" &&
+          event.target.firstElementChild != null &&
+          event.target.firstElementChild.className == "arrow-icon"
+        ) {
+          let [firstSublistSubmenuElement] = Array.from(
+            event.target.nextElementSibling.children
+          );
+          let btnElementInnerText = event.target.innerText;
+          console.log(btnElementInnerText);
+          let strUsedToFilterBtnElements =
+            event.target.parentElement.parentElement.previousElementSibling
+              .innerText;
+          let {
+            arrWithBtnWeWantToSetAriaTrue: oneOfBtnWillBeAriaTrue,
+            arrWithBtnWeWantToSetAriaFalse: turnAllBtnAriaFalse,
+          } = arrOfBtnElements(strUsedToFilterBtnElements);
+          makeBtnAriaToFalse(turnAllBtnAriaFalse);
+          makeBtnAriaTrueShowSubmenu(
+            oneOfBtnWillBeAriaTrue,
+            btnElementInnerText
+          );
+          firstSublistSubmenuElement.firstElementChild.focus();
+          event.stopPropagation();
+        }
       } else if (keyPressed == "Enter") {
-        alert("work on enter key");
+        /***** another apporach to show sublist submenu and select the first element/anchor that of that submenu *****/
+        event.preventDefault();
+        if (
+          event.target.parentElement.className == "header-subitems" &&
+          event.target.firstElementChild != null &&
+          event.target.firstElementChild.className == "arrow-icon"
+        ) {
+          let [firstSublistSubmenuElement] = Array.from(
+            event.target.nextElementSibling.children
+          );
+          event.target.attributes["aria-expanded"].value = true;
+          firstSublistSubmenuElement.firstElementChild.focus();
+        }
+        /***** another apporach to show sublist submenu and select the first element/anchor that of that submenu *****/
       }
     }
   );
@@ -532,6 +559,10 @@ function keyboardFunctionality(
         downArrow(event.target);
         event.preventDefault();
         break;
+      case "Escape":
+        escapeKeyFunctionality(event.target);
+        event.preventDefault();
+        break;
     }
     event.stopPropagation();
   });
@@ -592,12 +623,15 @@ function leftArrow(elementClicked, arrOfBtn) {
 }
 
 function leftArrowSubmenu(elementInput) {
+  console.log(`leftarrow`);
+  console.log(elementInput);
   var siblingOfULParentElement =
     elementInput.parentElement.parentElement.previousElementSibling;
   console.log(siblingOfULParentElement);
   if (siblingOfULParentElement.firstElementChild.className == "arrow-icon") {
     siblingOfULParentElement.focus();
     siblingOfULParentElement.attributes["aria-expanded"].value = false;
+    siblingOfULParentElement.attributes["aria-haspopup"].value = false;
   }
 }
 
@@ -822,8 +856,20 @@ function rightArrowSubmenu(elementInput, arrOfTopMenuBtn) {
   // }
 }
 
-function escapeKeyFunctionality() {
-  alert("work on escape key next");
+function escapeKeyFunctionality(elementInput) {
+  if (elementInput.parentElement.className == "header-sublist-submenu-items") {
+    let siblingAnchorOfULSubmenuElement =
+      elementInput.parentElement.parentElement.previousElementSibling;
+    siblingAnchorOfULSubmenuElement.focus();
+    siblingAnchorOfULSubmenuElement.attributes["aria-expanded"].value = false;
+  } else if (elementInput.parentElement.className == "header-subitems") {
+    let siblingAnchorOfULSubmenuSublistElement =
+      elementInput.parentElement.parentElement.previousElementSibling;
+    siblingAnchorOfULSubmenuSublistElement.focus();
+    siblingAnchorOfULSubmenuSublistElement.attributes[
+      "aria-expanded"
+    ].value = false;
+  }
 }
 
 function turnAriaSublistSubmenuOff() {
