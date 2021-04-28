@@ -163,9 +163,22 @@ body {
   margin-top: var(--flex-gap, 16px) 0 0 0;
 }
 
-[class="bg-"] {
+[class*="bg-"] {
   background-color: var(--bg, hsl(0, 100%, 100%));
   color: var(--fg, hsl(0, 0%, 0%));
+}
+
+[class*="btn-"] {
+  background-color: var(--btn-bg, hsl(0, 0%, 0%));
+  color: var(--btn-fg, hsl(0, 100%, 100%));
+}
+
+.btn-light {
+  --btn-bg: var(var(--clr-primary-cyan));
+}
+
+.btn-faded {
+  --btn-bg: var(var(--clr-neutral-gray));
 }
 
 /* hide h2 which are title for our section element */
