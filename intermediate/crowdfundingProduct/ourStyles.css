@@ -174,11 +174,15 @@ body {
 }
 
 .btn-light {
-  --btn-bg: var(var(--clr-primary-cyan));
+  font-weight: var(--fw-700);
+  --btn-bg: var(--clr-primary-cyan);
+  color: hsl(0, 0%, 100%);
+  border-radius: 100vw;
 }
 
 .btn-faded {
   --btn-bg: var(var(--clr-neutral-gray));
+  color: hsl(0, 0%, 100%);
 }
 
 /* hide h2 which are title for our section element */
@@ -232,18 +236,148 @@ a:hover {
 .hamburger:focus,
 a:focus,
 a:hover {
-  outline-offset: 5px;
+  outline-offset: -3px;
   outline: 3px dashed hsl(0, 0%, 0%);
 }
 /* accessibility */
 
+.center-negative-margin {
+  width: min-content;
+}
+
+.flex-wrapper {
+  display: flex;
+}
+
 /* utilities */
 
 /* general styles */
+
+body {
+  font-family: var(--ff-commissioner);
+  line-height: 2;
+}
+
+main {
+  background-color: hsl(0, 100%, 99%);
+  padding: 0.01px 16px 32px;
+}
+
+.fundriser-name,
+.progress-tracker,
+.project-info-backing {
+  background-color: hsl(0, 0%, 100%);
+  border: 1px solid rgb(206, 200, 200);
+  border-radius: 8px;
+}
+
+.margin-left-auto {
+  margin-inline-start: auto;
+}
+
+.center-with-margin {
+  margin: auto;
+}
+
 /* general styles */
 
 /* general layout */
+
 /* general layout */
 
+/* specific element */
+
+.back-project-btn {
+  padding: 16px 48px;
+  margin-inline-end: auto;
+}
+
+/* specific element */
+
 /* individual sections */
+
+/* header */
+
+header {
+  height: 40%;
+}
+
+.hero {
+  background-image: url("images/image-hero-mobile.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100%;
+  padding: 16px;
+}
+
+/* navbar */
+
+.headernav {
+  display: flex;
+}
+
+.nav-list {
+  border: 1px solid red;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.nav-links {
+  font-size: 1.2rem;
+  background-color: hsl(0, 100%, 100%);
+  display: block;
+  padding: 16px;
+}
+
+.img-container {
+  background-color: transparent;
+}
+
+/* navbar */
+
+/* header */
+
+/* fundriser-name */
+
+.letter-m-logo {
+  margin-block-start: -28px;
+  margin-block-end: 32px;
+}
+
+.primary-title {
+  font-size: var(--fs-500);
+}
+
+.fundriser-name {
+  margin-block-start: -56px;
+  padding: 0 24px 40px;
+  text-align: center;
+}
+
+.fundriser-name p {
+  font-size: var(--fs-200);
+  color: var(--clr-neutral-gray);
+  margin-block: 24px;
+}
+
+.fundriser-name button:last-of-type {
+  background-color: transparent;
+}
+
+/* fundriser-name */
+
+/* progress-tracker */
+
+.progress-tracker {
+  margin-block: 16px;
+}
+
+.tracker-container .backers {
+  border-top: 1px solid rgb(206, 200, 200);
+  border-bottom: 1px solid rgb(206, 200, 200);
+  width: min-content;
+}
+
+/* progress-tracker */
+
 /* individual sections */
