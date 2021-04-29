@@ -12,6 +12,7 @@
       href="images/favicon-32x32.png"
       type="image/x-icon"
     />
+    <link rel="stylesheet" href="ourStyles.css" />
     <title>Mastercraft Bamboo Monitor Riser</title>
   </head>
   <body>
@@ -20,7 +21,7 @@
         <nav class="headernav" aria-labelledby="main-navbar">
           <h2 id="main-navbar" class="visually-hidden">Main Navigation</h2>
           <img src="images/logo.svg" alt="Crowdfund Logo" />
-          <ul role="menubar" class="nav-list">
+          <ul role="menubar" class="nav-list hide-off-left">
             <li role="menuitem" class="nav-items">
               <a class="nav-links" href="#">About</a>
             </li>
@@ -31,32 +32,39 @@
               <a class="nav-links" href="#">Get Started</a>
             </li>
           </ul>
-          <img src="images/icon-hamburger.svg" alt="Three horizontal stripes" />
+          <button class="img-container margin-left-auto">
+            <img
+              src="images/icon-hamburger.svg"
+              alt="Three horizontal stripes"
+            />
+          </button>
         </nav>
       </section>
     </header>
     <main>
       <section class="fundriser-name">
-        <div class="img-container">
-          <img
-            src="images/logo-mastercraft.svg"
-            alt="Letter M with black background"
-          />
-        </div>
+        <img
+          class="center-with-margin letter-m-logo"
+          src="images/logo-mastercraft.svg"
+          alt="Letter M with black background"
+        />
+
         <h1 class="primary-title">Mastercraft Bamboo Monitor Riser</h1>
         <p>
           A beautiful & handcrafted monitor stand to reduce neck and eye strain.
         </p>
-        <button>Back this project</button>
-        <button class="btn">
-          <div class="img-container">
-            <img
-              src="images/icon-bookmark.svg"
-              alt="Gray ribbon with black background"
-            />
-          </div>
-          Bookmark
-        </button>
+        <div class="flex-wrapper">
+          <button class="btn-light back-project-btn">Back this project</button>
+          <button>
+            <div class="img-container">
+              <img
+                src="images/icon-bookmark.svg"
+                alt="Gray ribbon with black background"
+              />
+            </div>
+            <span class="hide-off-left">Bookmark</span>
+          </button>
+        </div>
       </section>
       <section class="progress-tracker">
         <div class="tracker-container">
@@ -68,9 +76,9 @@
           </div>
           <div class="duration"><span>56</span><span>days left</span></div>
         </div>
-        <progress></progress>
+        <!-- <progress></progress> -->
       </section>
-      <section class="poject-info-backing">
+      <section class="project-info-backing">
         <article class="about-project">
           <h2 class="section-title">About this project</h2>
           <p>
