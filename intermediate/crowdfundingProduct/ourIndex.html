@@ -69,26 +69,42 @@
       <section class="progress-tracker">
         <div class="tracker-container">
           <div class="dollar-amount">
-            <span>$89,914</span><span>of $100,000 backed</span>
+            <span class="bold-large-text">$89,914</span
+            ><span class="faded-text">of $100,000 backed</span>
           </div>
           <div class="backers">
-            <span>5,007</span><span>total backers</span>
+            <span class="bold-large-text">5,007</span
+            ><span class="faded-text">total backers</span>
           </div>
-          <div class="duration"><span>56</span><span>days left</span></div>
+          <div class="duration">
+            <span class="bold-large-text">56</span
+            ><span class="faded-text">days left</span>
+          </div>
+          <div
+            class="progress-bar-wrapper"
+            role="progressbar"
+            aria-valuenow="20"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          >
+            <div class="bar-wrapper">
+              <div class="bar"></div>
+            </div>
+          </div>
+          <!-- <progress max="100000" value="50000"></progress> -->
         </div>
-        <!-- <progress></progress> -->
       </section>
       <section class="project-info-backing">
         <article class="about-project">
           <h2 class="section-title">About this project</h2>
-          <p>
+          <p class="margin-top">
             The Mastercraft Bamboo Monitor Riser is a sturdy and stylish
             platform that elevates your screen to a more comfortable viewing
             height. Placing your monitor at eye level has the potential to
             improve your posture and make you more comfortable while at work,
             helping you stay focused on the task at hand.
           </p>
-          <p>
+          <p class="margin-top-bottom">
             Featuring artisan craftsmanship, the simplicity of design creates
             extra desk space below your computer to allow notepads, pens, and
             USB sticks to be stored under the stand.
@@ -98,7 +114,7 @@
           <article class="individual-pledge">
             <div class="title-pledge-amount">
               <h3>Bamboo Stand</h3>
-              <span>Pledge $25 or more</span>
+              <span class="highlight">Pledge $25 or more</span>
             </div>
             <p>
               You get an ergonomic stand made of natural bamboo. You've helped
@@ -106,14 +122,17 @@
               special Backer member list.
             </p>
             <div class="amount-pledges-left-select">
-              <span>101</span><span>left</span>
-              <button>Select Reward</button>
+              <div class="flex-wrapper">
+                <span class="bold-large-text">101</span
+                ><span class="faded-text self-center margin-left">left</span>
+              </div>
+              <button class="btn-light">Select Reward</button>
             </div>
           </article>
-          <article class="individual-pledge">
+          <article class="individual-pledge margin-top-bottom">
             <div class="title-pledge-amount">
               <h3>Black Edition Stand</h3>
-              <span>Pledge $75 or more</span>
+              <span class="highlight">Pledge $75 or more</span>
             </div>
             <p>
               You get a Black Special Edition computer stand and a personal
@@ -121,14 +140,17 @@
               included.
             </p>
             <div class="amount-pledges-left-select">
-              <span>64</span><span>left</span>
-              <button>Select Reward</button>
+              <div class="flex-wrapper">
+                <span class="bold-large-text">64</span
+                ><span class="faded-text self-center margin-left">left</span>
+              </div>
+              <button class="btn-light">Select Reward</button>
             </div>
           </article>
           <article class="individual-pledge">
             <div class="title-pledge-amount">
               <h3>Mahogany Special Edition</h3>
-              <span>Pledge $200 or more</span>
+              <span class="highlight">Pledge $200 or more</span>
             </div>
             <p>
               You get two Special Edition Mahogany stands, a Backer T-Shirt, and
@@ -136,8 +158,11 @@
               Shipping is included.
             </p>
             <div class="amount-pledges-left-select gray-out">
-              <span>0</span><span>left</span>
-              <button>Out of Stock</button>
+              <div class="flex-wrapper">
+                <span class="bold-large-text">0</span
+                ><span class="faded-text self-center margin-left">left</span>
+              </div>
+              <button class="btn-faded">Out of Stock</button>
             </div>
           </article>
         </section>
