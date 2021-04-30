@@ -57,7 +57,7 @@ h4 {
 }
 
 p {
-  line-height: 1.3;
+  line-height: 1.5;
 }
 
 a {
@@ -171,17 +171,18 @@ body {
 [class*="btn-"] {
   background-color: var(--btn-bg, hsl(0, 0%, 0%));
   color: var(--btn-fg, hsl(0, 100%, 100%));
+  padding: 0.8em 2em;
+  border-radius: 100vw;
 }
 
 .btn-light {
   font-weight: var(--fw-700);
   --btn-bg: var(--clr-primary-cyan);
   color: hsl(0, 0%, 100%);
-  border-radius: 100vw;
 }
 
 .btn-faded {
-  --btn-bg: var(var(--clr-neutral-gray));
+  --btn-bg: var(--clr-neutral-gray);
   color: hsl(0, 0%, 100%);
 }
 
@@ -249,6 +250,10 @@ a:hover {
   display: flex;
 }
 
+.highlight {
+  color: var(--clr-primary-cyan);
+}
+
 /* utilities */
 
 /* general styles */
@@ -279,6 +284,37 @@ main {
   margin: auto;
 }
 
+.dollar-amount span,
+.backers span,
+.duration span {
+  display: block;
+}
+
+.bold-large-text {
+  font-size: var(--fs-700);
+  font-weight: var(--fw-700);
+}
+
+.faded-text {
+  color: var(--clr-neutral-gray);
+}
+
+.self-center {
+  align-self: center;
+}
+
+.margin-left {
+  margin-left: 12px;
+}
+
+.margin-top {
+  margin-top: 28px;
+}
+
+.margin-top-bottom {
+  margin-top: 28px;
+  margin-bottom: 28px;
+}
 /* general styles */
 
 /* general layout */
@@ -375,9 +411,48 @@ header {
 .tracker-container .backers {
   border-top: 1px solid rgb(206, 200, 200);
   border-bottom: 1px solid rgb(206, 200, 200);
-  width: min-content;
+  width: 120px;
+  margin-inline: auto;
 }
 
+/* tracker container */
+
+.tracker-container {
+  text-align: center;
+  padding: 16px 24px 32px;
+}
+
+.dollar-amount,
+.backers,
+.duration {
+  padding-block-end: 16px;
+}
+
+.backers,
+.duration {
+  padding-block-start: 8px;
+}
+progress {
+  width: 100%;
+}
 /* progress-tracker */
+
+/* project-info-backing */
+
+.project-info-backing {
+  padding: 40px 24px 32px;
+}
+
+.project-info-backing p {
+  color: var(--clr-neutral-gray);
+}
+
+.individual-pledge {
+  border: 1px solid hsl(0, 3.9%, 64.5%);
+  border-radius: 8px;
+  padding: 32px 24px 24px;
+}
+
+/* project-info-backing */
 
 /* individual sections */
