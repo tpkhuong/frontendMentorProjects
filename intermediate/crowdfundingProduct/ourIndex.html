@@ -32,7 +32,10 @@
               <a class="nav-links" href="#">Get Started</a>
             </li>
           </ul>
-          <button class="img-container margin-left-auto">
+          <button
+            aria-label="open navgication mobile"
+            class="img-container margin-left-auto"
+          >
             <img
               src="images/icon-hamburger.svg"
               alt="Three horizontal stripes"
@@ -168,6 +171,142 @@
         </section>
       </section>
     </main>
+    <div
+      class="default-dialog"
+      role="dialog"
+      aria-labelledby="dialog1-label"
+      aria-modal="true"
+    >
+      <button aria-label="open modal" class="img-container margin-left-auto">
+        <img src="images/icon-close-modal.svg" alt="Three horizontal stripes" />
+      </button>
+      <h2 class="dialog-label" id="dialog1-label">Back this project</h2>
+      <p>
+        Want to support us in bringing Mastercraft Bamboo Monitor Riser out in
+        the world?
+      </p>
+      <article class="modal-pledge">
+        <div class="enter-pledge">
+          <div class="pledge-title-amount-quantity">
+            <input
+              type="radio"
+              id=""
+              aria-checked="false"
+              name="pledge-choices"
+              value=""
+            />
+            <label for="">Pledge with no reward</label>
+          </div>
+          <p>
+            Choose to support us without a reward if you simply believe in our
+            project. As a backer, you will be signed up to receive product
+            updates via email.
+          </p>
+          <!-- border here on selected-pledge div when we select a pledge it will show top border -->
+          <!-- <div class="selected-pledge">
+            <span></span>
+            <label for=""><input type="text" /></label>
+            <button></button>
+          </div> -->
+        </div>
+      </article>
+      <article class="modal-pledge">
+        <div class="enter-pledge">
+          <div class="pledge-title-amount-quantity">
+            <input
+              type="radio"
+              id=""
+              aria-checked="false"
+              name="pledge-choices"
+              value=""
+            />
+            <label for="">Bamboo Stand</label>
+            <span>Pledge $25 or more</span>
+            <div class="flex-wrapper"><span>101</span><span>left</span></div>
+          </div>
+          <p>
+            You get a Black Special Edition computer stand and a personal thank
+            you. You’ll be added to our Backer member list. Shipping is
+            included.
+          </p>
+          <!-- border here on selected-pledge div when we select a pledge it will show top border -->
+          <div class="selected-pledge">
+            <span>Enter your pledge</span>
+            <label for=""><input type="text" value="$25" /></label>
+            <button>Continue</button>
+          </div>
+        </div>
+      </article>
+      <article class="modal-pledge">
+        <div class="enter-pledge">
+          <div class="pledge-title-amount-quantity">
+            <input
+              type="radio"
+              id=""
+              aria-checked="false"
+              name="pledge-choices"
+              value=""
+            />
+            <label for="">Black Edition Stand</label>
+            <span>Pledge $75 or more</span>
+            <div class="flex-wrapper"><span>101</span><span>left</span></div>
+          </div>
+          <p>
+            You get a Black Special Edition computer stand and a personal thank
+            you. You’ll be added to our Backer member list. Shipping is
+            included.
+          </p>
+          <!-- border here on selected-pledge div when we select a pledge it will show top border -->
+          <div class="selected-pledge">
+            <span>Enter your pledge</span>
+            <label for=""><input type="text" value="$75" /></label>
+            <button>Continue</button>
+          </div>
+        </div>
+      </article>
+      <article class="modal-pledge">
+        <div class="enter-pledge">
+          <div class="pledge-title-amount-quantity">
+            <input
+              type="radio"
+              id=""
+              aria-checked="false"
+              name="pledge-choices"
+              value=""
+            />
+            <label for="">Mahogany Special Edition</label>
+            <span>Pledge $200 or more</span>
+            <div class="flex-wrapper"><span>0</span><span>left</span></div>
+          </div>
+          <p>
+            You get two Special Edition Mahogany stands, a Backer T-Shirt, and a
+            personal thank you. You’ll be added to our Backer member list.
+            Shipping is included.
+          </p>
+          <!-- border here on selected-pledge div when we select a pledge it will show top border -->
+          <div class="selected-pledge">
+            <span>Enter your pledge</span>
+            <label for=""><input type="text" value="$200" /></label>
+            <button>Continue</button>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div
+      class="default-dialog-completed"
+      role="dialog"
+      aria-labelledby="dialog2-label"
+      aria-modal="true"
+    >
+      <img src="images/icon-check.svg" alt="Checked with teal background" />
+      <h2>Thanks for your support!</h2>
+      <p>
+        Your pledge brings us one step closer to sharing Mastercraft Bamboo
+        Monitor Riser worldwide. You will get an email once our campaign is
+        completed.
+      </p>
+      <button>Got it!</button>
+    </div>
     <script src="./ourApp.js"></script>
   </body>
 </html>
