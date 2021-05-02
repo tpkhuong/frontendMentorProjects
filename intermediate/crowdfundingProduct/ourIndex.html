@@ -177,10 +177,11 @@
       aria-labelledby="dialog1-label"
       aria-modal="true"
     >
+      <h2 class="dialog-label" id="dialog1-label">Back this project</h2>
       <button aria-label="open modal" class="img-container margin-left-auto">
         <img src="images/icon-close-modal.svg" alt="Three horizontal stripes" />
       </button>
-      <h2 class="dialog-label" id="dialog1-label">Back this project</h2>
+
       <p>
         Want to support us in bringing Mastercraft Bamboo Monitor Riser out in
         the world?
@@ -190,18 +191,18 @@
           <div class="pledge-title-amount-quantity">
             <input
               type="radio"
-              id=""
+              id="no-reward"
               aria-checked="false"
               name="pledge-choices"
               value=""
             />
-            <label for="">Pledge with no reward</label>
+            <label for="no-reward">Pledge with no reward</label>
+            <p>
+              Choose to support us without a reward if you simply believe in our
+              project. As a backer, you will be signed up to receive product
+              updates via email.
+            </p>
           </div>
-          <p>
-            Choose to support us without a reward if you simply believe in our
-            project. As a backer, you will be signed up to receive product
-            updates via email.
-          </p>
           <!-- border here on selected-pledge div when we select a pledge it will show top border -->
           <!-- <div class="selected-pledge">
             <span></span>
@@ -215,25 +216,27 @@
           <div class="pledge-title-amount-quantity">
             <input
               type="radio"
-              id=""
+              id="starter-reward"
               aria-checked="false"
               name="pledge-choices"
               value=""
             />
-            <label for="">Bamboo Stand</label>
-            <span>Pledge $25 or more</span>
-            <div class="flex-wrapper"><span>101</span><span>left</span></div>
+            <label for="starter-reward">Bamboo Stand</label>
+            <span class="pledge-amount">Pledge $25 or more</span>
+            <div class="flex-wrapper pledge-quantity">
+              <span>101</span><span>left</span>
+            </div>
+            <p>
+              You get a Black Special Edition computer stand and a personal
+              thank you. You’ll be added to our Backer member list. Shipping is
+              included.
+            </p>
           </div>
-          <p>
-            You get a Black Special Edition computer stand and a personal thank
-            you. You’ll be added to our Backer member list. Shipping is
-            included.
-          </p>
           <!-- border here on selected-pledge div when we select a pledge it will show top border -->
           <div class="selected-pledge">
             <span>Enter your pledge</span>
             <label for=""><input type="text" value="$25" /></label>
-            <button>Continue</button>
+            <button class="btn-light">Continue</button>
           </div>
         </div>
       </article>
@@ -242,25 +245,27 @@
           <div class="pledge-title-amount-quantity">
             <input
               type="radio"
-              id=""
+              id="popular-reward"
               aria-checked="false"
               name="pledge-choices"
               value=""
             />
-            <label for="">Black Edition Stand</label>
-            <span>Pledge $75 or more</span>
-            <div class="flex-wrapper"><span>101</span><span>left</span></div>
+            <label for="popular-reward">Black Edition Stand</label>
+            <span class="pledge-amount">Pledge $75 or more</span>
+            <div class="flex-wrapper pledge-quantity">
+              <span>101</span><span>left</span>
+            </div>
+            <p>
+              You get a Black Special Edition computer stand and a personal
+              thank you. You’ll be added to our Backer member list. Shipping is
+              included.
+            </p>
           </div>
-          <p>
-            You get a Black Special Edition computer stand and a personal thank
-            you. You’ll be added to our Backer member list. Shipping is
-            included.
-          </p>
           <!-- border here on selected-pledge div when we select a pledge it will show top border -->
           <div class="selected-pledge">
             <span>Enter your pledge</span>
             <label for=""><input type="text" value="$75" /></label>
-            <button>Continue</button>
+            <button class="btn-light">Continue</button>
           </div>
         </div>
       </article>
@@ -269,25 +274,27 @@
           <div class="pledge-title-amount-quantity">
             <input
               type="radio"
-              id=""
+              id="premium-reward"
               aria-checked="false"
               name="pledge-choices"
               value=""
             />
-            <label for="">Mahogany Special Edition</label>
-            <span>Pledge $200 or more</span>
-            <div class="flex-wrapper"><span>0</span><span>left</span></div>
+            <label for="premium-reward">Mahogany Special Edition</label>
+            <span class="pledge-amount">Pledge $200 or more</span>
+            <div class="flex-wrapper pledge-quantity">
+              <span>0</span><span>left</span>
+            </div>
+            <p>
+              You get two Special Edition Mahogany stands, a Backer T-Shirt, and
+              a personal thank you. You’ll be added to our Backer member list.
+              Shipping is included.
+            </p>
           </div>
-          <p>
-            You get two Special Edition Mahogany stands, a Backer T-Shirt, and a
-            personal thank you. You’ll be added to our Backer member list.
-            Shipping is included.
-          </p>
           <!-- border here on selected-pledge div when we select a pledge it will show top border -->
           <div class="selected-pledge">
             <span>Enter your pledge</span>
             <label for=""><input type="text" value="$200" /></label>
-            <button>Continue</button>
+            <button class="btn-light">Continue</button>
           </div>
         </div>
       </article>
@@ -305,7 +312,7 @@
         Monitor Riser worldwide. You will get an email once our campaign is
         completed.
       </p>
-      <button>Got it!</button>
+      <button class="btn-light">Got it!</button>
     </div>
     <script src="./ourApp.js"></script>
   </body>
