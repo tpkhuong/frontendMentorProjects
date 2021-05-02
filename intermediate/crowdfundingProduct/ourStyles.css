@@ -263,6 +263,10 @@ body {
   line-height: 2;
 }
 
+p {
+  color: var(--clr-neutral-gray);
+}
+
 main {
   background-color: hsl(0, 100%, 99%);
   padding: 0.01px 16px 32px;
@@ -392,7 +396,7 @@ header {
 
 .fundriser-name p {
   font-size: var(--fs-200);
-  color: var(--clr-neutral-gray);
+  /* color: var(--clr-neutral-gray); */
   margin-block: 24px;
 }
 
@@ -443,9 +447,9 @@ progress {
   padding: 40px 24px 32px;
 }
 
-.project-info-backing p {
+/* .project-info-backing p {
   color: var(--clr-neutral-gray);
-}
+} */
 
 .individual-pledge {
   border: 1px solid hsl(0, 3.9%, 64.5%);
@@ -454,5 +458,104 @@ progress {
 }
 
 /* project-info-backing */
+
+/* modal */
+
+.default-dialog {
+  padding: 16px;
+  border: 1px solid var(--clr-neutral-gray);
+}
+
+.modal-pledge {
+  border: 1px solid var(--clr-neutral-gray);
+  border-radius: 8px;
+  padding: 28px 20px;
+}
+
+/* modal complete */
+
+.default-dialog-completed {
+  border: 1px solid var(--clr-neutral-gray);
+  border-radius: 8px;
+  padding: 24px 32px;
+  text-align: center;
+}
+
+.default-dialog-completed h2 {
+  margin-block-start: 32px;
+}
+
+.default-dialog-completed p {
+  margin-block: 32px;
+}
+
+.default-dialog-completed img {
+  margin: 0 auto;
+}
+
+.default-dialog-completed .btn-light {
+  padding: 8px 24px;
+}
+
+/* pledge-title-amount-quantity */
+
+.pledge-title-amount-quantity {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-areas:
+    "radio radio title title title title title title"
+    "radio radio amount amount amount amount amount amount"
+    "paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph"
+    "quantity quantity . . . . . .";
+}
+
+.pledge-title-amount-quantity input {
+  grid-area: radio;
+}
+.pledge-title-amount-quantity label {
+  grid-area: title;
+}
+.pledge-title-amount-quantity .pledge-amount {
+  grid-area: amount;
+}
+.pledge-title-amount-quantity .pledge-quantity {
+  grid-area: quantity;
+}
+.pledge-title-amount-quantity p {
+  grid-area: paragraph;
+}
+
+/* pledge-title-amount-quantity */
+
+/* modal complete */
+/* selected-pledge */
+
+.selected-pledge {
+  text-align: center;
+}
+
+.selected-pledge span {
+  color: var(--clr-neutral-gray);
+  display: block;
+  margin-block-end: 16px;
+}
+
+.selected-pledge input {
+  padding: 0;
+  border-radius: 100vw;
+  border-color: var(--clr-neutral-gray);
+  width: 120px;
+  height: 48px;
+  text-align: center;
+}
+
+.selected-pledge button {
+  padding: 0;
+  width: 120px;
+  height: 48px;
+}
+
+/* selected-pledge */
+/* modal */
 
 /* individual sections */
