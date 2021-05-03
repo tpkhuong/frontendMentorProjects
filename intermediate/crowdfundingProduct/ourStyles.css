@@ -503,8 +503,8 @@ progress {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-template-areas:
-    "radio radio title title title title title title"
-    "radio radio amount amount amount amount amount amount"
+    "radio title title title title title title title "
+    "radio amount amount amount amount amount amount amount"
     "paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph"
     "quantity quantity . . . . . .";
 }
