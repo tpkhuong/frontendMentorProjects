@@ -466,10 +466,18 @@ progress {
   border: 1px solid var(--clr-neutral-gray);
 }
 
+.dialog-label {
+  font-size: 1.4rem;
+}
+
+[aria-label="close modal"] {
+  align-self: flex-end;
+}
+
 .modal-pledge {
   border: 1px solid var(--clr-neutral-gray);
   border-radius: 8px;
-  padding: 28px 20px;
+  padding: 32px 28px;
 }
 
 /* modal complete */
@@ -501,26 +509,51 @@ progress {
 
 .pledge-title-amount-quantity {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   grid-template-areas:
-    "radio title title title title title title title "
-    "radio amount amount amount amount amount amount amount"
-    "paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph"
-    "quantity quantity . . . . . .";
+    "radio title title title title title"
+    "radio amount amount amount amount amount"
+    "paragraph paragraph paragraph paragraph paragraph paragraph"
+    "quantity quantity . . . .";
+}
+
+.separator {
+  display: block;
+  height: 1px;
+  margin-block: 16px;
+  margin-inline: -28px;
+  background-color: var(--clr-neutral-gray);
 }
 
 .pledge-title-amount-quantity input {
   grid-area: radio;
+  margin: 0;
+  margin-inline-end: 22px;
 }
 .pledge-title-amount-quantity label {
   grid-area: title;
+  font-weight: var(--fw-700);
 }
 .pledge-title-amount-quantity .pledge-amount {
+  font-weight: var(--fw-700);
   grid-area: amount;
 }
 .pledge-title-amount-quantity .pledge-quantity {
   grid-area: quantity;
+  font-size: var(--fs-400);
 }
+
+.pledge-quantity span:first-child {
+  font-weight: var(--fw-600);
+  margin-inline-end: 8px;
+}
+
+.pledge-quantity span:last-child {
+  color: var(--clr-neutral-gray);
+  font-size: var(--fs-300);
+  align-self: center;
+}
+
 .pledge-title-amount-quantity p {
   grid-area: paragraph;
 }
@@ -547,12 +580,14 @@ progress {
   width: 120px;
   height: 48px;
   text-align: center;
+  margin-inline-end: auto;
 }
 
 .selected-pledge button {
   padding: 0;
   width: 120px;
   height: 48px;
+  margin-inline-start: auto;
 }
 
 /* selected-pledge */
