@@ -177,10 +177,15 @@
       aria-labelledby="dialog1-label"
       aria-modal="true"
     >
-      <h2 class="dialog-label" id="dialog1-label">Back this project</h2>
-      <button aria-label="open modal" class="img-container margin-left-auto">
-        <img src="images/icon-close-modal.svg" alt="Three horizontal stripes" />
-      </button>
+      <div class="flex-wrapper">
+        <h2 class="dialog-label" id="dialog1-label">Back this project</h2>
+        <button aria-label="close modal" class="img-container margin-left-auto">
+          <img
+            src="images/icon-close-modal.svg"
+            alt="Three horizontal stripes"
+          />
+        </button>
+      </div>
 
       <p>
         Want to support us in bringing Mastercraft Bamboo Monitor Riser out in
@@ -222,7 +227,7 @@
               value=""
             />
             <label for="starter-reward">Bamboo Stand</label>
-            <span class="pledge-amount">Pledge $25 or more</span>
+            <span class="pledge-amount highlight">Pledge $25 or more</span>
             <div class="flex-wrapper pledge-quantity">
               <span>101</span><span>left</span>
             </div>
@@ -233,10 +238,13 @@
             </p>
           </div>
           <!-- border here on selected-pledge div when we select a pledge it will show top border -->
+          <span class="separator"></span>
           <div class="selected-pledge">
             <span>Enter your pledge</span>
-            <label for=""><input type="text" value="$25" /></label>
-            <button class="btn-light">Continue</button>
+            <div class="flex-wrapper">
+              <label for=""><input type="text" value="$25" /></label>
+              <button class="btn-light">Continue</button>
+            </div>
           </div>
         </div>
       </article>
@@ -251,7 +259,7 @@
               value=""
             />
             <label for="popular-reward">Black Edition Stand</label>
-            <span class="pledge-amount">Pledge $75 or more</span>
+            <span class="pledge-amount highlight">Pledge $75 or more</span>
             <div class="flex-wrapper pledge-quantity">
               <span>64</span><span>left</span>
             </div>
@@ -262,10 +270,13 @@
             </p>
           </div>
           <!-- border here on selected-pledge div when we select a pledge it will show top border -->
+          <span class="separator"></span>
           <div class="selected-pledge">
             <span>Enter your pledge</span>
-            <label for=""><input type="text" value="$75" /></label>
-            <button class="btn-light">Continue</button>
+            <div class="flex-wrapper">
+              <label for=""><input type="text" value="$75" /></label>
+              <button class="btn-light">Continue</button>
+            </div>
           </div>
         </div>
       </article>
@@ -280,7 +291,7 @@
               value=""
             />
             <label for="premium-reward">Mahogany Special Edition</label>
-            <span class="pledge-amount">Pledge $200 or more</span>
+            <span class="pledge-amount highlight">Pledge $200 or more</span>
             <div class="flex-wrapper pledge-quantity">
               <span>0</span><span>left</span>
             </div>
@@ -291,10 +302,13 @@
             </p>
           </div>
           <!-- border here on selected-pledge div when we select a pledge it will show top border -->
+          <span class="separator"></span>
           <div class="selected-pledge">
             <span>Enter your pledge</span>
-            <label for=""><input type="text" value="$200" /></label>
-            <button class="btn-light">Continue</button>
+            <div class="flex-wrapper">
+              <label for=""><input type="text" value="$200" /></label>
+              <button class="btn-light">Continue</button>
+            </div>
           </div>
         </div>
       </article>
