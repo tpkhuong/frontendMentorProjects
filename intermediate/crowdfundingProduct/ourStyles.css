@@ -132,11 +132,11 @@ input {
 
 .max-width {
   /* or the width we want our container/parent element to be */
-  max-width: 200px;
+  max-width: 350px;
   margin-inline-start: auto;
   margin-inline-end: auto;
-  padding-inline-start: 16px;
-  padding-inline-end: 16px;
+  /* padding-inline-start: 16px;
+  padding-inline-end: 16px; */
 }
 
 /* container wrapper */
@@ -210,13 +210,6 @@ body {
 
 .hide {
   display: none;
-}
-
-.hide-off-left {
-  position: absolute;
-  top: -9999px;
-  left: -9999px;
-  overflow: hidden;
 }
 
 @media screen and (min-width: 1200px) {
@@ -350,14 +343,31 @@ header {
   padding: 16px;
 }
 
+@media screen and (min-width: 90rem) {
+  .hero {
+    background-image: url("images/image-hero-desktop.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    padding: 16px;
+  }
+}
+
 /* navbar */
 
 .headernav {
   display: flex;
+  position: relative;
 }
 
 .nav-list {
-  border: 1px solid red;
+  position: absolute;
+  display: flex;
+  width: 100%;
+  flex-flow: column;
+  top: 38px;
+  left: 0;
+  border: 1px solid rgb(206, 200, 200);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -369,10 +379,47 @@ header {
   padding: 16px;
 }
 
+.nav-items:nth-of-type(2) {
+  border-top: 1px solid rgb(206, 200, 200);
+  border-bottom: 1px solid rgb(206, 200, 200);
+}
+
 .img-container {
   background-color: transparent;
 }
 
+.hide-off-left {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  overflow: hidden;
+}
+
+@media screen and (min-width: 90rem) {
+  .nav-list {
+    position: static;
+    flex-flow: row;
+    border: none;
+    /* overflow: visible; */
+  }
+  .nav-list > li:not(:last-child) {
+    margin-inline-end: 16px;
+  }
+  /* make toggle button hidden */
+  .headernav button.img-container {
+    display: none;
+  }
+  .nav-links {
+    font-size: calc(var(--fs-200) - 0.1rem);
+    padding: 0;
+    background-color: transparent;
+    color: hsl(0, 0%, 100%);
+  }
+  .nav-items:nth-of-type(2) {
+    border-bottom: none;
+    border-top: none;
+  }
+}
 /* navbar */
 
 /* header */
@@ -462,7 +509,7 @@ progress {
 /* modal */
 
 .default-dialog {
-  padding: 16px;
+  padding: 40px 28px;
   border: 1px solid var(--clr-neutral-gray);
 }
 
@@ -478,6 +525,10 @@ progress {
   border: 1px solid var(--clr-neutral-gray);
   border-radius: 8px;
   padding: 32px 28px;
+}
+
+.modal-pledge:not(:first-of-type) {
+  margin-block-start: 24px;
 }
 
 /* modal complete */
