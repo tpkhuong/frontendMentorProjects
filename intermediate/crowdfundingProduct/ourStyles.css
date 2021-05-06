@@ -141,6 +141,10 @@ input {
 
 /* container wrapper */
 
+/* img-wrapper */
+
+/* img-wrapper */
+
 html,
 body {
   height: 100%;
@@ -262,7 +266,7 @@ p {
 
 main {
   background-color: hsl(0, 100%, 99%);
-  padding: 0.01px 16px 32px;
+  padding: 0.1px 16px 32px;
 }
 
 .fundriser-name,
@@ -349,7 +353,7 @@ header {
     background-repeat: no-repeat;
     background-size: cover;
     height: 100%;
-    padding: 16px;
+    padding: 48px 120px;
   }
 }
 
@@ -358,6 +362,7 @@ header {
 .headernav {
   display: flex;
   position: relative;
+  align-items: center;
 }
 
 .nav-list {
@@ -400,6 +405,8 @@ header {
     position: static;
     flex-flow: row;
     border: none;
+    width: 180px;
+    margin-inline-start: auto;
     /* overflow: visible; */
   }
   .nav-list > li:not(:last-child) {
@@ -410,7 +417,7 @@ header {
     display: none;
   }
   .nav-links {
-    font-size: calc(var(--fs-200) - 0.1rem);
+    font-size: calc(var(--fs-200) - 0.2rem);
     padding: 0;
     background-color: transparent;
     color: hsl(0, 0%, 100%);
@@ -447,7 +454,7 @@ header {
   margin-block: 24px;
 }
 
-.fundriser-name button:last-of-type {
+.fundriser-name .bookmark-btn {
   background-color: transparent;
 }
 
@@ -506,11 +513,103 @@ progress {
 
 /* project-info-backing */
 
+@media screen and (min-width: 90rem) {
+  .max-width {
+    max-width: 750px;
+  }
+
+  /* fundriser-name */
+  .fundriser-name {
+    padding-inline: 42px;
+  }
+  .fundriser-name .bookmark-btn {
+    display: flex;
+    background-color: rgb(245, 236, 236);
+    align-items: center;
+    border-radius: 100vw;
+  }
+
+  .fundriser-name span {
+    position: static;
+    color: var(--clr-neutral-gray);
+    font-weight: var(--fw-700);
+    padding: 16px 24px;
+  }
+  /* fundriser-name */
+  /* progress-tracker */
+
+  .tracker-container {
+    padding: 48px 30px;
+    padding-inline-start: 42px;
+    display: flex;
+  }
+
+  .tracker-container .backers {
+    border-top: none;
+    border-bottom: none;
+    border-right: 1px solid rgb(206, 200, 200);
+    border-left: 1px solid rgb(206, 200, 200);
+    width: 120px;
+    margin-inline: 0;
+  }
+
+  .dollar-amount,
+  .backers,
+  .duration {
+    flex: 1;
+    padding-block-end: 0;
+    text-align: left;
+  }
+
+  .backers,
+  .duration {
+    padding-block-start: 0;
+    padding-inline-start: 48px;
+    padding-inline-end: 48px;
+  }
+
+  .duration {
+    padding-inline-end: 0;
+  }
+
+  .dollar-amount {
+    padding-inline-end: 48px;
+  }
+  /* progress-tracker */
+  /* project-info-backing */
+
+  .project-info-backing {
+    padding-inline: 42px;
+  }
+
+  .title-pledge-amount {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .amount-pledges-left-select {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .individual-pledge .btn-light {
+    padding: 0.6em 2em;
+    height: min-content;
+  }
+  /* project-info-backing */
+}
+
 /* modal */
+main + .max-width {
+  max-width: 400px;
+}
 
 .default-dialog {
   padding: 40px 28px;
   border: 1px solid var(--clr-neutral-gray);
+  border-radius: 8px;
 }
 
 .dialog-label {
@@ -529,6 +628,12 @@ progress {
 
 .modal-pledge:not(:first-of-type) {
   margin-block-start: 24px;
+}
+
+@media screen and (min-width: 90rem) {
+  main + .max-width {
+    max-width: 750px;
+  }
 }
 
 /* modal complete */
@@ -607,6 +712,19 @@ progress {
 
 .pledge-title-amount-quantity p {
   grid-area: paragraph;
+}
+
+@media screen and (min-width: 90rem) {
+  .default-dialog {
+    padding-inline: 40px;
+  }
+
+  .pledge-title-amount-quantity {
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-areas:
+      "radio title title title title amount amount amount quantity quantity"
+      "radio paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph";
+  }
 }
 
 /* pledge-title-amount-quantity */
