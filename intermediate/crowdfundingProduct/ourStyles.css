@@ -185,6 +185,11 @@ body {
   color: hsl(0, 0%, 100%);
 }
 
+.btn-light:hover {
+  background-color: var(--clr-primary-dark-cyan);
+  cursor: pointer;
+}
+
 .btn-faded {
   --btn-bg: var(--clr-neutral-gray);
   color: hsl(0, 0%, 100%);
@@ -407,7 +412,7 @@ header {
     border: none;
     width: 180px;
     margin-inline-start: auto;
-    /* overflow: visible; */
+    overflow: visible;
   }
   .nav-list > li:not(:last-child) {
     margin-inline-end: 16px;
@@ -606,6 +611,11 @@ main + .max-width {
   max-width: 400px;
 }
 
+.modal-complete-max-width {
+  max-width: 500px;
+  margin-inline: auto;
+}
+
 .default-dialog {
   padding: 40px 28px;
   border: 1px solid var(--clr-neutral-gray);
@@ -633,6 +643,9 @@ main + .max-width {
 @media screen and (min-width: 90rem) {
   main + .max-width {
     max-width: 750px;
+  }
+  .modal-pledge {
+    padding-block-end: 16px;
   }
 }
 
@@ -721,9 +734,14 @@ main + .max-width {
 
   .pledge-title-amount-quantity {
     grid-template-columns: repeat(10, 1fr);
+    align-items: center;
     grid-template-areas:
       "radio title title title title amount amount amount quantity quantity"
-      "radio paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph";
+      ". paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph paragraph";
+  }
+  .pledge-title-amount-quantity input {
+    align-self: normal;
+    margin-inline-end: 36px;
   }
 }
 
@@ -760,6 +778,26 @@ main + .max-width {
 }
 
 /* selected-pledge */
+
+@media screen and (min-width: 90rem) {
+  .selected-pledge {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-block: 16px;
+  }
+
+  .selected-pledge span {
+    margin-block-end: 0;
+  }
+
+  /* .selected-pledge .flex-wrapper {
+    gap: 16px;
+  } */
+  .selected-pledge .flex-wrapper button {
+    margin-inline-start: 16px;
+  }
+}
 /* modal */
 
 /* individual sections */
