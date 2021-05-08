@@ -256,6 +256,14 @@ a:hover {
   color: var(--clr-primary-cyan);
 }
 
+/* faded based on quantity */
+
+.faded-pledge {
+  opacity: 0.5;
+}
+
+/* faded based on quantity */
+
 /* utilities */
 
 /* general styles */
@@ -607,14 +615,45 @@ progress {
 }
 
 /* modal */
-main + .max-width {
+/* main + .max-width {
   max-width: 400px;
+} */
+
+/* when modal is active */
+
+.dialog-backdrop {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: hsla(0, 0%, 0%, 0.3);
+  /* come back to this later */
+  display: none;
+  /* come back to this later */
 }
 
-.modal-complete-max-width {
-  max-width: 500px;
+[id="dialog1"],
+[id="dialog2"] {
+  background-color: hsl(0, 0%, 100%);
   margin-inline: auto;
 }
+
+/* .modal-complete-max-width {
+  max-width: 500px;
+  margin-inline: auto;
+} */
+
+[id="dialog1"] {
+  max-width: 350px;
+  margin-block-start: 80px;
+}
+[id="dialog2"] {
+  max-width: 350px;
+  margin-block-start: 144px;
+}
+
+/* when modal is active */
 
 .default-dialog {
   padding: 40px 28px;
@@ -633,7 +672,7 @@ main + .max-width {
 .modal-pledge {
   border: 1px solid var(--clr-neutral-gray);
   border-radius: 8px;
-  padding: 32px 28px;
+  padding: 32px 16px;
 }
 
 .modal-pledge:not(:first-of-type) {
@@ -641,8 +680,12 @@ main + .max-width {
 }
 
 @media screen and (min-width: 90rem) {
-  main + .max-width {
+  [id="dialog1"] {
     max-width: 750px;
+  }
+  [id="dialog2"] {
+    max-width: 500px;
+    margin-block-start: 264px;
   }
   .modal-pledge {
     padding-block-end: 16px;
@@ -690,7 +733,7 @@ main + .max-width {
   display: block;
   height: 1px;
   margin-block: 16px;
-  margin-inline: -28px;
+  margin-inline: -16px;
   background-color: var(--clr-neutral-gray);
 }
 
