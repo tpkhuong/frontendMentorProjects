@@ -132,7 +132,7 @@
               </p>
               <div class="amount-pledges-left-select">
                 <div class="flex-wrapper">
-                  <span class="bold-large-text">101</span
+                  <span class="bold-large-text quantity-digit">101</span
                   ><span class="faded-text self-center margin-left">left</span>
                 </div>
                 <button class="btn-light">Select Reward</button>
@@ -150,7 +150,7 @@
               </p>
               <div class="amount-pledges-left-select">
                 <div class="flex-wrapper">
-                  <span class="bold-large-text">64</span
+                  <span class="bold-large-text quantity-digit">64</span
                   ><span class="faded-text self-center margin-left">left</span>
                 </div>
                 <button class="btn-light">Select Reward</button>
@@ -168,7 +168,7 @@
               </p>
               <div class="amount-pledges-left-select gray-out">
                 <div class="flex-wrapper">
-                  <span class="bold-large-text">0</span
+                  <span class="bold-large-text quantity-digit">0</span
                   ><span class="faded-text self-center margin-left">left</span>
                 </div>
                 <button class="btn-faded">Out of Stock</button>
@@ -179,9 +179,10 @@
       </div>
     </main>
     <div class="modal-wrapper">
-      <div class="max-width">
+      <div class="dialog-backdrop">
         <div
           class="default-dialog"
+          id="dialog1"
           role="dialog"
           aria-labelledby="dialog1-label"
           aria-modal="true"
@@ -241,7 +242,7 @@
                 <label for="starter-reward">Bamboo Stand</label>
                 <span class="pledge-amount highlight">Pledge $25 or more</span>
                 <div class="flex-wrapper pledge-quantity">
-                  <span>101</span><span>left</span>
+                  <span class="quantity-digit">101</span><span>left</span>
                 </div>
                 <p>
                   You get a Black Special Edition computer stand and a personal
@@ -273,7 +274,7 @@
                 <label for="popular-reward">Black Edition Stand</label>
                 <span class="pledge-amount highlight">Pledge $75 or more</span>
                 <div class="flex-wrapper pledge-quantity">
-                  <span>64</span><span>left</span>
+                  <span class="quantity-digit">64</span><span>left</span>
                 </div>
                 <p>
                   You get a Black Special Edition computer stand and a personal
@@ -305,7 +306,7 @@
                 <label for="premium-reward">Mahogany Special Edition</label>
                 <span class="pledge-amount highlight">Pledge $200 or more</span>
                 <div class="flex-wrapper pledge-quantity">
-                  <span>0</span><span>left</span>
+                  <span class="quantity-digit">0</span><span>left</span>
                 </div>
                 <p>
                   You get two Special Edition Mahogany stands, a Backer T-Shirt,
@@ -326,12 +327,14 @@
           </article>
         </div>
       </div>
-      <div class="modal-complete-max-width">
+
+      <div class="dialog-backdrop">
         <div
           class="default-dialog-completed"
           role="dialog"
           aria-labelledby="dialog2-label"
           aria-modal="true"
+          id="dialog2"
         >
           <img src="images/icon-check.svg" alt="Checked with teal background" />
           <h2>Thanks for your support!</h2>
