@@ -14,6 +14,8 @@ function ourSelectors() {
 
 toggleNavMenu();
 addFadedOpacity();
+selectedBookmarked();
+
 function toggleNavMenu() {
   var { navBar } = ourSelectors();
   var toggleButton = document.querySelector(".headernav button.img-container");
@@ -25,7 +27,7 @@ function toggleNavMenu() {
 
 function addFadedOpacity() {
   var { quantitySelectors } = ourSelectors();
-
+  var arrOfStrings = ["individual-pledge", "modal-pledge"];
   var quantityIsZero = quantitySelectors.reduce(function findZeroLeft(
     buildingUp,
     currentValue
@@ -37,5 +39,40 @@ function addFadedOpacity() {
     return buildingUp;
   },
   []);
-  console.log(quantityIsZero);
+
+  var arrOfArticleEleAddOpacity = quantityIsZero.reduce(function findArticleEle(
+    buildingUp,
+    currentValue
+  ) {
+    var parentEle = currentValue.parentElement;
+    var articleWithMatchingClassname;
+    while (parentEle) {
+      if (
+        parentEle.tagName == "ARTICLE" &&
+        arrOfStrings.includes(parentEle.className)
+      ) {
+        articleWithMatchingClassname = parentEle;
+        break;
+      }
+      parentEle = parentEle.parentElement;
+    }
+    if (articleWithMatchingClassname != undefined) {
+      return [...buildingUp, articleWithMatchingClassname];
+    }
+    return buildingUp;
+  },
+  []);
+
+  arrOfArticleEleAddOpacity.forEach(function addOpacity(eachArticleEle) {
+    eachArticleEle.classList.add("faded-pledge");
+  });
+  console.log(arrOfArticleEleAddOpacity);
+}
+
+function selectedBookmarked() {
+  document
+    .querySelector(".bookmark-btn")
+    .addEventListener("click", function selectBookmark(event) {
+      this.classList.toggle("activated-bookmarked");
+    });
 }
