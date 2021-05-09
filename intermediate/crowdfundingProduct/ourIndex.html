@@ -66,12 +66,28 @@
             </button>
             <button class="bookmark-btn">
               <div class="img-container">
-                <img
+                <svg width="56" height="56" xmlns="http://www.w3.org/2000/svg">
+                  <g fill="none" fill-rule="evenodd">
+                    <circle
+                      class="bookmark-circle"
+                      fill="#2F2F2F"
+                      cx="28"
+                      cy="28"
+                      r="28"
+                    />
+                    <path
+                      class="bookmark-logo"
+                      fill="#B1B1B1"
+                      d="M23 19v18l5-5.058L33 37V19z"
+                    />
+                  </g>
+                </svg>
+                <!-- <img
                   src="images/icon-bookmark.svg"
                   alt="Gray ribbon with black background"
-                />
+                /> -->
               </div>
-              <span class="hide-off-left">Bookmark</span>
+              <span class="hide-off-left bookmark-text">Bookmark</span>
             </button>
           </div>
         </section>
@@ -89,18 +105,19 @@
               <span class="bold-large-text">56</span
               ><span class="faded-text">days left</span>
             </div>
-            <div
-              class="progress-bar-wrapper"
-              role="progressbar"
-              aria-valuenow="20"
-              aria-valuemin="0"
-              aria-valuemax="100"
-            >
-              <div class="bar-wrapper">
-                <div class="bar"></div>
-              </div>
-            </div>
+
             <!-- <progress max="100000" value="50000"></progress> -->
+          </div>
+          <div
+            class="progress-bar-wrapper"
+            role="progressbar"
+            aria-valuenow="20"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          >
+            <div class="bar-wrapper">
+              <div class="bar"></div>
+            </div>
           </div>
         </section>
         <section class="project-info-backing">
