@@ -471,12 +471,45 @@ header {
   background-color: transparent;
 }
 
+.fundriser-name .bookmark-btn .img-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* activate bookmark */
+
+.activated-bookmarked {
+  --selected-fg: var(--clr-primary-dark-cyan);
+  --selected-circle: var(--clr-primary-dark-cyan);
+  --selected-logo: hsl(0, 0%, 100%);
+}
+
+.bookmark-btn:hover {
+  cursor: pointer;
+}
+
+.bookmark-btn svg .bookmark-circle {
+  fill: var(--selected-circle, #2f2f2f);
+}
+
+.bookmark-btn svg .bookmark-logo {
+  fill: var(--selected-logo, #b1b1b1);
+}
+
+.bookmark-btn .bookmark-text {
+  color: var(--selected-fg, var(--clr-neutral-gray));
+}
+
+/* activate bookmark */
+
 /* fundriser-name */
 
 /* progress-tracker */
 
 .progress-tracker {
   margin-block: 16px;
+  padding: 16px 24px 32px;
 }
 
 .tracker-container .backers {
@@ -490,7 +523,6 @@ header {
 
 .tracker-container {
   text-align: center;
-  padding: 16px 24px 32px;
 }
 
 .dollar-amount,
@@ -503,9 +535,29 @@ header {
 .duration {
   padding-block-start: 8px;
 }
-progress {
+/* progress {
   width: 100%;
+} */
+
+/* prograss bar */
+
+.progress-bar-wrapper {
+  margin-block-start: 32px;
+  width: 100%;
+  border-radius: 100vw;
+  background-color: lightgrey;
+  overflow: hidden;
 }
+
+.bar-wrapper {
+  height: 12px;
+  /* the width of this bar-wrapper will controlled by js code */
+  width: 50%;
+  background-color: red;
+}
+
+/* prograss bar */
+
 /* progress-tracker */
 
 /* project-info-backing */
@@ -551,9 +603,13 @@ progress {
   /* fundriser-name */
   /* progress-tracker */
 
+  .progress-tracker {
+    padding: 32px;
+  }
+
   .tracker-container {
-    padding: 48px 30px;
-    padding-inline-start: 42px;
+    line-height: 1.4;
+    padding: 0;
     display: flex;
   }
 
