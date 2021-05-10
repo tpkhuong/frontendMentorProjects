@@ -550,8 +550,16 @@ header {
 }
 
 .bar-wrapper {
+  overflow: hidden;
+  width: 100%;
+}
+
+.bar {
+  /* the width of this bar will controlled by js code */
+  /* our bar has to be wrapped in two elements so when our bar get at 98 or close to 100%
+  the top right and bottom right border won't bleed out of the gray bar background
+  */
   height: 12px;
-  /* the width of this bar-wrapper will controlled by js code */
   width: 50%;
   background-color: red;
 }
