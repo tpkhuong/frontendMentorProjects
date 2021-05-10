@@ -24,7 +24,7 @@ function toggleNavMenu() {
     navBar.classList.toggle("hide-off-left");
   });
 }
-
+alert("add accessibility labels to modal");
 function addFadedOpacity() {
   var { quantitySelectors } = ourSelectors();
   var arrOfStrings = ["individual-pledge", "modal-pledge"];
