@@ -6,15 +6,23 @@ function ourSelectors() {
   var quantitySelectors = Array.from(
     document.querySelectorAll(".quantity-digit")
   );
+  var selectPledgeInput = Array.prototype.slice.call(
+    document.querySelectorAll(".selected-pledge input")
+  );
+  // var selectPledgeInput = Array.from(
+  //   document.querySelectorAll(".selected-pledge input")
+  // );
   return {
     navBar,
     quantitySelectors,
+    selectPledgeInput,
   };
 }
 
 toggleNavMenu();
 addFadedOpacity();
 selectedBookmarked();
+inputFunctionality();
 
 function toggleNavMenu() {
   var { navBar } = ourSelectors();
@@ -24,7 +32,7 @@ function toggleNavMenu() {
     navBar.classList.toggle("hide-off-left");
   });
 }
-alert("add accessibility labels to modal");
+
 function addFadedOpacity() {
   var { quantitySelectors } = ourSelectors();
   var arrOfStrings = ["individual-pledge", "modal-pledge"];
@@ -75,4 +83,33 @@ function selectedBookmarked() {
     .addEventListener("click", function selectBookmark(event) {
       this.classList.toggle("activated-bookmarked");
     });
+}
+alert("add submit btn class to continue btn");
+function inputFunctionality() {
+  var { selectPledgeInput } = ourSelectors();
+  var submitBtn = document.querySelector(".submit-btn");
+
+  submitBtn.addEventListener("click", function getInputValue(event) {
+    // var getValueOfInputEle = Array.prototype.slice.call(
+    //   event.target.previousElementSibling.children
+    // );
+    var [getValueOfInputEle] = Array.from(
+      event.target.previousElementSibling.children
+    ).filter(function findMatchingClass(eachChildELe) {
+      return eachChildELe.className == "selected-pledge-input";
+    });
+    /**** we are getting the value of our inputs when we click the continue btn *****/
+    console.log(Number(getValueOfInputEle.value));
+  });
+  // selectPledgeInput.forEach(function onlyRunWhenFocused(eachInput) {
+  //   eachInput.addEventListener(
+  //     "focus",
+  //     function eventListenerOnInputEle(event) {
+  //       console.log(this == eachInput);
+  //       this.addEventListener("input", function watchInputs(event) {
+  //         console.log(event.target.value);
+  //       });
+  //     }
+  //   );
+  // });
 }
