@@ -94,15 +94,15 @@
         <section class="progress-tracker">
           <div class="tracker-container">
             <div class="dollar-amount">
-              <span class="bold-large-text">$89,914</span
+              <span class="bold-large-text amount-display">$89,914</span
               ><span class="faded-text">of $100,000 backed</span>
             </div>
             <div class="backers">
-              <span class="bold-large-text">5,007</span
+              <span class="bold-large-text backers-display">5,007</span
               ><span class="faded-text">total backers</span>
             </div>
             <div class="duration">
-              <span class="bold-large-text">56</span
+              <span class="bold-large-text days-left-display">56</span
               ><span class="faded-text">days left</span>
             </div>
 
@@ -273,7 +273,13 @@
               <div class="selected-pledge">
                 <span>Enter your pledge</span>
                 <div class="flex-wrapper">
-                  <label for=""><input type="text" value="$25" /></label>
+                  <label for=""
+                    ><span class="dollar-sign">$</span
+                    ><input
+                      class="selected-pledge-input"
+                      type="text"
+                      value="25"
+                  /></label>
                   <button class="btn-light">Continue</button>
                 </div>
               </div>
@@ -305,8 +311,14 @@
               <div class="selected-pledge">
                 <span>Enter your pledge</span>
                 <div class="flex-wrapper">
-                  <label for=""><input type="text" value="$75" /></label>
-                  <button class="btn-light">Continue</button>
+                  <label for=""
+                    ><span class="dollar-sign">$</span
+                    ><input
+                      class="selected-pledge-input"
+                      type="text"
+                      value="75"
+                  /></label>
+                  <button class="btn-light submit-btn">Continue</button>
                 </div>
               </div>
             </div>
@@ -337,7 +349,13 @@
               <div class="selected-pledge">
                 <span>Enter your pledge</span>
                 <div class="flex-wrapper">
-                  <label for=""><input type="text" value="$200" /></label>
+                  <label for="">
+                    <span class="dollar-sign">$</span>
+                    <input
+                      class="selected-pledge-input"
+                      type="text"
+                      value="200"
+                  /></label>
                   <button class="btn-light">Continue</button>
                 </div>
               </div>
@@ -353,10 +371,13 @@
           aria-labelledby="dialog2-label"
           aria-modal="true"
           id="dialog2"
+          aria-describedby="dialog2-desc"
         >
           <img src="images/icon-check.svg" alt="Checked with teal background" />
-          <h2>Thanks for your support!</h2>
-          <p>
+          <h2 class="dialog-label" id="dialog2-label">
+            Thanks for your support!
+          </h2>
+          <p id="dialog2-desc">
             Your pledge brings us one step closer to sharing Mastercraft Bamboo
             Monitor Riser worldwide. You will get an email once our campaign is
             completed.
