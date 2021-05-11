@@ -861,6 +861,18 @@ header {
   text-align: center;
 }
 
+.selected-pledge label {
+  position: relative;
+}
+
+.selected-pledge .dollar-sign {
+  margin: 0;
+  position: absolute;
+  font-weight: var(--fw-700);
+  left: 28px;
+  top: 8px;
+}
+
 .selected-pledge span {
   color: var(--clr-neutral-gray);
   display: block;
@@ -875,6 +887,7 @@ header {
   height: 48px;
   text-align: center;
   margin-inline-end: auto;
+  font-weight: var(--fw-700);
 }
 
 .selected-pledge button {
