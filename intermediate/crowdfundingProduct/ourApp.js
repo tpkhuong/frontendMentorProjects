@@ -26,12 +26,19 @@ inputFunctionality();
 // ourData();
 // onlyRunInputFuncWhenBtnClicked();
 
-function ourData(dataInput = {}) {
+function ourData(arrInput, amountInput) {
   var dataObj = {};
-  var [ourArr] = Object.entries(dataInput);
-  var [ourKey, ourValue] = ourArr;
-  // dataObj[ourKey] = ourValue;
-  dataObj[ourKey] = ourValue;
+  if (Array.isArray(arrInput)) {
+    dataObj["arrOfSpanDigitElement"] = arrInput;
+  }
+
+  if (typeof amountInput == "object") {
+    var [ourArr] = Object.entries(amountInput);
+    var [ourKey, ourValue] = ourArr;
+    // dataObj[ourKey] = ourValue;
+    dataObj[ourKey] = ourValue;
+  }
+
   console.log(dataObj);
 }
 
@@ -101,23 +108,52 @@ function selectedBookmarked() {
 function inputFunctionality() {
   var { selectPledgeInput } = ourSelectors();
   // var submitBtn = Array.prototype.slice.call( document.querySelectorAll(".submit-btn"));
-  var submitBtn = Array.from(document.querySelectorAll(".submit-btn"));
+  // var submitBtn = Array.from(document.querySelectorAll(".submit-btn"));
 
-  submitBtn.forEach(function addEventToBtn(eachBtn) {
-    eachBtn.addEventListener("click", function getInputValue(event) {
-      // var getValueOfInputEle = Array.prototype.slice.call(
-      //   event.target.previousElementSibling.children
-      // );
+  // submitBtn.forEach(function addEventToBtn(eachBtn) {
+  //   eachBtn.addEventListener("click", function getInputValue(event) {
+  //     // var getValueOfInputEle = Array.prototype.slice.call(
+  //     //   event.target.previousElementSibling.children
+  //     // );
+  //     var [getValueOfInputEle] = Array.from(
+  //       event.target.previousElementSibling.children
+  //     ).filter(function findMatchingClass(eachChildELe) {
+  //       return eachChildELe.className == "selected-pledge-input";
+  //     });
+  //     /**** we are getting the value of our inputs when we click the continue btn *****/
+  //     ourData(ourAmount(Number(getValueOfInputEle.value)));
+  //     // console.log(ourAmount(Number(getValueOfInputEle.value)));
+  //   });
+  // });
+
+  // better approach, we're not looping and adding the event to each submit-btn
+  var addListenerToDialog1 = document.querySelector('[id="dialog1"]');
+  var arrOfRadioBtn = Array.prototype.slice.call(
+    document.querySelectorAll('[type="radio"]')
+  );
+
+  addListenerToDialog1.addEventListener("click", function getAmount(event) {
+    if (
+      event.target.className.includes("submit-btn") &&
+      event.target.innerText == "Continue"
+    ) {
       var [getValueOfInputEle] = Array.from(
         event.target.previousElementSibling.children
       ).filter(function findMatchingClass(eachChildELe) {
         return eachChildELe.className == "selected-pledge-input";
       });
       /**** we are getting the value of our inputs when we click the continue btn *****/
-      ourData(ourAmount(Number(getValueOfInputEle.value)));
-      // console.log(ourAmount(Number(getValueOfInputEle.value)));
-    });
+      var [radioBtnCheckedTrue] = arrOfRadioBtn.filter(function findRadioBtn(
+        eachBtn
+      ) {
+        return eachBtn.checked;
+      });
+
+      var amountData = ourAmount(Number(getValueOfInputEle.value));
+      findTheQuantityOfPledge(radioBtnCheckedTrue, amountData);
+    }
   });
+  // better approach, we're not looping and adding the event to each submit-btn
   // selectPledgeInput.forEach(function onlyRunWhenFocused(eachInput) {
   //   eachInput.addEventListener(
   //     "focus",
@@ -157,15 +193,17 @@ function findRadioBtnChangeEvent() {
 
   var addListenerToDialog1 = document.querySelector('[id="dialog1"]');
 
+  var containerOfInputRadioChecked;
   addListenerToDialog1.addEventListener(
     "change",
     function watchForChange(event) {
       var radioBtnHasCheckedTrue = event.target;
       console.log(radioBtnHasCheckedTrue);
       /* turn the radio btn we clicked aria checked to true*/
+      containerOfInputRadioChecked =
+        event.target.parentElement.parentElement.children;
       event.target.attributes["aria-checked"].value = "true";
       toggleAriaChecked(radioBtnHasCheckedTrue, inputRadioBtnArray);
-      findTheQuantityOfPledge(radioBtnHasCheckedTrue);
     }
   );
   // inputRadioBtnArray.forEach(function addChangeListener(eachRadioBtn) {
@@ -195,21 +233,37 @@ function toggleAriaChecked(radioBtnInput, arrRadioBtn) {
     eachRadioBtn.attributes["aria-checked"].value = "false";
   });
 }
-alert(
-  "we are selecting the text of the quantity-digit element. might be better to put unique identifier for our quantity-digit element"
-);
-function findTheQuantityOfPledge(selectedRadioBtn) {
+
+function findTheQuantityOfPledge(selectedRadioBtn, amountInput) {
   var selectedRadioLabelText = selectedRadioBtn.nextElementSibling.innerText;
   console.log(selectedRadioLabelText);
 
+  // find the container with the quantity text and put them in an array. so we can loop them and change the quantity
+  var childrenOfParentOfRadioBtn = Array.prototype.slice.call(
+    selectedRadioBtn.parentElement.children
+  );
+
+  var [parentContainerOfQuantityText] = childrenOfParentOfRadioBtn.filter(
+    function findQuantityParentELe(eachElement) {
+      var tagNameOfElement = eachElement.tagName;
+      return tagNameOfElement == "DIV";
+    }
+  );
+
+  var textContainerOfRadioBtnChecked =
+    parentContainerOfQuantityText.firstElementChild;
+  // var childrenOfParentOfRadioBtn = Array.from(
+  //   selectedRadioBtn.parentElement.children
+  // );
+  var containerForOurText;
   if (!selectedRadioLabelText.includes("Pledge")) {
-    var arrOfIndividualPledgeEle = Array.prototype.slice.call(
+    let arrOfIndividualPledgeEle = Array.prototype.slice.call(
       document.querySelectorAll(".individual-pledge")
     );
 
     console.log(arrOfIndividualPledgeEle);
 
-    var [articleEleQuantityToChange] = arrOfIndividualPledgeEle.filter(
+    let [articleEleQuantityToChange] = arrOfIndividualPledgeEle.filter(
       function printInnerText(eachArticle) {
         var titleEleInnerText =
           eachArticle.firstElementChild.firstElementChild.innerText;
@@ -218,19 +272,33 @@ function findTheQuantityOfPledge(selectedRadioBtn) {
       }
     );
     // amount-pledges-left-select
-    var childrenOfArticleEle = Array.prototype.slice.call(
+    let childrenOfArticleEle = Array.prototype.slice.call(
       articleEleQuantityToChange.children
     );
     // var childrenOfArticleEle = Array.from(articleEleQuantityToChange);
 
-    var [containerOfQuantityDigit] = childrenOfArticleEle.filter(
+    let [containerOfQuantityDigit] = childrenOfArticleEle.filter(
       function findTheContainer(eachElement) {
         return eachElement.className == "amount-pledges-left-select";
       }
     );
 
-    console.log(
-      containerOfQuantityDigit.firstElementChild.firstElementChild.innerText
-    );
+    containerForOurText =
+      containerOfQuantityDigit.firstElementChild.firstElementChild;
+    console.log(containerForOurText);
   }
+
+  var arrOfTextContainerToChange = [
+    textContainerOfRadioBtnChecked,
+    containerForOurText,
+  ];
+  ourData(arrOfTextContainerToChange, amountInput);
+  // find the container with the quantity text and put them in an array. so we can loop them and change the quantity
 }
+
+alert(
+  "we have our amount and our array of quantity-digit an in obj, we can work with those data"
+);
+// function changeTheQuantityOfTextElement(...textElements) {
+
+// }
