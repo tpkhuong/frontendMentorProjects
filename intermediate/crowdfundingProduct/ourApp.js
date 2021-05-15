@@ -9,6 +9,7 @@ function ourSelectors() {
   var selectPledgeInput = Array.prototype.slice.call(
     document.querySelectorAll(".selected-pledge input")
   );
+  var totalAmountDisplay = document.querySelector(".amount-display");
   // var selectPledgeInput = Array.from(
   //   document.querySelectorAll(".selected-pledge input")
   // );
@@ -16,6 +17,7 @@ function ourSelectors() {
     navBar,
     quantitySelectors,
     selectPledgeInput,
+    totalAmountDisplay,
   };
 }
 
@@ -26,21 +28,21 @@ inputFunctionality();
 // ourData();
 // onlyRunInputFuncWhenBtnClicked();
 
-function ourData(arrInput, amountInput) {
-  var dataObj = {};
-  if (Array.isArray(arrInput)) {
-    dataObj["arrOfSpanDigitElement"] = arrInput;
-  }
+// function ourData(arrInput, amountInput) {
+//   var dataObj = {};
+//   if (Array.isArray(arrInput)) {
+//     dataObj["arrOfSpanDigitElement"] = arrInput;
+//   }
 
-  if (typeof amountInput == "object") {
-    var [ourArr] = Object.entries(amountInput);
-    var [ourKey, ourValue] = ourArr;
-    // dataObj[ourKey] = ourValue;
-    dataObj[ourKey] = ourValue;
-  }
+//   if (typeof amountInput == "object") {
+//     var [ourArr] = Object.entries(amountInput);
+//     var [ourKey, ourValue] = ourArr;
+//     // dataObj[ourKey] = ourValue;
+//     dataObj[ourKey] = ourValue;
+//   }
 
-  console.log(dataObj);
-}
+//   console.log(dataObj);
+// }
 
 function toggleNavMenu() {
   var { navBar } = ourSelectors();
@@ -148,9 +150,10 @@ function inputFunctionality() {
       ) {
         return eachBtn.checked;
       });
-
-      var amountData = ourAmount(Number(getValueOfInputEle.value));
-      findTheQuantityOfPledge(radioBtnCheckedTrue, amountData);
+      if (radioBtnCheckedTrue.attributes["id"].value != "no-reward") {
+        var amountData = Number(getValueOfInputEle.value);
+        findTheQuantityOfPledge(radioBtnCheckedTrue, amountData);
+      }
     }
   });
   // better approach, we're not looping and adding the event to each submit-btn
@@ -167,9 +170,9 @@ function inputFunctionality() {
   // });
 }
 
-function ourAmount(amountInput) {
-  return { amountInput };
-}
+// function ourAmount(amountInput) {
+//   return { amountInput };
+// }
 /* just add btn functionality when the submit button is clicked*/
 
 function testedCode() {
@@ -196,14 +199,16 @@ function findRadioBtnChangeEvent() {
   var containerOfInputRadioChecked;
   addListenerToDialog1.addEventListener(
     "change",
-    function watchForChange(event) {
-      var radioBtnHasCheckedTrue = event.target;
-      console.log(radioBtnHasCheckedTrue);
-      /* turn the radio btn we clicked aria checked to true*/
-      containerOfInputRadioChecked =
-        event.target.parentElement.parentElement.children;
-      event.target.attributes["aria-checked"].value = "true";
-      toggleAriaChecked(radioBtnHasCheckedTrue, inputRadioBtnArray);
+    function watchForRadioBtnChange(event) {
+      if (event.target.attributes["type"].value == "radio") {
+        var radioBtnHasCheckedTrue = event.target;
+        console.log(radioBtnHasCheckedTrue);
+        /* turn the radio btn we clicked aria checked to true*/
+        containerOfInputRadioChecked =
+          event.target.parentElement.parentElement.children;
+        event.target.attributes["aria-checked"].value = "true";
+        toggleAriaChecked(radioBtnHasCheckedTrue, inputRadioBtnArray);
+      }
     }
   );
   // inputRadioBtnArray.forEach(function addChangeListener(eachRadioBtn) {
@@ -237,7 +242,10 @@ function toggleAriaChecked(radioBtnInput, arrRadioBtn) {
 function findTheQuantityOfPledge(selectedRadioBtn, amountInput) {
   var selectedRadioLabelText = selectedRadioBtn.nextElementSibling.innerText;
   console.log(selectedRadioLabelText);
-
+  var totalAmountContainer = document.querySelector(".amount-display");
+  var totalPledgesContainer = document.querySelector(".backers-display");
+  var currTotalAmount = totalAmountContainer.innerText;
+  // currTotalInNumType(currTotalAmount);
   // find the container with the quantity text and put them in an array. so we can loop them and change the quantity
   var childrenOfParentOfRadioBtn = Array.prototype.slice.call(
     selectedRadioBtn.parentElement.children
@@ -292,13 +300,126 @@ function findTheQuantityOfPledge(selectedRadioBtn, amountInput) {
     textContainerOfRadioBtnChecked,
     containerForOurText,
   ];
-  ourData(arrOfTextContainerToChange, amountInput);
+  var dataObj = {
+    amountInput,
+    arrOfSpanDigitElement: arrOfTextContainerToChange,
+    currTotalAmount: currTotalInNumType(currTotalAmount),
+    totalBackersAmountContainer: [totalAmountContainer, totalPledgesContainer],
+  };
+  updatePledgesAndAmount(dataObj);
+  // ourData(arrOfTextContainerToChange, amountInput);
+
   // find the container with the quantity text and put them in an array. so we can loop them and change the quantity
 }
 
-alert(
-  "we have our amount and our array of quantity-digit an in obj, we can work with those data"
-);
-// function changeTheQuantityOfTextElement(...textElements) {
+function currTotalInNumType(strInput) {
+  // var arrOfValues = strInput.split("");
+  // var arrOfValues = [...strInput]
+  // var numRegex = /\d/gi;
+  // var arrOfValues = strInput.match(numRegex);
+  var strOfTotalInNumType = Number(strInput.match(/\d/gi).join(""));
+  return strOfTotalInNumType;
+}
 
-// }
+function updatePledgesAndAmount(objInput) {
+  var {
+    amountInput,
+    arrOfSpanDigitElement,
+    currTotalAmount,
+    totalBackersAmountContainer,
+  } = objInput;
+
+  //update number of pledges left
+  // substractOneOffPledgesLeft(arrOfSpanDigitElement);
+  //update total number of pledges
+  // addOneToTotalBackers(totalBackersAmountContainer);
+  //update total amount based on pledges
+  increaseTotalBackedBasedOnPledge(amountInput, currTotalAmount);
+  /* document.documentElement.style.setProperty */
+  //
+}
+
+function substractOneOffPledgesLeft(arrInput) {
+  arrInput.forEach(function calculateNewPledges(eachPledge) {
+    var pledgeInnerText = eachPledge.innerText;
+    // turn to num
+    var pledgeNumForm = Number(pledgeInnerText);
+    pledgeNumForm--;
+    // turn back to str
+    var pledgeStringForm = String(pledgeNumForm);
+    eachPledge.innerText = pledgeStringForm;
+  });
+}
+
+function addOneToTotalBackers(arrInput) {
+  var [backersTotalContainer] = arrInput.reduce(function findBackDisplayWrapper(
+    buildingUp,
+    currentValue
+  ) {
+    var classNameOfEle = currentValue.className.split(" ")[1];
+    if (classNameOfEle == "backers-display") {
+      return [...buildingUp, currentValue];
+    }
+    return buildingUp;
+  },
+  []);
+  // use regex to get just numbers
+  var backersTotalJustNums = backersTotalContainer.innerText
+    .match(/\d/gi)
+    .join("");
+  // turn to number
+  var backerTotalNumForm = Number(backersTotalJustNums);
+  backerTotalNumForm++;
+  // turn to string
+  var backerTotalStrForm = String(backerTotalNumForm);
+  backersTotalContainer.innerText = backerTotalStrForm;
+}
+
+function increaseTotalBackedBasedOnPledge(pledgeAmtInput, totalBackedAmtInput) {
+  var { totalAmountDisplay } = ourSelectors();
+  var newTotal = totalBackedAmtInput + pledgeAmtInput;
+  var strFormNewTotal = String(newTotal);
+  addCommasBySplitThreeValues(strFormNewTotal);
+}
+
+alert("finish add commas algorithm. we will make it work with good BigO");
+function addCommasBySplitThreeValues(strInput) {
+  var lengthOfStr = strInput.length;
+  switch (lengthOfStr) {
+    case 3:
+      console.log("length is 3");
+      break;
+    case 4:
+      console.log("length is 4");
+      var leftSide = strInput.slice(0, 1);
+      console.log(leftSide);
+      break;
+    case 5:
+      console.log("length is 5");
+      var leftSide = strInput.slice(0, 2);
+      console.log(leftSide);
+      break;
+    case 6:
+      console.log("length is 6");
+      var leftSide = strInput.slice(0, 3);
+      console.log(leftSide);
+      break;
+    case 7:
+      console.log("length is 7");
+      var leftSide = strInput.slice(0, 1);
+      var middle = strInput.slice(1, 4);
+      var rightSide = strInput.slice(4);
+      console.log(leftSide);
+      console.log(middle);
+      console.log(rightSide);
+      var addCommas = [
+        ...leftSide,
+        ...[","],
+        ...middle,
+        ...[","],
+        ...rightSide,
+      ].join("");
+      console.log(addCommas);
+      break;
+  }
+}
