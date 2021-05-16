@@ -3,6 +3,7 @@
 :root {
   --clr-primary-cyan: hsl(176, 50%, 47%);
   --clr-primary-dark-cyan: hsl(176, 72%, 28%);
+  --default-pledge-border: 1px solid var(--clr-neutral-gray);
 
   --clr-black: hsl(0, 0%, 0%);
   --clr-neutral-gray: hsl(0, 0%, 48%);
@@ -560,7 +561,7 @@ header {
   the top right and bottom right border won't bleed out of the gray bar background
   */
   height: 12px;
-  width: 50%;
+  width: var(--progress-width, 0%);
   background-color: red;
 }
 
@@ -734,7 +735,7 @@ header {
 }
 
 .modal-pledge {
-  border: 1px solid var(--clr-neutral-gray);
+  border: var(--selected-pledge-border, var(--default-pledge-border));
   border-radius: 8px;
   padding: 32px 16px;
 }
@@ -924,3 +925,11 @@ header {
 .show-for-now {
   display: revert;
 }
+
+/* selected-modal */
+
+.selected-pledge-border {
+  border: 3px solid var(--clr-primary-dark-cyan);
+}
+
+/* selected-modal */
