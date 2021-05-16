@@ -25,6 +25,7 @@ toggleNavMenu();
 addFadedOpacity();
 selectedBookmarked();
 inputFunctionality();
+setProgressBarProp();
 // ourData();
 // onlyRunInputFuncWhenBtnClicked();
 
@@ -43,6 +44,19 @@ inputFunctionality();
 
 //   console.log(dataObj);
 // }
+
+function setProgressBarProp() {
+  var { totalAmountDisplay } = ourSelectors();
+  var totalAmtWithoutPunc = totalAmountDisplay.innerText.match(/\d/gi).join("");
+
+  var totalAmtPercentage = (totalAmtWithoutPunc / 100000) * 100;
+
+  console.log(totalAmtPercentage);
+  document.documentElement.style.setProperty(
+    "--progress-width",
+    String(totalAmtPercentage) + "%"
+  );
+}
 
 function toggleNavMenu() {
   var { navBar } = ourSelectors();
@@ -207,6 +221,14 @@ function findRadioBtnChangeEvent() {
         containerOfInputRadioChecked =
           event.target.parentElement.parentElement.children;
         event.target.attributes["aria-checked"].value = "true";
+        event.target.parentElement.parentElement.parentElement.classList.add(
+          "selected-pledge-border"
+        );
+        // event.target.parentElement.parentElement.parentElement.style.setProperty(
+        //   "--selected-pledge",
+        //   "var(--clr-primary-dark-cyan)"
+        // );
+        // --clr-primary-dark-cyan
         toggleAriaChecked(radioBtnHasCheckedTrue, inputRadioBtnArray);
       }
     }
@@ -225,6 +247,7 @@ function findRadioBtnChangeEvent() {
   // });
 }
 
+alert("select first pledge and add class selected-pledge-border");
 function toggleAriaChecked(radioBtnInput, arrRadioBtn) {
   var notCheckedTurnAriaToFalse = arrRadioBtn.filter(function findFalse(
     eachBtn
@@ -236,6 +259,9 @@ function toggleAriaChecked(radioBtnInput, arrRadioBtn) {
     eachRadioBtn
   ) {
     eachRadioBtn.attributes["aria-checked"].value = "false";
+    eachRadioBtn.parentElement.parentElement.parentElement.classList.remove(
+      "selected-pledge-border"
+    );
   });
 }
 
@@ -330,13 +356,17 @@ function updatePledgesAndAmount(objInput) {
   } = objInput;
 
   //update number of pledges left
-  // substractOneOffPledgesLeft(arrOfSpanDigitElement);
+  substractOneOffPledgesLeft(arrOfSpanDigitElement);
   //update total number of pledges
-  // addOneToTotalBackers(totalBackersAmountContainer);
+  addOneToTotalBackers(totalBackersAmountContainer);
   //update total amount based on pledges
-  increaseTotalBackedBasedOnPledge(amountInput, currTotalAmount);
-  /* document.documentElement.style.setProperty */
-  //
+  var strFormNewTotal = increaseTotalBackedBasedOnPledge(
+    amountInput,
+    currTotalAmount
+  );
+  updateTotalAmtDisplay(strFormNewTotal);
+  //update the progress bar based on calculation
+  updateProgressBar(strFormNewTotal);
 }
 
 function substractOneOffPledgesLeft(arrInput) {
@@ -376,50 +406,67 @@ function addOneToTotalBackers(arrInput) {
 }
 
 function increaseTotalBackedBasedOnPledge(pledgeAmtInput, totalBackedAmtInput) {
-  var { totalAmountDisplay } = ourSelectors();
   var newTotal = totalBackedAmtInput + pledgeAmtInput;
   var strFormNewTotal = String(newTotal);
-  addCommasBySplitThreeValues(strFormNewTotal);
+  return strFormNewTotal;
 }
 
-alert("finish add commas algorithm. we will make it work with good BigO");
-function addCommasBySplitThreeValues(strInput) {
+function addCommasToStrFormTotal(strInput) {
   var lengthOfStr = strInput.length;
+  var addCommas;
   switch (lengthOfStr) {
-    case 3:
-      console.log("length is 3");
-      break;
     case 4:
       console.log("length is 4");
       var leftSide = strInput.slice(0, 1);
-      console.log(leftSide);
+      var rightSide = strInput.slice(1);
+      addCommas = [...leftSide, ...[","], ...rightSide];
+
       break;
     case 5:
       console.log("length is 5");
       var leftSide = strInput.slice(0, 2);
-      console.log(leftSide);
+      var rightSide = strInput.slice(2);
+      addCommas = [...leftSide, ...[","], ...rightSide];
+
       break;
     case 6:
       console.log("length is 6");
       var leftSide = strInput.slice(0, 3);
-      console.log(leftSide);
+      var rightSide = strInput.slice(3);
+      addCommas = [...leftSide, ...[","], ...rightSide];
+
       break;
+
     case 7:
       console.log("length is 7");
       var leftSide = strInput.slice(0, 1);
       var middle = strInput.slice(1, 4);
       var rightSide = strInput.slice(4);
-      console.log(leftSide);
-      console.log(middle);
-      console.log(rightSide);
-      var addCommas = [
-        ...leftSide,
-        ...[","],
-        ...middle,
-        ...[","],
-        ...rightSide,
-      ].join("");
+      addCommas = [...leftSide, ...[","], ...middle, ...[","], ...rightSide];
       console.log(addCommas);
       break;
   }
+
+  return addCommas.join("");
+}
+
+function updateTotalAmtDisplay(strInput) {
+  var { totalAmountDisplay } = ourSelectors();
+  if (strInput.length < 4) {
+    totalAmountDisplay.innerText = "$" + `${strInput}`;
+  } else {
+    let useStrInTotalAmtDisplay = addCommasToStrFormTotal(strInput);
+    totalAmountDisplay.innerText = "$" + `${useStrInTotalAmtDisplay}`;
+  }
+}
+
+function updateProgressBar(strInput) {
+  var convertStrToNum = Number(strInput);
+  var calculatedPercentForProgressBar = (convertStrToNum / 100000) * 100;
+  document.documentElement.attributes["style"].value =
+    "--progress-width:" + String(calculatedPercentForProgressBar) + "%";
+  // document.documentElement.style.setProperty(
+  //   "--progress-width",
+  //   calculatedPercentForProgressBar + "%"
+  // );
 }
