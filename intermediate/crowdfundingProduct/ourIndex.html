@@ -154,7 +154,9 @@
                   <span class="bold-large-text quantity-digit">101</span
                   ><span class="faded-text self-center margin-left">left</span>
                 </div>
-                <button class="btn-light">Select Reward</button>
+                <button class="btn-light Bamboo-Stand-reward">
+                  Select Reward
+                </button>
               </div>
             </article>
             <article class="individual-pledge margin-top-bottom">
@@ -172,7 +174,9 @@
                   <span class="bold-large-text quantity-digit">64</span
                   ><span class="faded-text self-center margin-left">left</span>
                 </div>
-                <button class="btn-light">Select Reward</button>
+                <button class="btn-light Black-Edition-Stand-Reward">
+                  Select Reward
+                </button>
               </div>
             </article>
             <article class="individual-pledge">
@@ -187,10 +191,12 @@
               </p>
               <div class="amount-pledges-left-select gray-out">
                 <div class="flex-wrapper">
-                  <span class="bold-large-text quantity-digit">0</span
-                  ><span class="faded-text self-center margin-left">left</span>
+                  <span class="bold-large-text quantity-digit">0</span>
+                  <span class="faded-text self-center margin-left">left</span>
                 </div>
-                <button class="btn-faded">Out of Stock</button>
+                <button class="btn-faded Mahogany-Special-Edition-Reward">
+                  Out of Stock
+                </button>
               </div>
             </article>
           </section>
@@ -223,15 +229,18 @@
             Want to support us in bringing Mastercraft Bamboo Monitor Riser out
             in the world?
           </p>
-          <article class="modal-pledge">
+          <article class="modal-pledge selected-pledge-border">
+            <!-- having aria-checked = true on native radio btn will remove it from the tablist we can just add tabindex="0"
+            have tabindex="0" and aria-checked = true will only add the radio btn to the tablist of the input that has aria-checked = "true"
+            -->
             <div class="enter-pledge">
               <div class="pledge-title-amount-quantity">
                 <input
                   type="radio"
                   id="no-reward"
-                  aria-checked="false"
                   name="pledge-choices"
-                  value=""
+                  aria-checked="false"
+                  tabindex="0"
                 />
                 <label for="no-reward">Pledge with no reward</label>
                 <p>
@@ -254,9 +263,8 @@
                 <input
                   type="radio"
                   id="starter-reward"
-                  aria-checked="false"
                   name="pledge-choices"
-                  value=""
+                  aria-checked="false"
                 />
                 <label for="starter-reward">Bamboo Stand</label>
                 <span class="pledge-amount highlight">Pledge $25 or more</span>
@@ -292,9 +300,9 @@
                 <input
                   type="radio"
                   id="popular-reward"
-                  aria-checked="false"
                   name="pledge-choices"
-                  value=""
+                  aria-checked="false"
+                  tabindex="0"
                 />
                 <label for="popular-reward">Black Edition Stand</label>
                 <span class="pledge-amount highlight">Pledge $75 or more</span>
@@ -330,9 +338,9 @@
                 <input
                   type="radio"
                   id="premium-reward"
-                  aria-checked="false"
                   name="pledge-choices"
-                  value=""
+                  aria-checked="false"
+                  tabindex="0"
                 />
                 <label for="premium-reward">Mahogany Special Edition</label>
                 <span class="pledge-amount highlight">Pledge $200 or more</span>
