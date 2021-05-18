@@ -13,19 +13,33 @@ function ourSelectors() {
   // var selectPledgeInput = Array.from(
   //   document.querySelectorAll(".selected-pledge input")
   // );
+  var rewardContainerElement = document.querySelector(".reward-container");
+  var arrOfLabelsOfPledgeTitleAmtQuanContainer = Array.from(
+    document.querySelectorAll(
+      ".modal-pledge .pledge-title-amount-quantity label"
+    )
+  );
+  var arrOfRadioBtn = Array.prototype.slice.call(
+    document.querySelectorAll('[type="radio"]')
+  );
   return {
     navBar,
     quantitySelectors,
     selectPledgeInput,
     totalAmountDisplay,
+    rewardContainerElement,
+    arrOfLabelsOfPledgeTitleAmtQuanContainer,
+    arrOfRadioBtn,
   };
 }
 
+initialLoad();
 toggleNavMenu();
 addFadedOpacity();
 selectedBookmarked();
 inputFunctionality();
 setProgressBarProp();
+selectCorrespondingPledge();
 // ourData();
 // onlyRunInputFuncWhenBtnClicked();
 
@@ -44,6 +58,18 @@ setProgressBarProp();
 
 //   console.log(dataObj);
 // }
+
+function initialLoad() {
+  var { arrOfRadioBtn } = ourSelectors();
+  // select first pledge and set our pledge checked attribute to false
+  arrOfRadioBtn.forEach(function setFirstPledgeCheckedTrueRestFalse(eachRadio) {
+    if (eachRadio.attributes["id"].value === "no-reward") {
+      eachRadio.checked = true;
+    } else {
+      eachRadio.checked = false;
+    }
+  });
+}
 
 function setProgressBarProp() {
   var { totalAmountDisplay } = ourSelectors();
@@ -118,6 +144,70 @@ function selectedBookmarked() {
       this.classList.toggle("activated-bookmarked");
     });
 }
+
+/* click on select reward btn will display modal and set focus on the corresponding pledge container*/
+
+function selectCorrespondingPledge() {
+  var { rewardContainerElement } = ourSelectors();
+  var { arrOfLabelsOfPledgeTitleAmtQuanContainer } = ourSelectors();
+  rewardContainerElement.addEventListener(
+    "click",
+    function showModalAndSelectCorrectPlege(event) {
+      if (event.target.tagName == "BUTTON") {
+        let matchThisString = event.target.className
+          .split(" ")[1]
+          .split("-")[0];
+
+        // var [matchingPledgeLabel] =
+        //   arrOfLabelsOfPledgeTitleAmtQuanContainer.filter(
+        //     function findMatchingLabel(eachLabel) {
+        //       var labelInnerText = eachLabel.innerText.split(" ")[0];
+        //       return matchThisString === labelInnerText;
+        //     }
+        //   );
+
+        var arrOfSubarrays = arrOfLabelsOfPledgeTitleAmtQuanContainer.reduce(
+          function makeTwoArrays(buildingUp, currentValue) {
+            var [firstSubarray, secondSubarray] = buildingUp;
+            var labelInnerText = currentValue.innerText.split(" ")[0];
+            if (labelInnerText === matchThisString) {
+              //use spread operator
+              // firstSubarray = [...firstSubarray, currentValue];
+              // return [firstSubarray, secondSubarray];
+              firstSubarray.push(currentValue);
+              return [firstSubarray, secondSubarray];
+            } else {
+              //use spread operator
+              // secondSubarray = [...secondSubarray, currentValue];
+              // return [firstSubarray, secondSubarray];
+              secondSubarray.push(currentValue);
+              return [firstSubarray, secondSubarray];
+            }
+          },
+          [[], []]
+        );
+        //arrOfSubarrays have two subarrays. when we use destructuring the variable we use will be arrays. we can use nested destructuring to get the value of that array
+        var [[matchingPledgeLabel] = addClassToElement, removeClassToElements] =
+          arrOfSubarrays;
+
+        let focusThisRadioBtn = matchingPledgeLabel.previousElementSibling;
+        let addClassWithTealBorderToElement =
+          matchingPledgeLabel.parentElement.parentElement.parentElement;
+        focusThisRadioBtn.checked = true;
+        addClassWithTealBorderToElement.classList.add("selected-pledge-border");
+        //loop through element in array and remove class. select the article container that we want to remove the class. it is the element that has
+        //border declaration declared on it in css
+        removeClassToElements.forEach(function removeClass(element) {
+          element.parentElement.parentElement.parentElement.classList.remove(
+            "selected-pledge-border"
+          );
+        });
+      }
+    }
+  );
+}
+
+/* click on select reward btn will display modal and set focus on the corresponding pledge container*/
 
 /* just add btn functionality when the submit button is clicked*/
 
@@ -209,7 +299,7 @@ function findRadioBtnChangeEvent() {
   );
 
   var addListenerToDialog1 = document.querySelector('[id="dialog1"]');
-
+  alert("uncomment the ['aria-checked'] and ");
   var containerOfInputRadioChecked;
   addListenerToDialog1.addEventListener(
     "change",
@@ -220,7 +310,7 @@ function findRadioBtnChangeEvent() {
         /* turn the radio btn we clicked aria checked to true*/
         containerOfInputRadioChecked =
           event.target.parentElement.parentElement.children;
-        event.target.attributes["aria-checked"].value = "true";
+        // event.target.attributes["aria-checked"].value = "true";
         event.target.parentElement.parentElement.parentElement.classList.add(
           "selected-pledge-border"
         );
@@ -247,18 +337,17 @@ function findRadioBtnChangeEvent() {
   // });
 }
 
-alert("select first pledge and add class selected-pledge-border");
 function toggleAriaChecked(radioBtnInput, arrRadioBtn) {
-  var notCheckedTurnAriaToFalse = arrRadioBtn.filter(function findFalse(
+  var removeClassTurnAriaFalse = arrRadioBtn.filter(function findFalse(
     eachBtn
   ) {
     return eachBtn != radioBtnInput;
   });
 
-  notCheckedTurnAriaToFalse.forEach(function turnAriaCheckedFalse(
+  removeClassTurnAriaFalse.forEach(function removeClassAndAriaFlase(
     eachRadioBtn
   ) {
-    eachRadioBtn.attributes["aria-checked"].value = "false";
+    // eachRadioBtn.attributes["aria-checked"].value = "false";
     eachRadioBtn.parentElement.parentElement.parentElement.classList.remove(
       "selected-pledge-border"
     );
