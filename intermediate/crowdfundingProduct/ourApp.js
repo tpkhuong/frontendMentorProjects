@@ -65,8 +65,10 @@ function initialLoad() {
   arrOfRadioBtn.forEach(function setFirstPledgeCheckedTrueRestFalse(eachRadio) {
     if (eachRadio.attributes["id"].value === "no-reward") {
       eachRadio.checked = true;
+      eachRadio.attributes["aria-checked"].value = "true";
     } else {
       eachRadio.checked = false;
+      eachRadio.attributes["aria-checked"].value = "false";
     }
   });
 }
@@ -145,6 +147,37 @@ function selectedBookmarked() {
     });
 }
 
+/***** modal tab focus cycle  *****/
+
+focusTabbingModal();
+alert("continue working on focus modal cycle functionality");
+function focusTabbingModal() {
+  var arrOfFocusable = ["A", "BUTTON", "INPUT"];
+  var addKeypressListenerToDialog1 = document.querySelector('[id="dialog1"]');
+
+  var result = arrOfFocusable.reduce(function getFocusableElement(
+    buildingUp,
+    currentValue
+  ) {
+    var addArrayToResult = Array.from(
+      document.querySelectorAll(`[id="dialog1"] ${currentValue}`)
+    );
+    // var addArrayToResult = Array.prototype.slice.call(
+    //   document.querySelectorAll(`[id]="dialog1" ${currentValue}`)
+    // );
+
+    buildingUp = [...buildingUp, addArrayToResult];
+    return buildingUp;
+  },
+  []);
+  var [, arrOfBtnModalElement] = result;
+  var [firstElement, , , lastElement] = arrOfBtnModalElement;
+  console.log(firstElement);
+  console.log(lastElement);
+}
+
+/***** modal tab focus cycle  *****/
+
 /* click on select reward btn will display modal and set focus on the corresponding pledge container*/
 
 function selectCorrespondingPledge() {
@@ -195,6 +228,7 @@ function selectCorrespondingPledge() {
           matchingPledgeLabel.parentElement.parentElement.parentElement;
         focusThisRadioBtn.checked = true;
         addClassWithTealBorderToElement.classList.add("selected-pledge-border");
+        putFocusOnAmtInputBasedOnPledgeSelected(matchingPledgeLabel);
         //loop through element in array and remove class. select the article container that we want to remove the class. it is the element that has
         //border declaration declared on it in css
         removeClassToElements.forEach(function removeClass(element) {
@@ -207,6 +241,17 @@ function selectCorrespondingPledge() {
   );
 }
 
+function putFocusOnAmtInputBasedOnPledgeSelected(element) {
+  let [, focusThisElement] = Array.from(
+    element.parentElement.nextElementSibling.nextElementSibling
+      .firstElementChild.nextElementSibling.firstElementChild.children
+  );
+  // let [, focusThisElement] = Array.prototype.slice.call(
+  //   matchingPledgeLabel.parentElement.nextElementSibling
+  //     .nextElementSibling.firstElementChild.nextElementSibling.children
+  // );
+  focusThisElement.focus();
+}
 /* click on select reward btn will display modal and set focus on the corresponding pledge container*/
 
 /* just add btn functionality when the submit button is clicked*/
@@ -299,7 +344,7 @@ function findRadioBtnChangeEvent() {
   );
 
   var addListenerToDialog1 = document.querySelector('[id="dialog1"]');
-  alert("uncomment the ['aria-checked'] and ");
+
   var containerOfInputRadioChecked;
   addListenerToDialog1.addEventListener(
     "change",
@@ -310,7 +355,7 @@ function findRadioBtnChangeEvent() {
         /* turn the radio btn we clicked aria checked to true*/
         containerOfInputRadioChecked =
           event.target.parentElement.parentElement.children;
-        // event.target.attributes["aria-checked"].value = "true";
+        event.target.attributes["aria-checked"].value = "true";
         event.target.parentElement.parentElement.parentElement.classList.add(
           "selected-pledge-border"
         );
@@ -347,7 +392,7 @@ function toggleAriaChecked(radioBtnInput, arrRadioBtn) {
   removeClassTurnAriaFalse.forEach(function removeClassAndAriaFlase(
     eachRadioBtn
   ) {
-    // eachRadioBtn.attributes["aria-checked"].value = "false";
+    eachRadioBtn.attributes["aria-checked"].value = "false";
     eachRadioBtn.parentElement.parentElement.parentElement.classList.remove(
       "selected-pledge-border"
     );
