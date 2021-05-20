@@ -150,7 +150,7 @@ function selectedBookmarked() {
 /***** modal tab focus cycle  *****/
 
 focusTabbingModal();
-alert("continue working on focus modal cycle functionality");
+
 function focusTabbingModal() {
   var arrOfFocusable = ["A", "BUTTON", "INPUT"];
   var addKeypressListenerToDialog1 = document.querySelector('[id="dialog1"]');
@@ -172,8 +172,34 @@ function focusTabbingModal() {
   []);
   var [, arrOfBtnModalElement] = result;
   var [firstElement, , , lastElement] = arrOfBtnModalElement;
+
+  console.log(arrOfBtnModalElement);
   console.log(firstElement);
   console.log(lastElement);
+  /* add event listener to dialog */
+
+  addKeypressListenerToDialog1.addEventListener(
+    "keydown",
+    function modalCycle(event) {
+      switch (event.code) {
+        case "Tab":
+          if (event.shiftKey === true) {
+            if (document.activeElement == firstElement) {
+              lastElement.focus();
+              event.preventDefault();
+            }
+          } else {
+            if (document.activeElement == lastElement) {
+              firstElement.focus();
+              event.preventDefault();
+            }
+          }
+          break;
+      }
+    }
+  );
+
+  /* add event listener to dialog */
 }
 
 /***** modal tab focus cycle  *****/
