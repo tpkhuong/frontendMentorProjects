@@ -1,3 +1,4 @@
+// alert("click event on a button will activate on enter and space key")
 function ourSelectors() {
   var navBar = document.querySelector(".nav-list");
   // var quantitySelectors = Array.prototype.slice.call(
@@ -22,6 +23,9 @@ function ourSelectors() {
   var arrOfRadioBtn = Array.prototype.slice.call(
     document.querySelectorAll('[type="radio"]')
   );
+
+  var fundriserSectionElement = document.querySelector(".fundriser-name");
+
   return {
     navBar,
     quantitySelectors,
@@ -30,16 +34,18 @@ function ourSelectors() {
     rewardContainerElement,
     arrOfLabelsOfPledgeTitleAmtQuanContainer,
     arrOfRadioBtn,
+    fundriserSectionElement,
   };
 }
 
 initialLoad();
 toggleNavMenu();
 addFadedOpacity();
-selectedBookmarked();
+addClickEventToFundriserElement();
 inputFunctionality();
 setProgressBarProp();
 selectCorrespondingPledge();
+focusClickedElementModalFeature();
 // ourData();
 // onlyRunInputFuncWhenBtnClicked();
 
@@ -139,13 +145,42 @@ function addFadedOpacity() {
   console.log(arrOfArticleEleAddOpacity);
 }
 
-function selectedBookmarked() {
-  document
-    .querySelector(".bookmark-btn")
-    .addEventListener("click", function selectBookmark(event) {
-      this.classList.toggle("activated-bookmarked");
-    });
+function addClickEventToFundriserElement() {
+  var { fundriserSectionElement } = ourSelectors();
+
+  fundriserSectionElement.addEventListener("click", selectBookmark);
 }
+
+// bookmark - btn;
+
+function selectBookmark(event) {
+  if (event.target.parentElement.className == "bookmark-btn") {
+    this.classList.toggle("activated-bookmarked");
+  }
+  alert(
+    "toggling bookmark function worked, we will find a way to save the element we clicked on so we can focus it when we exit our modal"
+  );
+  switch (event.target.attributes["class"].value) {
+    case "bookmark-wrapper":
+      this.classList.toggle("activated-bookmarked");
+      break;
+    case "bookmark-circle":
+      this.classList.toggle("activated-bookmarked");
+      break;
+    case "bookmark-logo":
+      this.classList.toggle("activated-bookmarked");
+      break;
+  }
+}
+/***** modal keyboard function. focus on clicked element when we exit the modal *****/
+
+function focusClickedElementModalFeature() {
+  var { fundriserSectionElement } = ourSelectors();
+
+  console.log(fundriserSectionElement);
+}
+
+/***** modal keyboard function. focus on clicked element when we exit the modal *****/
 
 /***** modal tab focus cycle  *****/
 
@@ -208,64 +243,73 @@ function focusTabbingModal() {
 
 function selectCorrespondingPledge() {
   var { rewardContainerElement } = ourSelectors();
-  var { arrOfLabelsOfPledgeTitleAmtQuanContainer } = ourSelectors();
+
   rewardContainerElement.addEventListener(
     "click",
-    function showModalAndSelectCorrectPlege(event) {
-      if (event.target.tagName == "BUTTON") {
-        let matchThisString = event.target.className
-          .split(" ")[1]
-          .split("-")[0];
-
-        // var [matchingPledgeLabel] =
-        //   arrOfLabelsOfPledgeTitleAmtQuanContainer.filter(
-        //     function findMatchingLabel(eachLabel) {
-        //       var labelInnerText = eachLabel.innerText.split(" ")[0];
-        //       return matchThisString === labelInnerText;
-        //     }
-        //   );
-
-        var arrOfSubarrays = arrOfLabelsOfPledgeTitleAmtQuanContainer.reduce(
-          function makeTwoArrays(buildingUp, currentValue) {
-            var [firstSubarray, secondSubarray] = buildingUp;
-            var labelInnerText = currentValue.innerText.split(" ")[0];
-            if (labelInnerText === matchThisString) {
-              //use spread operator
-              // firstSubarray = [...firstSubarray, currentValue];
-              // return [firstSubarray, secondSubarray];
-              firstSubarray.push(currentValue);
-              return [firstSubarray, secondSubarray];
-            } else {
-              //use spread operator
-              // secondSubarray = [...secondSubarray, currentValue];
-              // return [firstSubarray, secondSubarray];
-              secondSubarray.push(currentValue);
-              return [firstSubarray, secondSubarray];
-            }
-          },
-          [[], []]
-        );
-        //arrOfSubarrays have two subarrays. when we use destructuring the variable we use will be arrays. we can use nested destructuring to get the value of that array
-        var [[matchingPledgeLabel] = addClassToElement, removeClassToElements] =
-          arrOfSubarrays;
-
-        let focusThisRadioBtn = matchingPledgeLabel.previousElementSibling;
-        let addClassWithTealBorderToElement =
-          matchingPledgeLabel.parentElement.parentElement.parentElement;
-        focusThisRadioBtn.checked = true;
-        addClassWithTealBorderToElement.classList.add("selected-pledge-border");
-        putFocusOnAmtInputBasedOnPledgeSelected(matchingPledgeLabel);
-        //loop through element in array and remove class. select the article container that we want to remove the class. it is the element that has
-        //border declaration declared on it in css
-        removeClassToElements.forEach(function removeClass(element) {
-          element.parentElement.parentElement.parentElement.classList.remove(
-            "selected-pledge-border"
-          );
-        });
-      }
-    }
+    showModalAndSelectCorrectPlege
+  );
+  rewardContainerElement.addEventListener(
+    "keydown",
+    showModalAndSelectCorrectPlege
   );
 }
+
+/***** use this function for keyboard *****/
+
+function showModalAndSelectCorrectPlege(event) {
+  var { arrOfLabelsOfPledgeTitleAmtQuanContainer } = ourSelectors();
+  if (event.target.tagName == "BUTTON") {
+    let matchThisString = event.target.className.split(" ")[1].split("-")[0];
+
+    // var [matchingPledgeLabel] =
+    //   arrOfLabelsOfPledgeTitleAmtQuanContainer.filter(
+    //     function findMatchingLabel(eachLabel) {
+    //       var labelInnerText = eachLabel.innerText.split(" ")[0];
+    //       return matchThisString === labelInnerText;
+    //     }
+    //   );
+
+    var arrOfSubarrays = arrOfLabelsOfPledgeTitleAmtQuanContainer.reduce(
+      function makeTwoArrays(buildingUp, currentValue) {
+        var [firstSubarray, secondSubarray] = buildingUp;
+        var labelInnerText = currentValue.innerText.split(" ")[0];
+        if (labelInnerText === matchThisString) {
+          //use spread operator
+          // firstSubarray = [...firstSubarray, currentValue];
+          // return [firstSubarray, secondSubarray];
+          firstSubarray.push(currentValue);
+          return [firstSubarray, secondSubarray];
+        } else {
+          //use spread operator
+          // secondSubarray = [...secondSubarray, currentValue];
+          // return [firstSubarray, secondSubarray];
+          secondSubarray.push(currentValue);
+          return [firstSubarray, secondSubarray];
+        }
+      },
+      [[], []]
+    );
+    //arrOfSubarrays have two subarrays. when we use destructuring the variable we use will be arrays. we can use nested destructuring to get the value of that array
+    var [[matchingPledgeLabel] = addClassToElement, removeClassToElements] =
+      arrOfSubarrays;
+
+    let focusThisRadioBtn = matchingPledgeLabel.previousElementSibling;
+    let addClassWithTealBorderToElement =
+      matchingPledgeLabel.parentElement.parentElement.parentElement;
+    focusThisRadioBtn.checked = true;
+    addClassWithTealBorderToElement.classList.add("selected-pledge-border");
+    putFocusOnAmtInputBasedOnPledgeSelected(matchingPledgeLabel);
+    //loop through element in array and remove class. select the article container that we want to remove the class. it is the element that has
+    //border declaration declared on it in css
+    removeClassToElements.forEach(function removeClass(element) {
+      element.parentElement.parentElement.parentElement.classList.remove(
+        "selected-pledge-border"
+      );
+    });
+  }
+}
+
+/***** use this function for keyboard *****/
 
 function putFocusOnAmtInputBasedOnPledgeSelected(element) {
   let [, focusThisElement] = Array.from(
@@ -309,28 +353,8 @@ function inputFunctionality() {
     document.querySelectorAll('[type="radio"]')
   );
 
-  addListenerToDialog1.addEventListener("click", function getAmount(event) {
-    if (
-      event.target.className.includes("submit-btn") &&
-      event.target.innerText == "Continue"
-    ) {
-      var [getValueOfInputEle] = Array.from(
-        event.target.previousElementSibling.children
-      ).filter(function findMatchingClass(eachChildELe) {
-        return eachChildELe.className == "selected-pledge-input";
-      });
-      /**** we are getting the value of our inputs when we click the continue btn *****/
-      var [radioBtnCheckedTrue] = arrOfRadioBtn.filter(function findRadioBtn(
-        eachBtn
-      ) {
-        return eachBtn.checked;
-      });
-      if (radioBtnCheckedTrue.attributes["id"].value != "no-reward") {
-        var amountData = Number(getValueOfInputEle.value);
-        findTheQuantityOfPledge(radioBtnCheckedTrue, amountData);
-      }
-    }
-  });
+  addListenerToDialog1.addEventListener("click", getAmount);
+  // addListenerToDialog1.addEventListener("keydown", getAmount);
   // better approach, we're not looping and adding the event to each submit-btn
   // selectPledgeInput.forEach(function onlyRunWhenFocused(eachInput) {
   //   eachInput.addEventListener(
@@ -344,6 +368,40 @@ function inputFunctionality() {
   //   );
   // });
 }
+
+/***** use this function in click and keydown event *****/
+
+function getAmount(event) {
+  var { arrOfRadioBtn } = ourSelectors();
+  if (
+    event.target.className.includes("submit-btn") &&
+    event.target.innerText == "Continue"
+  ) {
+    var [getValueOfInputEle] = Array.from(
+      event.target.previousElementSibling.children
+    ).filter(function findMatchingClass(eachChildELe) {
+      return eachChildELe.className == "selected-pledge-input";
+    });
+    /**** we are getting the value of our inputs when we click the continue btn *****/
+    var [radioBtnCheckedTrue] = arrOfRadioBtn.filter(function findRadioBtn(
+      eachBtn
+    ) {
+      return eachBtn.checked;
+    });
+    if (radioBtnCheckedTrue.attributes["id"].value != "no-reward") {
+      var amountData = Number(getValueOfInputEle.value);
+      findTheQuantityOfPledge(radioBtnCheckedTrue, amountData);
+    }
+  }
+}
+
+document
+  .querySelector("button")
+  .addEventListener("click", function doStuff(event) {
+    console.log(event);
+  });
+
+/***** use this function in click and keydown event *****/
 
 // function ourAmount(amountInput) {
 //   return { amountInput };
