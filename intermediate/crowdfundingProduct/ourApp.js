@@ -149,6 +149,11 @@ function addClickEventToFundriserElement() {
   var { fundriserSectionElement } = ourSelectors();
 
   fundriserSectionElement.addEventListener("click", selectBookmark);
+
+  fundriserSectionElement.addEventListener(
+    "click",
+    focusClickedEleToExitModalFundriser
+  );
 }
 
 // bookmark - btn;
@@ -157,9 +162,6 @@ function selectBookmark(event) {
   if (event.target.parentElement.className == "bookmark-btn") {
     this.classList.toggle("activated-bookmarked");
   }
-  alert(
-    "toggling bookmark function worked, we will find a way to save the element we clicked on so we can focus it when we exit our modal"
-  );
   switch (event.target.attributes["class"].value) {
     case "bookmark-wrapper":
       this.classList.toggle("activated-bookmarked");
@@ -171,6 +173,18 @@ function selectBookmark(event) {
       this.classList.toggle("activated-bookmarked");
       break;
   }
+}
+
+var clickedElement;
+
+function focusClickedEleToExitModalFundriser(event) {
+  arrOfClickedBtnElementModalFeature(event.target);
+}
+
+function arrOfClickedBtnElementModalFeature(elementInput) {
+  console.count();
+  console.trace();
+  console.log(elementInput);
 }
 /***** modal keyboard function. focus on clicked element when we exit the modal *****/
 
@@ -243,15 +257,15 @@ function focusTabbingModal() {
 
 function selectCorrespondingPledge() {
   var { rewardContainerElement } = ourSelectors();
-
+  /***** when we had both of these code running, it cause both event to fire when we use the space or enter key to activate the modal *****/
   rewardContainerElement.addEventListener(
     "click",
     showModalAndSelectCorrectPlege
   );
-  rewardContainerElement.addEventListener(
-    "keydown",
-    showModalAndSelectCorrectPlege
-  );
+  // rewardContainerElement.addEventListener(
+  //   "keydown",
+  //   showModalAndSelectCorrectPlege
+  // );
 }
 
 /***** use this function for keyboard *****/
@@ -306,7 +320,13 @@ function showModalAndSelectCorrectPlege(event) {
         "selected-pledge-border"
       );
     });
+    focusClickedEleToExitModalRewardContainer(event.target);
   }
+  event.stopPropagation();
+}
+
+function focusClickedEleToExitModalRewardContainer(elementInput) {
+  arrOfClickedBtnElementModalFeature(elementInput);
 }
 
 /***** use this function for keyboard *****/
@@ -353,7 +373,7 @@ function inputFunctionality() {
     document.querySelectorAll('[type="radio"]')
   );
 
-  addListenerToDialog1.addEventListener("click", getAmount);
+  addListenerToDialog1.addEventListener("click", eventFeaturesOnModalDialogOne);
   // addListenerToDialog1.addEventListener("keydown", getAmount);
   // better approach, we're not looping and adding the event to each submit-btn
   // selectPledgeInput.forEach(function onlyRunWhenFocused(eachInput) {
@@ -368,6 +388,18 @@ function inputFunctionality() {
   //   );
   // });
 }
+
+/***** run function based on event/feature *****/
+
+function eventFeaturesOnModalDialogOne(eventInput) {
+  getAmount(eventInput);
+}
+
+/***** run function based on event/feature *****/
+
+alert(
+  "idea: dialog modal 1 is the middle element we want to focus after we submit our pledge. we want to keep separate arrays of element clicked from main page to go to pledge modal"
+);
 
 /***** use this function in click and keydown event *****/
 
