@@ -162,30 +162,55 @@ function selectBookmark(event) {
   if (event.target.parentElement.className == "bookmark-btn") {
     this.classList.toggle("activated-bookmarked");
   }
-  switch (event.target.attributes["class"].value) {
-    case "bookmark-wrapper":
-      this.classList.toggle("activated-bookmarked");
-      break;
-    case "bookmark-circle":
-      this.classList.toggle("activated-bookmarked");
-      break;
-    case "bookmark-logo":
-      this.classList.toggle("activated-bookmarked");
-      break;
+  if (event.target.attributes["class"]) {
+    switch (event.target.attributes["class"].value) {
+      case "bookmark-wrapper":
+        this.classList.toggle("activated-bookmarked");
+        break;
+      case "bookmark-circle":
+        this.classList.toggle("activated-bookmarked");
+        break;
+      case "bookmark-logo":
+        this.classList.toggle("activated-bookmarked");
+        break;
+    }
   }
 }
 
 var clickedElement;
 
+/***** click on "back this project btn" *****/
+
 function focusClickedEleToExitModalFundriser(event) {
-  arrOfClickedBtnElementModalFeature(event.target);
+  if (event.target.tagName == "BUTTON") {
+    addClickedBtnToArr(event.target);
+  }
 }
 
-function arrOfClickedBtnElementModalFeature(elementInput) {
-  console.count();
-  console.trace();
-  console.log(elementInput);
+/***** click on "back this project btn" *****/
+function addClickedBtnToArr(elementInput) {
+  // console.trace();
+  var arrOfClickedBtn = [];
+  var backThisProjectBtnClicked = elementInput.className.split(" ")[1];
+  var selectRewardBtnClicked = elementInput.className.split(" ")[2];
+
+  if (backThisProjectBtnClicked == "back-project-btn") {
+    arrOfClickedBtn.push(elementInput);
+  } else if (selectRewardBtnClicked == "Select-Reward") {
+    arrOfClickedBtn.push(elementInput);
+  }
+
+  function returnArrOfFirstClickedBtn() {
+    // console.log(arrInput);
+    var copyOfArr = [...arrOfClickedBtn];
+
+    return copyOfArr;
+  }
+  /***** assigning the func reference of returnAff to clickedElement then we run clickedELement in event feature func *****/
+  clickedElement = returnArrOfFirstClickedBtn;
+  /***** assigning the func reference of returnAff to clickedElement then we run clickedELement in event feature func *****/
 }
+
 /***** modal keyboard function. focus on clicked element when we exit the modal *****/
 
 function focusClickedElementModalFeature() {
@@ -326,7 +351,8 @@ function showModalAndSelectCorrectPlege(event) {
 }
 
 function focusClickedEleToExitModalRewardContainer(elementInput) {
-  arrOfClickedBtnElementModalFeature(elementInput);
+  // console.trace();
+  addClickedBtnToArr(elementInput);
 }
 
 /***** use this function for keyboard *****/
@@ -392,14 +418,31 @@ function inputFunctionality() {
 /***** run function based on event/feature *****/
 
 function eventFeaturesOnModalDialogOne(eventInput) {
-  getAmount(eventInput);
+  var btnClickedClassname = eventInput.target.className.split(" ")[1];
+  var ourArray;
+  if (
+    eventInput.target.tagName == "BUTTON" &&
+    btnClickedClassname == "starter-submit-btn"
+  ) {
+    if (clickedElement != undefined) {
+      ourArray = clickedElement();
+    }
+    secondClickedElement(ourArray, eventInput);
+    getAmount(eventInput);
+  }
 }
-
+alert(
+  "we have the arr of btn clicked from the fundriser or reward-container and the btn clicked on the pledge modal, display completed modal"
+);
 /***** run function based on event/feature *****/
 
-alert(
-  "idea: dialog modal 1 is the middle element we want to focus after we submit our pledge. we want to keep separate arrays of element clicked from main page to go to pledge modal"
-);
+function secondClickedElement(arrInput, eventInput) {
+  var copyOfArrInput = arrInput.slice();
+  // var copyOfArrInput = [].concat(arrInput);
+  // var copyOfArrInput = [...arrInput];
+  copyOfArrInput = [...copyOfArrInput, eventInput.target];
+  console.log(copyOfArrInput);
+}
 
 /***** use this function in click and keydown event *****/
 
@@ -426,12 +469,6 @@ function getAmount(event) {
     }
   }
 }
-
-document
-  .querySelector("button")
-  .addEventListener("click", function doStuff(event) {
-    console.log(event);
-  });
 
 /***** use this function in click and keydown event *****/
 
