@@ -26,6 +26,8 @@ function ourSelectors() {
 
   var fundriserSectionElement = document.querySelector(".fundriser-name");
 
+  var dialog2Element = document.querySelector("#dialog2");
+
   return {
     navBar,
     quantitySelectors,
@@ -35,6 +37,7 @@ function ourSelectors() {
     arrOfLabelsOfPledgeTitleAmtQuanContainer,
     arrOfRadioBtn,
     fundriserSectionElement,
+    dialog2Element,
   };
 }
 
@@ -220,6 +223,12 @@ function focusClickedElementModalFeature() {
 }
 
 /***** modal keyboard function. focus on clicked element when we exit the modal *****/
+
+function activatePledgeModal() {
+  alert(
+    "when we have the pledge modal activated, we want to run separate function based on if esc key is clicked or not"
+  );
+}
 
 /***** modal tab focus cycle  *****/
 
@@ -427,13 +436,11 @@ function eventFeaturesOnModalDialogOne(eventInput) {
     if (clickedElement != undefined) {
       ourArray = clickedElement();
     }
-    secondClickedElement(ourArray, eventInput);
     getAmount(eventInput);
+    var arrOfElementClicked = secondClickedElement(ourArray, eventInput);
   }
 }
-alert(
-  "we have the arr of btn clicked from the fundriser or reward-container and the btn clicked on the pledge modal, display completed modal"
-);
+
 /***** run function based on event/feature *****/
 
 function secondClickedElement(arrInput, eventInput) {
@@ -441,8 +448,16 @@ function secondClickedElement(arrInput, eventInput) {
   // var copyOfArrInput = [].concat(arrInput);
   // var copyOfArrInput = [...arrInput];
   copyOfArrInput = [...copyOfArrInput, eventInput.target];
-  console.log(copyOfArrInput);
+  return copyOfArrInput;
 }
+
+/***** second modal will launch after we click the 'continue' btn *****/
+
+function activateCompletedModal() {
+  alert("");
+}
+
+/***** second modal will launch after we click the 'continue' btn *****/
 
 /***** use this function in click and keydown event *****/
 
