@@ -687,11 +687,12 @@ header {
 /* when modal is active */
 
 .dialog-backdrop {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+  overflow-y: auto;
   background-color: hsla(0, 0%, 0%, 0.3);
   /* come back to this later */
   display: none;
@@ -712,6 +713,9 @@ header {
 [id="dialog1"] {
   max-width: 350px;
   margin-block-start: 80px;
+  position: absolute;
+  left: 0;
+  right: 0;
 }
 [id="dialog2"] {
   max-width: 350px;
@@ -734,6 +738,9 @@ header {
   align-self: flex-end;
 }
 
+[aria-label="close modal"]:hover {
+  cursor: pointer;
+}
 .modal-pledge {
   border: var(--selected-pledge-border, var(--default-pledge-border));
   border-radius: 8px;
@@ -930,6 +937,10 @@ header {
 
 .selected-pledge-border {
   border: 3px solid var(--clr-primary-dark-cyan);
+}
+
+.activate {
+  background-color: hsla(0, 0%, 0%, 0.3);
 }
 
 /* selected-modal */
