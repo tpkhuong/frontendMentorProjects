@@ -68,6 +68,21 @@ focusClickedElementModalFeature();
 //   console.log(dataObj);
 // }
 
+function notes() {
+  alert(
+    "we probably don't need to keep track of the elements click in an array because when esc key is pressed or when the close btn is click"
+  );
+  alert(
+    "we just need to know which btn was clicked the btn in fundriser or pledge section"
+  );
+  alert(
+    "from the modal pledge section, we just want to know which of the 'continue' btn was clicked"
+  );
+  alert(
+    "when we activate the completed modal, we just need to keep track of which 'continue' btn was clicked"
+  );
+}
+
 function initialLoad() {
   var { arrOfRadioBtn } = ourSelectors();
   // select first pledge and set our pledge checked attribute to false
@@ -224,11 +239,7 @@ function focusClickedElementModalFeature() {
 
 /***** modal keyboard function. focus on clicked element when we exit the modal *****/
 
-function activatePledgeModal() {
-  alert(
-    "when we have the pledge modal activated, we want to run separate function based on if esc key is clicked or not"
-  );
-}
+function activatePledgeModal() {}
 
 /***** modal tab focus cycle  *****/
 
@@ -425,10 +436,11 @@ function inputFunctionality() {
 }
 
 /***** run function based on event/feature *****/
-
+var secondClickedElement;
 function eventFeaturesOnModalDialogOne(eventInput) {
   var btnClickedClassname = eventInput.target.className.split(" ")[1];
   var ourArray;
+  var arrOfElementClicked;
   if (
     eventInput.target.tagName == "BUTTON" &&
     btnClickedClassname == "starter-submit-btn"
@@ -437,13 +449,29 @@ function eventFeaturesOnModalDialogOne(eventInput) {
       ourArray = clickedElement();
     }
     getAmount(eventInput);
-    var arrOfElementClicked = secondClickedElement(ourArray, eventInput);
+    arrOfElementClicked = addFirstAndSecondClickedELementIntoArr(
+      ourArray,
+      eventInput
+    );
+  } else if (
+    eventInput.target.tagName == "BUTTON" &&
+    eventInput.target.className.includes("close-dialog1")
+  ) {
+    /* idea: when close btn clicked or escape btn is pressed we access to the arr with the first clicked element from fundriser or pledge selected */
   }
+
+  function passedArrOfClickedELementToDialogTwo() {
+    var copyArrOfFirstSecondClickedELe = [...arrOfElementClicked];
+    // var copyArrOfFirstSecondClickedELe = [].concat(arrOfElementClicked);
+    // var copyArrOfFirstSecondClickedELe = arrOfElementClicked.slice();
+    return copyArrOfFirstSecondClickedELe;
+  }
+  secondClickedElement = passedArrOfClickedELementToDialogTwo;
 }
 
 /***** run function based on event/feature *****/
 
-function secondClickedElement(arrInput, eventInput) {
+function addFirstAndSecondClickedELementIntoArr(arrInput, eventInput) {
   var copyOfArrInput = arrInput.slice();
   // var copyOfArrInput = [].concat(arrInput);
   // var copyOfArrInput = [...arrInput];
@@ -451,11 +479,45 @@ function secondClickedElement(arrInput, eventInput) {
   return copyOfArrInput;
 }
 
+/***** escape key and closed btn clicked on dialog 1 *****/
+
+function escapeBtnKeydownDialogOne() {
+  /***** make a class that will toggle show or hiding modal *****/
+}
+
+function btnOfDialogOneClicked(arrInput) {
+  /***** make a class that will toggle show or hiding modal *****/
+  /***** we want to toggle the show class and focus the element that clicked in fundriser or pledge section *****/
+}
+
+/***** escape key and closed btn clicked on dialog 1 *****/
+
 /***** second modal will launch after we click the 'continue' btn *****/
 
-function activateCompletedModal() {
-  alert("");
+function activateCompletedModal() {}
+
+/***** second modal will launch after we click the 'continue' btn *****/
+/***** escape key and closed btn clicked on dialog 2 *****/
+
+function eventListenerOnModalDialogTwo(eventInput) {
+  var { dialog2Element } = ourSelectors();
+  dialog2Element.addEventListener("click", btnOfDialogTwoClicked);
+  dialog2Element.addEventListener("keydown", escapeBtnKeydownDialogTwo);
 }
+
+function escapeBtnKeydownDialogTwo(event) {
+  var arrOfTwoClickedElements = secondClickedElement();
+  /* we want to passed the arr with the btn clicked from fundriser or select-btn to these funcs*/
+  /* when we hit the escape key we want to close the modal and focus on the "continue" btn that was clicked to submit the pledge*/
+}
+
+function btnOfDialogTwoClicked(event) {
+  var arrOfTwoClickedElements = secondClickedElement();
+  /* we want to passed the arr with the btn clicked from fundriser or select-btn to these funcs*/
+  /* when we hit the "got it" btn we want to close the modal and focus on the "continue" btn that was clicked to submit the pledge*/
+}
+
+/***** escape key and closed btn clicked on dialog 2 *****/
 
 /***** second modal will launch after we click the 'continue' btn *****/
 
