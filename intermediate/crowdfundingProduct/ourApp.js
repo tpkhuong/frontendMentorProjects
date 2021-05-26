@@ -433,11 +433,22 @@ function inputFunctionality() {
   //     }
   //   );
   // });
+  addListenerToDialog1.addEventListener("keydown", escapeBtnKeydownDialogOne);
 }
 
 /***** run function based on event/feature *****/
 var secondClickedElement;
 function eventFeaturesOnModalDialogOne(eventInput) {
+  // var btnOfDialogOneClicked = (arrInput) => {
+  //   /***** make a class that will toggle show or hiding modal *****/
+  //   /***** we want to toggle the show class and focus the element that clicked in fundriser or pledge section *****/
+  //   let focusThisElement = arrInput[0];
+  //   console.log(this);
+  //   // console.log(thisInput);
+  //   // thisInput.parentElement.classList.toggle("show-for-now");
+  //   focusThisElement.focus();
+  // };
+  console.log(eventInput);
   var btnClickedClassname = eventInput.target.className.split(" ")[1];
   var ourArray;
   var arrOfElementClicked;
@@ -454,10 +465,34 @@ function eventFeaturesOnModalDialogOne(eventInput) {
       eventInput
     );
   } else if (
-    eventInput.target.tagName == "BUTTON" &&
-    eventInput.target.className.includes("close-dialog1")
+    (eventInput.target.tagName == "BUTTON" &&
+      eventInput.target.className.includes("close-dialog1")) ||
+    eventInput.target.parentElement.className.includes("close-dialog1")
   ) {
     /* idea: when close btn clicked or escape btn is pressed we access to the arr with the first clicked element from fundriser or pledge selected */
+
+    if (clickedElement != undefined) {
+      ourArray = clickedElement();
+      console.log(this);
+      /**** when we declared the btnOfDialogOne func outside of eventFeaturesOnModal func, the this of btnOfDialogOne func is the window,
+       * even when we declared btnOfDialogOne func as an arrow function outside of eventFeaturesOnModal, the this keyword was still the window object.
+       * we could have used the this keyword in btnOfDialogOne func by passing the reference of this of eventFeaturesOnModal as an argument in to
+       * btnOfDialongOne func call.
+       * if we want to declare btnOfDialogOne func outside of eventFeaturesOnModal func and use the this keyword of eventFeaturesOnModal
+       * we can use execute btnOfDialogOne with the call() pass in the this of eventFeaturesOnModal as the first argument to call() method
+       * or
+       *  *****/
+      /***** we can declare btnOfDialogOne as an arrow function inside of eventFeatureOnModal func by doing this the this keyword of btnOfDialogOne
+       * will be the this keyword of its parent function scope which will be eventFeaturesOnModal whatever call eventFeaturesOnModal func.
+       * btnOfDialogOneClicked(ourArray);
+       * if
+       * we declare btnOfDialogOne as a func outside of eventFeaturesOnModal func the this keyword of btnOfDialogOneClicked will be the window because
+       * we have to look at where it is called it is called not using new keyword or explicitly with call, apply or bind or implicit with object literal
+       * therefore it is the window. even though the func is inside eventFeaturesOnModal func, our btnOfDialogOne func doesnt run until eventFeaturesOnModal
+       * is called.
+       *  *****/
+      btnOfDialogOneClicked.call(this, ourArray);
+    }
   }
 
   function passedArrOfClickedELementToDialogTwo() {
@@ -467,6 +502,18 @@ function eventFeaturesOnModalDialogOne(eventInput) {
     return copyArrOfFirstSecondClickedELe;
   }
   secondClickedElement = passedArrOfClickedELementToDialogTwo;
+}
+alert(
+  "finish this func using this keyword, remove show-for-now and focus first clicked element"
+);
+function btnOfDialogOneClicked(arrInput) {
+  /***** make a class that will toggle show or hiding modal *****/
+  /***** we want to toggle the show class and focus the element that clicked in fundriser or pledge section *****/
+  let focusThisElement = arrInput[0];
+  console.log(this);
+  // console.log(thisInput);
+  // thisInput.parentElement.classList.toggle("show-for-now");
+  focusThisElement.focus();
 }
 
 /***** run function based on event/feature *****/
@@ -481,13 +528,33 @@ function addFirstAndSecondClickedELementIntoArr(arrInput, eventInput) {
 
 /***** escape key and closed btn clicked on dialog 1 *****/
 
-function escapeBtnKeydownDialogOne() {
+function escapeBtnKeydownDialogOne(event) {
   /***** make a class that will toggle show or hiding modal *****/
+  console.log(event);
+  var ourArrayOfClickedELementFundriserOrPledge;
+  if (clickedElement != undefined) {
+    ourArrayOfClickedELementFundriserOrPledge = clickedElement();
+    let focusOnThisElement = ourArrayOfClickedELementFundriserOrPledge[0];
+    if (event.key == "Escape") {
+      /***** the this keyword of escapeBtnKeydown is the dialog1 modal because we pass this func as a callback argument in to addListenerToDialog1.addEventListener
+       * which means we are not calling it. addEventListener is calling it then we have to look at what is calling addEventListener. addListenerToDialog1 is calling
+       * addEventListener
+       *  *****/
+      this.parentElement.classList.toggle("show-for-now");
+      focusOnThisElement.focus();
+      // event.preventDefault();
+    }
+  }
 }
 
-function btnOfDialogOneClicked(arrInput) {
+function btnOfDialogOneClicked(arrInput, thisInput) {
   /***** make a class that will toggle show or hiding modal *****/
   /***** we want to toggle the show class and focus the element that clicked in fundriser or pledge section *****/
+  let focusThisElement = arrInput[0];
+  console.log(this);
+  // console.log(thisInput);
+  // thisInput.parentElement.classList.toggle("show-for-now");
+  focusThisElement.focus();
 }
 
 /***** escape key and closed btn clicked on dialog 1 *****/
