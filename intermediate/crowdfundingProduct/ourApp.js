@@ -28,6 +28,10 @@ function ourSelectors() {
 
   var dialog2Element = document.querySelector("#dialog2");
 
+  var dialog2ModalCloseModalbtn = document.querySelector(
+    "[aria-label='close support modal']"
+  );
+
   return {
     navBar,
     quantitySelectors,
@@ -38,6 +42,7 @@ function ourSelectors() {
     arrOfRadioBtn,
     fundriserSectionElement,
     dialog2Element,
+    dialog2ModalCloseModalbtn,
   };
 }
 
@@ -46,6 +51,7 @@ toggleNavMenu();
 addFadedOpacity();
 addClickEventToFundriserElement();
 inputFunctionality();
+eventListenerOnModalDialogTwo();
 setProgressBarProp();
 selectCorrespondingPledge();
 focusClickedElementModalFeature();
@@ -439,6 +445,7 @@ function inputFunctionality() {
 /***** run function based on event/feature *****/
 var secondClickedElement;
 function eventFeaturesOnModalDialogOne(eventInput) {
+  // eventInput.preventDefault();
   // var btnOfDialogOneClicked = (arrInput) => {
   //   /***** make a class that will toggle show or hiding modal *****/
   //   /***** we want to toggle the show class and focus the element that clicked in fundriser or pledge section *****/
@@ -473,7 +480,7 @@ function eventFeaturesOnModalDialogOne(eventInput) {
 
     if (clickedElement != undefined) {
       ourArray = clickedElement();
-      console.log(this);
+      // console.log(this);
       /**** when we declared the btnOfDialogOne func outside of eventFeaturesOnModal func, the this of btnOfDialogOne func is the window,
        * even when we declared btnOfDialogOne func as an arrow function outside of eventFeaturesOnModal, the this keyword was still the window object.
        * we could have used the this keyword in btnOfDialogOne func by passing the reference of this of eventFeaturesOnModal as an argument in to
@@ -503,18 +510,29 @@ function eventFeaturesOnModalDialogOne(eventInput) {
   }
   secondClickedElement = passedArrOfClickedELementToDialogTwo;
 }
-alert(
-  "finish this func using this keyword, remove show-for-now and focus first clicked element"
-);
+
 function btnOfDialogOneClicked(arrInput) {
   /***** make a class that will toggle show or hiding modal *****/
   /***** we want to toggle the show class and focus the element that clicked in fundriser or pledge section *****/
   let focusThisElement = arrInput[0];
-  console.log(this);
+  // console.log(focusThisElement);
+  // console.log(this);
   // console.log(thisInput);
-  // thisInput.parentElement.classList.toggle("show-for-now");
+  this.parentElement.classList.toggle("show-for-now");
   focusThisElement.focus();
 }
+
+// function btnOfDialogOneClicked(arrInput, event) {
+//   /***** make a class that will toggle show or hiding modal *****/
+//   /***** we want to toggle the show class and focus the element that clicked in fundriser or pledge section *****/
+//   let focusThisElement = arrInput[0];
+//   console.log(event);
+//   // console.log(this);
+//   // console.log(thisInput);
+//   this.parentElement.classList.toggle("show-for-now");
+//   focusThisElement.focus();
+//   event.preventDefault();
+// }
 
 /***** run function based on event/feature *****/
 
@@ -547,16 +565,43 @@ function escapeBtnKeydownDialogOne(event) {
   }
 }
 
-function btnOfDialogOneClicked(arrInput, thisInput) {
-  /***** make a class that will toggle show or hiding modal *****/
-  /***** we want to toggle the show class and focus the element that clicked in fundriser or pledge section *****/
-  let focusThisElement = arrInput[0];
-  console.log(this);
-  // console.log(thisInput);
-  // thisInput.parentElement.classList.toggle("show-for-now");
-  focusThisElement.focus();
-}
+/***** func below we are calling btnOfDialogOneClicked using .call() inside of eventFeaturesOnModal, passing the this keyword of eventFeaturesOnModal into the func
+ * call of btnOfDialogOneClicked
+ *  *****/
 
+// function btnOfDialogOneClicked(arrInput) {
+//   /***** make a class that will toggle show or hiding modal *****/
+//   /***** we want to toggle the show class and focus the element that clicked in fundriser or pledge section *****/
+//   let focusThisElement = arrInput[0];
+//   console.log(focusThisElement);
+//   // console.log(this);
+//   // console.log(thisInput);
+//   this.parentElement.classList.toggle("show-for-now");
+//   focusThisElement.focus();
+
+// }
+
+/***** func below we are calling btnOfDialogOneClicked using .call() inside of eventFeaturesOnModal, passing the this keyword of eventFeaturesOnModal into the func
+ * call of btnOfDialogOneClicked
+ *  *****/
+
+/***** func below is when we call btnOfDialogOneClicked inside of eventFeaturesOnModal we pass the array and this of eventFeatureOnModal into the func call of
+ * btnOfDialogOneClicked
+ *  *****/
+
+// function btnOfDialogOneClicked(arrInput, thisInput) {
+//   /***** make a class that will toggle show or hiding modal *****/
+//   /***** we want to toggle the show class and focus the element that clicked in fundriser or pledge section *****/
+//   let focusThisElement = arrInput[0];
+//   console.log(this);
+//   // console.log(thisInput);
+//   // thisInput.parentElement.classList.toggle("show-for-now");
+//   focusThisElement.focus();
+// }
+
+/***** func below is when we call btnOfDialogOneClicked inside of eventFeaturesOnModal we pass the array and this of eventFeatureOnModal into the func call of
+ * btnOfDialogOneClicked
+ *  *****/
 /***** escape key and closed btn clicked on dialog 1 *****/
 
 /***** second modal will launch after we click the 'continue' btn *****/
@@ -564,27 +609,51 @@ function btnOfDialogOneClicked(arrInput, thisInput) {
 function activateCompletedModal() {}
 
 /***** second modal will launch after we click the 'continue' btn *****/
-/***** escape key and closed btn clicked on dialog 2 *****/
+/***** escape key and closed btn clicked on dialog 2: using different approach for dialog 2
+ * the func eventListenerOnModalDialogOne is called on dialog1 when the click is use. mouse click or hitting space/enter key when
+ * focus is on button
+ * *****/
 
-function eventListenerOnModalDialogTwo(eventInput) {
-  var { dialog2Element } = ourSelectors();
-  dialog2Element.addEventListener("click", btnOfDialogTwoClicked);
+function eventListenerOnModalDialogTwo() {
+  var { dialog2Element, dialog2ModalCloseModalbtn } = ourSelectors();
+  dialog2ModalCloseModalbtn.addEventListener("click", btnOfDialogTwoClicked);
   dialog2Element.addEventListener("keydown", escapeBtnKeydownDialogTwo);
 }
 
 function escapeBtnKeydownDialogTwo(event) {
-  var arrOfTwoClickedElements = secondClickedElement();
+  if (secondClickedElement != undefined) {
+    let arrOfTwoClickedElements = secondClickedElement();
+    if (event.key == "Escape") {
+      let focusThisBtnElement = arrOfTwoClickedElements[1];
+      this.parentElement.classList.toggle("show-for-now");
+      focusThisBtnElement.focus();
+    }
+  }
   /* we want to passed the arr with the btn clicked from fundriser or select-btn to these funcs*/
   /* when we hit the escape key we want to close the modal and focus on the "continue" btn that was clicked to submit the pledge*/
 }
-
+alert(
+  "our modal will have a display none when our page loads, based on the btn click. if btn in fundriser  or pledge is clicked first modal will display"
+);
+alert(
+  "if contine btn in back this project modal is clicked dialog2 will display"
+);
 function btnOfDialogTwoClicked(event) {
-  var arrOfTwoClickedElements = secondClickedElement();
+  if (secondClickedElement != undefined) {
+    let arrOfTwoClickedElements = secondClickedElement();
+    let tagName = event.target.tagName;
+    let ariaLabelValue = event.target.attributes["aria-label"].value;
+    if (tagName == "BUTTON" && ariaLabelValue == "close support modal") {
+      let focusBtnElement = arrOfTwoClickedElements[1];
+      this.parentElement.parentElement.classList.toggle("show-for-now");
+      focusBtnElement.focus();
+    }
+  }
   /* we want to passed the arr with the btn clicked from fundriser or select-btn to these funcs*/
   /* when we hit the "got it" btn we want to close the modal and focus on the "continue" btn that was clicked to submit the pledge*/
 }
 
-/***** escape key and closed btn clicked on dialog 2 *****/
+/***** escape key and closed btn clicked on dialog 2: using different approach for dialog 2 *****/
 
 /***** second modal will launch after we click the 'continue' btn *****/
 
