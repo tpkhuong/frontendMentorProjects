@@ -693,7 +693,7 @@ header {
   bottom: 0;
   left: 0;
   overflow-y: auto;
-  background-color: hsla(0, 0%, 0%, 0.3);
+  /* background-color: hsla(0, 0%, 0%, 0.3); */
   /* come back to this later */
   display: none;
   /* come back to this later */
@@ -940,6 +940,7 @@ header {
 }
 
 .activate {
+  display: revert;
   background-color: hsla(0, 0%, 0%, 0.3);
 }
 
