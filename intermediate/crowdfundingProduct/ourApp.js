@@ -24,9 +24,16 @@ function ourSelectors() {
     document.querySelectorAll('[type="radio"]')
   );
 
+  var radioBtnNoReward = document.querySelector("#no-reward");
+  var dialog1HeadingTitle = document.querySelector("#dialog1-label");
+
+  var dialog1Element = document.querySelector("#dialog1");
+
   var fundriserSectionElement = document.querySelector(".fundriser-name");
 
   var dialog2Element = document.querySelector("#dialog2");
+
+  var dialog2HeadingTitle = document.querySelector("#dialog2-label");
 
   var dialog2ModalCloseModalbtn = document.querySelector(
     "[aria-label='close support modal']"
@@ -41,7 +48,11 @@ function ourSelectors() {
     arrOfLabelsOfPledgeTitleAmtQuanContainer,
     arrOfRadioBtn,
     fundriserSectionElement,
+    radioBtnNoReward,
+    dialog1HeadingTitle,
+    dialog1Element,
     dialog2Element,
+    dialog2HeadingTitle,
     dialog2ModalCloseModalbtn,
   };
 }
@@ -207,12 +218,14 @@ var clickedElement;
 
 function focusClickedEleToExitModalFundriser(event) {
   if (event.target.tagName == "BUTTON") {
-    addClickedBtnToArr(event.target);
+    addClickedBtnToArrShowDialogModalOne(event.target);
   }
 }
 
 /***** click on "back this project btn" *****/
-function addClickedBtnToArr(elementInput) {
+function addClickedBtnToArrShowDialogModalOne(elementInput) {
+  var { dialog1Element, dialog1HeadingTitle, radioBtnNoReward } =
+    ourSelectors();
   // console.trace();
   var arrOfClickedBtn = [];
   var backThisProjectBtnClicked = elementInput.className.split(" ")[1];
@@ -220,8 +233,16 @@ function addClickedBtnToArr(elementInput) {
 
   if (backThisProjectBtnClicked == "back-project-btn") {
     arrOfClickedBtn.push(elementInput);
+    dialog1Element.parentElement.classList.toggle("activate");
+    setTimeout(function focusHeading() {
+      /* run line below when we want to focus on the radio btn of no-reward */
+      radioBtnNoReward.focus();
+      /* call line below when we want to put focus on the h2 title of dialog1 */
+      // dialog1HeadingTitle.focus();
+    }, 1000);
   } else if (selectRewardBtnClicked == "Select-Reward") {
     arrOfClickedBtn.push(elementInput);
+    dialog1Element.parentElement.classList.toggle("activate");
   }
 
   function returnArrOfFirstClickedBtn() {
@@ -245,7 +266,7 @@ function focusClickedElementModalFeature() {
 
 /***** modal keyboard function. focus on clicked element when we exit the modal *****/
 
-function activatePledgeModal() {}
+// function activatePledgeModal() {}
 
 /***** modal tab focus cycle  *****/
 
@@ -357,13 +378,18 @@ function showModalAndSelectCorrectPlege(event) {
     //arrOfSubarrays have two subarrays. when we use destructuring the variable we use will be arrays. we can use nested destructuring to get the value of that array
     var [[matchingPledgeLabel] = addClassToElement, removeClassToElements] =
       arrOfSubarrays;
-
     let focusThisRadioBtn = matchingPledgeLabel.previousElementSibling;
     let addClassWithTealBorderToElement =
       matchingPledgeLabel.parentElement.parentElement.parentElement;
     focusThisRadioBtn.checked = true;
     addClassWithTealBorderToElement.classList.add("selected-pledge-border");
-    putFocusOnAmtInputBasedOnPledgeSelected(matchingPledgeLabel);
+    /***** when we didnt use setTimeout our input didnt receive focus *****/
+    setTimeout(function runAfterClick() {
+      focusThisRadioBtn.focus();
+      // putFocusOnAmtInputBasedOnPledgeSelected(matchingPledgeLabel);
+    }, 500);
+    /***** when we didnt use setTimeout our input didnt receive focus *****/
+    // putFocusOnAmtInputBasedOnPledgeSelected(matchingPledgeLabel);
     //loop through element in array and remove class. select the article container that we want to remove the class. it is the element that has
     //border declaration declared on it in css
     removeClassToElements.forEach(function removeClass(element) {
@@ -376,13 +402,16 @@ function showModalAndSelectCorrectPlege(event) {
   event.stopPropagation();
 }
 
+function showDialogOneModal() {}
+
 function focusClickedEleToExitModalRewardContainer(elementInput) {
   // console.trace();
-  addClickedBtnToArr(elementInput);
+  addClickedBtnToArrShowDialogModalOne(elementInput);
 }
 
 /***** use this function for keyboard *****/
 
+/***** func below will focus the amount input of the dialog1 which is activated when user click on select btn *****/
 function putFocusOnAmtInputBasedOnPledgeSelected(element) {
   let [, focusThisElement] = Array.from(
     element.parentElement.nextElementSibling.nextElementSibling
@@ -392,8 +421,12 @@ function putFocusOnAmtInputBasedOnPledgeSelected(element) {
   //   matchingPledgeLabel.parentElement.nextElementSibling
   //     .nextElementSibling.firstElementChild.nextElementSibling.children
   // );
+  // console.log("this is putFocusOnAmtInput", focusThisElement);
   focusThisElement.focus();
 }
+
+/***** func below will focus the amount input of the dialog1 which is activated when user click on select btn *****/
+
 /* click on select reward btn will display modal and set focus on the corresponding pledge container*/
 
 /* just add btn functionality when the submit button is clicked*/
@@ -445,6 +478,7 @@ function inputFunctionality() {
 /***** run function based on event/feature *****/
 var secondClickedElement;
 function eventFeaturesOnModalDialogOne(eventInput) {
+  var { dialog2Element } = ourSelectors();
   // eventInput.preventDefault();
   // var btnOfDialogOneClicked = (arrInput) => {
   //   /***** make a class that will toggle show or hiding modal *****/
@@ -456,12 +490,13 @@ function eventFeaturesOnModalDialogOne(eventInput) {
   //   focusThisElement.focus();
   // };
   console.log(eventInput);
-  var btnClickedClassname = eventInput.target.className.split(" ")[1];
+  // var btnClickedClassname = eventInput.target.className.split(" ")[1];
   var ourArray;
   var arrOfElementClicked;
   if (
     eventInput.target.tagName == "BUTTON" &&
-    btnClickedClassname == "starter-submit-btn"
+    eventInput.target.className.includes("submit-btn")
+    // btnClickedClassname == "starter-submit-btn"
   ) {
     if (clickedElement != undefined) {
       ourArray = clickedElement();
@@ -471,6 +506,7 @@ function eventFeaturesOnModalDialogOne(eventInput) {
       ourArray,
       eventInput
     );
+    activateCompletedModal();
   } else if (
     (eventInput.target.tagName == "BUTTON" &&
       eventInput.target.className.includes("close-dialog1")) ||
@@ -496,9 +532,12 @@ function eventFeaturesOnModalDialogOne(eventInput) {
        * we declare btnOfDialogOne as a func outside of eventFeaturesOnModal func the this keyword of btnOfDialogOneClicked will be the window because
        * we have to look at where it is called it is called not using new keyword or explicitly with call, apply or bind or implicit with object literal
        * therefore it is the window. even though the func is inside eventFeaturesOnModal func, our btnOfDialogOne func doesnt run until eventFeaturesOnModal
-       * is called.
+       * is called. focusBtnThatActivateDialog1AndResetDialog1ToInitialState
        *  *****/
-      btnOfDialogOneClicked.call(this, ourArray);
+      focusBtnThatActivateDialog1AndResetDialog1ToInitialState.call(
+        this,
+        ourArray
+      );
     }
   }
 
@@ -510,16 +549,19 @@ function eventFeaturesOnModalDialogOne(eventInput) {
   }
   secondClickedElement = passedArrOfClickedELementToDialogTwo;
 }
-
-function btnOfDialogOneClicked(arrInput) {
+alert(
+  "work on only showing the amt input and sumbit btn when the reward/pledge radio btn is selected of dialog1"
+);
+function focusBtnThatActivateDialog1AndResetDialog1ToInitialState(arrInput) {
   /***** make a class that will toggle show or hiding modal *****/
   /***** we want to toggle the show class and focus the element that clicked in fundriser or pledge section *****/
   let focusThisElement = arrInput[0];
   // console.log(focusThisElement);
   // console.log(this);
   // console.log(thisInput);
-  this.parentElement.classList.toggle("show-for-now");
+  this.parentElement.classList.toggle("activate");
   focusThisElement.focus();
+  setNoRewardInputTrueRestInputFalse();
 }
 
 // function btnOfDialogOneClicked(arrInput, event) {
@@ -558,12 +600,45 @@ function escapeBtnKeydownDialogOne(event) {
        * which means we are not calling it. addEventListener is calling it then we have to look at what is calling addEventListener. addListenerToDialog1 is calling
        * addEventListener
        *  *****/
-      this.parentElement.classList.toggle("show-for-now");
+      this.parentElement.classList.toggle("activate");
       focusOnThisElement.focus();
+      setNoRewardInputTrueRestInputFalse();
       // event.preventDefault();
     }
   }
 }
+
+function setNoRewardInputTrueRestInputFalse() {
+  var { arrOfRadioBtn } = ourSelectors();
+  // select first pledge and set our pledge checked attribute to false
+  arrOfRadioBtn.forEach(function setFirstPledgeCheckedTrueRestFalse(eachRadio) {
+    if (eachRadio.attributes["id"].value === "no-reward") {
+      eachRadio.parentElement.parentElement.parentElement.classList.add(
+        "selected-pledge-border"
+      );
+      eachRadio.checked = true;
+      eachRadio.attributes["aria-checked"].value = "true";
+    } else {
+      eachRadio.parentElement.parentElement.parentElement.classList.remove(
+        "selected-pledge-border"
+      );
+      eachRadio.checked = false;
+      eachRadio.attributes["aria-checked"].value = "false";
+    }
+  });
+}
+
+/***** second modal will launch after we click the 'continue' btn *****/
+
+function activateCompletedModal() {
+  var { dialog2Element, dialog2HeadingTitle } = ourSelectors();
+  dialog2Element.parentElement.classList.toggle("activate");
+  setTimeout(function focusheadingDialogTwo() {
+    dialog2HeadingTitle.focus();
+  }, 1000);
+}
+
+/***** second modal will launch after we click the 'continue' btn *****/
 
 /***** func below we are calling btnOfDialogOneClicked using .call() inside of eventFeaturesOnModal, passing the this keyword of eventFeaturesOnModal into the func
  * call of btnOfDialogOneClicked
@@ -604,11 +679,6 @@ function escapeBtnKeydownDialogOne(event) {
  *  *****/
 /***** escape key and closed btn clicked on dialog 1 *****/
 
-/***** second modal will launch after we click the 'continue' btn *****/
-
-function activateCompletedModal() {}
-
-/***** second modal will launch after we click the 'continue' btn *****/
 /***** escape key and closed btn clicked on dialog 2: using different approach for dialog 2
  * the func eventListenerOnModalDialogOne is called on dialog1 when the click is use. mouse click or hitting space/enter key when
  * focus is on button
@@ -616,7 +686,10 @@ function activateCompletedModal() {}
 
 function eventListenerOnModalDialogTwo() {
   var { dialog2Element, dialog2ModalCloseModalbtn } = ourSelectors();
-  dialog2ModalCloseModalbtn.addEventListener("click", btnOfDialogTwoClicked);
+  dialog2ModalCloseModalbtn.addEventListener(
+    "click",
+    focusBtnOfPledgeThatActivatedDialogTwo
+  );
   dialog2Element.addEventListener("keydown", escapeBtnKeydownDialogTwo);
 }
 
@@ -625,27 +698,22 @@ function escapeBtnKeydownDialogTwo(event) {
     let arrOfTwoClickedElements = secondClickedElement();
     if (event.key == "Escape") {
       let focusThisBtnElement = arrOfTwoClickedElements[1];
-      this.parentElement.classList.toggle("show-for-now");
+      this.parentElement.classList.toggle("activate");
       focusThisBtnElement.focus();
     }
   }
   /* we want to passed the arr with the btn clicked from fundriser or select-btn to these funcs*/
   /* when we hit the escape key we want to close the modal and focus on the "continue" btn that was clicked to submit the pledge*/
 }
-alert(
-  "our modal will have a display none when our page loads, based on the btn click. if btn in fundriser  or pledge is clicked first modal will display"
-);
-alert(
-  "if contine btn in back this project modal is clicked dialog2 will display"
-);
-function btnOfDialogTwoClicked(event) {
+
+function focusBtnOfPledgeThatActivatedDialogTwo(event) {
   if (secondClickedElement != undefined) {
     let arrOfTwoClickedElements = secondClickedElement();
     let tagName = event.target.tagName;
     let ariaLabelValue = event.target.attributes["aria-label"].value;
     if (tagName == "BUTTON" && ariaLabelValue == "close support modal") {
       let focusBtnElement = arrOfTwoClickedElements[1];
-      this.parentElement.parentElement.classList.toggle("show-for-now");
+      this.parentElement.parentElement.classList.toggle("activate");
       focusBtnElement.focus();
     }
   }
