@@ -217,7 +217,10 @@
       </div>
     </main>
     <div class="modal-wrapper">
-      <div class="dialog-backdrop show-for-now">
+      <div class="dialog-backdrop">
+        <!-- <a id="focus-link-dialog1" href="#" class="visually-hidden"
+          >Focus Element for Modal</a
+        > -->
         <div
           class="default-dialog"
           id="dialog1"
@@ -226,7 +229,9 @@
           aria-modal="true"
         >
           <div class="flex-wrapper">
-            <h2 class="dialog-label" id="dialog1-label">Back this project</h2>
+            <h2 tabindex="-1" class="dialog-label" id="dialog1-label">
+              Back this project
+            </h2>
             <button
               aria-label="close modal"
               class="img-container margin-left-auto close-dialog1"
@@ -401,7 +406,7 @@
         </div>
       </div>
 
-      <div class="dialog-backdrop show-for-now">
+      <div class="dialog-backdrop">
         <div
           class="default-dialog-completed"
           role="dialog"
@@ -411,7 +416,7 @@
           aria-describedby="dialog2-desc"
         >
           <img src="images/icon-check.svg" alt="Checked with teal background" />
-          <h2 class="dialog-label" id="dialog2-label">
+          <h2 class="dialog-label" id="dialog2-label" tabindex="-1">
             Thanks for your support!
           </h2>
           <p id="dialog2-desc">
