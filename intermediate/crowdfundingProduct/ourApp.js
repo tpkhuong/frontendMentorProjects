@@ -66,6 +66,7 @@ eventListenerOnModalDialogTwo();
 setProgressBarProp();
 selectCorrespondingPledge();
 focusClickedElementModalFeature();
+findRadioBtnChangeEvent();
 // ourData();
 // onlyRunInputFuncWhenBtnClicked();
 
@@ -343,7 +344,8 @@ function selectCorrespondingPledge() {
 /***** use this function for keyboard *****/
 
 function showModalAndSelectCorrectPlege(event) {
-  var { arrOfLabelsOfPledgeTitleAmtQuanContainer } = ourSelectors();
+  var { arrOfRadioBtn, arrOfLabelsOfPledgeTitleAmtQuanContainer } =
+    ourSelectors();
   if (event.target.tagName == "BUTTON") {
     let matchThisString = event.target.className.split(" ")[1].split("-")[0];
 
@@ -397,12 +399,28 @@ function showModalAndSelectCorrectPlege(event) {
         "selected-pledge-border"
       );
     });
+    var radioBtnOfMatchingLabel = matchingPledgeLabel.previousElementSibling;
+    var childrenOfContainerOfMatchingLabel = Array.prototype.slice.call(
+      radioBtnOfMatchingLabel.parentElement.parentElement.children
+    );
+    // var childrenOfContainerOfMatchingLabel = Array.from(
+    //   radioBtnOfMatchingLabel.parentElement.parentElement.children
+    // );
+    /***** funcs below will remove hide-display class to separator and select pledge based on selected radio input *****/
+    removeShowClassOnSeparatorAndSelectedPledge(
+      radioBtnOfMatchingLabel,
+      arrOfRadioBtn
+    );
+    showInputAndContinueBtnBasedOnRadioChecked(
+      childrenOfContainerOfMatchingLabel
+    );
+    /***** funcs below will remove hide-display class to separator and select pledge based on selected radio input *****/
     focusClickedEleToExitModalRewardContainer(event.target);
   }
   event.stopPropagation();
 }
 
-function showDialogOneModal() {}
+// function showDialogOneModal() {}
 
 function focusClickedEleToExitModalRewardContainer(elementInput) {
   // console.trace();
@@ -549,9 +567,7 @@ function eventFeaturesOnModalDialogOne(eventInput) {
   }
   secondClickedElement = passedArrOfClickedELementToDialogTwo;
 }
-alert(
-  "work on only showing the amt input and sumbit btn when the reward/pledge radio btn is selected of dialog1"
-);
+
 function focusBtnThatActivateDialog1AndResetDialog1ToInitialState(arrInput) {
   /***** make a class that will toggle show or hiding modal *****/
   /***** we want to toggle the show class and focus the element that clicked in fundriser or pledge section *****/
@@ -603,10 +619,35 @@ function escapeBtnKeydownDialogOne(event) {
       this.parentElement.classList.toggle("activate");
       focusOnThisElement.focus();
       setNoRewardInputTrueRestInputFalse();
+      loopThroughArrOfRadioBtnAddHideDisplay();
       // event.preventDefault();
     }
   }
 }
+alert("run func below when the close modal btn is clicked too");
+/***** add class hide-display for separator and select pledge section *****/
+function loopThroughArrOfRadioBtnAddHideDisplay() {
+  var { arrOfRadioBtn } = ourSelectors();
+  var arrOfRadioBtnExceptNoRewardRadio = arrOfRadioBtn.filter(
+    function doNotAddNoRewardBtn(radioBtn) {
+      var idOfRadioBtn = radioBtn.attributes["id"].value;
+      return idOfRadioBtn != "no-reward";
+    }
+  );
+  /* loop through arr: select the separator element and select pledge element add hide-display class */
+  arrOfRadioBtnExceptNoRewardRadio.forEach(
+    function addHideDisplayToSeparatorAndSelectPledge(radioBtn) {
+      var separatorElement = radioBtn.parentElement.nextElementSibling;
+      var selectPledgeElement =
+        radioBtn.parentElement.parentElement.lastElementChild;
+      separatorElement.classList.add("hide-display");
+      selectPledgeElement.classList.add("hide-display");
+    }
+  );
+  /* loop through arr: select the separator element and select pledge element add hide-display class */
+}
+
+/***** add class hide-display for separator and select pledge section *****/
 
 function setNoRewardInputTrueRestInputFalse() {
   var { arrOfRadioBtn } = ourSelectors();
@@ -768,7 +809,6 @@ function testedCode() {
   }
 }
 
-findRadioBtnChangeEvent();
 function findRadioBtnChangeEvent() {
   // var inputRadioBtn = Array.from(
   //   document.querySelectorAll("input[type='radio']")
@@ -779,7 +819,7 @@ function findRadioBtnChangeEvent() {
 
   var addListenerToDialog1 = document.querySelector('[id="dialog1"]');
 
-  var containerOfInputRadioChecked;
+  var containerOfInputRadioCheckedChildren;
   addListenerToDialog1.addEventListener(
     "change",
     function watchForRadioBtnChange(event) {
@@ -787,7 +827,7 @@ function findRadioBtnChangeEvent() {
         var radioBtnHasCheckedTrue = event.target;
         console.log(radioBtnHasCheckedTrue);
         /* turn the radio btn we clicked aria checked to true*/
-        containerOfInputRadioChecked =
+        containerOfInputRadioCheckedChildren =
           event.target.parentElement.parentElement.children;
         event.target.attributes["aria-checked"].value = "true";
         event.target.parentElement.parentElement.parentElement.classList.add(
@@ -799,6 +839,16 @@ function findRadioBtnChangeEvent() {
         // );
         // --clr-primary-dark-cyan
         toggleAriaChecked(radioBtnHasCheckedTrue, inputRadioBtnArray);
+        /***** funcs below will remove hide-display class to separator and select pledge based on selected radio input *****/
+
+        removeShowClassOnSeparatorAndSelectedPledge(
+          radioBtnHasCheckedTrue,
+          inputRadioBtnArray
+        );
+        showInputAndContinueBtnBasedOnRadioChecked(
+          containerOfInputRadioCheckedChildren
+        );
+        /***** funcs below will remove hide-display class to separator and select pledge based on selected radio input *****/
       }
     }
   );
@@ -814,6 +864,45 @@ function findRadioBtnChangeEvent() {
   // inputRadioBtn.forEach(function printStuff(eachRadioBtn) {
   //   console.log(eachRadioBtn.checked);
   // });
+}
+
+function showInputAndContinueBtnBasedOnRadioChecked(arrOfInputRadioChecked) {
+  var [, separatorElement, selectedPledgeElement] = Array.from(
+    arrOfInputRadioChecked
+  );
+
+  // var [, separatorElement, selectedPledgeElement] = Array.prototype.slice.call(
+  //   radioBtn.parentElement.parentElement.children
+  // );
+  // console.log("seprator element", separatorElement);
+  // console.log("selectPledgeElement", selectedPledgeElement);
+  separatorElement.classList.remove("hide-display");
+  selectedPledgeElement.classList.remove("hide-display");
+}
+
+function removeShowClassOnSeparatorAndSelectedPledge(radioInput, arrRadioBtn) {
+  var arrOfRadioBtnRemoveClassOnSeparatorSelectedPledge = arrRadioBtn.filter(
+    function notCheckRadioBtn(eachRadio) {
+      return (
+        eachRadio != radioInput &&
+        eachRadio.attributes["id"].value != "no-reward"
+      );
+    }
+  );
+
+  arrOfRadioBtnRemoveClassOnSeparatorSelectedPledge.forEach(
+    function removeClassFromSeparatorSelectedPledge(radioBtn) {
+      var pledgeSeparatorElement = radioBtn.parentElement.nextElementSibling;
+      var pledgeSelectedEleOfInputSubmitBtn =
+        radioBtn.parentElement.parentElement.lastElementChild;
+      pledgeSeparatorElement.classList.add("hide-display");
+      pledgeSelectedEleOfInputSubmitBtn.classList.add("hide-display");
+    }
+  );
+  // console.log(
+  //   "removeClassOnSeparatorSelectedPledge",
+  //   removeClassOnSeparatorSelectedPledge
+  // );
 }
 
 function toggleAriaChecked(radioBtnInput, arrRadioBtn) {
