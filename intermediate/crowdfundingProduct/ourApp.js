@@ -58,8 +58,9 @@ function ourSelectors() {
 }
 
 initialLoad();
+// addClassFadedPledgeBasedOnPledgesQuantityDialogOne();
 toggleNavMenu();
-addFadedOpacity();
+// addFadedOpacity();
 addClickEventToFundriserElement();
 inputFunctionality();
 eventListenerOnModalDialogTwo();
@@ -114,6 +115,52 @@ function initialLoad() {
     }
   });
 }
+
+/***** run this func below on initial load, when user submit pledge amount
+ * want to change the btn text to Out of Stock instead of Select Reward
+ *  *****/
+
+function addClassFadedPledgeBasedOnPledgesQuantityIndividualPledge() {
+  //use this selector: document.querySelectorAll(".individual-pledge .quantity-digit")
+}
+
+/***** run this func below on initial load, when user submit pledge amount
+ * want to change the btn text to Out of Stock instead of Select Reward
+ *  *****/
+
+/***** we want this func to run when we activate dialog1modal: when back this project btn is clicked, pledge is select reward is clicked
+ * since our quantity will decrement when we submit the reward: we want to check the quantity when submit our reward
+ *  *****/
+
+function addClassFadedPledgeBasedOnPledgesQuantityDialogOne() {
+  var arrOfQuantityDigit = Array.prototype.slice.call(
+    document.querySelectorAll(".pledge-quantity .quantity-digit")
+  );
+  /* loop through array of quantity digit array, get the digit use innerText then based on quantity we will add class faded-pledge */
+
+  arrOfQuantityDigit.forEach(function addFadedPledgeBasedOnQuantity(element) {
+    var articleElementTopLevelContainerOfQuantityDigit =
+      element.parentElement.parentElement.parentElement.parentElement;
+    // console.log(articleElementTopLevelContainerOfQuantityDigit);
+    var convertToNumType = Number(element.innerText);
+    if (convertToNumType <= 0) {
+      articleElementTopLevelContainerOfQuantityDigit.classList.add(
+        "faded-pledge"
+      );
+    } else {
+      articleElementTopLevelContainerOfQuantityDigit.classList.remove(
+        "faded-pledge"
+      );
+    }
+  });
+
+  /* loop through array of quantity digit array, get the digit use innerText then based on quantity we will add class faded-pledge */
+  // var arrOfQuantityDigit = Array.from(document.querySelectorAll(".pledge-quantity .quantity-digit"));
+}
+
+/***** we want this func to run when we activate dialog1modal: when back this project btn is clicked, pledge is select reward is clicked
+ * since our quantity will decrement when we submit the reward: we want to check the quantity when submit our reward
+ *  *****/
 
 function setProgressBarProp() {
   var { totalAmountDisplay } = ourSelectors();
@@ -241,6 +288,9 @@ function addClickedBtnToArrShowDialogModalOne(elementInput) {
       /* call line below when we want to put focus on the h2 title of dialog1 */
       // dialog1HeadingTitle.focus();
     }, 1000);
+    /***** func below will add faded-pledge class based on the quantity of our pledges *****/
+    addClassFadedPledgeBasedOnPledgesQuantityDialogOne();
+    /***** func below will add faded-pledge class based on the quantity of our pledges *****/
   } else if (selectRewardBtnClicked == "Select-Reward") {
     arrOfClickedBtn.push(elementInput);
     dialog1Element.parentElement.classList.toggle("activate");
@@ -258,7 +308,9 @@ function addClickedBtnToArrShowDialogModalOne(elementInput) {
 }
 
 /***** modal keyboard function. focus on clicked element when we exit the modal *****/
-
+alert(
+  "run addClassFadedPledgeBasedOnPledgesQuantityDialogOne when user click on continue btn to submit pledge. for the button we can add class btn-light or btn-faded based on quantity"
+);
 function focusClickedElementModalFeature() {
   var { fundriserSectionElement } = ourSelectors();
 
@@ -556,6 +608,9 @@ function eventFeaturesOnModalDialogOne(eventInput) {
         this,
         ourArray
       );
+      /***** add class hide-display for separator and select pledge section *****/
+      loopThroughArrOfRadioBtnAddHideDisplay();
+      /***** add class hide-display for separator and select pledge section *****/
     }
   }
 
@@ -624,7 +679,7 @@ function escapeBtnKeydownDialogOne(event) {
     }
   }
 }
-alert("run func below when the close modal btn is clicked too");
+// alert("run func below when the close modal btn is clicked too");
 /***** add class hide-display for separator and select pledge section *****/
 function loopThroughArrOfRadioBtnAddHideDisplay() {
   var { arrOfRadioBtn } = ourSelectors();
