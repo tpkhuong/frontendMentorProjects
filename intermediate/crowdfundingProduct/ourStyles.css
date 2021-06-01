@@ -929,8 +929,8 @@ header {
 /* modal */
 
 /* individual sections */
-.show-for-now {
-  display: revert;
+.hide-display {
+  display: none;
 }
 
 /* selected-modal */
