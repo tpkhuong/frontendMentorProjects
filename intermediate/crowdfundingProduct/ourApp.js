@@ -114,19 +114,95 @@ function initialLoad() {
       eachRadio.attributes["aria-checked"].value = "false";
     }
   });
+  addFadedPledgeClassBasedOnQuantityMainPledgeContent();
+  // buildClassOfElement();
+  changeBtnClassAndTextBasedOnQuantity();
 }
 
-/***** run this func below on initial load, when user submit pledge amount
- * want to change the btn text to Out of Stock instead of Select Reward
- *  *****/
+/*****
+ * func below: we want to added faded-pledge to article with class of individual-pledge. For the btn of each pledge we want to change the text from Select Reward or Out of Stock
+ * and the class btn-light or btn-faded based on the quantity.
+ * we want to run it on initial load and when user click on contine btn
+ * *****/
 
-function addClassFadedPledgeBasedOnPledgesQuantityIndividualPledge() {
-  //use this selector: document.querySelectorAll(".individual-pledge .quantity-digit")
+// changeBtnClassAndTextBasedOnQuantity();
+
+function buildClassOfElement() {
+  alert(
+    "learned how to build the element.className so that our select pledge based on reward selected didn't throw an error. had to add btn-light or btn-faded to the beginning of the classname string"
+  );
+  var arrOfQuantityDigit = Array.prototype.slice.call(
+    document.querySelectorAll(".individual-pledge .quantity-digit")
+  );
+
+  //loop though our array of digit element. select the button of the pledge remove or add class and change innerText based on quantity digit
+  arrOfQuantityDigit.forEach(function addOrRemoveClassChangeInnerText(element) {
+    var btnOfpledgeMainContainer = element.parentElement.nextElementSibling;
+
+    console.log("btn-testing" + " " + btnOfpledgeMainContainer.className);
+  });
 }
 
-/***** run this func below on initial load, when user submit pledge amount
- * want to change the btn text to Out of Stock instead of Select Reward
- *  *****/
+alert("test func below if it will work when the quantity changes");
+function changeBtnClassAndTextBasedOnQuantity() {
+  // select the quanity digit elements
+  var arrOfQuantityDigit = Array.prototype.slice.call(
+    document.querySelectorAll(".individual-pledge .quantity-digit")
+  );
+
+  //loop though our array of digit element. select the button of the pledge remove or add class and change innerText based on quantity digit
+  arrOfQuantityDigit.forEach(function addOrRemoveClassChangeInnerText(element) {
+    var btnOfpledgeMainContainer = element.parentElement.nextElementSibling;
+    var btnClassNameInStrForm = btnOfpledgeMainContainer.className;
+    var convertStrToNum = Number(element.innerText);
+    //our condition: add or remove class and changed innerText based on quantity digit
+    if (convertStrToNum <= 0) {
+      //when we use element.classList.add("class") it will append to the end of the className string
+      // btnOfpledgeMainContainer.classList.add("btn-faded");
+      /***** we want to build the class string added btn-faded or btn-light to the beginning of the string *****/
+      btnOfpledgeMainContainer.className =
+        "btn-faded" + " " + btnClassNameInStrForm;
+      /***** we want to build the class string added btn-faded or btn-light to the beginning of the string *****/
+      btnOfpledgeMainContainer.innerText = "Out of Stock";
+    } else {
+      //when we use element.classList.add("class") it will append to the end of the className string
+      // btnOfpledgeMainContainer.classList.add("btn-light");
+      /***** we want to build the class string added btn-faded or btn-light to the beginning of the string *****/
+      btnOfpledgeMainContainer.className =
+        "btn-light" + " " + btnClassNameInStrForm;
+      /***** we want to build the class string added btn-faded or btn-light to the beginning of the string *****/
+      btnOfpledgeMainContainer.innerText = "Select Reward";
+    }
+  });
+}
+
+function addFadedPledgeClassBasedOnQuantityMainPledgeContent() {
+  var arrOfQuantityDigit = Array.prototype.slice.call(
+    document.querySelectorAll(".individual-pledge .quantity-digit")
+  );
+
+  arrOfQuantityDigit.forEach(function addFadedPledgeClassBasedOnQuanDigit(
+    eachQuantityDigit
+  ) {
+    var articleElementWeWantToAddClassFadedPledge =
+      eachQuantityDigit.parentElement.parentElement.parentElement;
+    var convertInnerTextToNum = Number(eachQuantityDigit.innerText);
+
+    if (convertInnerTextToNum <= 0) {
+      articleElementWeWantToAddClassFadedPledge.classList.add("faded-pledge");
+    } else {
+      articleElementWeWantToAddClassFadedPledge.classList.remove(
+        "faded-pledge"
+      );
+    }
+  });
+}
+
+/*****
+ * func below: we want to added faded-pledge to article with class of individual-pledge. For the btn of each pledge we want to change the text from Select Reward or Out of Stock
+ * and the class btn-light or btn-faded based on the quantity.
+ * we want to run it on initial load and when user click on contine btn
+ * *****/
 
 /***** we want this func to run when we activate dialog1modal: when back this project btn is clicked, pledge is select reward is clicked
  * since our quantity will decrement when we submit the reward: we want to check the quantity when submit our reward
@@ -136,6 +212,7 @@ function addClassFadedPledgeBasedOnPledgesQuantityDialogOne() {
   var arrOfQuantityDigit = Array.prototype.slice.call(
     document.querySelectorAll(".pledge-quantity .quantity-digit")
   );
+
   /* loop through array of quantity digit array, get the digit use innerText then based on quantity we will add class faded-pledge */
 
   arrOfQuantityDigit.forEach(function addFadedPledgeBasedOnQuantity(element) {
@@ -277,6 +354,7 @@ function addClickedBtnToArrShowDialogModalOne(elementInput) {
   // console.trace();
   var arrOfClickedBtn = [];
   var backThisProjectBtnClicked = elementInput.className.split(" ")[1];
+
   var selectRewardBtnClicked = elementInput.className.split(" ")[2];
 
   if (backThisProjectBtnClicked == "back-project-btn") {
@@ -308,9 +386,7 @@ function addClickedBtnToArrShowDialogModalOne(elementInput) {
 }
 
 /***** modal keyboard function. focus on clicked element when we exit the modal *****/
-alert(
-  "run addClassFadedPledgeBasedOnPledgesQuantityDialogOne when user click on continue btn to submit pledge. for the button we can add class btn-light or btn-faded based on quantity"
-);
+
 function focusClickedElementModalFeature() {
   var { fundriserSectionElement } = ourSelectors();
 
@@ -399,8 +475,9 @@ function showModalAndSelectCorrectPlege(event) {
   var { arrOfRadioBtn, arrOfLabelsOfPledgeTitleAmtQuanContainer } =
     ourSelectors();
   if (event.target.tagName == "BUTTON") {
+    //we changed this from [1] to [0]
     let matchThisString = event.target.className.split(" ")[1].split("-")[0];
-
+    console.log("matchthisstring", matchThisString);
     // var [matchingPledgeLabel] =
     //   arrOfLabelsOfPledgeTitleAmtQuanContainer.filter(
     //     function findMatchingLabel(eachLabel) {
@@ -468,6 +545,9 @@ function showModalAndSelectCorrectPlege(event) {
     );
     /***** funcs below will remove hide-display class to separator and select pledge based on selected radio input *****/
     focusClickedEleToExitModalRewardContainer(event.target);
+    /***** func below will add faded-pledge class based on the quantity of our pledges *****/
+    addClassFadedPledgeBasedOnPledgesQuantityDialogOne();
+    /***** func below will add faded-pledge class based on the quantity of our pledges *****/
   }
   event.stopPropagation();
 }
@@ -577,6 +657,12 @@ function eventFeaturesOnModalDialogOne(eventInput) {
       eventInput
     );
     activateCompletedModal();
+    /***** func below will add faded-pledge class based on the quantity of our pledges dialog1 modal*****/
+    addClassFadedPledgeBasedOnPledgesQuantityDialogOne();
+    /***** func below will add faded-pledge class based on the quantity of our pledges dialog1 modal*****/
+    /***** func below will add faded-pledge class based on the quantity of our pledges main pledge content section*****/
+    addFadedPledgeClassBasedOnQuantityMainPledgeContent();
+    /***** func below will add faded-pledge class based on the quantity of our pledges main pledge content section*****/
   } else if (
     (eventInput.target.tagName == "BUTTON" &&
       eventInput.target.className.includes("close-dialog1")) ||
