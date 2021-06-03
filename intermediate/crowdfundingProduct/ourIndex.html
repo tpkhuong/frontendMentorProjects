@@ -121,6 +121,11 @@
             aria-valuemin="0"
             aria-valuemax="100"
           >
+            <div class="visually-hidden">
+              <span id="text-for-percentage">
+                <!-- we want text here to match the progress bar % or the valuenow --> </span
+              ><span>%</span>
+            </div>
             <!-- add accessibility labels to modal-->
             <div class="bar-wrapper">
               <div class="bar"></div>
@@ -197,7 +202,7 @@
               <!-- we removed the class gray-out element below -->
               <div class="amount-pledges-left-select">
                 <div class="flex-wrapper">
-                  <span class="bold-large-text quantity-digit">0</span>
+                  <span class="bold-large-text quantity-digit">1</span>
                   <span class="faded-text self-center margin-left">left</span>
                 </div>
                 <!-- add btn-faded or btn-light based on quantity-digit -->
@@ -371,7 +376,7 @@
                 <label for="premium-reward">Mahogany Special Edition</label>
                 <span class="pledge-amount highlight">Pledge $200 or more</span>
                 <div class="flex-wrapper pledge-quantity">
-                  <span class="quantity-digit">0</span><span>left</span>
+                  <span class="quantity-digit">1</span><span>left</span>
                 </div>
                 <p>
                   You get two Special Edition Mahogany stands, a Backer T-Shirt,
