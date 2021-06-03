@@ -39,6 +39,8 @@ function ourSelectors() {
     "[aria-label='close support modal']"
   );
 
+  var textMatchingPercentage = document.querySelector("#text-for-percentage");
+
   return {
     navBar,
     quantitySelectors,
@@ -54,6 +56,7 @@ function ourSelectors() {
     dialog2Element,
     dialog2HeadingTitle,
     dialog2ModalCloseModalbtn,
+    textMatchingPercentage,
   };
 }
 
@@ -127,23 +130,22 @@ function initialLoad() {
 
 // changeBtnClassAndTextBasedOnQuantity();
 
-function buildClassOfElement() {
-  alert(
-    "learned how to build the element.className so that our select pledge based on reward selected didn't throw an error. had to add btn-light or btn-faded to the beginning of the classname string"
-  );
-  var arrOfQuantityDigit = Array.prototype.slice.call(
-    document.querySelectorAll(".individual-pledge .quantity-digit")
-  );
+// function buildClassOfElement() {
+//   alert(
+//     "learned how to build the element.className so that our select pledge based on reward selected didn't throw an error. had to add btn-light or btn-faded to the beginning of the classname string"
+//   );
+//   var arrOfQuantityDigit = Array.prototype.slice.call(
+//     document.querySelectorAll(".individual-pledge .quantity-digit")
+//   );
 
-  //loop though our array of digit element. select the button of the pledge remove or add class and change innerText based on quantity digit
-  arrOfQuantityDigit.forEach(function addOrRemoveClassChangeInnerText(element) {
-    var btnOfpledgeMainContainer = element.parentElement.nextElementSibling;
+//   //loop though our array of digit element. select the button of the pledge remove or add class and change innerText based on quantity digit
+//   arrOfQuantityDigit.forEach(function addOrRemoveClassChangeInnerText(element) {
+//     var btnOfpledgeMainContainer = element.parentElement.nextElementSibling;
 
-    console.log("btn-testing" + " " + btnOfpledgeMainContainer.className);
-  });
-}
+//     console.log("btn-testing" + " " + btnOfpledgeMainContainer.className);
+//   });
+// }
 
-alert("test func below if it will work when the quantity changes");
 function changeBtnClassAndTextBasedOnQuantity() {
   // select the quanity digit elements
   var arrOfQuantityDigit = Array.prototype.slice.call(
@@ -244,7 +246,11 @@ function setProgressBarProp() {
   var totalAmtWithoutPunc = totalAmountDisplay.innerText.match(/\d/gi).join("");
 
   var totalAmtPercentage = (totalAmtWithoutPunc / 100000) * 100;
+  /***** func below will convert totalAmtPercentage to a string then we will use that value as the innerText for the span element *****/
 
+  updateARIAtextToMatchPercentage(totalAmtPercentage);
+
+  /***** func below will convert totalAmtPercentage to a string then we will use that value as the innerText for the span element *****/
   console.log(totalAmtPercentage);
   document.documentElement.style.setProperty(
     "--progress-width",
@@ -548,6 +554,11 @@ function showModalAndSelectCorrectPlege(event) {
     /***** func below will add faded-pledge class based on the quantity of our pledges *****/
     addClassFadedPledgeBasedOnPledgesQuantityDialogOne();
     /***** func below will add faded-pledge class based on the quantity of our pledges *****/
+    /***** func below will add class faded-pledge to pledge container in main page and btn-light or btn-faded to button of that pledge *****/
+
+    changeBtnClassAndTextBasedOnQuantity();
+
+    /***** func below will add class faded-pledge to pledge container in main page and btn-light or btn-faded to button of that pledge *****/
   }
   event.stopPropagation();
 }
@@ -1258,13 +1269,38 @@ function updateTotalAmtDisplay(strInput) {
   }
 }
 
+alert("update CSS for js module 5 to use CSS variables");
+
 function updateProgressBar(strInput) {
   var convertStrToNum = Number(strInput);
   var calculatedPercentForProgressBar = (convertStrToNum / 100000) * 100;
+  /***** setting CSS variable in another func setProgressBarProp *****/
   document.documentElement.attributes["style"].value =
     "--progress-width:" + String(calculatedPercentForProgressBar) + "%";
   // document.documentElement.style.setProperty(
   //   "--progress-width",
   //   calculatedPercentForProgressBar + "%"
   // );
+
+  /***** func below will convert calculatedPercentForProgressBar to a string then we will use that value as the innerText for the span element *****/
+
+  updateARIAtextToMatchPercentage(calculatedPercentForProgressBar);
+
+  /***** func below will convert calculatedPercentForProgressBar to a string then we will use that value as the innerText for the span element *****/
 }
+
+/***** ARIA progress bar: we want to update the aria-valuenow to reflect the % of the progress bar *****/
+
+function updateARIAvalueNowProgressBar() {}
+
+/***** ARIA progress bar: we want to update the aria-valuenow to reflect the % of the progress bar *****/
+
+/***** ARIA progress bar: we want to update text content of the span element to match the percentage of the progress bar *****/
+
+function updateARIAtextToMatchPercentage(percentageInput) {
+  var { textMatchingPercentage } = ourSelectors();
+  // console.log(object);
+  textMatchingPercentage.innerText = String(percentageInput);
+}
+
+/***** ARIA progress bar: we want to update text content of the span element to match the percentage of the progress bar *****/
