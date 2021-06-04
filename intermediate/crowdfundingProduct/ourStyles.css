@@ -168,6 +168,20 @@ body {
   margin-top: var(--flex-gap, 16px) 0 0 0;
 }
 
+[class*="col-"] {
+  flex-basis: var(--col-basis, 100%);
+}
+
+.col-1 {
+  --col-basis: 25%;
+}
+.col-2 {
+  --col-basis: 50%;
+}
+.col-3 {
+  --col-basis: 75%;
+}
+
 [class*="bg-"] {
   background-color: var(--bg, hsl(0, 100%, 100%));
   color: var(--fg, hsl(0, 0%, 0%));
