@@ -24,6 +24,8 @@ function ourSelectors() {
     document.querySelectorAll('[type="radio"]')
   );
 
+  var progressbarValueNow = document.querySelector("[role='progressbar'");
+
   var radioBtnNoReward = document.querySelector("#no-reward");
   var dialog1HeadingTitle = document.querySelector("#dialog1-label");
 
@@ -56,6 +58,7 @@ function ourSelectors() {
     dialog2Element,
     dialog2HeadingTitle,
     dialog2ModalCloseModalbtn,
+    progressbarValueNow,
     textMatchingPercentage,
   };
 }
@@ -66,6 +69,7 @@ toggleNavMenu();
 // addFadedOpacity();
 addClickEventToFundriserElement();
 inputFunctionality();
+focusTabbingModal();
 eventListenerOnModalDialogTwo();
 setProgressBarProp();
 selectCorrespondingPledge();
@@ -93,6 +97,9 @@ findRadioBtnChangeEvent();
 function notes() {
   alert(
     "we probably don't need to keep track of the elements click in an array because when esc key is pressed or when the close btn is click"
+  );
+  alert(
+    "we probably don't need to keep track of the btn click to activate modal one and activate modal 2 in one single array"
   );
   alert(
     "we just need to know which btn was clicked the btn in fundriser or pledge section"
@@ -246,6 +253,13 @@ function setProgressBarProp() {
   var totalAmtWithoutPunc = totalAmountDisplay.innerText.match(/\d/gi).join("");
 
   var totalAmtPercentage = (totalAmtWithoutPunc / 100000) * 100;
+
+  /***** func below will change the attribute aria-valuenow of the element with role="progressbar" *****/
+
+  updateARIAvalueNowProgressBar(totalAmtPercentage);
+
+  /***** func below will change the attribute aria-valuenow of the element with role="progressbar" *****/
+
   /***** func below will convert totalAmtPercentage to a string then we will use that value as the innerText for the span element *****/
 
   updateARIAtextToMatchPercentage(totalAmtPercentage);
@@ -404,8 +418,6 @@ function focusClickedElementModalFeature() {
 // function activatePledgeModal() {}
 
 /***** modal tab focus cycle  *****/
-
-focusTabbingModal();
 
 function focusTabbingModal() {
   var arrOfFocusable = ["A", "BUTTON", "INPUT"];
@@ -1269,7 +1281,7 @@ function updateTotalAmtDisplay(strInput) {
   }
 }
 
-alert("update CSS for js module 5 to use CSS variables");
+alert("refactor our app.js file");
 
 function updateProgressBar(strInput) {
   var convertStrToNum = Number(strInput);
@@ -1282,6 +1294,12 @@ function updateProgressBar(strInput) {
   //   calculatedPercentForProgressBar + "%"
   // );
 
+  /***** func below will change the attribute aria-valuenow of the element with role="progressbar" *****/
+
+  updateARIAvalueNowProgressBar(calculatedPercentForProgressBar);
+
+  /***** func below will change the attribute aria-valuenow of the element with role="progressbar" *****/
+
   /***** func below will convert calculatedPercentForProgressBar to a string then we will use that value as the innerText for the span element *****/
 
   updateARIAtextToMatchPercentage(calculatedPercentForProgressBar);
@@ -1289,9 +1307,17 @@ function updateProgressBar(strInput) {
   /***** func below will convert calculatedPercentForProgressBar to a string then we will use that value as the innerText for the span element *****/
 }
 
+/***** we want to run these aria value and aria text func when our page load and when we update the progress bar % *****/
+
 /***** ARIA progress bar: we want to update the aria-valuenow to reflect the % of the progress bar *****/
 
-function updateARIAvalueNowProgressBar() {}
+function updateARIAvalueNowProgressBar(percentageInput) {
+  var { progressbarValueNow } = ourSelectors();
+
+  //change the valuenow attribute of progressbarValueNow
+  progressbarValueNow.attributes["aria-valuenow"].value =
+    String(percentageInput);
+}
 
 /***** ARIA progress bar: we want to update the aria-valuenow to reflect the % of the progress bar *****/
 
@@ -1304,3 +1330,5 @@ function updateARIAtextToMatchPercentage(percentageInput) {
 }
 
 /***** ARIA progress bar: we want to update text content of the span element to match the percentage of the progress bar *****/
+
+/***** we want to run these aria value and aria text func when our page load and when we update the progress bar % *****/
