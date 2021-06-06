@@ -231,6 +231,7 @@ body {
   padding: 0;
   border: 0;
 }
+/* hide h2 which are title for our section element */
 
 .hide {
   display: none;
