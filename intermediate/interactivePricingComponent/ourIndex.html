@@ -10,11 +10,67 @@
       content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
     />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link
+      rel="shortcut icon"
+      href="./images/favicon-32x32.png"
+      type="image/x-icon"
+    />
     <link rel="stylesheet" href="ourStyles.css" />
-    <title></title>
+    <title>Interactive Pricing Component</title>
   </head>
   <body>
+    <a href="#pricing-component" class="skip-link"></a>
+    <section role="region" class="pricing-component">
+      <!-- outside title, paragraph, and background-img, max-width wrapper -->
+      <article>
+        <h2>Simple, traffic-based pricing</h2>
+        <!-- mobile: display: block -->
+        <!-- laptop: display: inline for horizontal -->
+        <p>Sign-up for our 30-day trial.</p>
+        <p>No credit card required.</p>
+      </article>
+      <!-- component: white background, max-width wrapper -->
+      <article>
+        <!-- top -->
+        <article>
+          <div class="pageviews"><span>100k</span><span>Pageviews</span></div>
+          <!-- accessible slider -->
+          <div class="slider"></div>
+          <!-- thinking abour using display: flex -->
+          <div class="priceview"><span>$16</span><span>/ month</span></div>
+
+          <div class="toggle">
+            <!-- text -->
+            <span>Monthly Billing</span>
+            <!-- toggle button wrapper -->
+            <button>
+              <!-- style span to a toggle circle -->
+              <span></span>
+            </button>
+            <!-- text -->
+            <span>Yearly Billing</span>
+            <!-- discount -->
+            <span>25%</span>
+            <!-- display: none at small screen -->
+            <span>discount</span>
+          </div>
+        </article>
+        <!-- separator -->
+        <div class="separator"></div>
+        <!-- bottom -->
+        <article>
+          <div class="text-wrapper">
+            <img src="" alt="teal checked mark" />
+            <span>Unlimited websites</span>
+            <img src="" alt="teal checked mark" />
+            <span>100% data ownership</span>
+            <img src="" alt="teal checked mark" />
+            <span>Email reports</span>
+          </div>
+          <button>Start my trial</button>
+        </article>
+      </article>
+    </section>
     <script src="ourApp.js"></script>
   </body>
 </html>
