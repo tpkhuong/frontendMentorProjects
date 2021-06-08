@@ -8,6 +8,7 @@
   --color-pri-light-grayish-red: hsl(14, 92%, 95%);
   --color-pri--light-red: hsl(15, 100%, 70%);
   --color-pri-pale-blue: hsl(226, 100%, 87%);
+  --color-black: hsl(0, 0%, 0%);
 
   --color-neutral-white: hsl(0, 0%, 100%);
   --color-neutral-very-pale-blue: hsl(230, 100%, 99%);
@@ -18,7 +19,7 @@
 
   --manrope: "Manrope", sans-serif;
 
-  --font-size-intro-para: calc(14 / 16 * 1rem);
+  --font-size-intro-para: calc(15 / 16 * 1rem);
   --font-size-200: 0.9375rem;
   --font-size-300: 1rem;
   --font-size-400: 1.25rem;
@@ -38,6 +39,8 @@
   --font-weight-500: 500;
   --font-weight-600: 600;
   --font-weight-700: 700;
+  --font-weight-800: 800;
+  --font-weight-900: 900;
 }
 /* CSS variables */
 
@@ -47,6 +50,12 @@
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+body {
+  font-family: var(--manrope);
+  /* use color: revert for text that we dont want to be grayish blue */
+  color: var(--color-neutral-grayish-blue);
 }
 
 h1,
@@ -91,7 +100,7 @@ img {
   /* we use max-width: 100% so when we have an img element inside of a div and we want to use flex which means the div will be a flex item
     the img will shrink and grow as its parent element shrink and grows
     */
-  display: block;
+  /* display: block; */
   height: auto;
 }
 
@@ -150,6 +159,11 @@ body {
   padding-inline-end: 16px; */
 }
 
+.text-max-width-wrapper {
+  max-width: 150px;
+  margin-inline: auto;
+}
+
 /* container wrapper */
 
 .flow-content > * + * {
@@ -188,9 +202,14 @@ body {
 [class*="btn-"] {
   background-color: var(--bg);
   color: var(--fg);
+  padding: 12px;
+  padding-inline: 46px;
+  border-radius: 100vw;
 }
 
 .btn-light {
+  --bg: var(--color-pri--light-red);
+  --fg: var(--color-pri-light-grayish-red);
 }
 
 .btn-dark {
@@ -229,6 +248,11 @@ body {
   border: 0;
 }
 /* hide h2 which are title for our section element */
+
+.darker-text-color {
+  color: var(--color-black);
+}
+
 /* utilities */
 
 /* general-styles */
@@ -238,4 +262,101 @@ body {
 /* general-layout */
 
 /* individual sections */
+
+/* has background image */
+.pricing-component {
+  background-image: url("./images/bg-pattern.svg");
+  background-size: 85rem;
+  background-repeat: no-repeat;
+
+  padding: 24px;
+  /* mobile size */
+  text-align: center;
+}
+
+/* intro */
+
+.intro {
+  font-size: var(--font-size-intro-para);
+  background-image: url("./images/pattern-circles.svg");
+  background-repeat: no-repeat;
+  background-size: 9.8rem;
+  background-position-x: center;
+
+  padding: 32px;
+  padding-inline: 4px;
+}
+
+.intro P {
+  font-size: calc((14 / 16) * 1rem);
+}
+
+.intro p:first-of-type {
+  margin-block-end: 0;
+}
+
+.intro p:last-of-type {
+  margin-block-start: 4px;
+}
+/* intro */
+
+/* pricing-sells-pitch-container */
+
+.pricing-sells-pitch-container {
+  padding: 24px;
+  padding-block: 38px;
+  border-radius: 8px;
+  background-color: var(--color-neutral-white);
+  box-shadow: 0 100px 62px rgba(0, 0, 0, 0.07);
+}
+
+/* pricing-sells-pitch-container */
+
+/* pricing */
+
+.price {
+  font-weight: var(--font-weight-800);
+  font-size: calc((34 / 16) * 1rem);
+}
+
+.toggle {
+  font-size: calc((14 / 16) * 1rem);
+}
+
+.discount-hide {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+}
+/* pricing */
+
+/* separator */
+
+.separator {
+  margin-block-start: 30px;
+  margin-block-end: 24px;
+  margin-inline: -24px;
+  height: 1px;
+  background-color: var(--color-neutral-grayish-blue);
+}
+
+/* separator */
+
+/* sells-pitch */
+
+.sells-pitch span {
+  font-size: calc((14 / 16) * 1rem);
+}
+
+.sells-pitch button {
+  font-size: calc((15 / 16) * 1rem);
+}
+
+/* sells-pitch */
+
 /* individual sections */
