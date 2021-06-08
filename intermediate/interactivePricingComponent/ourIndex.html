@@ -19,30 +19,36 @@
     <title>Interactive Pricing Component</title>
   </head>
   <body>
-    <a href="#pricing-component" class="skip-link"></a>
-    <section role="region" class="pricing-component">
+    <!-- <a href="#pricing-component" class="skip-link">Skip to Pricing Component</a> -->
+    <section id="#pricing-component" role="region" class="pricing-component">
       <!-- outside title, paragraph, and background-img, max-width wrapper -->
-      <article>
-        <h2>Simple, traffic-based pricing</h2>
+      <article class="intro max-width">
+        <h2 class="darker-text-color">Simple, traffic-based pricing</h2>
         <!-- mobile: display: block -->
         <!-- laptop: display: inline for horizontal -->
         <p>Sign-up for our 30-day trial.</p>
         <p>No credit card required.</p>
       </article>
       <!-- component: white background, max-width wrapper -->
-      <article>
+      <article class="pricing-sells-pitch-container max-width">
         <!-- top -->
-        <article>
-          <div class="pageviews"><span>100k</span><span>Pageviews</span></div>
+        <article class="pricing">
+          <!-- figure out how to change pageviews dynamically -->
+          <div class="pageviews"><span>100k Pageviews</span></div>
           <!-- accessible slider -->
           <div class="slider"></div>
           <!-- thinking abour using display: flex -->
-          <div class="priceview"><span>$16</span><span>/ month</span></div>
+          <div class="priceview">
+            <span class="price darker-text-color">$16.00</span
+            ><span>/ month</span>
+          </div>
 
           <div class="toggle">
             <!-- text -->
             <span>Monthly Billing</span>
             <!-- toggle button wrapper -->
+            <!-- button height will be based on span child -->
+            <!-- button width will be fixed -->
             <button>
               <!-- style span to a toggle circle -->
               <span></span>
@@ -50,24 +56,40 @@
             <!-- text -->
             <span>Yearly Billing</span>
             <!-- discount -->
-            <span>25%</span>
-            <!-- display: none at small screen -->
-            <span>discount</span>
+            <div class="discount-percent-wrapper">
+              <span>25%</span>
+              <!-- display: none at small screen -->
+              <span class="discount-hide">discount</span>
+            </div>
           </div>
         </article>
         <!-- separator -->
         <div class="separator"></div>
         <!-- bottom -->
-        <article>
+        <article class="sells-pitch">
+          <!-- might not have to use box-wrapper -->
+
           <div class="text-wrapper">
-            <img src="" alt="teal checked mark" />
-            <span>Unlimited websites</span>
-            <img src="" alt="teal checked mark" />
-            <span>100% data ownership</span>
-            <img src="" alt="teal checked mark" />
-            <span>Email reports</span>
+            <div class="box-wrapper">
+              <img src="./images/icon-check.svg" alt="teal checked mark" /><span
+                >Unlimited websites</span
+              >
+            </div>
+
+            <div class="box-wrapper">
+              <img src="./images/icon-check.svg" alt="teal checked mark" /><span
+                >100% data ownership</span
+              >
+            </div>
+
+            <div class="box-wrapper">
+              <img src="./images/icon-check.svg" alt="teal checked mark" /><span
+                >Email reports</span
+              >
+            </div>
           </div>
-          <button>Start my trial</button>
+
+          <button class="btn-dark">Start my trial</button>
         </article>
       </article>
     </section>
