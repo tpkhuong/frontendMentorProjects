@@ -303,7 +303,7 @@ body {
 /* pricing-sells-pitch-container */
 
 .pricing-sells-pitch-container {
-  padding: 24px;
+  /* padding: 24px; */
   padding-block: 38px;
   border-radius: 8px;
   background-color: var(--color-neutral-white);
@@ -320,7 +320,48 @@ body {
 }
 
 .toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* using gap to the space between the elements or we can use a utility class on
+  the flex container then use this declaration: margin-inline-start
+  .margin-left-toggle-children > * + * {
+  margin-inline-start: 4px;
+  */
+  gap: 8px;
+  margin-block-start: 38px;
   font-size: calc((14 / 16) * 1rem);
+}
+
+/* .margin-left-toggle-children > * + * {
+  margin-inline-start: 4px;
+} */
+
+.toggle-button {
+  display: inline-block;
+  width: 42px;
+  /* height of this element is based on its child the toggle-circle */
+  padding: 4px;
+  border-radius: 100vw;
+  background-color: var(--color-neutral-light-grayish-blue-toggle);
+}
+
+.toggle-circle {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--color-neutral-white);
+}
+
+.discount-percent-wrapper {
+  font-size: calc((12 / 16) * 1rem);
+
+  display: inline-block;
+  padding: 2px;
+  padding-inline: 8px;
+  border-radius: 100vw;
+  border: 1px solid red;
 }
 
 .discount-hide {
@@ -338,9 +379,9 @@ body {
 /* separator */
 
 .separator {
-  margin-block-start: 30px;
+  margin-block-start: 42px;
   margin-block-end: 24px;
-  margin-inline: -24px;
+  /* margin-inline: -24px; */
   height: 1px;
   background-color: var(--color-neutral-grayish-blue);
 }
@@ -348,6 +389,28 @@ body {
 /* separator */
 
 /* sells-pitch */
+
+/* if we don't plan to add another element to the text-wrapper we can use this selector */
+
+.box-wrapper:nth-of-type(2) {
+  margin-block: 12px;
+}
+
+/* if we plan to add another element to the text-wrapper we can use this class
+add it to the middle box-wrapper element
+*/
+
+.margin-top-bottom {
+  margin-block: 12px;
+}
+
+.box-wrapper img {
+  margin-inline-end: 16px;
+}
+
+.trail-btn {
+  margin-block-start: 32px;
+}
 
 .sells-pitch span {
   font-size: calc((14 / 16) * 1rem);
