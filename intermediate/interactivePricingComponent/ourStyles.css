@@ -6,7 +6,7 @@
   --color-pri-soft-cyan: hsl(174, 77%, 80%);
   --color-pri-strong-cyan: hsl(174, 86%, 45%);
   --color-pri-light-grayish-red: hsl(14, 92%, 95%);
-  --color-pri--light-red: hsl(15, 100%, 70%);
+  --color-pri-light-red: hsl(15, 100%, 70%);
   --color-pri-pale-blue: hsl(226, 100%, 87%);
   --color-black: hsl(0, 0%, 0%);
 
@@ -314,9 +314,54 @@ body {
 
 /* pricing */
 
+/* slider */
+
+.slider {
+  display: flex;
+  margin-block: 20px;
+}
+
+.slider-icon-wrapper {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: var(--color-pri-strong-cyan);
+  background-image: url("./images/icon-slider.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.bar-wrapper {
+  width: 100%;
+  align-self: center;
+  background-color: var(--color-neutral-light-grayish-blue-bar);
+}
+
+.bar {
+  width: 50%;
+  height: 8px;
+  background-color: var(--color-pri-soft-cyan);
+}
+
+/* slider */
+
+.priceview {
+  display: flex;
+  justify-content: center;
+  /* for browsers that support gap */
+  /* gap: 8px; */
+}
+
+/* for browsers that do not support flex: gap. add margin to price container or month span */
+
 .price {
   font-weight: var(--font-weight-800);
   font-size: calc((34 / 16) * 1rem);
+}
+
+.priceview span:last-child {
+  align-self: center;
+  margin-inline-start: 8px;
 }
 
 .toggle {
@@ -338,7 +383,7 @@ body {
 } */
 
 .toggle-button {
-  display: inline-block;
+  /* display: inline-block; */
   width: 42px;
   /* height of this element is based on its child the toggle-circle */
   padding: 4px;
@@ -357,11 +402,13 @@ body {
 .discount-percent-wrapper {
   font-size: calc((12 / 16) * 1rem);
 
+  color: var(--color-pri-light-red);
   display: inline-block;
   padding: 2px;
   padding-inline: 8px;
   border-radius: 100vw;
-  border: 1px solid red;
+  font-weight: var(--font-weight-800);
+  background-color: var(--color-pri-light-grayish-red);
 }
 
 .discount-hide {
