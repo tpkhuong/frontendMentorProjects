@@ -36,7 +36,47 @@
           <!-- figure out how to change pageviews dynamically -->
           <div class="pageviews"><span>100k Pageviews</span></div>
           <!-- accessible slider -->
-          <div class="slider"></div>
+          <div class="slider">
+            <!-- we might not need to have a fixed height for this element -->
+            <!-- when we declare this declartion: display: flex. it cause our bar-wrapper element
+            to not display because it is a flex item and flex item by default is intrinsic. its width
+            is based on its content
+            -->
+
+            <div class="slider-icon-wrapper">
+              <!-- 
+                  without using display: flex on .slider. we will be working with the stacking-content and position property
+                        width: 40px;
+    height: 40px;
+    background-color: burlywood;
+    position: relative;
+                 -->
+            </div>
+            <div class="bar-wrapper">
+              <!-- width of this element will be 100% -->
+              <!-- we have to change the order. the .bar-wrapper element will go before .slider-icon-wrapper to make the .slider-icon-wrapper stacking-content go after .bar-wrapper -->
+              <!-- 
+                  without using display: flex on .slider. we will be working with the stacking-content and position property
+height: 8px;
+width: 100%;
+background-color: blanchedalmond;
+position: absolute;
+margin-block: auto;
+top: 0;
+bottom: 0;
+               -->
+              <div class="bar">
+                <!-- 
+                      without using display: flex on .slider. we will be working with the stacking-content and position property
+                      width: 40px;
+height: 40px;
+background-color: burlywood;
+position: relative;
+                   -->
+                <!-- width of this element will be dynamic -->
+              </div>
+            </div>
+          </div>
           <!-- thinking abour using display: flex -->
           <div class="priceview">
             <span class="price darker-text-color">$16.00</span
