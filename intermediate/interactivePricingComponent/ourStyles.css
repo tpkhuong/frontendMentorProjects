@@ -3,8 +3,10 @@
 /* CSS variables */
 :root {
   /* CSS variables */
+  --color-strong-cyan: 174, 86%, 45%;
   --color-pri-soft-cyan: hsl(174, 77%, 80%);
-  --color-pri-strong-cyan: hsl(174, 86%, 45%);
+  --color-pri-strong-cyan: hsl(var(--color-strong-cyan));
+  --color-pri-strong-cyan-alpha: hsla(var(--color-strong-cyan), 0.9);
   --color-pri-light-grayish-red: hsl(14, 92%, 95%);
   --color-pri-light-red: hsl(15, 100%, 70%);
   --color-pri-pale-blue: hsl(226, 100%, 87%);
@@ -159,6 +161,12 @@ body {
   padding-inline-end: 16px; */
 }
 
+@media screen and (min-width: 90rem) {
+  .max-width {
+    max-width: 600px;
+  }
+}
+
 .text-max-width-wrapper {
   max-width: 150px;
   margin-inline: auto;
@@ -274,6 +282,12 @@ body {
   text-align: center;
 }
 
+@media screen and (min-width: 90rem) {
+  .pricing-component {
+    background-size: 100rem;
+  }
+}
+
 /* intro */
 
 .intro {
@@ -298,6 +312,27 @@ body {
 .intro p:last-of-type {
   margin-block-start: 4px;
 }
+
+@media screen and (min-width: 90rem) {
+  .intro {
+    margin-block-start: 32px;
+    padding: 48px;
+    padding-block: 52px;
+    background-size: 8.8rem;
+    background-position-y: 8px;
+  }
+  .intro P {
+    font-size: calc((17 / 16) * 1rem);
+    display: inline;
+    margin: 0;
+  }
+  .margin-bottom {
+    margin-block-end: 16px;
+  }
+  .larger-text-size-laptop {
+    font-size: 2rem;
+  }
+}
 /* intro */
 
 /* pricing-sells-pitch-container */
@@ -305,6 +340,7 @@ body {
 .pricing-sells-pitch-container {
   /* padding: 24px; */
   padding-block: 38px;
+  margin-block-start: 32px;
   border-radius: 8px;
   background-color: var(--color-neutral-white);
   box-shadow: 0 100px 62px rgba(0, 0, 0, 0.07);
@@ -312,29 +348,54 @@ body {
 
 /* pricing-sells-pitch-container */
 
+@media screen and (min-width: 90rem) {
+  .pricing {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+      "pageviews priceview"
+      "slider slider"
+      "toggle toggle";
+    padding-inline: 38px;
+  }
+  .pageviews {
+    grid-area: pageviews;
+    align-self: center;
+  }
+}
+
 /* pricing */
 
 /* slider */
 
 .slider {
-  display: flex;
+  /*if we plan to not use a flex display on the parent element slider: both of .slider-icon-wrapper and .bar-wrapper will be using
+    transform: translate which will create its own stacking context
+    we could use isolation: isolate on .slider to container both .slider-icon-wrapper and .bar-wrapper in the stacking context of .slider*/
+  /* display: flex; */
   margin-block: 20px;
+  padding-inline: 16px;
 }
 
 .slider-icon-wrapper {
   height: 40px;
   width: 40px;
   border-radius: 50%;
+  transform: translateX(0px);
   background-color: var(--color-pri-strong-cyan);
   background-image: url("./images/icon-slider.svg");
   background-repeat: no-repeat;
   background-position: center;
+  box-shadow: 0 32px 423px var(--color-pri-strong-cyan-alpha);
 }
 
 .bar-wrapper {
   width: 100%;
-  align-self: center;
+  transform: translateY(24px);
+  /* align-self: center;  */ /* since we are not using display: flex on its parent .slider */
   background-color: var(--color-neutral-light-grayish-blue-bar);
+  border-radius: 100vw;
+  overflow: hidden;
 }
 
 .bar {
@@ -343,7 +404,16 @@ body {
   background-color: var(--color-pri-soft-cyan);
 }
 
+@media screen and (min-width: 90rem) {
+  .slider {
+    grid-area: slider;
+    padding-inline: 0px;
+  }
+}
+
 /* slider */
+
+/* priceview */
 
 .priceview {
   display: flex;
@@ -363,6 +433,16 @@ body {
   align-self: center;
   margin-inline-start: 8px;
 }
+
+@media screen and (min-width: 90rem) {
+  .priceview {
+    grid-area: priceview;
+  }
+}
+
+/* priceview */
+
+/* toggle */
 
 .toggle {
   display: flex;
@@ -389,6 +469,11 @@ body {
   padding: 4px;
   border-radius: 100vw;
   background-color: var(--color-neutral-light-grayish-blue-toggle);
+}
+
+.toggle-button:hover {
+  background-color: var(--color-pri-soft-cyan);
+  cursor: pointer;
 }
 
 .toggle-circle {
@@ -421,6 +506,18 @@ body {
   padding: 0;
   border: 0;
 }
+
+/* media query for toggle container */
+
+@media screen and (min-width: 90rem) {
+  .toggle {
+    grid-area: toggle;
+  }
+}
+/* media query for toggle container */
+
+/* toggle */
+
 /* pricing */
 
 /* separator */
@@ -459,12 +556,23 @@ add it to the middle box-wrapper element
   margin-block-start: 32px;
 }
 
+.trail-btn:hover {
+  color: var(--color-neutral-white);
+  cursor: pointer;
+}
+
 .sells-pitch span {
   font-size: calc((14 / 16) * 1rem);
 }
 
 .sells-pitch button {
   font-size: calc((15 / 16) * 1rem);
+}
+
+@media screen and (min-width: 90rem) {
+  .sells-pitch {
+    padding-inline: 38px;
+  }
 }
 
 /* sells-pitch */
