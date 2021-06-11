@@ -23,7 +23,9 @@
     <section id="#pricing-component" role="region" class="pricing-component">
       <!-- outside title, paragraph, and background-img, max-width wrapper -->
       <article class="intro max-width">
-        <h2 class="darker-text-color">Simple, traffic-based pricing</h2>
+        <h2 class="darker-text-color larger-text-size-laptop margin-bottom">
+          Simple, traffic-based pricing
+        </h2>
         <!-- mobile: display: block -->
         <!-- laptop: display: inline for horizontal -->
         <p>Sign-up for our 30-day trial.</p>
@@ -42,17 +44,13 @@
             to not display because it is a flex item and flex item by default is intrinsic. its width
             is based on its content
             -->
-
-            <div class="slider-icon-wrapper">
-              <!-- 
-                  without using display: flex on .slider. we will be working with the stacking-content and position property
-                        width: 40px;
-    height: 40px;
-    background-color: burlywood;
-    position: relative;
-                 -->
-            </div>
             <div class="bar-wrapper">
+              <!-- we only need one bar-wrapper because our .slider-icon-wrapper will cover the progress bar at 0% and near 99%
+                at 99% the progress bar will not bleed out of the .bar-wrapper
+                -->
+              <!-- we will switch the order of .bar-wrapper and .slider-icon-wrapper and not have to mess with z-index
+                when we switch the two .slider-icon-wrapper will go over .bar-wrapper
+                -->
               <!-- width of this element will be 100% -->
               <!-- we have to change the order. the .bar-wrapper element will go before .slider-icon-wrapper to make the .slider-icon-wrapper stacking-content go after .bar-wrapper -->
               <!-- 
@@ -75,6 +73,19 @@ position: relative;
                    -->
                 <!-- width of this element will be dynamic -->
               </div>
+            </div>
+            <div class="slider-icon-wrapper">
+              <!-- if we plan to not use a flex display on the parent element slider: both of .slider-icon-wrapper and .bar-wrapper will be using
+                transform: translate which will create its own stacking context
+                we could use isolation: isolate on .slider to container both .slider-icon-wrapper and .bar-wrapper in the stacking context of .slider
+                -->
+              <!-- 
+                  without using display: flex on .slider. we will be working with the stacking-content and position property
+                        width: 40px;
+    height: 40px;
+    background-color: burlywood;
+    position: relative;
+                 -->
             </div>
           </div>
           <!-- thinking abour using display: flex -->
