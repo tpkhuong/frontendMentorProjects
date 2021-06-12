@@ -146,7 +146,7 @@ button {
 /* we can use min-height on the element we want its height to be 100% */
 html,
 body {
-  height: 100%;
+  /* height: 100%; */
 }
 /* we can use min-height on the element we want its height to be 100% */
 
@@ -163,7 +163,7 @@ body {
 
 @media screen and (min-width: 90rem) {
   .max-width {
-    max-width: 600px;
+    max-width: 550px;
   }
 }
 
@@ -223,6 +223,11 @@ body {
 .btn-dark {
   --bg: var(--color-neutral-dark-blue);
   --fg: var(--color-pri-pale-blue);
+}
+
+@media screen and (min-width: 90rem) {
+  [class*="btn-"] {
+  }
 }
 /* test out [class*=btn-]{} 
 .btn-light{
@@ -361,6 +366,8 @@ body {
   .pageviews {
     grid-area: pageviews;
     align-self: center;
+    justify-self: start;
+    font-weight: var(--font-weight-800);
   }
 }
 
@@ -387,6 +394,15 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   box-shadow: 0 32px 423px var(--color-pri-strong-cyan-alpha);
+}
+
+.slider-icon-wrapper:hover {
+  cursor: pointer;
+}
+
+.slider-icon-wrapper:focus,
+.slider-icon-wrapper:hover {
+  outline: 2px solid blue;
 }
 
 .bar-wrapper {
@@ -437,6 +453,11 @@ body {
 @media screen and (min-width: 90rem) {
   .priceview {
     grid-area: priceview;
+    justify-self: end;
+  }
+  .price {
+    /* font-size: 2.7rem; */
+    font-size: calc((43 / 16) * 1rem);
   }
 }
 
@@ -444,6 +465,13 @@ body {
 
 /* toggle */
 
+/* toggle feature: when button is pressed/clicked set aria-checked to true then move span circle right */
+
+.toggle-button[aria-checked="true"] .toggle-circle {
+  transform: translateX(100%);
+}
+
+/* toggle feature: when button is pressed/clicked set aria-checked to true then move span circle right */
 .toggle {
   display: flex;
   justify-content: center;
@@ -471,7 +499,8 @@ body {
   background-color: var(--color-neutral-light-grayish-blue-toggle);
 }
 
-.toggle-button:hover {
+.toggle-button:hover,
+.toggle-button:focus {
   background-color: var(--color-pri-soft-cyan);
   cursor: pointer;
 }
@@ -512,6 +541,12 @@ body {
 @media screen and (min-width: 90rem) {
   .toggle {
     grid-area: toggle;
+    margin-block-start: 16px;
+    gap: 24px;
+  }
+  .discount-hide {
+    position: initial;
+    margin: 0px;
   }
 }
 /* media query for toggle container */
@@ -556,7 +591,8 @@ add it to the middle box-wrapper element
   margin-block-start: 32px;
 }
 
-.trail-btn:hover {
+.trail-btn:hover,
+.trail-btn:focus {
   color: var(--color-neutral-white);
   cursor: pointer;
 }
@@ -572,6 +608,19 @@ add it to the middle box-wrapper element
 @media screen and (min-width: 90rem) {
   .sells-pitch {
     padding-inline: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .separator {
+    margin-block-end: 32px;
+  }
+  .box-wrapper {
+    display: flex;
+    align-items: baseline;
+  }
+  .trail-btn {
+    margin: 0px;
   }
 }
 
