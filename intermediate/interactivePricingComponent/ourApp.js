@@ -82,3 +82,47 @@ function changeTextOfBillingMonthOrYear(valueOfAriaChecked) {
  * based on our toggle. if aria-checked is true we want to work with year obj
  * if it is aria-checked false we want to work with month obj
  * *****/
+/***** run our func that controls the slider/pageviews/priceview
+ * based on our toggle. if aria-checked is true we want to work with year obj
+ * if it is aria-checked false we want to work with month obj
+ * *****/
+
+/***** our func with our obj: month data and year data *****/
+
+function selectDataBasedOnToggleMonthOrYear(strInput) {}
+
+/***** our func with our obj: month data and year data *****/
+
+/***** our data will be selected based on the slider position *****/
+
+function returnMonthOrYearDataObj(sliderPosition) {
+  var monthData = {
+    first: {},
+    second: {},
+    third: {},
+    fourth: {},
+    fifth: {},
+  };
+  var yearData = {
+    first: {},
+    second: {},
+    third: {},
+    fourth: {},
+    fifth: {},
+  };
+}
+
+/***** our data will be selected based on the slider position *****/
+testingIdeas();
+function testingIdeas() {
+  var sliderContainer = document.querySelector(".slider");
+  // use mousedown them mousemove then mouseup
+  console.log(sliderContainer.firstElementChild.nextElementSibling);
+  sliderContainer.addEventListener(
+    "mousedown",
+    function watchMovingSlider(event) {
+      console.log(event.pageX);
+    }
+  );
+  //the slider element transform: translateX() will be based on the mousemove pageX position
+}
