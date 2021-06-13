@@ -39,6 +39,7 @@
           <div class="pageviews"><span>100k Pageviews</span></div>
           <!-- accessible slider -->
           <div class="slider">
+            <!-- work with width of slider wrapper - the width of the .slider-icon-wrapper -->
             <!-- we might not need to have a fixed height for this element -->
             <!-- when we declare this declartion: display: flex. it cause our bar-wrapper element
             to not display because it is a flex item and flex item by default is intrinsic. its width
@@ -64,6 +65,7 @@ top: 0;
 bottom: 0;
                -->
               <div class="bar">
+                <!-- work with width of slider wrapper - the width of the .slider-icon-wrapper -->
                 <!-- 
                       without using display: flex on .slider. we will be working with the stacking-content and position property
                       width: 40px;
@@ -75,6 +77,7 @@ position: relative;
               </div>
             </div>
             <div class="slider-icon-wrapper">
+              <!-- add aria attribute to slider-icon -->
               <!-- if we plan to not use a flex display on the parent element slider: both of .slider-icon-wrapper and .bar-wrapper will be using
                 transform: translate which will create its own stacking context
                 we could use isolation: isolate on .slider to container both .slider-icon-wrapper and .bar-wrapper in the stacking context of .slider
@@ -150,6 +153,7 @@ position: relative;
           <button class="trail-btn btn-dark">Start my trial</button>
         </article>
       </article>
+      <!-- <input type="range" /> -->
     </section>
     <script src="ourApp.js"></script>
   </body>
