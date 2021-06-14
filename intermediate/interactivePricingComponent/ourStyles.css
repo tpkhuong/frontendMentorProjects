@@ -376,6 +376,7 @@ body {
 /* slider */
 
 .slider {
+  /* work with width of slider wrapper - the width of the .slider-icon-wrapper */
   /*if we plan to not use a flex display on the parent element slider: both of .slider-icon-wrapper and .bar-wrapper will be using
     transform: translate which will create its own stacking context
     we could use isolation: isolate on .slider to container both .slider-icon-wrapper and .bar-wrapper in the stacking context of .slider*/
@@ -385,6 +386,7 @@ body {
 }
 
 .slider-icon-wrapper {
+  /* work with width of slider wrapper - the width of the .slider-icon-wrapper */
   height: 40px;
   width: 40px;
   border-radius: 50%;
@@ -406,6 +408,7 @@ body {
 }
 
 .bar-wrapper {
+  /* work with width of slider wrapper - the width of the .slider-icon-wrapper */
   width: 100%;
   transform: translateY(24px);
   /* align-self: center;  */ /* since we are not using display: flex on its parent .slider */
@@ -415,6 +418,7 @@ body {
 }
 
 .bar {
+  /* work with width of slider wrapper - the width of the .slider-icon-wrapper */
   width: 50%;
   height: 8px;
   background-color: var(--color-pri-soft-cyan);
