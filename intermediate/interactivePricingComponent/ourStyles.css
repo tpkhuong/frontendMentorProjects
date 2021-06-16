@@ -407,7 +407,23 @@ body {
   outline: 2px solid blue;
 }
 
+/* center-bar-vertically: position: relative
+.bar-wrapper: position; absolute
+top: -7px;
+
+these code will center our bar.wrapper vertically and the length/width of our .bar-wrapper will not bleed out
+the padding of our .slider while making the height of our .slider match the height of our .slider-icon-wrapper
+there won't be a empty space above the .slider-icon-wrapper with these codes
+*/
+
+.center-bar-vertically {
+  position: relative;
+}
+
 .bar-wrapper {
+  /* center vertically  */
+  position: absolute;
+  top: -7px;
   /* work with width of slider wrapper - the width of the .slider-icon-wrapper */
   width: 100%;
   transform: translateY(24px);
