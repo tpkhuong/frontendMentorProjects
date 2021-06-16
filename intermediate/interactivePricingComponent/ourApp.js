@@ -7,11 +7,14 @@ function ourSelectors() {
   var spanTextEleMonthOrYear = document.querySelector(
     ".priceview span:last-of-type"
   );
+  //slider icon with left and right arrow
+  var sliderIconWrapper = document.querySelector(".slider-icon-wrapper");
 
   return {
     toggleBtn,
     pricingContainer,
     spanTextEleMonthOrYear,
+    sliderIconWrapper,
   };
 }
 
@@ -115,6 +118,7 @@ function returnMonthOrYearDataObj(sliderPosition) {
 /***** our data will be selected based on the slider position *****/
 testingIdeas();
 function testingIdeas() {
+  var { sliderIconWrapper } = ourSelectors();
   document.documentElement.style.setProperty(
     "--slider-movement",
     "0px"
@@ -122,13 +126,43 @@ function testingIdeas() {
   );
   var sliderContainer = document.querySelector(".slider");
   // use mousedown them mousemove then mouseup
+  /***** currently when we move our mouse to the right, we will add one to movementCounter *****/
+  var movementCounter = 0;
+  /***** we want a variable to keep track of the previous pageX position/number.
+   * we want a way to know when our user is moving the mouse left or right
+   *  *****/
+  //we want to get pageX position
+  //the next time "mousemove" is call/execute if that number is greater add 1 to movementCounter
+  //if that number is less than substract 1 from movementCounter
+  //if the number is equal keep movementCounter or do nothing
   console.log(sliderContainer.firstElementChild.nextElementSibling);
+  // alert(
+  //   "our movementCounter is incrementing when the mouse move in the vertical direction"
+  // );
+  /***** for our mouse users: we want our algorithm to fire when they click/hold left click on our slider-icon-wrapper *****/
+
+  sliderContainer.addEventListener("click", function checkElementClickd(event) {
+    console.log(this);
+  });
+  alert("start here");
+  /***** for our mouse users: we want our algorithm to fire when they click/hold left click on our slider-icon-wrapper *****/
+
   sliderContainer.addEventListener(
-    "mousedown",
+    "mouseup",
     function watchMovingSlider(event) {
-      console.log(event);
-      console.log(event.pageX);
-      console.log(event.target);
+      // console.log(event);
+      // console.log(event.pageX);
+      // console.log(event.target);
+      /***** whatever pageX is we will divide that number by itself which will give us 1 *****/
+      /***** we will add or substract this number based on our user mouse direction movement *****/
+      var addThisToMovementCounter = event.pageX / event.pageX;
+      // console.log(addThisToMovementCounter);
+      /***** movementCounter is a variable set to 0, it is outside the scope of this function so it won't reset everytime this event or function
+       * is called
+       *  *****/
+      /***** only increment when pageX increase not when "mousemove" fires *****/
+      movementCounter += addThisToMovementCounter;
+      // console.log(movementCounter);
       // if (event.target == this) {
       //   this.addEventListener("mousemove", function testingAlgorithm(event) {
       //     console.log(event.pageX);
@@ -139,15 +173,25 @@ function testingIdeas() {
       // console.log(typeof pixelMoveMnt);
       // document.documentElement.attributes["style"].value =
       //   "--slider-movement: " + String(pixelMoveMnt) + "px";
+      if (event.target == sliderIconWrapper) {
+        console.log("hello");
+      }
+      // alert(
+      //   "next time we build an accessible navbar use code below to check the event.target element, another way to check an element instead of using the elements"
+      // );
+      // alert("class name. we can put an id on the element we want to check then use event.target == document.querySelector()")
+      // if (event.target == sliderIconWrapper) {
+      //   console.log("hello");
+      // }
     }
   );
-  alert("our slider-icon-wrapper is moving based on movement of mouse");
-  alert(
-    "we will figure out how to add one or substract one pixel based on mouse horizontal movement"
-  );
-  alert(
-    "get pageX divide by pageX add it to a variable use that variable to change --slider-movement"
-  );
+  // alert("our slider-icon-wrapper is moving based on movement of mouse");
+  // alert(
+  //   "we will figure out how to add one or substract one pixel based on mouse horizontal movement"
+  // );
+  // alert(
+  //   "get pageX divide by pageX add it to a variable use that variable to change --slider-movement"
+  // );
   // sliderContainer.addEventListener(
   //   "mousemove",
   //   function watchMovingSlider(event) {
