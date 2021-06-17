@@ -135,32 +135,51 @@ function testingIdeas() {
   //the next time "mousemove" is call/execute if that number is greater add 1 to movementCounter
   //if that number is less than substract 1 from movementCounter
   //if the number is equal keep movementCounter or do nothing
-  console.log(sliderContainer.firstElementChild.nextElementSibling);
+  // console.log(sliderContainer.firstElementChild.nextElementSibling);
   // alert(
   //   "our movementCounter is incrementing when the mouse move in the vertical direction"
   // );
   /***** for our mouse users: we want our algorithm to fire when they click/hold left click on our slider-icon-wrapper *****/
-
-  sliderContainer.addEventListener("click", function checkElementClickd(event) {
-    console.log(this);
-  });
   alert("start here");
+  sliderIconWrapper.addEventListener(
+    "mouseover",
+    function checkElementClickd(event) {
+      if (event.target == this) {
+        // console.log(this);
+        mouseMoveAlgorithm(this, event);
+      }
+    }
+  );
+
   /***** for our mouse users: we want our algorithm to fire when they click/hold left click on our slider-icon-wrapper *****/
 
   sliderContainer.addEventListener(
     "mouseup",
     function watchMovingSlider(event) {
+      if (event.target == sliderIconWrapper) {
+        removeMouseMovementAlgorFunc();
+      }
+      // if (event.target == sliderIconWrapper) {
+      //   removeMouseMovementAlgorFunc(event);
+      // }
       // console.log(event);
       // console.log(event.pageX);
       // console.log(event.target);
       /***** whatever pageX is we will divide that number by itself which will give us 1 *****/
       /***** we will add or substract this number based on our user mouse direction movement *****/
-      var addThisToMovementCounter = event.pageX / event.pageX;
+      // var addThisToMovementCounter = event.pageX / event.pageX;
+      /***** test out movementX instead of using .pageX *****/
+      var addThisToMovementCounter = event.movementX;
       // console.log(addThisToMovementCounter);
       /***** movementCounter is a variable set to 0, it is outside the scope of this function so it won't reset everytime this event or function
        * is called
        *  *****/
-      /***** only increment when pageX increase not when "mousemove" fires *****/
+      /***** only increment when pageX increase not when "mousemove" fires or we can use movementX *****/
+      /***** we can use movementX it will increment our movement by 1 when user move the mouse to the right and decrement by 1 when the user move
+       * the mouse to the left
+       *  *****/
+      /***** when we use movementX we don't have to check if the user is moving the mouse to the left or right *****/
+      /***** addThisToMovementCounter will increment or decrement movementCounter based on the user mouse move (right or left) *****/
       movementCounter += addThisToMovementCounter;
       // console.log(movementCounter);
       // if (event.target == this) {
@@ -173,9 +192,9 @@ function testingIdeas() {
       // console.log(typeof pixelMoveMnt);
       // document.documentElement.attributes["style"].value =
       //   "--slider-movement: " + String(pixelMoveMnt) + "px";
-      if (event.target == sliderIconWrapper) {
-        console.log("hello");
-      }
+      // if (event.target == sliderIconWrapper) {
+      //   console.log("hello");
+      // }
       // alert(
       //   "next time we build an accessible navbar use code below to check the event.target element, another way to check an element instead of using the elements"
       // );
@@ -206,4 +225,33 @@ function testingIdeas() {
   // );
   // alert("our slider-icon-wrapper is moving based on movement of mouse")
   //the slider element transform: translateX() will be based on the mousemove pageX position
+}
+
+function removeMouseMovementAlgorFunc(event) {
+  var sliderContainer = document.querySelector(".slider");
+
+  console.log("we here");
+  sliderContainer.removeEventListener("mousemove", watchMouseMovement);
+}
+
+function mouseMoveAlgorithm(elementPassIn, eventInput) {
+  // console.log(`this is mouseMoveAlgorithm:`, elementPassIn);
+  //elementPassIn will be our .slider element it is the container for our .slider-icon-wrapper and .bar-wrapper
+  //we add this eventlistener in our sliderContainer.addeventlistener("click")
+  //we the event.target == sliderIconWrapper
+  elementPassIn.addEventListener("mousemove", watchMouseMovement);
+}
+
+function watchMouseMovement(event) {
+  var { sliderIconWrapper } = ourSelectors();
+  var sliderContainer = document.querySelector(".slider");
+  console.log(event);
+  // if (event.target == sliderIconWrapper && event.which === 1) {
+  //   console.log(event);
+  // }
+  //looks like our code is working, when our mouse cursor is not hovering over sliderIconWrapper we are not seeing console.log(event)
+  //thinking our removeeventlistener is working;
+  if (event.target != sliderIconWrapper) {
+    sliderContainer.removeEventListener("mousemove", watchMouseMovement);
+  }
 }
