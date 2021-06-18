@@ -140,25 +140,46 @@ function testingIdeas() {
   //   "our movementCounter is incrementing when the mouse move in the vertical direction"
   // );
   /***** for our mouse users: we want our algorithm to fire when they click/hold left click on our slider-icon-wrapper *****/
-  alert("start here");
+  /***** on "mousedown" on our .sliderIconWrapper element we will add "mousemove" and watchMouseMovement()*****/
   sliderIconWrapper.addEventListener(
-    "mouseover",
-    function checkElementClickd(event) {
+    "mousedown",
+    function checkElementClicked(event) {
       if (event.target == this) {
+        console.log(event);
         // console.log(this);
+        // mouseMoveAlgorithm(this, event);
+        // this.addEventListener("mousedown", clickEvent);
         mouseMoveAlgorithm(this, event);
       }
     }
   );
+  // function clickEvent(event) {
+  //   console.log(event);
+  //   //since this.addEventListener() will call clickEvent() and this of checkElementClicked() is .sliderIconWrapper
+  //   //keyword this in clickEvent will be .sliderIconWrapper
+  //   // console.log(this);
+  //   // mouseMoveAlgorithm(this, event);
+  // }
 
+  /***** when our user releaes the left mouse click "mouseup" when was to use removeeventlistener to remove "mousemove" on .sliderIconWrapper *****/
+  /***** on "mouseup" on our .sliderIconWrapper element we want to remove "mousemove" and watchMouseMovement() *****/
+  alert("start here");
+  sliderIconWrapper.addEventListener("mouseup", mouseUpRemoveEventListener);
+  function mouseUpRemoveEventListener(event) {
+    //the keyword this will be .sliderIconWrapper because we will addeventlistener "mouseup" to .sliderIconWrapper
+    //we want to remove the event when the target is .sliderIconWrapper
+    if (event.target == this) {
+      this.removeEventListener("mousemove", watchMouseMovement);
+    }
+  }
   /***** for our mouse users: we want our algorithm to fire when they click/hold left click on our slider-icon-wrapper *****/
 
   sliderContainer.addEventListener(
     "mouseup",
     function watchMovingSlider(event) {
-      if (event.target == sliderIconWrapper) {
-        removeMouseMovementAlgorFunc();
-      }
+      // if (event.target == sliderIconWrapper) {
+      //   removeMouseMovementAlgorFunc();
+      // }
       // if (event.target == sliderIconWrapper) {
       //   removeMouseMovementAlgorFunc(event);
       // }
@@ -227,12 +248,12 @@ function testingIdeas() {
   //the slider element transform: translateX() will be based on the mousemove pageX position
 }
 
-function removeMouseMovementAlgorFunc(event) {
-  var sliderContainer = document.querySelector(".slider");
+// function removeMouseMovementAlgorFunc(event) {
+//   var sliderContainer = document.querySelector(".slider");
 
-  console.log("we here");
-  sliderContainer.removeEventListener("mousemove", watchMouseMovement);
-}
+//   console.log("we here");
+//   sliderContainer.removeEventListener("mousemove", watchMouseMovement);
+// }
 
 function mouseMoveAlgorithm(elementPassIn, eventInput) {
   // console.log(`this is mouseMoveAlgorithm:`, elementPassIn);
@@ -246,12 +267,37 @@ function watchMouseMovement(event) {
   var { sliderIconWrapper } = ourSelectors();
   var sliderContainer = document.querySelector(".slider");
   console.log(event);
+  // when we have code below inside of watchMouseMovement it
+  // does remove "mousemove" eventlistener but now everytime we call watchMouseMovement we are adding "mouseup" eventlistener
+  /***** we will move .addeventlistener below outside of watchMouseMovement so we are not adding "mouseup" eventlistener to .sliderIconWrapper
+   * every time our user move the mouse after they clicked on our .sliderIconWrapper which will call mouseMoveAlgorithm()
+   * which will addeventlistener to "mousemove" .sliderIconWrapper which will run this watchMouseMovement funtions.
+   *  *****/
+  // sliderIconWrapper.addEventListener(
+  //   "mouseup",
+  //   function removeMouseMovement(event) {
+  //     if (event.target == sliderIconWrapper) {
+  //       this.removeEventListener("mousemove", watchMouseMovement);
+  //     }
+  //   }
+  // );
+
   // if (event.target == sliderIconWrapper && event.which === 1) {
   //   console.log(event);
   // }
   //looks like our code is working, when our mouse cursor is not hovering over sliderIconWrapper we are not seeing console.log(event)
   //thinking our removeeventlistener is working;
-  if (event.target != sliderIconWrapper) {
-    sliderContainer.removeEventListener("mousemove", watchMouseMovement);
-  }
+  // if (event.target != sliderIconWrapper) {
+  //   sliderIconWrapper.removeEventListener("mousemove", watchMouseMovement);
+  // }
 }
+
+// var { sliderIconWrapper } = ourSelectors();
+// sliderIconWrapper.addEventListener(
+//   "mouseup",
+//   function removeMouseMovement(event) {
+//     if (event.target == sliderIconWrapper) {
+//       this.removeEventListener("mousemove", watchMouseMovement);
+//     }
+//   }
+// );
