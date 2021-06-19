@@ -54,6 +54,11 @@
   box-sizing: border-box;
 }
 
+/* code below is from inclusive design patterns */
+/* html {
+  font-size: calc(1em + 1vw);
+} */
+
 body {
   font-family: var(--manrope);
   /* use color: revert for text that we dont want to be grayish blue */
