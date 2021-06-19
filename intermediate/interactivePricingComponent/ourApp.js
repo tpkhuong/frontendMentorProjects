@@ -163,7 +163,7 @@ function testingIdeas() {
 
   /***** when our user releaes the left mouse click "mouseup" when was to use removeeventlistener to remove "mousemove" on .sliderIconWrapper *****/
   /***** on "mouseup" on our .sliderIconWrapper element we want to remove "mousemove" and watchMouseMovement() *****/
-  alert("start here");
+
   sliderIconWrapper.addEventListener("mouseup", mouseUpRemoveEventListener);
   function mouseUpRemoveEventListener(event) {
     //the keyword this will be .sliderIconWrapper because we will addeventlistener "mouseup" to .sliderIconWrapper
@@ -173,6 +173,29 @@ function testingIdeas() {
     }
   }
   /***** for our mouse users: we want our algorithm to fire when they click/hold left click on our slider-icon-wrapper *****/
+  /***** we also want to removeEventListener "mousemove" when our cursor leaves/is not hovering over .sliderIconWrapper
+   * putting the "mousemove" listener on the .sliderContainer which is the parent of .sliderIconWrapper we are able to remove the "mousemove" event
+   * on .sliderIconWrapper. before we had the "mousemove" listener on .sliderIconWrapper, when we move our cursor outside of .sliderIconWrapper
+   * our code didn't remove "mousemove" event on .sliderIconWrapper. we think the reason is we had "mousemove" on .sliderIconWrapper. the func will fire
+   * every time the mouse moves when it is on .sliderIconWrapper but when we move the cursor outside of .sliderIconWrapper our func is not firing/executing
+   * therefore it won't run removeMouseMoveEventWhenOutsideOfIconWrapper. also we have the if statement => if(event.target != sliderIconWrapper)
+   * that is wrong because when we have the cursor over .sliderIconWrapper we will never enter our if statement but when we move our cursor outside of
+   * .sliderIconWrapper the "mousemove" will never run/execute removeMouseMoveEventWhenOutsideOfIconWrapper.
+   * *****/
+  alert(
+    "our mousemove event listener will be removed when the user is not holding left click while inside of .sliderIconWrapper and when the cursor is outside of .sliderIconWrapper"
+  );
+  sliderContainer.addEventListener(
+    "mousemove",
+    removeMouseMoveEventWhenOutsideOfIconWrapper
+  );
+  function removeMouseMoveEventWhenOutsideOfIconWrapper(event) {
+    if (event.target != sliderIconWrapper) {
+      sliderIconWrapper.removeEventListener("mousemove", watchMouseMovement);
+    }
+  }
+
+  /***** we also want to removeEventListener "mousemove" when our cursor leaves/is not hovering over .sliderIconWrapper *****/
 
   sliderContainer.addEventListener(
     "mouseup",
@@ -257,12 +280,14 @@ function testingIdeas() {
 
 function mouseMoveAlgorithm(elementPassIn, eventInput) {
   // console.log(`this is mouseMoveAlgorithm:`, elementPassIn);
-  //elementPassIn will be our .slider element it is the container for our .slider-icon-wrapper and .bar-wrapper
-  //we add this eventlistener in our sliderContainer.addeventlistener("click")
-  //we the event.target == sliderIconWrapper
+  //elementPassIn will be our .sliderIconWrapper
+  //we add this eventlistener in our .sliderIconWrapper.addeventlistener("click")
+  //when the event.target == sliderIconWrapper, when used the event.target == this
+  //the keyword this will be the element we attached .addEventListener which will be .sliderIconWrapper
   elementPassIn.addEventListener("mousemove", watchMouseMovement);
 }
 
+/***** we are calling watchMouseMovement inside of .slider *****/
 function watchMouseMovement(event) {
   var { sliderIconWrapper } = ourSelectors();
   var sliderContainer = document.querySelector(".slider");
