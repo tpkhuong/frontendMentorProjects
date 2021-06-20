@@ -148,6 +148,19 @@ button {
 
 /* utilities */
 
+/* skip link using attr selector */
+
+[href="#main"] {
+  position: absolute;
+  top: 0;
+  right: 100%; /* moves off screen */
+}
+[href="#main"]:focus {
+  right: auto;
+}
+
+/* skip link using attr selector */
+
 /* we can use min-height on the element we want its height to be 100% */
 html,
 body {
