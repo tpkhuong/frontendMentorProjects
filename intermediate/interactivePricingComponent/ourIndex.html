@@ -80,8 +80,8 @@
                 </div>
               </div>
             </div>
-
-            <div class="slider-icon-wrapper">
+            <!-- giving .sliderIconWrapper a tabindex='0' will add the element to the focusable element rotation -->
+            <div tabindex="0" class="slider-icon-wrapper">
               <!-- add aria attribute to slider-icon -->
               <!-- if we plan to not use a flex display on the parent element slider: both of .slider-icon-wrapper and .bar-wrapper will be using
                   transform: translate which will create its own stacking context
