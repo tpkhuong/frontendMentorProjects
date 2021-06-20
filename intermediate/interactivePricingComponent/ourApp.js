@@ -30,6 +30,7 @@ function toggleAriaChecked() {
   pricingContainer.addEventListener(
     "click",
     function switchBetweenTrueAndFalse(event) {
+      console.log(event);
       if (event.target == toggleBtn) {
         //clicking toggle button
         let toggleAriaCheckedAttr =
@@ -115,7 +116,15 @@ function returnMonthOrYearDataObj(sliderPosition) {
   };
 }
 
+clickingFeature();
 /***** our data will be selected based on the slider position *****/
+function clickingFeature() {
+  alert(
+    "look into layerX when we implement clicking feature: where clicking on the .bar or .bar-wrapper will move .sliderIconWrapper to that spot."
+  );
+  alert("look at mouseMoveAlgorithm");
+}
+
 testingIdeas();
 function testingIdeas() {
   var { sliderIconWrapper } = ourSelectors();
@@ -149,7 +158,7 @@ function testingIdeas() {
         // console.log(this);
         // mouseMoveAlgorithm(this, event);
         // this.addEventListener("mousedown", clickEvent);
-        mouseMoveAlgorithm(this, event);
+        mouseMoveAlgorithm(this);
       }
     }
   );
@@ -182,9 +191,6 @@ function testingIdeas() {
    * that is wrong because when we have the cursor over .sliderIconWrapper we will never enter our if statement but when we move our cursor outside of
    * .sliderIconWrapper the "mousemove" will never run/execute removeMouseMoveEventWhenOutsideOfIconWrapper.
    * *****/
-  alert(
-    "our mousemove event listener will be removed when the user is not holding left click while inside of .sliderIconWrapper and when the cursor is outside of .sliderIconWrapper"
-  );
   sliderContainer.addEventListener(
     "mousemove",
     removeMouseMoveEventWhenOutsideOfIconWrapper
@@ -224,7 +230,9 @@ function testingIdeas() {
        *  *****/
       /***** when we use movementX we don't have to check if the user is moving the mouse to the left or right *****/
       /***** addThisToMovementCounter will increment or decrement movementCounter based on the user mouse move (right or left) *****/
+
       movementCounter += addThisToMovementCounter;
+
       // console.log(movementCounter);
       // if (event.target == this) {
       //   this.addEventListener("mousemove", function testingAlgorithm(event) {
@@ -269,6 +277,78 @@ function testingIdeas() {
   // );
   // alert("our slider-icon-wrapper is moving based on movement of mouse")
   //the slider element transform: translateX() will be based on the mousemove pageX position
+
+  /***** adding "mousemove" event listener and removing "mousemove" event listener *****/
+
+  function mouseMoveAlgorithm(elementPassIn) {
+    // console.log(`this is mouseMoveAlgorithm:`, elementPassIn);
+    //elementPassIn will be our .sliderIconWrapper
+    //we add this eventlistener in our .sliderIconWrapper.addeventlistener("click")
+    //when the event.target == sliderIconWrapper, when used the event.target == this
+    //the keyword this will be the element we attached .addEventListener which will be .sliderIconWrapper
+    elementPassIn.addEventListener("mousemove", watchMouseMovement);
+  }
+  // alert(
+  //   "our algorithm is working when we use event.movementX. our CSS variable --slider-movement on HTML will be updating when user move the mouse to the left or right"
+  // );
+  // alert(
+  //   "work on algorithm to stop user mouse movement when .sliderIconWrapper reaches the right edge of .slider"
+  // );
+
+  /***** we are calling watchMouseMovement inside of .slider *****/
+  /***** our algorithm is working when we use event.movementX. our CSS variable --slider-movement on HTML will be updating when user move the mouse to the left or right
+   * and it will move our .sliderIconWrapper
+   * *****/
+  function watchMouseMovement(event) {
+    /***** every time our user move the mouse to the right it will add 1 to movementCounter
+     * every time our user move the mouse to the left it will substract -1 from movementCounter
+     *  when our user left clicks on .sliderIconWrapper and hold down left click then move the mouse to the right
+     * once monvementCounter gets to 434: the right side of the .sliderIconWrapper will touch the right edge of .slider
+     * *****/
+    alert(
+      "do we want to remove mousemove event listener when .sliderIconWrapper touches .slider righ edge or just stop updating --slider-movement"
+    );
+    alert("and stop increment movementCounter");
+    var addThisToMovementCounter = event.movementX;
+    movementCounter += addThisToMovementCounter;
+
+    /***** every func is inside the testingIdeas func scope
+     * movementCounter is a variable with an initial value 0
+     * we are updating it every time user move mouse to the right or the left
+     * *****/
+    console.log(movementCounter);
+    document.documentElement.attributes["style"].value =
+      "--slider-movement: " + String(movementCounter) + "px";
+    var { sliderIconWrapper } = ourSelectors();
+    var sliderContainer = document.querySelector(".slider");
+    // console.log(event);
+    // console.log(movementCounter);
+    // when we have code below inside of watchMouseMovement it
+    // does remove "mousemove" eventlistener but now everytime we call watchMouseMovement we are adding "mouseup" eventlistener
+    /***** we will move .addeventlistener below outside of watchMouseMovement so we are not adding "mouseup" eventlistener to .sliderIconWrapper
+     * every time our user move the mouse after they clicked on our .sliderIconWrapper which will call mouseMoveAlgorithm()
+     * which will addeventlistener to "mousemove" .sliderIconWrapper which will run this watchMouseMovement funtions.
+     *  *****/
+    // sliderIconWrapper.addEventListener(
+    //   "mouseup",
+    //   function removeMouseMovement(event) {
+    //     if (event.target == sliderIconWrapper) {
+    //       this.removeEventListener("mousemove", watchMouseMovement);
+    //     }
+    //   }
+    // );
+
+    // if (event.target == sliderIconWrapper && event.which === 1) {
+    //   console.log(event);
+    // }
+    //looks like our code is working, when our mouse cursor is not hovering over sliderIconWrapper we are not seeing console.log(event)
+    //thinking our removeeventlistener is working;
+    // if (event.target != sliderIconWrapper) {
+    //   sliderIconWrapper.removeEventListener("mousemove", watchMouseMovement);
+    // }
+  }
+
+  /***** adding "mousemove" event listener and removing "mousemove" event listener *****/
 }
 
 // function removeMouseMovementAlgorFunc(event) {
@@ -277,45 +357,6 @@ function testingIdeas() {
 //   console.log("we here");
 //   sliderContainer.removeEventListener("mousemove", watchMouseMovement);
 // }
-
-function mouseMoveAlgorithm(elementPassIn, eventInput) {
-  // console.log(`this is mouseMoveAlgorithm:`, elementPassIn);
-  //elementPassIn will be our .sliderIconWrapper
-  //we add this eventlistener in our .sliderIconWrapper.addeventlistener("click")
-  //when the event.target == sliderIconWrapper, when used the event.target == this
-  //the keyword this will be the element we attached .addEventListener which will be .sliderIconWrapper
-  elementPassIn.addEventListener("mousemove", watchMouseMovement);
-}
-
-/***** we are calling watchMouseMovement inside of .slider *****/
-function watchMouseMovement(event) {
-  var { sliderIconWrapper } = ourSelectors();
-  var sliderContainer = document.querySelector(".slider");
-  console.log(event);
-  // when we have code below inside of watchMouseMovement it
-  // does remove "mousemove" eventlistener but now everytime we call watchMouseMovement we are adding "mouseup" eventlistener
-  /***** we will move .addeventlistener below outside of watchMouseMovement so we are not adding "mouseup" eventlistener to .sliderIconWrapper
-   * every time our user move the mouse after they clicked on our .sliderIconWrapper which will call mouseMoveAlgorithm()
-   * which will addeventlistener to "mousemove" .sliderIconWrapper which will run this watchMouseMovement funtions.
-   *  *****/
-  // sliderIconWrapper.addEventListener(
-  //   "mouseup",
-  //   function removeMouseMovement(event) {
-  //     if (event.target == sliderIconWrapper) {
-  //       this.removeEventListener("mousemove", watchMouseMovement);
-  //     }
-  //   }
-  // );
-
-  // if (event.target == sliderIconWrapper && event.which === 1) {
-  //   console.log(event);
-  // }
-  //looks like our code is working, when our mouse cursor is not hovering over sliderIconWrapper we are not seeing console.log(event)
-  //thinking our removeeventlistener is working;
-  // if (event.target != sliderIconWrapper) {
-  //   sliderIconWrapper.removeEventListener("mousemove", watchMouseMovement);
-  // }
-}
 
 // var { sliderIconWrapper } = ourSelectors();
 // sliderIconWrapper.addEventListener(
