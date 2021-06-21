@@ -123,6 +123,8 @@ function clickingFeature() {
     "look into layerX when we implement clicking feature: where clicking on the .bar or .bar-wrapper will move .sliderIconWrapper to that spot."
   );
   alert("look at mouseMoveAlgorithm");
+  alert("clicking event will fire on mouse click and touch");
+  alert("use layerX instead of movementCounter += movementX");
 }
 
 testingIdeas();
