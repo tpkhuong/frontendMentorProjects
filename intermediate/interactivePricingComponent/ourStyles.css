@@ -423,6 +423,7 @@ body {
 .slider-icon-wrapper:focus,
 .slider-icon-wrapper:hover {
   outline: 2px solid blue;
+  /* background-color: blue; */
 }
 
 /* center-bar-vertically: position: relative
@@ -633,7 +634,15 @@ add it to the middle box-wrapper element
 .trail-btn:focus {
   color: var(--color-neutral-white);
   cursor: pointer;
+  /* background-color: blue; */
 }
+
+/* background-color for focus btn */
+
+/* .trail-btn:focus {
+  outline: 2px solid var(--color-black);
+  background-color: blue;
+} */
 
 .sells-pitch span {
   font-size: calc((14 / 16) * 1rem);
