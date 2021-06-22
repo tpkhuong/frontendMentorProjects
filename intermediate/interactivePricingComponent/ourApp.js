@@ -7,62 +7,109 @@ function ourSelectors() {
   var spanTextEleMonthOrYear = document.querySelector(
     ".priceview span:last-of-type"
   );
+  //slider container element parent of .sliderIconWrapper, .bar and .barWrapper
+  var sliderContainer = document.querySelector(".slider");
   //slider icon with left and right arrow
   var sliderIconWrapper = document.querySelector(".slider-icon-wrapper");
-
+  //.bar teal color
+  var barTealElement = document.querySelector(".bar");
+  //.bar-wrapper gray color
+  var barWrapperElement = document.querySelector(".bar-wrapper");
   return {
     toggleBtn,
     pricingContainer,
     spanTextEleMonthOrYear,
+    sliderContainer,
     sliderIconWrapper,
+    barTealElement,
+    barWrapperElement,
   };
 }
 
 /***** call/invoke our functions *****/
-toggleAriaChecked();
+clickEventAddToPricingContainer();
 /***** call/invoke our functions *****/
 
 /* toggle between monthly/yearly */
 
-function toggleAriaChecked() {
-  var { pricingContainer, toggleBtn } = ourSelectors();
+function clickEventAddToPricingContainer() {
+  var { pricingContainer } = ourSelectors();
 
-  pricingContainer.addEventListener(
-    "click",
-    function switchBetweenTrueAndFalse(event) {
-      console.log(event);
-      if (event.target == toggleBtn) {
-        //clicking toggle button
-        let toggleAriaCheckedAttr =
-          event.target.attributes["aria-checked"].value;
-        //single ! means explicitly coerce to boolean. checking if its false
-        //we shouldn't check if its true or false (a boolean) because the value of ["aria-checked"].value will be a string true or false
-        //we want to check if the value is a string "true" or "false"
-        /***** changing the text between month and year *****/
-        changeTextOfBillingMonthOrYear(toggleAriaCheckedAttr);
-        if (toggleAriaCheckedAttr == "false") {
-          // if aria-checked is false turn to true
-          toggleBtn.attributes["aria-checked"].value = "true";
-        } else {
-          toggleBtn.attributes["aria-checked"].value = "false";
-        }
-      } else if (event.target.parentElement == toggleBtn) {
-        // clicking the span/circle element
-        let parentElementAriaCheckedAttr =
-          event.target.parentElement.attributes["aria-checked"].value;
-        /***** changing the text between month and year *****/
-        changeTextOfBillingMonthOrYear(parentElementAriaCheckedAttr);
-        if (parentElementAriaCheckedAttr == "false") {
-          toggleBtn.attributes["aria-checked"].value = "true";
-        } else {
-          toggleBtn.attributes["aria-checked"].value = "false";
-        }
-      }
+  pricingContainer.addEventListener("click", fireFuncBasedOnElementClicked);
+}
+
+function fireFuncBasedOnElementClicked(event) {
+  /***** for our toggle button between monthly and yearly billing *****/
+  toggleAriaCheckedSwitchBetweenTrueAndFalse(event);
+  /***** move .sliderIconWrapper to spot in bar based on if user click on .bar or .bar-wrapper *****/
+  sliderMovementClickFeatureBarElement(event);
+}
+
+function toggleAriaCheckedSwitchBetweenTrueAndFalse(eventInput) {
+  var { toggleBtn } = ourSelectors();
+  if (eventInput.target == toggleBtn) {
+    //clicking toggle button
+    let toggleAriaCheckedAttr =
+      eventInput.target.attributes["aria-checked"].value;
+    //single ! means explicitly coerce to boolean. checking if its false
+    //we shouldn't check if its true or false (a boolean) because the value of ["aria-checked"].value will be a string true or false
+    //we want to check if the value is a string "true" or "false"
+    /***** changing the text between month and year *****/
+    changeTextOfBillingMonthOrYear(toggleAriaCheckedAttr);
+    if (toggleAriaCheckedAttr == "false") {
+      // if aria-checked is false turn to true
+      toggleBtn.attributes["aria-checked"].value = "true";
+    } else {
+      toggleBtn.attributes["aria-checked"].value = "false";
     }
-  );
+  } else if (eventInput.target.parentElement == toggleBtn) {
+    // clicking the span/circle element
+    let parentElementAriaCheckedAttr =
+      eventInput.target.parentElement.attributes["aria-checked"].value;
+    /***** changing the text between month and year *****/
+    changeTextOfBillingMonthOrYear(parentElementAriaCheckedAttr);
+    if (parentElementAriaCheckedAttr == "false") {
+      toggleBtn.attributes["aria-checked"].value = "true";
+    } else {
+      toggleBtn.attributes["aria-checked"].value = "false";
+    }
+  }
 }
 
 /* toggle between monthly/yearly */
+
+/* slider feature: move .sliderIconWrapper when user clicked on .bar or .bar-wrapper */
+function sliderMovementClickFeatureBarElement(eventInput) {
+  // alert("worked!");
+  var { barTealElement, barWrapperElement } = ourSelectors();
+  console.log(eventInput.layerX);
+  //work with layerX
+  //check if event.target is .bar or .bar-wrapper
+  /* we dont need to add or substract we want .sliderIconWrapper to move to the layerX based on where the user click at bar or bar-wrapper */
+  if (eventInput.target == barTealElement) {
+    document.documentElement.attributes["style"].value =
+      "--slider-movement:" + " " + String(eventInput.layerX) + "px";
+  } else if (eventInput.target == barWrapperElement) {
+    let barWrapperLayerX = eventInput.layerX;
+    //when we click on .barWrapper neat the edge our .sliderIconWrapper right side is too far off barWrapper edge
+    //when we use transform: translateX(434px) on .sliderIconWrapper. the right edge of .sliderIconWrapper touches the right edge of .barWrapper
+    //instead of subtracting layerX if the user click on barWrapper and layerX is 470: we will work with a range and if layerX
+    //is within that range we will set layerX to be 434
+    //range we will work with will be 435-472
+    if (barWrapperLayerX >= 435 && barWrapperLayerX <= 472) {
+      //if user clicked on barWrapper and layerX is between 435 and 472 we will set --slider-movement to be 434 by setting barWrapperLayerX to be 434
+      barWrapperLayerX = 434;
+      document.documentElement.attributes["style"].value =
+        "--slider-movement:" + " " + String(barWrapperLayerX) + "px";
+    } else {
+      //set --slider-movement will be set to event.target.layerX
+      document.documentElement.attributes["style"].value =
+        "--slider-movement:" + " " + String(barWrapperLayerX) + "px";
+    }
+  }
+}
+
+/* slider feature: move .sliderIconWrapper when user clicked on .bar or .bar-wrapper */
 
 /***** func will change the text between month or year based on toggle aria-checked
  * if true it will be year if it is false it will be month
@@ -81,6 +128,62 @@ function changeTextOfBillingMonthOrYear(valueOfAriaChecked) {
 /***** func will change the text between month or year based on toggle aria-checked
  * if true it will be year if it is false it will be month
  * *****/
+
+/***** keyboard feature *****/
+/*  
+
+Right Arrow: Increase the value of the slider by one step.
+Up Arrow: Increase the value of the slider by one step.
+Left Arrow: Decrease the value of the slider by one step.
+Down Arrow: Decrease the value of the slider by one step.
+Home: Set the slider to the first allowed value in its range.
+End: Set the slider to the last allowed value in its range.
+Page Up (Optional): Increment the slider by an amount larger than the step change made by Up Arrow.
+Page Down (Optional): Decrement the slider by an amount larger than the step change made by Down Arrow.
+
+*/
+alert("fun begins add keyboard fuctionality");
+keyboardFeatureSliderMovement();
+function keyboardFeatureSliderMovement() {
+  var { pricingContainer } = ourSelectors();
+  //document.activeElement will let us know which element has focus but we have to run/call/execute this func
+  var focusElement = document.activeElement;
+  console.log(focusElement);
+  //addeventlistener("focus") does not bubble up or down
+  //we can use "focusin" on pricingContainer and add or remove keypress event to .sliderIconWrapper
+  pricingContainer.addEventListener("focusin", addOrRemoveKeydownSliderIcon);
+}
+
+function addOrRemoveKeydownSliderIcon(event) {
+  var { sliderIconWrapper } = ourSelectors();
+
+  //call func based on focus event
+  if (event.target == sliderIconWrapper) {
+    //add if it is sliderIcon
+    addFocusEventToSliderIcon();
+  } else {
+    //remove if it is not sliderIcon
+    removeFocusEventFromSlider();
+  }
+}
+
+function addFocusEventToSliderIcon() {
+  var { sliderIconWrapper } = ourSelectors();
+
+  //the func that we passed into .addEventListener, in order to remove the event we need to pass that same func to .removeEventListener
+  sliderIconWrapper.addEventListener("keydown", moveSliderIconOnKeydown);
+}
+
+function removeFocusEventFromSlider() {
+  var { sliderIconWrapper } = ourSelectors();
+  sliderIconWrapper.removeEventListener("keydown", moveSliderIconOnKeydown);
+}
+
+function moveSliderIconOnKeydown(event) {
+  console.log(event);
+}
+
+/***** keyboard feature *****/
 
 /***** run our func that controls the slider/pageviews/priceview
  * based on our toggle. if aria-checked is true we want to work with year obj
@@ -116,15 +219,14 @@ function returnMonthOrYearDataObj(sliderPosition) {
   };
 }
 
-clickingFeature();
+// clickingFeatureMobileAndDesktop();
 /***** our data will be selected based on the slider position *****/
-function clickingFeature() {
-  alert(
-    "look into layerX when we implement clicking feature: where clicking on the .bar or .bar-wrapper will move .sliderIconWrapper to that spot."
-  );
-  alert("look at mouseMoveAlgorithm");
-  alert("clicking event will fire on mouse click and touch");
-  alert("use layerX instead of movementCounter += movementX");
+function clickingFeatureMobileAndDesktop() {
+  // alert("clicking event will fire on mouse click and touch");
+  // alert(
+  //   "look into layerX when we implement clicking feature: where clicking on the .bar or .bar-wrapper will move .sliderIconWrapper to that spot."
+  // );
+  // alert("look at mouseMoveAlgorithm");
 }
 
 testingIdeas();
@@ -172,7 +274,7 @@ function testingIdeas() {
   //   // mouseMoveAlgorithm(this, event);
   // }
 
-  /***** when our user releaes the left mouse click "mouseup" when was to use removeeventlistener to remove "mousemove" on .sliderIconWrapper *****/
+  /***** when our user released the left mouse click "mouseup" when was to use removeeventlistener to remove "mousemove" on .sliderIconWrapper *****/
   /***** on "mouseup" on our .sliderIconWrapper element we want to remove "mousemove" and watchMouseMovement() *****/
 
   sliderIconWrapper.addEventListener("mouseup", mouseUpRemoveEventListener);
@@ -180,6 +282,7 @@ function testingIdeas() {
     //the keyword this will be .sliderIconWrapper because we will addeventlistener "mouseup" to .sliderIconWrapper
     //we want to remove the event when the target is .sliderIconWrapper
     if (event.target == this) {
+      // watchMoveMovement is being added/called in mouseMoveAlgorithm
       this.removeEventListener("mousemove", watchMouseMovement);
     }
   }
@@ -199,6 +302,8 @@ function testingIdeas() {
   );
   function removeMouseMoveEventWhenOutsideOfIconWrapper(event) {
     if (event.target != sliderIconWrapper) {
+      // watchMoveMovement is being added/called in mouseMoveAlgorithm
+
       sliderIconWrapper.removeEventListener("mousemove", watchMouseMovement);
     }
   }
@@ -206,6 +311,7 @@ function testingIdeas() {
   /***** we also want to removeEventListener "mousemove" when our cursor leaves/is not hovering over .sliderIconWrapper *****/
 
   sliderContainer.addEventListener(
+    // alert("this was a test func. our algorithm is below this .addeventlistener")
     "mouseup",
     function watchMovingSlider(event) {
       // if (event.target == sliderIconWrapper) {
@@ -312,6 +418,7 @@ function testingIdeas() {
     );
     alert("and stop increment movementCounter");
     var addThisToMovementCounter = event.movementX;
+    //movementCounter is declared at the top of testingIdeas func
     movementCounter += addThisToMovementCounter;
 
     /***** every func is inside the testingIdeas func scope
