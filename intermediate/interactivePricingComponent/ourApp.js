@@ -28,7 +28,21 @@ function ourSelectors() {
 
 /***** call/invoke our functions *****/
 clickEventAddToPricingContainer();
+setCssPropertyToDocument();
 /***** call/invoke our functions *****/
+
+/***** declare --slider-movement CSS property to html element *****/
+
+function setCssPropertyToDocument() {
+  document.documentElement.style.setProperty(
+    "--desktop-slider-movement",
+    "0px"
+    // String(totalAmtPercentage) + "%"
+  );
+  document.documentElement.style.setProperty("--mobile-slider-movement", "0px");
+}
+
+/***** declare --slider-movement CSS property to html element *****/
 
 /* toggle between monthly/yearly */
 
@@ -88,7 +102,7 @@ function sliderMovementClickFeatureBarElement(eventInput) {
   /* we dont need to add or substract we want .sliderIconWrapper to move to the layerX based on where the user click at bar or bar-wrapper */
   if (eventInput.target == barTealElement) {
     document.documentElement.attributes["style"].value =
-      "--slider-movement:" + " " + String(eventInput.layerX) + "px";
+      "--desktop-slider-movement:" + " " + String(eventInput.layerX) + "px";
   } else if (eventInput.target == barWrapperElement) {
     let barWrapperLayerX = eventInput.layerX;
     //when we click on .barWrapper neat the edge our .sliderIconWrapper right side is too far off barWrapper edge
@@ -100,11 +114,16 @@ function sliderMovementClickFeatureBarElement(eventInput) {
       //if user clicked on barWrapper and layerX is between 435 and 472 we will set --slider-movement to be 434 by setting barWrapperLayerX to be 434
       barWrapperLayerX = 434;
       document.documentElement.attributes["style"].value =
-        "--slider-movement:" + " " + String(barWrapperLayerX) + "px";
+        "--desktop-slider-movement:" +
+        " " +
+        String(barWrapperLayerX) +
+        "px" +
+        ";" +
+        "--mobile-slider-movement: ";
     } else {
       //set --slider-movement will be set to event.target.layerX
       document.documentElement.attributes["style"].value =
-        "--slider-movement:" + " " + String(barWrapperLayerX) + "px";
+        "--desktop-slider-movement:" + " " + String(barWrapperLayerX) + "px";
     }
   }
 }
@@ -142,8 +161,8 @@ Page Up (Optional): Increment the slider by an amount larger than the step chang
 Page Down (Optional): Decrement the slider by an amount larger than the step change made by Down Arrow.
 
 */
-alert("fun begins add keyboard fuctionality");
-keyboardFeatureSliderMovement();
+// alert("fun begins add keyboard fuctionality");
+// keyboardFeatureSliderMovement();
 function keyboardFeatureSliderMovement() {
   var { pricingContainer } = ourSelectors();
   //document.activeElement will let us know which element has focus but we have to run/call/execute this func
@@ -232,11 +251,6 @@ function clickingFeatureMobileAndDesktop() {
 testingIdeas();
 function testingIdeas() {
   var { sliderIconWrapper } = ourSelectors();
-  document.documentElement.style.setProperty(
-    "--slider-movement",
-    "0px"
-    // String(totalAmtPercentage) + "%"
-  );
   var sliderContainer = document.querySelector(".slider");
   // use mousedown them mousemove then mouseup
   /***** currently when we move our mouse to the right, we will add one to movementCounter *****/
@@ -310,10 +324,11 @@ function testingIdeas() {
 
   /***** we also want to removeEventListener "mousemove" when our cursor leaves/is not hovering over .sliderIconWrapper *****/
 
-  sliderContainer.addEventListener(
+  sliderContainer.removeEventListener(
     // alert("this was a test func. our algorithm is below this .addeventlistener")
-    "mouseup",
+    "keydown",
     function watchMovingSlider(event) {
+      console.log(event);
       // if (event.target == sliderIconWrapper) {
       //   removeMouseMovementAlgorFunc();
       // }
@@ -408,28 +423,61 @@ function testingIdeas() {
    * and it will move our .sliderIconWrapper
    * *****/
   function watchMouseMovement(event) {
+    console.log(event);
     /***** every time our user move the mouse to the right it will add 1 to movementCounter
      * every time our user move the mouse to the left it will substract -1 from movementCounter
      *  when our user left clicks on .sliderIconWrapper and hold down left click then move the mouse to the right
      * once monvementCounter gets to 434: the right side of the .sliderIconWrapper will touch the right edge of .slider
      * *****/
-    alert(
-      "do we want to remove mousemove event listener when .sliderIconWrapper touches .slider righ edge or just stop updating --slider-movement"
-    );
-    alert("and stop increment movementCounter");
+    // alert(
+    //   "do we want to remove mousemove event listener when .sliderIconWrapper touches .slider righ edge or just stop updating --slider-movement"
+    // );
+    // alert("and stop increment movementCounter");
+    //addThisToMovementCounter will be -1 or 1: -1 means mouse is moving left and 1 means mouse moving right
+    /***** we will work with layerX instead of movementX so we can implement moving .sliderIconWrapper clicking on .bar or .barWrapper
+     * keyboard functionality
+     *  *****/
     var addThisToMovementCounter = event.movementX;
     //movementCounter is declared at the top of testingIdeas func
-    movementCounter += addThisToMovementCounter;
+    // movementCounter += addThisToMovementCounter;
 
     /***** every func is inside the testingIdeas func scope
      * movementCounter is a variable with an initial value 0
      * we are updating it every time user move mouse to the right or the left
      * *****/
+    // console.log(addThisToMovementCounter);
+    // console.log(movementCounter);
+    /***** if movementCounter is 0 and movementX is -1 which means user moved the mouse to the left do nothing.
+     * if movementCounter is 434 and movementX is 1 which means user moved the mouse to the right.
+     * we want "--slider-movement" to match movementX when it is between 0 and 434
+     * *****/
+    //using a switch might not be the best because addThisToMovementCounter will either be -1 or 1
+    // switch (addThisToMovementCounter) {
+    //   case -1:
+    //     //we should update movementX based on -1 moving left
+    //     break;
+    //   case 1:
+    //     //we should update movementX based on 1 moving right
+    //     break;
+    // }
     console.log(movementCounter);
+    //if user is moving mouse to the left addThisToMovementCounter will -1 && movementCounter is 0, keep movementCounter 0
+    if (addThisToMovementCounter === -1 && movementCounter === 0) {
+      movementCounter = 0;
+      //if user is moving mouse to the right addThisToMovementCounter will 1 && movementCounter is 434, keep movementCounter 434
+    } else if (addThisToMovementCounter === 1 && movementCounter == 434) {
+      movementCounter = 434;
+    } else {
+      // if we get into this else statement it means we are in between 1-433
+      movementCounter += addThisToMovementCounter;
+    }
+
     document.documentElement.attributes["style"].value =
-      "--slider-movement: " + String(movementCounter) + "px";
-    var { sliderIconWrapper } = ourSelectors();
-    var sliderContainer = document.querySelector(".slider");
+      "--desktop-slider-movement: " + String(movementCounter) + "px";
+    // document.documentElement.attributes["style"].value =
+    //   "--slider-movement: " + String(movementCounter) + "px";
+    // var { sliderIconWrapper } = ourSelectors();
+    // var sliderContainer = document.querySelector(".slider");
     // console.log(event);
     // console.log(movementCounter);
     // when we have code below inside of watchMouseMovement it
@@ -476,3 +524,87 @@ function testingIdeas() {
 //     }
 //   }
 // );
+
+function algorithmDidnotWorkTheWayWeWant() {
+  /***** reason code below didnt work is because we are updating movementX before we passed that variable into movingLeft and movingRight func
+   * when movementCounter is 0,
+   * var addThisToMovementCounter = event.movementX;
+   * movementCounter += addThisToMovementCounter;
+   * we had code above. so when user move mouse to the left event.movementX will be -1 which we assigned to addThisToMovementCounter
+   * then we += -1 to movementCounter which will make movementCounter -1. when we passed movementCounter into mouseMovingLeft as moveCounter it was already assigned -1
+   * so it will run the else statement
+   *  *****/
+
+  function mouseMovingLeft(moveCounter, movementX) {
+    /***** if moveCounter is 0 and movementX is -1 which means user moved the mouse to the left do nothing.
+     * we want "--slider-movement" to match movementX when it is between 0 and 434
+     * *****/
+    //we are still updating moveCounter which is movementCounter in watchMouseMovement
+    debugger;
+    if (moveCounter === 0) {
+      let keepZeroWhenNegOne = 0;
+      document.documentElement.attributes["style"].value =
+        "--slider-movement: " + String(keepZeroWhenNegOne) + "px";
+    } else {
+      moveCounter += movementX;
+
+      document.documentElement.attributes["style"].value =
+        "--slider-movement: " + String(moveCounter) + "px";
+    }
+  }
+
+  /***** reason code below didnt work is because we are updating movementX before we passed that variable into movingLeft and movingRight func
+   * when movementCounter is 434,
+   * var addThisToMovementCounter = event.movementX;
+   * movementCounter += addThisToMovementCounter;
+   * we had code above. so when user move mouse to the right event.movementX will be 1 which we assigned to addThisToMovementCounter
+   * then we += 1 to movementCounter which will make 434 + 1. when we passed movementCounter into mouseMovingLeft as moveCounter it was already assigned 435
+   * so it will run the else statement
+   *  *****/
+
+  function mouseMovingRight(moveCounter, movementX) {
+    /***** if moveCounter is 434 and movementX is 1 which means user moved the mouse to the right.
+     * we want "--slider-movement" to match movementX when it is between 0 and 434
+     * *****/
+    //we are still updating moveCounter which is movementCounter in watchMouseMovement
+    if (moveCounter === 434) {
+      let doNotMoveRightWhenAtEdge = 434;
+      document.documentElement.attributes["style"].value =
+        "--slider-movement: " + String(doNotMoveRightWhenAtEdge) + "px";
+    } else {
+      moveCounter += movementX;
+      document.documentElement.attributes["style"].value =
+        "--slider-movement: " + String(moveCounter) + "px";
+    }
+  }
+}
+
+function notes() {
+  alert(
+    "keyboard, click and mousemove should use the same movementCounter variable"
+  );
+  alert("use layerX for both click and mousemove");
+  alert(
+    "get % of where .sliderIconWrapper is based on layerX. depend on desktop or mobile divide it by 434(desktop). 256(mobile)"
+  );
+  alert(
+    "if we want .sliderIconWrapper to be in similar spot in both desktop and mobile we have to use resize listener on window obj"
+  );
+  alert(
+    "get % layerX / 434 or $ layerX / 256 mobile then use that % multiply it by 434 for desktop or 256 for mobile"
+  );
+  alert("translateX(calc((.73 * 434) * 1px))");
+  alert(
+    "have a separate func that will run at mobile or desktop size. in our css our .sliderIconWrapper --slider-movement will be based on the screen size"
+  );
+  alert(
+    "how can we get layerX of .bar or .barWrapper using keyboard: transform: translateX(100px) is similar to layerX: 100"
+  );
+  alert(
+    "make two css properties. using media query to apply the correct variable to .sliderIconWrapper"
+  );
+  alert(
+    "find a way to save the either --desktop slider and --mobile-slider position"
+  );
+  alert("find a way to ");
+}
