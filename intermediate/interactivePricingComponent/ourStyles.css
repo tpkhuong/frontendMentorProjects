@@ -408,7 +408,7 @@ body {
   height: 40px;
   width: 40px;
   border-radius: 50%;
-  transform: translateX(var(--slider-movement, 0px));
+  transform: translateX(var(--mobile-slider-movement, 0px));
   background-color: var(--color-pri-strong-cyan);
   background-image: url("./images/icon-slider.svg");
   background-repeat: no-repeat;
@@ -463,6 +463,9 @@ there won't be a empty space above the .slider-icon-wrapper with these codes
   .slider {
     grid-area: slider;
     padding-inline: 0px;
+  }
+  .slider-icon-wrapper {
+    transform: translateX(var(--desktop-slider-movement, 0px));
   }
 }
 
