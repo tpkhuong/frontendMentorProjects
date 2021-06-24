@@ -27,7 +27,8 @@ function ourSelectors() {
 }
 
 /***** call/invoke our functions *****/
-clickEventAddToPricingContainer();
+mouseClickAndMouseMovementAlgor();
+clickEventAddToToggleContainer();
 setCssPropertyToDocument();
 /***** call/invoke our functions *****/
 
@@ -44,24 +45,118 @@ function setCssPropertyToDocument() {
 
 /***** declare --slider-movement CSS property to html element *****/
 
-/* toggle between monthly/yearly */
+function mouseClickAndMouseMovementAlgor() {
+  var { barWrapperElement } = ourSelectors();
+  //layerXofClickedEle will be layerX of bar or barWrapper
+  var layerXofClickedEle;
+  console.log("layerXofClickedEle", layerXofClickedEle);
 
-function clickEventAddToPricingContainer() {
-  var { pricingContainer } = ourSelectors();
-
-  pricingContainer.addEventListener("click", fireFuncBasedOnElementClicked);
+  barWrapperElement.addEventListener(
+    "click",
+    function sliderMovementClickFeatureBarElement(event) {
+      var { barTealElement, barWrapperElement } = ourSelectors();
+      console.log("sliderMovement", event.layerX);
+      //work with layerX
+      //check if event.target is .bar or .bar-wrapper
+      /* we dont need to add or substract we want .sliderIconWrapper to move to the layerX based on where the user click at bar or bar-wrapper */
+      if (event.target == barTealElement) {
+        //if user clicked on bar and layerX is between 0 and 40 we will set --slider-movement to be 0 by setting barlayerX to be 0
+        let barLayerX = event.layerX;
+        if (barLayerX >= 0 && barLayerX <= 40) {
+          barLayerX = 0;
+          document.documentElement.attributes["style"].value =
+            "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
+        } else {
+          document.documentElement.attributes["style"].value =
+            "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
+        }
+      } else if (event.target == barWrapperElement) {
+        let barWrapperLayerX = event.layerX;
+        //when we click on .barWrapper neat the edge our .sliderIconWrapper right side is too far off barWrapper edge
+        //when we use transform: translateX(434px) on .sliderIconWrapper. the right edge of .sliderIconWrapper touches the right edge of .barWrapper
+        //instead of subtracting layerX if the user click on barWrapper and layerX is 470: we will work with a range and if layerX
+        //is within that range we will set layerX to be 434
+        //range we will work with will be 435-472
+        if (barWrapperLayerX >= 435 && barWrapperLayerX <= 472) {
+          //if user clicked on barWrapper and layerX is between 435 and 472 we will set --slider-movement to be 434 by setting barWrapperLayerX to be 434
+          barWrapperLayerX = 434;
+          document.documentElement.attributes["style"].value =
+            "--desktop-slider-movement:" +
+            " " +
+            String(barWrapperLayerX) +
+            "px";
+        } else {
+          //set --slider-movement will be set to event.target.layerX
+          document.documentElement.attributes["style"].value =
+            "--desktop-slider-movement:" +
+            " " +
+            String(barWrapperLayerX) +
+            "px";
+        }
+      }
+      layerXofClickedEle = event.layerX;
+      console.log("layerXofClickedEle", layerXofClickedEle);
+      /***** calling mousemove func *****/
+      // alert("we are passing in the correct layerX that we want to use in mousemove func");
+      if (layerXofClickedEle >= 0 && layerXofClickedEle <= 40) {
+        testingIdeas(0);
+      } else if (layerXofClickedEle >= 435 && layerXofClickedEle <= 472) {
+        testingIdeas(434);
+      } else {
+        testingIdeas(layerXofClickedEle);
+      }
+      /***** calling mousemove func *****/
+    }
+  );
+  if (!layerXofClickedEle) {
+    testingIdeas(0);
+  }
 }
 
-function fireFuncBasedOnElementClicked(event) {
-  /***** for our toggle button between monthly and yearly billing *****/
-  toggleAriaCheckedSwitchBetweenTrueAndFalse(event);
-  /***** move .sliderIconWrapper to spot in bar based on if user click on .bar or .bar-wrapper *****/
-  sliderMovementClickFeatureBarElement(event);
-}
-
-function toggleAriaCheckedSwitchBetweenTrueAndFalse(eventInput) {
+function clickEventAddToToggleContainer() {
   var { toggleBtn } = ourSelectors();
-  if (eventInput.target == toggleBtn) {
+
+  toggleBtn.addEventListener(
+    "click",
+    toggleAriaCheckedSwitchBetweenTrueAndFalse
+  );
+}
+
+// function fireFuncBasedOnElementClicked(event) {
+//   var useThisPositionInMousemose;
+//   /***** for our toggle button between monthly and yearly billing *****/
+//   toggleAriaCheckedSwitchBetweenTrueAndFalse(event);
+
+//   /***** move .sliderIconWrapper to spot in bar based on if user click on .bar or .bar-wrapper *****/
+//   var layerXfromSliderBarClickEvent =
+//     sliderMovementClickFeatureBarElement(event);
+//   //if user click on .sliderIconWrapper or .bar or .barWrapper
+//   //if layerX is between 0 and 40 make useThisPositionInMousemose to be 0
+//   //if layerX is between 435 and 472 make useThisPositionInMousemose to be 434
+//   /***** we will run mousemove algorithm based on user clicking on .sliderIcon or .bar or .barWrapper *****/
+//   if (
+//     layerXfromSliderBarClickEvent >= 0 &&
+//     layerXfromSliderBarClickEvent <= 40
+//   ) {
+//     useThisPositionInMousemose = 0;
+//   } else if (
+//     layerXfromSliderBarClickEvent >= 435 &&
+//     layerXfromSliderBarClickEvent <= 472
+//   ) {
+//     useThisPositionInMousemose = 432;
+//   } else {
+//     useThisPositionInMousemose = layerXfromSliderBarClickEvent;
+//   }
+//   testingIdeas(useThisPositionInMousemose);
+// }
+
+/* toggle between monthly/yearly: both works */
+
+/***** we can use keyword this since we are adding event listener to toggleBtn *****/
+function toggleAriaCheckedSwitchBetweenTrueAndFalse(eventInput) {
+  // var { toggleBtn } = ourSelectors();
+  console.log(this);
+  if (eventInput.target == this) {
     //clicking toggle button
     let toggleAriaCheckedAttr =
       eventInput.target.attributes["aria-checked"].value;
@@ -72,37 +167,78 @@ function toggleAriaCheckedSwitchBetweenTrueAndFalse(eventInput) {
     changeTextOfBillingMonthOrYear(toggleAriaCheckedAttr);
     if (toggleAriaCheckedAttr == "false") {
       // if aria-checked is false turn to true
-      toggleBtn.attributes["aria-checked"].value = "true";
+      this.attributes["aria-checked"].value = "true";
     } else {
-      toggleBtn.attributes["aria-checked"].value = "false";
+      this.attributes["aria-checked"].value = "false";
     }
-  } else if (eventInput.target.parentElement == toggleBtn) {
+  } else if (eventInput.target.parentElement == this) {
     // clicking the span/circle element
     let parentElementAriaCheckedAttr =
       eventInput.target.parentElement.attributes["aria-checked"].value;
     /***** changing the text between month and year *****/
     changeTextOfBillingMonthOrYear(parentElementAriaCheckedAttr);
     if (parentElementAriaCheckedAttr == "false") {
-      toggleBtn.attributes["aria-checked"].value = "true";
+      this.attributes["aria-checked"].value = "true";
     } else {
-      toggleBtn.attributes["aria-checked"].value = "false";
+      this.attributes["aria-checked"].value = "false";
     }
   }
 }
 
+// function toggleAriaCheckedSwitchBetweenTrueAndFalse(eventInput) {
+//   var { toggleBtn } = ourSelectors();
+//   if (eventInput.target == toggleBtn) {
+//     //clicking toggle button
+//     let toggleAriaCheckedAttr =
+//       eventInput.target.attributes["aria-checked"].value;
+//     //single ! means explicitly coerce to boolean. checking if its false
+//     //we shouldn't check if its true or false (a boolean) because the value of ["aria-checked"].value will be a string true or false
+//     //we want to check if the value is a string "true" or "false"
+//     /***** changing the text between month and year *****/
+//     changeTextOfBillingMonthOrYear(toggleAriaCheckedAttr);
+//     if (toggleAriaCheckedAttr == "false") {
+//       // if aria-checked is false turn to true
+//       toggleBtn.attributes["aria-checked"].value = "true";
+//     } else {
+//       toggleBtn.attributes["aria-checked"].value = "false";
+//     }
+//   } else if (eventInput.target.parentElement == toggleBtn) {
+//     // clicking the span/circle element
+//     let parentElementAriaCheckedAttr =
+//       eventInput.target.parentElement.attributes["aria-checked"].value;
+//     /***** changing the text between month and year *****/
+//     changeTextOfBillingMonthOrYear(parentElementAriaCheckedAttr);
+//     if (parentElementAriaCheckedAttr == "false") {
+//       toggleBtn.attributes["aria-checked"].value = "true";
+//     } else {
+//       toggleBtn.attributes["aria-checked"].value = "false";
+//     }
+//   }
+// }
+
 /* toggle between monthly/yearly */
+
+// function
 
 /* slider feature: move .sliderIconWrapper when user clicked on .bar or .bar-wrapper */
 function sliderMovementClickFeatureBarElement(eventInput) {
   // alert("worked!");
   var { barTealElement, barWrapperElement } = ourSelectors();
-  console.log(eventInput.layerX);
+  console.log("sliderMovement", eventInput.layerX);
   //work with layerX
   //check if event.target is .bar or .bar-wrapper
   /* we dont need to add or substract we want .sliderIconWrapper to move to the layerX based on where the user click at bar or bar-wrapper */
   if (eventInput.target == barTealElement) {
-    document.documentElement.attributes["style"].value =
-      "--desktop-slider-movement:" + " " + String(eventInput.layerX) + "px";
+    //if user clicked on bar and layerX is between 0 and 40 we will set --slider-movement to be 0 by setting barlayerX to be 0
+    let barLayerX = eventInput.layerX;
+    if (barLayerX >= 0 && barLayerX <= 40) {
+      barLayerX = 0;
+      document.documentElement.attributes["style"].value =
+        "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
+    } else {
+      document.documentElement.attributes["style"].value =
+        "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
+    }
   } else if (eventInput.target == barWrapperElement) {
     let barWrapperLayerX = eventInput.layerX;
     //when we click on .barWrapper neat the edge our .sliderIconWrapper right side is too far off barWrapper edge
@@ -114,18 +250,14 @@ function sliderMovementClickFeatureBarElement(eventInput) {
       //if user clicked on barWrapper and layerX is between 435 and 472 we will set --slider-movement to be 434 by setting barWrapperLayerX to be 434
       barWrapperLayerX = 434;
       document.documentElement.attributes["style"].value =
-        "--desktop-slider-movement:" +
-        " " +
-        String(barWrapperLayerX) +
-        "px" +
-        ";" +
-        "--mobile-slider-movement: ";
+        "--desktop-slider-movement:" + " " + String(barWrapperLayerX) + "px";
     } else {
       //set --slider-movement will be set to event.target.layerX
       document.documentElement.attributes["style"].value =
         "--desktop-slider-movement:" + " " + String(barWrapperLayerX) + "px";
     }
   }
+  return eventInput.layerX;
 }
 
 /* slider feature: move .sliderIconWrapper when user clicked on .bar or .bar-wrapper */
@@ -248,13 +380,13 @@ function clickingFeatureMobileAndDesktop() {
   // alert("look at mouseMoveAlgorithm");
 }
 
-testingIdeas();
-function testingIdeas() {
+function testingIdeas(layerXOfMouseClick) {
   var { sliderIconWrapper } = ourSelectors();
   var sliderContainer = document.querySelector(".slider");
+  // console.log(layerXOfMouseClick);
   // use mousedown them mousemove then mouseup
   /***** currently when we move our mouse to the right, we will add one to movementCounter *****/
-  var movementCounter = 0;
+  var movementCounter = layerXOfMouseClick;
   /***** we want a variable to keep track of the previous pageX position/number.
    * we want a way to know when our user is moving the mouse left or right
    *  *****/
@@ -271,6 +403,7 @@ function testingIdeas() {
   sliderIconWrapper.addEventListener(
     "mousedown",
     function checkElementClicked(event) {
+      console.log(layerXOfMouseClick);
       if (event.target == this) {
         console.log(event);
         // console.log(this);
@@ -409,6 +542,7 @@ function testingIdeas() {
     //we add this eventlistener in our .sliderIconWrapper.addeventlistener("click")
     //when the event.target == sliderIconWrapper, when used the event.target == this
     //the keyword this will be the element we attached .addEventListener which will be .sliderIconWrapper
+
     elementPassIn.addEventListener("mousemove", watchMouseMovement);
   }
   // alert(
@@ -423,7 +557,7 @@ function testingIdeas() {
    * and it will move our .sliderIconWrapper
    * *****/
   function watchMouseMovement(event) {
-    console.log(event);
+    // console.log(event);
     /***** every time our user move the mouse to the right it will add 1 to movementCounter
      * every time our user move the mouse to the left it will substract -1 from movementCounter
      *  when our user left clicks on .sliderIconWrapper and hold down left click then move the mouse to the right
@@ -437,9 +571,11 @@ function testingIdeas() {
     /***** we will work with layerX instead of movementX so we can implement moving .sliderIconWrapper clicking on .bar or .barWrapper
      * keyboard functionality
      *  *****/
-    var addThisToMovementCounter = event.movementX;
+    /* alert("code in this block we were working with movementX and adding that number to movementCounter")*/
+
+    // var addThisToMovementCounter = event.movementX;
+    /***** now movementX is move left or right more than 1 or -1 *****/
     //movementCounter is declared at the top of testingIdeas func
-    // movementCounter += addThisToMovementCounter;
 
     /***** every func is inside the testingIdeas func scope
      * movementCounter is a variable with an initial value 0
@@ -460,18 +596,22 @@ function testingIdeas() {
     //     //we should update movementX based on 1 moving right
     //     break;
     // }
-    console.log(movementCounter);
-    //if user is moving mouse to the left addThisToMovementCounter will -1 && movementCounter is 0, keep movementCounter 0
-    if (addThisToMovementCounter === -1 && movementCounter === 0) {
+    // //if user is moving mouse to the left addThisToMovementCounter will -1 && movementCounter is 0, keep movementCounter 0
+    alert("make this better");
+    if (event.movementX < 0 && movementCounter <= 0) {
       movementCounter = 0;
       //if user is moving mouse to the right addThisToMovementCounter will 1 && movementCounter is 434, keep movementCounter 434
-    } else if (addThisToMovementCounter === 1 && movementCounter == 434) {
+    } else if (event.movementX > 0 && movementCounter >= 434) {
       movementCounter = 434;
     } else {
-      // if we get into this else statement it means we are in between 1-433
-      movementCounter += addThisToMovementCounter;
+      if (event.movementX < 0) {
+        movementCounter += -1;
+      } else {
+        movementCounter += 1;
+      }
     }
-
+    /* alert("code in this block we were working with movementX and adding that number to movementCounter")*/
+    console.log("movementCounter", movementCounter);
     document.documentElement.attributes["style"].value =
       "--desktop-slider-movement: " + String(movementCounter) + "px";
     // document.documentElement.attributes["style"].value =
@@ -576,6 +716,9 @@ function algorithmDidnotWorkTheWayWeWant() {
       document.documentElement.attributes["style"].value =
         "--slider-movement: " + String(moveCounter) + "px";
     }
+  }
+  function testingIdeas(layerXOfMouseClick) {
+    console.log("layerXOfMouseClick", layerXOfMouseClick);
   }
 }
 
