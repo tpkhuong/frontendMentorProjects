@@ -45,12 +45,18 @@ function setCssPropertyToDocument() {
 
 /***** declare --slider-movement CSS property to html element *****/
 
+var positionOfClickedEvent;
+
 function mouseClickAndMouseMovementAlgor() {
   var { barWrapperElement } = ourSelectors();
   //layerXofClickedEle will be layerX of bar or barWrapper
   var layerXofClickedEle;
   console.log("layerXofClickedEle", layerXofClickedEle);
 
+  /***** when user click on .bar or .barWrapper we will get the layerX assign it to layerXofClickedEle variable
+   * if user clicked between 0 and 40 layerX will be 0. if user clicked between 435 and 472 layerX will be 434.
+   * we will use layerXofClickedELe in our mouseMovement func
+   * *****/
   barWrapperElement.addEventListener(
     "click",
     function sliderMovementClickFeatureBarElement(event) {
@@ -95,22 +101,55 @@ function mouseClickAndMouseMovementAlgor() {
         }
       }
       layerXofClickedEle = event.layerX;
-      console.log("layerXofClickedEle", layerXofClickedEle);
-      /***** calling mousemove func *****/
+      // console.log("layerXofClickedEle", layerXofClickedEle);
+      /***** calling mousemove func: when we have testingIdeas inside this event we're adding mousemove and mouseup event to .sliderIconWrapper *****/
       // alert("we are passing in the correct layerX that we want to use in mousemove func");
+      // alert("testingIdeas is fire four times")
       if (layerXofClickedEle >= 0 && layerXofClickedEle <= 40) {
-        testingIdeas(0);
+        layerXofClickedEle = 0;
       } else if (layerXofClickedEle >= 435 && layerXofClickedEle <= 472) {
-        testingIdeas(434);
+        layerXofClickedEle = 434;
       } else {
-        testingIdeas(layerXofClickedEle);
+        layerXofClickedEle = event.layerX;
       }
-      /***** calling mousemove func *****/
+      console.log("layerXofClickedEle", layerXofClickedEle);
+      /***** calling mousemove func: when we have testingIdeas inside this event we're adding mousemove and mouseup event to .sliderIconWrapper *****/
+      // testingIdeas(layerXofClickedEle);
+      /***** getLayerXpositionOfbarEle func will return the value assigned to layerXofClickedEle. every time our user click on .bar or .barWrapper
+       * we dont run it in this click event. we are passing the refer of getLayerXpositionOfBarEle to positionOfClickedEvent then in our mouseMoveAlgorithm or the func we have the mouseMoveAlgorithm
+       * event listener we will call positionOfClickedEvent to get that value.
+       *  *****/
+      // function getLayerXpositionOfBarEle() {
+      //   return layerXofClickedEle;
+      // }
+      //positionOfClickedEvent is declared outside of this click event func
+      // positionOfClickedEvent = getLayerXpositionOfBarEle;
     }
   );
-  if (!layerXofClickedEle) {
-    testingIdeas(0);
-  }
+
+  /***** mouseMovementAlgorithm *****/
+  alert("refactor or make mouseMovementAlgor cleaner");
+  // function mo
+
+  /***** mouseMovementAlgorithm *****/
+
+  /***** we dont have to make a function inside click event of barElement and pass a reference to that func to a variable outside the func scope of click event
+   * if we declare our mousemoveAlgorithm inside the same func scope as the click event
+   * alert("look at algorithmDidnotWorkTheWayWeWant");
+   function testingPositionOfClickedEle() {
+     var { sliderIconWrapper } = ourSelectors();
+     // if (positionOfClickedEvent instanceof Function) {
+     //   console.log(positionOfClickedEvent);
+     // }
+     sliderIconWrapper.addEventListener("mousedown", function (event) {
+       console.log(event);
+       console.log("layerXofClickedEle", layerXofClickedEle);
+       // if (positionOfClickedEvent instanceof Function) {
+       //   console.log(positionOfClickedEvent());
+       // }
+     });
+   }
+   * *****/
 }
 
 function clickEventAddToToggleContainer() {
@@ -380,10 +419,14 @@ function clickingFeatureMobileAndDesktop() {
   // alert("look at mouseMoveAlgorithm");
 }
 
-function testingIdeas(layerXOfMouseClick) {
+function testing_Ideas(layerXOfMouseClick = 0) {
   var { sliderIconWrapper } = ourSelectors();
   var sliderContainer = document.querySelector(".slider");
+
   // console.log(layerXOfMouseClick);
+  // alert(
+  //   "we will find a way to pass in layerCofMouseClickOnBarElement to this func"
+  // );
   // use mousedown them mousemove then mouseup
   /***** currently when we move our mouse to the right, we will add one to movementCounter *****/
   var movementCounter = layerXOfMouseClick;
@@ -430,6 +473,7 @@ function testingIdeas(layerXOfMouseClick) {
     //we want to remove the event when the target is .sliderIconWrapper
     if (event.target == this) {
       // watchMoveMovement is being added/called in mouseMoveAlgorithm
+
       this.removeEventListener("mousemove", watchMouseMovement);
     }
   }
@@ -450,7 +494,6 @@ function testingIdeas(layerXOfMouseClick) {
   function removeMouseMoveEventWhenOutsideOfIconWrapper(event) {
     if (event.target != sliderIconWrapper) {
       // watchMoveMovement is being added/called in mouseMoveAlgorithm
-
       sliderIconWrapper.removeEventListener("mousemove", watchMouseMovement);
     }
   }
@@ -597,7 +640,8 @@ function testingIdeas(layerXOfMouseClick) {
     //     break;
     // }
     // //if user is moving mouse to the left addThisToMovementCounter will -1 && movementCounter is 0, keep movementCounter 0
-    alert("make this better");
+    var ourVariable = positionOfClickedEvent();
+    console.log("ourVariable", ourVariable);
     if (event.movementX < 0 && movementCounter <= 0) {
       movementCounter = 0;
       //if user is moving mouse to the right addThisToMovementCounter will 1 && movementCounter is 434, keep movementCounter 434
@@ -719,6 +763,25 @@ function algorithmDidnotWorkTheWayWeWant() {
   }
   function testingIdeas(layerXOfMouseClick) {
     console.log("layerXOfMouseClick", layerXOfMouseClick);
+  }
+
+  // testingPositionOfClickedEle();
+
+  /***** if we didnt declare mouseMovement func in the same func scope as .barWrapper event listener. we would have to declare a function the func will return the value assigned to
+   * layerXpositionOfClickedEle, pass a reference to that func
+   * to a variable outside the func scope of the func that house .barWrapper event listener the call that func to get use the value assigned to layerXpositionOfClickedEle
+   *  *****/
+  function testingPositionOfClickedEle() {
+    var { sliderIconWrapper } = ourSelectors();
+    if (positionOfClickedEvent instanceof Function) {
+      console.log(positionOfClickedEvent);
+    }
+    sliderIconWrapper.addEventListener("mousedown", function (event) {
+      console.log(event);
+      if (positionOfClickedEvent instanceof Function) {
+        console.log(positionOfClickedEvent());
+      }
+    });
   }
 }
 
