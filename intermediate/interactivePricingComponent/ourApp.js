@@ -30,6 +30,7 @@ function ourSelectors() {
 mouseClickAndMouseMovementAlgor();
 clickEventAddToToggleContainer();
 setCssPropertyToDocument();
+// callAddAndRemoveMouseMovementAlgorithm();
 /***** call/invoke our functions *****/
 
 /***** declare --slider-movement CSS property to html element *****/
@@ -43,16 +44,17 @@ function setCssPropertyToDocument() {
   document.documentElement.style.setProperty("--mobile-slider-movement", "0px");
 }
 
+// var callAddAndRemoveMouseMovementAlgorithm;
 /***** declare --slider-movement CSS property to html element *****/
 
-var positionOfClickedEvent;
+// var positionOfClickedEvent;
 
 function mouseClickAndMouseMovementAlgor() {
+  // addAndRemoveMouseMovementAlgorithm();
   var { barWrapperElement } = ourSelectors();
   //layerXofClickedEle will be layerX of bar or barWrapper
   var layerXofClickedEle;
   console.log("layerXofClickedEle", layerXofClickedEle);
-
   /***** when user click on .bar or .barWrapper we will get the layerX assign it to layerXofClickedEle variable
    * if user clicked between 0 and 40 layerX will be 0. if user clicked between 435 and 472 layerX will be 434.
    * we will use layerXofClickedELe in our mouseMovement func
@@ -126,10 +128,90 @@ function mouseClickAndMouseMovementAlgor() {
       // positionOfClickedEvent = getLayerXpositionOfBarEle;
     }
   );
-
+  addAndRemoveMouseMovementAlgorithm();
+  // callAddAndRemoveMouseMovementAlgorithm = addAndRemoveMouseMovementAlgorithm;
   /***** mouseMovementAlgorithm *****/
-  alert("refactor or make mouseMovementAlgor cleaner");
-  // function mo
+  // we don't need to pass in layerXOfClickedEle because our mouseMovementAlgor func is declared in the same scope as
+  //the event listener that will assign the layerX to a variable that our mouseMovementAlgor func can use
+  function addAndRemoveMouseMovementAlgorithm() {
+    var { sliderIconWrapper, sliderContainer } = ourSelectors();
+    // first time we run addAndRemoveMouseMovementAlgorithm mouseClickOfLayerX will 0
+    // when we click on bar or barWrapper mouseClickOfLayerX will be the layerX of bar or barWrapper
+    var movementCounter;
+
+    /***** add event *****/
+    // when user click on .sliderIconWrapper we will run mouseMovementAlgorithm
+    sliderIconWrapper.addEventListener(
+      "mousedown",
+      function addMovementEventToSliderIcon(event) {
+        // we need a way to update/reassign movementCounter
+        //every time user click on bar or barWrapper layerXofClickedEle is reassigned
+        //inside addAndRemoveMouseMovementAlgorithm we are using movementCounter so we want to update that variable whenever our user click on sliderIconWrapper
+        if (!layerXofClickedEle) {
+          movementCounter = 0;
+        } else {
+          movementCounter = layerXofClickedEle;
+        }
+        if (event.target == this) {
+          console.log(movementCounter);
+          mouseMovementAlgorithm(this);
+        }
+      }
+    );
+    /***** add event *****/
+    /***** remove event *****/
+    //inside removeEventListenerMousemoveOnMouseUp we will remove moveSliderIconWrapper
+
+    sliderIconWrapper.addEventListener(
+      "mouseup",
+      removeEventListenerMousemoveOnMouseUp
+    );
+    //inside removeMousemoveEventWhenOutsideSliderIconWrapper we will remove moveSliderIconWrapper
+    sliderContainer.addEventListener(
+      "mousemove",
+      removeMousemoveEventWhenOutsideSliderIconWrapper
+    );
+    /***** remove event *****/
+    /***** declare funcs *****/
+    function mouseMovementAlgorithm(sliderIconInput) {
+      sliderIconInput.addEventListener("mousemove", moveSliderIconWrapper);
+    }
+
+    function moveSliderIconWrapper(eventInput) {
+      if (eventInput.movementX < 0 && movementCounter <= 0) {
+        movementCounter = 0;
+      } else if (eventInput.movementX > 0 && movementCounter >= 434) {
+        movementCounter = 434;
+      } else {
+        if (eventInput.movementX < 0) {
+          movementCounter += -1;
+        } else {
+          movementCounter += 1;
+        }
+      }
+
+      document.documentElement.attributes["style"].value =
+        "--desktop-slider-movement: " + String(movementCounter) + "px";
+    }
+
+    // removeEvent Funcs
+    function removeEventListenerMousemoveOnMouseUp(eventInput) {
+      //this remove func will be run/execute by sliderIconWrapper
+      if (eventInput.target == this) {
+        this.removeEventListener("mousemove", moveSliderIconWrapper);
+      }
+    }
+    function removeMousemoveEventWhenOutsideSliderIconWrapper(eventInput) {
+      //this remove func will be run/execute by sliderContainer
+      if (eventInput.target != sliderIconWrapper) {
+        sliderIconWrapper.removeEventListener(
+          "mousemove",
+          moveSliderIconWrapper
+        );
+      }
+    }
+    /***** declare funcs *****/
+  }
 
   /***** mouseMovementAlgorithm *****/
 
@@ -418,6 +500,14 @@ function clickingFeatureMobileAndDesktop() {
   // );
   // alert("look at mouseMoveAlgorithm");
 }
+
+/***** refactored near the top of file. we will declare mouseMovement inside the func that we will add click event to barWrapper
+ * so that we can update a variable that our mouseMovement will also use.
+ * if we declare mouseMovement outside the func scope of the func that we will add click event to barWrapper then we have to declare a func inside that func scope
+ * the func will return the position where our user clicked on bar or barWrapper pass that func reference to a variable outside of the
+ * func that has add click event to barWrapper then that variable will have a reference to the func that will return positionX
+ * then we will call that func inside of mouseMovement func to get positionX that we will use event mousemove
+ * *****/
 
 function testing_Ideas(layerXOfMouseClick = 0) {
   var { sliderIconWrapper } = ourSelectors();
@@ -783,6 +873,73 @@ function algorithmDidnotWorkTheWayWeWant() {
       }
     });
   }
+  function testingIdeasTwo() {
+    var { sliderIconWrapper } = ourSelectors();
+    var moveCounter;
+    sliderIconWrapper.addEventListener(
+      "mousedown",
+      function addEventListener(event) {
+        if (event.target == this) {
+          moveAlgor(this);
+        }
+      }
+    );
+
+    function moveAlgor(sliderIcon) {
+      sliderIcon.addEventListener("mousemove", moveSliderIcon);
+    }
+
+    function moveSliderIcon(eventInput) {
+      if (!layerXofClickedEle) {
+        moveCounter = 0;
+      } else {
+        moveCounter = layerXofClickedEle;
+      }
+
+      console.log(moveCounter);
+    }
+    // console.log("layerXOfMouseClick", layerXOfMouseClick);
+  }
+}
+
+testingMobileOrDesktopIdea();
+function testingMobileOrDesktopIdea() {
+  // var res;
+  // window.onresize = function () {
+  //   if (res) {
+  //     clearTimeout(res);
+  //   }
+  //   res = setTimeout(function () {
+  //     console.log("resize triggered");
+  //   }, 100);
+  // };
+
+  function printStuff() {
+    console.log(window.innerWidth);
+  }
+
+  var resizeTimer = false;
+  window.onresize = function () {
+    if (!resizeTimer) {
+      clearTimeout(resizeTimer);
+    }
+    resizeTimer = setTimeout(printStuff, 0);
+  };
+  // window.addEventListener("resize", (event) => {
+  //   // use setTimeout to have resie fires ones
+  //   console.count();
+  //   if (resizeTimer) {
+  //     resizeTimer = clearTimeout(resizeTimer);
+  //   }
+  //   resizeTimer = setTimeout(function () {
+  //     console.log(window.innerWidth);
+  //   }, 50);
+  //   // if (window.innerWidth < 1400) {
+  //   //   console.log("here");
+  //   // } else {
+  //   //   console.log("there");
+  //   // }
+  // });
 }
 
 function notes() {
