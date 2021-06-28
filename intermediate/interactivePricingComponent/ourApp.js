@@ -126,6 +126,9 @@ function mouseClickAndMouseMovementAlgor() {
       // }
       //positionOfClickedEvent is declared outside of this click event func
       // positionOfClickedEvent = getLayerXpositionOfBarEle;
+      return {
+        layerXofClickedEle,
+      };
     }
   );
   addAndRemoveMouseMovementAlgorithm();
@@ -192,6 +195,10 @@ function mouseClickAndMouseMovementAlgor() {
 
       document.documentElement.attributes["style"].value =
         "--desktop-slider-movement: " + String(movementCounter) + "px";
+      /***** we want to update layerXofClickedEle to be movementCounter because we want to use the new position of layerXofClickedEle
+       * for our keyboard feature
+       *  *****/
+      layerXofClickedEle = movementCounter;
     }
 
     // removeEvent Funcs
@@ -212,7 +219,7 @@ function mouseClickAndMouseMovementAlgor() {
     }
     /***** declare funcs *****/
   }
-
+  keyboardFeatureSliderMovement();
   /***** mouseMovementAlgorithm *****/
 
   /***** we dont have to make a function inside click event of barElement and pass a reference to that func to a variable outside the func scope of click event
@@ -220,7 +227,7 @@ function mouseClickAndMouseMovementAlgor() {
    * alert("look at algorithmDidnotWorkTheWayWeWant");
    function testingPositionOfClickedEle() {
      var { sliderIconWrapper } = ourSelectors();
-     // if (positionOfClickedEvent instanceof Function) {
+     // if (positionOfClickedEvent instanceof Function) {u
      //   console.log(positionOfClickedEvent);
      // }
      sliderIconWrapper.addEventListener("mousedown", function (event) {
@@ -231,7 +238,58 @@ function mouseClickAndMouseMovementAlgor() {
        // }
      });
    }
-   * *****/
+   *****/
+  /***** keyboard feature *****/
+
+  function keyboardFeatureSliderMovement() {
+    var { pricingContainer } = ourSelectors();
+    //document.activeElement will let us know which element has focus but we have to run/call/execute this func
+    var focusElement = document.activeElement;
+    console.log(focusElement);
+    //addeventlistener("focus") does not bubble up or down
+    //we can use "focusin" on pricingContainer and add or remove keypress event to .sliderIconWrapper
+    pricingContainer.addEventListener("focusin", addOrRemoveKeydownSliderIcon);
+  }
+
+  function addOrRemoveKeydownSliderIcon(event) {
+    var { sliderIconWrapper } = ourSelectors();
+
+    //call func based on focus event
+    if (event.target == sliderIconWrapper) {
+      //add if it is sliderIcon
+      addFocusEventToSliderIcon();
+    } else {
+      //remove if it is not sliderIcon
+      removeFocusEventFromSlider();
+    }
+  }
+
+  function addFocusEventToSliderIcon() {
+    var { sliderIconWrapper } = ourSelectors();
+
+    //the func that we passed into .addEventListener, in order to remove the event we need to pass that same func to .removeEventListener
+    sliderIconWrapper.addEventListener("keydown", moveSliderIconOnKeydown);
+  }
+
+  function removeFocusEventFromSlider() {
+    var { sliderIconWrapper } = ourSelectors();
+    sliderIconWrapper.removeEventListener("keydown", moveSliderIconOnKeydown);
+  }
+
+  function moveSliderIconOnKeydown(event) {
+    var keydownMoveCounter;
+    /***** layerXofClickedEle will be the updating position of layerX based on mousemovement  *****/
+    /***** we will declare keydownMoveCounter variable in this func. if layerXofClickedEle is undefined it means currently it holds no value,
+     * the keydownMoveCounter variable we declare will be 0, if layerXofClickedEle is not != undefined we will assign the value of layerXofClickedEle
+     * to keydownMoveCounter then we will either add or substract to keydownMoveCounter based on which arrow key user keydown.
+     * then we will assign the value of keydownMoveCounter to layerXofClickedEle so our mousemovement will work with the correct position of .sliderIconWrapper
+     * *****/
+
+    console.log(layerXofClickedEle);
+    console.log(event);
+  }
+
+  /***** keyboard feature *****/
 }
 
 function clickEventAddToToggleContainer() {
@@ -416,7 +474,7 @@ Page Down (Optional): Decrement the slider by an amount larger than the step cha
 */
 // alert("fun begins add keyboard fuctionality");
 // keyboardFeatureSliderMovement();
-function keyboardFeatureSliderMovement() {
+function keyboardFeatureSliderMovement(variablePassedIn) {
   var { pricingContainer } = ourSelectors();
   //document.activeElement will let us know which element has focus but we have to run/call/execute this func
   var focusElement = document.activeElement;
@@ -902,7 +960,6 @@ function algorithmDidnotWorkTheWayWeWant() {
   }
 }
 
-testingMobileOrDesktopIdea();
 function testingMobileOrDesktopIdea() {
   // var res;
   // window.onresize = function () {
