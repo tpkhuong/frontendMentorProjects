@@ -278,16 +278,67 @@ function mouseClickAndMouseMovementAlgor() {
 
   function moveSliderIconOnKeydown(event) {
     var keydownMoveCounter;
-    /***** layerXofClickedEle will be the updating position of layerX based on mousemovement  *****/
+    /***** layerXofClickedEle will be updating the position of layerX based on mousemovement  *****/
     /***** we will declare keydownMoveCounter variable in this func. if layerXofClickedEle is undefined it means currently it holds no value,
      * the keydownMoveCounter variable we declare will be 0, if layerXofClickedEle is not != undefined we will assign the value of layerXofClickedEle
      * to keydownMoveCounter then we will either add or substract to keydownMoveCounter based on which arrow key user keydown.
      * then we will assign the value of keydownMoveCounter to layerXofClickedEle so our mousemovement will work with the correct position of .sliderIconWrapper
      * *****/
 
-    console.log(layerXofClickedEle);
-    console.log(event);
+    if (layerXofClickedEle == undefined) {
+      keydownMoveCounter = 0;
+    } else {
+      keydownMoveCounter = layerXofClickedEle;
+    }
+    //our switch statement will run depending on which arrow key, home,end, page up or down key is pressed(keydown)
+    //we will update keydownMoveCounter
+    switch (event.key) {
+      case "ArrowLeft":
+        console.log("ArrowLeft");
+        break;
+      case "ArrowDown":
+        console.log("ArrowDown");
+        break;
+      case "ArrowRight":
+        console.log("ArrowRight");
+        break;
+      case "ArrowUp":
+        console.log("ArrowUp");
+        break;
+      case "Home":
+        console.log("Home");
+        break;
+      case "End":
+        console.log("End");
+        break;
+      case "PageUp":
+        console.log("PageUp");
+        break;
+      case "PageDown":
+        console.log("PageDown");
+        break;
+    }
+    //once we update keydownMoveCounter we will assign that value to --desktop-slider-movement
+    document.documentElement.attributes["style"].value =
+      "--desktop-slider-movement: " + String(keydownMoveCounter) + "px";
+    //then we will update layerXofClickedEle by assigning the value of keydownMoveCounter to layerXofClickedEle
+    //this way if our user decide to use the mouse to move the .sliderIconWrapper it will use the current position of X or position of layerX
+    //where the keyboard user last used the keyboard to move .sliderIconWrapper
+    layerXofClickedEle = keydownMoveCounter;
   }
+
+  /*  
+
+Right Arrow: Increase the value of the slider by one step. key = "ArrowRight"
+Up Arrow: Increase the value of the slider by one step. key = "ArrowUp"
+Left Arrow: Decrease the value of the slider by one step. key = "ArrowLeft"
+Down Arrow: Decrease the value of the slider by one step. key = "ArrowDown"
+Home: Set the slider to the first allowed value in its range. key = "Home"
+End: Set the slider to the last allowed value in its range. key = "End"
+Page Up (Optional): Increment the slider by an amount larger than the step change made by Up Arrow. key = "PageUp". move by 4
+Page Down (Optional): Decrement the slider by an amount larger than the step change made by Down Arrow. key = "PageDown" move by 4
+
+*/
 
   /***** keyboard feature *****/
 }
@@ -472,6 +523,7 @@ Page Up (Optional): Increment the slider by an amount larger than the step chang
 Page Down (Optional): Decrement the slider by an amount larger than the step change made by Down Arrow.
 
 */
+
 // alert("fun begins add keyboard fuctionality");
 // keyboardFeatureSliderMovement();
 function keyboardFeatureSliderMovement(variablePassedIn) {
