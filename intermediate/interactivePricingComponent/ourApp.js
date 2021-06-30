@@ -26,12 +26,36 @@ function ourSelectors() {
   };
 }
 
+let callFuncToGetWindowWidth;
 /***** call/invoke our functions *****/
-mouseClickAndMouseMovementAlgor();
+desktopMouseClickAndMouseMovementAlgor();
 clickEventAddToToggleContainer();
 setCssPropertyToDocument();
 // callAddAndRemoveMouseMovementAlgorithm();
 /***** call/invoke our functions *****/
+testingMobileDesktopAlgorithm();
+function testingMobileDesktopAlgorithm() {
+  var windowInnerWidth;
+  window.addEventListener("resize", function getWindowWidth(event) {
+    windowInnerWidth = window.innerWidth;
+    console.log(windowInnerWidth);
+  });
+  function getWindowInnerWidth() {
+    return windowInnerWidth;
+  }
+  callFuncToGetWindowWidth = getWindowInnerWidth;
+}
+
+// getTheWidthOfWindow();
+
+function getTheWidthOfWindow() {
+  document.querySelector("body").addEventListener("click", (event) => {
+    if (callFuncToGetWindowWidth instanceof Function) {
+      var printWindowWidth = callFuncToGetWindowWidth();
+      console.log(printWindowWidth);
+    }
+  });
+}
 
 /***** declare --slider-movement CSS property to html element *****/
 
@@ -48,10 +72,18 @@ function setCssPropertyToDocument() {
 /***** declare --slider-movement CSS property to html element *****/
 
 // var positionOfClickedEvent;
-
-function mouseClickAndMouseMovementAlgor() {
+alert(
+  "we are using another func to get the window width then we declare another func in that func. the func we declare will return the variable that will have the window width assigned to it"
+);
+alert(
+  "we will declare a variable outside of the func that has our variable with the window width assigned to it. the func that has closure of the variable that has window width assigned to it"
+);
+alert(
+  "we will pass the reference of the func that has clousure of the window width variable then we will call that func in our click or mousedown func to get the window width."
+);
+function desktopMouseClickAndMouseMovementAlgor() {
   // addAndRemoveMouseMovementAlgorithm();
-  var { barWrapperElement } = ourSelectors();
+  var { barTealElement, barWrapperElement, sliderIconWrapper } = ourSelectors();
   //layerXofClickedEle will be layerX of bar or barWrapper
   var layerXofClickedEle;
   console.log("layerXofClickedEle", layerXofClickedEle);
@@ -62,8 +94,13 @@ function mouseClickAndMouseMovementAlgor() {
   barWrapperElement.addEventListener(
     "click",
     function sliderMovementClickFeatureBarElement(event) {
-      var { barTealElement, barWrapperElement } = ourSelectors();
+      // var { barTealElement, barWrapperElement } = ourSelectors();
+      if (callFuncToGetWindowWidth instanceof Function) {
+        var printWindowWidth = callFuncToGetWindowWidth();
+        console.log(printWindowWidth);
+      }
       console.log("sliderMovement", event.layerX);
+
       //work with layerX
       //check if event.target is .bar or .bar-wrapper
       /* we dont need to add or substract we want .sliderIconWrapper to move to the layerX based on where the user click at bar or bar-wrapper */
@@ -126,9 +163,9 @@ function mouseClickAndMouseMovementAlgor() {
       // }
       //positionOfClickedEvent is declared outside of this click event func
       // positionOfClickedEvent = getLayerXpositionOfBarEle;
-      return {
-        layerXofClickedEle,
-      };
+      setTimeout(function focusSliderIconWrapper() {
+        sliderIconWrapper.focus();
+      }, 1000);
     }
   );
   addAndRemoveMouseMovementAlgorithm();
@@ -147,6 +184,10 @@ function mouseClickAndMouseMovementAlgor() {
     sliderIconWrapper.addEventListener(
       "mousedown",
       function addMovementEventToSliderIcon(event) {
+        if (callFuncToGetWindowWidth instanceof Function) {
+          var printWindowWidth = callFuncToGetWindowWidth();
+          console.log(printWindowWidth);
+        }
         // we need a way to update/reassign movementCounter
         //every time user click on bar or barWrapper layerXofClickedEle is reassigned
         //inside addAndRemoveMouseMovementAlgorithm we are using movementCounter so we want to update that variable whenever our user click on sliderIconWrapper
@@ -294,30 +335,64 @@ function mouseClickAndMouseMovementAlgor() {
     //we will update keydownMoveCounter
     switch (event.key) {
       case "ArrowLeft":
-        console.log("ArrowLeft");
+        //-1
+        if (keydownMoveCounter === 0) {
+          keydownMoveCounter = 0;
+        } else {
+          keydownMoveCounter -= 1;
+        }
         break;
       case "ArrowDown":
-        console.log("ArrowDown");
+        //-1
+        if (keydownMoveCounter === 0) {
+          keydownMoveCounter = 0;
+        } else {
+          keydownMoveCounter -= 1;
+        }
         break;
       case "ArrowRight":
-        console.log("ArrowRight");
+        //+1
+        if (keydownMoveCounter == 434) {
+          keydownMoveCounter = 434;
+        } else {
+          keydownMoveCounter += 1;
+        }
         break;
       case "ArrowUp":
-        console.log("ArrowUp");
+        //+1
+        if (keydownMoveCounter == 434) {
+          keydownMoveCounter = 434;
+        } else {
+          keydownMoveCounter += 1;
+        }
         break;
       case "Home":
-        console.log("Home");
+        //go to 0
+        keydownMoveCounter = 0;
         break;
       case "End":
-        console.log("End");
+        //go to 434
+        keydownMoveCounter = 434;
+
         break;
       case "PageUp":
-        console.log("PageUp");
+        //+4
+        if (keydownMoveCounter >= 431) {
+          keydownMoveCounter = 434;
+        } else {
+          keydownMoveCounter += 4;
+        }
         break;
       case "PageDown":
-        console.log("PageDown");
+        //-4
+        if (keydownMoveCounter <= 3) {
+          keydownMoveCounter = 0;
+        } else {
+          keydownMoveCounter -= 4;
+        }
         break;
     }
+    console.log(keydownMoveCounter);
     //once we update keydownMoveCounter we will assign that value to --desktop-slider-movement
     document.documentElement.attributes["style"].value =
       "--desktop-slider-movement: " + String(keydownMoveCounter) + "px";
@@ -505,6 +580,340 @@ function changeTextOfBillingMonthOrYear(valueOfAriaChecked) {
     spanTextEleMonthOrYear.innerText = "/ month";
   }
 }
+
+/***** mobile functionality *****/
+
+function scopeThisFunc() {
+  function desktopMouseClickAndMouseMovementAlgor() {
+    // addAndRemoveMouseMovementAlgorithm();
+    var { barWrapperElement, sliderIconWrapper } = ourSelectors();
+    //layerXofClickedEle will be layerX of bar or barWrapper
+    var layerXofClickedEle;
+    console.log("layerXofClickedEle", layerXofClickedEle);
+    /***** when user click on .bar or .barWrapper we will get the layerX assign it to layerXofClickedEle variable
+     * if user clicked between 0 and 40 layerX will be 0. if user clicked between 435 and 472 layerX will be 434.
+     * we will use layerXofClickedELe in our mouseMovement func
+     * *****/
+    barWrapperElement.addEventListener(
+      "click",
+      function sliderMovementClickFeatureBarElement(event) {
+        var { barTealElement, barWrapperElement } = ourSelectors();
+        console.log("sliderMovement", event.layerX);
+        //work with layerX
+        //check if event.target is .bar or .bar-wrapper
+        /* we dont need to add or substract we want .sliderIconWrapper to move to the layerX based on where the user click at bar or bar-wrapper */
+        if (event.target == barTealElement) {
+          //if user clicked on bar and layerX is between 0 and 40 we will set --slider-movement to be 0 by setting barlayerX to be 0
+          let barLayerX = event.layerX;
+          if (barLayerX >= 0 && barLayerX <= 40) {
+            barLayerX = 0;
+            document.documentElement.attributes["style"].value =
+              "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
+          } else {
+            document.documentElement.attributes["style"].value =
+              "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
+          }
+        } else if (event.target == barWrapperElement) {
+          let barWrapperLayerX = event.layerX;
+          //when we click on .barWrapper neat the edge our .sliderIconWrapper right side is too far off barWrapper edge
+          //when we use transform: translateX(434px) on .sliderIconWrapper. the right edge of .sliderIconWrapper touches the right edge of .barWrapper
+          //instead of subtracting layerX if the user click on barWrapper and layerX is 470: we will work with a range and if layerX
+          //is within that range we will set layerX to be 434
+          //range we will work with will be 435-472
+          if (barWrapperLayerX >= 435 && barWrapperLayerX <= 472) {
+            //if user clicked on barWrapper and layerX is between 435 and 472 we will set --slider-movement to be 434 by setting barWrapperLayerX to be 434
+            barWrapperLayerX = 434;
+            document.documentElement.attributes["style"].value =
+              "--desktop-slider-movement:" +
+              " " +
+              String(barWrapperLayerX) +
+              "px";
+          } else {
+            //set --slider-movement will be set to event.target.layerX
+            document.documentElement.attributes["style"].value =
+              "--desktop-slider-movement:" +
+              " " +
+              String(barWrapperLayerX) +
+              "px";
+          }
+        }
+        layerXofClickedEle = event.layerX;
+        // console.log("layerXofClickedEle", layerXofClickedEle);
+        /***** calling mousemove func: when we have testingIdeas inside this event we're adding mousemove and mouseup event to .sliderIconWrapper *****/
+        // alert("we are passing in the correct layerX that we want to use in mousemove func");
+        // alert("testingIdeas is fire four times")
+        if (layerXofClickedEle >= 0 && layerXofClickedEle <= 40) {
+          layerXofClickedEle = 0;
+        } else if (layerXofClickedEle >= 435 && layerXofClickedEle <= 472) {
+          layerXofClickedEle = 434;
+        } else {
+          layerXofClickedEle = event.layerX;
+        }
+        console.log("layerXofClickedEle", layerXofClickedEle);
+        /***** calling mousemove func: when we have testingIdeas inside this event we're adding mousemove and mouseup event to .sliderIconWrapper *****/
+        // testingIdeas(layerXofClickedEle);
+        /***** getLayerXpositionOfbarEle func will return the value assigned to layerXofClickedEle. every time our user click on .bar or .barWrapper
+         * we dont run it in this click event. we are passing the refer of getLayerXpositionOfBarEle to positionOfClickedEvent then in our mouseMoveAlgorithm or the func we have the mouseMoveAlgorithm
+         * event listener we will call positionOfClickedEvent to get that value.
+         *  *****/
+        // function getLayerXpositionOfBarEle() {
+        //   return layerXofClickedEle;
+        // }
+        //positionOfClickedEvent is declared outside of this click event func
+        // positionOfClickedEvent = getLayerXpositionOfBarEle;
+        setTimeout(function focusSliderIconWrapper() {
+          sliderIconWrapper.focus();
+        }, 1000);
+      }
+    );
+    addAndRemoveMouseMovementAlgorithm();
+    // callAddAndRemoveMouseMovementAlgorithm = addAndRemoveMouseMovementAlgorithm;
+    /***** mouseMovementAlgorithm *****/
+    // we don't need to pass in layerXOfClickedEle because our mouseMovementAlgor func is declared in the same scope as
+    //the event listener that will assign the layerX to a variable that our mouseMovementAlgor func can use
+    function addAndRemoveMouseMovementAlgorithm() {
+      var { sliderIconWrapper, sliderContainer } = ourSelectors();
+      // first time we run addAndRemoveMouseMovementAlgorithm mouseClickOfLayerX will 0
+      // when we click on bar or barWrapper mouseClickOfLayerX will be the layerX of bar or barWrapper
+      var movementCounter;
+
+      /***** add event *****/
+      // when user click on .sliderIconWrapper we will run mouseMovementAlgorithm
+      sliderIconWrapper.addEventListener(
+        "mousedown",
+        function addMovementEventToSliderIcon(event) {
+          // we need a way to update/reassign movementCounter
+          //every time user click on bar or barWrapper layerXofClickedEle is reassigned
+          //inside addAndRemoveMouseMovementAlgorithm we are using movementCounter so we want to update that variable whenever our user click on sliderIconWrapper
+          if (!layerXofClickedEle) {
+            movementCounter = 0;
+          } else {
+            movementCounter = layerXofClickedEle;
+          }
+          if (event.target == this) {
+            console.log(movementCounter);
+            mouseMovementAlgorithm(this);
+          }
+        }
+      );
+      /***** add event *****/
+      /***** remove event *****/
+      //inside removeEventListenerMousemoveOnMouseUp we will remove moveSliderIconWrapper
+
+      sliderIconWrapper.addEventListener(
+        "mouseup",
+        removeEventListenerMousemoveOnMouseUp
+      );
+      //inside removeMousemoveEventWhenOutsideSliderIconWrapper we will remove moveSliderIconWrapper
+      sliderContainer.addEventListener(
+        "mousemove",
+        removeMousemoveEventWhenOutsideSliderIconWrapper
+      );
+      /***** remove event *****/
+      /***** declare funcs *****/
+      function mouseMovementAlgorithm(sliderIconInput) {
+        sliderIconInput.addEventListener("mousemove", moveSliderIconWrapper);
+      }
+
+      function moveSliderIconWrapper(eventInput) {
+        if (eventInput.movementX < 0 && movementCounter <= 0) {
+          movementCounter = 0;
+        } else if (eventInput.movementX > 0 && movementCounter >= 434) {
+          movementCounter = 434;
+        } else {
+          if (eventInput.movementX < 0) {
+            movementCounter += -1;
+          } else {
+            movementCounter += 1;
+          }
+        }
+
+        document.documentElement.attributes["style"].value =
+          "--desktop-slider-movement: " + String(movementCounter) + "px";
+        /***** we want to update layerXofClickedEle to be movementCounter because we want to use the new position of layerXofClickedEle
+         * for our keyboard feature
+         *  *****/
+        layerXofClickedEle = movementCounter;
+      }
+
+      // removeEvent Funcs
+      function removeEventListenerMousemoveOnMouseUp(eventInput) {
+        //this remove func will be run/execute by sliderIconWrapper
+        if (eventInput.target == this) {
+          this.removeEventListener("mousemove", moveSliderIconWrapper);
+        }
+      }
+      function removeMousemoveEventWhenOutsideSliderIconWrapper(eventInput) {
+        //this remove func will be run/execute by sliderContainer
+        if (eventInput.target != sliderIconWrapper) {
+          sliderIconWrapper.removeEventListener(
+            "mousemove",
+            moveSliderIconWrapper
+          );
+        }
+      }
+      /***** declare funcs *****/
+    }
+    keyboardFeatureSliderMovement();
+    /***** mouseMovementAlgorithm *****/
+
+    /***** we dont have to make a function inside click event of barElement and pass a reference to that func to a variable outside the func scope of click event
+   * if we declare our mousemoveAlgorithm inside the same func scope as the click event
+   * alert("look at algorithmDidnotWorkTheWayWeWant");
+   function testingPositionOfClickedEle() {
+     var { sliderIconWrapper } = ourSelectors();
+     // if (positionOfClickedEvent instanceof Function) {u
+     //   console.log(positionOfClickedEvent);
+     // }
+     sliderIconWrapper.addEventListener("mousedown", function (event) {
+       console.log(event);
+       console.log("layerXofClickedEle", layerXofClickedEle);
+       // if (positionOfClickedEvent instanceof Function) {
+       //   console.log(positionOfClickedEvent());
+       // }
+     });
+   }
+   *****/
+    /***** keyboard feature: do not need keyboard feature for mobile display *****/
+
+    // function keyboardFeatureSliderMovement() {
+    //   var { pricingContainer } = ourSelectors();
+    //   //document.activeElement will let us know which element has focus but we have to run/call/execute this func
+    //   var focusElement = document.activeElement;
+    //   console.log(focusElement);
+    //   //addeventlistener("focus") does not bubble up or down
+    //   //we can use "focusin" on pricingContainer and add or remove keypress event to .sliderIconWrapper
+    //   pricingContainer.addEventListener("focusin", addOrRemoveKeydownSliderIcon);
+    // }
+
+    // function addOrRemoveKeydownSliderIcon(event) {
+    //   var { sliderIconWrapper } = ourSelectors();
+
+    //   //call func based on focus event
+    //   if (event.target == sliderIconWrapper) {
+    //     //add if it is sliderIcon
+    //     addFocusEventToSliderIcon();
+    //   } else {
+    //     //remove if it is not sliderIcon
+    //     removeFocusEventFromSlider();
+    //   }
+    // }
+
+    // function addFocusEventToSliderIcon() {
+    //   var { sliderIconWrapper } = ourSelectors();
+
+    //   //the func that we passed into .addEventListener, in order to remove the event we need to pass that same func to .removeEventListener
+    //   sliderIconWrapper.addEventListener("keydown", moveSliderIconOnKeydown);
+    // }
+
+    // function removeFocusEventFromSlider() {
+    //   var { sliderIconWrapper } = ourSelectors();
+    //   sliderIconWrapper.removeEventListener("keydown", moveSliderIconOnKeydown);
+    // }
+
+    // function moveSliderIconOnKeydown(event) {
+    //   var keydownMoveCounter;
+    //   /***** layerXofClickedEle will be updating the position of layerX based on mousemovement  *****/
+    //   /***** we will declare keydownMoveCounter variable in this func. if layerXofClickedEle is undefined it means currently it holds no value,
+    //    * the keydownMoveCounter variable we declare will be 0, if layerXofClickedEle is not != undefined we will assign the value of layerXofClickedEle
+    //    * to keydownMoveCounter then we will either add or substract to keydownMoveCounter based on which arrow key user keydown.
+    //    * then we will assign the value of keydownMoveCounter to layerXofClickedEle so our mousemovement will work with the correct position of .sliderIconWrapper
+    //    * *****/
+
+    //   if (layerXofClickedEle == undefined) {
+    //     keydownMoveCounter = 0;
+    //   } else {
+    //     keydownMoveCounter = layerXofClickedEle;
+    //   }
+    //   //our switch statement will run depending on which arrow key, home,end, page up or down key is pressed(keydown)
+    //   //we will update keydownMoveCounter
+    //   switch (event.key) {
+    //     case "ArrowLeft":
+    //       //-1
+    //       if (keydownMoveCounter === 0) {
+    //         keydownMoveCounter = 0;
+    //       } else {
+    //         keydownMoveCounter -= 1;
+    //       }
+    //       break;
+    //     case "ArrowDown":
+    //       //-1
+    //       if (keydownMoveCounter === 0) {
+    //         keydownMoveCounter = 0;
+    //       } else {
+    //         keydownMoveCounter -= 1;
+    //       }
+    //       break;
+    //     case "ArrowRight":
+    //       //+1
+    //       if (keydownMoveCounter == 434) {
+    //         keydownMoveCounter = 434;
+    //       } else {
+    //         keydownMoveCounter += 1;
+    //       }
+    //       break;
+    //     case "ArrowUp":
+    //       //+1
+    //       if (keydownMoveCounter == 434) {
+    //         keydownMoveCounter = 434;
+    //       } else {
+    //         keydownMoveCounter += 1;
+    //       }
+    //       break;
+    //     case "Home":
+    //       //go to 0
+    //       keydownMoveCounter = 0;
+    //       break;
+    //     case "End":
+    //       //go to 434
+    //       keydownMoveCounter = 434;
+
+    //       break;
+    //     case "PageUp":
+    //       //+4
+    //       if (keydownMoveCounter >= 431) {
+    //         keydownMoveCounter = 434;
+    //       } else {
+    //         keydownMoveCounter += 4;
+    //       }
+    //       break;
+    //     case "PageDown":
+    //       //-4
+    //       if (keydownMoveCounter <= 3) {
+    //         keydownMoveCounter = 0;
+    //       } else {
+    //         keydownMoveCounter -= 4;
+    //       }
+    //       break;
+    //   }
+    //   console.log(keydownMoveCounter);
+    //   //once we update keydownMoveCounter we will assign that value to --desktop-slider-movement
+    //   document.documentElement.attributes["style"].value =
+    //     "--desktop-slider-movement: " + String(keydownMoveCounter) + "px";
+    //   //then we will update layerXofClickedEle by assigning the value of keydownMoveCounter to layerXofClickedEle
+    //   //this way if our user decide to use the mouse to move the .sliderIconWrapper it will use the current position of X or position of layerX
+    //   //where the keyboard user last used the keyboard to move .sliderIconWrapper
+    //   layerXofClickedEle = keydownMoveCounter;
+    // }
+
+    /*  
+
+Right Arrow: Increase the value of the slider by one step. key = "ArrowRight"
+Up Arrow: Increase the value of the slider by one step. key = "ArrowUp"
+Left Arrow: Decrease the value of the slider by one step. key = "ArrowLeft"
+Down Arrow: Decrease the value of the slider by one step. key = "ArrowDown"
+Home: Set the slider to the first allowed value in its range. key = "Home"
+End: Set the slider to the last allowed value in its range. key = "End"
+Page Up (Optional): Increment the slider by an amount larger than the step change made by Up Arrow. key = "PageUp". move by 4
+Page Down (Optional): Decrement the slider by an amount larger than the step change made by Down Arrow. key = "PageDown" move by 4
+
+*/
+
+    /***** keyboard feature: do not need keyboard feature for mobile display *****/
+  }
+}
+
+/***** mobile functionality *****/
 
 /***** func will change the text between month or year based on toggle aria-checked
  * if true it will be year if it is false it will be month
