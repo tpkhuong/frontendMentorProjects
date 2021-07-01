@@ -25,9 +25,20 @@ function ourSelectors() {
     barWrapperElement,
   };
 }
-
+alert("sliderIconWrapper on load there is a solution that will work");
+alert(
+  "sliderIconWrapper on window resize. do we want to set mobile-slider-movment or desktop-slider-movement to use on window resize"
+);
+alert(
+  "or do we want to calculate the sliderIcon position based on mobile-slider-movement or desktop-slider-movement."
+);
+alert(
+  "if we are on desktop we would get the slider position get the % of that number then use that % to calculate the sliderIcon position on mobile"
+);
 let callFuncToGetWindowWidth;
+let windowWidthOnLoad;
 /***** call/invoke our functions *****/
+getWindowWidthOnLoad();
 desktopMouseClickAndMouseMovementAlgor();
 clickEventAddToToggleContainer();
 setCssPropertyToDocument();
@@ -35,17 +46,29 @@ setCssPropertyToDocument();
 /***** call/invoke our functions *****/
 testingMobileDesktopAlgorithm();
 function testingMobileDesktopAlgorithm() {
-  var windowInnerWidth;
+  var resizeWindowWidth;
   window.addEventListener("resize", function getWindowWidth(event) {
-    windowInnerWidth = window.innerWidth;
-    console.log(windowInnerWidth);
+    resizeWindowWidth = window.innerWidth;
+    console.log(resizeWindowWidth);
   });
   function getWindowInnerWidth() {
-    return windowInnerWidth;
+    return resizeWindowWidth;
   }
   callFuncToGetWindowWidth = getWindowInnerWidth;
 }
 
+function getWindowWidthOnLoad() {
+  var loadWindowWidth;
+  window.addEventListener("load", function getWidth(event) {
+    loadWindowWidth = window.innerWidth;
+    console.log(loadWindowWidth);
+  });
+  function onLoadGetWindowWidth() {
+    return loadWindowWidth;
+  }
+
+  windowWidthOnLoad = onLoadGetWindowWidth;
+}
 // getTheWidthOfWindow();
 
 function getTheWidthOfWindow() {
@@ -72,17 +95,28 @@ function setCssPropertyToDocument() {
 /***** declare --slider-movement CSS property to html element *****/
 
 // var positionOfClickedEvent;
-alert(
-  "we are using another func to get the window width then we declare another func in that func. the func we declare will return the variable that will have the window width assigned to it"
-);
-alert(
-  "we will declare a variable outside of the func that has our variable with the window width assigned to it. the func that has closure of the variable that has window width assigned to it"
-);
-alert(
-  "we will pass the reference of the func that has clousure of the window width variable then we will call that func in our click or mousedown func to get the window width."
-);
+// alert(
+//   "we are using another func to get the window width then we declare another func in that func. the func we declare will return the variable that will have the window width assigned to it"
+// );
+// alert(
+//   "we will declare a variable outside of the func that has our variable with the window width assigned to it. the func that has closure of the variable that has window width assigned to it"
+// );
+// alert(
+//   "we will pass the reference of the func that has clousure of the window width variable then we will call that func in our click or mousedown func to get the window width."
+// );
 function desktopMouseClickAndMouseMovementAlgor() {
+  // window.addEventListener("load", function getWidth(event) {
+  //   loadWindowWidth = window.innerWidth;
+  //   console.log(loadWindowWidth);
+  // });
   // addAndRemoveMouseMovementAlgorithm();
+  if (windowWidthOnLoad instanceof Function) {
+    let callingWindowWidthInDesktopFunc = windowWidthOnLoad();
+    console.log(
+      "callingWindowWidthInDesktopFunc",
+      callingWindowWidthInDesktopFunc
+    );
+  }
   var { barTealElement, barWrapperElement, sliderIconWrapper } = ourSelectors();
   //layerXofClickedEle will be layerX of bar or barWrapper
   var layerXofClickedEle;
@@ -1438,7 +1472,7 @@ function testingMobileOrDesktopIdea() {
 
   var resizeTimer = false;
   window.onresize = function () {
-    if (!resizeTimer) {
+    if (resizeTimer) {
       clearTimeout(resizeTimer);
     }
     resizeTimer = setTimeout(printStuff, 0);
