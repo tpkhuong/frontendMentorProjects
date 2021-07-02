@@ -25,70 +25,94 @@ function ourSelectors() {
     barWrapperElement,
   };
 }
-alert("sliderIconWrapper on load there is a solution that will work");
-alert(
-  "sliderIconWrapper on window resize. do we want to set mobile-slider-movment or desktop-slider-movement to use on window resize"
-);
-alert(
-  "or do we want to calculate the sliderIcon position based on mobile-slider-movement or desktop-slider-movement."
-);
-alert(
-  "if we are on desktop we would get the slider position get the % of that number then use that % to calculate the sliderIcon position on mobile"
-);
+
 let callFuncToGetWindowWidth;
 let windowWidthOnLoad;
 /***** call/invoke our functions *****/
-getWindowWidthOnLoad();
+// getWindowWidthOnLoad();
 desktopMouseClickAndMouseMovementAlgor();
 clickEventAddToToggleContainer();
 setCssPropertyToDocument();
 // callAddAndRemoveMouseMovementAlgorithm();
 /***** call/invoke our functions *****/
-testingMobileDesktopAlgorithm();
-function testingMobileDesktopAlgorithm() {
-  var resizeWindowWidth;
-  window.addEventListener("resize", function getWindowWidth(event) {
-    resizeWindowWidth = window.innerWidth;
-    console.log(resizeWindowWidth);
-  });
-  function getWindowInnerWidth() {
-    return resizeWindowWidth;
-  }
-  callFuncToGetWindowWidth = getWindowInnerWidth;
-}
+// testingMobileDesktopAlgorithm();
+// function testingMobileDesktopAlgorithm() {
+//   var resizeWindowWidth;
+//   window.addEventListener("resize", function getWindowWidth(event) {
+//     resizeWindowWidth = window.innerWidth;
+//     console.log(resizeWindowWidth);
+//   });
+//   function getWindowInnerWidth() {
+//     return resizeWindowWidth;
+//   }
+//   callFuncToGetWindowWidth = getWindowInnerWidth;
+// }
 
-function getWindowWidthOnLoad() {
-  var loadWindowWidth;
-  window.addEventListener("load", function getWidth(event) {
-    loadWindowWidth = window.innerWidth;
-    console.log(loadWindowWidth);
-  });
-  function onLoadGetWindowWidth() {
-    return loadWindowWidth;
-  }
+function testingMoreIdeas() {
+  function getWindowWidthOnLoad() {
+    var loadWindowWidth;
+    window.addEventListener("load", function getWidth(event) {
+      //when we had our if else statement in another func and we passed in a variable that was assigned the windowWidth our if else statement did not work
+      //after "load" is ran loadWindowWidth is undefined outside of this func.
+      if (window.innerWidth <= 415) {
+        document.documentElement.style.setProperty(
+          "--mobile-slider-movement",
+          "0px"
+        );
+      } else {
+        document.documentElement.style.setProperty(
+          "--desktop-slider-movement",
+          "0px"
+          // String(totalAmtPercentage) + "%"
+        );
+      }
+    });
 
-  windowWidthOnLoad = onLoadGetWindowWidth;
-}
-// getTheWidthOfWindow();
-
-function getTheWidthOfWindow() {
-  document.querySelector("body").addEventListener("click", (event) => {
-    if (callFuncToGetWindowWidth instanceof Function) {
-      var printWindowWidth = callFuncToGetWindowWidth();
-      console.log(printWindowWidth);
+    function onLoadGetWindowWidth() {
+      return loadWindowWidth;
     }
-  });
+
+    windowWidthOnLoad = onLoadGetWindowWidth;
+  }
+  // getTheWidthOfWindow();
+
+  function getTheWidthOfWindow() {
+    document.querySelector("body").addEventListener("click", (event) => {
+      if (callFuncToGetWindowWidth instanceof Function) {
+        var printWindowWidth = callFuncToGetWindowWidth();
+        console.log(printWindowWidth);
+      }
+    });
+  }
+
+  // this works. we will get window.innerWidth every sec. our func assignWidthToVariable will have a closure over windowInnerWidth
+  //then we assign the func reference of assignWidthToVariable to callFuncToGetWindowWidth then we will call callFuncToGetWindowWidth in our click handler which will give us the window.width
+  var getWidthOfWindowEverySec = setInterval(function getWidth() {
+    var windowInnerWidth = window.innerWidth;
+    function assignWidthToVariable() {
+      return windowInnerWidth;
+    }
+
+    callFuncToGetWindowWidth = assignWidthToVariable;
+  }, 1000);
 }
-
-/***** declare --slider-movement CSS property to html element *****/
-
+/***** declare --slider-movement CSS property to html element: we are now running  *****/
 function setCssPropertyToDocument() {
-  document.documentElement.style.setProperty(
-    "--desktop-slider-movement",
-    "0px"
-    // String(totalAmtPercentage) + "%"
-  );
-  document.documentElement.style.setProperty("--mobile-slider-movement", "0px");
+  // document.documentElement.attributes["style"].value.split(" ")[1];
+  // parseInt($0.attributes["style"].value.split(" ")[1])
+  //code above we can use to get --desktop-slider-movement or --mobile-slider-movement value
+  if (window.innerWidth <= 415) {
+    document.documentElement.style.setProperty(
+      "--mobile-slider-movement",
+      " 0px"
+    );
+  } else {
+    document.documentElement.style.setProperty(
+      "--desktop-slider-movement",
+      " 0px"
+      // String(totalAmtPercentage) + "%"
+    );
+  }
 }
 
 // var callAddAndRemoveMouseMovementAlgorithm;
@@ -110,13 +134,13 @@ function desktopMouseClickAndMouseMovementAlgor() {
   //   console.log(loadWindowWidth);
   // });
   // addAndRemoveMouseMovementAlgorithm();
-  if (windowWidthOnLoad instanceof Function) {
-    let callingWindowWidthInDesktopFunc = windowWidthOnLoad();
-    console.log(
-      "callingWindowWidthInDesktopFunc",
-      callingWindowWidthInDesktopFunc
-    );
-  }
+  // if (windowWidthOnLoad instanceof Function) {
+  //   let callingWindowWidthInDesktopFunc = windowWidthOnLoad();
+  //   console.log(
+  //     "callingWindowWidthInDesktopFunc",
+  //     callingWindowWidthInDesktopFunc
+  //   );
+  // }
   var { barTealElement, barWrapperElement, sliderIconWrapper } = ourSelectors();
   //layerXofClickedEle will be layerX of bar or barWrapper
   var layerXofClickedEle;
@@ -128,13 +152,19 @@ function desktopMouseClickAndMouseMovementAlgor() {
   barWrapperElement.addEventListener(
     "click",
     function sliderMovementClickFeatureBarElement(event) {
-      // var { barTealElement, barWrapperElement } = ourSelectors();
-      if (callFuncToGetWindowWidth instanceof Function) {
-        var printWindowWidth = callFuncToGetWindowWidth();
-        console.log(printWindowWidth);
+      // console.log(callFuncToGetWindowWidth());
+      // clearInterval(getWidthOfWindowEverySec);
+      // // var { barTealElement, barWrapperElement } = ourSelectors();
+      // if (callFuncToGetWindowWidth instanceof Function) {
+      //   var printWindowWidth = callFuncToGetWindowWidth();
+      //   console.log(printWindowWidth);
+      // }
+      // console.log("sliderMovement", event.layerX);
+      if (window.innerWidth <= 415) {
+        console.log("mobile this display", window.innerWidth);
+      } else {
+        console.log("desktop this display", window.innerWidth);
       }
-      console.log("sliderMovement", event.layerX);
-
       //work with layerX
       //check if event.target is .bar or .bar-wrapper
       /* we dont need to add or substract we want .sliderIconWrapper to move to the layerX based on where the user click at bar or bar-wrapper */
@@ -202,6 +232,34 @@ function desktopMouseClickAndMouseMovementAlgor() {
       }, 1000);
     }
   );
+
+  function testingOurIdeaMobileAndDesktop() {
+    alert(
+      "something to note: when we switch from desktop to mobile view html element will have --desktop-slider-movement"
+    );
+    alert(
+      "which means when we switch from mobile to desktop our html element or document.documentElement will have --mobile-slider-movement"
+    );
+    alert("tested code below and it works");
+    if (window.innerWidth <= 415) {
+      console.log("mobile this display", window.innerWidth);
+      sliderIconWrapper.addEventListener("click", (event) => {
+        console.log(
+          document.documentElement.attributes["style"].value.split(" ")[1]
+        );
+      });
+      document.documentElement.attributes["style"].value =
+        "--mobile-slider-movement:" + " " + String(100) + "px";
+    } else {
+      console.log("desktop this display", window.innerWidth);
+      sliderIconWrapper.addEventListener("click", (event) => {
+        console.log(document.documentElement.attributes["style"]);
+        console.log(
+          document.documentElement.attributes["style"].value.split(" ")[1]
+        );
+      });
+    }
+  }
   addAndRemoveMouseMovementAlgorithm();
   // callAddAndRemoveMouseMovementAlgorithm = addAndRemoveMouseMovementAlgorithm;
   /***** mouseMovementAlgorithm *****/
@@ -218,10 +276,11 @@ function desktopMouseClickAndMouseMovementAlgor() {
     sliderIconWrapper.addEventListener(
       "mousedown",
       function addMovementEventToSliderIcon(event) {
-        if (callFuncToGetWindowWidth instanceof Function) {
-          var printWindowWidth = callFuncToGetWindowWidth();
-          console.log(printWindowWidth);
-        }
+        // if (callFuncToGetWindowWidth instanceof Function) {
+        //   var printWindowWidth = callFuncToGetWindowWidth();
+        //   console.log(printWindowWidth);
+        // }
+
         // we need a way to update/reassign movementCounter
         //every time user click on bar or barWrapper layerXofClickedEle is reassigned
         //inside addAndRemoveMouseMovementAlgorithm we are using movementCounter so we want to update that variable whenever our user click on sliderIconWrapper
