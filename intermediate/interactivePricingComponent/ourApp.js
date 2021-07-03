@@ -48,6 +48,55 @@ setCssPropertyToDocument();
 //   callFuncToGetWindowWidth = getWindowInnerWidth;
 // }
 
+testingOurIdeaMobileAndDesktop();
+alert(
+  "let's make our algorithm work on mobile before we work on resize algorithm"
+);
+alert(
+  "on load --desktop-slider-movement or --mobile-slider-movement will be 0"
+);
+alert(
+  "on resize is where we want to calculate --desktop-slider-movement or --mobile-slider-movement"
+);
+alert(
+  "our algorithm we have two variables. one to use at desktop layout and one for mobile. we just have to update these variables when our user resize the window"
+);
+function testingOurIdeaMobileAndDesktop() {
+  // alert(
+  //   "something to note: when we switch from desktop to mobile view html element will have --desktop-slider-movement"
+  // );
+  // alert(
+  //   "which means when we switch from mobile to desktop our html element or document.documentElement will have --mobile-slider-movement"
+  // );
+  // alert("tested code below and it works");
+  // alert(
+  //   "on window resize, we want the position of sliderIconWrapper to be the same on mobile and desktop layout based on %"
+  // );
+  window.addEventListener("resize", function getSliderMovement(event) {
+    if (window.innerWidth <= 415) {
+      console.log("mobile this display", window.innerWidth);
+      console.log(document.documentElement.attributes["style"]);
+      // sliderIconWrapper.addEventListener("click", (event) => {
+      //   console.log(
+      //     document.documentElement.attributes["style"].value.split(" ")[1]
+      //   );
+      // });
+      // document.documentElement.attributes["style"].value =
+      //   "--mobile-slider-movement:" + " " + String(100) + "px";
+    } else {
+      console.log("desktop this display", window.innerWidth);
+      // sliderIconWrapper.addEventListener("click", (event) => {
+      console.log(document.documentElement.attributes["style"]);
+      //   console.log(
+      //     document.documentElement.attributes["style"].value.split(" ")[1]
+      //   );
+      // });
+      // document.documentElement.attributes["style"].value =
+      //   "--desktop-slider-movement:" + " " + String(100) + "px";
+    }
+  });
+}
+
 function testingMoreIdeas() {
   function getWindowWidthOnLoad() {
     var loadWindowWidth;
@@ -144,6 +193,7 @@ function desktopMouseClickAndMouseMovementAlgor() {
   var { barTealElement, barWrapperElement, sliderIconWrapper } = ourSelectors();
   //layerXofClickedEle will be layerX of bar or barWrapper
   var layerXofClickedEle;
+  var mobileLayerX;
   console.log("layerXofClickedEle", layerXofClickedEle);
   /***** when user click on .bar or .barWrapper we will get the layerX assign it to layerXofClickedEle variable
    * if user clicked between 0 and 40 layerX will be 0. if user clicked between 435 and 472 layerX will be 434.
@@ -160,6 +210,7 @@ function desktopMouseClickAndMouseMovementAlgor() {
       //   console.log(printWindowWidth);
       // }
       // console.log("sliderMovement", event.layerX);
+      console.log(event);
       if (window.innerWidth <= 415) {
         console.log("mobile this display", window.innerWidth);
       } else {
@@ -179,6 +230,8 @@ function desktopMouseClickAndMouseMovementAlgor() {
           document.documentElement.attributes["style"].value =
             "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
         }
+        layerXofClickedEle = barLayerX;
+        // console.log("barLayerX", barLayerX);
       } else if (event.target == barWrapperElement) {
         let barWrapperLayerX = event.layerX;
         //when we click on .barWrapper neat the edge our .sliderIconWrapper right side is too far off barWrapper edge
@@ -202,18 +255,25 @@ function desktopMouseClickAndMouseMovementAlgor() {
             String(barWrapperLayerX) +
             "px";
         }
+        layerXofClickedEle = barWrapperLayerX;
+        // console.log("barWrapperLayerX", barWrapperLayerX);
       }
-      layerXofClickedEle = event.layerX;
-      // console.log("layerXofClickedEle", layerXofClickedEle);
-      /***** calling mousemove func: when we have testingIdeas inside this event we're adding mousemove and mouseup event to .sliderIconWrapper *****/
-      // alert("we are passing in the correct layerX that we want to use in mousemove func");
-      // alert("testingIdeas is fire four times")
-      if (layerXofClickedEle >= 0 && layerXofClickedEle <= 40) {
-        layerXofClickedEle = 0;
-      } else if (layerXofClickedEle >= 435 && layerXofClickedEle <= 472) {
-        layerXofClickedEle = 434;
-      } else {
-        layerXofClickedEle = event.layerX;
+      function notes() {
+        /***** instead of assigning event.layerX to layerXofClickedEle based on where the user clicked on bar or barWrapper
+         * we will assign layerXofClickedEle the layerX of barLayerX or barWrapperLayerX so we dont repeat ourselves
+         * *****/
+        // layerXofClickedEle = event.layerX;
+        // console.log("layerXofClickedEle", layerXofClickedEle);
+        /***** calling mousemove func: when we have testingIdeas inside this event we're adding mousemove and mouseup event to .sliderIconWrapper *****/
+        // alert("we are passing in the correct layerX that we want to use in mousemove func");
+        // alert("testingIdeas is fire four times")
+        // if (layerXofClickedEle >= 0 && layerXofClickedEle <= 40) {
+        //   layerXofClickedEle = 0;
+        // } else if (layerXofClickedEle >= 435 && layerXofClickedEle <= 472) {
+        //   layerXofClickedEle = 434;
+        // } else {
+        //   layerXofClickedEle = event.layerX;
+        // }
       }
       console.log("layerXofClickedEle", layerXofClickedEle);
       /***** calling mousemove func: when we have testingIdeas inside this event we're adding mousemove and mouseup event to .sliderIconWrapper *****/
@@ -233,33 +293,6 @@ function desktopMouseClickAndMouseMovementAlgor() {
     }
   );
 
-  function testingOurIdeaMobileAndDesktop() {
-    alert(
-      "something to note: when we switch from desktop to mobile view html element will have --desktop-slider-movement"
-    );
-    alert(
-      "which means when we switch from mobile to desktop our html element or document.documentElement will have --mobile-slider-movement"
-    );
-    alert("tested code below and it works");
-    if (window.innerWidth <= 415) {
-      console.log("mobile this display", window.innerWidth);
-      sliderIconWrapper.addEventListener("click", (event) => {
-        console.log(
-          document.documentElement.attributes["style"].value.split(" ")[1]
-        );
-      });
-      document.documentElement.attributes["style"].value =
-        "--mobile-slider-movement:" + " " + String(100) + "px";
-    } else {
-      console.log("desktop this display", window.innerWidth);
-      sliderIconWrapper.addEventListener("click", (event) => {
-        console.log(document.documentElement.attributes["style"]);
-        console.log(
-          document.documentElement.attributes["style"].value.split(" ")[1]
-        );
-      });
-    }
-  }
   addAndRemoveMouseMovementAlgorithm();
   // callAddAndRemoveMouseMovementAlgorithm = addAndRemoveMouseMovementAlgorithm;
   /***** mouseMovementAlgorithm *****/
