@@ -48,7 +48,7 @@ setCssPropertyToDocument();
 //   callFuncToGetWindowWidth = getWindowInnerWidth;
 // }
 
-testingOurIdeaMobileAndDesktop();
+// testingOurIdeaMobileAndDesktop();
 alert(
   "let's make our algorithm work on mobile before we work on resize algorithm"
 );
@@ -218,46 +218,80 @@ function desktopMouseClickAndMouseMovementAlgor() {
       }
       //work with layerX
       //check if event.target is .bar or .bar-wrapper
-      /* we dont need to add or substract we want .sliderIconWrapper to move to the layerX based on where the user click at bar or bar-wrapper */
-      if (event.target == barTealElement) {
-        //if user clicked on bar and layerX is between 0 and 40 we will set --slider-movement to be 0 by setting barlayerX to be 0
-        let barLayerX = event.layerX;
-        if (barLayerX >= 0 && barLayerX <= 40) {
-          barLayerX = 0;
-          document.documentElement.attributes["style"].value =
-            "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
-        } else {
-          document.documentElement.attributes["style"].value =
-            "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
+      /***** mobile *****/
+      if (window.innerWidth <= 415) {
+        /***** mobile *****/
+        if (event.target == barTealElement) {
+          let mobileBarLayerX = event.layerX;
+          if (mobileBarLayerX >= 0 && mobileBarLayerX <= 40) {
+            mobileBarLayerX = 0;
+            document.documentElement.attributes["style"].value =
+              "--mobile-slider-movement: " + String(mobileBarLayerX) + "px";
+          } else {
+            document.documentElement.attributes["style"].value =
+              "--mobile-slider-movement: " + String(mobileBarLayerX) + "px";
+          }
+        } else if (event.target == barWrapperElement) {
+          let mobileBarWrapperLayerX = event.layerX;
+          if (mobileBarWrapperLayerX >= 253 && mobileBarWrapperLayerX <= 294) {
+            mobileBarWrapperLayerX = 255;
+            document.documentElement.attributes["style"].value =
+              "--mobile-slider-movement: " +
+              String(mobileBarWrapperLayerX) +
+              "px";
+          } else {
+            console.log(event.layerX);
+            document.documentElement.attributes["style"].value =
+              "--mobile-slider-movement: " +
+              String(mobileBarWrapperLayerX) +
+              "px";
+          }
         }
-        layerXofClickedEle = barLayerX;
-        // console.log("barLayerX", barLayerX);
-      } else if (event.target == barWrapperElement) {
-        let barWrapperLayerX = event.layerX;
-        //when we click on .barWrapper neat the edge our .sliderIconWrapper right side is too far off barWrapper edge
-        //when we use transform: translateX(434px) on .sliderIconWrapper. the right edge of .sliderIconWrapper touches the right edge of .barWrapper
-        //instead of subtracting layerX if the user click on barWrapper and layerX is 470: we will work with a range and if layerX
-        //is within that range we will set layerX to be 434
-        //range we will work with will be 435-472
-        if (barWrapperLayerX >= 435 && barWrapperLayerX <= 472) {
-          //if user clicked on barWrapper and layerX is between 435 and 472 we will set --slider-movement to be 434 by setting barWrapperLayerX to be 434
-          barWrapperLayerX = 434;
-          document.documentElement.attributes["style"].value =
-            "--desktop-slider-movement:" +
-            " " +
-            String(barWrapperLayerX) +
-            "px";
-        } else {
-          //set --slider-movement will be set to event.target.layerX
-          document.documentElement.attributes["style"].value =
-            "--desktop-slider-movement:" +
-            " " +
-            String(barWrapperLayerX) +
-            "px";
+      } else {
+        /***** desktop *****/
+        /* we dont need to add or substract we want .sliderIconWrapper to move to the layerX based on where the user click at bar or bar-wrapper */
+        if (event.target == barTealElement) {
+          //if user clicked on bar and layerX is between 0 and 40 we will set --slider-movement to be 0 by setting barlayerX to be 0
+          let barLayerX = event.layerX;
+          if (barLayerX >= 0 && barLayerX <= 40) {
+            barLayerX = 0;
+            document.documentElement.attributes["style"].value =
+              "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
+          } else {
+            document.documentElement.attributes["style"].value =
+              "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
+          }
+          layerXofClickedEle = barLayerX;
+          // console.log("barLayerX", barLayerX);
+        } else if (event.target == barWrapperElement) {
+          let barWrapperLayerX = event.layerX;
+          //when we click on .barWrapper neat the edge our .sliderIconWrapper right side is too far off barWrapper edge
+          //when we use transform: translateX(434px) on .sliderIconWrapper. the right edge of .sliderIconWrapper touches the right edge of .barWrapper
+          //instead of subtracting layerX if the user click on barWrapper and layerX is 470: we will work with a range and if layerX
+          //is within that range we will set layerX to be 434
+          //range we will work with will be 435-472
+          if (barWrapperLayerX >= 435 && barWrapperLayerX <= 472) {
+            //if user clicked on barWrapper and layerX is between 435 and 472 we will set --slider-movement to be 434 by setting barWrapperLayerX to be 434
+            barWrapperLayerX = 434;
+            document.documentElement.attributes["style"].value =
+              "--desktop-slider-movement:" +
+              " " +
+              String(barWrapperLayerX) +
+              "px";
+          } else {
+            //set --slider-movement will be set to event.target.layerX
+            document.documentElement.attributes["style"].value =
+              "--desktop-slider-movement:" +
+              " " +
+              String(barWrapperLayerX) +
+              "px";
+          }
+          layerXofClickedEle = barWrapperLayerX;
+          // console.log("barWrapperLayerX", barWrapperLayerX);
         }
-        layerXofClickedEle = barWrapperLayerX;
-        // console.log("barWrapperLayerX", barWrapperLayerX);
+        /***** desktop *****/
       }
+
       function notes() {
         /***** instead of assigning event.layerX to layerXofClickedEle based on where the user clicked on bar or barWrapper
          * we will assign layerXofClickedEle the layerX of barLayerX or barWrapperLayerX so we dont repeat ourselves
