@@ -47,17 +47,19 @@
               is based on its content
               -->
 
-            <div class="center-bar-vertically">
-              <div class="bar-wrapper">
-                <!-- we only need one bar-wrapper because our .slider-icon-wrapper will cover the progress bar at 0% and near 99%
+            <!-- <div class="center-bar-vertically"> we dont need this element. we will have position: relative on .slider then use left: 16px and right 16px on .barWrapper
+              without the width:100% to get the .barWrapper width to match .slider with .slider having padding-inline: 16px;
+              </div> -->
+            <div class="bar-wrapper">
+              <!-- we only need one bar-wrapper because our .slider-icon-wrapper will cover the progress bar at 0% and near 99%
                       at 99% the progress bar will not bleed out of the .bar-wrapper
                       -->
-                <!-- we will switch the order of .bar-wrapper and .slider-icon-wrapper and not have to mess with z-index
+              <!-- we will switch the order of .bar-wrapper and .slider-icon-wrapper and not have to mess with z-index
                       when we switch the two .slider-icon-wrapper will go over .bar-wrapper
                       -->
-                <!-- width of this element will be 100% -->
-                <!-- we have to change the order. the .bar-wrapper element will go before .slider-icon-wrapper to make the .slider-icon-wrapper stacking-content go after .bar-wrapper -->
-                <!-- 
+              <!-- width of this element will be 100% -->
+              <!-- we have to change the order. the .bar-wrapper element will go before .slider-icon-wrapper to make the .slider-icon-wrapper stacking-content go after .bar-wrapper -->
+              <!-- 
                         without using display: flex on .slider. we will be working with the stacking-content and position property
       height: 8px;
       width: 100%;
@@ -67,19 +69,19 @@
       top: 0;
       bottom: 0;
                      -->
-                <div class="bar">
-                  <!-- work with width of slider wrapper - the width of the .slider-icon-wrapper -->
-                  <!-- 
+              <div class="bar">
+                <!-- work with width of slider wrapper - the width of the .slider-icon-wrapper -->
+                <!-- 
                             without using display: flex on .slider. we will be working with the stacking-content and position property
                             width: 40px;
       height: 40px;
       background-color: burlywood;
       position: relative;
                          -->
-                  <!-- width of this element will be dynamic -->
-                </div>
+                <!-- width of this element will be dynamic -->
               </div>
             </div>
+
             <!-- giving .sliderIconWrapper a tabindex='0' will add the element to the focusable element rotation -->
             <div tabindex="0" class="slider-icon-wrapper">
               <!-- add aria attribute to slider-icon -->
