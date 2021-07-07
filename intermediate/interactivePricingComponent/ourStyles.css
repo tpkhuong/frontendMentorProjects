@@ -409,6 +409,7 @@ body {
   /* display: flex; */
   margin-block: 20px;
   padding-inline: 16px;
+  position: relative;
 }
 
 .slider-icon-wrapper {
@@ -443,21 +444,22 @@ the padding of our .slider while making the height of our .slider match the heig
 there won't be a empty space above the .slider-icon-wrapper with these codes
 */
 
-.center-bar-vertically {
+/* .center-bar-vertically {
   position: relative;
-}
+} */
 
 .bar-wrapper {
   /* center vertically  */
   position: absolute;
   top: -7px;
   /* work with width of slider wrapper - the width of the .slider-icon-wrapper */
-  width: 100%;
   transform: translateY(24px);
   /* align-self: center;  */ /* since we are not using display: flex on its parent .slider */
   background-color: var(--color-neutral-light-grayish-blue-bar);
   border-radius: 100vw;
   overflow: hidden;
+  left: 16px;
+  right: 16px;
 }
 
 .bar {
@@ -474,6 +476,11 @@ there won't be a empty space above the .slider-icon-wrapper with these codes
   }
   .slider-icon-wrapper {
     transform: translateX(var(--desktop-slider-movement, 0px));
+  }
+  .bar-wrapper {
+    left: 0px;
+    right: 0px;
+    width: 100%;
   }
 }
 
