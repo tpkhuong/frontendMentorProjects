@@ -25,7 +25,7 @@ function ourSelectors() {
     barWrapperElement,
   };
 }
-
+alert("work on sliderIcon movement for mobile");
 let callFuncToGetWindowWidth;
 let windowWidthOnLoad;
 /***** call/invoke our functions *****/
@@ -49,19 +49,23 @@ setCssPropertyToDocument();
 // }
 
 // testingOurIdeaMobileAndDesktop();
-alert(
-  "let's make our algorithm work on mobile before we work on resize algorithm"
-);
-alert(
-  "on load --desktop-slider-movement or --mobile-slider-movement will be 0"
-);
-alert(
-  "on resize is where we want to calculate --desktop-slider-movement or --mobile-slider-movement"
-);
-alert(
-  "our algorithm we have two variables. one to use at desktop layout and one for mobile. we just have to update these variables when our user resize the window"
-);
+
 function testingOurIdeaMobileAndDesktop() {
+  alert(
+    "make algorithm work on mobile for mousemove. make keyboard feature only work on desktop"
+  );
+  alert(
+    "let's make our algorithm work on mobile before we work on resize algorithm"
+  );
+  alert(
+    "on load --desktop-slider-movement or --mobile-slider-movement will be 0"
+  );
+  alert(
+    "on resize is where we want to calculate --desktop-slider-movement or --mobile-slider-movement"
+  );
+  alert(
+    "our algorithm we have two variables. one to use at desktop layout and one for mobile. we just have to update these variables when our user resize the window"
+  );
   // alert(
   //   "something to note: when we switch from desktop to mobile view html element will have --desktop-slider-movement"
   // );
@@ -192,6 +196,7 @@ function desktopMouseClickAndMouseMovementAlgor() {
   // }
   var { barTealElement, barWrapperElement, sliderIconWrapper } = ourSelectors();
   //layerXofClickedEle will be layerX of bar or barWrapper
+  //we are assigning layerXofClickedEle/mobileLayerX in our barWrapperElement eventListener
   var layerXofClickedEle;
   var mobileLayerX;
   console.log("layerXofClickedEle", layerXofClickedEle);
@@ -327,12 +332,12 @@ function desktopMouseClickAndMouseMovementAlgor() {
     }
   );
 
-  addAndRemoveMouseMovementAlgorithm();
+  addAndRemoveMouseAndTouchMovementAlgorithm();
   // callAddAndRemoveMouseMovementAlgorithm = addAndRemoveMouseMovementAlgorithm;
   /***** mouseMovementAlgorithm *****/
   // we don't need to pass in layerXOfClickedEle because our mouseMovementAlgor func is declared in the same scope as
   //the event listener that will assign the layerX to a variable that our mouseMovementAlgor func can use
-  function addAndRemoveMouseMovementAlgorithm() {
+  function addAndRemoveMouseAndTouchMovementAlgorithm() {
     var { sliderIconWrapper, sliderContainer } = ourSelectors();
     // first time we run addAndRemoveMouseMovementAlgorithm mouseClickOfLayerX will 0
     // when we click on bar or barWrapper mouseClickOfLayerX will be the layerX of bar or barWrapper
@@ -340,6 +345,7 @@ function desktopMouseClickAndMouseMovementAlgor() {
 
     /***** add event *****/
     // when user click on .sliderIconWrapper we will run mouseMovementAlgorithm
+    /***** mouse event *****/
     sliderIconWrapper.addEventListener(
       "mousedown",
       function addMovementEventToSliderIcon(event) {
@@ -351,6 +357,7 @@ function desktopMouseClickAndMouseMovementAlgor() {
         // we need a way to update/reassign movementCounter
         //every time user click on bar or barWrapper layerXofClickedEle is reassigned
         //inside addAndRemoveMouseMovementAlgorithm we are using movementCounter so we want to update that variable whenever our user click on sliderIconWrapper
+
         if (!layerXofClickedEle) {
           movementCounter = 0;
         } else {
@@ -362,8 +369,30 @@ function desktopMouseClickAndMouseMovementAlgor() {
         }
       }
     );
+    /***** touch event *****/
+
+    sliderIconWrapper.addEventListener(
+      "touchstart",
+      function addTouchEventToSliderIconWrapper(event) {
+        // .preventDefault() called below is so we do fire a mouse event because touch event can fire both touch and mouse event.
+        event.preventDefault();
+        console.log(event);
+        if (!mobileLayerX) {
+          movementCounter = 0;
+        } else {
+          movementCounter = mobileBarLayerX;
+        }
+
+        if (event.target == this) {
+          console.log(movementCounter);
+          touchMovementAlgorithm(this);
+        }
+      }
+    );
     /***** add event *****/
     /***** remove event *****/
+    /***** mouse event *****/
+
     //inside removeEventListenerMousemoveOnMouseUp we will remove moveSliderIconWrapper
 
     sliderIconWrapper.addEventListener(
@@ -377,6 +406,8 @@ function desktopMouseClickAndMouseMovementAlgor() {
     );
     /***** remove event *****/
     /***** declare funcs *****/
+    /***** mouse event *****/
+
     function mouseMovementAlgorithm(sliderIconInput) {
       sliderIconInput.addEventListener("mousemove", moveSliderIconWrapper);
     }
@@ -402,7 +433,38 @@ function desktopMouseClickAndMouseMovementAlgor() {
       layerXofClickedEle = movementCounter;
     }
 
+    /***** touch event *****/
+    function touchMovementAlgorithm(sliderIcon) {
+      sliderIcon.addEventListener("touchmove", touchEventMoveSliderIcon);
+    }
+    var previousTouch;
+    function touchEventMoveSliderIcon(eventInput) {
+      alert("start here.");
+      var touch = eventInput.changedTouches[0];
+      // eventInput.touches[0].pageX;
+      //first time we run this func, previousTouch will be undefined
+      //second time we run this func, previousTouch will not be undefined it will be the eventInput.changedTouches[0]
+      //from the previous ran of this func so we will enter the if statement
+      if (previousTouch) {
+        //first time we run this func, we will not enter this if statement
+        //second time we run this func, we will enter this if statement
+        //since we are in this if statement, touch will be the current value of eventInput.changedTouches[0] from the execution of this func
+        //previousTouch.pageX will be the previous value of eventInput.changedTouches[0]. the previous execution of this func
+        let movementX = touch.pageX - previousTouch.pageX;
+        //touch.pageX will be the current value of eventInput.changedTouches[0] and previousTouch.pageX will be the previous value of eventInput.changedTouches[0]
+        console.log("previousTouch inside if statement", previousTouch);
+        console.log("movementX", movementX);
+      }
+      console.log("previousTouch before", previousTouch);
+
+      //first time we run this func, previousTouch the value of eventInput.changedTouches[0]
+      previousTouch = touch;
+
+      console.log("previousTouch after", previousTouch);
+    }
     // removeEvent Funcs
+
+    /***** mouse event *****/
     function removeEventListenerMousemoveOnMouseUp(eventInput) {
       //this remove func will be run/execute by sliderIconWrapper
       if (eventInput.target == this) {
@@ -418,6 +480,12 @@ function desktopMouseClickAndMouseMovementAlgor() {
         );
       }
     }
+
+    /***** touch event *****/
+    function touchEndRemoveEvent(eventInput) {}
+
+    function removeTouchmoveEventWhenPointerOutsideOfSliderIcon(eventInput) {}
+    /***** touch event *****/
     /***** declare funcs *****/
   }
   keyboardFeatureSliderMovement();
@@ -876,23 +944,28 @@ function scopeThisFunc() {
       }
 
       function moveSliderIconWrapper(eventInput) {
-        if (eventInput.movementX < 0 && movementCounter <= 0) {
-          movementCounter = 0;
-        } else if (eventInput.movementX > 0 && movementCounter >= 434) {
-          movementCounter = 434;
+        if (window.innerWidth <= 415) {
+          console.log("we are heere");
         } else {
-          if (eventInput.movementX < 0) {
-            movementCounter += -1;
+          if (eventInput.movementX < 0 && movementCounter <= 0) {
+            movementCounter = 0;
+          } else if (eventInput.movementX > 0 && movementCounter >= 434) {
+            movementCounter = 434;
           } else {
-            movementCounter += 1;
+            if (eventInput.movementX < 0) {
+              movementCounter += -1;
+            } else {
+              movementCounter += 1;
+            }
           }
+
+          document.documentElement.attributes["style"].value =
+            "--desktop-slider-movement: " + String(movementCounter) + "px";
+          /***** we want to update layerXofClickedEle to be movementCounter because we want to use the new position of layerXofClickedEle
+           * for our keyboard feature
+           *  *****/
         }
 
-        document.documentElement.attributes["style"].value =
-          "--desktop-slider-movement: " + String(movementCounter) + "px";
-        /***** we want to update layerXofClickedEle to be movementCounter because we want to use the new position of layerXofClickedEle
-         * for our keyboard feature
-         *  *****/
         layerXofClickedEle = movementCounter;
       }
 
