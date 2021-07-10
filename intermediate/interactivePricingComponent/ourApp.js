@@ -26,7 +26,13 @@ function ourSelectors() {
   };
 }
 alert(
-  "work on calculation for --desktop-slider-movement or --mobile-slider-movement"
+  "calculation in window resize is running once but every time we resize the window eiter layerXofClickedEle or mobileLayerX is substracted by one because we are using Math.floor"
+);
+alert(
+  "test algorithm where we don't use math.floor. since we are passing in a string form of our sliderMovement we can use .toFixed"
+);
+alert(
+  "then passed that string in to document.documentElement.attributes['style'].value between --document-slider-movement and px"
 );
 alert(
   "let's use two css variable for the progress bar. one for mobile and one for desktop. these variables will work with --desktop-slider-movement or --mobile-slider-movement"
@@ -99,7 +105,7 @@ function testingOurIdeaMobileAndDesktop() {
       //   console.log(
       //     document.documentElement.attributes["style"].value.split(" ")[1]
       //   );
-      // });
+      // });resize
       // document.documentElement.attributes["style"].value =
       //   "--desktop-slider-movement:" + " " + String(100) + "px";
     }
@@ -223,12 +229,12 @@ function desktopMouseClickAndMouseMovementAlgor() {
       //   console.log(printWindowWidth);
       // }
       // console.log("sliderMovement", event.layerX);
-      console.log(event);
-      if (window.innerWidth <= 415) {
-        console.log("mobile this display", window.innerWidth);
-      } else {
-        console.log("desktop this display", window.innerWidth);
-      }
+      // console.log(event);
+      // if (window.innerWidth <= 415) {
+      //   console.log("mobile this display", window.innerWidth);
+      // } else {
+      //   console.log("desktop this display", window.innerWidth);
+      // }
       //work with layerX
       //check if event.target is .bar or .bar-wrapper
       /***** mobile *****/
@@ -685,16 +691,152 @@ Page Up (Optional): Increment the slider by an amount larger than the step chang
 Page Down (Optional): Decrement the slider by an amount larger than the step change made by Down Arrow. key = "PageDown" move by 4
 
 */
-
+  resizeCalculationForMobileAndDesktop();
   /***** keyboard feature *****/
   /***** resize feature *****/
   // when our user resizes the window from desktop to mobile, we will get the value of --desktop-slider-movement divide that by 435 to get the %
   //then take the % times it by 255 the max value that we want to use on mobile-slider-movement.
   // when our user resizes the window from mobile to desktop, we will get the value of --mobile-slider-movement divide that by 255 to get the %
   //then take the % times it by 435 the max value that we want to use on desktop-slider-movement.
-  function resizeCalculationForMobileAndDesktop() {}
+  let resizeTimer = null;
+  function resizeCalculationForMobileAndDesktop() {
+    window.addEventListener("resize", function doStuff() {
+      if (resizeTimer) {
+        clearTimeout(resizeTimer);
+      }
+      resizeTimer = setTimeout(function () {
+        console.log("window has changed");
+        if (window.innerWidth <= 415) {
+          // debugger;
+          let desktopSliderMovement = parseInt(
+            document.documentElement.attributes["style"].value.split(" ").pop()
+          );
+          // console.log(
+          //   "this is mobile. get desktop-slider without px",
+          //   desktopSliderMovement
+          // );
+          // let calculatedMobileSlider = calculateSliderMovementSetProgressBar(
+          //   window.innerWidth,
+          //   desktopSliderMovement
+          // );
+          //we are getting desktop slider so we need to divide by 435
+          console.log("desktopSliderMovement", desktopSliderMovement);
+          let percentageOfDesktopSlider = desktopSliderMovement / 435;
+          //we can use this percentage as a value for our progress bar variable
+          //take percentage multiply it by mobile slider max num 255
+          let mobileSliderResize = Math.floor(percentageOfDesktopSlider * 255);
+          console.log("convertToMobile", mobileSliderResize);
+          document.documentElement.attributes["style"].value =
+            "--mobile-slider-movement: " + String(mobileSliderResize) + "px";
+          mobileLayerX = mobileSliderResize;
+          console.log("mobileLayerX", mobileLayerX);
+        } else {
+          let mobileSliderMovement = parseInt(
+            document.documentElement.attributes["style"].value.split(" ").pop()
+          );
+          // console.log(
+          //   "this is desktop. get mobile-slider without px",
+          //   mobileSliderMovement
+          // );
+          // let calculatedDesktopSlider = calculateSliderMovementSetProgressBar(
+          //   window.innerWidth,
+          //   mobileSliderMovement
+          // );
+          //we are getting mobile slider so we need to divide by 255
+          console.log("mobileSliderMovement", mobileSliderMovement);
+          let percentageOfMobileSlider = mobileSliderMovement / 255;
+          //we can use this percentage as a value for our progress bar variable
+          //take percentage multiply it by desktop slider max num 435
+          let desktopSliderResize = Math.floor(percentageOfMobileSlider * 435);
+          console.log("converToDesktop", desktopSliderResize);
+          document.documentElement.attributes["style"].value =
+            "--desktop-slider-movement: " + String(desktopSliderResize) + "px";
+          layerXofClickedEle = desktopSliderResize;
+          console.log("layerXofClickedEle", layerXofClickedEle);
+        }
+      }, 300);
+    });
+  }
+
+  function calculateSliderMovementSetProgressBar(
+    innerWidthInput,
+    sliderMovement
+  ) {
+    if (innerWidthInput <= 415) {
+      //we are getting desktop slider so we need to divide by 435
+      console.log("sliderMovement", sliderMovement);
+      let percentageOfDesktopSlider = (sliderMovement / 435).toFixed(2);
+      //we can use this percentage as a value for our progress bar variable
+      //take percentage multiply it by mobile slider max num 255
+      let mobileSliderResize = Math.floor(percentageOfDesktopSlider * 255);
+      console.log("convertToMobile", mobileSliderResize);
+
+      return mobileSliderResize;
+    } else {
+      //we are getting mobile slider so we need to divide by 255
+      console.log("sliderMovement", sliderMovement);
+      let percentageOfMobileSlider = (sliderMovement / 255).toFixed(2);
+      //we can use this percentage as a value for our progress bar variable
+      //take percentage multiply it by desktop slider max num 435
+      let desktopSliderResize = Math.floor(percentageOfMobileSlider * 435);
+      console.log("converToDesktop", desktopSliderResize);
+      return desktopSliderResize;
+    }
+  }
   /***** resize feature *****/
 }
+
+/***** first attempt *****/
+function getSliderMovement(eventInput) {
+  console.count();
+  if (window.innerWidth <= 415) {
+    // debugger;
+    let desktopSliderMovement = parseInt(
+      document.documentElement.attributes["style"].value.split(" ").pop()
+    );
+    // console.log(
+    //   "this is mobile. get desktop-slider without px",
+    //   desktopSliderMovement
+    // );
+    // let calculatedMobileSlider = calculateSliderMovementSetProgressBar(
+    //   window.innerWidth,
+    //   desktopSliderMovement
+    // );
+    //we are getting desktop slider so we need to divide by 435
+    console.log("desktopSliderMovement", desktopSliderMovement);
+    let percentageOfDesktopSlider = desktopSliderMovement / 435;
+    //we can use this percentage as a value for our progress bar variable
+    //take percentage multiply it by mobile slider max num 255
+    let mobileSliderResize = Math.floor(percentageOfDesktopSlider * 255);
+    console.log("convertToMobile", mobileSliderResize);
+    document.documentElement.attributes["style"].value =
+      "--mobile-slider-movement: " + String(mobileSliderResize) + "px";
+    // mobileLayerX = mobileSliderResize;
+  } else {
+    let mobileSliderMovement = parseInt(
+      document.documentElement.attributes["style"].value.split(" ").pop()
+    );
+    // console.log(
+    //   "this is desktop. get mobile-slider without px",
+    //   mobileSliderMovement
+    // );
+    // let calculatedDesktopSlider = calculateSliderMovementSetProgressBar(
+    //   window.innerWidth,
+    //   mobileSliderMovement
+    // );
+    //we are getting mobile slider so we need to divide by 255
+    console.log("mobileSliderMovement", mobileSliderMovement);
+    let percentageOfMobileSlider = mobileSliderMovement / 255;
+    //we can use this percentage as a value for our progress bar variable
+    //take percentage multiply it by desktop slider max num 435
+    let desktopSliderResize = Math.floor(percentageOfMobileSlider * 435);
+    console.log("converToDesktop", desktopSliderResize);
+    document.documentElement.attributes["style"].value =
+      "--desktop-slider-movement: " + String(desktopSliderResize) + "px";
+    // layerXofClickedEle = desktopSliderResize;
+  }
+}
+/***** first attempt *****/
 
 function clickEventAddToToggleContainer() {
   var { toggleBtn } = ourSelectors();
