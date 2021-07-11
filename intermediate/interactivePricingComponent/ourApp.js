@@ -26,17 +26,10 @@ function ourSelectors() {
   };
 }
 alert(
-  "calculation in window resize is running once but every time we resize the window eiter layerXofClickedEle or mobileLayerX is substracted by one because we are using Math.floor"
+  "for our progress bar, we want to use the sliderIcon movement variable divide that by 434(desktop) or 255(mobile) to get the %"
 );
-alert(
-  "test algorithm where we don't use math.floor. since we are passing in a string form of our sliderMovement we can use .toFixed"
-);
-alert(
-  "then passed that string in to document.documentElement.attributes['style'].value between --document-slider-movement and px"
-);
-alert(
-  "let's use two css variable for the progress bar. one for mobile and one for desktop. these variables will work with --desktop-slider-movement or --mobile-slider-movement"
-);
+alert("then assign that % to --desktop or --mobile-progressbar");
+alert("finish click on bar or barWrapper with progressbar first");
 // let callFuncToGetWindowWidth;
 // let windowWidthOnLoad;
 /***** call/invoke our functions *****/
@@ -168,16 +161,22 @@ function setCssPropertyToDocument() {
   // parseInt($0.attributes["style"].value.split(" ")[1])
   //code above we can use to get --desktop-slider-movement or --mobile-slider-movement value
   if (window.innerWidth <= 415) {
+    //for our slider movement
     document.documentElement.style.setProperty(
       "--mobile-slider-movement",
       " 0px"
     );
+    //for our progress bar
+    document.documentElement.style.setProperty("--mobile-progressbar", " 0%");
   } else {
+    //for our slider movement
     document.documentElement.style.setProperty(
       "--desktop-slider-movement",
       " 0px"
       // String(totalAmtPercentage) + "%"
     );
+    //for our progress bar
+    document.documentElement.style.setProperty("--desktop-progressbar", " 0%");
     callThisKeyBoardAtDesktopSize();
   }
 }
@@ -246,6 +245,7 @@ function desktopMouseClickAndMouseMovementAlgor() {
             mobileBarLayerX = 0;
             document.documentElement.attributes["style"].value =
               "--mobile-slider-movement: " + String(mobileBarLayerX) + "px";
+            //progressbar
           } else {
             document.documentElement.attributes["style"].value =
               "--mobile-slider-movement: " + String(mobileBarLayerX) + "px";
@@ -259,6 +259,7 @@ function desktopMouseClickAndMouseMovementAlgor() {
               "--mobile-slider-movement: " +
               String(mobileBarWrapperLayerX) +
               "px";
+            //progressbar
           } else {
             console.log(event.layerX);
             document.documentElement.attributes["style"].value =
@@ -277,7 +278,14 @@ function desktopMouseClickAndMouseMovementAlgor() {
           if (barLayerX >= 0 && barLayerX <= 40) {
             barLayerX = 0;
             document.documentElement.attributes["style"].value =
-              "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
+              "--desktop-slider-movement:" +
+              " " +
+              String(barLayerX) +
+              "px" +
+              "; " +
+              //progressbar
+              "--desktop-progressbar: " +
+              "0%";
           } else {
             document.documentElement.attributes["style"].value =
               "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
@@ -298,7 +306,11 @@ function desktopMouseClickAndMouseMovementAlgor() {
               "--desktop-slider-movement:" +
               " " +
               String(barWrapperLayerX) +
-              "px";
+              "px" +
+              "; " +
+              //progressbar
+              "--desktop-progressbar: " +
+              "100%";
           } else {
             //set --slider-movement will be set to event.target.layerX
             document.documentElement.attributes["style"].value =
@@ -724,11 +736,14 @@ Page Down (Optional): Decrement the slider by an amount larger than the step cha
           let percentageOfDesktopSlider = desktopSliderMovement / 435;
           //we can use this percentage as a value for our progress bar variable
           //take percentage multiply it by mobile slider max num 255
-          let mobileSliderResize = Math.floor(percentageOfDesktopSlider * 255);
-          console.log("convertToMobile", mobileSliderResize);
+          //since we are using .toFixed() below we will get the string form of the calculated number then assign that value to mobileSliderResize
+          //we can just pass in mobileSliderResize into --mobile-slider-movement
+          let mobileSliderResize = (percentageOfDesktopSlider * 255).toFixed();
+          console.log("convertToMobile", typeof mobileSliderResize);
           document.documentElement.attributes["style"].value =
-            "--mobile-slider-movement: " + String(mobileSliderResize) + "px";
-          mobileLayerX = mobileSliderResize;
+            "--mobile-slider-movement: " + mobileSliderResize + "px";
+          //need to convert mobileSliderResize back to number
+          mobileLayerX = Number(mobileSliderResize);
           console.log("mobileLayerX", mobileLayerX);
         } else {
           let mobileSliderMovement = parseInt(
@@ -747,11 +762,14 @@ Page Down (Optional): Decrement the slider by an amount larger than the step cha
           let percentageOfMobileSlider = mobileSliderMovement / 255;
           //we can use this percentage as a value for our progress bar variable
           //take percentage multiply it by desktop slider max num 435
-          let desktopSliderResize = Math.floor(percentageOfMobileSlider * 435);
-          console.log("converToDesktop", desktopSliderResize);
+          //since we are using .toFixed() below we will get the string form of the calculated number then assign that value to desktopSliderResize
+          //we can just pass in desktopSliderResize into --desktop-slider-movement
+          let desktopSliderResize = (percentageOfMobileSlider * 435).toFixed();
+          console.log("converToDesktop", typeof desktopSliderResize);
           document.documentElement.attributes["style"].value =
-            "--desktop-slider-movement: " + String(desktopSliderResize) + "px";
-          layerXofClickedEle = desktopSliderResize;
+            "--desktop-slider-movement: " + desktopSliderResize + "px";
+          //need to convert desktopSliderResize back to number
+          layerXofClickedEle = Number(desktopSliderResize);
           console.log("layerXofClickedEle", layerXofClickedEle);
         }
       }, 300);
