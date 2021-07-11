@@ -467,6 +467,7 @@ there won't be a empty space above the .slider-icon-wrapper with these codes
   width: 50%;
   height: 8px;
   background-color: var(--color-pri-soft-cyan);
+  width: var(--mobile-progressbar, 0%);
 }
 
 @media screen and (min-width: 90rem) {
@@ -481,6 +482,9 @@ there won't be a empty space above the .slider-icon-wrapper with these codes
     left: 0px;
     right: 0px;
     width: 100%;
+  }
+  .bar {
+    width: var(--desktop-progressbar, 0%);
   }
 }
 
