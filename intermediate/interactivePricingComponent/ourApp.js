@@ -26,10 +26,8 @@ function ourSelectors() {
   };
 }
 alert(
-  "for our progress bar, we want to use the sliderIcon movement variable divide that by 434(desktop) or 255(mobile) to get the %"
+  "click event for mobile and desktop bar/barwrapper progress bar complete. work on mousemove, touchmove and keyboard progressbar feature"
 );
-alert("then assign that % to --desktop or --mobile-progressbar");
-alert("finish click on bar or barWrapper with progressbar first");
 // let callFuncToGetWindowWidth;
 // let windowWidthOnLoad;
 /***** call/invoke our functions *****/
@@ -239,16 +237,35 @@ function desktopMouseClickAndMouseMovementAlgor() {
       /***** mobile *****/
       if (window.innerWidth <= 415) {
         /***** mobile *****/
+
         if (event.target == barTealElement) {
           let mobileBarLayerX = event.layerX;
           if (mobileBarLayerX >= 0 && mobileBarLayerX <= 40) {
             mobileBarLayerX = 0;
             document.documentElement.attributes["style"].value =
-              "--mobile-slider-movement: " + String(mobileBarLayerX) + "px";
-            //progressbar
+              "--mobile-slider-movement: " +
+              String(mobileBarLayerX) +
+              "px" +
+              "; " +
+              //progressbar
+              "--mobile-progressbar: " +
+              "0%";
           } else {
+            //since strFormMobileBarLayerX is a string we can pass it into document.documentElement.attribute["style"] without converting it to string
+            let strFormMobileBarLayerX = (
+              (mobileBarLayerX / 255) *
+              100
+            ).toFixed(2);
+            //assign slider-movement and progressbar to html
             document.documentElement.attributes["style"].value =
-              "--mobile-slider-movement: " + String(mobileBarLayerX) + "px";
+              "--mobile-slider-movement: " +
+              String(mobileBarLayerX) +
+              "px" +
+              "; " +
+              //progressbar
+              "--mobile-progressbar: " +
+              strFormMobileBarLayerX +
+              "%";
           }
           mobileLayerX = mobileBarLayerX;
         } else if (event.target == barWrapperElement) {
@@ -258,14 +275,29 @@ function desktopMouseClickAndMouseMovementAlgor() {
             document.documentElement.attributes["style"].value =
               "--mobile-slider-movement: " +
               String(mobileBarWrapperLayerX) +
-              "px";
-            //progressbar
+              "px" +
+              "; " +
+              //progressbar
+              "--mobile-progressbar: " +
+              "100%";
           } else {
-            console.log(event.layerX);
+            // console.log(event.layerX);
+            //since percentStrFormMobileBarWrapperLayerX is a string we can pass it into document.documentElement.attribute["style"] without converting it to string
+            let percentStrFormMobileBarWrapperLayerX = (
+              (mobileBarWrapperLayerX / 255) *
+              100
+            ).toFixed(2);
+            //assign slider-movement and progressbar to html
+
             document.documentElement.attributes["style"].value =
               "--mobile-slider-movement: " +
               String(mobileBarWrapperLayerX) +
-              "px";
+              "px" +
+              "; " +
+              //progressbar
+              "--mobile-progressbar: " +
+              percentStrFormMobileBarWrapperLayerX +
+              "%";
           }
           mobileLayerX = mobileBarWrapperLayerX;
         }
@@ -287,8 +319,21 @@ function desktopMouseClickAndMouseMovementAlgor() {
               "--desktop-progressbar: " +
               "0%";
           } else {
+            //since percentOfbarLayerXStrForm is a string we can pass it into document.documentElement.attribute["style"] without convert it to string
+            let percentOfbarLayerXStrForm = ((barLayerX / 434) * 100).toFixed(
+              2
+            );
+            //assign slider-movement and progressbar to html
+
             document.documentElement.attributes["style"].value =
-              "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
+              "--desktop-slider-movement:" +
+              " " +
+              String(barLayerX) +
+              "px" +
+              "; " +
+              "--desktop-progressbar: " +
+              percentOfbarLayerXStrForm +
+              "%";
           }
           layerXofClickedEle = barLayerX;
           // console.log("barLayerX", barLayerX);
@@ -313,11 +358,22 @@ function desktopMouseClickAndMouseMovementAlgor() {
               "100%";
           } else {
             //set --slider-movement will be set to event.target.layerX
+            //since strFormPercentOfBarWrapperLayerX is a string we can pass it into document.documentElement.attribute["style"] without convert it to string
+            let strFormPercentOfBarWrapperLayerX = (
+              (barWrapperLayerX / 434) *
+              100
+            ).toFixed(2);
+            //assign slider-movement and progressbar to html
+
             document.documentElement.attributes["style"].value =
               "--desktop-slider-movement:" +
               " " +
               String(barWrapperLayerX) +
-              "px";
+              "px" +
+              "; " +
+              "--desktop-progressbar: " +
+              strFormPercentOfBarWrapperLayerX +
+              "%";
           }
           layerXofClickedEle = barWrapperLayerX;
           // console.log("barWrapperLayerX", barWrapperLayerX);
