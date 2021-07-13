@@ -25,9 +25,11 @@ function ourSelectors() {
     barWrapperElement,
   };
 }
+
 alert(
-  "click event for mobile and desktop bar/barwrapper progress bar complete. work on mousemove, touchmove and keyboard progressbar feature"
+  "every time we toggle between monthly/yearly. we can set the value of document.documentElement.attributes['style']"
 );
+alert("then we will use -progresbar value to display the price and pageviews");
 // let callFuncToGetWindowWidth;
 // let windowWidthOnLoad;
 /***** call/invoke our functions *****/
@@ -152,7 +154,7 @@ function testingMoreIdeas() {
     callFuncToGetWindowWidth = assignWidthToVariable;
   }, 1000);
 }
-var callThisKeyBoardAtDesktopSize;
+
 /***** declare --slider-movement CSS property to html element: we are now running  *****/
 function setCssPropertyToDocument() {
   // document.documentElement.attributes["style"].value.split(" ")[1];
@@ -175,7 +177,7 @@ function setCssPropertyToDocument() {
     );
     //for our progress bar
     document.documentElement.style.setProperty("--desktop-progressbar", " 0%");
-    callThisKeyBoardAtDesktopSize();
+    // callThisKeyBoardAtDesktopSize();
   }
 }
 
@@ -205,7 +207,8 @@ function desktopMouseClickAndMouseMovementAlgor() {
   //     callingWindowWidthInDesktopFunc
   //   );
   // }
-  var { barTealElement, barWrapperElement, sliderIconWrapper } = ourSelectors();
+  var { barTealElement, barWrapperElement, sliderIconWrapper, toggleBtn } =
+    ourSelectors();
   //layerXofClickedEle will be layerX of bar or barWrapper
   //we are assigning layerXofClickedEle/mobileLayerX in our barWrapperElement eventListener
   var layerXofClickedEle;
@@ -218,6 +221,10 @@ function desktopMouseClickAndMouseMovementAlgor() {
   barWrapperElement.addEventListener(
     "click",
     function sliderMovementClickFeatureBarElement(event) {
+      console.log(
+        "toggleBtn: aria-checked.value",
+        toggleBtn.attributes["aria-checked"].value
+      );
       // console.log(callFuncToGetWindowWidth());
       // clearInterval(getWidthOfWindowEverySec);
       // // var { barTealElement, barWrapperElement } = ourSelectors();
@@ -504,6 +511,7 @@ function desktopMouseClickAndMouseMovementAlgor() {
     }
 
     function moveSliderIconWrapper(eventInput) {
+      var progressBarMouseMovement;
       if (eventInput.movementX < 0 && movementCounter <= 0) {
         movementCounter = 0;
       } else if (eventInput.movementX > 0 && movementCounter >= 434) {
@@ -515,9 +523,16 @@ function desktopMouseClickAndMouseMovementAlgor() {
           movementCounter += 1;
         }
       }
-
+      //our progressbar should be based off desktop movementCounter
+      progressBarMouseMovement = ((movementCounter / 434) * 100).toFixed(2);
       document.documentElement.attributes["style"].value =
-        "--desktop-slider-movement: " + String(movementCounter) + "px";
+        "--desktop-slider-movement: " +
+        String(movementCounter) +
+        "px" +
+        "; " +
+        "--desktop-progressbar: " +
+        progressBarMouseMovement +
+        "%";
       /***** we want to update layerXofClickedEle to be movementCounter because we want to use the new position of layerXofClickedEle
        * for our keyboard feature
        *  *****/
@@ -541,6 +556,7 @@ function desktopMouseClickAndMouseMovementAlgor() {
         //since we are in this if statement, touch will be the current value of eventInput.changedTouches[0] from the execution of this func
         //previousTouch.pageX will be the previous value of eventInput.changedTouches[0]. the previous execution of this func
         let mobileMovementX = touch.pageX - previousTouch.pageX;
+        let progressbarMobileTouchMovement;
         //touch.pageX will be the current value of eventInput.changedTouches[0] and previousTouch.pageX will be the previous value of eventInput.changedTouches[0]
         // console.log("previousTouch inside if statement", previousTouch);
         // console.log("movementX", movementX);
@@ -556,8 +572,19 @@ function desktopMouseClickAndMouseMovementAlgor() {
             mobileMovementCounter += 1;
           }
         }
+        //our progressbar should be based off mobile mobileMovementX
+        progressbarMobileTouchMovement = (
+          (mobileMovementX / 255) *
+          100
+        ).toFixed(2);
         document.documentElement.attributes["style"].value =
-          "--mobile-slider-movement: " + String(mobileMovementCounter) + "px";
+          "--mobile-slider-movement: " +
+          String(mobileMovementCounter) +
+          "px" +
+          "; " +
+          "--mobile-progressbar: " +
+          progressbarMobileTouchMovement +
+          "%";
         mobileLayerX = mobileMovementCounter;
       }
       // console.log("previousTouch before", previousTouch);
@@ -626,7 +653,9 @@ function desktopMouseClickAndMouseMovementAlgor() {
   /***** keyboard feature *****/
   // we declared callThisKeyBoardAtDesktopSize outside the scope of this func desktopMouseClickAndMouseMovementAlgor then we assigned the keyboardFeatureSliderMovement func reference to that variable
   //then we call callThisKeyBoardAtDesktopSize inside setCssPropertyToDocument func
-  callThisKeyBoardAtDesktopSize = keyboardFeatureSliderMovement;
+  if (window.innerWidth >= 415) {
+    keyboardFeatureSliderMovement();
+  }
   function keyboardFeatureSliderMovement() {
     var { pricingContainer } = ourSelectors();
     //document.activeElement will let us know which element has focus but we have to run/call/execute this func
@@ -664,6 +693,7 @@ function desktopMouseClickAndMouseMovementAlgor() {
 
   function moveSliderIconOnKeydown(event) {
     var keydownMoveCounter;
+    var progressbarKeydownMoveCounter;
     /***** layerXofClickedEle will be updating the position of layerX based on mousemovement  *****/
     /***** we will declare keydownMoveCounter variable in this func. if layerXofClickedEle is undefined it means currently it holds no value,
      * the keydownMoveCounter variable we declare will be 0, if layerXofClickedEle is not != undefined we will assign the value of layerXofClickedEle
@@ -738,9 +768,19 @@ function desktopMouseClickAndMouseMovementAlgor() {
         break;
     }
     console.log(keydownMoveCounter);
+    //our progressbar should be based off desktop keydownMoveCounter
+    progressbarKeydownMoveCounter = ((keydownMoveCounter / 434) * 100).toFixed(
+      2
+    );
     //once we update keydownMoveCounter we will assign that value to --desktop-slider-movement
     document.documentElement.attributes["style"].value =
-      "--desktop-slider-movement: " + String(keydownMoveCounter) + "px";
+      "--desktop-slider-movement: " +
+      String(keydownMoveCounter) +
+      "px" +
+      "; " +
+      "--desktop-progressbar: " +
+      progressbarKeydownMoveCounter +
+      "%";
     //then we will update layerXofClickedEle by assigning the value of keydownMoveCounter to layerXofClickedEle
     //this way if our user decide to use the mouse to move the .sliderIconWrapper it will use the current position of X or position of layerX
     //where the keyboard user last used the keyboard to move .sliderIconWrapper
@@ -777,7 +817,7 @@ Page Down (Optional): Decrement the slider by an amount larger than the step cha
         if (window.innerWidth <= 415) {
           // debugger;
           let desktopSliderMovement = parseInt(
-            document.documentElement.attributes["style"].value.split(" ").pop()
+            document.documentElement.attributes["style"].value.split(" ")[1]
           );
           // console.log(
           //   "this is mobile. get desktop-slider without px",
@@ -794,16 +834,28 @@ Page Down (Optional): Decrement the slider by an amount larger than the step cha
           //take percentage multiply it by mobile slider max num 255
           //since we are using .toFixed() below we will get the string form of the calculated number then assign that value to mobileSliderResize
           //we can just pass in mobileSliderResize into --mobile-slider-movement
+          console.log("percentageOfDesktopSlider", percentageOfDesktopSlider);
           let mobileSliderResize = (percentageOfDesktopSlider * 255).toFixed();
-          console.log("convertToMobile", typeof mobileSliderResize);
+          console.log("convertToMobile", mobileSliderResize);
+          //make sure we get the correct % we can take mobileSliderResize * 435 then calculate the progressbar % with that number
+          let resizeProgresbarMobile = (
+            (Number(mobileSliderResize) / 255) *
+            100
+          ).toFixed(2);
           document.documentElement.attributes["style"].value =
-            "--mobile-slider-movement: " + mobileSliderResize + "px";
+            "--mobile-slider-movement: " +
+            mobileSliderResize +
+            "px" +
+            "; " +
+            "--mobile-progressbar: " +
+            resizeProgresbarMobile +
+            "%";
           //need to convert mobileSliderResize back to number
           mobileLayerX = Number(mobileSliderResize);
           console.log("mobileLayerX", mobileLayerX);
         } else {
           let mobileSliderMovement = parseInt(
-            document.documentElement.attributes["style"].value.split(" ").pop()
+            document.documentElement.attributes["style"].value.split(" ")[1]
           );
           // console.log(
           //   "this is desktop. get mobile-slider without px",
@@ -820,10 +872,22 @@ Page Down (Optional): Decrement the slider by an amount larger than the step cha
           //take percentage multiply it by desktop slider max num 435
           //since we are using .toFixed() below we will get the string form of the calculated number then assign that value to desktopSliderResize
           //we can just pass in desktopSliderResize into --desktop-slider-movement
+          console.log("percentageOfMobileSlider", percentageOfMobileSlider);
           let desktopSliderResize = (percentageOfMobileSlider * 435).toFixed();
-          console.log("converToDesktop", typeof desktopSliderResize);
+          //make sure we get the correct % we can take desktopSliderResize * 435 then calculate the progressbar % with that number
+          let progressbarResizeDesktop = (
+            (Number(desktopSliderResize) / 435) *
+            100
+          ).toFixed(2);
+          console.log("converToDesktop", desktopSliderResize);
           document.documentElement.attributes["style"].value =
-            "--desktop-slider-movement: " + desktopSliderResize + "px";
+            "--desktop-slider-movement: " +
+            desktopSliderResize +
+            "px" +
+            "; " +
+            "--desktop-progressbar: " +
+            progressbarResizeDesktop +
+            "%";
           //need to convert desktopSliderResize back to number
           layerXofClickedEle = Number(desktopSliderResize);
           console.log("layerXofClickedEle", layerXofClickedEle);
@@ -982,6 +1046,10 @@ function toggleAriaCheckedSwitchBetweenTrueAndFalse(eventInput) {
       this.attributes["aria-checked"].value = "false";
     }
   }
+  console.log(
+    "document.attributes",
+    typeof document.documentElement.attributes["style"].value.split(" ")[3]
+  );
 }
 
 // function toggleAriaCheckedSwitchBetweenTrueAndFalse(eventInput) {
