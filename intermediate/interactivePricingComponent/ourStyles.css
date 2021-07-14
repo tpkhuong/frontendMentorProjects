@@ -506,6 +506,10 @@ there won't be a empty space above the .slider-icon-wrapper with these codes
   font-size: calc((34 / 16) * 1rem);
 }
 
+.price.discount-toggle {
+  color: var(--color-pri-light-red);
+}
+
 .priceview span:last-child {
   align-self: center;
   margin-inline-start: 8px;
