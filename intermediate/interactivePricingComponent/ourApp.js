@@ -1,8 +1,12 @@
 function ourSelectors() {
+  //span of our pageview text.
+  var pageViewText = document.querySelector("#number-pageviews");
   //article with class of pricing. container element for pageviews,slider,priceview,toggle
   var pricingContainer = document.querySelector(".pricing");
   // toggle button
   var toggleBtn = document.querySelector(".toggle-button");
+  //price view container
+  var priceViewText = document.querySelector(".price");
   //element text month or yearly
   var spanTextEleMonthOrYear = document.querySelector(
     ".priceview span:last-of-type"
@@ -16,7 +20,9 @@ function ourSelectors() {
   //.bar-wrapper gray color
   var barWrapperElement = document.querySelector(".bar-wrapper");
   return {
+    pageViewText,
     toggleBtn,
+    priceViewText,
     pricingContainer,
     spanTextEleMonthOrYear,
     sliderContainer,
@@ -26,10 +32,6 @@ function ourSelectors() {
   };
 }
 
-alert(
-  "every time we toggle between monthly/yearly. we can set the value of document.documentElement.attributes['style']"
-);
-alert("then we will use -progresbar value to display the price and pageviews");
 // let callFuncToGetWindowWidth;
 // let windowWidthOnLoad;
 /***** call/invoke our functions *****/
@@ -207,6 +209,7 @@ function desktopMouseClickAndMouseMovementAlgor() {
   //     callingWindowWidthInDesktopFunc
   //   );
   // }
+  var valueOfToggleElementAriaChecked;
   var { barTealElement, barWrapperElement, sliderIconWrapper, toggleBtn } =
     ourSelectors();
   //layerXofClickedEle will be layerX of bar or barWrapper
@@ -221,10 +224,8 @@ function desktopMouseClickAndMouseMovementAlgor() {
   barWrapperElement.addEventListener(
     "click",
     function sliderMovementClickFeatureBarElement(event) {
-      console.log(
-        "toggleBtn: aria-checked.value",
-        toggleBtn.attributes["aria-checked"].value
-      );
+      valueOfToggleElementAriaChecked =
+        toggleBtn.attributes["aria-checked"].value;
       // console.log(callFuncToGetWindowWidth());
       // clearInterval(getWidthOfWindowEverySec);
       // // var { barTealElement, barWrapperElement } = ourSelectors();
@@ -244,7 +245,6 @@ function desktopMouseClickAndMouseMovementAlgor() {
       /***** mobile *****/
       if (window.innerWidth <= 415) {
         /***** mobile *****/
-
         if (event.target == barTealElement) {
           let mobileBarLayerX = event.layerX;
           if (mobileBarLayerX >= 0 && mobileBarLayerX <= 40) {
@@ -385,27 +385,20 @@ function desktopMouseClickAndMouseMovementAlgor() {
           layerXofClickedEle = barWrapperLayerX;
           // console.log("barWrapperLayerX", barWrapperLayerX);
         }
-
         /***** desktop *****/
       }
 
-      function notes() {
-        /***** instead of assigning event.layerX to layerXofClickedEle based on where the user clicked on bar or barWrapper
-         * we will assign layerXofClickedEle the layerX of barLayerX or barWrapperLayerX so we dont repeat ourselves
-         * *****/
-        // layerXofClickedEle = event.layerX;
-        // console.log("layerXofClickedEle", layerXofClickedEle);
-        /***** calling mousemove func: when we have testingIdeas inside this event we're adding mousemove and mouseup event to .sliderIconWrapper *****/
-        // alert("we are passing in the correct layerX that we want to use in mousemove func");
-        // alert("testingIdeas is fire four times")
-        // if (layerXofClickedEle >= 0 && layerXofClickedEle <= 40) {
-        //   layerXofClickedEle = 0;
-        // } else if (layerXofClickedEle >= 435 && layerXofClickedEle <= 472) {
-        //   layerXofClickedEle = 434;
-        // } else {
-        //   layerXofClickedEle = event.layerX;
-        // }
+      /***** call yearly or monthly func for display based on valueOfToggleElementAriaChecked. the value of valueOfToggleElementAriaChecked is a string "true" or "false"
+       * we had if (valueOfToggleElementAriaChecked) => if("true") or if("false") which is truthy because it is a string
+       *  *****/
+      if (valueOfToggleElementAriaChecked == "true") {
+        yearlyDisplayOfPriceAndPageviews();
+      } else {
+        monthlyDisplayOfPriceAndPageviews();
       }
+      // if valueOfToggleElementAriaChecked is false it will be monthly
+      // if valueOfToggleElementAriaChecked is true it will be yearly
+
       console.log("layerXofClickedEle", layerXofClickedEle);
       /***** calling mousemove func: when we have testingIdeas inside this event we're adding mousemove and mouseup event to .sliderIconWrapper *****/
       // testingIdeas(layerXofClickedEle);
@@ -423,7 +416,23 @@ function desktopMouseClickAndMouseMovementAlgor() {
       }, 1000);
     }
   );
-
+  function notes() {
+    /***** instead of assigning event.layerX to layerXofClickedEle based on where the user clicked on bar or barWrapper
+     * we will assign layerXofClickedEle the layerX of barLayerX or barWrapperLayerX so we dont repeat ourselves
+     * *****/
+    // layerXofClickedEle = event.layerX;
+    // console.log("layerXofClickedEle", layerXofClickedEle);
+    /***** calling mousemove func: when we have testingIdeas inside this event we're adding mousemove and mouseup event to .sliderIconWrapper *****/
+    // alert("we are passing in the correct layerX that we want to use in mousemove func");
+    // alert("testingIdeas is fire four times")
+    // if (layerXofClickedEle >= 0 && layerXofClickedEle <= 40) {
+    //   layerXofClickedEle = 0;
+    // } else if (layerXofClickedEle >= 435 && layerXofClickedEle <= 472) {
+    //   layerXofClickedEle = 434;
+    // } else {
+    //   layerXofClickedEle = event.layerX;
+    // }
+  }
   addAndRemoveMouseAndTouchMovementAlgorithm();
   // callAddAndRemoveMouseMovementAlgorithm = addAndRemoveMouseMovementAlgorithm;
   /***** mouseMovementAlgorithm *****/
@@ -896,85 +905,8 @@ Page Down (Optional): Decrement the slider by an amount larger than the step cha
     });
   }
 
-  function calculateSliderMovementSetProgressBar(
-    innerWidthInput,
-    sliderMovement
-  ) {
-    if (innerWidthInput <= 415) {
-      //we are getting desktop slider so we need to divide by 435
-      console.log("sliderMovement", sliderMovement);
-      let percentageOfDesktopSlider = (sliderMovement / 435).toFixed(2);
-      //we can use this percentage as a value for our progress bar variable
-      //take percentage multiply it by mobile slider max num 255
-      let mobileSliderResize = Math.floor(percentageOfDesktopSlider * 255);
-      console.log("convertToMobile", mobileSliderResize);
-
-      return mobileSliderResize;
-    } else {
-      //we are getting mobile slider so we need to divide by 255
-      console.log("sliderMovement", sliderMovement);
-      let percentageOfMobileSlider = (sliderMovement / 255).toFixed(2);
-      //we can use this percentage as a value for our progress bar variable
-      //take percentage multiply it by desktop slider max num 435
-      let desktopSliderResize = Math.floor(percentageOfMobileSlider * 435);
-      console.log("converToDesktop", desktopSliderResize);
-      return desktopSliderResize;
-    }
-  }
   /***** resize feature *****/
 }
-
-/***** first attempt *****/
-function getSliderMovement(eventInput) {
-  console.count();
-  if (window.innerWidth <= 415) {
-    // debugger;
-    let desktopSliderMovement = parseInt(
-      document.documentElement.attributes["style"].value.split(" ").pop()
-    );
-    // console.log(
-    //   "this is mobile. get desktop-slider without px",
-    //   desktopSliderMovement
-    // );
-    // let calculatedMobileSlider = calculateSliderMovementSetProgressBar(
-    //   window.innerWidth,
-    //   desktopSliderMovement
-    // );
-    //we are getting desktop slider so we need to divide by 435
-    console.log("desktopSliderMovement", desktopSliderMovement);
-    let percentageOfDesktopSlider = desktopSliderMovement / 435;
-    //we can use this percentage as a value for our progress bar variable
-    //take percentage multiply it by mobile slider max num 255
-    let mobileSliderResize = Math.floor(percentageOfDesktopSlider * 255);
-    console.log("convertToMobile", mobileSliderResize);
-    document.documentElement.attributes["style"].value =
-      "--mobile-slider-movement: " + String(mobileSliderResize) + "px";
-    // mobileLayerX = mobileSliderResize;
-  } else {
-    let mobileSliderMovement = parseInt(
-      document.documentElement.attributes["style"].value.split(" ").pop()
-    );
-    // console.log(
-    //   "this is desktop. get mobile-slider without px",
-    //   mobileSliderMovement
-    // );
-    // let calculatedDesktopSlider = calculateSliderMovementSetProgressBar(
-    //   window.innerWidth,
-    //   mobileSliderMovement
-    // );
-    //we are getting mobile slider so we need to divide by 255
-    console.log("mobileSliderMovement", mobileSliderMovement);
-    let percentageOfMobileSlider = mobileSliderMovement / 255;
-    //we can use this percentage as a value for our progress bar variable
-    //take percentage multiply it by desktop slider max num 435
-    let desktopSliderResize = Math.floor(percentageOfMobileSlider * 435);
-    console.log("converToDesktop", desktopSliderResize);
-    document.documentElement.attributes["style"].value =
-      "--desktop-slider-movement: " + String(desktopSliderResize) + "px";
-    // layerXofClickedEle = desktopSliderResize;
-  }
-}
-/***** first attempt *****/
 
 function clickEventAddToToggleContainer() {
   var { toggleBtn } = ourSelectors();
@@ -1030,9 +962,13 @@ function toggleAriaCheckedSwitchBetweenTrueAndFalse(eventInput) {
     changeTextOfBillingMonthOrYear(toggleAriaCheckedAttr);
     if (toggleAriaCheckedAttr == "false") {
       // if aria-checked is false turn to true
+      //yearly
       this.attributes["aria-checked"].value = "true";
+      yearlyDisplayOfPriceAndPageviews();
     } else {
+      //monthly
       this.attributes["aria-checked"].value = "false";
+      monthlyDisplayOfPriceAndPageviews();
     }
   } else if (eventInput.target.parentElement == this) {
     // clicking the span/circle element
@@ -1041,15 +977,15 @@ function toggleAriaCheckedSwitchBetweenTrueAndFalse(eventInput) {
     /***** changing the text between month and year *****/
     changeTextOfBillingMonthOrYear(parentElementAriaCheckedAttr);
     if (parentElementAriaCheckedAttr == "false") {
+      //yearly
       this.attributes["aria-checked"].value = "true";
+      yearlyDisplayOfPriceAndPageviews();
     } else {
+      //monthly
       this.attributes["aria-checked"].value = "false";
+      monthlyDisplayOfPriceAndPageviews();
     }
   }
-  console.log(
-    "document.attributes",
-    typeof document.documentElement.attributes["style"].value.split(" ")[3]
-  );
 }
 
 // function toggleAriaCheckedSwitchBetweenTrueAndFalse(eventInput) {
@@ -1085,48 +1021,6 @@ function toggleAriaCheckedSwitchBetweenTrueAndFalse(eventInput) {
 
 /* toggle between monthly/yearly */
 
-// function
-
-/* slider feature: move .sliderIconWrapper when user clicked on .bar or .bar-wrapper */
-function sliderMovementClickFeatureBarElement(eventInput) {
-  // alert("worked!");
-  var { barTealElement, barWrapperElement } = ourSelectors();
-  console.log("sliderMovement", eventInput.layerX);
-  //work with layerX
-  //check if event.target is .bar or .bar-wrapper
-  /* we dont need to add or substract we want .sliderIconWrapper to move to the layerX based on where the user click at bar or bar-wrapper */
-  if (eventInput.target == barTealElement) {
-    //if user clicked on bar and layerX is between 0 and 40 we will set --slider-movement to be 0 by setting barlayerX to be 0
-    let barLayerX = eventInput.layerX;
-    if (barLayerX >= 0 && barLayerX <= 40) {
-      barLayerX = 0;
-      document.documentElement.attributes["style"].value =
-        "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
-    } else {
-      document.documentElement.attributes["style"].value =
-        "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
-    }
-  } else if (eventInput.target == barWrapperElement) {
-    let barWrapperLayerX = eventInput.layerX;
-    //when we click on .barWrapper neat the edge our .sliderIconWrapper right side is too far off barWrapper edge
-    //when we use transform: translateX(434px) on .sliderIconWrapper. the right edge of .sliderIconWrapper touches the right edge of .barWrapper
-    //instead of subtracting layerX if the user click on barWrapper and layerX is 470: we will work with a range and if layerX
-    //is within that range we will set layerX to be 434
-    //range we will work with will be 435-472
-    if (barWrapperLayerX >= 435 && barWrapperLayerX <= 472) {
-      //if user clicked on barWrapper and layerX is between 435 and 472 we will set --slider-movement to be 434 by setting barWrapperLayerX to be 434
-      barWrapperLayerX = 434;
-      document.documentElement.attributes["style"].value =
-        "--desktop-slider-movement:" + " " + String(barWrapperLayerX) + "px";
-    } else {
-      //set --slider-movement will be set to event.target.layerX
-      document.documentElement.attributes["style"].value =
-        "--desktop-slider-movement:" + " " + String(barWrapperLayerX) + "px";
-    }
-  }
-  return eventInput.layerX;
-}
-
 /* slider feature: move .sliderIconWrapper when user clicked on .bar or .bar-wrapper */
 
 /***** func will change the text between month or year based on toggle aria-checked
@@ -1142,6 +1036,115 @@ function changeTextOfBillingMonthOrYear(valueOfAriaChecked) {
     spanTextEleMonthOrYear.innerText = "/ month";
   }
 }
+
+/***** func will change the text between month or year based on toggle aria-checked
+ * if true it will be year if it is false it will be month
+ * *****/
+
+/***** run our func that controls the slider/pageviews/priceview
+ * based on our toggle. if aria-checked is true we want to work with year obj
+ * if it is aria-checked false we want to work with month obj
+ * *****/
+
+/*
+ 
+ 
+- 10K pageviews / $8 per => $72
+- 50K pageviews / $12 per month => $108
+- 100K pageviews / $16 per month => $144
+- 500k pageviews / $24 per month => $216
+- 1M pageviews / $36 per month => $324
+ 
+ */
+
+function yearlyDisplayOfPriceAndPageviews() {
+  var { pageViewText, priceViewText } = ourSelectors();
+  priceViewText.classList.add("discount-toggle");
+
+  //we will display pagview and price based on the % of our --progressbar mobile or desktop
+  //we will use parseInt(document.documentElement.attributes["style"].value.split(" ")[3]) it will take a string like "62.30%" gives us 62 in number form
+  var percentOfProgressbar = parseInt(
+    document.documentElement.attributes["style"].value.split(" ")[3]
+  );
+  switch (true) {
+    case percentOfProgressbar >= 0 && percentOfProgressbar <= 20:
+      pageViewText.innerText = "10k Pageviews";
+      priceViewText.innerText = "$72.00";
+      break;
+    case percentOfProgressbar >= 21 && percentOfProgressbar <= 40:
+      pageViewText.innerText = "50k Pageviews";
+      priceViewText.innerText = "$108.00";
+
+      break;
+    case percentOfProgressbar >= 41 && percentOfProgressbar <= 60:
+      pageViewText.innerText = "100k Pageviews";
+      priceViewText.innerText = "$144.00";
+
+      break;
+    case percentOfProgressbar >= 61 && percentOfProgressbar <= 80:
+      pageViewText.innerText = "500k Pageviews";
+      priceViewText.innerText = "$216.00";
+
+      break;
+    case percentOfProgressbar >= 81 && percentOfProgressbar <= 100:
+      pageViewText.innerText = "1M Pageviews";
+      priceViewText.innerText = "$324.00";
+
+      break;
+  }
+  // console.log(
+  //   "yearly price",
+  //   "document.attributes",
+  //   document.documentElement.attributes["style"].value.split(" ")[3]
+  // );
+}
+
+function monthlyDisplayOfPriceAndPageviews() {
+  var { pageViewText, priceViewText } = ourSelectors();
+  priceViewText.classList.remove("discount-toggle");
+  //we will display pagview and price based on the % of our --progressbar mobile or desktop
+  //we will use parseInt(document.documentElement.attributes["style"].value.split(" ")[3]) it will take a string like "62.30%" gives us 62 in number form
+
+  var percentOfProgressbar = parseInt(
+    document.documentElement.attributes["style"].value.split(" ")[3]
+  );
+  switch (true) {
+    case percentOfProgressbar >= 0 && percentOfProgressbar <= 20:
+      pageViewText.innerText = "10k Pageviews";
+      priceViewText.innerText = "$8.00";
+      break;
+    case percentOfProgressbar >= 21 && percentOfProgressbar <= 40:
+      pageViewText.innerText = "50k Pageviews";
+      priceViewText.innerText = "$12.00";
+
+      break;
+    case percentOfProgressbar >= 41 && percentOfProgressbar <= 60:
+      pageViewText.innerText = "100k Pageviews";
+      priceViewText.innerText = "$16.00";
+
+      break;
+    case percentOfProgressbar >= 61 && percentOfProgressbar <= 80:
+      pageViewText.innerText = "500k Pageviews";
+      priceViewText.innerText = "$24.00";
+
+      break;
+    case percentOfProgressbar >= 81 && percentOfProgressbar <= 100:
+      pageViewText.innerText = "1M Pageviews";
+      priceViewText.innerText = "$36.00";
+
+      break;
+  }
+  // console.log(
+  //   "monthly price",
+  //   "document.attributes",
+  //   document.documentElement.attributes["style"].value.split(" ")[3]
+  // );
+}
+
+/***** run our func that controls the slider/pageviews/priceview
+ * based on our toggle. if aria-checked is true we want to work with year obj
+ * if it is aria-checked false we want to work with month obj
+ * *****/
 
 /***** mobile functionality *****/
 
@@ -1478,16 +1481,61 @@ Page Down (Optional): Decrement the slider by an amount larger than the step cha
 
     /***** keyboard feature: do not need keyboard feature for mobile display *****/
   }
+  /* slider feature: move .sliderIconWrapper when user clicked on .bar or .bar-wrapper */
+  function sliderMovementClickFeatureBarElement(eventInput) {
+    // alert("worked!");
+    var { barTealElement, barWrapperElement } = ourSelectors();
+    console.log("sliderMovement", eventInput.layerX);
+    //work with layerX
+    //check if event.target is .bar or .bar-wrapper
+    /* we dont need to add or substract we want .sliderIconWrapper to move to the layerX based on where the user click at bar or bar-wrapper */
+    if (eventInput.target == barTealElement) {
+      //if user clicked on bar and layerX is between 0 and 40 we will set --slider-movement to be 0 by setting barlayerX to be 0
+      let barLayerX = eventInput.layerX;
+      if (barLayerX >= 0 && barLayerX <= 40) {
+        barLayerX = 0;
+        document.documentElement.attributes["style"].value =
+          "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
+      } else {
+        document.documentElement.attributes["style"].value =
+          "--desktop-slider-movement:" + " " + String(barLayerX) + "px";
+      }
+    } else if (eventInput.target == barWrapperElement) {
+      let barWrapperLayerX = eventInput.layerX;
+      //when we click on .barWrapper neat the edge our .sliderIconWrapper right side is too far off barWrapper edge
+      //when we use transform: translateX(434px) on .sliderIconWrapper. the right edge of .sliderIconWrapper touches the right edge of .barWrapper
+      //instead of subtracting layerX if the user click on barWrapper and layerX is 470: we will work with a range and if layerX
+      //is within that range we will set layerX to be 434
+      //range we will work with will be 435-472
+      if (barWrapperLayerX >= 435 && barWrapperLayerX <= 472) {
+        //if user clicked on barWrapper and layerX is between 435 and 472 we will set --slider-movement to be 434 by setting barWrapperLayerX to be 434
+        barWrapperLayerX = 434;
+        document.documentElement.attributes["style"].value =
+          "--desktop-slider-movement:" + " " + String(barWrapperLayerX) + "px";
+      } else {
+        //set --slider-movement will be set to event.target.layerX
+        document.documentElement.attributes["style"].value =
+          "--desktop-slider-movement:" + " " + String(barWrapperLayerX) + "px";
+      }
+    }
+    return eventInput.layerX;
+  }
 }
 
 /***** mobile functionality *****/
 
-/***** func will change the text between month or year based on toggle aria-checked
- * if true it will be year if it is false it will be month
+/***** refactored near the top of file. we will declare mouseMovement inside the func that we will add click event to barWrapper
+ * so that we can update a variable that our mouseMovement will also use.
+ * if we declare mouseMovement outside the func scope of the func that we will add click event to barWrapper then we have to declare a func inside that func scope
+ * the func will return the position where our user clicked on bar or barWrapper pass that func reference to a variable outside of the
+ * func that has add click event to barWrapper then that variable will have a reference to the func that will return positionX
+ * then we will call that func inside of mouseMovement func to get positionX that we will use event mousemove
  * *****/
 
-/***** keyboard feature *****/
-/*  
+function testing_Ideas(layerXOfMouseClick = 0) {
+  function scopeKeyboardFeature() {
+    /***** keyboard feature *****/
+    /*  
 
 Right Arrow: Increase the value of the slider by one step.
 Up Arrow: Increase the value of the slider by one step.
@@ -1500,102 +1548,138 @@ Page Down (Optional): Decrement the slider by an amount larger than the step cha
 
 */
 
-// alert("fun begins add keyboard fuctionality");
-// keyboardFeatureSliderMovementTwo();
-function keyboardFeatureSliderMovementTwo(variablePassedIn) {
-  var { pricingContainer } = ourSelectors();
-  //document.activeElement will let us know which element has focus but we have to run/call/execute this func
-  var focusElement = document.activeElement;
-  console.log(focusElement);
-  //addeventlistener("focus") does not bubble up or down
-  //we can use "focusin" on pricingContainer and add or remove keypress event to .sliderIconWrapper
-  pricingContainer.addEventListener("focusin", addOrRemoveKeydownSliderIcon);
-}
+    // alert("fun begins add keyboard fuctionality");
+    // keyboardFeatureSliderMovementTwo();
+    function keyboardFeatureSliderMovementTwo(variablePassedIn) {
+      var { pricingContainer } = ourSelectors();
+      //document.activeElement will let us know which element has focus but we have to run/call/execute this func
+      var focusElement = document.activeElement;
+      console.log(focusElement);
+      //addeventlistener("focus") does not bubble up or down
+      //we can use "focusin" on pricingContainer and add or remove keypress event to .sliderIconWrapper
+      pricingContainer.addEventListener(
+        "focusin",
+        addOrRemoveKeydownSliderIcon
+      );
+    }
 
-function addOrRemoveKeydownSliderIcon(event) {
-  var { sliderIconWrapper } = ourSelectors();
+    function addOrRemoveKeydownSliderIcon(event) {
+      var { sliderIconWrapper } = ourSelectors();
 
-  //call func based on focus event
-  if (event.target == sliderIconWrapper) {
-    //add if it is sliderIcon
-    addFocusEventToSliderIcon();
-  } else {
-    //remove if it is not sliderIcon
-    removeFocusEventFromSlider();
+      //call func based on focus event
+      if (event.target == sliderIconWrapper) {
+        //add if it is sliderIcon
+        addFocusEventToSliderIcon();
+      } else {
+        //remove if it is not sliderIcon
+        removeFocusEventFromSlider();
+      }
+    }
+
+    function addFocusEventToSliderIcon() {
+      var { sliderIconWrapper } = ourSelectors();
+
+      //the func that we passed into .addEventListener, in order to remove the event we need to pass that same func to .removeEventListener
+      sliderIconWrapper.addEventListener("keydown", moveSliderIconOnKeydown);
+    }
+
+    function removeFocusEventFromSlider() {
+      var { sliderIconWrapper } = ourSelectors();
+      sliderIconWrapper.removeEventListener("keydown", moveSliderIconOnKeydown);
+    }
+
+    function moveSliderIconOnKeydown(event) {
+      console.log(event);
+    }
+
+    /***** keyboard feature *****/
   }
-}
+  /***** first attempt *****/
+  function getSliderMovement(eventInput) {
+    console.count();
+    if (window.innerWidth <= 415) {
+      // debugger;
+      let desktopSliderMovement = parseInt(
+        document.documentElement.attributes["style"].value.split(" ").pop()
+      );
+      // console.log(
+      //   "this is mobile. get desktop-slider without px",
+      //   desktopSliderMovement
+      // );
+      // let calculatedMobileSlider = calculateSliderMovementSetProgressBar(
+      //   window.innerWidth,
+      //   desktopSliderMovement
+      // );
+      //we are getting desktop slider so we need to divide by 435
+      console.log("desktopSliderMovement", desktopSliderMovement);
+      let percentageOfDesktopSlider = desktopSliderMovement / 435;
+      //we can use this percentage as a value for our progress bar variable
+      //take percentage multiply it by mobile slider max num 255
+      let mobileSliderResize = Math.floor(percentageOfDesktopSlider * 255);
+      console.log("convertToMobile", mobileSliderResize);
+      document.documentElement.attributes["style"].value =
+        "--mobile-slider-movement: " + String(mobileSliderResize) + "px";
+      // mobileLayerX = mobileSliderResize;
+    } else {
+      let mobileSliderMovement = parseInt(
+        document.documentElement.attributes["style"].value.split(" ").pop()
+      );
+      // console.log(
+      //   "this is desktop. get mobile-slider without px",
+      //   mobileSliderMovement
+      // );
+      // let calculatedDesktopSlider = calculateSliderMovementSetProgressBar(
+      //   window.innerWidth,
+      //   mobileSliderMovement
+      // );
+      //we are getting mobile slider so we need to divide by 255
+      console.log("mobileSliderMovement", mobileSliderMovement);
+      let percentageOfMobileSlider = mobileSliderMovement / 255;
+      //we can use this percentage as a value for our progress bar variable
+      //take percentage multiply it by desktop slider max num 435
+      let desktopSliderResize = Math.floor(percentageOfMobileSlider * 435);
+      console.log("converToDesktop", desktopSliderResize);
+      document.documentElement.attributes["style"].value =
+        "--desktop-slider-movement: " + String(desktopSliderResize) + "px";
+      // layerXofClickedEle = desktopSliderResize;
+    }
+  }
+  /***** first attempt *****/
+  // clickingFeatureMobileAndDesktop();
+  /***** our data will be selected based on the slider position *****/
+  function clickingFeatureMobileAndDesktop() {
+    // alert("clicking event will fire on mouse click and touch");
+    // alert(
+    //   "look into layerX when we implement clicking feature: where clicking on the .bar or .bar-wrapper will move .sliderIconWrapper to that spot."
+    // );
+    // alert("look at mouseMoveAlgorithm");
+  }
 
-function addFocusEventToSliderIcon() {
-  var { sliderIconWrapper } = ourSelectors();
+  /***** our func with our obj: month data and year data *****/
 
-  //the func that we passed into .addEventListener, in order to remove the event we need to pass that same func to .removeEventListener
-  sliderIconWrapper.addEventListener("keydown", moveSliderIconOnKeydown);
-}
+  function selectDataBasedOnToggleMonthOrYear(strInput) {}
 
-function removeFocusEventFromSlider() {
-  var { sliderIconWrapper } = ourSelectors();
-  sliderIconWrapper.removeEventListener("keydown", moveSliderIconOnKeydown);
-}
+  /***** our func with our obj: month data and year data *****/
 
-function moveSliderIconOnKeydown(event) {
-  console.log(event);
-}
+  /***** our data will be selected based on the slider position *****/
 
-/***** keyboard feature *****/
+  function returnMonthOrYearDataObj(sliderPosition) {
+    var monthData = {
+      first: {},
+      second: {},
+      third: {},
+      fourth: {},
+      fifth: {},
+    };
+    var yearData = {
+      first: {},
+      second: {},
+      third: {},
+      fourth: {},
+      fifth: {},
+    };
+  }
 
-/***** run our func that controls the slider/pageviews/priceview
- * based on our toggle. if aria-checked is true we want to work with year obj
- * if it is aria-checked false we want to work with month obj
- * *****/
-/***** run our func that controls the slider/pageviews/priceview
- * based on our toggle. if aria-checked is true we want to work with year obj
- * if it is aria-checked false we want to work with month obj
- * *****/
-
-/***** our func with our obj: month data and year data *****/
-
-function selectDataBasedOnToggleMonthOrYear(strInput) {}
-
-/***** our func with our obj: month data and year data *****/
-
-/***** our data will be selected based on the slider position *****/
-
-function returnMonthOrYearDataObj(sliderPosition) {
-  var monthData = {
-    first: {},
-    second: {},
-    third: {},
-    fourth: {},
-    fifth: {},
-  };
-  var yearData = {
-    first: {},
-    second: {},
-    third: {},
-    fourth: {},
-    fifth: {},
-  };
-}
-
-// clickingFeatureMobileAndDesktop();
-/***** our data will be selected based on the slider position *****/
-function clickingFeatureMobileAndDesktop() {
-  // alert("clicking event will fire on mouse click and touch");
-  // alert(
-  //   "look into layerX when we implement clicking feature: where clicking on the .bar or .bar-wrapper will move .sliderIconWrapper to that spot."
-  // );
-  // alert("look at mouseMoveAlgorithm");
-}
-
-/***** refactored near the top of file. we will declare mouseMovement inside the func that we will add click event to barWrapper
- * so that we can update a variable that our mouseMovement will also use.
- * if we declare mouseMovement outside the func scope of the func that we will add click event to barWrapper then we have to declare a func inside that func scope
- * the func will return the position where our user clicked on bar or barWrapper pass that func reference to a variable outside of the
- * func that has add click event to barWrapper then that variable will have a reference to the func that will return positionX
- * then we will call that func inside of mouseMovement func to get positionX that we will use event mousemove
- * *****/
-
-function testing_Ideas(layerXOfMouseClick = 0) {
   var { sliderIconWrapper } = ourSelectors();
   var sliderContainer = document.querySelector(".slider");
 
@@ -2055,4 +2139,31 @@ function notes() {
     "find a way to save the either --desktop slider and --mobile-slider position"
   );
   alert("find a way to ");
+  class Popular extends React.Component {
+    constructor(props) {
+      super();
+      this.state = {
+        repos: null,
+      };
+
+      this.updateLanguage = this.updateLanguage.bind(this);
+    }
+    componentDidMount() {
+      this.updateLanguage("javascript");
+    }
+    updateLanguage(lang) {
+      api.fetchPopularRepos(lang).then(
+        function (repos) {
+          this.setState(function () {
+            return {
+              repos: repos,
+            };
+          });
+        }.bind(this)
+      );
+    }
+    render() {
+      // Stuff
+    }
+  }
 }
