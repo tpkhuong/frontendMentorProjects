@@ -32,6 +32,12 @@ function ourSelectors() {
   };
 }
 
+alert(
+  "add aria attributes to barWrapper for progressbar and sliderIcon for slider"
+);
+alert(
+  "make sure we handle aria attr both on mobile and desktop when our app loads and when our window resize"
+);
 // let callFuncToGetWindowWidth;
 // let windowWidthOnLoad;
 /***** call/invoke our functions *****/
@@ -391,11 +397,14 @@ function desktopMouseClickAndMouseMovementAlgor() {
       /***** call yearly or monthly func for display based on valueOfToggleElementAriaChecked. the value of valueOfToggleElementAriaChecked is a string "true" or "false"
        * we had if (valueOfToggleElementAriaChecked) => if("true") or if("false") which is truthy because it is a string
        *  *****/
-      if (valueOfToggleElementAriaChecked == "true") {
-        yearlyDisplayOfPriceAndPageviews();
-      } else {
-        monthlyDisplayOfPriceAndPageviews();
-      }
+      toggleBetweenYearlyAndMonthyDisplayPriceAndPage(
+        valueOfToggleElementAriaChecked
+      );
+      // if (valueOfToggleElementAriaChecked == "true") {
+      //   yearlyDisplayOfPriceAndPageviews();
+      // } else {
+      //   monthlyDisplayOfPriceAndPageviews();
+      // }
       // if valueOfToggleElementAriaChecked is false it will be monthly
       // if valueOfToggleElementAriaChecked is true it will be yearly
 
@@ -521,6 +530,8 @@ function desktopMouseClickAndMouseMovementAlgor() {
 
     function moveSliderIconWrapper(eventInput) {
       var progressBarMouseMovement;
+      valueOfToggleElementAriaChecked =
+        toggleBtn.attributes["aria-checked"].value;
       if (eventInput.movementX < 0 && movementCounter <= 0) {
         movementCounter = 0;
       } else if (eventInput.movementX > 0 && movementCounter >= 434) {
@@ -542,6 +553,19 @@ function desktopMouseClickAndMouseMovementAlgor() {
         "--desktop-progressbar: " +
         progressBarMouseMovement +
         "%";
+      /***** call yearly or monthly func for display based on valueOfToggleElementAriaChecked. the value of valueOfToggleElementAriaChecked is a string "true" or "false"
+       * we had if (valueOfToggleElementAriaChecked) => if("true") or if("false") which is truthy because it is a string
+       *  *****/
+      toggleBetweenYearlyAndMonthyDisplayPriceAndPage(
+        valueOfToggleElementAriaChecked
+      );
+      // if (valueOfToggleElementAriaChecked == "true") {
+      //   yearlyDisplayOfPriceAndPageviews();
+      // } else {
+      //   monthlyDisplayOfPriceAndPageviews();
+      // }
+      // if valueOfToggleElementAriaChecked is false it will be monthly
+      // if valueOfToggleElementAriaChecked is true it will be yearly
       /***** we want to update layerXofClickedEle to be movementCounter because we want to use the new position of layerXofClickedEle
        * for our keyboard feature
        *  *****/
@@ -555,6 +579,8 @@ function desktopMouseClickAndMouseMovementAlgor() {
     var previousTouch;
     function touchEventMoveSliderIcon(eventInput) {
       var touch = eventInput.changedTouches[0];
+      valueOfToggleElementAriaChecked =
+        toggleBtn.attributes["aria-checked"].value;
       // eventInput.touches[0].pageX;
       //first time we run this func, previousTouch will be undefined
       //second time we run this func, previousTouch will not be undefined it will be the eventInput.changedTouches[0]
@@ -583,7 +609,7 @@ function desktopMouseClickAndMouseMovementAlgor() {
         }
         //our progressbar should be based off mobile mobileMovementX
         progressbarMobileTouchMovement = (
-          (mobileMovementX / 255) *
+          (mobileMovementCounter / 255) *
           100
         ).toFixed(2);
         document.documentElement.attributes["style"].value =
@@ -595,9 +621,22 @@ function desktopMouseClickAndMouseMovementAlgor() {
           progressbarMobileTouchMovement +
           "%";
         mobileLayerX = mobileMovementCounter;
+        /***** call yearly or monthly func for display based on valueOfToggleElementAriaChecked. the value of valueOfToggleElementAriaChecked is a string "true" or "false"
+         * we had if (valueOfToggleElementAriaChecked) => if("true") or if("false") which is truthy because it is a string
+         *  *****/
+        toggleBetweenYearlyAndMonthyDisplayPriceAndPage(
+          valueOfToggleElementAriaChecked
+        );
+        // if (valueOfToggleElementAriaChecked == "true") {
+        //   yearlyDisplayOfPriceAndPageviews();
+        // } else {
+        //   monthlyDisplayOfPriceAndPageviews();
+        // }
+        // if valueOfToggleElementAriaChecked is false it will be monthly
+        // if valueOfToggleElementAriaChecked is true it will be yearly
       }
-      // console.log("previousTouch before", previousTouch);
 
+      // console.log("previousTouch before", previousTouch);
       //first time we run this func, previousTouch the value of eventInput.changedTouches[0]
       previousTouch = touch;
 
@@ -703,6 +742,8 @@ function desktopMouseClickAndMouseMovementAlgor() {
   function moveSliderIconOnKeydown(event) {
     var keydownMoveCounter;
     var progressbarKeydownMoveCounter;
+    valueOfToggleElementAriaChecked =
+      toggleBtn.attributes["aria-checked"].value;
     /***** layerXofClickedEle will be updating the position of layerX based on mousemovement  *****/
     /***** we will declare keydownMoveCounter variable in this func. if layerXofClickedEle is undefined it means currently it holds no value,
      * the keydownMoveCounter variable we declare will be 0, if layerXofClickedEle is not != undefined we will assign the value of layerXofClickedEle
@@ -790,6 +831,19 @@ function desktopMouseClickAndMouseMovementAlgor() {
       "--desktop-progressbar: " +
       progressbarKeydownMoveCounter +
       "%";
+    /***** call yearly or monthly func for display based on valueOfToggleElementAriaChecked. the value of valueOfToggleElementAriaChecked is a string "true" or "false"
+     * we had if (valueOfToggleElementAriaChecked) => if("true") or if("false") which is truthy because it is a string
+     *  *****/
+    toggleBetweenYearlyAndMonthyDisplayPriceAndPage(
+      valueOfToggleElementAriaChecked
+    );
+    // if (valueOfToggleElementAriaChecked == "true") {
+    //   yearlyDisplayOfPriceAndPageviews();
+    // } else {
+    //   monthlyDisplayOfPriceAndPageviews();
+    // }
+    // if valueOfToggleElementAriaChecked is false it will be monthly
+    // if valueOfToggleElementAriaChecked is true it will be yearly
     //then we will update layerXofClickedEle by assigning the value of keydownMoveCounter to layerXofClickedEle
     //this way if our user decide to use the mouse to move the .sliderIconWrapper it will use the current position of X or position of layerX
     //where the keyboard user last used the keyboard to move .sliderIconWrapper
@@ -900,6 +954,9 @@ Page Down (Optional): Decrement the slider by an amount larger than the step cha
           //need to convert desktopSliderResize back to number
           layerXofClickedEle = Number(desktopSliderResize);
           console.log("layerXofClickedEle", layerXofClickedEle);
+          //execute keyboardFeatureSliderMovement when we resize our window because if we dont call keyboardFeatureSliderMovement in resize
+          //when we load our app in mobile then resize to desktop, our keyboardFeatureSliderMovement is not running.
+          keyboardFeatureSliderMovement();
         }
       }, 300);
     });
@@ -1139,6 +1196,14 @@ function monthlyDisplayOfPriceAndPageviews() {
   //   "document.attributes",
   //   document.documentElement.attributes["style"].value.split(" ")[3]
   // );
+}
+
+function toggleBetweenYearlyAndMonthyDisplayPriceAndPage(
+  valueOfToggleAriaChecked
+) {
+  valueOfToggleAriaChecked == "true"
+    ? yearlyDisplayOfPriceAndPageviews()
+    : monthlyDisplayOfPriceAndPageviews();
 }
 
 /***** run our func that controls the slider/pageviews/priceview
