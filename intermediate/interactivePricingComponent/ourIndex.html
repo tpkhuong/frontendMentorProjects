@@ -52,7 +52,13 @@
             <!-- <div class="center-bar-vertically"> we dont need this element. we will have position: relative on .slider then use left: 16px and right 16px on .barWrapper
               without the width:100% to get the .barWrapper width to match .slider with .slider having padding-inline: 16px;
               </div> -->
-            <div class="bar-wrapper">
+            <div
+              class="bar-wrapper"
+              role="progressbar"
+              aria-valuemin="0%"
+              aria-valuemax="100%"
+              aria-valuenow="0%"
+            >
               <!-- we only need one bar-wrapper because our .slider-icon-wrapper will cover the progress bar at 0% and near 99%
                       at 99% the progress bar will not bleed out of the .bar-wrapper
                       -->
@@ -85,7 +91,17 @@
             </div>
 
             <!-- giving .sliderIconWrapper a tabindex='0' will add the element to the focusable element rotation -->
-            <div tabindex="0" class="slider-icon-wrapper">
+            <div
+              tabindex="0"
+              class="slider-icon-wrapper"
+              role="slider"
+              aria-valuemin="0"
+              aria-valuenow="0"
+            >
+              <!-- set aria-valuemin aria-valuemax aria-valuenow using js. the value will be different between mobile and desktop 
+              mobile: aria-valuemin="0" aria-valuemax="255" aria-valuenow="0"
+              desktop: aria-valuemin="0" aria-valuemax="434" aria-valuenow="0"
+              -->
               <!-- add aria attribute to slider-icon -->
               <!-- if we plan to not use a flex display on the parent element slider: both of .slider-icon-wrapper and .bar-wrapper will be using
                   transform: translate which will create its own stacking context
