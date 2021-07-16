@@ -33,11 +33,9 @@ function ourSelectors() {
 }
 
 alert(
-  "add aria attributes to barWrapper for progressbar and sliderIcon for slider"
+  "look at bar or barWrapper, mousemovement, touchmovement, keyboardmovement. Set aria-valuenow attrs based on --desktop-slider-movement or --mobile-slider-movement. Let's GOOOOO!"
 );
-alert(
-  "make sure we handle aria attr both on mobile and desktop when our app loads and when our window resize"
-);
+
 // let callFuncToGetWindowWidth;
 // let windowWidthOnLoad;
 /***** call/invoke our functions *****/
@@ -45,6 +43,7 @@ alert(
 desktopMouseClickAndMouseMovementAlgor();
 clickEventAddToToggleContainer();
 setCssPropertyToDocument();
+setSliderAriaAttrOnLoadEitherMobileOrDesktop();
 // callAddAndRemoveMouseMovementAlgorithm();
 /***** call/invoke our functions *****/
 // testingMobileDesktopAlgorithm();
@@ -163,6 +162,25 @@ function testingMoreIdeas() {
   }, 1000);
 }
 
+/***** set slider aria attr on load for mobile and desktop *****/
+/*
+set aria-valuemin aria-valuemax aria-valuenow using js. the value will be different between mobile and desktop 
+mobile: aria-valuemin="0" aria-valuemax="255" aria-valuenow="0"
+desktop: aria-valuemin="0" aria-valuemax="434" aria-valuenow="0"
+*/
+function setSliderAriaAttrOnLoadEitherMobileOrDesktop() {
+  var { sliderIconWrapper } = ourSelectors();
+  if (window.innerWidth <= 415) {
+    //aria-valuemax will be 255
+    sliderIconWrapper.setAttribute("aria-valuemax", "255");
+  } else {
+    //aria-valuemax will be 434
+    sliderIconWrapper.setAttribute("aria-valuemax", "434");
+  }
+}
+
+/***** set slider aria attr on load for mobile and desktop *****/
+
 /***** declare --slider-movement CSS property to html element: we are now running  *****/
 function setCssPropertyToDocument() {
   // document.documentElement.attributes["style"].value.split(" ")[1];
@@ -222,6 +240,7 @@ function desktopMouseClickAndMouseMovementAlgor() {
   //we are assigning layerXofClickedEle/mobileLayerX in our barWrapperElement eventListener
   var layerXofClickedEle;
   var mobileLayerX;
+  var ariaPercentForProgressbar;
   console.log("layerXofClickedEle", layerXofClickedEle);
   /***** when user click on .bar or .barWrapper we will get the layerX assign it to layerXofClickedEle variable
    * if user clicked between 0 and 40 layerX will be 0. if user clicked between 435 and 472 layerX will be 434.
@@ -269,6 +288,7 @@ function desktopMouseClickAndMouseMovementAlgor() {
               (mobileBarLayerX / 255) *
               100
             ).toFixed(2);
+
             //assign slider-movement and progressbar to html
             document.documentElement.attributes["style"].value =
               "--mobile-slider-movement: " +
@@ -314,6 +334,7 @@ function desktopMouseClickAndMouseMovementAlgor() {
           }
           mobileLayerX = mobileBarWrapperLayerX;
         }
+        //set sliderIcon aria attr for mobile
       } else {
         /***** desktop *****/
         /* we dont need to add or substract we want .sliderIconWrapper to move to the layerX based on where the user click at bar or bar-wrapper */
@@ -393,13 +414,24 @@ function desktopMouseClickAndMouseMovementAlgor() {
         }
         /***** desktop *****/
       }
+      //get --progressbar value
+      //setting aria-valuenow for sliderIconWrapper our progressbar
+      var barOrBarWrapperClickprogressbarValueUsedForAriaAttr =
+        document.documentElement.attributes["style"].value.split(" ")[3];
 
+      setAriaAttrsForProgressBar(
+        barOrBarWrapperClickprogressbarValueUsedForAriaAttr
+      );
       /***** call yearly or monthly func for display based on valueOfToggleElementAriaChecked. the value of valueOfToggleElementAriaChecked is a string "true" or "false"
        * we had if (valueOfToggleElementAriaChecked) => if("true") or if("false") which is truthy because it is a string
        *  *****/
       toggleBetweenYearlyAndMonthyDisplayPriceAndPage(
         valueOfToggleElementAriaChecked
       );
+      //set sliderIcon aria attr on bar or barWrapper click
+      var clickBarOrBarWrapperAriaValuenowAttrSlider =
+        document.documentElement.attributes["style"].value.split(" ")[1];
+
       // if (valueOfToggleElementAriaChecked == "true") {
       //   yearlyDisplayOfPriceAndPageviews();
       // } else {
@@ -559,6 +591,21 @@ function desktopMouseClickAndMouseMovementAlgor() {
       toggleBetweenYearlyAndMonthyDisplayPriceAndPage(
         valueOfToggleElementAriaChecked
       );
+
+      //get --progressbar value
+      var sliderMousemovementAriaValuenowAttrProgressbar =
+        document.documentElement.attributes["style"].value.split(" ")[3];
+      //setting aria-valuenow for sliderIconWrapper our progressbar
+      setAriaAttrsForProgressBar(
+        sliderMousemovementAriaValuenowAttrProgressbar
+      );
+      //set sliderIcon aria attr on mousemovement
+      var mousemovementSliderIconAriaValuenowAttrSlider =
+        document.documentElement.attributes["style"].value.split(" ")[1];
+      console.log(
+        "mousemovementSliderIconAriaValuenowAttrSlider",
+        mousemovementSliderIconAriaValuenowAttrSlider
+      );
       // if (valueOfToggleElementAriaChecked == "true") {
       //   yearlyDisplayOfPriceAndPageviews();
       // } else {
@@ -626,6 +673,21 @@ function desktopMouseClickAndMouseMovementAlgor() {
          *  *****/
         toggleBetweenYearlyAndMonthyDisplayPriceAndPage(
           valueOfToggleElementAriaChecked
+        );
+
+        //get --progressbar value
+        var sliderTouchMovementAriaValuenowAttrProgressbar =
+          document.documentElement.attributes["style"].value.split(" ")[3];
+        //setting aria-valuenow for sliderIconWrapper our progressbar
+        setAriaAttrsForProgressBar(
+          sliderTouchMovementAriaValuenowAttrProgressbar
+        );
+        //set sliderIcon aria attr on touchmovement
+        var touchmovementSliderIconAriaValuenowAttrSlider =
+          document.documentElement.attributes["style"].value.split(" ")[1];
+        console.log(
+          "touchmovementSliderIconAriaValuenowAttrSlider",
+          touchmovementSliderIconAriaValuenowAttrSlider
         );
         // if (valueOfToggleElementAriaChecked == "true") {
         //   yearlyDisplayOfPriceAndPageviews();
@@ -837,6 +899,21 @@ function desktopMouseClickAndMouseMovementAlgor() {
     toggleBetweenYearlyAndMonthyDisplayPriceAndPage(
       valueOfToggleElementAriaChecked
     );
+
+    //get --progressbar value
+    var sliderKeyboardMovementAriaValuenowAttrProgressbar =
+      document.documentElement.attributes["style"].value.split(" ")[3];
+    //setting aria-valuenow for sliderIconWrapper our progressbar
+    setAriaAttrsForProgressBar(
+      sliderKeyboardMovementAriaValuenowAttrProgressbar
+    );
+    //set sliderIcon aria attr on touchmovement
+    var keyboardAriaValuenowAttrSlider =
+      document.documentElement.attributes["style"].value.split(" ")[1];
+    console.log(
+      "keyboardAriaValuenowAttrSlider",
+      keyboardAriaValuenowAttrSlider
+    );
     // if (valueOfToggleElementAriaChecked == "true") {
     //   yearlyDisplayOfPriceAndPageviews();
     // } else {
@@ -871,6 +948,7 @@ Page Down (Optional): Decrement the slider by an amount larger than the step cha
   //then take the % times it by 435 the max value that we want to use on desktop-slider-movement.
   let resizeTimer = null;
   function resizeCalculationForMobileAndDesktop() {
+    var { sliderIconWrapper } = ourSelectors();
     window.addEventListener("resize", function doStuff() {
       if (resizeTimer) {
         clearTimeout(resizeTimer);
@@ -879,6 +957,10 @@ Page Down (Optional): Decrement the slider by an amount larger than the step cha
         console.log("window has changed");
         if (window.innerWidth <= 415) {
           // debugger;
+          /***** set slider aria attr on load for mobile *****/
+          sliderIconWrapper.setAttribute("aria-valuemax", "255");
+
+          //getting --desktop-slider-movement
           let desktopSliderMovement = parseInt(
             document.documentElement.attributes["style"].value.split(" ")[1]
           );
@@ -917,6 +999,10 @@ Page Down (Optional): Decrement the slider by an amount larger than the step cha
           mobileLayerX = Number(mobileSliderResize);
           console.log("mobileLayerX", mobileLayerX);
         } else {
+          /***** set slider aria attr on load for desktop *****/
+          sliderIconWrapper.setAttribute("aria-valuemax", "434");
+
+          //getting --mobile-slider-movement
           let mobileSliderMovement = parseInt(
             document.documentElement.attributes["style"].value.split(" ")[1]
           );
@@ -1211,6 +1297,25 @@ function toggleBetweenYearlyAndMonthyDisplayPriceAndPage(
  * if it is aria-checked false we want to work with month obj
  * *****/
 
+/***** change the value of aria attrs for slider and progres bar *****/
+/***** progressbar % will be the same at mobile and desktop *****/
+
+function setAriaAttrsForProgressBar(percentInput) {
+  var { barWrapperElement } = ourSelectors();
+  var ariaValueNowOfBarWrapper = barWrapperElement.attributes["aria-valuenow"];
+  //set aria-valuenow to percentInput;
+  ariaValueNowOfBarWrapper.value = percentInput;
+}
+
+/***** slider aria attrs will be different on mobile and desktop *****/
+function mobileSetSliderAttrs(movementCounterInput) {
+  var { sliderIconWrapper } = ourSelectors();
+}
+
+function desktopSetSliderAttrs(movementCounterInput) {
+  var { sliderIconWrapper } = ourSelectors();
+  console.log("movementCounterInput", movementCounterInput);
+}
 /***** mobile functionality *****/
 
 function scopeThisFunc() {
