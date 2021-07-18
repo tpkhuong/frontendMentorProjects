@@ -32,10 +32,6 @@ function ourSelectors() {
   };
 }
 
-alert(
-  "look at bar or barWrapper, mousemovement, touchmovement, keyboardmovement. Set aria-valuenow attrs based on --desktop-slider-movement or --mobile-slider-movement. Let's GOOOOO!"
-);
-
 // let callFuncToGetWindowWidth;
 // let windowWidthOnLoad;
 /***** call/invoke our functions *****/
@@ -429,9 +425,12 @@ function desktopMouseClickAndMouseMovementAlgor() {
         valueOfToggleElementAriaChecked
       );
       //set sliderIcon aria attr on bar or barWrapper click
-      var clickBarOrBarWrapperAriaValuenowAttrSlider =
-        document.documentElement.attributes["style"].value.split(" ")[1];
-
+      var clickBarOrBarWrapperAriaValuenowAttrSlider = parseInt(
+        document.documentElement.attributes["style"].value.split(" ")[1]
+      );
+      sliderIconWrapper.attributes["aria-valuenow"].value = String(
+        clickBarOrBarWrapperAriaValuenowAttrSlider
+      );
       // if (valueOfToggleElementAriaChecked == "true") {
       //   yearlyDisplayOfPriceAndPageviews();
       // } else {
@@ -600,10 +599,11 @@ function desktopMouseClickAndMouseMovementAlgor() {
         sliderMousemovementAriaValuenowAttrProgressbar
       );
       //set sliderIcon aria attr on mousemovement
-      var mousemovementSliderIconAriaValuenowAttrSlider =
-        document.documentElement.attributes["style"].value.split(" ")[1];
-      console.log(
-        "mousemovementSliderIconAriaValuenowAttrSlider",
+      var mousemovementSliderIconAriaValuenowAttrSlider = parseInt(
+        document.documentElement.attributes["style"].value.split(" ")[1]
+      );
+
+      sliderIconWrapper.attributes["aria-valuenow"].value = String(
         mousemovementSliderIconAriaValuenowAttrSlider
       );
       // if (valueOfToggleElementAriaChecked == "true") {
@@ -683,10 +683,11 @@ function desktopMouseClickAndMouseMovementAlgor() {
           sliderTouchMovementAriaValuenowAttrProgressbar
         );
         //set sliderIcon aria attr on touchmovement
-        var touchmovementSliderIconAriaValuenowAttrSlider =
-          document.documentElement.attributes["style"].value.split(" ")[1];
-        console.log(
-          "touchmovementSliderIconAriaValuenowAttrSlider",
+        var touchmovementSliderIconAriaValuenowAttrSlider = parseInt(
+          document.documentElement.attributes["style"].value.split(" ")[1]
+        );
+
+        sliderIconWrapper.attributes["aria-valuenow"].value = String(
           touchmovementSliderIconAriaValuenowAttrSlider
         );
         // if (valueOfToggleElementAriaChecked == "true") {
@@ -802,6 +803,7 @@ function desktopMouseClickAndMouseMovementAlgor() {
   }
 
   function moveSliderIconOnKeydown(event) {
+    var { sliderIconWrapper } = ourSelectors();
     var keydownMoveCounter;
     var progressbarKeydownMoveCounter;
     valueOfToggleElementAriaChecked =
@@ -908,10 +910,11 @@ function desktopMouseClickAndMouseMovementAlgor() {
       sliderKeyboardMovementAriaValuenowAttrProgressbar
     );
     //set sliderIcon aria attr on touchmovement
-    var keyboardAriaValuenowAttrSlider =
-      document.documentElement.attributes["style"].value.split(" ")[1];
-    console.log(
-      "keyboardAriaValuenowAttrSlider",
+    var keyboardAriaValuenowAttrSlider = parseInt(
+      document.documentElement.attributes["style"].value.split(" ")[1]
+    );
+
+    sliderIconWrapper.attributes["aria-valuenow"].value = String(
       keyboardAriaValuenowAttrSlider
     );
     // if (valueOfToggleElementAriaChecked == "true") {
