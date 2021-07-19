@@ -159,26 +159,6 @@ body {
 
 /* utilities */
 
-/* skip link using attr selector */
-
-[href="#main"] {
-  position: absolute;
-  top: 0;
-  right: 100%; /* moves off screen */
-}
-[href="#main"]:focus {
-  right: auto;
-}
-
-/* skip link using attr selector */
-
-/* we can use min-height on the element we want its height to be 100% */
-html,
-body {
-  /* height: 100%; */
-}
-/* we can use min-height on the element we want its height to be 100% */
-
 /* container wrapper */
 
 .max-width {
@@ -281,6 +261,19 @@ body {
   border: 0;
 }
 /* hide h2 which are title for our section element */
+
+/* skip link using attr selector */
+
+[href="#main"] {
+  position: absolute;
+  top: 0;
+  right: 100%; /* moves off screen */
+}
+[href="#main"]:focus {
+  right: auto;
+}
+
+/* skip link using attr selector */
 
 /* utitlities */
 
