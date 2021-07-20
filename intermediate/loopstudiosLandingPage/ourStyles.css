@@ -46,7 +46,7 @@
 } */
 
 body {
-  font-family: var(--manrope);
+  font-family: var(--ff-josefin);
   /* use color: revert for text that we dont want to be grayish blue */
   color: var(--color-neutral-grayish-blue);
   font-size: var(--font-size-intro-para);
@@ -137,13 +137,24 @@ button {
 
 /* skip link using attr selector */
 
-[href="#main"] {
+[href="#main-content"] {
   position: absolute;
   top: 0;
   right: 100%; /* moves off screen */
 }
-[href="#main"]:focus {
+[href="#main-content"]:focus {
   right: auto;
+}
+
+.skip-link {
+  color: red;
+  border: 1px solid blue;
+  display: inline-block;
+  padding-block-start: 8px;
+  padding-block-end: 10px;
+  padding-inline-start: 12px;
+  padding-inline-end: 12px;
+  border-radius: 8px;
 }
 
 /* skip link using attr selector */
@@ -161,9 +172,9 @@ body {
 
 /* container wrapper */
 
-.max-width {
+.max-width-wrapper {
   /* or the width we want our container/parent element to be */
-  max-width: 350px;
+  max-width: var(--width-wrapper, 350px);
   margin-inline-start: auto;
   margin-inline-end: auto;
   /* padding-inline-start: 16px;
@@ -278,10 +289,93 @@ body {
 /* utitlities */
 
 /* general-styles */
+
+button[aria-label] {
+  background-color: transparent;
+}
+
+[role="banner"],
+[role="footer"] {
+  color: var(--color-primary-white);
+}
+
+[id="main-navigation"],
+[id="footer-navigation"],
+button[class*="extend"],
+.text-container p {
+  font-family: var(--ff-alata);
+}
+
 /* general-styles */
 
 /* general-layout */
 /* general-layout */
 
 /* individual-sections */
+
+[id="opened-mobile-menu"] {
+  display: flex;
+  display: none;
+  flex-direction: column;
+  background-color: var(--color-primary-black);
+  position: fixed;
+  inset: 0;
+  font-family: var(--ff-josefin);
+  padding: 42px;
+  padding-inline: 32px;
+}
+
+.mobile-icons-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.close-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* adding space between mobile li elements */
+
+.mobile-navbar > * + * {
+  margin-block-start: 8px;
+}
+
+/* .mobile-navbar li:not(:last-child) {
+  margin-block-end: 8px;
+} */
+
+[id="mobile-navigation"] {
+  text-transform: uppercase;
+  font-weight: var(--font-weight-300);
+  font-size: 2.1rem;
+  margin-block: auto;
+}
+
+[role="banner"] {
+  background-image: url("./images/desktop/image-hero.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: left;
+}
+
+[role="main"] {
+}
+
+[role="footer"] {
+  background-color: var(--color-primary-black);
+}
+
+@media screen and (min-width: 84.375rem) {
+  [role="banner"] {
+    background-image: url("./images/desktop/image-hero.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: left;
+
+    padding: 144px;
+    padding-block-start: 56px;
+  }
+}
 /* individual-sections */
