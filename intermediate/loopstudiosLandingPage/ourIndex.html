@@ -32,7 +32,7 @@
     <header role="banner">
       <!-- background-image in CSS -->
       <section id="header-content">
-        <div class="desktop-menu-container">
+        <div class="desktop-mobile-menu-container">
           <img class="desktop-mobile-logo" src="./images/logo.svg" alt="loopstudios">
           
           <!-- at mobile hide -->
@@ -62,9 +62,10 @@
           <button
             aria-label="open nav menu"
             aria-pressed="false"
+            class="menu-button"
           >
             <svg
-              class="menu-button"
+              id="mobile-menu-btn-img"
               width="24"
               height="16"
               xmlns="http://www.w3.org/2000/svg"
@@ -81,9 +82,8 @@
               <button
                 class="close-button"
                 aria-label="close nav menu"
-                aria-pressed="true"
               >
-                <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+                <svg id="mobile-menu-closed-img" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
                   <path
                     d="M17.778.808l1.414 1.414L11.414 10l7.778 7.778-1.414 1.414L10 11.414l-7.778 7.778-1.414-1.414L8.586 10 .808 2.222 2.222.808 10 8.586 17.778.808z"
                     fill="#FFF"
