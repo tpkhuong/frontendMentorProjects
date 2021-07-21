@@ -162,7 +162,7 @@ button {
 /* we can use min-height on the element we want its height to be 100% */
 html,
 body {
-  /* height: 100%; */
+  height: 100%;
 }
 /* we can use min-height on the element we want its height to be 100% */
 
@@ -290,6 +290,14 @@ body {
 
 /* general-styles */
 
+/* come back to this */
+a:focus {
+  outline-width: 2px;
+  outline-style: solid;
+  outline-offset: 2px;
+  outline-color: blue;
+}
+
 button[aria-label] {
   background-color: transparent;
 }
@@ -313,8 +321,18 @@ button[class*="extend"],
 
 /* individual-sections */
 
-[id="opened-mobile-menu"] {
+/* show mobile menu bar */
+
+[class="menu-button"][aria-pressed="true"] + [id="opened-mobile-menu"] {
   display: flex;
+}
+
+[id="main-navigation"]{
+  display: none;
+}
+
+
+[id="opened-mobile-menu"] {
   display: none;
   flex-direction: column;
   background-color: var(--color-primary-black);
@@ -330,6 +348,7 @@ button[class*="extend"],
   justify-content: space-between;
 }
 
+.menu-button,
 .close-button {
   display: flex;
   flex-direction: column;
@@ -353,11 +372,59 @@ button[class*="extend"],
   margin-block: auto;
 }
 
+[id="header-content"]{
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.text-container{
+  border: 2px solid currentColor;
+  padding: 24px;
+  margin-block: auto;
+  /* display: flex;
+  flex-direction: column; */
+}
+
+.text-container > * {
+  /* margin: 0; */
+  display: block;
+  font-size: 2.5rem;
+  line-height: .9;
+}
+
+@media screen and (min-width: 84.375rem) {
+  [id="main-navigation"]{
+  display: revert;
+}
+  [id="opened-mobile-menu"] {
+    display: none;
+  }
+  .menu-button{
+    display: none;
+  }
+}
+
 [role="banner"] {
-  background-image: url("./images/desktop/image-hero.jpg");
+  background-image: url("./images/mobile/image-hero.jpg");
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: left;
+  height: 100%;
+
+  padding: 40px;
+  padding-inline: 32px;
+}
+
+
+.desktop-mobile-menu-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.desktop-mobile-menu-container > img{
+  flex:0 1;
+min-width: 155px;
 }
 
 [role="main"] {
@@ -370,9 +437,8 @@ button[class*="extend"],
 @media screen and (min-width: 84.375rem) {
   [role="banner"] {
     background-image: url("./images/desktop/image-hero.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: left;
+    /* background-repeat: no-repeat;
+    background-size: cover; */
 
     padding: 144px;
     padding-block-start: 56px;
