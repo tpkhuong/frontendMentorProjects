@@ -11,7 +11,7 @@
   }
 
   //call our functions
-  openMobileMenu();
+  var elementClickToOpenMenu = openMobileMenu();
   closeMobileMenu();
   function openMobileMenu() {
     var { menuBtn, closeBtn } = ourSelectors();
@@ -32,6 +32,7 @@
         }, 300);
       }
     }
+    return menuBtn;
   }
 
   function closeMobileMenu() {
@@ -40,6 +41,7 @@
 
     closeBtn.addEventListener("click", hideMobileNavbar);
 
+    // document.getElementById("opened-mobile-menu").addEventListener("click", hideMobileNavbar)
     function hideMobileNavbar(event) {
       if (
         event.target === closeBtn ||
@@ -48,7 +50,11 @@
         event.target.parentElement.parentElement === closeBtnSvg
       ) {
         menuBtn.attributes["aria-pressed"].value = "false";
+        setTimeout(function focusClickedELementOpenMenu() {
+          elementClickToOpenMenu.focus();
+        },300)
       }
+      // console.log("elementClickToOpenMenu",elementClickToOpenMenu)
     }
   }
 })();
