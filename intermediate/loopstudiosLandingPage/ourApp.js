@@ -52,9 +52,10 @@
         menuBtn.attributes["aria-pressed"].value = "false";
         setTimeout(function focusClickedELementOpenMenu() {
           elementClickToOpenMenu.focus();
-        },300)
+        }, 300);
       }
       // console.log("elementClickToOpenMenu",elementClickToOpenMenu)
     }
   }
+  alert("use opacity on images");
 })();
