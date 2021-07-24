@@ -1,0 +1,38 @@
+/* add this stylesheet as the last link in our head */
+form button:not([type]):after {
+  background: red;
+  color: white;
+  content: "Warning: this button doesn’t have a type attribute. Is it a submit, reset or just button?";
+}
+
+button {
+  outline: 2px solid transparent;
+  outline-offset: 100px;
+  transition: 0.5s all ease;
+}
+
+button:focus {
+  outline: 2px solid hsl(0, 100%, 100%);
+  outline-offset: 0;
+}
+
+.button:not(button):after {
+  background: red;
+  color: white;
+  content: "Warning: You are making an element look like a button here. Is it really a button?";
+}
+button.disabled:not([disabled]):after,
+a.disabled[href]:after {
+  background: red;
+  color: white;
+  content: "Warning: It looks like you are styling an element to be disabled here. Make sure it is disabled properly.";
+}
+
+a:empty:not([aria-label]):not([aria-labelledby]):after,
+button:empty:not([aria-label]):not([aria-labelledby]):after,
+button:not([aria-label]):not([aria-labelledby]) img:only-child:not([alt]):after,
+a:not([aria-label]):not([aria-labelledby]) img:only-child:not([alt]):after {
+  background: red;
+  color: white;
+  content: "You are not providing enough information about what this button does. Please include some text within the button.";
+}
