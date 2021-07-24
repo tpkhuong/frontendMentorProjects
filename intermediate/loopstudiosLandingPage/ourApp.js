@@ -57,5 +57,4 @@
       // console.log("elementClickToOpenMenu",elementClickToOpenMenu)
     }
   }
-  alert("use opacity on images");
 })();
