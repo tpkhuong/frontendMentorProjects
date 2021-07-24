@@ -291,8 +291,7 @@ body {
 /* general-styles */
 
 /* come back to this */
-a:focus,
-button:focus {
+a:focus {
   outline-width: 2px;
   outline-style: solid;
   outline-offset: 4px;
@@ -459,7 +458,18 @@ button[class*="extend"],
     position: relative;
   }
 
-  .desktop-navbar a::after {
+  .footer-navbar a,
+  .social-media-icons-container .svg-wrapper {
+    position: relative;
+  }
+
+  .social-media-icons-container .svg-wrapper {
+    display: inline-block;
+  }
+
+  .desktop-navbar a::after,
+  .footer-navbar a::after,
+  .social-media-icons-container .svg-wrapper::after {
     content: "";
     display: inline-block;
     width: 0%;
@@ -471,7 +481,16 @@ button[class*="extend"],
     transition: width 0.5s linear;
   }
 
-  .desktop-navbar a:hover::after {
+  .social-media-icons-container .svg-wrapper::after {
+    background-color: var(--color-primary-white);
+  }
+
+  .desktop-navbar a:hover::after,
+  .desktop-navbar a:focus::after,
+  .footer-navbar a:hover::after,
+  .footer-navbar a:focus::after,
+  .social-media-icons-container .svg-wrapper:hover::after,
+  .social-media-icons-container a:focus .svg-wrapper::after {
     width: 100%;
   }
 
@@ -536,11 +555,11 @@ button[class*="extend"],
 
 .creation-item {
   position: relative;
+  color: var(--color-primary-white);
 }
 
 .creation-item .item-text-container {
   font-size: 1.4rem;
-  color: var(--color-primary-white);
   position: absolute;
   bottom: 12px;
   left: 24px;
@@ -567,7 +586,6 @@ button[class*="extend"],
   background-color: transparent;
 }
 
-[class*="extend-"]:focus,
 [class*="extend-"]:hover {
   color: var(--color-primary-white);
   background-color: var(--color-primary-black);
@@ -655,6 +673,12 @@ button[class*="extend"],
     grid-template-columns: repeat(4, max-content);
     /* justify-content: space-between; */
     gap: 43px;
+  }
+
+  .creation-item:hover {
+    opacity: 0.4;
+    cursor: pointer;
+    color: var(--color-primary-black);
   }
 
   .creation-items > * + * {
@@ -747,6 +771,10 @@ button[class*="extend"],
     grid-area: social;
     justify-self: end;
   }
+  .social-media-icons-container a {
+    display: inline-block;
+    width: max-content;
+  }
   .copyright-text {
     grid-area: copyright;
     margin: 0px;
@@ -757,3 +785,13 @@ button[class*="extend"],
 /* footer */
 
 /* individual-sections */
+button {
+  outline: 2px solid transparent;
+  outline-offset: 100px;
+  transition: 0.5s all ease;
+}
+
+button:focus {
+  outline: 2px solid rgb(45, 13, 224);
+  outline-offset: 0;
+}
