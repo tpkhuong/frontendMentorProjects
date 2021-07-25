@@ -1,0 +1,288 @@
+:root {
+  --color-primary-white: hsl(0, 100%, 100%);
+  --color-primary-black: hsl(0, 0%, 0%);
+  --color-primary-cyan: hsl(172, 67%, 45%);
+
+  --media-query-desktop: 84.375rem;
+
+  --color-dark-cyan: hsl(183, 100%, 15%);
+  --color-dark-grayish-cyan: hsl(184, 14%, 56%);
+  --color-darker-grayish-cyan: hsl(186, 14%, 43%);
+  --color-light-grayish-cyan: hsl(185, 41%, 84%);
+  --color-lighter-grayish-cyan: hsl(189, 41%, 97%);
+
+  --ff-spacemono: "Space Mono" . monospace;
+
+  --font-size-intro-para: calc(15 / 16 * 1rem);
+  --font-size-200: 0.9375rem;
+  --font-size-300: 1rem;
+  --font-size-400: 1.25rem;
+  --font-size-500: 1.5rem;
+  --font-size-600: 1.75rem;
+  --font-size-700: 2rem;
+
+  --spacer-xxs: 0.5rem;
+  --spacer-xs: 0.8rem;
+  --spacer-s: 1rem;
+  --spacer-m: 1.5rem;
+  --spacer-l: 2rem;
+
+  --font-weight-200: 200;
+  --font-weight-300: 300;
+  --font-weight-400: 400;
+  --font-weight-500: 500;
+  --font-weight-600: 600;
+  --font-weight-700: 700;
+  --font-weight-800: 800;
+  --font-weight-900: 900;
+}
+
+/* reset */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* code below is from inclusive design patterns */
+/* html {
+  font-size: calc(1em + 1vw);
+} */
+
+body {
+  font-family: var(--ff-spacemono);
+  /* use color: revert for text that we dont want to be grayish blue */
+  color: var(--color-neutral-grayish-blue);
+  font-size: var(--font-size-intro-para);
+}
+
+h1,
+h2,
+h3,
+h4,
+body,
+ul {
+  margin: 0;
+  /* figure, dl, and dd have default margin */
+  /* font-weight: 100; */
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1;
+}
+
+p {
+  line-height: 1.5;
+}
+
+a {
+  text-decoration: none;
+  color: var(--link-fg, var(--clr-neutral-900));
+  font-weight: var(--fw-700);
+  font-size: var(--fs-300);
+}
+
+a:hover,
+a:focus {
+  text-decoration: none;
+}
+
+img {
+  /* using object-fit for images. we have to set a height or a min-height on the image and the width of 100% 
+  exception to the rule of setting a height. we can sometime use it on a child element.
+  */
+  max-width: 100%;
+  /* we use max-width: 100% so when we have an img element inside of a div and we want to use flex which means the div will be a flex item
+    the img will shrink and grow as its parent element shrink and grows
+    */
+  display: block;
+  height: auto;
+}
+
+ul[class],
+li[class] {
+  list-style: none;
+  padding: 0;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  border: none;
+}
+
+/* button {
+
+/* Remove all animations and transitions for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* reset */
+
+/* utilities */
+
+/* skip link using attr selector */
+
+[href="#main-content"] {
+  position: absolute;
+  top: 0;
+  right: 100%; /* moves off screen */
+}
+[href="#main-content"]:focus {
+  right: auto;
+}
+
+.skip-link {
+  color: red;
+  border: 1px solid blue;
+  display: inline-block;
+  padding-block-start: 8px;
+  padding-block-end: 10px;
+  padding-inline-start: 12px;
+  padding-inline-end: 12px;
+  border-radius: 8px;
+}
+
+/* skip link using attr selector */
+
+/* we can use min-height on the element we want its height to be 100% */
+html,
+body {
+  height: 100%;
+}
+/* we can use min-height on the element we want its height to be 100% */
+
+/* reset */
+
+/* utilities */
+
+/* container wrapper */
+
+.max-width-wrapper {
+  /* or the width we want our container/parent element to be */
+  max-width: var(--width-wrapper, 350px);
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+  /* padding-inline-start: 16px;
+  padding-inline-end: 16px; */
+}
+
+/* reset */
+
+/* utitlities */
+
+.flow-content > * + * {
+  margin: var(--gap, 8px) 0 0 0;
+}
+
+.columns {
+  display: flex;
+  flex-direction: column;
+}
+
+.columns > * {
+  flex-basis: 100%;
+}
+
+[class*="col-"] {
+  flex-basis: var(--col-basis, 100%);
+}
+
+.col-1 {
+  --col-basis: 25%;
+}
+.col-2 {
+  --col-basis: 50%;
+}
+.col-3 {
+  --col-basis: 75%;
+}
+
+[class*="btn-"] {
+  background-color: var(--bg, var(--color-primary-white));
+  color: var(--fg, var(--color-primary-black));
+  /* to make element look like a button */
+  border-radius: 100vw;
+}
+
+/* .btn-dark{
+    --bg:;
+    --fg:;
+}
+
+.btn-light{
+    --bg:;
+    --fg:;
+    
+}
+
+.btn-accent{
+    --bg:;
+    --fg:;
+
+} */
+
+/* hide h2 which are title for our section element */
+.visually-hidden:not(:focus):not(:active) {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* .visually-hidden{
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  clip: rect(1px 1px 1px 1px)
+} */
+
+.visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+}
+/* hide h2 which are title for our section element */
+
+/* skip link using attr selector */
+
+[href="#main"] {
+  position: absolute;
+  top: 0;
+  right: 100%; /* moves off screen */
+}
+[href="#main"]:focus {
+  right: auto;
+}
+
+/* skip link using attr selector */
+
+/* utitlities */
