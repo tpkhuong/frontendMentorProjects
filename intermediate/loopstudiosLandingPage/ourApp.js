@@ -4,15 +4,20 @@
     var menuBtn = document.querySelector(".menu-button");
     //close button
     var closeBtn = document.querySelector(".close-button");
+    //nav menu at mobile. it is a modal taking the whole screen. we used position: fixed.
+    var mobileNavMenu = document.getElementById("opened-mobile-menu");
     return {
       menuBtn,
       closeBtn,
+      mobileNavMenu,
     };
   }
 
   //call our functions
   var elementClickToOpenMenu = openMobileMenu();
   closeMobileMenu();
+  modalTabFeature();
+  //call our functions
   function openMobileMenu() {
     var { menuBtn, closeBtn } = ourSelectors();
     var menuBtnSvg = document.getElementById("mobile-menu-btn-img");
@@ -56,5 +61,36 @@
       }
       // console.log("elementClickToOpenMenu",elementClickToOpenMenu)
     }
+  }
+
+  function modalTabFeature() {
+    var { mobileNavMenu, closeBtn } = ourSelectors();
+    // var arrOfNavbarAnchorTags = Array.from(
+    //   document.querySelectorAll("#mobile-navigation a")
+    // );
+    var arrOfNavbarAnchorTags = Array.prototype.slice.call(
+      document.querySelectorAll("#mobile-navigation a")
+    );
+    var lastAnchorTagNavbar = arrOfNavbarAnchorTags.filter(
+      function lookForSupportText(eachLink) {
+        return eachLink.textContent === "Support";
+      }
+    )[0];
+    mobileNavMenu.addEventListener("keydown", function tabThroughModal(event) {
+      if (event.shiftKey) {
+        if (event.key == "Tab" && document.activeElement == closeBtn) {
+          lastAnchorTagNavbar.focus();
+          event.preventDefault();
+        }
+      } else {
+        if (
+          event.key == "Tab" &&
+          document.activeElement == lastAnchorTagNavbar
+        ) {
+          closeBtn.focus();
+          event.preventDefault();
+        }
+      }
+    });
   }
 })();

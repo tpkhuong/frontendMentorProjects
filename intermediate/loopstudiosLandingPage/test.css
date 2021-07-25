@@ -36,3 +36,9 @@ a:not([aria-label]):not([aria-labelledby]) img:only-child:not([alt]):after {
   color: white;
   content: "You are not providing enough information about what this button does. Please include some text within the button.";
 }
+
+section > section:first-child::after {
+  background: red;
+  color: #fff;
+  content: "Warning: it looks like you are using sections like divs. Sections should each have a heading";
+}

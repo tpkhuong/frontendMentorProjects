@@ -303,7 +303,7 @@ button[aria-label] {
 }
 
 [role="banner"],
-[role="footer"] {
+[role="contentinfo"] {
   color: var(--color-primary-white);
 }
 
@@ -317,7 +317,7 @@ button[class*="extend"],
 @media screen and (min-width: 84.375rem) {
   [role="banner"],
   [role="main"],
-  [role="footer"] {
+  [role="contentinfo"] {
     max-width: 1440px;
     margin-inline: auto;
   }
@@ -695,7 +695,7 @@ button[class*="extend"],
 /* main section */
 
 /* footer */
-[role="footer"] {
+[role="contentinfo"] {
   background-color: var(--color-primary-black);
   padding: 64px;
   padding-inline: 60px;
@@ -734,7 +734,7 @@ button[class*="extend"],
 }
 
 @media screen and (min-width: 84.375rem) {
-  [role="footer"] {
+  [role="contentinfo"] {
     padding: 144px;
     padding-block: 48px;
   }
