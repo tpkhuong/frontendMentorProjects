@@ -25,7 +25,51 @@
     <title>Tip Calculator App</title>
   </head>
   <body>
-    <h2>Hello World!</h2>
+    <img class="app-logo" src="./images/logo.svg" alt="" />
+    <article class="app-content-wrapper">
+      <h2 class="visually-hidden">Tip Calculator</h2>
+      <div class="amt-tip-quantity-inputs">
+        <label class="smaller-fontsize" for="bill-input">Bill</label
+        ><input
+          id="bill-input"
+          required
+          aria-required="true"
+          type="number"
+          placeholder="0"
+        />
+        <span class="tip-text smaller-fontsize">Select Tip %</span>
+        <div class="tip-amt-btns">
+          <button class="tip-amt-btn">5%</button>
+          <button class="tip-amt-btn">10%</button>
+          <button class="tip-amt-btn">15%</button>
+          <button class="tip-amt-btn">25%</button>
+          <button class="tip-amt-btn">50%</button>
+          <input type="text" class="custom-tip-amt" placeholder="Custom" />
+        </div>
+        <label class="smaller-fontsize" for="quantity-people"
+          >Number of People</label
+        ><input
+          id="quantity-people"
+          required
+          aria-required="true"
+          type="number"
+          placeholder="0"
+        />
+      </div>
+      <div class="amt-display">
+        <div class="tip-amt-person-display">
+          <span class="small-fontsize tip-text">Tip Amount</span>
+          <span class="smaller-fontsize per-person">/ person</span>
+          <span class="med-fontsize tip-amt">$0.00</span>
+        </div>
+        <div class="total-amt-person-display">
+          <span class="small-fontsize total-text">Total</span>
+          <span class="smaller-fontsize per-person">/ person</span>
+          <span class="med-fontsize total-amt">$0.00</span>
+        </div>
+      </div>
+      <button class="btn-accent" id="reset-btn">Reset</button>
+    </article>
     <script src="ourApp.js"></script>
   </body>
 </html>
