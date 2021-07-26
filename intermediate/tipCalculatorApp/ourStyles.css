@@ -2,6 +2,8 @@
   --color-primary-white: hsl(0, 100%, 100%);
   --color-primary-black: hsl(0, 0%, 0%);
   --color-primary-cyan: hsl(172, 67%, 45%);
+  --color-reset-bg: hsl(184, 92%, 20%);
+  --color-reset-fg: hsl(183, 79%, 24%);
 
   --media-query-desktop: 84.375rem;
 
@@ -11,7 +13,7 @@
   --color-light-grayish-cyan: hsl(185, 41%, 84%);
   --color-lighter-grayish-cyan: hsl(189, 41%, 97%);
 
-  --ff-spacemono: "Space Mono" . monospace;
+  --ff-spacemono: "Space Mono", monospace;
 
   --font-size-intro-para: calc(15 / 16 * 1rem);
   --font-size-200: 0.9375rem;
@@ -52,9 +54,10 @@
 
 body {
   font-family: var(--ff-spacemono);
+  background-color: var(--color-light-grayish-cyan);
   /* use color: revert for text that we dont want to be grayish blue */
   color: var(--color-neutral-grayish-blue);
-  font-size: var(--font-size-intro-para);
+  font-size: calc(24 / 16 * 1rem);
 }
 
 h1,
@@ -221,25 +224,27 @@ body {
   background-color: var(--bg, var(--color-primary-white));
   color: var(--fg, var(--color-primary-black));
   /* to make element look like a button */
-  border-radius: 100vw;
+  /* border-radius: 100vw; */
 }
 
-/* .btn-dark{
-    --bg:;
-    --fg:;
+.btn-dark {
+  --bg: var(--color-dark-cyan);
+  --fg: var(--color-primary-white);
 }
 
+.btn-accent {
+  --bg: var(--color-primary-cyan);
+  --fg: var(--color-dark-cyan);
+}
+/* 
 .btn-light{
     --bg:;
     --fg:;
     
 }
 
-.btn-accent{
-    --bg:;
-    --fg:;
 
-} */
+ */
 
 /* hide h2 which are title for our section element */
 .visually-hidden:not(:focus):not(:active) {
@@ -283,6 +288,86 @@ body {
   right: auto;
 }
 
+::placeholder {
+  color: var(--color-darker-grayish-cyan);
+}
+
+input {
+  color: red;
+  background-color: var(--color-lighter-grayish-cyan);
+}
 /* skip link using attr selector */
 
+.smaller-fontsize {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.small-fontsize {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.med-fontsize {
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
 /* utitlities */
+
+/* general styles */
+
+label,
+.tip-text {
+  color: var(--color-dark-cyan);
+}
+
+.custom-tip-amt::placeholder {
+  color: var(--color-dark-cyan);
+}
+
+/* general styles */
+
+.app-logo {
+  margin-inline: auto;
+}
+
+/* app wrapper */
+
+.app-content-wrapper {
+  background: var(--color-primary-white);
+}
+
+/* amt-tip inputs */
+
+/* amt-tip display */
+
+.amt-display {
+  background: var(--color-dark-cyan);
+}
+
+.tip-text,
+.total-text {
+  color: var(--color-primary-white);
+}
+
+.per-person {
+  color: var(--color-dark-grayish-cyan);
+}
+
+.tip-amt,
+.total-amt {
+  color: var(--color-primary-cyan);
+}
+
+.smaller-fontsize.per-person {
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+[id="reset-btn"] {
+  /* background: #0d686d; */
+  background: var(--color-reset-bg);
+  /* color: #045b62; */
+  color: var(--color-reset-fg);
+}
