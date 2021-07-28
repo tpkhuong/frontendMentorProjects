@@ -42,3 +42,39 @@ section > section:first-child::after {
   color: #fff;
   content: "Warning: it looks like you are using sections like divs. Sections should each have a heading";
 }
+
+#navigation:not([role="navigation"]):after {
+  background: red;
+  color: white;
+  content: "Warning: You appear to be linking to a principal navigation block. Make sure it has the navigation ARIA role";
+}
+[aria-controls="navigation"]:not([href="#navigation"]):after {
+  background: red;
+  color: white;
+  content: "Warning: When JavaScript is turned off, this should be a link and should go to the navigation landmark";
+}
+
+[role="tablist"] a:not([role="tab"]):after {
+  background: red;
+  color: white;
+  content: "Warning: All links inside a tablist should be defined as tabs, using the tab ARIA role";
+}
+[role="tabpanel"]:not([id]):after {
+  background: red;
+  color: white;
+  content: "Warning: Each tabpanel should be identified with an id attribute";
+}
+[role="tab"]:not([aria-controls]):after {
+  background: red;
+  color: white;
+  content: "Warning: Each tab should explicitly control a tabpanel using the aria-controls attribute";
+}
+
+[role="status"]:not([aria-live="polite"]),
+[role="alert"]:not([aria-live="assertive"]) {
+  content: "Warning: For better support, you should include a politeness setting for your live region role using the aria-live attribute";
+}
+[aria-live="polite"]:not([role="status"]),
+[aria-live="assertive"]:not([role="alert"]) {
+  content: "Warning: For better support, you should include a corresponding role for your aria-live politeness setting";
+}
