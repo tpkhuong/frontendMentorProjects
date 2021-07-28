@@ -4,6 +4,8 @@
   --color-primary-cyan: hsl(172, 67%, 45%);
   --color-reset-bg: hsl(184, 92%, 20%);
   --color-reset-fg: hsl(183, 79%, 24%);
+  --color-hover-reset-bg: hsl(173, 61%, 77%);
+  --color-hover-reset-fg: hsl(177, 95%, 15%);
 
   --media-query-desktop: 84.375rem;
 
@@ -338,8 +340,17 @@ input {
 /* utitlities */
 
 /* general styles */
+
+button,
+.input-dollar-img > img:hover,
+.input-people-img > img:hover,
+input {
+  cursor: pointer;
+}
+
 .center-wrapper {
   padding-block-start: 48px;
+  flex: 1;
 }
 
 [role="main"] {
@@ -350,6 +361,21 @@ input {
 label,
 .select-tip-text {
   color: var(--color-dark-cyan);
+}
+
+/* hover and focus */
+
+input:hover,
+.input-dollar-img > img:hover + input,
+.input-people-img > img:hover + input,
+input:focus {
+  outline: 2px solid var(--color-primary-cyan);
+}
+
+button[class*="btn"]:hover,
+button[class*="btn"]:focus {
+  background-color: var(--color-hover-reset-bg);
+  color: var(--color-hover-reset-fg);
 }
 
 /* move input type number to right */
@@ -371,6 +397,7 @@ input[type="number"] {
 @media screen and (min-width: 84.375rem) {
   .center-wrapper {
     margin: auto;
+    max-width: 750px;
   }
 }
 
@@ -404,6 +431,7 @@ input[type="number"] {
   margin-block-start: 48px;
   border-radius: 16px;
   padding: 32px;
+  padding-block-start: 20px;
   /* padding-inline-end: 20px; */
 }
 
@@ -480,10 +508,12 @@ input[type="number"] {
 
 .tip-amt-text {
   grid-area: tip-amt-text;
+  align-self: end;
 }
 
 .tip-amt-person-display .per-person {
   grid-area: tip-per-person;
+  align-self: start;
 }
 
 .tip-amt {
@@ -497,14 +527,18 @@ input[type="number"] {
   grid-template-areas:
     "total-text total-amt-digit"
     "total-per-person total-amt-digit";
+  margin-block: 18px;
+  margin-block-end: 26px;
 }
 
 .total-text {
   grid-area: total-text;
+  align-self: end;
 }
 
 .total-amt-person-display .per-person {
   grid-area: total-per-person;
+  align-self: start;
 }
 
 .total-amt {
