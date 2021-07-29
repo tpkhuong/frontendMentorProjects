@@ -46,15 +46,29 @@
             </span>
             <span class="select-tip-text smaller-fontsize">Select Tip %</span>
             <div class="tip-amt-btns">
-              <button class="tip-amt-btn btn-dark">5%</button>
-              <button class="tip-amt-btn btn-dark">10%</button>
-              <button class="tip-amt-btn btn-dark">15%</button>
-              <button class="tip-amt-btn btn-dark">25%</button>
-              <button class="tip-amt-btn btn-dark">50%</button>
+              <button aria-pressed="false" class="tip-amt-btn btn-dark">
+                5%
+              </button>
+              <button aria-pressed="false" class="tip-amt-btn btn-dark">
+                10%
+              </button>
+              <button aria-pressed="false" class="tip-amt-btn btn-dark">
+                15%
+              </button>
+              <button aria-pressed="false" class="tip-amt-btn btn-dark">
+                25%
+              </button>
+              <button aria-pressed="false" class="tip-amt-btn btn-dark">
+                50%
+              </button>
               <input type="text" class="custom-tip-amt" placeholder="Custom" />
             </div>
+            <div class="flex-wrapper"></div>
             <label class="smaller-fontsize" for="quantity-people"
               >Number of People</label
+            >
+            <span id="empty-number-of-people" aria-hidden="true"
+              >Can't be/start zero</span
             >
             <span class="input-people-img">
               <img src="images/icon-person.svg" alt="" />
