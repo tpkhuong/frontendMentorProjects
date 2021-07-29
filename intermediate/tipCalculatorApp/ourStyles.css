@@ -6,6 +6,8 @@
   --color-reset-fg: hsl(183, 79%, 24%);
   --color-hover-reset-bg: hsl(173, 61%, 77%);
   --color-hover-reset-fg: hsl(177, 95%, 15%);
+  --color-empty-num-people: hsl(18, 29%, 55%);
+  --color-zero-text: hsl(11, 71%, 69%);
 
   --media-query-desktop: 84.375rem;
 
@@ -42,6 +44,8 @@
 }
 
 /* reset */
+
+/* margin will go up to the parent's padding then it will make the parent container height/width bigger */
 
 *,
 *::before,
@@ -176,6 +180,17 @@ body {
 }
 
 /* we can use min-height on the element we want its height to be 100% */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
 
 /* reset */
 
@@ -191,20 +206,6 @@ body {
   /* padding-inline-start: 16px;
   padding-inline-end: 16px; */
 }
-
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type="number"] {
-  -moz-appearance: textfield;
-}
-
-/* reset */
 
 /* utitlities */
 
@@ -239,23 +240,30 @@ input[type="number"] {
   background-color: var(--bg, var(--color-primary-white));
   color: var(--fg, var(--color-primary-black));
   border-radius: 5px;
-  padding: var(--spacer-block) var(--spacer-inline);
+  /* padding: var(--spacer-block) var(--spacer-inline); */
   font-weight: var(--font-weight-700);
   /* to make element look like a button */
   /* border-radius: 100vw; */
 }
-
+/* having padding-inline on our btns within a grid, our text were not centered. we removed it from [class*="btn*] .btn selectors */
 .btn-dark {
   --bg: var(--color-dark-cyan);
   --fg: var(--color-primary-white);
-  --spacer-block: 4px;
-  --spacer-inline: 48px;
+  padding-block: 8px;
 }
+
+/* having padding-inline on our btns within a grid, our text were not centered. we removed it from [class*="btn*] .btn selectors */
 
 .btn-accent {
   --bg: var(--color-primary-cyan);
   --fg: var(--color-dark-cyan);
 }
+
+[aria-pressed="true"] {
+  --bg: var(--color-primary-cyan);
+  --fg: var(--color-dark-cyan);
+}
+
 /* 
 .btn-light{
     --bg:;
@@ -337,6 +345,11 @@ input {
   font-weight: 700;
 }
 
+@media screen and (min-width: 84.375rem) {
+  .med-fontsize {
+    font-size: 2.4rem;
+  }
+}
 /* utitlities */
 
 /* general styles */
@@ -397,7 +410,10 @@ input[type="number"] {
 @media screen and (min-width: 84.375rem) {
   .center-wrapper {
     margin: auto;
-    max-width: 750px;
+    max-width: 850px;
+  }
+  .custom-tip-amt::placeholder {
+    font-size: 1.4rem;
   }
 }
 
@@ -435,6 +451,15 @@ input[type="number"] {
   /* padding-inline-end: 20px; */
 }
 
+@media screen and (min-width: 84.375rem) {
+  .app-content-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0 38px;
+    padding: 32px;
+  }
+}
+
 /* amt-tip inputs */
 
 /* $ and person img for inputs */
@@ -466,11 +491,66 @@ input[type="number"] {
 }
 
 .tip-amt-btns {
+  /* having padding-inline on our btns within a grid, our text were not centered. we removed it from [class*="btn*] .btn selectors */
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 16px;
   margin-block-start: 12px;
   margin-block-end: 20px;
+}
+
+.tip-amt-btn {
+  font-size: 1.4rem;
+}
+
+/* wrapper for our label with text "number of people" and span with text "can't be zero". using flex so we can use space-between */
+/* not going to use this so we can add outline to number of people input using aria-hidden false on span with text "can't be zero" */
+
+/* .flex-wrapper {
+  display: flex;
+  justify-content: space-between;
+} */
+
+/* only show when number of people is empty and total bill and % is not empty */
+[id="empty-number-of-people"] {
+  /* if we didnt add /start to text */
+  /* margin-inline-start: 54px; */
+  margin-inline-start: 6px;
+}
+[id="empty-number-of-people"][aria-hidden="true"] {
+  display: none;
+}
+
+[id="empty-number-of-people"][aria-hidden="false"] {
+  display: revert;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: right;
+  color: var(--color-zero-text);
+}
+
+[id="empty-number-of-people"][aria-hidden="false"]
+  + [class="input-people-img"]
+  [id="quantity-people"] {
+  outline: 2px solid var(--color-empty-num-people);
+}
+
+@media screen and (min-width: 84.375rem) {
+  .tip-amt-btns {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+  .input-dollar-img,
+  .input-people-img {
+    display: block;
+  }
+  input[type="number"] {
+    width: 100%;
+  }
+  [id="empty-number-of-people"] {
+    /* if we didnt add /start to text */
+    /* margin-inline-start: 116px; */
+    margin-inline-start: 64px;
+  }
 }
 
 /* amt-tip display */
@@ -553,6 +633,12 @@ input[type="number"] {
   border-radius: 8px;
 }
 
+/* use javascript to add the class activated-reset-btn */
+[id="reset-btn"].activated-reset-btn {
+  --color-reset-bg: var(--color-primary-cyan);
+  --color-reset-fg: var(--color-dark-cyan);
+}
+
 [id="reset-btn"] {
   text-transform: uppercase;
   font-size: calc(19 / 16 * 1rem);
@@ -561,6 +647,27 @@ input[type="number"] {
   /* color: #045b62; */
   color: var(--color-reset-fg);
   width: 100%;
-  --spacer-block: 8px;
-  --spacer-inline: 16px;
+  padding: 8px 16px;
+  /* --spacer-block: 8px;
+  --spacer-inline: 16px; */
+}
+
+@media screen and (min-width: 84.375rem) {
+  .amt-display {
+    /* display: flex;
+    flex-direction: column; */
+    margin-block-start: 0px;
+    padding: 36px;
+    padding-block-start: 42px;
+  }
+  [id="reset-btn"] {
+    margin-block-start: 124px;
+  }
+  /* grid */
+  /* amt-tip-display */
+  .total-amt-person-display {
+    margin-block: 26px;
+    margin-block-end: 0px;
+    /* margin-block-end: 0px; */
+  }
 }
