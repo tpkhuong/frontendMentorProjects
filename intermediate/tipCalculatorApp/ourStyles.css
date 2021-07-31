@@ -535,6 +535,12 @@ input[type="number"] {
   outline: 2px solid var(--color-empty-num-people);
 }
 
+[id="empty-number-of-people"][aria-hidden="false"]
+  + [class="input-people-img"]
+  [id="quantity-people"]::placeholder {
+  color: var(--color-dark-cyan);
+}
+
 @media screen and (min-width: 84.375rem) {
   .tip-amt-btns {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
