@@ -393,13 +393,15 @@ button[class*="btn"]:focus {
 
 /* move input type number to right */
 
-input[type="number"],
+[id="bill-input"],
+[id="quantity-people"],
 .custom-tip-amt {
   text-align: right;
   padding-inline-end: 12px;
 }
 
-input[type="number"] {
+[id="bill-input"],
+[id="quantity-people"] {
   font-size: calc(24 / 16 * 1rem);
 }
 
@@ -528,7 +530,7 @@ input[type="number"] {
   text-align: right;
   color: var(--color-zero-text);
 }
-
+/* [id="bill-input"],[id="quantity-people"] */
 [id="empty-number-of-people"][aria-hidden="false"]
   + [class="input-people-img"]
   [id="quantity-people"] {
@@ -549,7 +551,8 @@ input[type="number"] {
   .input-people-img {
     display: block;
   }
-  input[type="number"] {
+  [id="bill-input"],
+  [id="quantity-people"] {
     width: 100%;
   }
   [id="empty-number-of-people"] {
