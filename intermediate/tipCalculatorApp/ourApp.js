@@ -13,11 +13,12 @@
   } = ourSelectors();
   // variable will hold the value of which %btn is clicked/selected
   var btnPercentSelectedByUser;
+  var customInputEnterBeforePercentBtnClicked;
   function ourSelectors() {
     //input element
     var billInput = document.querySelector("#bill-input");
     var customPercentInput = document.querySelector(
-      '[type="text"][placeholder="Custom"]'
+      '[type="number"][placeholder="Custom"]'
     );
     var numOfPeopleInput = document.getElementById("quantity-people");
     //   var arrOfPercentBtns = Array.prototype.slice.call(
@@ -75,18 +76,23 @@
       //   console.log("btnPercentSelectedByUser", btnPercentSelectedByUser);
       resetBtn.classList.add("activated-reset-btn");
       resetBtn.addEventListener("click", clickedResetBtnFeature);
+      //checking if user clicked on % btn
       if (!btnPercentSelectedByUser) {
         //when our user have not clicked on a % btn
         console.log(customPercentInput.value);
         console.log(numOfPeopleInput.value);
-        customPercentInput.value != "" && numOfPeopleInput.value === ""
+        customPercentInput.value !== "" && numOfPeopleInput.value === ""
           ? (spanAboveNumOfPeopleInput.attributes["aria-hidden"].value =
               "false")
           : null;
       } else {
-        console.log("btn is undefined");
+        numOfPeopleInput.value === ""
+          ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false")
+          : null;
       }
+      //checking if user is entering a % using the customInput
     } else {
+      //here billInput length is 0
       //want to check if the other inputs are emptry
       if (!btnPercentSelectedByUser) {
         //when our user have not clicked on a % btn
@@ -98,6 +104,15 @@
           ? (resetBtn.classList.remove("activated-reset-btn"),
             resetBtn.removeEventListener("click", clickedResetBtnFeature))
           : null;
+
+        customPercentInput.value !== ""
+          ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true")
+          : null;
+      } else {
+        //when bill input is empty we want to not show red text above num of people input
+        //because we will show red text when both bill input and custom input are not empty strings
+        // or bill input is not an empty string and btnPercentSelectedByUser is assign one of the % btn
+        spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true");
       }
     }
   }
@@ -107,59 +122,132 @@
     //if user enter 0 we will set input to empty sting
     if (!btnPercentSelectedByUser) {
       //when our user have not clicked on a % btn
-      //   if (event.data === "0" && lengthOfCustomInput === 1) {
-      //     event.target.value = "";
-      //   }
-      //   } else if (lengthOfCustomInput >= 1) {
-      //     //when length of value is 1 or greater we want to apply class activated-reset-btn to reset btn
-      //     console.log("btnPercentSelectedByUser", btnPercentSelectedByUser);
-      //     resetBtn.classList.add("activated-reset-btn");
-      //     resetBtn.addEventListener("click", clickedResetBtnFeature);
-      //   } else {
-      //     //want to check if the other inputs are emptry
-      //     if (billInput.value === "" && numOfPeopleInput.value === "") {
-      //       resetBtn.classList.remove("activated-reset-btn");
-      //       resetBtn.removeEventListener("click", clickedResetBtnFeature);
-      //     }
-      //   }
+      if (event.data === "0" && lengthOfCustomInput === 1) {
+        event.target.value = "";
+      } else if (lengthOfCustomInput >= 1) {
+        //get the value of customInput
+        customInputEnterBeforePercentBtnClicked = event.target.value;
+        //when length of value is 1 or greater we want to apply class activated-reset-btn to reset btn
+        // console.log("btnPercentSelectedByUser", btnPercentSelectedByUser);
+        resetBtn.classList.add("activated-reset-btn");
+        resetBtn.addEventListener("click", clickedResetBtnFeature);
+        //we don't want to give our user the ability to add 0 to the beginning of their inputs
+        let valueOfCustomInput = event.target.value[0];
+        //check if spanAboveNumInput has aria-hidden false
+
+        if (valueOfCustomInput === "0") {
+          //copy the input starting at index 1 to the end of the input
+          let copyInputFromIndexOne = event.target.value.slice(1);
+          event.target.value = copyInputFromIndexOne;
+        }
+        //show span text above num of people input
+        billInput.value !== "" && numOfPeopleInput.value === ""
+          ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false")
+          : null;
+      } else {
+        //here customInput length is 0
+        //want to check if the other inputs are emptry
+        if (billInput.value === "" && numOfPeopleInput.value === "") {
+          resetBtn.classList.remove("activated-reset-btn");
+          resetBtn.removeEventListener("click", clickedResetBtnFeature);
+        }
+        //we are showing red text above num of people input when custom input and bill input are not empty strings
+        //when custom is an empty string  or billing is an empty string do not show red text above num of people input
+        billInput.value !== ""
+          ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true")
+          : null;
+      }
       // ternary operator
-      event.data === "0" && lengthOfCustomInput === 1
-        ? (event.target.value = "")
-        : lengthOfCustomInput >= 1
-        ? (resetBtn.classList.add("activated-reset-btn"),
-          resetBtn.addEventListener("click", clickedResetBtnFeature))
-        : billInput.value === "" && numOfPeopleInput.value === ""
-        ? (resetBtn.classList.remove("activated-reset-btn"),
-          resetBtn.removeEventListener("click", clickedResetBtnFeature))
-        : null;
+      //   event.data === "0" && lengthOfCustomInput === 1
+      //     ? (event.target.value = "")
+      //     : lengthOfCustomInput >= 1
+      //     ? (resetBtn.classList.add("activated-reset-btn"),
+      //       resetBtn.addEventListener("click", clickedResetBtnFeature))
+      //     : billInput.value === "" && numOfPeopleInput.value === ""
+      //     ? (resetBtn.classList.remove("activated-reset-btn"),
+      //       resetBtn.removeEventListener("click", clickedResetBtnFeature))
+      //     : null;
     } else {
       //when btnPercentSelectedByUser is not undefined means our user clicked on a % btn
       //also means we add activated-reset-btn to our reset btn making it look like it is clickable
       //so we dont have to add the class activated-reset-btn in this part of the code
       //when user enter an input for custom input we want to change the bg and fg of the selected % btn by setting aria-pressed to false
-      //   if (event.data === "0" && lengthOfCustomInput === 1) {
-      //     event.target.value = "";
-      //   } else if (lengthOfCustomInput >= 1) {
-      //     // resetBtn.classList.add("activated-reset-btn");
-      //     btnPercentSelectedByUser.attributes["aria-pressed"].value = "false";
-      //   } else {
-      //     btnPercentSelectedByUser.attributes["aria-pressed"].value = "true";
-      //     //when our user delete the value in the custom input and makes the custom input value to be "" which means its length will be 0
-      //     //we want to select the % btn the user clicked before they decided to use the custom input by changing the bg and fg color of the btn
-      //   }
+      if (event.data === "0" && lengthOfCustomInput === 1) {
+        event.target.value = "";
+      } else if (lengthOfCustomInput >= 1) {
+        //get the value of customInput
+        customInputEnterBeforePercentBtnClicked = event.target.value;
+        // resetBtn.classList.add("activated-reset-btn");
+        btnPercentSelectedByUser.attributes["aria-pressed"].value = "false";
+      } else {
+        btnPercentSelectedByUser.attributes["aria-pressed"].value = "true";
+        //when our user delete the value in the custom input and makes the custom input value to be "" which means its length will be 0
+        //we want to select the % btn the user clicked before they decided to use the custom input by changing the bg and fg color of the btn
+      }
       // ternary operator
-      event.data === "0" && lengthOfCustomInput === 1
-        ? (event.target.value = "")
-        : lengthOfCustomInput >= 1
-        ? (btnPercentSelectedByUser.attributes["aria-pressed"].value = "false")
-        : (btnPercentSelectedByUser.attributes["aria-pressed"].value = "true");
+      //   event.data === "0" && lengthOfCustomInput === 1
+      //     ? (event.target.value = "")
+      //     : lengthOfCustomInput >= 1
+      //     ? (btnPercentSelectedByUser.attributes["aria-pressed"].value = "false")
+      //     : (btnPercentSelectedByUser.attributes["aria-pressed"].value = "true");
     }
   }
   function focusIsOnNumOfPeopleInput(event) {
     //if user enter 0 for number of people entry show text "can't be zero"
     var lengthOfNumOfPeopleInput = event.target.value.length;
     // console.log(event.target.value.length);
-    console.log("cant use ternary operator here");
+    if (event.data === "0" && lengthOfNumOfPeopleInput === 1) {
+      event.target.value = "";
+    } else if (lengthOfNumOfPeopleInput >= 1) {
+      //add activated-reset-btn css to reset button and add click listener to reset btn
+      resetBtn.classList.add("activated-reset-btn");
+      resetBtn.addEventListener("click", clickedResetBtnFeature);
+      //we don't want to give our user the ability to add 0 to the beginning of their inputs
+      let valueOfNumOfPeopleInput = event.target.value[0];
+      //check if spanAboveNumInput has aria-hidden false
+      let ariaHiddenOfSpanAbovePeopleInput =
+        spanAboveNumOfPeopleInput.getAttribute("aria-hidden");
+      if (ariaHiddenOfSpanAbovePeopleInput === "false") {
+        spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true");
+      }
+
+      if (valueOfNumOfPeopleInput === "0") {
+        //copy the input starting at index 1 to the end of the input
+        let copyInputFromIndexOne = event.target.value.slice(1);
+        event.target.value = copyInputFromIndexOne;
+      }
+    } else {
+      //here lengthOfNumOfPeopleInput is 0
+      if (!btnPercentSelectedByUser) {
+        //when our user have not clicked on a % btn
+        billInput.value === "" && customPercentInput.value === ""
+          ? (resetBtn.classList.remove("activated-reset-btn"),
+            resetBtn.removeEventListener("click", clickedResetBtnFeature))
+          : null;
+        //when numOfPeopleInput length is 0 we want to check if billOnput and customInput != "" we will make aria-hidden to false to show red text above numPeopleInput
+        //we dont need to check if bill input is not empty or num of people input is not empty because we are showing red text when
+        //both billinput and custom input is not empty stings
+        // billInput.value !== ""
+        //   ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true")
+        //   : null;
+        billInput.value !== "" && customPercentInput.value !== ""
+          ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false")
+          : spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true");
+      } else {
+        //our user clicked on a % btn
+        billInput.value === "" && !btnPercentSelectedByUser
+          ? (resetBtn.classList.remove("activated-reset-btn"),
+            resetBtn.removeEventListener("click", clickedResetBtnFeature))
+          : null;
+
+        billInput.value !== ""
+          ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false")
+          : null;
+        // billInput.value !== "" && btnPercentSelectedByUser
+        //   ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false")
+        //   : null;
+      }
+    }
     //   event.data === "0" && lengthOfNumOfPeopleInput === 1
     //       ? (event.target.value = "")
     //       : lengthOfNumOfPeopleInput >= 1
@@ -214,6 +302,17 @@
       //when our user have not clicked on a % btn
       if (percentValueOfBtn === "%") {
         selectPercentBtnAlgor(event);
+        billInput.value !== "" && numOfPeopleInput.value === ""
+          ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false")
+          : null;
+        console.log(
+          "customInputEnterBeforePercentBtnClicked",
+          customInputEnterBeforePercentBtnClicked
+        );
+        //when customInputEnterBeforePercentBtnClicked has a value assign to it, it will be truthy, if our user click on % btn set customInput to ""
+        customInputEnterBeforePercentBtnClicked
+          ? (customPercentInput.value = "")
+          : null;
         /* moved code below into a separate func since we will use it twice */
         // event.target.attributes["aria-pressed"].value = "true";
         // event.target.blur();
@@ -252,6 +351,10 @@
       ) {
         //we want to set aria-pressed to false, unfocus on the clicked btn and remove .activated-reset-btn on resetBtn
         //to set resetBtn bg to --color-reset-bg and fg to --color-reset-fg
+        console.log(
+          "customInputEnterBeforePercentBtnClicked",
+          customInputEnterBeforePercentBtnClicked
+        );
         event.target.attributes["aria-pressed"].value = "false";
         event.target.blur();
         btnPercentSelectedByUser = undefined;
@@ -264,6 +367,19 @@
           ? (resetBtn.classList.remove("activated-reset-btn"),
             resetBtn.removeEventListener("click", clickedResetBtnFeature))
           : null;
+
+        //when user click on the % btn with the highlighted css code
+        billInput.value !== ""
+          ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true")
+          : null;
+        //   we will have our conditional check here for custom input
+        //when customInputEnterBeforePercentBtnClicked is truthy and user click on btnPercentSelectedByUser
+        //   we want to focus customInput and restore value that user enter before they selected % btn
+        customInputEnterBeforePercentBtnClicked
+          ? ((customPercentInput.value =
+              customInputEnterBeforePercentBtnClicked),
+            customPercentInput.focus())
+          : null;
       } else {
         //when we get here, our user clicked on a % btn which means btnPercentSelectedByUser is not undefined. it will have a value of the element of the btn clicked
         //if this is the case, we want to check if the element the user clicked is one of the % btn
@@ -271,6 +387,9 @@
         if (percentValueOfBtn === "%") {
           //
           selectPercentBtnAlgor(event);
+          billInput.value !== "" && numOfPeopleInput.value === ""
+            ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false")
+            : null;
           /* moved code below into a separate func since we will use it twice */
           //   event.target.attributes["aria-pressed"].value = "true";
           //   event.target.blur();
@@ -299,6 +418,14 @@
           //   btn2.attributes["aria-pressed"].value = "false";
           //   btn3.attributes["aria-pressed"].value = "false";
           //   btn4.attributes["aria-pressed"].value = "false";
+          console.log(
+            "customInputEnterBeforePercentBtnClicked",
+            customInputEnterBeforePercentBtnClicked
+          );
+          //when customInputEnterBeforePercentBtnClicked has a value assign to it, it will be truthy, if our user click on % btn set customInput to ""
+          customInputEnterBeforePercentBtnClicked
+            ? (customPercentInput.value = "")
+            : null;
         }
       }
     }
@@ -324,7 +451,7 @@
     /* another way to set aria pressed to false */
     let [btn1, btn2, btn3, btn4] = arrOfPercentBtns.filter(
       function getAriaPressedFalseBtns(btn) {
-        return btn != eventInput.target;
+        return btn !== eventInput.target;
       }
     );
     btn1.attributes["aria-pressed"].value = "false";
