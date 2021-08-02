@@ -1,5 +1,6 @@
 (function scopeOurVariables() {
-  //selector elements variable top of function
+  //selector elements variable top of function used destructuring
+  // alert("use parseInt for % btn")
   var {
     billInput,
     customPercentInput,
@@ -12,8 +13,10 @@
     resetBtn,
   } = ourSelectors();
   // variable will hold the value of which %btn is clicked/selected
+  var billAmtEnter;
   var btnPercentSelectedByUser;
   var customInputEnterBeforePercentBtnClicked;
+  var numberOfPeopleEnter;
   function ourSelectors() {
     //input element
     var billInput = document.querySelector("#bill-input");
@@ -73,18 +76,37 @@
     if (event.data === "0" && lengthOfBillInput === 1) {
       event.target.value = "";
     } else if (lengthOfBillInput >= 1) {
+      //get bill amt entered
+      billAmtEnter = event.target.value;
       //   console.log("btnPercentSelectedByUser", btnPercentSelectedByUser);
       resetBtn.classList.add("activated-reset-btn");
       resetBtn.addEventListener("click", clickedResetBtnFeature);
       //checking if user clicked on % btn
       if (!btnPercentSelectedByUser) {
         //when our user have not clicked on a % btn
-        console.log(customPercentInput.value);
-        console.log(numOfPeopleInput.value);
-        customPercentInput.value !== "" && numOfPeopleInput.value === ""
-          ? (spanAboveNumOfPeopleInput.attributes["aria-hidden"].value =
-              "false")
-          : null;
+        // console.log(customPercentInput.value);
+        // console.log(numOfPeopleInput.value);
+        // customPercentInput.value !== "" && numOfPeopleInput.value === ""
+        //   ? (spanAboveNumOfPeopleInput.attributes["aria-hidden"].value =
+        //       "false")
+        //       : null;
+        if (customPercentInput.value !== "") {
+          //user entered a value to customPercentInput
+          //customInput in container with % btns is not an empty string.
+          numOfPeopleInput.value === ""
+            ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false")
+            : null;
+          //calculate tipAmtEachPerson and totalAmtEachPerson then display it to span with class tip-amt and span with total-amt
+          calculationTipAndTotalAmtEachPerson(
+            event.target.value,
+            customInputEnterBeforePercentBtnClicked,
+            numberOfPeopleEnter
+          );
+        } else {
+          //here our customPercentInput is an empty string
+          //if that is the case we want our span tip-amt and span with total-amt will display $0.00;
+          //we need these values (billAmt, tip % and num of people) to calculate tip amt per and total per person.
+        }
       } else {
         numOfPeopleInput.value === ""
           ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false")
@@ -199,6 +221,8 @@
     if (event.data === "0" && lengthOfNumOfPeopleInput === 1) {
       event.target.value = "";
     } else if (lengthOfNumOfPeopleInput >= 1) {
+      //get number of people entered
+      numberOfPeopleEnter = event.target.value;
       //add activated-reset-btn css to reset button and add click listener to reset btn
       resetBtn.classList.add("activated-reset-btn");
       resetBtn.addEventListener("click", clickedResetBtnFeature);
@@ -491,5 +515,37 @@
     spanOfTotalPerPersonDisplay.innerText = "$0.00";
     resetBtn.removeEventListener("click", clickedResetBtnFeature);
   }
-  function calculationTipAndTotalAmtEachPerson() {}
+  function calculationTipAndTotalAmtEachPerson(
+    billAmtValue = 0,
+    percentValue = 0,
+    numOfPeopleValue = 0
+  ) {
+    //declare variable top of functions
+    var convertToDecimalValue = percentValue / 100;
+    var tipTotalNotEachPerson = billAmtValue * convertToDecimalValue;
+    var billTotalEachPersonWithoutTip = billAmtValue / numOfPeopleValue;
+    console.log("billTotalEachPersonWithoutTip", billTotalEachPersonWithoutTip);
+    //tip amt person
+    //billAmtValue * percentValue = percentTotal then use percentTotal / numOfPeopleValue to get tip amt per/person
+    // we will use 102.20.toFixed(2) which will return a string then we will pass that string returned
+    // from.toFixed() to span with class tip- amt or span with class total-amt to display it
+    // using .toFixed() like this .888.toFixed(2) will return "0.89"
+    var tipAmtEachPerson = tipTotalNotEachPerson / numOfPeopleValue;
+    //total amt person without tip will be billAmtValue / numOfPeopleValue = totalAmtPerWithoutTip
+    //total per person will be. we take totalAmtPerWithoutTip + tipAmtPer
+    //total per person
+    // we will use 102.20.toFixed(2) which will return a string then we will pass that string returned
+    // from.toFixed() to span with class tip- amt or span with class total-amt to display it
+    var totalAmtWithTipAmtEachPerson =
+      billTotalEachPersonWithoutTip + tipAmtEachPerson;
+    /* display of span with class total-amt and span with class of tip-amt will be changed here in this func */
+    spanOfTipPerPersonDisplay.innerText = "$" + tipAmtEachPerson.toFixed(2);
+    spanOfTotalPerPersonDisplay.innerText =
+      "$" + totalAmtWithTipAmtEachPerson.toFixed(2);
+    //using template literal
+    // spanOfTipPerPersonDisplay.innerText = `$${tipAmtEachPerson.toFixed(2)}`;
+    // spanOfTotalPerPersonDisplay.innerText = `$${totalAmtWithTipAmtEachPerson.toFixed(
+    //   2
+    // )}`;
+  }
 })();
