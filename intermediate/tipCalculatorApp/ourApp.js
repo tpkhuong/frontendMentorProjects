@@ -1,6 +1,6 @@
 (function scopeOurVariables() {
   //selector elements variable top of function used destructuring
-  alert("on to numOfPeopleInput");
+  // alert("add label above customInput and hide it")
   var {
     billInput,
     customPercentInput,
@@ -87,6 +87,9 @@
       //checking if user clicked on % btn
       if (!btnPercentSelectedByUser) {
         //when our user have not clicked on a % btn
+        //also we enter this if statement when user clicked on the btnPercentSelectedByUser that matched the element that is assigned to btnPercentSelectedByUser
+        //if user enter value for billInput and numOfPeopleInput then user clicked on btnPercentSelectedByUser that has element assigned to it
+        //we will enter the else statement of if(customPercentInput.value !== "") code in that else statement will run, the code will display $0.00
         // console.log(customPercentInput.value);
         // console.log(numOfPeopleInput.value);
         // customPercentInput.value !== "" && numOfPeopleInput.value === ""
@@ -97,14 +100,15 @@
           //user entered a value to customPercentInput
           //customInput in container with % btns is not an empty string.
           numOfPeopleInput.value === ""
-            ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false")
-            : null;
-          //calculate tipAmtEachPerson and totalAmtEachPerson then display it to span with class tip-amt and span with total-amt
-          calculationTipAndTotalAmtEachPerson(
-            event.target.value,
-            customInputEnterBeforePercentBtnClicked,
-            numberOfPeopleInputEntered
-          );
+            ? (spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false"),
+              (spanOfTipPerPersonDisplay.innerText = "$0.00"),
+              (spanOfTotalPerPersonDisplay.innerText = "$0.00"))
+            : //calculate tipAmtEachPerson and totalAmtEachPerson then display it to span with class tip-amt and span with total-amt
+              calculationTipAndTotalAmtEachPerson(
+                event.target.value,
+                customInputEnterBeforePercentBtnClicked,
+                numberOfPeopleInputEntered
+              );
         } else {
           //here our customPercentInput is an empty string and user have not clicked on a % btn
           //if that is the case we want our span tip-amt and span with total-amt will display $0.00;
@@ -114,19 +118,21 @@
         }
       } else {
         //if we get here it means, user is entering values in billInput because billInput length will be >= 1
-        //and user clicked on a % btn then we want to use red text above numOfPeopleInput
+        //and user clicked on a % btn
         let btnInnerText = btnPercentSelectedByUser.innerText;
         let numFormOfValueOfPercentBtnClicked = parseInt(btnInnerText);
+        // if numOfPeopleInput is empty/empty string we want to show red text above numOfPeopleInput
         numOfPeopleInput.value === ""
-          ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false")
-          : null;
-        //we need these values (billAmt, tip % and num of people) to calculate tip amt per and total per person.
-        //user clicked on % btn, use numFormOfValueOfPercentBtnClicked in our calculationTipAndTotalAmtEachPerson func
-        calculationTipAndTotalAmtEachPerson(
-          event.target.value,
-          numFormOfValueOfPercentBtnClicked,
-          numberOfPeopleInputEntered
-        );
+          ? (spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false"),
+            (spanOfTipPerPersonDisplay.innerText = "$0.00"),
+            (spanOfTotalPerPersonDisplay.innerText = "$0.00"))
+          : //we need these values (billAmt, tip % and num of people) to calculate tip amt per and total per person.
+            //user clicked on % btn, use numFormOfValueOfPercentBtnClicked in our calculationTipAndTotalAmtEachPerson func
+            calculationTipAndTotalAmtEachPerson(
+              event.target.value,
+              numFormOfValueOfPercentBtnClicked,
+              numberOfPeopleInputEntered
+            );
       }
       /*
         else {
@@ -139,10 +145,13 @@
     //checking if user is entering a % using the customInput
     else {
       //here billInput length is 0
-      //want to check if the other inputs are emptry
+      //we will set billAmtInputEntered to 0
       /* we won't calculateTipAndTotalAmtEachPerson unless user enter value in billInput */
+      billAmtInputEntered = 0;
+      //want to check if the other inputs are emptry
       if (!btnPercentSelectedByUser) {
         //when our user have not clicked on a % btn
+        // also we enter this if statement when user clicked on the btnPercentSelectedByUser that matched the element that is assigned to btnPercentSelectedByUser
         // if (customPercentInput.value === "" && numOfPeopleInput.value === "") {
         //   resetBtn.classList.remove("activated-reset-btn");
         //   }
@@ -171,6 +180,7 @@
       }
     }
   }
+
   function focusIsOnCustomInput(event) {
     let lengthOfCustomInput = event.target.value.length;
     // console.log(lengthOfCustomInput);
@@ -196,38 +206,59 @@
           event.target.value = copyInputFromIndexOne;
         }
         //show span text above num of people input
-        billInput.value !== "" && numOfPeopleInput.value === ""
-          ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false")
-          : null;
-        //we want to check look at billAmtInput
         if (billInput.value !== "") {
-          //here user has entered a value to billAmtInput
-          //we need these values (billAmt, tip % and num of people) to calculate tip amt per and total per person.
-          calculationTipAndTotalAmtEachPerson(
-            billAmtInputEntered,
-            event.target.value,
-            numberOfPeopleInputEntered
-          );
+          //if we get here billInput.value is an not an empty string. user entered a value to billInput
+          numOfPeopleInput.value === ""
+            ? (spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false"),
+              (spanOfTipPerPersonDisplay.innerText = "$0.00"),
+              (spanOfTotalPerPersonDisplay.innerText = "$0.00"))
+            : // if we get to : part of this ternary operator, it means both billInput and numOfPeopleInput have user entered values. they are both not empty strings.
+              calculationTipAndTotalAmtEachPerson(
+                billAmtInputEntered,
+                event.target.value,
+                numberOfPeopleInputEntered
+              );
         } else {
-          //here user has not entered a value to billAmtInput
+          //if we get here billInput.value is an empty string
+          //if that is the case display $0.00
           spanOfTipPerPersonDisplay.innerText = "$0.00";
           spanOfTotalPerPersonDisplay.innerText = "$0.00";
         }
+        //we want to check look at billAmtInput
+        // if (billInput.value !== "") {
+        //   //here user has entered a value to billAmtInput
+        //   //we need these values (billAmt, tip % and num of people) to calculate tip amt per and total per person.
+        //   calculationTipAndTotalAmtEachPerson(
+        //     billAmtInputEntered,
+        //     event.target.value,
+        //     numberOfPeopleInputEntered
+        //   );
+        // } else {
+        //   //here user has not entered a value to billAmtInput
+        //   spanOfTipPerPersonDisplay.innerText = "$0.00";
+        //   spanOfTotalPerPersonDisplay.innerText = "$0.00";
+        // }
       } else {
         //here customInput length is 0
+        customInputEnterBeforePercentBtnClicked = 0;
+        //we will set customInputEnterBeforePercentBtnClicked to 0
+        //when customInput is 0 display $0.00 for both spans
+        spanOfTipPerPersonDisplay.innerText = "$0.00";
+        spanOfTotalPerPersonDisplay.innerText = "$0.00";
         //want to check if the other inputs are emptry
-        if (billInput.value === "" && numOfPeopleInput.value === "") {
-          resetBtn.classList.remove("activated-reset-btn");
-          resetBtn.removeEventListener("click", clickedResetBtnFeature);
+        if (billInput.value === "") {
+          numOfPeopleInput.value === ""
+            ? (resetBtn.classList.remove("activated-reset-btn"),
+              resetBtn.removeEventListener("click", clickedResetBtnFeature))
+            : null;
+        } else {
+          //we want to check billAmtInput
+          //if we get here billInput.value has user entered values which means it is not an empty string.
+          //we are showing red text above num of people input when custom input and bill input are not empty strings
+          //when custom is an empty string  or billing is an empty string do not show red text above num of people input
+          spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true");
+          // spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true");
         }
-        //we are showing red text above num of people input when custom input and bill input are not empty strings
-        //when custom is an empty string  or billing is an empty string do not show red text above num of people input
-        //we want to check look at billAmtInput
-        billInput.value !== ""
-          ? (spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true"),
-            (spanOfTipPerPersonDisplay.innerText = "$0.00"),
-            (spanOfTotalPerPersonDisplay.innerText = "$0.00"))
-          : null;
       }
       //we want to check look at billAmtInput
       // ternary operator
@@ -254,14 +285,37 @@
         btnPercentSelectedByUser.attributes["aria-pressed"].value = "false";
         //we want to check look at billAmtInput
         //first checking if billAmtInput is not empty user entered a value
-        billInput.value !== ""
-          ? calculationTipAndTotalAmtEachPerson(
-              billAmtInputEntered,
-              event.target.value,
-              numberOfPeopleInputEntered
-            )
-          : console.log("here");
+        //we have to check if numOfPeopleInput is empty because our previous code would run calculation func when user enter value to customInput
+        //and billInput.value is not an empty string(user entered value to billInput).
+        // billInput.value !== ""
+        //   ? calculationTipAndTotalAmtEachPerson(
+        //       billAmtInputEntered,
+        //       event.target.value,
+        //       numberOfPeopleInputEntered
+        //     )
+        //   : console.log("here");
+        //code below will check both billInput and numOfPeopleInput
+        if (billInput.value !== "") {
+          //if we get here billInput.value is an not an empty string. user entered a value to billInput
+          numOfPeopleInput.value === ""
+            ? (spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false"),
+              (spanOfTipPerPersonDisplay.innerText = "$0.00"),
+              (spanOfTotalPerPersonDisplay.innerText = "$0.00"))
+            : // if we get to : part of this ternary operator, it means both billInput and numOfPeopleInput have user entered values. they are both not empty strings.
+              calculationTipAndTotalAmtEachPerson(
+                billAmtInputEntered,
+                event.target.value,
+                numberOfPeopleInputEntered
+              );
+        } else {
+          //if we get here billInput.value is an empty string
+          //if that is the case display $0.00
+          spanOfTipPerPersonDisplay.innerText = "$0.00";
+          spanOfTotalPerPersonDisplay.innerText = "$0.00";
+        }
       } else {
+        //customInput is 0 here
+        customInputEnterBeforePercentBtnClicked = 0;
         btnPercentSelectedByUser.attributes["aria-pressed"].value = "true";
         //when our user delete the value in the custom input and makes the custom input value to be "" which means its length will be 0
         //we want to select the % btn the user clicked before they decided to use the custom input by changing the bg and fg color of the btn
@@ -270,11 +324,20 @@
           btnPercentSelectedByUser.innerText;
         let numFormOfValueOfPercentBtnClickedDeclaredInCustomInputFunc =
           parseInt(btnInnerTextDeclaredInCustomInputFunc);
-        calculationTipAndTotalAmtEachPerson(
-          billAmtInputEntered,
-          numFormOfValueOfPercentBtnClickedDeclaredInCustomInputFunc,
-          numberOfPeopleInputEntered
-        );
+        //if user clicked on a % btn, entered value to billInput and numOfPeopleInput then select customInput then change the input to numOfPeopleInput
+        //if we the user delete the value in customInput, the calculation of tip amt and total amt each person will use
+        //the most resent value entered to numOfPeopleInput with the % btn the user selected before the user entered value to customInput.
+        // console.log("numberOfPeopleInputEntered", numberOfPeopleInputEntered);
+        //we want to call calculation of display when both billInput and numOfPeopleInput are not empty strings( !== "")
+        billInput.value !== "" && numOfPeopleInput.value !== ""
+          ? //else we want to display $0.00 if eiter billInput or numOfPeopleInput.value is an empty string display $0.00
+            calculationTipAndTotalAmtEachPerson(
+              billAmtInputEntered,
+              numFormOfValueOfPercentBtnClickedDeclaredInCustomInputFunc,
+              numberOfPeopleInputEntered
+            )
+          : ((spanOfTipPerPersonDisplay.innerText = "$0.00"),
+            (spanOfTotalPerPersonDisplay.innerText = "$0.00"));
       }
       // ternary operator
       //   event.data === "0" && lengthOfCustomInput === 1
@@ -310,8 +373,48 @@
         let copyInputFromIndexOne = event.target.value.slice(1);
         event.target.value = copyInputFromIndexOne;
       }
+      //if btnPercentSelectedByUser is undefined means user did not click on % btn
+      if (!btnPercentSelectedByUser) {
+        //if both billInput and customInput are not empty strings. !== "", run our calculation func
+        //else if either billInput or customInput is an empty string we will make our spanOfTipPerPersonDisplay and spanOfTotalPerPersonDisplay display "$0.00"
+        billInput.value !== "" && customPercentInput.value !== ""
+          ? calculationTipAndTotalAmtEachPerson(
+              billAmtInputEntered,
+              customInputEnterBeforePercentBtnClicked,
+              event.target.value
+            )
+          : ((spanOfTipPerPersonDisplay.innerText = "$0.00"),
+            (spanOfTotalPerPersonDisplay.innerText = "$0.00"));
+      } else {
+        //user clicked on % btn
+        alert("start here tomorrow");
+        let btnInnerTextDeclaredInCustomInputFunc =
+          btnPercentSelectedByUser.innerText;
+        let numFormOfValueOfPercentBtnClickedDeclaredInNumOfPeopleFunc =
+          parseInt(btnInnerTextDeclaredInCustomInputFunc);
+        if (billInput.value !== "") {
+          console.log("customPercentInput", customPercentInput.value);
+          //user entered value to billInput and user clicked on % btn (15%) need to get innerText of that % btn
+          //check if customInput is empty if it is run calculcation func with numFormOfValueOfPercentBtnClickedDeclaredInNumOfPeopleFunc the value of % btn clicked
+          //else if customInput is not empty and btnPercentSelectedByUser has an element assigned to it
+          //we want to use the value in the customInput to calculate the tip amt and total amt each person
+          customPercentInput.value === ""
+            ? calculationTipAndTotalAmtEachPerson(
+                billAmtInputEntered,
+                numFormOfValueOfPercentBtnClickedDeclaredInNumOfPeopleFunc,
+                event.target.value
+              )
+            : calculationTipAndTotalAmtEachPerson(
+                billAmtInputEntered,
+                customPercentInput.value,
+                event.target.value
+              );
+        }
+      }
     } else {
       //here lengthOfNumOfPeopleInput is 0
+      //we will set numberOfPeopleInputEntered to 0
+      numberOfPeopleInputEntered = 0;
       if (!btnPercentSelectedByUser) {
         //when our user have not clicked on a % btn
         billInput.value === "" && customPercentInput.value === ""
@@ -623,3 +726,5 @@
     // )}`;
   }
 })();
+// spanOfTipPerPersonDisplay.innerText = "$0.00",
+// spanOfTotalPerPersonDisplay.innerText = "$0.00";
