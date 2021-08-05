@@ -1,6 +1,6 @@
 (function scopeOurVariables() {
   //selector elements variable top of function used destructuring
-  // alert("add label above customInput and hide it")
+  alert("add label above customInput, make it screen reader accessible");
   var {
     billInput,
     customPercentInput,
@@ -387,7 +387,7 @@
             (spanOfTotalPerPersonDisplay.innerText = "$0.00"));
       } else {
         //user clicked on % btn
-        alert("start here tomorrow");
+
         let btnInnerTextDeclaredInCustomInputFunc =
           btnPercentSelectedByUser.innerText;
         let numFormOfValueOfPercentBtnClickedDeclaredInNumOfPeopleFunc =
@@ -415,6 +415,9 @@
       //here lengthOfNumOfPeopleInput is 0
       //we will set numberOfPeopleInputEntered to 0
       numberOfPeopleInputEntered = 0;
+      //when numOfPeopleInput is 0 display $0.00
+      spanOfTipPerPersonDisplay.innerText = "$0.00";
+      spanOfTotalPerPersonDisplay.innerText = "$0.00";
       if (!btnPercentSelectedByUser) {
         //when our user have not clicked on a % btn
         billInput.value === "" && customPercentInput.value === ""
@@ -445,6 +448,7 @@
         //   : null;
       }
     }
+
     //   event.data === "0" && lengthOfNumOfPeopleInput === 1
     //       ? (event.target.value = "")
     //       : lengthOfNumOfPeopleInput >= 1
@@ -508,6 +512,7 @@
           customInputEnterBeforePercentBtnClicked
         );
         //when customInputEnterBeforePercentBtnClicked has a value assign to it, it will be truthy, if our user click on % btn set customInput to ""
+        //we want our users to enter a new customInput
         customInputEnterBeforePercentBtnClicked
           ? (customPercentInput.value = "")
           : null;
@@ -516,7 +521,19 @@
         // event.target.blur();
         // resetBtn.classList.add("activated-reset-btn");
         // btnPercentSelectedByUser = event.target;
-
+        /* calculate display */
+        let btnInnerTextDeclaredInCustomInputFunc =
+          btnPercentSelectedByUser.innerText;
+        let numFormOfValueOfPercentBtnClickedDeclaredInSelectPercentFunc =
+          parseInt(btnInnerTextDeclaredInCustomInputFunc);
+        billInput.value !== "" && numOfPeopleInput.value !== ""
+          ? calculationTipAndTotalAmtEachPerson(
+              billAmtInputEntered,
+              numFormOfValueOfPercentBtnClickedDeclaredInSelectPercentFunc,
+              numberOfPeopleInputEntered
+            )
+          : ((spanOfTipPerPersonDisplay.innerText = "$0.00"),
+            (spanOfTotalPerPersonDisplay.innerText = "$0.00"));
         // //   use filter to get an array of btn with aria-pressed set to false
         // // using forEach loop to change aria pressed to false
         // //   let arrOfBtnsAriaPressedFalse = arrOfPercentBtns.filter(
@@ -549,10 +566,17 @@
       ) {
         //we want to set aria-pressed to false, unfocus on the clicked btn and remove .activated-reset-btn on resetBtn
         //to set resetBtn bg to --color-reset-bg and fg to --color-reset-fg
-        console.log(
-          "customInputEnterBeforePercentBtnClicked",
-          customInputEnterBeforePercentBtnClicked
-        );
+        //when user click on the same element as btnPercentSelectedByUser, we will unselect that % btn
+        //if that is the case don't calculate display, have span displaying our tip amt and total amt each person $0.00
+        //set btnPercentSelectedByUser to undefined
+        spanOfTipPerPersonDisplay.innerText = "$0.00";
+        spanOfTotalPerPersonDisplay.innerText = "$0.00";
+        // console.log(
+        //   "customInputEnterBeforePercentBtnClicked",
+        //   customInputEnterBeforePercentBtnClicked
+        // );
+        // console.log("billAmtInputEntered", billAmtInputEntered);
+        // console.log("numOfPeopleInput", numOfPeopleInput);
         event.target.attributes["aria-pressed"].value = "false";
         event.target.blur();
         btnPercentSelectedByUser = undefined;
@@ -573,10 +597,39 @@
         //   we will have our conditional check here for custom input
         //when customInputEnterBeforePercentBtnClicked is truthy and user click on btnPercentSelectedByUser
         //   we want to focus customInput and restore value that user enter before they selected % btn
+        // if (customInputEnterBeforePercentBtnClicked) {
+        //   customPercentInput.value = customInputEnterBeforePercentBtnClicked;
+        //   customPercentInput.focus();
+        //   //run display calculation with the value that we stored in customInputEnterBeforePercentBtnClicked
+        //   //we want to also check the value of billInput and numOfPeopleInput
+        //   billInput.value !== "" && numOfPeopleInput.value !== ""
+        //     ? calculationTipAndTotalAmtEachPerson(
+        //         billAmtInputEntered,
+        //         customInputEnterBeforePercentBtnClicked,
+        //         numberOfPeopleInputEntered
+        //       )
+        //     : ((spanOfTipPerPersonDisplay.innerText = "$0.00"),
+        //       (spanOfTotalPerPersonDisplay.innerText = "$0.00"));
+        // } else {
+        // }
+        //ternary operator
+        //   we will have our conditional check here for custom input
+        // when customInputEnterBeforePercentBtnClicked is truthy and user click on btnPercentSelectedByUser
+        //   we want to focus customInput and restore value that user enter before they selected % btn
         customInputEnterBeforePercentBtnClicked
           ? ((customPercentInput.value =
               customInputEnterBeforePercentBtnClicked),
-            customPercentInput.focus())
+            customPercentInput.focus(),
+            // run display calculation with the value that we stored in customInputEnterBeforePercentBtnClicked
+            // we want to also check the value of billInput and numOfPeopleInput
+            billInput.value !== "" && numOfPeopleInput.value !== ""
+              ? calculationTipAndTotalAmtEachPerson(
+                  billAmtInputEntered,
+                  customInputEnterBeforePercentBtnClicked,
+                  numberOfPeopleInputEntered
+                )
+              : ((spanOfTipPerPersonDisplay.innerText = "$0.00"),
+                (spanOfTotalPerPersonDisplay.innerText = "$0.00")))
           : null;
       } else {
         //when we get here, our user clicked on a % btn which means btnPercentSelectedByUser is not undefined. it will have a value of the element of the btn clicked
@@ -593,7 +646,23 @@
           //   event.target.blur();
           //   resetBtn.classList.add("activated-reset-btn");
           //   btnPercentSelectedByUser = event.target;
-
+          /* user clicked on a % btn then the clicked a different % btn when that is the case we want to run calculation of display with the % btn the user clicked */
+          /* it will be the element assigned to btnPercentSelectedByUser */
+          let btnInnerTextDeclaredInCustomInputFunc =
+            btnPercentSelectedByUser.innerText;
+          let numFormOfValueOfPercentBtnClickedDeclaredWhenUserClickedDiffBtn =
+            parseInt(btnInnerTextDeclaredInCustomInputFunc);
+          /* we are only running calculation func when both billInput and numOfPeopleInput are not empty strings mean user entered value into those inputs */
+          /* else if either one of billInput or numOfPeopleInput is an empty string means user did not enter value in either billInpur or numOfPeopleinput */
+          /* we will display $0.00 */
+          billInput.value !== "" && numOfPeopleInput.value !== ""
+            ? calculationTipAndTotalAmtEachPerson(
+                billAmtInputEntered,
+                numFormOfValueOfPercentBtnClickedDeclaredWhenUserClickedDiffBtn,
+                numberOfPeopleInputEntered
+              )
+            : ((spanOfTipPerPersonDisplay.innerText = "$0.00"),
+              (spanOfTotalPerPersonDisplay.innerText = "$0.00"));
           //   //   use filter to get an array of btn with aria-pressed set to false
           //   // using forEach loop to change aria pressed to false
           //   //   let arrOfBtnsAriaPressedFalse = arrOfPercentBtns.filter(
@@ -658,11 +727,12 @@
     btn4.attributes["aria-pressed"].value = "false";
   }
   function clickedResetBtnFeature() {
+    console.log(btnPercentSelectedByUser);
     !btnPercentSelectedByUser
-      ? (resetPercentBtnInputsAndDisplays(),
+      ? (resetCustomPercentBtnInputsAndDisplays(),
         resetBtn.classList.remove("activated-reset-btn"),
         resetBtn.blur())
-      : (resetInputsAndDisplaysWithoutPercentBtn(),
+      : (resetInputsAndDisplaysWithPercentBtn(),
         resetBtn.classList.remove("activated-reset-btn"),
         resetBtn.blur());
   }
@@ -673,7 +743,8 @@
     spanOfTipPerPersonDisplay.innerText = "$0.00";
     spanOfTotalPerPersonDisplay.innerText = "$0.00";
   }
-  function resetPercentBtnInputsAndDisplays() {
+  function resetCustomPercentBtnInputsAndDisplays() {
+    // console.log(btnPercentSelectedByUser);
     billInput.value = "";
     customPercentInput.value = "";
     numOfPeopleInput.value = "";
@@ -682,9 +753,10 @@
     btnPercentSelectedByUser = undefined;
     resetBtn.removeEventListener("click", clickedResetBtnFeature);
   }
-  function resetInputsAndDisplaysWithoutPercentBtn() {
-    console.log("btnPercentSelectedByUser", btnPercentSelectedByUser);
+  function resetInputsAndDisplaysWithPercentBtn() {
+    // console.log("btnPercentSelectedByUser", btnPercentSelectedByUser);
     btnPercentSelectedByUser.attributes["aria-pressed"].value = "false";
+    customPercentInput.value = "";
     billInput.value = "";
     numOfPeopleInput.value = "";
     spanOfTipPerPersonDisplay.innerText = "$0.00";
