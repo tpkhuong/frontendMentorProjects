@@ -1,6 +1,5 @@
 (function scopeOurVariables() {
   //selector elements variable top of function used destructuring
-  alert("add label above customInput, make it screen reader accessible");
   var {
     billInput,
     customPercentInput,
@@ -96,11 +95,13 @@
         //   ? (spanAboveNumOfPeopleInput.attributes["aria-hidden"].value =
         //       "false")
         //       : null;
+        //we can clean this up a bit. we can check if
         if (customPercentInput.value !== "") {
           //user entered a value to customPercentInput
           //customInput in container with % btns is not an empty string.
           numOfPeopleInput.value === ""
-            ? (spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false"),
+            ? //since customPercentInput is not empty and numOfPeopleInput is empty show red text above numOfPeopleInput
+              (spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false"),
               (spanOfTipPerPersonDisplay.innerText = "$0.00"),
               (spanOfTotalPerPersonDisplay.innerText = "$0.00"))
             : //calculate tipAmtEachPerson and totalAmtEachPerson then display it to span with class tip-amt and span with total-amt
@@ -148,6 +149,9 @@
       //we will set billAmtInputEntered to 0
       /* we won't calculateTipAndTotalAmtEachPerson unless user enter value in billInput */
       billAmtInputEntered = 0;
+      //we dont want to calculate display when billInput is 0 when billInput is 0 display $0.00
+      spanOfTipPerPersonDisplay.innerText = "$0.00";
+      spanOfTotalPerPersonDisplay.innerText = "$0.00";
       //want to check if the other inputs are emptry
       if (!btnPercentSelectedByUser) {
         //when our user have not clicked on a % btn
@@ -159,15 +163,24 @@
         customPercentInput.value === "" && numOfPeopleInput.value === ""
           ? (resetBtn.classList.remove("activated-reset-btn"),
             resetBtn.removeEventListener("click", clickedResetBtnFeature))
-          : null;
-
-        customPercentInput.value !== ""
-          ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true")
-          : null;
+          : spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true");
+        //
+        /* we moved the spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true") into the else statement of the ternary operator above
+        this line customPercentInput.value === "" && numOfPeopleInput.value === ""
+        if customPercentInput.value !== "" then it will run spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true")
+        it will also run if customPercentInput.value === "" and numOfPeopleInput.value !== ""
+        */
+        // customPercentInput.value !== ""
+        //   ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true")
+        //   : null;
         //here our billAmtInput is an empty string and user have entered value to customInput
         //if that is the case we want our span tip-amt and span with total-amt will display $0.00;
+        //moving code below to the else statement, we eneter that else statement when billInput is 0
+        //we dont want to calculate display when billInput is 0
+
+        /* moved into else statement when billInput is 0
         spanOfTipPerPersonDisplay.innerText = "$0.00";
-        spanOfTotalPerPersonDisplay.innerText = "$0.00";
+        spanOfTotalPerPersonDisplay.innerText = "$0.00";*/
       } else {
         //when bill input is empty we want to not show red text above num of people input
         //because we will show red text when both bill input and custom input are not empty strings
@@ -175,8 +188,11 @@
         spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true");
         //here our billAmtInput is an empty string and user have clicked on a % btn
         //if that is the case we want our span tip-amt and span with total-amt will display $0.00;
+        //moving code below to the else statement, we eneter that else statement when billInput is 0
+        //we dont want to calculate display when billInput is 0
+        /* moved into else statement when billInput is 0
         spanOfTipPerPersonDisplay.innerText = "$0.00";
-        spanOfTotalPerPersonDisplay.innerText = "$0.00";
+        spanOfTotalPerPersonDisplay.innerText = "$0.00";*/
       }
     }
   }
@@ -221,9 +237,34 @@
         } else {
           //if we get here billInput.value is an empty string
           //if that is the case display $0.00
+          //in our ternary operator when the is value in customInput and there is no value in billInput or numOfPeopleInput
+          //it will run calculation func
           spanOfTipPerPersonDisplay.innerText = "$0.00";
           spanOfTotalPerPersonDisplay.innerText = "$0.00";
         }
+        //show span text above num of people input
+        //if we get here billInput.value is an not an empty string. user entered a value to billInput
+        // billInput.value !== "" && numOfPeopleInput.value === ""
+        //   ? (spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false"),
+        //     (spanOfTipPerPersonDisplay.innerText = "$0.00"),
+        //     (spanOfTotalPerPersonDisplay.innerText = "$0.00")) // if we get to : part of this ternary operator, it means both billInput and numOfPeopleInput have user entered values. they are both not empty strings.
+        //   : calculationTipAndTotalAmtEachPerson(
+        //       billAmtInputEntered,
+        //       event.target.value,
+        //       numberOfPeopleInputEntered
+        //     );
+        /* code below was else statement to if(billInput.value !== ""){}
+        we dont need code below because when user enter value to numOfPeopleInput then enter value to customInput
+        and billInput.value is empty, display will already be $0.00 because we are not running/calling calculation func
+        also if user enter value into customInput, numOfPeopleInput and billInput then user delete values in billInput to make it empty
+        display will be $0.00
+        else {
+          //if we get here billInput.value is an empty string
+          //if that is the case display $0.00
+          spanOfTipPerPersonDisplay.innerText = "$0.00";
+          spanOfTotalPerPersonDisplay.innerText = "$0.00";
+        }
+        */
         //we want to check look at billAmtInput
         // if (billInput.value !== "") {
         //   //here user has entered a value to billAmtInput
@@ -245,13 +286,22 @@
         //when customInput is 0 display $0.00 for both spans
         spanOfTipPerPersonDisplay.innerText = "$0.00";
         spanOfTotalPerPersonDisplay.innerText = "$0.00";
+        spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true");
         //want to check if the other inputs are emptry
-        if (billInput.value === "") {
-          numOfPeopleInput.value === ""
-            ? (resetBtn.classList.remove("activated-reset-btn"),
-              resetBtn.removeEventListener("click", clickedResetBtnFeature))
-            : null;
-        } else {
+        // if (billInput.value === "") {
+        //   numOfPeopleInput.value === ""
+        //     ? (resetBtn.classList.remove("activated-reset-btn"),
+        //       resetBtn.removeEventListener("click", clickedResetBtnFeature))
+        //     : null;
+        // }
+        //ternery operator for code above
+        //if both billInput and numOfPeopleInput are empty remove activated-reset-btn from reset btn and remove event listener
+        billInput.value === "" && numOfPeopleInput.value === ""
+          ? (resetBtn.classList.remove("activated-reset-btn"),
+            resetBtn.removeEventListener("click", clickedResetBtnFeature))
+          : null;
+        /*
+        else {
           //we want to check billAmtInput
           //if we get here billInput.value has user entered values which means it is not an empty string.
           //we are showing red text above num of people input when custom input and bill input are not empty strings
@@ -259,6 +309,17 @@
           spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true");
           // spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true");
         }
+        */
+        //ternary opearto code above
+        //want to check if the other inputs are emptry
+        // billInput.value === "" && numOfPeopleInput.value === ""
+        //   ? (resetBtn.classList.remove("activated-reset-btn"),
+        //     resetBtn.removeEventListener("click", clickedResetBtnFeature))
+        //   : //we want to check billAmtInput
+        //     //if we get here billInput.value has user entered values which means it is not an empty string.
+        //     //we are showing red text above num of people input when custom input and bill input are not empty strings
+        //     //when custom is an empty string  or billing is an empty string do not show red text above num of people input
+        //     spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true");
       }
       //we want to check look at billAmtInput
       // ternary operator
@@ -347,6 +408,7 @@
       //     : (btnPercentSelectedByUser.attributes["aria-pressed"].value = "true");
     }
   }
+
   function focusIsOnNumOfPeopleInput(event) {
     //if user enter 0 for number of people entry show text "can't be zero"
     var lengthOfNumOfPeopleInput = event.target.value.length;
