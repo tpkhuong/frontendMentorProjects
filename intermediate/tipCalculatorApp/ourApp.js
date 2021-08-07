@@ -492,16 +492,20 @@
         // billInput.value !== ""
         //   ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true")
         //   : null;
+        //if both billInput.value and customInput.value are not empty strings !== "" then show red text above numOfPeople
         billInput.value !== "" && customPercentInput.value !== ""
           ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false")
           : spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true");
       } else {
         //our user clicked on a % btn
+        //when billInput.value is an empty string === "" and btnPercentSelectedByUser === undefined(either user didnt click on % btn
+        // or user clicked on element that was assigned to btnPercentSelectedByUser. which would make btnPercentSelectedByUser to undefined)
         billInput.value === "" && !btnPercentSelectedByUser
           ? (resetBtn.classList.remove("activated-reset-btn"),
             resetBtn.removeEventListener("click", clickedResetBtnFeature))
           : null;
-
+        //here billInput.value is not an empty string !== "" and there is an element assigned to btnPercentSelectedByUser
+        //numOfPeopleInput is 0 then we will show red text above numOfPeopleInput
         billInput.value !== ""
           ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false")
           : null;
@@ -639,6 +643,7 @@
         // );
         // console.log("billAmtInputEntered", billAmtInputEntered);
         // console.log("numOfPeopleInput", numOfPeopleInput);
+        //event.target will be the % btn that user clicked
         event.target.attributes["aria-pressed"].value = "false";
         event.target.blur();
         btnPercentSelectedByUser = undefined;
@@ -653,7 +658,8 @@
           : null;
 
         //when user click on the % btn with the highlighted css code
-        billInput.value !== ""
+        //billInput.value is not an empty string hide red text above numOfPeopleInput
+        billInput.value !== "" && numOfPeopleInput.value === ""
           ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "true")
           : null;
         //   we will have our conditional check here for custom input
@@ -676,7 +682,8 @@
         // }
         //ternary operator
         //   we will have our conditional check here for custom input
-        // when customInputEnterBeforePercentBtnClicked is truthy and user click on btnPercentSelectedByUser
+        // here user clicked customInput which will make it focused and when customInputEnterBeforePercentBtnClicked is truthy and user clicked on % btn that match
+        // the element assigned to btnPercentSelectedByUser
         //   we want to focus customInput and restore value that user enter before they selected % btn
         customInputEnterBeforePercentBtnClicked
           ? ((customPercentInput.value =
@@ -695,11 +702,12 @@
           : null;
       } else {
         //when we get here, our user clicked on a % btn which means btnPercentSelectedByUser is not undefined. it will have a value of the element of the btn clicked
-        //if this is the case, we want to check if the element the user clicked is one of the % btn
+        //if this is the case, we want to check if the element the user clicked is one of the % btns
         //if it is we want to make the event.target element aria pressed to true it will change the bg and fg to a clicked btn
         if (percentValueOfBtn === "%") {
-          //
+          //code in selectPercentBtnAlgor func will apply the correct css to the % btn clicked by setting the correct value to aria-pressed attr
           selectPercentBtnAlgor(event);
+          //when user enter value to billInput and numOfPeopleInput is blank(it is an empty string === "") show red text above numOfPeopleInput
           billInput.value !== "" && numOfPeopleInput.value === ""
             ? spanAboveNumOfPeopleInput.setAttribute("aria-hidden", "false")
             : null;
