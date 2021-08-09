@@ -234,7 +234,7 @@ input[type="number"] {
 [class*="btn"] {
   background-color: var(--bg, var(--color-primary-white));
   color: var(--fg, var(--color-primary-black));
-  
+
   /* border-radius: 5px; */
   /* padding: var(--spacer-block) var(--spacer-inline); */
   /* font-weight: var(--font-weight-700); */
@@ -249,7 +249,7 @@ input[type="number"] {
 /* having padding-inline on our btns within a grid, our text were not centered. we removed it from [class*="btn*] .btn selectors */
 
 .btn-accent {
-    font-family: var(--font-family-fraunces);
+  font-family: var(--font-family-fraunces);
 }
 
 /* [aria-pressed="true"] {
