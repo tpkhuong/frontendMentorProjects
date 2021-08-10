@@ -57,7 +57,7 @@ body {
   font-family: var(--ff-spacemono);
   background-color: var(--color-light-grayish-cyan);
   /* use color: revert for text that we dont want to be grayish blue */
-  color: var(--color-neutral-grayish-blue);
+  /* color: var(--color-neutral-grayish-blue); */
   font-size: calc(24 / 16 * 1rem);
 }
 
@@ -149,30 +149,30 @@ button {
 [href="#main-content"] {
   position: absolute;
   top: 0;
-  right: 100%; /* moves off screen */
+  right: 100%; /* move of the screen */
 }
+
 [href="#main-content"]:focus {
   right: auto;
 }
 
 .skip-link {
   color: red;
-  border: 1px solid blue;
+  border: 1px solid black;
   display: inline-block;
+  border-radius: 8px;
+  padding-inline: 12px;
   padding-block-start: 8px;
   padding-block-end: 10px;
-  padding-inline-start: 12px;
-  padding-inline-end: 12px;
-  border-radius: 8px;
 }
 
 /* skip link using attr selector */
 
 /* we can use min-height on the element we want its height to be 100% */
-/* html,
+html,
 body {
   height: 100%;
-} */
+}
 
 /* we can use min-height on the element we want its height to be 100% */
 /* Chrome, Safari, Edge, Opera */
@@ -308,4 +308,83 @@ input[type="number"] {
 /* general styles */
 
 /* individual sections */
+
+/* header */
+
+header[role="banner"] {
+  background-image: url("images/mobile/image-header.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  min-height: 100%;
+}
+
+@media screen and (min-width: 84.375rem) {
+  header[role="banner"] {
+    background-image: url("images/desktop/image-header.jpg");
+  }
+}
+
+/* main content */
+
+/* grid-images */
+
+[id="egg-yellow-bg"] {
+  background-image: url("images/mobile/image-transform.jpg");
+}
+[id="cuppop-pink-bg"] {
+  background-image: url("images/mobile/image-stand-out.jpg");
+}
+[id="cherry-teal-bg"] {
+  background-image: url("images/mobile/image-graphic-design.jpg");
+}
+[id="orange-blue-bg"] {
+  background-image: url("images/mobile/image-photography.jpg");
+}
+
+@media screen and (min-width: 84.375rem) {
+  [id="egg-yellow-bg"] {
+    background-image: url("images/desktop/image-transform.jpg");
+  }
+  [id="cuppop-pink-bg"] {
+    background-image: url("images/desktop/image-stand-out.jpg");
+  }
+  [id="cherry-teal-bg"] {
+    background-image: url("images/desktop/image-graphic-design.jpg");
+  }
+  [id="orange-blue-bg"] {
+    background-image: url("images/desktop/image-photography.jpg");
+  }
+}
+
+/* separator images-grid */
+
+[id="milk-sky"] {
+  background-image: url("images/mobile/image-gallery-milkbottles.jpg");
+}
+[id="plate-orange-piece"] {
+  background-image: url("images/desktop/image-gallery-orange.jpg");
+}
+[id="waffle-cone"] {
+  background-image: url("images/desktop/image-gallery-cone.jpg");
+}
+[id="stack-sugars"] {
+  background-image: url("images/desktop/image-gallery-sugarcubes.jpg");
+}
+
+@media screen and (min-width: 84.375rem) {
+  [id="milk-sky"] {
+    background-image: url("images/desktop/image-gallery-milkbottles.jpg");
+  }
+  [id="plate-orange-piece"] {
+    background-image: url("images/desktop/image-gallery-orange.jpg");
+  }
+  [id="waffle-cone"] {
+    background-image: url("images/desktop/image-gallery-cone.jpg");
+  }
+  [id="stack-sugars"] {
+    background-image: url("images/desktop/image-gallery-sugarcubes.jpg");
+  }
+}
+
 /* individual sections */
