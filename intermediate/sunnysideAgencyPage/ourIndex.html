@@ -50,37 +50,41 @@
             </ul>
           </nav>
           <h2 class="visually-hidden" id="mobile-navbar">Mobile Navigation</h2>
-          <button
-            aria-pressed="false"
-            id="hamburger-menu-icon"
-            aria-label="Open Nav Menu"
-          >
-            <svg width="24" height="18" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M24 16v2H0v-2h24zm0-8v2H0V8h24zm0-8v2H0V0h24z"
-                fill="#FFF"
-                fill-rule="evenodd"
-              />
-            </svg>
-          </button>
-          <nav aria-hidden="true" aria-labelledby="mobile-navbar">
-            <ul role="menu">
-              <li role="none">
-                <a role="menuitem" href="">About</a>
-              </li>
-              <li role="none">
-                <a role="menuitem" href="">Services</a>
-              </li>
-              <li role="none">
-                <a role="menuitem" href="">Projects</a>
-              </li>
-              <li role="none">
-                <a role="menuitem" href="">CONTACT</a>
-              </li>
-            </ul>
-          </nav>
+          <div class="tab-order-container">
+              <button
+                aria-pressed="false"
+                id="hamburger-menu-icon"
+                aria-label="Open Nav Menu"
+              >
+                <svg width="24" height="18" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M24 16v2H0v-2h24zm0-8v2H0V8h24zm0-8v2H0V0h24z"
+                    fill="#FFF"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+              </button>
+              <div role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="mobile-navbar">
+                  <nav >
+                    <ul role="menu">
+                      <li role="none">
+                        <a role="menuitem" href="">About</a>
+                      </li>
+                      <li role="none">
+                        <a role="menuitem" href="">Services</a>
+                      </li>
+                      <li role="none">
+                        <a role="menuitem" href="">Projects</a>
+                      </li>
+                      <li role="none">
+                        <a class="btn-accent" role="menuitem" href="">CONTACT</a>
+                      </li>
+                    </ul>
+                  </nav>
+              </div>
+          </div>
         </div>
-        <h2>WE ARE CREATIVES</h2>
+        <h2 class="header-title">WE ARE CREATIVES</h2>
         <!-- make span element below with id arrow-img-container display: inline-block -->
         <span id="arrow-img-container">
           <svg width="36" height="114" xmlns="http://www.w3.org/2000/svg">
@@ -103,7 +107,7 @@
         <h2 class="visually-hidden" >Main Content</h2>
         <article id="grid-content-wrapper">
           <div class="grid-img" id="egg-yellow-bg"></div>
-          <div class="grid-text">
+          <div id="transform" class="grid-text">
             <h3>Transform your brand</h3>
             <p>
               We are a full-service creative agency specializing in helping
@@ -113,7 +117,7 @@
             <a href="">LEARN MORE</a>
           </div>
           <div class="grid-img" id="cuppop-pink-bg"></div>
-          <div class="grid-text">
+          <div id="stand-out" class="grid-text">
             <h3>Stand out to the right audience</h3>
             <p>
               Using a collaborative formula of designers, researchers,
@@ -124,11 +128,11 @@
           </div>
           <div class="grid-img-text" id="cherry-teal-bg">
             <h3>Graphic Design</h3>
-            <p></p>
+            <p>Great design makes you memorable. We deliver artwork that underscores your brand message and captures potential clients’ attention.</p>
           </div>
           <div class="grid-img-text" id="orange-blue-bg">
             <h3>Photography</h3>
-            <p></p>
+            <p>Increase your credibility by getting the most stunning, high-quality photos that improve your business image.</p>
           </div>
         </article>
         <h2>Client testimonials</h2>
