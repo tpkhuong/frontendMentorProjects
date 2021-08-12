@@ -6,8 +6,10 @@
   --color-primary-dark-cyan: hsl(167, 40%, 24%);
   --color-primary-dark-blue: hsl(198, 62%, 26%);
   --color-primary-moderate-cyan: hsl(168, 34%, 41%);
+  --color-primary-footer: hsl(167, 44%, 70%);
   --color-red-bar: hsl(9, 100%, 91%);
   --color-yellow-bar: hsl(50, 95%, 85%);
+  --color-hover-desktop: hsl(199, 100%, 72%);
 
   --color-neutral-very-dark-des-blue: hsl(212, 27%, 19%);
   --color-neutral-very-dark-grayish-blue: hsl(213, 9%, 39%);
@@ -86,8 +88,8 @@ p {
 a {
   text-decoration: none;
   color: var(--link-fg, var(--clr-neutral-900));
-  font-weight: var(--fw-700);
-  font-size: var(--fs-300);
+  /* font-weight: var(--fw-700);
+  font-size: var(--fs-300); */
 }
 
 a:hover,
@@ -103,7 +105,7 @@ img {
   /* we use max-width: 100% so when we have an img element inside of a div and we want to use flex which means the div will be a flex item
     the img will shrink and grow as its parent element shrink and grows
     */
-  display: block;
+  /* display: block; */
   height: auto;
 }
 
@@ -331,7 +333,38 @@ h4 {
   line-height: 1.7;
 }
 
-@media screen and (min-width: 84.375rem) {
+.grid-img-text h3 {
+  font-size: 2.3rem;
+  font-family: var(--font-family-fraunces);
+}
+
+[id="cherry-teal-bg"] {
+  color: var(--color-primary-dark-cyan);
+}
+
+[id="orange-blue-bg"] {
+  color: var(--color-primary-dark-blue);
+}
+
+.grid-img-text p {
+  font-size: 1.2rem;
+  font-family: var(--font-family-barlow);
+}
+
+[id="testimonials-wrapper"] h2,
+.testimonials .name {
+  font-family: var(--font-family-fraunces);
+}
+
+.testimonials p,
+.testimonials .job-title {
+  font-family: var(--font-family-barlow);
+}
+
+[id="testimonials-wrapper"] h2,
+.testimonials .job-title {
+  color: var(--color-neutral-dark-grayish-blue);
+  font-weight: 700;
 }
 
 /* general styles */
@@ -416,7 +449,10 @@ section[id="header-content"] {
 }
 
 [aria-labelledby="mobile-navbar"] [role="menu"] > li > a:focus,
-[aria-labelledby="mobile-navbar"] [role="menu"] > li > a:hover {
+[aria-labelledby="mobile-navbar"] [role="menu"] > li > a:hover,
+[aria-labelledby="footer-navigation"] [role="menu"] > li > a:focus,
+[aria-labelledby="desktop-navbar"] [role="menubar"] > li > a:focus,
+.social-media-icons a:focus {
   outline-offset: 5px;
   outline: 2px solid cornflowerblue;
 }
@@ -447,6 +483,12 @@ a[class="btn-accent"] {
   background-color: var(--color-primary-yellow);
 }
 
+[aria-labelledby="footer-navigation"] {
+  font-size: 1.2rem;
+  font-family: var(--font-family-barlow);
+  color: var(--color-primary-moderate-cyan);
+}
+
 /* navbar */
 
 .header-title {
@@ -460,6 +502,54 @@ a[class="btn-accent"] {
 
 [id="arrow-img-container"] {
   display: inline-block;
+}
+
+@media screen and (min-width: 84.375rem) {
+  section[id="header-content"] {
+    padding-block-end: 260px;
+  }
+  .header-title {
+    font-size: 3rem;
+    letter-spacing: 12px;
+    margin-block-start: 106px;
+    margin-block-end: 88px;
+  }
+  /* desktop navbar */
+  .navbars-img-container {
+    display: flex;
+    align-items: center;
+  }
+  [aria-labelledby="desktop-navbar"] {
+    display: revert;
+  }
+  [aria-labelledby="desktop-navbar"] ul[role="menubar"] {
+    display: flex;
+    font-family: var(--font-family-barlow);
+    color: var(--color-neutral-white);
+  }
+
+  [aria-labelledby="desktop-navbar"] ul[role="menubar"] > * + * {
+    margin-inline-start: 32px;
+  }
+
+  [id="desktop-btn-accent"] {
+    font-family: var(--font-family-fraunces);
+    color: var(--color-neutral-black);
+    background-color: var(--color-neutral-white);
+    font-size: 1.15rem;
+    border-radius: 100vw;
+    padding: 16px;
+    padding-inline: 20px;
+  }
+
+  [id="desktop-btn-accent"]:hover {
+    color: var(--color-neutral-white);
+    background-color: var(--color-hover-desktop);
+  }
+  .tab-order-container,
+  [id="mobile-navbar"] {
+    display: none;
+  }
 }
 /* main content */
 
@@ -521,6 +611,216 @@ a[class="btn-accent"] {
 .grid-text[id="stand-out"] a::after {
   background-color: var(--color-red-bar);
 }
+
+.grid-img-text {
+  padding-inline: 32px;
+  text-align: center;
+  padding-block-start: 338px;
+  padding-block-end: 42px;
+}
+
+.grid-img-text h3 {
+  margin-block: 42px;
+  margin-block-start: 96px;
+}
+
+@media screen and (min-width: 84.375rem) {
+  [id="grid-content-wrapper"] {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  [id="transform"] {
+    order: -1;
+  }
+  .grid-text {
+    text-align: left;
+    padding: 180px;
+    padding-inline: 92px;
+  }
+
+  [id="transform"] h3 {
+    width: 13ch;
+  }
+  [id="transform"] p {
+    width: 48ch;
+  }
+  [id="transform"] a:hover::after {
+    background-color: var(--color-primary-yellow);
+  }
+  [id="stand-out"] h3 {
+    width: 18ch;
+  }
+  [id="stand-out"] p {
+    width: 48ch;
+  }
+  [id="stand-out"] a:hover::after {
+    background-color: var(--color-primary-soft-red);
+  }
+
+  .grid-img-text h3 {
+    font-size: 1.8rem;
+  }
+
+  .grid-img-text p {
+    width: 38ch;
+    margin-inline: auto;
+  }
+}
+
+/* testimonials */
+
+[id="testimonials-wrapper"] {
+  text-align: center;
+  padding-inline: 32px;
+  padding-block: 72px;
+}
+
+.testimonials img {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+[id="testimonials-wrapper"] h2 {
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+.testimonials p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: var(--color-neutral-very-dark-grayish-blue);
+  margin-block: 32px;
+}
+
+.testimonials .name,
+.testimonials .job-title {
+  display: block;
+}
+
+.testimonials .name {
+  font-size: 1.3rem;
+  margin-block-end: 16px;
+}
+.testimonials .job-title {
+  font-size: 1.05rem;
+}
+
+.testimonials .testimonial {
+  padding-block-start: 72px;
+}
+
+@media screen and (min-width: 84.375rem) {
+  [id="testimonials-wrapper"] {
+    padding-inline: 136px;
+    padding-block: 180px;
+  }
+  [id="testimonials-wrapper"] h2 {
+    margin-block-end: 90px;
+    letter-spacing: 8px;
+  }
+
+  .testimonials {
+    display: flex;
+    /* gap: 32px; */
+  }
+
+  @supports (display: flex) {
+    .testimonials {
+      gap: 32px;
+    }
+  }
+
+  /* .testimonials > * + * {
+    margin-inline-start: 32px;
+  } */
+
+  .testimonials .testimonial {
+    padding-block-start: 0px;
+    padding-inline: 16px;
+  }
+
+  .testimonials img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .testimonials p {
+    margin-block: 56px;
+  }
+}
+
+/* img separator */
+
+[id="main-content-footer-separator"] {
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+}
+
+/* using img-container and using display: grid on that container.
+container has 4 img element as its children
+*/
+
+/* [id="mike-sky"] {
+  background-image: url("images/mobile/image-gallery-milkbottles.jpg");
+}
+[id="plate-orange-piece"] {
+  background-image: url("images/mobile/image-gallery-orange.jpg");
+}
+[id="waffle-cone"] {
+  background-image: url("images/mobile/image-gallery-cone.jpg");
+}
+[id="stack-sugars"] {
+  background-image: url("images/mobile/image-gallery-sugar-cubes.jpg");
+} */
+
+/* footer */
+
+[id="footer-content"] {
+  background-color: var(--color-primary-footer);
+  padding-block: 72px;
+  padding-inline: 48px;
+  text-align: center;
+}
+
+[id="footer-content"] path {
+  fill: var(--color-primary-dark-cyan);
+}
+
+[id="footer-content"] ul[role="menu"] {
+  display: flex;
+  justify-content: space-between;
+  margin-block-start: 40px;
+  margin-block-end: 80px;
+}
+
+.social-media-icons a {
+  display: inline-block;
+  width: max-content;
+}
+
+.social-media-icons a span {
+  display: inline-block;
+  width: max-content;
+}
+
+.social-media-icons > * + * {
+  margin-inline-start: 16px;
+}
+
+@media screen and (min-width: 84.375rem) {
+  [aria-labelledby="footer-navigation"] [role="menu"] > li > a:hover {
+    color: var(--color-neutral-white);
+  }
+  /* want to hover the parent of targeted element. the target element is the path of the svg */
+  .social-media-icons span:hover path {
+    fill: var(--color-neutral-white);
+  }
+}
+/*  */
+
+/* images */
 
 @media screen and (min-width: 84.375rem) {
   [id="egg-yellow-bg"] {
