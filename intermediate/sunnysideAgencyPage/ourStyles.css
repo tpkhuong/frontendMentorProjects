@@ -546,6 +546,11 @@ a[class="btn-accent"] {
     color: var(--color-neutral-white);
     background-color: var(--color-hover-desktop);
   }
+  /* 
+  at desktop size we declared .tab-order-container{display:none} in css
+  if our user clicked our hamburger btn to activate mobile menu, at desktop size it will not be displayed because
+  at desktop size the container that contain the mobile btn, mobile navmenu will have display: none
+  */
   .tab-order-container,
   [id="mobile-navbar"] {
     display: none;
@@ -757,6 +762,15 @@ a[class="btn-accent"] {
   display: grid;
   grid-template-columns: repeat(2, 50%);
 }
+[id="main-content-footer-separator"] picture img {
+  display: block;
+}
+
+@media screen and (min-width: 84.375rem) {
+  [id="main-content-footer-separator"] {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
 
 /* using img-container and using display: grid on that container.
 container has 4 img element as its children
@@ -777,18 +791,23 @@ container has 4 img element as its children
 
 /* footer */
 
-[id="footer-content"] {
+footer[role="footer"] {
   background-color: var(--color-primary-footer);
+}
+
+[aria-labelledby="footer-content"] {
   padding-block: 72px;
   padding-inline: 48px;
   text-align: center;
+  max-width: 375px;
+  margin-inline: auto;
 }
 
-[id="footer-content"] path {
+[aria-labelledby="footer-content"] path {
   fill: var(--color-primary-dark-cyan);
 }
 
-[id="footer-content"] ul[role="menu"] {
+[aria-labelledby="footer-content"] ul[role="menu"] {
   display: flex;
   justify-content: space-between;
   margin-block-start: 40px;
