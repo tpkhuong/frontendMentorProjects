@@ -1,0 +1,295 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600&display=swap");
+
+/* CSS variables */
+:root {
+  --color-pri-moderate-violet: hsl(263, 55%, 52%);
+  /* bg for container */
+  --color-pri-dark-grayish-blue: hsl(217, 19%, 35%);
+  /* color for white bg */
+  --color-pri-blackish-blue: hsl(219, 29%, 14%);
+  --color-pri-img-circle-border-light: hsl(265, 60%, 65%);
+  --color-pri-img-circle-border-dark: hsl(257, 37%, 39%);
+  /* color for dark bg */
+  --color-pri-white: hsl(0, 0%, 100%);
+
+  --color-black: hsl(0, 0%, 0%);
+
+  --color-neutral-light-gray: hsl(0, 0%, 81%);
+  --color-neutral-light-grayish-blue: hsl(210, 46%, 95%);
+
+  --font-family-barlow-semi: "Barlow Semi Condensed", sans-serif;
+
+  --font-size-intro-para: calc(15 / 16 * 1rem);
+  --font-size-200: 0.9375rem;
+  --font-size-300: 1rem;
+  --font-size-400: 1.25rem;
+  --font-size-500: 1.5rem;
+  --font-size-600: 1.75rem;
+  --font-size-700: 2rem;
+
+  --spacer-xxs: 0.5rem;
+  --spacer-xs: 0.8rem;
+  --spacer-s: 1rem;
+  --spacer-m: 1.5rem;
+  --spacer-l: 2rem;
+
+  --font-weight-200: 200;
+  --font-weight-300: 300;
+  --font-weight-400: 400;
+  --font-weight-500: 500;
+  --font-weight-600: 600;
+  --font-weight-700: 700;
+  --font-weight-800: 800;
+  --font-weight-900: 900;
+}
+/* CSS variables */
+
+/* reset */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* code below is from inclusive design patterns */
+/* html {
+  font-size: calc(1em + 1vw);
+} */
+
+body {
+  font-family: var(--font-family-barlow-semi);
+  /* use color: revert for text that we dont want to be grayish blue */
+  /* color: var(--color-neutral-grayish-blue); */
+}
+
+h1,
+h2,
+h3,
+h4,
+body,
+ul,
+blockquote {
+  margin: 0;
+  /* figure, dl, and dd have default margin */
+  /* font-weight: 100; */
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1;
+}
+
+p {
+  line-height: 1.5;
+}
+
+a {
+  text-decoration: none;
+  /* color: var(--link-fg, var(--clr-neutral-900));
+  font-weight: var(--fw-700);
+  font-size: var(--fs-300); */
+}
+
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+
+img {
+  /* using object-fit for images. we have to set a height or a min-height on the image and the width of 100% 
+  exception to the rule of setting a height. we can sometime use it on a child element.
+  */
+  max-width: 100%;
+  /* we use max-width: 100% so when we have an img element inside of a div and we want to use flex which means the div will be a flex item
+    the img will shrink and grow as its parent element shrink and grows
+    */
+  /* display: block; */
+  height: auto;
+}
+
+ul[class],
+li[class] {
+  list-style: none;
+  padding: 0;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  border: none;
+}
+
+/* button {
+
+/* Remove all animations and transitions for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* reset */
+
+/* utilities */
+
+/* skip link using attr selector */
+
+[href="#main"] {
+  position: absolute;
+  top: 0;
+  right: 100%; /* moves off screen */
+}
+[href="#main"]:focus {
+  right: auto;
+}
+
+/* skip link using attr selector */
+
+/* we can use min-height on the element we want its height to be 100% */
+html,
+body {
+  /* height: 100%; */
+}
+/* we can use min-height on the element we want its height to be 100% */
+
+/* container wrapper */
+
+.max-width {
+  /* or the width we want our container/parent element to be */
+  max-width: 350px;
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+  /* padding-inline-start: 16px;
+  padding-inline-end: 16px; */
+}
+
+@media screen and (min-width: 90rem) {
+  .max-width {
+    max-width: 550px;
+  }
+}
+
+.text-max-width-wrapper {
+  max-width: 150px;
+  margin-inline: auto;
+}
+
+/* container wrapper */
+
+.flow-content > * + * {
+  margin: var(--gap, 8px) 0 0 0;
+}
+
+/* @media screen and (min-width: 90rem){
+
+} */
+
+.columns {
+  display: flex;
+  flex-direction: column;
+  /* flex-flow: column; */
+}
+
+.columns > * {
+  /* flex:1 => flex-basis will be 0px */
+  flex: 1;
+  flex-basis: 100%;
+}
+
+[class*="col-"] {
+  flex-basis: var(--col-basis, 100%);
+}
+
+.col-1 {
+  --col-basis: 25%;
+}
+.col-2 {
+  --col-basis: 50%;
+}
+.col-3 {
+  --col-basis: 75%;
+}
+
+[class*="btn-"] {
+  background-color: var(--bg);
+  color: var(--fg);
+  padding: 12px;
+  padding-inline: 46px;
+  border-radius: 100vw;
+}
+
+.btn-light {
+  --bg: var(--color-pri--light-red);
+  --fg: var(--color-pri-light-grayish-red);
+}
+
+.btn-dark {
+  --bg: var(--color-neutral-dark-blue);
+  --fg: var(--color-pri-pale-blue);
+}
+
+@media screen and (min-width: 90rem) {
+  [class*="btn-"] {
+  }
+}
+/* test out [class*=btn-]{} 
+.btn-light{
+    --bg
+    --fg
+}
+.btn-dark{
+    --bg
+    --fg
+} 
+*/
+/* hide h2 which are title for our section element */
+.visually-hidden:not(:focus):not(:active) {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* .visually-hidden{
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  clip: rect(1px 1px 1px 1px)
+} */
+
+.visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+}
+/* hide h2 which are title for our section element */
+
+.darker-text-color {
+  color: var(--color-black);
+}
+
+/* utilities */
