@@ -1,7 +1,9 @@
 /* CSS variables */
 :root {
   /* CSS variables */
-  --color-gradient: hsl(6, 100%, 80%) to hsl(335, 100%, 65%);
+  --color-gradient-start: hsl(6, 100%, 80%);
+  --color-gradient-end: hsl(335, 100%, 65%);
+  --color-progress-bar-bg: hsl(227, 57%, 18%);
 
   --color-neutral-pale-blue: hsl(243, 100%, 93%);
   --color-neutral-grayish-blue: hsl(229, 7%, 55%);
@@ -153,7 +155,7 @@ button {
 /* we can use min-height on the element we want its height to be 100% */
 html,
 body {
-  /* height: 100%; */
+  height: 100%;
 }
 /* we can use min-height on the element we want its height to be 100% */
 
@@ -273,3 +275,269 @@ body {
   border: 0;
 }
 /* hide h2 which are title for our section element */
+
+/* general style */
+
+.bold {
+  font-weight: 700;
+}
+
+.large-font {
+  font-size: 2.5rem;
+}
+
+.smaller-font {
+  font-size: 0.75rem;
+}
+
+.dark-shade-text {
+  color: var(--color-neutral-vary-dark-blue);
+}
+
+.rounded-border {
+  border-radius: 10px;
+}
+
+.logo-icon-container,
+.data-capacity-bar-container {
+  background-color: var(--color-neutral-dark-blue);
+  padding: 38px;
+}
+
+.data-capacity-bar-container {
+  padding-inline: 28px;
+}
+
+/* individual sections */
+
+/* computer conponent */
+
+.computer-component {
+  min-height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  background: url("images/bg-mobile.png");
+  background-repeat: no-repeat;
+  padding-inline: 24px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* data-storage-component */
+
+.data-storage-component {
+  /* margin-block: auto; */
+  max-width: 1150px;
+}
+
+@media screen and (min-width: 23.5rem) {
+  .computer-component {
+    background-color: var(--color-neutral-vary-dark-blue);
+    background-image: url("images/bg-desktop.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-y: 450px;
+  }
+  .data-storage-component {
+    display: flex;
+    gap: 32px;
+    /* margin: auto; */
+  }
+}
+
+/* logo-icon-container */
+
+.logo-icon-container {
+  border-top-right-radius: 96px;
+}
+
+.icons-container {
+  margin-block-start: 32px;
+}
+
+.icon-wrapper {
+  background-color: var(--color-neutral-vary-dark-blue);
+  display: inline-block;
+  padding: 12px;
+  padding-inline: 16px;
+}
+
+/* .icons-container > * + * {
+  margin-inline-start: 16px;
+} */
+
+.icon-wrapper:not(:first-child) {
+  margin-inline-start: 16px;
+}
+
+.icon-wrapper:nth-child(2) {
+  padding-block-start: 16px;
+}
+.icon-wrapper:nth-child(3) {
+  padding-block-start: 20px;
+}
+
+@media screen and (min-width: 23.5rem) {
+  .logo-icon-container {
+    padding-block-end: 40px;
+    padding-inline-end: 50px;
+  }
+  .icons-container {
+    margin-inline-end: 88px;
+  }
+}
+
+/* data-capacity-bar-container */
+
+.data-capacity-bar-container {
+  margin-block-start: 16px;
+}
+
+@media screen and (min-width: 23.5rem) {
+  .data-capacity-bar-container {
+    /* since this element is a flex item and its parent is a flex item 
+      when use margin: auto on its parent or use justify-content and align-items: center on its parent's parent
+      our max-width: 625px is not working. we will use width: 625px at screen size not mobile
+      */
+    /* if the layout we use on the parent element of data-storage-component which is the .computer-comopnent element,
+      (data-storage-component is the parent element of this div). if the layout cause the (data-storage-component) width to be intrinsic
+      margin-inline: auto will take presedence over max-width.
+      */
+    /* we can use width: 625px at screen size 380px. 5px above mobile layout */
+    /* max-width: 625px; */
+    width: 550px;
+    padding-inline: 42px;
+    padding-block-start: 24px;
+    margin-block-start: 0px;
+    /* flex: 1; */
+    align-self: flex-end;
+  }
+}
+
+[class*="quote-bubble"] {
+  background-color: hsl(0, 0%, 100%);
+  width: max-content;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  padding-block-start: 8px;
+  padding-inline: 28px;
+  color: var(--color-neutral-grayish-blue);
+  font-weight: 700;
+}
+
+/* quote bubble desktop */
+/* progress-bar-info-container */
+
+[class="progress-bar-info-container"] {
+  color: hsl(0, 0%, 100%);
+}
+
+.progress-bar-info-container > span:first-child {
+  padding-inline: 16px;
+  opacity: 0.7;
+}
+
+.digit {
+  margin-inline-end: 5px;
+}
+
+/* desktop-bubble */
+
+.quote-bubble-desktop {
+  display: none;
+}
+
+@media screen and (min-width: 23.5rem) {
+  .quote-bubble-desktop {
+    position: relative;
+    display: flex;
+    margin-inline-start: auto;
+    margin-block-start: -64px;
+    margin-block-end: 12px;
+    border-bottom-right-radius: 0px;
+  }
+
+  .quote-bubble-desktop::after {
+    content: "";
+    border-width: 12px;
+    border-style: solid;
+    display: inline-block;
+    /* width: 20px;
+    height: 20px; */
+    position: absolute;
+    right: 0;
+    bottom: -24px;
+    border-top-color: hsl(0, 0%, 100%);
+    border-right-color: hsl(0, 0%, 100%);
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+  }
+
+  .progress-bar-info-container > span:first-child {
+    padding-inline: 0px;
+  }
+}
+
+/* progress-bar */
+
+.progress-bar-wrapper {
+  width: auto;
+  border-radius: 100vw;
+  overflow: hidden;
+  padding: 4px;
+  background-color: var(--color-progress-bar-bg);
+  margin-block-start: 20px;
+  margin-block-end: 12px;
+}
+
+.progress-bar {
+  background: linear-gradient(
+    var(--color-gradient-start),
+    var(--color-gradient-end)
+  );
+  border-radius: 100vw;
+  width: 75%;
+}
+
+.circle {
+  display: block;
+  background-color: hsl(0, 0%, 100%);
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+}
+
+.circle:focus {
+  outline: 2px solid lightblue;
+}
+
+.progress-bar-info-container > span {
+  font-size: 0.9rem;
+}
+
+.flex-wrapper {
+  display: flex;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.flex-wrapper .margin-left-auto {
+  margin-inline-start: auto;
+}
+
+.quote-bubble-mobile {
+  margin-inline: auto;
+  margin-block-start: 18px;
+  margin-block-end: -74px;
+}
+
+/* mobile-bubble */
+@media screen and (min-width: 23.5rem) {
+  .quote-bubble-mobile {
+    display: none;
+  }
+}
+
+/* quote bubble mobile */
