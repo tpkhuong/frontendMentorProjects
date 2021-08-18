@@ -436,7 +436,7 @@ body {
 
 .progress-bar-info-container > span:first-child {
   padding-inline: 16px;
-  opacity: 0.7;
+  opacity: 0.8;
 }
 
 .digit {
@@ -498,15 +498,15 @@ body {
     var(--color-gradient-end)
   );
   border-radius: 100vw;
-  width: 75%;
+  width: var(--progress-bar-value, 0%);
 }
-
 .circle {
   display: block;
   background-color: hsl(0, 0%, 100%);
   border-radius: 50%;
   width: 12px;
   height: 12px;
+  transform: translateX(var(--circle-movement, 0px));
 }
 
 .circle:focus {
