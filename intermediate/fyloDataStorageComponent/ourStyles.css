@@ -509,8 +509,13 @@ body {
   transform: translateX(var(--circle-movement, 0px));
 }
 
-.circle:focus {
+.circle:focus,
+.circle:hover {
   outline: 2px solid lightblue;
+}
+
+.circle:hover {
+  cursor: pointer;
 }
 
 .progress-bar-info-container > span {
