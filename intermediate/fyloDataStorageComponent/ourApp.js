@@ -1,4 +1,5 @@
 (function scopeOurVariables() {
+  console.log("change values in display in html");
   //declare our selectors top of func using destructuring
   var {
     progressBarContainer,
@@ -6,6 +7,8 @@
     dataUsedDisplay,
     desktopDataLeftDisplay,
     progressBarElement,
+    desktopGigaLeftDisplay,
+    mobileGigaLeftDisplay,
   } = ourSelectors();
 
   function ourSelectors() {
@@ -21,12 +24,22 @@
     );
     //progress bar. we want the width of this element
     var progressBarElement = document.querySelector(".progress-bar");
+    //desktop-gb-left-display
+    var desktopGigaLeftDisplay = document.getElementById(
+      "desktop-data-left-display"
+    );
+    //mobile-gb-left-display
+    var mobileGigaLeftDisplay = document.getElementById(
+      "mobile-data-left-display"
+    );
     return {
       progressBarContainer,
       circleInsideProgressBar,
       dataUsedDisplay,
       desktopDataLeftDisplay,
       progressBarElement,
+      desktopGigaLeftDisplay,
+      mobileGigaLeftDisplay,
     };
   }
 
@@ -34,6 +47,7 @@
   addEventToELement();
   addEventListenerToProgressBarOnCircleElementMousedown();
   setPropertyOnProgressBarWrapperAndProgressBarElement();
+  mobileAddEventListenerToProgressBarOnCircleElementMousedown();
   //set property on progressBar element
   function setPropertyOnProgressBarWrapperAndProgressBarElement() {
     progressBarContainer.style.setProperty("--progress-bar-value", " 0%");
@@ -148,12 +162,12 @@
   function circleElementMousemovement(event) {
     /***** subtract or add based on movementX. movementX value will be negative or positive *****/
     var valueOfProgressBarCircleMovementFunc = getValueOfProgressBarProperty();
-    console.log(valueOfProgressBarCircleMovementFunc);
+    // console.log(valueOfProgressBarCircleMovementFunc);
     if (event.movementX > 0) {
       //handle if mousemovement is positive number
       if (valueOfProgressBarCircleMovementFunc > 99.7) {
         //   console.log(valueOfProgressBarAddFunc);
-        console.log(valueOfProgressBarCircleMovementFunc);
+        // console.log(valueOfProgressBarCircleMovementFunc);
         updateValueOfProgressBarProperty(100);
         updateValueOfCircleMovementProperty(445);
       } else {
@@ -203,91 +217,131 @@
     //     circleElementMousemove
     //   );
     // }
+    var valueWeWillUseInDisplayGigaLeftDisplayDesktopMousemovementFunc =
+      changeDisplayDataCapacityUsed(valueOfProgressBarCircleMovementFunc);
+
+    desktopChangeDisplayOfDataCapacityLeft(
+      valueWeWillUseInDisplayGigaLeftDisplayDesktopMousemovementFunc
+    );
   }
 
   /* touchstart, touchend, touchmove*/
-  alert("start here tomorrow mobile movement");
-  function scope() {
-    function mobileAddEventListenerToProgressBarOnCircleElementMousedown() {
-      //we want to add event listener when circle element is clicked on using mousedown
-      //we want to remove event listener when mouseup is on circle element
-      progressBarElement.addEventListener(
-        "touchstart",
-        listenToTouchEventOnProgressBarWrapperElement
-      );
-      progressBarElement.addEventListener(
-        "touchend",
-        removeEventFromProgressBarAndCircleElementTouchend
-      );
-    }
 
-    function listenToTouchEventOnProgressBarWrapperElement(event) {
-      if (event.target == circleInsideProgressBar) {
-        circleInsideProgressBar.addEventListener(
-          "touchmove",
-          circleELementTouchMovement
-        );
-        progressBarContainer.addEventListener(
-          "touchmove",
-          circleElementTouchMovementAndRemoveEventListener
-        );
-      }
-    }
+  function mobileAddEventListenerToProgressBarOnCircleElementMousedown() {
+    //we want to add event listener when circle element is clicked on using mousedown
+    //we want to remove event listener when mouseup is on circle element
+    progressBarElement.addEventListener(
+      "touchstart",
+      listenToTouchEventOnProgressBarWrapperElement
+    );
+    progressBarElement.addEventListener(
+      "touchend",
+      removeEventFromProgressBarAndCircleElementTouchend
+    );
+  }
 
-    function removeEventFromProgressBarAndCircleElementTouchend(event) {
-      if (event.target == circleInsideProgressBar) {
-        circleInsideProgressBar.removeEventListener(
-          "touchmove",
-          circleELementTouchMovement
-        );
-        progressBarContainer.removeEventListener(
-          "touchmove",
-          circleElementTouchMovementAndRemoveEventListener
-        );
-        //   progressBarElement.removeEventListener(
-        //     "mousedown",
-        //     listenToMouseEventOnProgressBarWrapperElement
-        //   );
-        //   progressBarElement.removeEventListener(
-        //     "mouseup",
-        //     removeEventFromProgressBarAndCircleElement
-        //   );
-      }
-    }
-
-    function circleElementTouchMovementAndRemoveEventListener(event) {
-      Listener;
-      if (event.target != circleInsideProgressBar) {
-        // console.log("here");
-        circleInsideProgressBar.removeEventListener(
-          "touchmove",
-          circleELementTouchMovement
-        );
-        progressBarContainer.removeEventListener(
-          "touchmove",
-          circleElementTouchMovementAndRemoveEventListener
-        );
-      }
-    }
-
-    function circleELementTouchMovement() {
+  function listenToTouchEventOnProgressBarWrapperElement(event) {
+    if (event.target == circleInsideProgressBar) {
       circleInsideProgressBar.addEventListener(
         "touchmove",
-        function TODO(event) {
-          var previousTouch;
-          var touch = event.changedTouches[0];
-          if (previousTouch) {
-            //first time we run this func, we will not enter this if statement
-            //second time we run this func, we will enter this if statement
-            //since we are in this if statement, touch will be the current value of eventInput.changedTouches[0] from the execution of this func
-            //previousTouch.pageX will be the previous value of eventInput.changedTouches[0]. the previous execution of this func
-            let mobileMovementX = touch.pageX - previousTouch.pageX;
-            console.log("inside if statement", mobileMovementX);
-          }
-          previousTouch = touch;
-        }
+        circleELementTouchMovement
+      );
+      progressBarContainer.addEventListener(
+        "touchmove",
+        circleElementTouchMovementAndRemoveEventListener
       );
     }
+  }
+
+  function removeEventFromProgressBarAndCircleElementTouchend(event) {
+    if (event.target == circleInsideProgressBar) {
+      circleInsideProgressBar.removeEventListener(
+        "touchmove",
+        circleELementTouchMovement
+      );
+      progressBarContainer.removeEventListener(
+        "touchmove",
+        circleElementTouchMovementAndRemoveEventListener
+      );
+      //   progressBarElement.removeEventListener(
+      //     "mousedown",
+      //     listenToMouseEventOnProgressBarWrapperElement
+      //   );
+      //   progressBarElement.removeEventListener(
+      //     "mouseup",
+      //     removeEventFromProgressBarAndCircleElement
+      //   );
+    }
+  }
+
+  function circleElementTouchMovementAndRemoveEventListener(event) {
+    if (event.target != circleInsideProgressBar) {
+      // console.log("here");
+      circleInsideProgressBar.removeEventListener(
+        "touchmove",
+        circleELementTouchMovement
+      );
+      progressBarContainer.removeEventListener(
+        "touchmove",
+        circleElementTouchMovementAndRemoveEventListener
+      );
+    }
+  }
+
+  let previousTouch;
+  function circleELementTouchMovement(event) {
+    /***** subtract or add based on mobileMovementX. mobileMovementX value will be negative or positive *****/
+    var valueOfProgressBarCircleMovementMobile =
+      getValueOfProgressBarProperty();
+
+    var touch = event.changedTouches[0];
+
+    if (previousTouch) {
+      //first time we run this func, we will not enter this if statement
+      //second time we run this func, we will enter this if statement
+      //since we are in this if statement, touch will be the current value of eventInput.changedTouches[0] from the execution of this func
+      //previousTouch.pageX will be the previous value of eventInput.changedTouches[0]. the previous execution of this func
+      let mobileMovementX = touch.pageX - previousTouch.pageX;
+      //   console.log("inside if statement", mobileMovementX);
+      if (mobileMovementX > 0) {
+        //working with positive number of mobileMovementX
+        if (valueOfProgressBarCircleMovementMobile > 99.7) {
+          //   if the container of our progress bar change in size, we have to adjust the value we passed into updateValueOfCircleMovementProperty
+          updateValueOfProgressBarProperty(100);
+          updateValueOfCircleMovementProperty(229);
+        } else {
+          if (valueOfProgressBarCircleMovementMobile === 0) {
+            increaseByOneOrFiveBasedOnKeyPressed(
+              valueOfProgressBarCircleMovementMobile,
+              50
+            );
+          } else {
+            increaseByOneOrFiveBasedOnKeyPressed(
+              valueOfProgressBarCircleMovementMobile,
+              5
+            );
+          }
+        }
+      } else {
+        //working with negative number of mobileMovementX
+        if (valueOfProgressBarCircleMovementMobile === 0) {
+          updateValueOfProgressBarProperty(0);
+          updateValueOfCircleMovementProperty(0);
+        } else {
+          decreaseByOneOrFiveBasedOnKeyPressed(
+            valueOfProgressBarCircleMovementMobile,
+            5
+          );
+        }
+      }
+    }
+    previousTouch = touch;
+    var valueWeWillUseInDisplayGigaLeftDisplayMobileTouchmovementFunc =
+      changeDisplayDataCapacityUsed(valueOfProgressBarCircleMovementMobile);
+
+    mobileChangeDisplayOfDataCapacityLeft(
+      valueWeWillUseInDisplayGigaLeftDisplayMobileTouchmovementFunc
+    );
   }
 
   /* keyboard */
@@ -321,12 +375,15 @@
         // set to 0%
         updateValueOfProgressBarProperty(0);
         updateValueOfCircleMovementProperty(0);
+        changeDisplayDataCapacityUsed(0);
+        desktopChangeDisplayOfDataCapacityLeft(0);
         break;
       case "End":
         //set to 100%
         updateValueOfProgressBarProperty(100);
         updateValueOfCircleMovementProperty(445);
-
+        changeDisplayDataCapacityUsed(100);
+        desktopChangeDisplayOfDataCapacityLeft(1000);
         break;
     }
   }
@@ -373,6 +430,12 @@
       //   var useValueInCircleMovementSubtractFunc = calculateCircleMovementValue();
       //   updateValueOfCircleMovementProperty(useValueInCircleMovementSubtractFunc);
     }
+    var valueWeWillUseInDisplayGigaLeftDisplaySubtractPercentFunc =
+      changeDisplayDataCapacityUsed(valueOfProgressBarSubtractFunc);
+
+    desktopChangeDisplayOfDataCapacityLeft(
+      valueWeWillUseInDisplayGigaLeftDisplaySubtractPercentFunc
+    );
   }
 
   // refactor this code to work with mobile and desktop
@@ -397,6 +460,11 @@
       //   var useValueInCircleMovementAddFunc = calculateCircleMovementValue();
       //   updateValueOfCircleMovementProperty(useValueInCircleMovementAddFunc);
     }
+    var valueWeWillUseInDisplayGigaLeftDisplayAddPercentFunc =
+      changeDisplayDataCapacityUsed(valueOfProgressBarAddFunc);
+    desktopChangeDisplayOfDataCapacityLeft(
+      valueWeWillUseInDisplayGigaLeftDisplayAddPercentFunc
+    );
   }
 
   function addLargerAmtToProgressBar() {
@@ -412,6 +480,11 @@
       );
     }
     // updateValueOfProgressBarProperty();
+    var valueWeWillUseInDisplayGigaLeftDisplayAddLargerFunc =
+      changeDisplayDataCapacityUsed(valueOfProgressBarAddLargerAmtFunc);
+    desktopChangeDisplayOfDataCapacityLeft(
+      valueWeWillUseInDisplayGigaLeftDisplayAddLargerFunc
+    );
   }
 
   function subtractLargerAmtFromProgressBar() {
@@ -428,6 +501,11 @@
         5
       );
     }
+    var valueWeWillUseInDisplayGigaLeftDisplaySubtractLargerFunc =
+      changeDisplayDataCapacityUsed(valueOfProgressBarSubtractLargerAmtFunc);
+    desktopChangeDisplayOfDataCapacityLeft(
+      valueWeWillUseInDisplayGigaLeftDisplaySubtractLargerFunc
+    );
   }
 
   function decreaseByOneOrFiveBasedOnKeyPressed(
@@ -446,6 +524,7 @@
     var useValueInCircleMovement = calculateCircleMovementValue();
     updateValueOfCircleMovementProperty(useValueInCircleMovement);
   }
+
   function increaseByOneOrFiveBasedOnKeyPressed(
     valueOfProgressBar,
     valueBasedOnKey
@@ -455,6 +534,7 @@
     let addValueOfKeyPressed = convertedNumberFromPercentage + valueBasedOnKey;
     let convertedPercentageFromNum =
       convertNumberToPercentage(addValueOfKeyPressed);
+
     updateValueOfProgressBarProperty(convertedPercentageFromNum);
     //circle movement
     var useValueInCircleMovement = calculateCircleMovementValue();
@@ -490,7 +570,34 @@
     }
   }
 
-  function changeDisplayDataCapacityUsed() {}
+  function changeDisplayDataCapacityUsed(valueOfPercentage) {
+    //take percentage and convert to number based off 1000
+    var usedValueFromFuncToChangeDataCapacityDisplay =
+      convertPercentageToNumber(valueOfPercentage).toFixed();
 
-  function changeDisplayOfDataCapacityLeft() {}
+    dataUsedDisplay.innerText = `${usedValueFromFuncToChangeDataCapacityDisplay}`;
+    return usedValueFromFuncToChangeDataCapacityDisplay;
+  }
+
+  function desktopChangeDisplayOfDataCapacityLeft(gigabyteUsedValue) {
+    //substract value of GB used from 1000
+    var valueToUseForGigaByteLeftDesktopDisplay =
+      1000 - Number(gigabyteUsedValue);
+    desktopGigaLeftDisplay.innerText = String(
+      valueToUseForGigaByteLeftDesktopDisplay
+    );
+  }
+  function mobileChangeDisplayOfDataCapacityLeft(gigabyteUsedValue) {
+    var valueToUseForGigaByteLeftMobileDisplay =
+      1000 - Number(gigabyteUsedValue);
+    mobileGigaLeftDisplay.innerText = String(
+      valueToUseForGigaByteLeftMobileDisplay
+    );
+  }
+
+  function executeFuncBasedOnScreenSize() {}
+
+  function executeMobileTouchFeature() {}
+
+  function activateDesktopMousemovementAndKeyboardPressedFeature() {}
 })();
