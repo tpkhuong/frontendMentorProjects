@@ -305,7 +305,6 @@ body {
 }
 
 .data-capacity-bar-container {
-  padding-inline: 28px;
 }
 
 /* individual sections */
@@ -391,6 +390,8 @@ body {
 
 .data-capacity-bar-container {
   margin-block-start: 16px;
+  padding-inline: 28px;
+  width: 305px;
 }
 
 @media screen and (min-width: 23.5rem) {
@@ -437,6 +438,8 @@ body {
 .progress-bar-info-container > span:first-child {
   padding-inline: 16px;
   opacity: 0.8;
+  display: inline-block;
+  width: max-content;
 }
 
 .digit {
@@ -519,7 +522,7 @@ body {
 }
 
 .progress-bar-info-container > span {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 .flex-wrapper {
@@ -542,6 +545,9 @@ body {
 @media screen and (min-width: 23.5rem) {
   .quote-bubble-mobile {
     display: none;
+  }
+  .progress-bar-info-container > span {
+    font-size: 0.9rem;
   }
 }
 
