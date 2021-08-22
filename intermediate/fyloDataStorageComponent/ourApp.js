@@ -599,39 +599,44 @@
 
   function executeMobileTouchFeature() {}
 
+  progressBarContainer.addEventListener("click", (event) => {
+    console.log(event);
+  });
   function activateDesktopMousemovementAndKeyboardPressedFeature() {}
-  function Foo(name) {
-    this.name = name;
-  }
+  // function learningNotes() {
+  //   function Foo(name) {
+  //     this.name = name;
+  //   }
 
-  Foo.prototype.myName = function () {
-    //keyword this is Bar because of
-    //   var a = new Bar("a", "obj a");
+  //   Foo.prototype.myName = function () {
+  //     //keyword this is Bar because of
+  //     //   var a = new Bar("a", "obj a");
 
-    return this.name;
-  };
+  //     return this.name;
+  //   };
 
-  function Bar(name, label) {
-    Foo.call(this, name);
-    this.label = label;
-  }
+  //   function Bar(name, label) {
+  //     Foo.call(this, name);
+  //     this.label = label;
+  //   }
 
-  // here, we make a new `Bar.prototype`
-  // linked to `Foo.prototype`
-  Bar.prototype = Object.create(Foo.prototype);
+  //   // here, we make a new `Bar.prototype`
+  //   // linked to `Foo.prototype`
+  //   Bar.prototype = Object.create(Foo.prototype);
 
-  // Beware! Now `Bar.prototype.constructor` is gone,
-  // and might need to be manually "fixed" if you're
-  // in the habit of relying on such properties!
+  //   // Beware! Now `Bar.prototype.constructor` is gone,
+  //   // and might need to be manually "fixed" if you're
+  //   // in the habit of relying on such properties!
 
-  Bar.prototype.myLabel = function () {
-    //keyword this is Bar because of
-    //   var a = new Bar("a", "obj a");
-    return this.label;
-  };
-  //keyword new takes precedence over object literal
-  var a = new Bar("a", "obj a");
+  //   Bar.prototype.myLabel = function () {
+  //     //keyword this is Bar because of
+  //     //   var a = new Bar("a", "obj a");
+  //     return this.label;
+  //   };
+  //   //keyword new takes precedence over object literal
+  //   var a = new Bar("a", "obj a");
 
-  //   a.myName(); // "a"
-  //   a.myLabel(); // "obj a"
+  //   //   a.myName(); // "a"
+  //   //   a.myLabel(); // "obj a"
+  // }
 })();
