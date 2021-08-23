@@ -179,7 +179,7 @@ button {
 /* we can use min-height on the element we want its height to be 100% */
 html,
 body {
-  /* height: 100%; */
+  height: 100%;
 }
 /* we can use min-height on the element we want its height to be 100% */
 
@@ -365,11 +365,27 @@ a:hover {
 }
 
 .social-media-dashboard.dark-theme::before {
+  /* background-color: red; */
   background-color: var(--col-neutral-dark-top-bg);
+  z-index: -1;
+}
+
+.content-wrapper {
+  /* border: 1px solid red; */
+  max-width: 1450px;
+  margin-inline: auto;
+}
+
+@media screen and (min-width: 90rem) {
+  .social-media-dashboard {
+    min-height: 100%;
+  }
+  .social-media-dashboard::before {
+    bottom: 70%;
+  }
 }
 
 /* top content container */
-
 .top-content-container {
   margin-block-end: 42px;
 }
@@ -439,6 +455,25 @@ a:hover {
   height: 20px;
   border-radius: 50%;
   transition: transform 500ms;
+}
+
+@media screen and (min-width: 23.5rem) {
+  .top-content-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .section-title-follower-container .title {
+    font-size: 1.8rem;
+    margin-block-end: 5px;
+  }
+  .separator {
+    display: none;
+  }
+  .dark-mode-toggle {
+    justify-content: initial;
+    gap: 16px;
+  }
 }
 
 /* color */
@@ -557,6 +592,10 @@ a:hover {
 }
 
 @media screen and (min-width: 23.5rem) {
+  .social-media-cards {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 32px;
+  }
   .light-theme .social-media-card-link:hover .social-media-card,
   .light-theme .social-media-card-link:focus .social-media-card {
     background-color: var(--col-light-hover-bg);
@@ -567,7 +606,7 @@ a:hover {
   }
 }
 
-/* separator */
+/* section separator */
 
 .social-media-cards + h2.section-title {
   margin-block-start: 52px;
@@ -630,6 +669,10 @@ background-color: var(--col-dark-hover-bg);
 */
 
 @media screen and (min-width: 23.5rem) {
+  .social-media-overview-cards {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 32px;
+  }
   .light-theme
     .social-media-overview-card-link:hover
     .social-media-overview-card,
