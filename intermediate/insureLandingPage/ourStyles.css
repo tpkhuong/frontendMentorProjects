@@ -1,0 +1,11 @@
+:root {
+  --col-pri-dark-violet: hsl(256, 26%, 20%);
+  --col-pri-grayish-blue: hsl(216, 30%, 68%);
+
+  --col-neutral-very-violet: hsl(270, 9%, 17%);
+  --col-neutral-dark-grayish-violet: hsl(273, 4%, 51%);
+  --col-neutral-light-gray: hsl(0, 0%, 98%);
+
+  --font-family-DM-serif: "DM Serif Display", serif;
+  --font-family-karla: "Karla", sans-serif;
+}
