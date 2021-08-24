@@ -1,6 +1,7 @@
 :root {
   --col-pri-dark-violet: hsl(256, 26%, 20%);
   --col-pri-grayish-blue: hsl(216, 30%, 68%);
+  --col-navbar-bg: hsl(266, 8%, 17%);
 
   --col-neutral-very-violet: hsl(270, 9%, 17%);
   --col-neutral-dark-grayish-violet: hsl(273, 4%, 51%);
@@ -8,4 +9,481 @@
 
   --font-family-DM-serif: "DM Serif Display", serif;
   --font-family-karla: "Karla", sans-serif;
+}
+
+/* reset */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* code below is from inclusive design patterns */
+/* html {
+  font-size: calc(1em + 1vw);
+} */
+
+body {
+  font-family: var(--font-family-karla);
+  /* use color: revert for text that we dont want to be grayish blue */
+  /* color: var(--color-neutral-grayish-blue); */
+}
+
+h1,
+h2,
+h3,
+h4,
+body,
+ul {
+  margin: 0;
+  /* figure, dl, and dd have default margin */
+  /* font-weight: 100; */
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1;
+}
+
+p {
+  line-height: 1.5;
+}
+
+a {
+  text-decoration: none;
+  color: var(--link-fg, var(--clr-neutral-900));
+  font-weight: var(--fw-700);
+  font-size: var(--fs-300);
+}
+
+a:hover,
+a:focus {
+  /* text-decoration: underline; */
+}
+
+a:focus {
+  outline: 3px solid rgb(9, 138, 180);
+  /* outline-offset: 2px; */
+}
+
+img {
+  /* using object-fit for images. we have to set a height or a min-height on the image and the width of 100% 
+  exception to the rule of setting a height. we can sometime use it on a child element.
+  */
+  max-width: 100%;
+  /* we use max-width: 100% so when we have an img element inside of a div and we want to use flex which means the div will be a flex item
+    the img will shrink and grow as its parent element shrink and grows
+    */
+  /* use display: block so our img fits the container.
+    when we didnt have display: block on img element the image did not fill the container.
+    there were some white space
+    */
+  display: block;
+  height: auto;
+}
+
+ul[role],
+li[role] {
+  list-style: none;
+  padding: 0;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  border: none;
+}
+
+/* button {
+
+/* Remove all animations and transitions for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* reset */
+
+/* utilities */
+
+/* skip link using attr selector */
+
+[href="#main-content"] {
+  position: absolute;
+  top: 0;
+  right: 100%; /* moves off screen */
+}
+[href="#main-content"]:focus {
+  right: auto;
+}
+
+/* skip link using attr selector */
+
+/* we can use min-height on the element we want its height to be 100% */
+html,
+body {
+  height: 100%;
+}
+/* we can use min-height on the element we want its height to be 100% */
+
+/* container wrapper */
+
+.max-width {
+  /* or the width we want our container/parent element to be */
+  max-width: 350px;
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+  /* padding-inline-start: 16px;
+  padding-inline-end: 16px; */
+}
+
+@media screen and (min-width: 90rem) {
+  .max-width {
+    max-width: 550px;
+  }
+}
+
+.text-max-width-wrapper {
+  max-width: 150px;
+  margin-inline: auto;
+}
+
+/* container wrapper */
+
+.flow-content > * + * {
+  margin: var(--gap, 8px) 0 0 0;
+}
+
+/* @media screen and (min-width: 90rem){
+
+} */
+
+.columns {
+  display: flex;
+  flex-direction: column;
+  /* flex-flow: column; */
+}
+
+.columns > * {
+  /* flex:1 => flex-basis will be 0px */
+  flex: 1;
+  flex-basis: 100%;
+}
+
+[class*="col-"] {
+  flex-basis: var(--col-basis, 100%);
+}
+
+.col-1 {
+  --col-basis: 25%;
+}
+.col-2 {
+  --col-basis: 50%;
+}
+.col-3 {
+  --col-basis: 75%;
+}
+
+[class*="btn-"] {
+  background-color: var(--bg);
+  color: var(--fg);
+  padding: 12px;
+  padding-inline: 46px;
+  border-radius: 100vw;
+}
+
+.btn-light {
+  --bg: var(--color-pri--light-red);
+  --fg: var(--color-pri-light-grayish-red);
+}
+
+.btn-dark {
+  --bg: var(--color-neutral-dark-blue);
+  --fg: var(--color-pri-pale-blue);
+}
+
+.light-theme {
+  background-color: var(--light-theme-bg);
+  color: var(--light-theme-fg);
+}
+
+.dark-theme {
+  background-color: var(--dark-theme-bg);
+  color: var(--dark-theme-fg);
+}
+
+.low-bold {
+  font-weight: 400;
+}
+
+.high-bold {
+  font-weight: 700;
+}
+
+.uppercase-text {
+  text-transform: uppercase;
+}
+
+button:hover,
+a:hover {
+  cursor: pointer;
+}
+
+/* test out [class*=btn-]{} 
+.btn-light{
+    --bg
+    --fg
+}
+.btn-dark{
+    --bg
+    --fg
+} 
+*/
+/* hide h2 which are title for our section element */
+.visually-hidden:not(:focus):not(:active) {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* .visually-hidden{
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  clip: rect(1px 1px 1px 1px)
+} */
+
+.visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+}
+
+.skip-link {
+  display: inline-block;
+  border: 1px solid red;
+  padding-block: 16px;
+  padding-inline: 32px;
+}
+/* hide h2 which are title for our section element */
+
+/* general styles */
+
+.section-title {
+  font-family: var(--font-family-DM-serif);
+  font-size: 2.6rem;
+}
+
+.desktop-btn {
+  background-color: transparent;
+  text-transform: uppercase;
+  padding-inline: 30px;
+  padding-block: 10px;
+  border: 2px solid var(--col-neutral-light-gray);
+}
+
+/* individual sections */
+
+/* header */
+
+/* navbar */
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+[id="desktop-navbar"] {
+  display: none;
+}
+
+.open-button,
+.close-button {
+  background-color: transparent;
+}
+
+.open-button[aria-pressed="true"] {
+  display: none;
+}
+
+.open-button[aria-pressed="false"] + .close-button {
+  display: none;
+}
+
+.close-button[aria-pressed="true"] + [class="dialog1"] {
+  display: none;
+}
+
+/* mobile navbar */
+
+.dialog1 {
+  position: fixed;
+  top: 74px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--col-navbar-bg);
+  padding-block-start: 50px;
+  padding-inline: 24px;
+  color: var(--col-neutral-light-gray);
+  background-image: url("images/bg-pattern-mobile-nav.svg");
+  background-repeat: no-repeat;
+  background-position: bottom;
+  z-index: 1;
+}
+
+[id="mobile-navbar"] {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 1.4rem;
+}
+
+[id="mobile-navbar"] ul > * + * {
+  /* border: 1px solid currentColor; */
+  margin-block-start: 38px;
+}
+
+.navbar-btn {
+  background-color: transparent;
+  border: 1px solid currentColor;
+  padding-block: 12px;
+  padding-inline: 105px;
+}
+
+/* hero content */
+
+.hero-content {
+  position: relative;
+  background-color: var(--col-pri-dark-violet);
+  color: var(--col-neutral-light-gray);
+  text-align: center;
+  padding-inline: 8px;
+  padding-block-start: 100px;
+  padding-block-end: 84px;
+  background-image: url("images/bg-pattern-intro-left-mobile.svg");
+  background-repeat: no-repeat;
+}
+
+.hero-content::before {
+  content: url("images/bg-pattern-intro-right-mobile.svg");
+  position: absolute;
+  right: 0;
+  bottom: -178px;
+}
+
+.hero-content .section-title {
+  width: 15ch;
+  margin-inline: auto;
+}
+
+.hero-content .paragraph {
+  width: 32ch;
+  margin-inline: auto;
+  line-height: 1.8;
+}
+
+.hero-content .desktop-btn {
+  margin-block-start: 16px;
+}
+
+/* main selling content */
+
+.selling-content {
+  text-align: center;
+  color: var(--col-neutral-very-violet);
+  padding-inline: 30px;
+  padding-block: 120px;
+}
+
+.main-selling-content {
+  /* border: 1px solid red; */
+  /* without padding or border. our margin-block-start on .section-title will collapse 
+  the margin on .section-title will not create space between .main-selling-content
+  and .section-title
+  we could keep margin-block on .section-title and add padding of 1px on main-selling-content element
+  or use padding-block-start on main-selling-content
+  */
+  padding-block-start: 48px;
+  /* padding: 1px; */
+  position: relative;
+  color: var(--col-neutral-very-violet);
+}
+
+.main-selling-content::before {
+  content: "";
+  position: absolute;
+  display: inline-block;
+  height: 1px;
+  left: 28%;
+  right: 28%;
+  background-color: var(--col-pri-grayish-blue);
+  top: 0;
+}
+
+.main-selling-content .section-title {
+  /* margin-block-start: 48px; */
+  margin-block-end: 80px;
+}
+
+/* main-selling-content-card */
+
+.main-selling-content-cards > * + * {
+  margin-block-start: 48px;
+}
+
+.main-selling-content-card .title {
+  margin-block-start: 32px;
+  font-size: 1.8rem;
+  font-family: var(--font-family-DM-serif);
+}
+
+.main-selling-content-card .paragraph {
+  color: var(--col-neutral-dark-grayish-violet);
+  margin-block-start: 20px;
+}
+
+/* sectionary-selling-content */
+
+.secondary-selling-content {
+  background-image: url("images/bg-pattern-how-we-work-mobile.svg");
+  background-repeat: no-repeat;
+  background-position: top right;
+  background-color: var(--col-pri-dark-violet);
+  color: var(--col-neutral-light-gray);
+  padding-inline: 16px;
+  padding-block: 72px;
+  margin-block-start: 124px;
+}
+
+.secondary-selling-content .desktop-btn {
+  margin-block-start: 42px;
 }
