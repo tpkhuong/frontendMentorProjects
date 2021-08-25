@@ -295,6 +295,11 @@ a:hover {
 
 /* general styles */
 
+.width-wrapper {
+  max-width: 1450px;
+  margin-inline: auto;
+}
+
 .section-title {
   font-family: var(--font-family-DM-serif);
   font-size: 2.6rem;
@@ -306,6 +311,24 @@ a:hover {
   padding-inline: 30px;
   padding-block: 10px;
   border: 2px solid var(--col-neutral-light-gray);
+}
+
+.light-color-text {
+  color: hsl(0, 0%, 55%);
+}
+
+.top-margin {
+  margin-block-start: 32px;
+}
+
+@media screen and (min-width: 84.375rem) {
+  .section-title {
+    font-size: 3.7rem;
+  }
+
+  .top-margin {
+    margin-block-start: 0px;
+  }
 }
 
 /* individual sections */
@@ -340,6 +363,33 @@ a:hover {
 
 .close-button[aria-pressed="true"] + [class="dialog1"] {
   display: none;
+}
+
+@media screen and (min-width: 84.375rem) {
+  .navbar {
+    padding-inline: 148px;
+  }
+  [id="desktop-navbar"] {
+    display: revert;
+    color: hsl(0, 0%, 55%);
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+
+  [id="desktop-navbar"] ul {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+  }
+
+  [id="desktop-navbar"] .desktop-btn {
+    color: var(--col-neutral-very-violet);
+    border-color: currentColor;
+  }
+  .open-button {
+    display: none;
+  }
 }
 
 /* mobile navbar */
@@ -415,12 +465,116 @@ a:hover {
   margin-block-start: 16px;
 }
 
+.family-img-wrapper,
+.graphic-img-wrapper {
+  display: none;
+}
+
+@media screen and (min-width: 84.375rem) {
+  .img-wrapper {
+    display: none;
+  }
+  .hero-content {
+    display: flex;
+    justify-content: space-between;
+    /***** 
+    we also need pointer-events: none on this element because when we only had pointer-events: none on
+    .hide-graphic-img element the hover effect would only trigger on left and top of view plans button
+    when we have pointer-events: none on .hero-content and .hide-graphic-img the hover effect 
+    would trigger on top,right,bottom,left
+    *****/
+    pointer-events: none;
+    padding-inline: 148px;
+    text-align: left;
+    padding-block-end: 124px;
+    background-image: none;
+    /* background-image: url("images/bg-pattern-intro-right-desktop.svg"),
+      url("images/image-intro-desktop.jpg");
+    background-repeat: no-repeat;
+    background-position: top right, 10rem 10rem;
+    background-size: 23rem, 30rem; */
+  }
+  /* using ::before and ::after for our images we will learn about stacking context and bg-images */
+  /* we will add two images element in out html to the hero content element */
+  /* .hero-content:after {
+    content: url("images/image-intro-desktop.jpg");
+    position: absolute;
+    top: 100px;
+    right: 148px;
+  } */
+  .hero-content::before {
+    position: absolute;
+    content: url("images/bg-pattern-intro-left-desktop.svg");
+    left: 0;
+    bottom: -336px;
+  }
+  .hero-content .section-title {
+    margin-inline: 0px;
+    position: relative;
+    padding-block-start: 56px;
+  }
+
+  .hero-content .section-title::before {
+    content: "";
+    background-color: var(--col-neutral-light-gray);
+    height: 1px;
+    top: 0;
+    left: 0;
+    right: 70%;
+    position: absolute;
+  }
+  .hero-content .paragraph {
+    margin-inline: 0px;
+    width: 56ch;
+    line-height: 1.5;
+  }
+
+  .hero-content .desktop-btn {
+    pointer-events: auto;
+  }
+
+  .family-img-wrapper,
+  .graphic-img-wrapper {
+    display: revert;
+  }
+
+  .hide-graphic-img {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    /* since this element is 100% height and width of its parent element
+    when we hover our the button it didnt work.
+    we want to the hover effect to go through this element so we declare
+    pointer-events: none
+    having pointer-events: none on this element we had part of the hover effect on the view plans button
+    only left and top would trigger hover
+    ***** look at .hero-content pointer-events. we need pointer-events: none on it too *****
+    */
+    pointer-events: none;
+    /* or */
+    /* top:0;
+    right:0;
+    bottom:0;
+    left:0; */
+  }
+
+  .family-img-wrapper {
+    margin-block-end: -288px;
+  }
+
+  .graphic-img-wrapper {
+    position: absolute;
+    right: 0;
+    top: -78px;
+  }
+}
+
 /* main selling content */
 
 .selling-content {
   text-align: center;
   color: var(--col-neutral-very-violet);
-  padding-inline: 30px;
+  padding-inline: 20px;
   padding-block: 120px;
 }
 
@@ -484,6 +638,163 @@ a:hover {
   margin-block-start: 124px;
 }
 
+.secondary-selling-content .section-title.desktop {
+  display: none;
+}
+
 .secondary-selling-content .desktop-btn {
   margin-block-start: 42px;
+}
+
+@media screen and (min-width: 84.375rem) {
+  .selling-content {
+    text-align: left;
+    padding-inline: 128px;
+    padding-block-start: 300px;
+  }
+  .main-selling-content::before {
+    left: 0;
+    right: 88%;
+  }
+
+  .main-selling-content-cards {
+    display: flex;
+  }
+
+  .main-selling-content-cards > * + * {
+    margin-block-start: 0px;
+    margin-inline-start: 28px;
+  }
+
+  .main-selling-content-card .paragraph {
+    max-width: 42ch;
+  }
+  .secondary-selling-content {
+    background-image: url("images/bg-pattern-how-we-work-desktop.svg");
+    padding-inline: 72px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .secondary-selling-content .section-title.mobile {
+    display: none;
+  }
+  .secondary-selling-content .section-title.desktop {
+    display: revert;
+    font-size: 3rem;
+  }
+  .secondary-selling-content .desktop-btn {
+    margin-block-start: 0px;
+  }
+}
+
+/* footer content */
+
+.footer-content-wrapper {
+  background-color: var(--col-neutral-light-gray);
+  background-image: url("images/bg-pattern-footer-mobile.svg");
+  background-repeat: no-repeat;
+  padding-inline: 20px;
+  text-align: center;
+  padding-block: 80px;
+  font-size: 0.85rem;
+}
+
+.footer-navigation {
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--col-neutral-very-violet);
+}
+
+.footer-content-wrapper .social-icons-wrapper {
+  margin-block: 28px;
+  margin-block-end: 36px;
+}
+
+.footer-content-wrapper .social-icons-wrapper svg:not(:first-child) {
+  margin-inline-start: 12px;
+}
+
+/* footer separator */
+
+.footer-separator {
+  height: 1px;
+  background-color: var(--col-neutral-dark-grayish-violet);
+  margin-block-end: 32px;
+}
+
+.footer-navigation .menubar-text {
+  color: hsl(0, 0%, 55%);
+  margin-block-end: 28px;
+  display: inline-block;
+}
+/* declaration below on span which is a child of li in .footer-navigation will cause
+a margin collapse if we dont declared margin-block-start on that li element
+*/
+/* 
+when we declared margin-block-start on span element that is a child of the li in the menubar
+both margin was applied
+*/
+/* 
+margin collapse did occur when we had margin-block-start on one li and margin-block-end on
+an li that is the previous sibling of the li with margin-block-start
+*/
+
+/* 
+but margin collapse did not happen between first <li> and span inside the second <li>
+<li></li> (first li)
+<li> (second li)
+<span></span>
+</li>
+
+
+*/
+/***** we used a utility margin-block-start: 32px in a class called .top-margin
+added the class to the li element we want to create space
+*****/
+/* .footer-navigation ul > li:not(:first-child) .menubar-text {
+  margin-block-start: 32px;
+} */
+
+.footer-navigation ul[role="menu"] li:not([role]):not(:first-child) {
+  margin-block-start: 16px;
+}
+
+@media screen and (min-width: 84.375rem) {
+  .footer-content-wrapper {
+    background-image: url("images/bg-pattern-footer-desktop.svg");
+    text-align: left;
+    padding-block: 60px;
+    padding-inline: 128px;
+  }
+
+  .footer-content-wrapper .logo-social-icons-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .footer-content-wrapper .social-icons-wrapper {
+    margin-block: 0px;
+  }
+
+  .footer-separator {
+    margin-block-start: 24px;
+    margin-block-end: 46px;
+  }
+
+  .footer-navbar {
+    padding-inline-end: 172px;
+  }
+
+  .footer-navigation ul[role="menubar"] {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+/* hover effect */
+
+button:hover,
+svg:hover {
+  cursor: pointer;
 }
