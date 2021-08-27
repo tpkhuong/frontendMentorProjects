@@ -322,6 +322,11 @@ a:hover {
 }
 
 @media screen and (min-width: 84.375rem) {
+  .desktop-btn:hover,
+  .desktop-btn:focus {
+    background-color: hsl(0, 0%, 100%);
+    color: var(--col-pri-dark-violet);
+  }
   .section-title {
     font-size: 3.7rem;
   }
@@ -383,8 +388,22 @@ a:hover {
     align-items: center;
   }
 
+  [id="desktop-navbar"] li[role="none"] a:hover,
+  [id="desktop-navbar"] li[role="none"] a:focus {
+    color: var(--col-pri-dark-violet);
+  }
+
+  /* desktop-btn */
+
   [id="desktop-navbar"] .desktop-btn {
     color: var(--col-neutral-very-violet);
+    border-color: currentColor;
+  }
+
+  [id="desktop-navbar"] .desktop-btn:hover,
+  [id="desktop-navbar"] .desktop-btn:focus {
+    color: var(--col-neutral-light-gray);
+    background-color: var(--col-pri-dark-violet);
     border-color: currentColor;
   }
   .open-button {
@@ -777,6 +796,10 @@ added the class to the li element we want to create space
     margin-block: 0px;
   }
 
+  .footer-content-wrapper .social-icons-wrapper svg:hover path {
+    fill: var(--col-pri-dark-violet);
+  }
+
   .footer-separator {
     margin-block-start: 24px;
     margin-block-end: 46px;
@@ -789,6 +812,11 @@ added the class to the li element we want to create space
   .footer-navigation ul[role="menubar"] {
     display: flex;
     justify-content: space-between;
+  }
+
+  .footer-navbar li:not([role]) a:hover,
+  .footer-navbar li:not([role]) a:focus {
+    text-decoration: underline;
   }
 }
 
