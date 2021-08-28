@@ -41,6 +41,7 @@
   }
 
   function closeNavMenu(eventInput) {
-    console.log(eventInput);
+    closeNavbarButton.attributes["aria-pressed"].value = "true";
+    openNavbarButton.attributes["aria-pressed"].value = "false";
   }
 })();
