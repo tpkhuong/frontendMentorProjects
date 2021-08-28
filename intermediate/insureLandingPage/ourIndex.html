@@ -67,6 +67,9 @@
           </nav>
           <!-- our two buttons. one for open and one for close -->
           <!-- only visible on mobile. invisible on desktop -->
+          <!-- when open button aria-pressed = "false" we show our open button(hamburger button). when user click on the hamburger button
+          we set the value of aria-pressed to "true" we hide the hamburger button.
+          -->
           <button
             aria-label="open nav menu"
             aria-pressed="false"
@@ -75,6 +78,9 @@
           >
             <img src="images/icon-hamburger.svg" alt="" />
           </button>
+          <!-- when user click on open hamburger button we will set aria-pressed = "false" of the close button. set close button display to static.
+            when user click on close(X) button we will set aria-pressed to "true" and hide close(X) button.
+          -->
           <button
             aria-label="close nav menu"
             aria-pressed="true"
