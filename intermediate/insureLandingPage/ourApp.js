@@ -1,5 +1,6 @@
 (function scopeOurVariables() {
   //declare our selectors at top
+  alert("make navbar tab work with keyboard");
   const { openNavbarButton, closeNavbarButton, navbarContainer } =
     ourSelectors();
 
