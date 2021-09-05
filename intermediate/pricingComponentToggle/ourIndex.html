@@ -16,9 +16,79 @@
       type="image/x-icon"
     />
     <link rel="stylesheet" href="ourStyles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
+      rel="stylesheet"
+    />
     <title>Pricing Component Toggle</title>
   </head>
   <body>
+    <main role="main">
+      <section class="pricing-component" role="region">
+        <h2 class="pricing-component__title">Our Pricing</h2>
+        <div class="toggle-container">
+          <span>Annually</span>
+          <button
+            class="toggle-container__button"
+            role="button"
+            aria-label="toggle between monthly or annually"
+            aria-pressed="false"
+          >
+            <span class="toggle-container__button__circle"></span>
+          </button>
+          <span>Monthly</span>
+        </div>
+        <article class="plan-cards-container">
+          <div class="plan-card bg-light">
+            <span class="plan-card__plan-name">Basic</span>
+            <span class="plan-card__price-wrapper dark-shade">
+              <span class="plan-card__price-wrapper__price-sign medium-font"
+                >$</span
+              >
+              <span class="plan-card__price-wrapper__price large-font"
+                >199.99</span
+              >
+            </span>
+            <span class="plan-card__storage">500 GB Storage</span>
+            <span class="plan-card__users">2 Users Allowed</span>
+            <span class="plan-card__upload">Send up to 3 GB</span>
+            <a class="plan-card__btn btn-dark" href="">Learn More</a>
+          </div>
+          <div class="plan-card bg-dark middle-element-margin-block">
+            <span class="plan-card__plan-name">Professional</span>
+            <span class="plan-card__price-wrapper">
+              <span class="plan-card__price-wrapper__price-sign medium-font"
+                >$</span
+              >
+              <span class="plan-card__price-wrapper__price large-font"
+                >249.99</span
+              >
+            </span>
+            <span class="plan-card__storage">1 TB Storage</span>
+            <span class="plan-card__users">5 Users Allowed</span>
+            <span class="plan-card__upload">Send up to 10 GB</span>
+            <a class="plan-card__btn btn-light" href="">Learn More</a>
+          </div>
+          <div class="plan-card bg-light">
+            <span class="plan-card__plan-name">Master</span>
+            <span class="plan-card__price-wrapper dark-shade">
+              <span class="plan-card__price-wrapper__price-sign medium-font"
+                >$</span
+              >
+              <span class="plan-card__price-wrapper__price large-font"
+                >399.99</span
+              >
+            </span>
+            <span class="plan-card__storage">2 TB Storage</span>
+            <span class="plan-card__users">10 Users Allowed</span>
+            <span class="plan-card__upload">Send up to 20 GB</span>
+            <a class="plan-card__btn btn-dark" href="">Learn More</a>
+          </div>
+        </article>
+      </section>
+    </main>
     <script src="ourApp.js"></script>
   </body>
 </html>

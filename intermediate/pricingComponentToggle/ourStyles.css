@@ -1,0 +1,454 @@
+:root {
+  --col-pri-gradient-start: hsl(236, 72%, 79%);
+  --col-pri-gradient-end: hsl(237, 63%, 64%);
+  --col-pri-button-bg: hsl(238, 64%, 69%);
+  --col-bg-image: linear-gradient(
+    var(--col-pri-gradient-start),
+    var(--col-pri-gradient-end)
+  );
+
+  --col-neutral-very-grayish-blue: hsl(240, 78%, 98%);
+  --col-neutral-light-grayish-blue: hsl(234, 14%, 74%);
+  --col-neutral-grayish-blue: hsl(233, 13%, 49%);
+  --col-neutral-dark-grayish-blue: hsl(232, 13%, 33%);
+
+  --font-family-montserrat: "Montserrat", sans-serif;
+}
+
+/* reset */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* code below is from inclusive design patterns */
+/* html {
+  font-size: calc(1em + 1vw);
+} */
+
+body {
+  font-family: var(--font-family-montserrat);
+  /* use color: revert for text that we dont want to be grayish blue */
+  /* color: var(--color-neutral-grayish-blue); */
+}
+
+h1,
+h2,
+h3,
+h4,
+body,
+ul {
+  margin: 0;
+  /* figure, dl, and dd have default margin */
+  /* font-weight: 100; */
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1;
+}
+
+p {
+  line-height: 1.5;
+}
+
+a {
+  text-decoration: none;
+  color: var(--link-fg, var(--clr-neutral-900));
+  font-weight: var(--fw-700);
+  font-size: var(--fs-300);
+}
+
+a:hover,
+a:focus {
+  /* text-decoration: underline; */
+}
+
+a:focus {
+  outline: 3px solid rgb(9, 138, 180);
+  /* outline-offset: 2px; */
+}
+
+img {
+  /* using object-fit for images. we have to set a height or a min-height on the image and the width of 100% 
+  exception to the rule of setting a height. we can sometime use it on a child element.
+  */
+  max-width: 100%;
+  /* we use max-width: 100% so when we have an img element inside of a div and we want to use flex which means the div will be a flex item
+    the img will shrink and grow as its parent element shrink and grows
+    */
+  /* use display: block so our img fits the container.
+    when we didnt have display: block on img element the image did not fill the container.
+    there were some white space
+    */
+  display: block;
+  height: auto;
+}
+
+ul[role],
+li[role] {
+  list-style: none;
+  padding: 0;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  border: none;
+}
+
+/* button {
+
+/* Remove all animations and transitions for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* reset */
+
+/* utilities */
+
+/* skip link using attr selector */
+
+[href="#main-content"] {
+  position: absolute;
+  top: 0;
+  right: 100%; /* moves off screen */
+}
+[href="#main-content"]:focus {
+  right: auto;
+}
+
+/* skip link using attr selector */
+
+/* we can use min-height on the element we want its height to be 100% */
+html,
+body {
+  height: 100%;
+}
+/* we can use min-height on the element we want its height to be 100% */
+
+/* container wrapper */
+
+.max-width {
+  /* or the width we want our container/parent element to be */
+  max-width: 350px;
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+  /* padding-inline-start: 16px;
+  padding-inline-end: 16px; */
+}
+
+@media screen and (min-width: 90rem) {
+  .max-width {
+    max-width: 550px;
+  }
+}
+
+.text-max-width-wrapper {
+  max-width: 150px;
+  margin-inline: auto;
+}
+
+/* container wrapper */
+
+.flow-content > * + * {
+  margin: var(--gap, 8px) 0 0 0;
+}
+
+/* @media screen and (min-width: 90rem){
+
+} */
+
+.columns {
+  display: flex;
+  flex-direction: column;
+  /* flex-flow: column; */
+}
+
+.columns > * {
+  /* flex:1 => flex-basis will be 0px */
+  flex: 1;
+  flex-basis: 100%;
+}
+
+[class*="col-"] {
+  flex-basis: var(--col-basis, 100%);
+}
+
+.col-1 {
+  --col-basis: 25%;
+}
+.col-2 {
+  --col-basis: 50%;
+}
+.col-3 {
+  --col-basis: 75%;
+}
+
+[class*="bg-"] {
+  background-color: var(--bg, hsl(0, 100%, 100%));
+  background-image: var(--bg-img, hsl(0, 100%, 100%));
+  color: var(--fg, hsl(0, 0%, 0%));
+}
+
+[class*="btn-"] {
+  background-color: var(--btn-bg);
+  background-image: var(--btn-bg-img, hsl(0, 100%, 100%));
+  text-transform: uppercase;
+  color: var(--btn-fg);
+  padding-block: 16px;
+  margin-block-start: 34px;
+  border-radius: 6px;
+  /* padding: 12px;
+  padding-inline: 46px;
+  border-radius: 100vw; */
+}
+
+.bg-dark {
+  /* --bg: ; */
+  --bg-img: var(--col-bg-image);
+  --fg: var(--col-neutral-very-grayish-blue);
+}
+
+.bg-light {
+  --bg: var(--col-neutral-very-grayish-blue);
+  --fg: var(--col-neutral-grayish-blue);
+}
+
+.btn-light {
+  /* --btn-bg: ; */
+  /* --fg is declared in .bg-dark which is applied to the parent element of the element that has .btn-light */
+  /* <div class="bg-dark">
+      <button class="btn-light">hello</button>
+    </div> */
+  /* since <button> is a child of div with .bg-dark we can use --fg on div children */
+  --btn-bg: var(--fg);
+  --btn-fg: var(--col-pri-gradient-end);
+}
+
+.btn-dark {
+  --btn-bg-img: var(--col-bg-image);
+  --btn-bg: ;
+  --btn-fg: var(--col-neutral-very-grayish-blue);
+}
+
+.light-theme {
+  background-color: var(--light-theme-bg);
+  color: var(--light-theme-fg);
+}
+
+.dark-theme {
+  background-color: var(--dark-theme-bg);
+  color: var(--dark-theme-fg);
+}
+
+.low-bold {
+  font-weight: 400;
+}
+
+.high-bold {
+  font-weight: 700;
+}
+
+.uppercase-text {
+  text-transform: uppercase;
+}
+
+button:hover,
+a:hover {
+  cursor: pointer;
+}
+
+/* test out [class*=btn-]{} 
+.btn-light{
+    --bg
+    --fg
+}
+.btn-dark{
+    --bg
+    --fg
+} 
+*/
+/* hide h2 which are title for our section element */
+.visually-hidden:not(:focus):not(:active) {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* .visually-hidden{
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  clip: rect(1px 1px 1px 1px)
+} */
+
+.visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+}
+
+.skip-link {
+  display: inline-block;
+  border: 1px solid red;
+  padding-block: 16px;
+  padding-inline: 32px;
+}
+
+/* hide h2 which are title for our section element */
+
+/* utility */
+
+.dark-shade {
+  color: var(--col-neutral-dark-grayish-blue);
+}
+
+.large-font {
+  font-size: 4rem;
+}
+
+.medium-font {
+  font-size: 2.2rem;
+}
+
+.middle-element-margin-block {
+  margin-block: 28px;
+}
+
+/* individual sections */
+
+[role="main"] {
+  height: 100%;
+}
+
+.pricing-component {
+  background-color: var(--col-neutral-very-grayish-blue);
+  background-image: url("images/bg-top.svg");
+  background-size: 17rem;
+  background-position: 14rem -2rem;
+  background-repeat: no-repeat;
+  min-height: 100%;
+  padding-block: 56px;
+  padding-inline: 20px;
+}
+
+.pricing-component__title {
+  text-align: center;
+  font-size: 1.8rem;
+  color: var(--col-neutral-grayish-blue);
+}
+
+.toggle-container {
+  text-align: center;
+  font-size: 0.85rem;
+  width: max-content;
+  margin-inline: auto;
+  color: var(--col-neutral-light-grayish-blue);
+  margin-block-start: 36px;
+  margin-block-end: 56px;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-container__button {
+  /* background-color: var(--col-pri-button-bg); */
+  background-image: var(--col-bg-image);
+  width: 50px;
+  margin-inline: 20px;
+  padding: 4px;
+  border-radius: 100vw;
+}
+
+.toggle-container__button[aria-pressed="true"]
+  .toggle-container__button__circle {
+  transform: translateX(22px);
+}
+
+.toggle-container__button__circle {
+  display: block;
+  height: 20px;
+  width: 20px;
+  background-color: hsl(0, 100%, 100%);
+  border-radius: 50%;
+  transition: transform 300ms linear;
+}
+
+/* plan-cards */
+
+/* plan-card */
+
+.plan-card {
+  /* border: 1px solid red; */
+  padding: 28px;
+  padding-block: 34px;
+  text-align: center;
+  font-size: calc(15 / 16 * 1rem);
+  border-radius: 8px;
+  box-shadow: 0 1px 3.6px rgba(0, 0, 0, 0.024),
+    0 2.6px 10px rgba(0, 0, 0, 0.035), 0 6.3px 24.1px rgba(0, 0, 0, 0.046),
+    0 21px 80px rgba(0, 0, 0, 0.07);
+}
+
+.plan-card > * {
+  display: block;
+}
+
+.plan-card__price-wrapper {
+  margin-block: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  /* margin-block-start: ;
+    margin-block-end:; */
+}
+
+/* border-top/border-bottom */
+
+.plan-card__storage,
+.plan-card__users,
+.plan-card__upload {
+  border-width: 1px;
+  border-color: currentColor;
+  padding-block: 16px;
+}
+
+.plan-card__storage {
+  border-top-style: solid;
+  border-bottom-style: solid;
+}
+
+.plan-card__users,
+.plan-card__upload {
+  border-bottom-style: solid;
+}
