@@ -1,6 +1,9 @@
 (function scopeOurVariables() {
-  alert("access element innerText change its value");
-  alert("make our algorithm more dynamic");
+  //obj of arrays
+  var objOfArrays = {
+    monthly: ["19.99", "24.99", "39.99"],
+    annually: ["199.99", "249.99", "399.99"],
+  };
   //our selector at top of function
   const { toggleBtn, arrOfPriceElements } = ourSelectors();
   //call our functions
@@ -12,20 +15,30 @@
 
   function toggleBetweenPricePlan() {
     var ariaPressedOfBtn = this.getAttribute("aria-pressed");
-    console.log(arrOfPriceElements);
+    // console.log(arrOfPriceElements);
     if (ariaPressedOfBtn == "false") {
       //   this.setAttribute("aria-pressed", "true");
       //or
-      let arrOfMonthlyPrices = ["19.99", "24.99", "39.99"];
+      //   let arrOfMonthlyPrices = ["19.99", "24.99", "39.99"];
       this.attributes["aria-pressed"].value = "true";
       //monthly price
-      recursiveFunc(arrOfPriceElements, arrOfMonthlyPrices);
+      let monthlyElementTextContent =
+        this.nextElementSibling.innerText.toLowerCase();
+      //   console.log("monthlyElementTextContent", monthlyElementTextContent);
+      //   console.log(objOfArrays[monthlyElementTextContent]);
+      //   recursiveFunc(arrOfPriceElements, arrOfMonthlyPrices);
+      recursiveFunc(arrOfPriceElements, objOfArrays[monthlyElementTextContent]);
     } else {
-      let arrOfYearlyPrices = ["199.99", "249.99", "399.99"];
+      //   let arrOfYearlyPrices = ["199.99", "249.99", "399.99"];
       //   this.setAttribute("aria-pressed", "false");
       this.attributes["aria-pressed"].value = "false";
       //or
       //annually price
+      let yearlyElementTextContent =
+        this.previousElementSibling.innerText.toLowerCase();
+      //   console.log("yearlyElementTextContent", yearlyElementTextContent);
+      //   console.log(objOfArrays[yearlyElementTextContent]);
+      recursiveFunc(arrOfPriceElements, objOfArrays[yearlyElementTextContent]);
     }
   }
 
@@ -35,10 +48,10 @@
     if (index === lengthOfArr) {
       return;
     }
+
     var elementValue = arrOfElements[index];
     var priceValue = arrOfPrices[index];
-    console.log(elementValue.innerText);
-    console.log(priceValue);
+    elementValue.innerText = `${priceValue}`;
     recursiveFunc(arrOfElements, arrOfPrices, index + 1);
   }
 

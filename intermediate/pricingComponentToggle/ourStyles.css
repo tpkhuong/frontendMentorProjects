@@ -273,6 +273,20 @@ body {
   text-transform: uppercase;
 }
 
+.btn-light:hover,
+.btn-light:focus {
+  background: transparent;
+  color: var(--fg);
+  border: 0.1px solid currentColor;
+}
+
+.btn-dark:hover,
+.btn-dark:focus {
+  background: transparent;
+  color: var(--col-pri-button-bg);
+  border: solid currentColor;
+}
+
 button:hover,
 a:hover {
   cursor: pointer;
@@ -341,8 +355,15 @@ a:hover {
   font-size: 2.2rem;
 }
 
-.middle-element-margin-block {
-  margin-block: 28px;
+.middle-element-margin-padding-block {
+  /* margin-block: 28px; */
+}
+
+@media screen and (min-width: 28.125rem) {
+  .middle-element-margin-padding-block[class*="plan-card"] {
+    margin-block: 0px;
+    padding-block: 56px;
+  }
 }
 
 /* individual sections */
@@ -368,6 +389,18 @@ a:hover {
   color: var(--col-neutral-grayish-blue);
 }
 
+@media screen and (min-width: 90.3125rem) {
+  .pricing-component {
+    background-image: url("images/bg-bottom.svg"), url("images/bg-top.svg");
+    /* background-repeat: no-repeat; */
+    background-size: 28rem;
+    background-position: bottom left, top right;
+  }
+  .plan-card[class*="bg-light"] {
+    align-self: center;
+  }
+}
+
 .toggle-container {
   text-align: center;
   font-size: 0.85rem;
@@ -389,6 +422,11 @@ a:hover {
   border-radius: 100vw;
 }
 
+.toggle-container__button:hover,
+.toggle-container__button:focus {
+  opacity: 0.7;
+}
+
 .toggle-container__button[aria-pressed="true"]
   .toggle-container__button__circle {
   transform: translateX(22px);
@@ -404,6 +442,26 @@ a:hover {
 }
 
 /* plan-cards */
+/* this container is responsive */
+.plan-cards-container {
+  /* auto-fill with max-width of 1450px will also add extra card to the right since there is enough space for more cards */
+  /* if we use a lower max-width we will have container with 3 cards */
+  max-width: 1150px;
+  display: grid;
+  gap: 32px;
+  margin-inline: auto;
+  /* auto-fill without margin-inline auto and max-width will add extra cards to the right */
+  /* grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); */
+  /* or we can use auto-fit does not matter what max-width we use 1150px or 1450px we will have container with 3 cards */
+  /* the size of the cards will be different */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+@media screen and (min-width: 90.3125rem) {
+  .plan-cards-container {
+    gap: 0px;
+  }
+}
 
 /* plan-card */
 
@@ -412,7 +470,7 @@ a:hover {
   padding: 28px;
   padding-block: 34px;
   text-align: center;
-  font-size: calc(15 / 16 * 1rem);
+  font-size: calc(18 / 16 * 1rem);
   border-radius: 8px;
   box-shadow: 0 1px 3.6px rgba(0, 0, 0, 0.024),
     0 2.6px 10px rgba(0, 0, 0, 0.035), 0 6.3px 24.1px rgba(0, 0, 0, 0.046),

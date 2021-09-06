@@ -60,7 +60,7 @@
     // without eventInput.preventDefault() browser did not focus openNavbarButton
     //after 500ms of clicking on closeNavbarButton
     eventInput.preventDefault();
-    setTimeout(function focusCloseBtn() {
+    setTimeout(function focusOpenBtn() {
       openNavbarButton.focus();
     }, 500);
   }
