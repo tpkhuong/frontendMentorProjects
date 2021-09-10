@@ -13,7 +13,8 @@
     toggleBtn.addEventListener("click", toggleBetweenPricePlan);
   }
 
-  function toggleBetweenPricePlan() {
+  function toggleBetweenPricePlan(event) {
+    console.log(event);
     var ariaPressedOfBtn = this.getAttribute("aria-pressed");
     // console.log(arrOfPriceElements);
     if (ariaPressedOfBtn == "false") {
