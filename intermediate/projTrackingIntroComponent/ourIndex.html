@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html" />
+    <meta name="author" content="KhuongCorp" />
+    <meta name="description" content="Learning Nodejs" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link
+      rel="shortcut icon"
+      href="images/favicon-32x32.png"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="ourStyles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow&family=Barlow+Condensed:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Project Tracking Intro</title>
+  </head>
+  <body>
+    <!-- skip link here -->
+    <a href="#main-content">Skip to Main Content</a>
+    <!-- header -->
+    <header role="banner">
+      <!-- section containing our content -->
+
+      <section role="region" class="hero-section">
+        <h2 class="visually-hidden">Project Intro</h2>
+        <article class="navbar-container">
+          <!-- logo -->
+          <div class="logo-container"><img src="images/logo.svg" alt="" /></div>
+          <!-- desktop nav -->
+          <nav
+            role="navigation"
+            id="desktop-navigation"
+            aria-labelledby="desktop-nav-title"
+          >
+            <h2 class="visually-hidden" id="desktop-nav-title">
+              Desktop Navigation
+            </h2>
+            <ul role="menubar" class="navlist">
+              <li role="none" class="navitem">
+                <a href="#" role="menuitem" class="navlink">Product</a>
+              </li>
+              <li role="none" class="navitem">
+                <a href="#" role="menuitem" class="navlink">Features</a>
+              </li>
+              <li role="none" class="navitem">
+                <a href="#" role="menuitem" class="navlink">Pricing</a>
+              </li>
+              <li role="none" class="navitem">
+                <a href="#" role="menuitem" class="navlink">Login</a>
+              </li>
+            </ul>
+          </nav>
+          <!-- buttons -->
+          <!-- open navmenu button -->
+          <button
+            role="button"
+            aria-pressed="false"
+            aria-label="Open navigation menu"
+            class="open-menu-btn"
+          >
+            <img src="images/icon-hamburger.svg" alt="" />
+            <!-- svg -->
+          </button>
+          <!-- close navmenu button -->
+          <button
+            class="close-menu-btn"
+            role="button"
+            aria-pressed="true"
+            aria-label="close navigation menu"
+          >
+            <img src="images/icon-close.svg" alt="" />
+            <!-- svg -->
+          </button>
+          <!-- modal container -->
+          <!-- only show when user click on open button -->
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="mobile-nav-title"
+            class="dialog1"
+          >
+            <nav
+              role="navigation"
+              aria-labelledby="mobile-nav-title"
+              id="mobile-navigation"
+            >
+              <h2 id="mobile-nav-title" class="visually-hidden">
+                Mobile Navigation
+              </h2>
+              <ul role="menu" class="navlist">
+                <li role="none" class="navlist">
+                  <a href="#" role="menuitem" class="navlink">Product</a>
+                </li>
+                <li role="none" class="navlist">
+                  <a href="#" role="menuitem" class="navlink">Features</a>
+                </li>
+                <li role="none" class="navlist">
+                  <a href="#" role="menuitem" class="navlink">Pricing</a>
+                </li>
+                <span class="separator"></span>
+                <li role="none" class="navlist">
+                  <a href="#" role="menuitem" class="navlink">Login</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <!-- mobile nav -->
+        </article>
+        <div class="text-container">
+          <div class="text-container__top__row">
+            <span class="dark-bg-round-container">NEW</span>
+            <span>MONOGRAPH DASHBOARD</span>
+          </div>
+
+          <h2 class="text-container__title">
+            Powerful insights into your team
+          </h2>
+          <span class="text-container__description"
+            >Project planning and time tracking for agile teams</span
+          >
+
+          <!-- button container -->
+          <div class="button-container">
+            <button class="button-container__btn btn-dark">
+              Schedule a demo
+            </button>
+            <span class="button-container__preview-text"
+              >to see a live preview</span
+            >
+          </div>
+        </div>
+      </section>
+    </header>
+
+    <script src="ourApp.js"></script>
+  </body>
+</html>
