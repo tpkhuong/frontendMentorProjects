@@ -209,12 +209,14 @@ body {
 
 [class*="btn-"] {
   background-color: var(--btn-bg);
-  background-image: var(--btn-bg-img, hsl(0, 100%, 100%));
+  /* background-image: var(--btn-bg-img, hsl(0, 100%, 100%)); */
   text-transform: uppercase;
   color: var(--btn-fg);
-  padding-block: 16px;
-  margin-block-start: 34px;
+  padding-block: 12px;
+  padding-inline: 20px;
+  /* margin-block-start: 34px; */
   border-radius: 6px;
+  font-weight: 700;
   /* padding: 12px;
   padding-inline: 46px;
   border-radius: 100vw; */
@@ -222,8 +224,8 @@ body {
 
 .bg-dark {
   /* --bg: ; */
-  --bg-img: var(--col-bg-image);
-  --fg: var(--col-neutral-very-grayish-blue);
+  --btn-fg: hsl(0, 100%, 100%);
+  --btn-bg: var(--col-pri-red);
 }
 
 .bg-light {
@@ -243,9 +245,8 @@ body {
 }
 
 .btn-dark {
-  --btn-bg-img: var(--col-bg-image);
-  --btn-bg: ;
-  --btn-fg: var(--col-neutral-very-grayish-blue);
+  --btn-fg: hsl(0, 100%, 100%);
+  --btn-bg: var(--col-pri-red);
 }
 
 .light-theme {
@@ -277,12 +278,17 @@ body {
   border: 0.1px solid currentColor;
 }
 
-.btn-dark:hover,
+.btn-dark:focus,
+.btn-dark:hover {
+  opacity: 0.7;
+}
+
+/* .btn-dark:hover,
 .btn-dark:focus {
   background: transparent;
   color: var(--col-pri-button-bg);
   border: solid currentColor;
-}
+} */
 
 button:hover,
 a:hover {
@@ -336,20 +342,49 @@ a:hover {
   padding-inline: 32px;
 }
 
+.light-shade-text {
+  color: var(--col-neutral-grayish-blue);
+}
+
+.small-text {
+  font-size: calc(12 / 16 * 1rem);
+}
+
+.letter-spacing {
+  letter-spacing: 3px;
+}
+
+.margin-right {
+  margin-inline-end: 6px;
+}
+
 /* hide h2 which are title for our section element */
 
 /* individual sections */
 
+/* banner */
+
+header[role="banner"] {
+  height: 100%;
+}
+
 /* hero-section */
 
 .hero-section {
+  min-height: 100%;
   position: relative;
   padding-inline: 28px;
   padding-block: 34px;
   background-image: url("images/illustration-devices.svg");
   background-repeat: no-repeat;
   background-size: 550px;
+  background-position-x: 4px;
   background-position-y: 120px;
+  /* flex declarations */
+  /* to get app to look like design have to apply explicit margin-block-start to text-container */
+  /* display: flex;
+  flex-direction: column;
+  justify-content: space-between; */
 }
 
 /* gray bg */
@@ -363,7 +398,7 @@ a:hover {
   top: 0;
   right: 0;
   left: 50%;
-  bottom: 42%;
+  bottom: 41%;
   border-bottom-left-radius: 86px;
 }
 
@@ -375,6 +410,7 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-family: var(--font-family-barlow-condensed);
 }
 
 /* .logo-container {
@@ -391,6 +427,7 @@ a:hover {
 .open-menu-btn,
 .close-menu-btn {
   background: transparent;
+  padding-inline: 0px;
 }
 
 .open-menu-btn img,
@@ -414,8 +451,63 @@ a:hover {
 
 /* dafault state modal/mobile-nav*/
 [class="close-menu-btn"][aria-pressed="true"] + [role="dialog"] {
-  display: none;
+  /* display: none; */
+  transition: transform ease-in 200ms;
+  transform: translateY(-140%);
 }
+
+[class="close-menu-btn"][aria-pressed="false"] + [role="dialog"] {
+  /* display: revert; */
+  transition: transform ease-out 200ms;
+  transform: translateY(0%);
+}
+
+/* mobile navigation and modal */
+
+[class="dialog1"] {
+  padding: 16px;
+  padding-inline: 24px;
+  position: fixed;
+  /* from top */
+  top: 98px;
+  left: 28px;
+  right: 28px;
+  background-color: hsl(0, 100%, 100%);
+  box-shadow: 0 1.7px 8.2px rgba(0, 0, 0, 0.022),
+    0 4.1px 19.8px rgba(0, 0, 0, 0.032), 0 7.6px 37.3px rgba(0, 0, 0, 0.04),
+    0 13.6px 66.6px rgba(0, 0, 0, 0.048), 0 25.5px 124.5px rgba(0, 0, 0, 0.058),
+    0 61px 298px rgba(0, 0, 0, 0.08);
+}
+
+[id="mobile-navigation"] {
+  text-align: center;
+}
+
+/* mobile navigation */
+
+.separator {
+  /* inline-block caused added space between separator and pricing link(li) 
+    display: block on .separator did not add any space
+    */
+  /* display: inline-block; */
+  display: block;
+  background-color: lightgray;
+  width: 100%;
+  height: 1px;
+  margin-block: 8px;
+}
+
+/* mobile link */
+
+[id="mobile-navigation"] .navlink {
+  display: inline-block;
+  width: 100%;
+  padding-block: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* desktop navigation */
 
 [id="desktop-navigation"] {
   display: none;
@@ -427,4 +519,41 @@ a:hover {
   }
 }
 
+.text-container {
+  margin-block-start: 405px;
+}
+
 /* hero-content */
+
+/* title */
+.text-container__title {
+  font-family: var(--font-family-barlow-condensed);
+}
+
+.dark-bg-round-container {
+  color: hsl(0, 100%, 100%);
+  background-color: hsl(0, 0%, 0%);
+  font-weight: 700;
+  padding: 3px;
+  padding-inline: 8px;
+  border-radius: 100vw;
+  font-size: calc(12 / 16 * 1rem);
+  margin-inline-end: 6px;
+}
+
+.text-container__title {
+  text-transform: uppercase;
+  font-size: calc(42 / 16 * 1rem);
+  margin-block-start: 16px;
+}
+
+.text-container__description {
+  line-height: 1.2;
+  display: inline-block;
+  font-size: calc(18 / 16 * 1rem);
+  margin-block: 24px;
+}
+
+.button-container__btn {
+  margin-inline-end: 12px;
+}
