@@ -19,10 +19,14 @@
   }
   function toggleNavBarMenu(event) {
     if (event.target.parentElement == openBtn) {
-      console.log("Open btn");
+      //using [aria-pressed]
+      openBtn.attributes["aria-pressed"].value = "true";
+      closeBtn.attributes["aria-pressed"].value = "false";
+      // using setAttribute
     }
     if (event.target.parentElement == closeBtn) {
-      console.log("Close btn");
+      closeBtn.attributes["aria-pressed"].value = "true";
+      openBtn.attributes["aria-pressed"].value = "false";
     }
   }
 
