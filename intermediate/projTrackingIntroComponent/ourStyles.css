@@ -430,6 +430,10 @@ header[role="banner"] {
   padding-inline: 0px;
 }
 
+.close-menu-btn img {
+  width: 30px;
+}
+
 .open-menu-btn img,
 .close-menu-btn img {
   height: 20px;
@@ -507,19 +511,62 @@ header[role="banner"] {
   text-transform: uppercase;
 }
 
+/* hide mobile navbar menu */
+
+@media screen and (min-width: 25.9375rem) {
+  .open-menu-btn,
+  .dialog1 {
+    display: none;
+  }
+
+  .logo-container img {
+    width: 32px;
+    height: 32px;
+  }
+}
+
 /* desktop navigation */
 
 [id="desktop-navigation"] {
   display: none;
 }
 
-@media screen and (min-width: 84.375rem) {
+@media screen and (min-width: 25.9375rem) {
   [id="desktop-navigation"] {
     display: revert;
+  }
+
+  [id="desktop-navigation"] .navlist {
+    display: flex;
+    gap: 52px;
+    align-items: center;
+  }
+
+  [id="desktop-navigation"] .navlink {
+    font-size: calc(20 / 16 * 1rem);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .desktop-navmenu-separator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--col-neutral-grayish-blue);
+  }
+
+  [id="desktop-navigation"] .navitem:hover .navlink,
+  [id="desktop-navigation"] .navlink:focus {
+    border-bottom: 2px solid currentColor;
+  }
+
+  [id="desktop-navigation"] .navlink:focus {
+    outline-offset: 2px;
   }
 }
 
 .text-container {
+  max-width: 618px;
   margin-block-start: 405px;
 }
 
@@ -556,4 +603,44 @@ header[role="banner"] {
 
 .button-container__btn {
   margin-inline-end: 12px;
+}
+
+@media screen and (min-width: 25.9375rem) {
+  .hero-section {
+    padding-block: 68px;
+    padding-inline: 188px;
+    padding-block-end: 250px;
+    background-size: 1100px;
+    background-position: 1075px 215px;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  .text-container {
+    margin-block-start: auto;
+  }
+
+  .dark-bg-round-container {
+    font-size: calc(16 / 16 * 1rem);
+    margin-inline-end: 16px;
+  }
+  .small-text {
+    font-size: calc(16 / 16 * 1rem);
+  }
+  .text-container__title {
+    font-size: calc(68 / 16 * 1rem);
+    max-width: 20ch;
+    margin-block-start: 26px;
+  }
+  .text-container__description {
+    max-width: 28ch;
+    font-size: calc(20 / 16 * 1rem);
+    margin-block: 28px;
+    margin-block-end: 58px;
+  }
+  .btn-dark {
+    padding-inline: 26px;
+    padding-block: 16px;
+  }
 }
