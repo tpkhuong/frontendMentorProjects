@@ -644,3 +644,74 @@ header[role="banner"] {
     padding-block: 16px;
   }
 }
+
+/* josh's solution */
+
+.front {
+  transform: translateY(-4px);
+  transition: transform 500ms;
+}
+.pushable:hover .front {
+  transform: translateY(-6px);
+  transition: transform 250ms;
+}
+.pushable:active .front {
+  transform: translateY(-2px);
+  transition: transform 50ms;
+}
+
+/* using js/React for action driven animation */
+
+/* 
+
+function Button({ children }) {
+  /*
+  We track 4 actions:
+    • "hovering", the user is mousing over the button
+    • "depressed", the user is pressing down on it
+    • "released", the user has released the button
+    • "exited", the user has moused away
+  */
+/* const [
+    mostRecentAction,
+    setMostRecentAction
+  ] = React.useState(null); */
+/* Calculate the right styles based on the action */
+/* let styles = {};
+  if (mostRecentAction === 'hovering') {
+    styles = {
+      transform: 'translateY(-6px)',
+      transition: 'transform 250ms',
+    }
+  } else if (mostRecentAction === 'depressed') {
+    styles = {
+      transform: 'translateY(-2px)',
+      transition: 'transform 50ms',
+    }
+  } else if (mostRecentAction === 'released') {
+    styles = {
+      transform: 'translateY(-6px)',
+      transition: 'transform 200ms',
+    }
+  } else {
+    // The default value
+    // Used initially, before any actions have occurred, and also
+    // when exiting.
+    styles = {
+      transform: 'translateY(-4px)',
+      transition: 'transform 500ms',
+    }
+  }
+  return (
+    <button
+      style={styles}
+      // Set the action based on the JS event:
+      onMouseEnter={() => setMostRecentAction('hovering')}
+      onMouseDown={() => setMostRecentAction('depressed')}
+      onMouseUp={() => setMostRecentAction('released')}
+      onMouseLeave={() => setMostRecentAction('exited')}
+    >
+      {children}
+    </button>
+  );
+} */

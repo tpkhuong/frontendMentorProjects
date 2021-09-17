@@ -25,13 +25,14 @@
     <title>Project Tracking Intro</title>
   </head>
   <body>
+    <!-- this is the viewport -->
     <!-- skip link here -->
     <a href="#main-content">Skip to Main Content</a>
     <!-- header -->
     <header role="banner">
       <!-- section containing our content -->
 
-      <section role="region" class="hero-section">
+      <section role="region" class="hero-section" aria-label="project intro">
         <h2 class="visually-hidden">Project Intro</h2>
         <article class="navbar-container">
           <!-- logo -->
@@ -138,7 +139,11 @@
 
           <!-- button container -->
           <div class="button-container small-text">
-            <button class="button-container__btn btn-dark">
+            <button
+              role="button"
+              aria-label="open schedule demo form"
+              class="button-container__btn btn-dark"
+            >
               SCHEDULE A DEMO
             </button>
             <span
