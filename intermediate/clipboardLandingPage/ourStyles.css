@@ -1,6 +1,8 @@
 :root {
   --col-pri-strong-cyan: hsl(171, 66%, 44%);
   --col-pri-light-blue: hsl(233, 100%, 69%);
+  --col-pri-back-bg: hsl(170, 60%, 38%);
+  --col-sec-back-bg: hsl(232, 68%, 59%);
 
   --col-neutral-dark-grayish-blue: hsl(210, 10%, 33%);
   --col-neutral-grayish-blue: hsl(201, 11%, 66%);
@@ -22,7 +24,7 @@
 } */
 
 body {
-  font-family: var(--font-family-montserrat);
+  font-family: var(--font-family-baijamjuree);
   /* use color: revert for text that we dont want to be grayish blue */
   /* color: var(--color-neutral-grayish-blue); */
 }
@@ -205,12 +207,12 @@ body {
 
 [class*="btn-"] {
   background-color: var(--btn-bg);
-  background-image: var(--btn-bg-img, hsl(0, 100%, 100%));
-  text-transform: uppercase;
-  color: var(--btn-fg);
-  padding-block: 16px;
+  /* background-image: var(--btn-bg-img, hsl(0, 100%, 100%)); */
+  /* text-transform: uppercase; */
+  color: var(--btn-fg, hsl(0, 100%, 100%));
+  /* padding-block: 16px;
   margin-block-start: 34px;
-  border-radius: 6px;
+  border-radius: 6px; */
   /* padding: 12px;
   padding-inline: 46px;
   border-radius: 100vw; */
@@ -226,6 +228,22 @@ body {
   --bg: var(--col-neutral-very-grayish-blue);
   --fg: var(--col-neutral-grayish-blue);
 }
+
+/* .btn-primary .front-of-button {
+  --btn-bg: var(--col-pri-strong-cyan);
+}
+
+.btn-primary.back-of-button {
+  --btn-bg: var(--col-pri-back-bg);
+}
+
+.btn-secondary .front-of-button {
+  --btn-bg: var(--col-pri-light-blue);
+}
+
+.btn-secondary.back-of-button {
+  --btn-bg: var(--col-sec-back-bg);
+} */
 
 .btn-light {
   /* --btn-bg: ; */
@@ -333,3 +351,105 @@ a:hover {
 }
 
 /* hide h2 which are title for our section element */
+
+/* button */
+
+.buttons-container {
+  text-align: center;
+}
+
+.btn-primary.back-of-button {
+  background-color: var(--col-pri-back-bg);
+}
+
+.btn-secondary.back-of-button {
+  background-color: var(--col-sec-back-bg);
+}
+
+.btn-primary .front-of-button {
+  background-color: var(--col-pri-strong-cyan);
+}
+
+.btn-secondary .front-of-button {
+  background-color: var(--col-pri-light-blue);
+}
+
+.buttons-container__btn:first-child {
+  margin-block-end: 24px;
+}
+
+.buttons-container__btn {
+  /* without border-radius on both back and front of button
+    back of button will be shown as a square behind the front of button
+    */
+  border-radius: 100vw;
+  padding: 0;
+}
+
+.front-of-button {
+  border-radius: 100vw;
+  font-weight: 600;
+  display: block;
+  margin-inline: auto;
+  padding: 14px;
+  padding-inline: 80px;
+  transform: translateY(-3px);
+  cursor: pointer;
+}
+
+.buttons-container__btn:first-child .front-of-button {
+  padding-inline: calc(80px + 2.4px);
+}
+
+/* font and colors */
+
+[class*="__title"],
+[id="footer-navbar"] .navlist {
+  color: var(--col-neutral-dark-grayish-blue);
+}
+
+[class*="__description"] {
+  color: var(--col-neutral-grayish-blue);
+  font-size: calc(16 / 16 * 1rem);
+  max-width: 30ch;
+}
+
+h3[class*="__title"] {
+  font-size: calc(22 / 16 * 1rem);
+}
+
+/* header */
+
+[class="hero-content"] {
+  padding-block-start: 128px;
+
+  background-image: url("images/bg-header-mobile.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
+  text-align: center;
+}
+
+.img-wrapper1 {
+  width: 100px;
+  margin-inline: auto;
+}
+
+[class="hero-content__section1__title"] {
+  font-size: calc(32 / 16 * 1rem);
+  max-width: 15ch;
+  margin-inline: auto;
+  margin-block-start: 68px;
+}
+
+[class="hero-content__section1__description"] {
+  margin-block-start: 20px;
+}
+
+[class="buttons-container"] {
+  margin-block-start: 48px;
+}
+
+/* main */
+
+/* footer */
