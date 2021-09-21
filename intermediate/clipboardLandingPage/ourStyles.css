@@ -405,13 +405,27 @@ a:hover {
   padding-inline: calc(80px + 2.4px);
 }
 
+@media screen and (min-width: 84.375rem) {
+  .buttons-container__btn:first-child {
+    margin-inline-end: 16px;
+  }
+
+  .buttons-container__btn:first-child .front-of-button {
+    padding-inline: calc(32px + 2.4px);
+  }
+
+  .front-of-button {
+    padding-inline: 32px;
+  }
+}
+
 /* font and colors */
 
 [class*="__title"] {
   max-width: var(--title-ch);
 }
 [class*="__description"] {
-  max-width: var(--description-ch);
+  max-width: var(--description-ch, 33ch);
 }
 
 [class*="__title"],
@@ -422,12 +436,13 @@ a:hover {
 [class*="__description"] {
   color: var(--col-neutral-grayish-blue);
   font-size: calc(16 / 16 * 1rem);
-  max-width: 33ch;
+  /* max-width: 33ch; */
   margin-inline: auto;
 }
 
 h2[class*="__title"] {
-  max-width: 16ch;
+  /* max-width: 16ch; */
+  --title-ch: 16ch;
   margin-inline: auto;
   line-height: 1.5;
 }
@@ -435,6 +450,16 @@ h2[class*="__title"] {
 h3[class*="__title"] {
   font-size: calc(22 / 16 * 1rem);
   margin-inline: auto;
+}
+
+@media screen and (min-width: 84.375rem) {
+  h2[class*="__title"] {
+    --title-ch: 25ch;
+    font-size: calc(32 / 16 * 1rem);
+  }
+  p:not([class*="__subsection"])[class*="__description"] {
+    --description-ch: 60ch;
+  }
 }
 
 /* header */
@@ -457,7 +482,7 @@ h3[class*="__title"] {
 
 [class="hero-content__section1__title"] {
   font-size: calc(32 / 16 * 1rem);
-  max-width: 15ch;
+  --title-ch: 15ch;
   margin-inline: auto;
   margin-block-start: 68px;
 }
@@ -468,6 +493,29 @@ h3[class*="__title"] {
 
 [class="buttons-container"] {
   margin-block-start: 48px;
+}
+
+@media screen and (min-width: 84.375rem) {
+  .logo-wrapper1 {
+    width: 115px;
+  }
+
+  [class="hero-content"] {
+    background-image: url("images/bg-header-desktop.png");
+    background-size: contain;
+    padding-block-end: 118px;
+  }
+
+  [class="hero-content__section1__title"] {
+    font-size: calc(40 / 16 * 1rem);
+    --title-ch: 25ch;
+  }
+
+  [class="hero-content"]
+    [class="hero-content__section1"]
+    [class="hero-content__section1__description"] {
+    --description-ch: 52ch;
+  }
 }
 
 /* main */
@@ -488,7 +536,11 @@ h3[class*="__title"] {
   padding-block-end: 96px;
 }
 
-[class="img-wrapper2"] {
+[class="main-content2__description"] {
+  --description-ch: 30ch;
+}
+
+[class="img-wrapper1"] {
   margin-block-start: 48px;
 }
 
@@ -516,6 +568,55 @@ h3[class*="__title"] {
   max-width: 34ch;
 }
 
+@media screen and (min-width: 84.375rem) {
+  [class="main-content1"] {
+    padding-inline: 0px;
+  }
+  [class="style-wrapper1"] {
+    margin-block-start: 32px;
+    /* making the parent of elements with margin-inline auto a flex item made the parent element an intrinic element meaning the width is its content
+    text-align: left on style-wrapper2 will work
+    */
+    display: flex;
+    align-items: center;
+  }
+
+  [class="img-wrapper1"] {
+    width: 750px;
+    margin-inline-start: -30px;
+  }
+
+  [class="style-wrapper2"] {
+    text-align: left;
+    margin-inline-start: 120px;
+    margin-block-end: 16px;
+  }
+
+  /* main-content2 */
+  [class="img-wrapper2"] {
+    width: 785px;
+    margin-inline: auto;
+    margin-block-start: 80px;
+  }
+
+  /* main-content3 */
+
+  .style-wrapper3 {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  [class="main-content3"] .style-wrapper3 > * + * {
+    margin-block-start: 0px;
+  }
+
+  /* set height on this icon so text of other containers matches each other's */
+  .main-content3__subsection1 img {
+    height: 32px;
+  }
+}
+
 /* img grid */
 
 .style-wrapper4 {
@@ -526,13 +627,22 @@ h3[class*="__title"] {
   padding-block-end: 168px;
 }
 
+/* main-content5 */
+
 [class="main-content5"] {
   text-align: center;
   padding-block-end: 168px;
 }
 
 [class="main-content5"] p[class*="__description"] {
-  max-width: 28ch;
+  /* max-width: 28ch; */
+  --description-ch: 28ch;
+}
+
+@media screen and (min-width: 84.375rem) {
+  [class="main-content5"] p[class*="__description"] {
+    --description-ch: 60ch;
+  }
 }
 
 /* footer */
