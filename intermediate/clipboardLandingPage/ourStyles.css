@@ -406,6 +406,14 @@ a:hover {
 }
 
 @media screen and (min-width: 84.375rem) {
+  /* since our .front-of-button is moved up using transform: translateY 
+  when we used opacity on the .front-of-button, the top of the button was transparent.
+  putting opacity on button worked
+  */
+  .buttons-container__btn:focus,
+  .buttons-container__btn:hover {
+    opacity: 0.7;
+  }
   .buttons-container__btn:first-child {
     margin-inline-end: 16px;
   }
@@ -417,6 +425,14 @@ a:hover {
   .front-of-button {
     padding-inline: 32px;
   }
+}
+
+/* make sections aligned with each other */
+
+[role="banner"],
+[role="main"],
+[role="content-info"] {
+  max-width: 1450px;
 }
 
 /* font and colors */
@@ -621,10 +637,12 @@ h3[class*="__title"] {
 
 .style-wrapper4 {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(188px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(188px, 1fr));
   justify-items: center;
   gap: 72px;
   padding-block-end: 168px;
+  max-width: 1180px;
+  margin-inline: auto;
 }
 
 /* main-content5 */
@@ -640,6 +658,13 @@ h3[class*="__title"] {
 }
 
 @media screen and (min-width: 84.375rem) {
+  [class="main-content3__subsection3__description"] {
+    --description-ch: 35ch;
+  }
+  .style-wrapper4 {
+    gap: 0px;
+    align-items: center;
+  }
   [class="main-content5"] p[class*="__description"] {
     --description-ch: 60ch;
   }
@@ -678,6 +703,16 @@ footer[role="content-info"] {
   margin-block-start: 32px;
 }
 
+/* anchor tags are inline element and since we have an svg as a child of the anchor element for our social media icons
+the height or hover area of the anchor is not matching the height of the svg.
+declaring display: inline-block on anchor tag/element made the height of the anchor element 
+match the svg.
+*/
+
+[class="social-icons-wrapper"] a {
+  display: inline-block;
+}
+
 [class="social-icons-wrapper"] > * + * {
   margin-inline-start: 32px;
 }
@@ -685,3 +720,77 @@ footer[role="content-info"] {
 /* [class="social-icons-wrapper"] a:not(:first-child) {
   margin-inline-start: 32px;
 } */
+@media screen and (min-width: 84.375rem) {
+  footer[role="content-info"] {
+    padding-inline: 172px;
+  }
+  .style-wrapper5 {
+    display: flex;
+    align-items: center;
+  }
+
+  .logo-wrapper2 {
+    width: 60px;
+    margin-inline: revert;
+  }
+
+  [id="footer-navbar"] {
+    margin-block: 0px;
+  }
+
+  [id="footer-navbar"] ul {
+    display: grid;
+    max-width: 750px;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: start;
+    align-items: baseline;
+    margin-inline-start: 172px;
+    gap: 16px 72px;
+  }
+
+  [id="footer-navbar"] .navlist > * + * {
+    margin-block-start: 0px;
+  }
+
+  [id="footer-navbar"] .navlist li:focus .navlist,
+  [id="footer-navbar"] .navlist li:hover .navlist {
+    color: var(--col-pri-strong-cyan);
+    cursor: pointer;
+  }
+
+  /* faqs */
+
+  /* contact ux */
+  [id="footer-navbar"] ul li:nth-of-type(2) {
+    grid-column: 1/2;
+    grid-row: 2/3;
+  }
+  /* privacy */
+  [id="footer-navbar"] ul li:nth-of-type(3) {
+    grid-column: 2/3;
+    grid-row: 1/2;
+  }
+  /* press */
+  [id="footer-navbar"] ul li:nth-of-type(4) {
+    grid-column: 2/3;
+    grid-row: 2/3;
+  }
+  /* install */
+  [id="footer-navbar"] ul li:nth-of-type(5) {
+    grid-column: 3/4;
+    grid-row: 1/2;
+  }
+
+  [class="social-icons-wrapper"] {
+    margin-inline-start: auto;
+  }
+
+  [class="social-icons-wrapper"] a:hover path,
+  [class="social-icons-wrapper"] a:focus path {
+    fill: var(--col-pri-strong-cyan);
+  }
+
+  [class="social-icons-wrapper"] > * + * {
+    margin-inline-start: 16px;
+  }
+}
