@@ -27,15 +27,16 @@
     <title>Huddle - Build The Community Your Fans Will Love</title>
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to Main Content</a>
     <header class="hero-content" role="banner">
       <div class="navbar">
         <!-- since we dont have to change the color of the svg img, we will use this pattern for the header logo
-        div>img
-        -->
+            div>img
+            -->
         <div class="header-logo-wrapper">
           <img src="images/logo.svg" alt="Huddle Logo" />
         </div>
-        <button class="navbar__btn">Try It Free</button>
+        <button class="navbar__btn btn-light">Try It Free</button>
       </div>
       <section
         aria-labelledby="hero-content__section1__title"
@@ -50,7 +51,7 @@
             but so does your audience. Create connections with your users as you
             engage in genuine discussion.
           </p>
-          <button class="hero-content__section1__btn">
+          <button class="hero-content__section1__btn btn-accent">
             Get Started For Free
           </button>
         </section>
@@ -64,7 +65,13 @@
     </header>
     <main role="main">
       <div class="main-section-content1">
-        <section>
+        <div class="main-content__img-wrapper1">
+          <img
+            src="images/illustration-grow-together.svg"
+            alt="male and female figure with chat bubbles between them"
+          />
+        </div>
+        <section class="main-content-text-wrapper">
           <h2 class="main-section-content1__title">Grow Together</h2>
           <p class="main-section-content1__description">
             Generate meaningful discussions with your audience and build a
@@ -72,12 +79,6 @@
             miss out on with a feedback form.
           </p>
         </section>
-        <div class="main-content__img-wrapper1">
-          <img
-            src="images/illustration-grow-together.svg"
-            alt="male and female figure with chat bubbles between them"
-          />
-        </div>
       </div>
       <div class="main-section-content2">
         <div class="main-content__img-wrapper2">
@@ -86,7 +87,7 @@
             alt="Group of four setting around a table near a tree chatting"
           />
         </div>
-        <section>
+        <section class="main-content-text-wrapper">
           <h2 class="main-section-content2__title">Flowing Conversations</h2>
           <p class="main-section-content2__description">
             You wouldn't paginate a conversation in real life, so why do it
@@ -96,7 +97,13 @@
         </section>
       </div>
       <div class="main-section-content3">
-        <section>
+        <div class="main-content__img-wrapper3">
+          <img
+            src="images/illustration-your-users.svg"
+            alt="one female and two male holding chat bubble"
+          />
+        </div>
+        <section class="main-content-text-wrapper">
           <h2 class="main-section-content3__title">Your Users</h2>
           <p class="main-section-content3__description">
             It takes no time at all to integrate Huddle with your app's
@@ -104,28 +111,24 @@
             your users can start chatting immediately.
           </p>
         </section>
-        <div class="main-content__img-wrapper3">
-          <img
-            src="images/illustration-your-users.svg"
-            alt="one female and two male holding chat bubble"
-          />
-        </div>
       </div>
       <section class="call-to-action">
         <h2 class="call-to-action__title">Ready To Build Your Community?</h2>
-        <button class="call-to-action__btn">Get Started For Free</button>
+        <button class="call-to-action__btn btn-accent">
+          Get Started For Free
+        </button>
       </section>
     </main>
     <footer role="content-info">
       <!-- <div class="footer-logo-wrapper"></div> -->
       <!-- adjusting viewBox="0 0 thisValue thisValue" made the svg smaller or bigger
-    higher values make the svg smaller
-    -->
+        higher values make the svg smaller
+        -->
       <svg
         width="240"
         height="39"
         xmlns="http://www.w3.org/2000/svg"
-        viewbox="0 0 350 40"
+        viewbox="0 0 390 40"
       >
         <g fill-rule="nonzero" fill="none">
           <path
@@ -141,6 +144,12 @@
       <div class="footer-content-style-wrapper">
         <div class="contact-content">
           <div class="contact-content-style-wrapper1">
+            <!-- element that are intrinic then made into flex or grid item
+            like svg wrapper, the location img was the smallest size it could be
+
+            making the span display block worked with flex container where
+            two spans are flex items
+            -->
             <span class="contact-content-img-wrapper1">
               <img src="images/icon-location.svg" alt="" />
             </span>
@@ -190,8 +199,8 @@
               <!-- facebook -->
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="35"
-                height="35"
+                width="40"
+                height="40"
                 enable-background="new 0 0 144.083 144"
                 viewBox="0 0 144.083 144"
               >
@@ -207,8 +216,8 @@
               <!-- twitter -->
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="35"
-                height="35"
+                width="40"
+                height="40"
                 enable-background="new 0 0 144.083 144"
                 viewBox="0 0 144.083 144"
               >
@@ -224,8 +233,8 @@
               <!-- instagram -->
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="35"
-                height="35"
+                width="40"
+                height="40"
                 enable-background="new 0 0 144.083 144"
                 viewBox="0 0 144.083 144"
               >
@@ -244,6 +253,7 @@
         </div>
       </div>
     </footer>
+
     <script src="ourApp.js"></script>
   </body>
 </html>
