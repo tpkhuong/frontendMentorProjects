@@ -1,15 +1,30 @@
 :root {
   --col-pri-pink: hsl(322, 100%, 66%);
+  --col-pri-hero-content-bg: hsl(191, 89%, 96%);
+  --card-border-radius: 16px;
+  --footer-bg-color: hsl(192, 100%, 9%);
 
+  --col-neutral-black: hsl(0, 0%, 0%);
+  --col-neutral-white: hsl(0, 100%, 100%);
   --col-neutral-pale-cyan: hsl(193, 100%, 96%);
   --col-neutral-dark-cyan: hsl(192, 100%, 9%);
   --col-neutral-grayish-blue: hsl(208, 11%, 55%);
+
+  --box-shadow: 0.6px 0.6px 4.6px rgba(0, 0, 0, 0.02),
+    1.3px 1.3px 11px rgba(0, 0, 0, 0.028),
+    2.5px 2.5px 20.7px rgba(0, 0, 0, 0.035),
+    4.5px 4.5px 36.9px rgba(0, 0, 0, 0.042),
+    8.4px 8.4px 68.9px rgba(0, 0, 0, 0.05), 20px 20px 165px rgba(0, 0, 0, 0.07);
 
   /* headings */
   --font-family-poppins: "Poppins", sans-serif;
   /* body, call-to-actions */
   --font-family-open-sans: "Open Sans", sans-serif;
 }
+
+/* margin collapse: when one of the element is block and the other element is inline-block
+bottom margin on block and top margin on inline-block will not collapse. interesting
+*/
 
 /* reset */
 
@@ -25,7 +40,7 @@
 } */
 
 body {
-  font-family: var(--font-family-baijamjuree);
+  font-family: var(--font-family-open-sans);
   /* use color: revert for text that we dont want to be grayish blue */
   /* color: var(--color-neutral-grayish-blue); */
 }
@@ -253,14 +268,28 @@ body {
       <button class="btn-light">hello</button>
     </div> */
   /* since <button> is a child of div with .bg-dark we can use --fg on div children */
-  --btn-bg: var(--fg);
-  --btn-fg: var(--col-pri-gradient-end);
+  --btn-bg: var(--col-neutral-white);
+  --btn-fg: var(--col-neutral-black);
 }
 
 .btn-dark {
   --btn-bg-img: var(--col-bg-image);
   --btn-bg: ;
   --btn-fg: var(--col-neutral-very-grayish-blue);
+}
+
+.btn-accent {
+  font-size: 0.75rem;
+  font-weight: 700;
+
+  padding: 12px;
+  padding-inline: 56px;
+  border-radius: 100vw;
+
+  box-shadow: var(--box-shadow);
+
+  --btn-bg: var(--col-pri-pink);
+  --btn-fg: var(--col-neutral-white);
 }
 
 .light-theme {
@@ -353,7 +382,227 @@ a:hover {
 
 /* hide h2 which are title for our section element */
 
+/* font size and weight etc */
+
+h1[class*="__title"],
+h2[class*="__title"] {
+  font-family: var(--font-family-poppins);
+}
+
 /* individual sections */
 
+/* header */
+
+[class="hero-content"] {
+  background-image: url("images/bg-hero-mobile.svg");
+  background-color: var(--col-pri-hero-content-bg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-x: -12px;
+  background-position-y: -56px;
+
+  padding: 32px;
+  padding-inline: 16px;
+}
+
+/* navbar */
+
+[class="header-logo-wrapper"] {
+  width: 100px;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar__btn {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 6px;
+  padding-inline: 24px;
+  border-radius: 100vw;
+
+  box-shadow: var(--box-shadow);
+}
+
+/* hero-content */
+
+[class="hero-content__section1"] {
+  text-align: center;
+  margin-block-start: 88px;
+}
+
+[id="hero-content__section1__title"] {
+  font-size: 1.5rem;
+  max-width: 20ch;
+  line-height: 1.5;
+  margin-inline: auto;
+}
+
+.hero-content__section1__description {
+  max-width: 33ch;
+  margin-inline: auto;
+}
+
+[class*="hero-content__section1__btn"] {
+  margin-block-start: 16px;
+  margin-block-end: 56px;
+}
+
+.hero-content__img-wrapper1 {
+  width: 320px;
+  margin-inline: auto;
+}
+
+/* main content */
+
+[role="main"] {
+  padding: 16px;
+
+  padding-block-start: 60px;
+  /* padding-block-end: 244px; */
+}
+
+div[class*="main-section-content"] {
+  border-radius: var(--card-border-radius);
+  padding: 32px;
+  padding-block-start: 56px;
+  padding-block-end: 16px;
+  box-shadow: var(--box-shadow);
+}
+
+.main-section-content2 {
+  margin-block: 40px;
+}
+
+.main-content__img-wrapper1,
+.main-content__img-wrapper2,
+.main-content__img-wrapper3 {
+  width: 275px;
+  margin-inline: auto;
+}
+
+.main-content-text-wrapper {
+  margin-block-start: 64px;
+  text-align: center;
+}
+
+[class*="main-section-content"] h2 {
+  font-size: 1.3rem;
+}
+
+[class*="main-section-content"] p {
+  font-size: 0.9rem;
+  max-width: 32ch;
+  margin-inline: auto;
+  color: var(--col-neutral-grayish-blue);
+}
+
+p.main-section-content3__description {
+  max-width: 31ch;
+}
+
+/* call to action */
+
+.call-to-action {
+  padding-block: 48px;
+  padding-block-end: 42px;
+  text-align: center;
+  box-shadow: var(--box-shadow);
+  border-radius: var(--card-border-radius);
+
+  /* declaring bg-color: white and position relative will have our call to action element
+  over laid over footer section
+  */
+  background-color: white;
+  margin-block-start: 124px;
+  margin-block-end: -80px;
+  position: relative;
+}
+
+.call-to-action__title {
+  font-size: 1.1rem;
+}
+
+.call-to-action__btn {
+  margin-block-start: 28px;
+  padding-inline: 40px;
+}
+
 /* footer */
+
+[role="content-info"] {
+  padding-block: 56px;
+  padding-block-start: 128px;
+  padding-inline: 16px;
+  color: var(--col-neutral-white);
+  background-color: var(--footer-bg-color);
+}
+
+[role="content-info"] svg path {
+  fill: var(--col-neutral-white);
+}
+
+/* contact info */
+.contact-content {
+  margin-block-start: 14px;
+}
+
+[class*="contact-content-style-wrapper"] {
+  text-align: left;
+  display: flex;
+  gap: 16px;
+}
+
+[class*="contact-content-style-wrapper"] span {
+  display: block;
+}
+
+.contact-content-img-wrapper1 img {
+  margin-block-start: 10px;
+}
+
+.contact-content__location {
+  max-width: 33ch;
+  margin-inline-start: 6px;
+}
+
+.contact-content-style-wrapper2 {
+  margin-block: 24px;
+}
+
+/* footer navigation */
+
+[role="navigation"] {
+  margin-block: 56px;
+  margin-block-end: 50px;
+}
+
+[role="navigation"] .navlist {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 1.2rem;
+}
+
+/* social icons and copyright */
+
+.footer-style-wrapper1 {
+  text-align: center;
+}
+
+.social-icons-wrapper {
+  margin-block-end: 16px;
+}
+
+.social-icons-wrapper a {
+  display: inline-block;
+}
+
+.footer-copyright {
+  font-size: 0.75rem;
+}
+
 /* declare anchor tag display: inline-block */
