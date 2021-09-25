@@ -456,6 +456,69 @@ h2[class*="__title"] {
   margin-inline: auto;
 }
 
+@media screen and (min-width: 90rem) {
+  /* header and navbar */
+  [class="hero-content"] {
+    background-image: url("images/bg-hero-desktop.svg");
+    background-color: var(--col-pri-hero-content-bg);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position-x: -15px;
+    background-position-y: 5px;
+
+    padding: 48px;
+    padding-inline: 64px;
+
+    max-width: 1175px;
+
+    margin-inline: auto;
+  }
+
+  [class="header-logo-wrapper"] {
+    width: 150px;
+  }
+
+  .navbar__btn {
+    font-size: 0.75rem;
+    padding: 12px;
+    padding-inline: 48px;
+  }
+
+  /* hero-content */
+
+  [class="hero-content__section1"] {
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-block-start: 55px;
+  }
+
+  [id="hero-content__section1__title"] {
+    font-size: 2.3rem;
+    max-width: 20ch;
+    line-height: 1.5;
+    margin-inline: revert;
+  }
+
+  .hero-content__section1__description {
+    max-width: 50ch;
+    margin-inline: revert;
+  }
+
+  .hero-content__section1__btn {
+    padding: 20px;
+    padding-inline: 65px;
+    margin-block-end: revert;
+  }
+
+  .hero-content__img-wrapper1 {
+    width: 550px;
+    margin-inline: revert;
+  }
+}
+
 /* main content */
 
 [role="main"] {
@@ -531,6 +594,83 @@ p.main-section-content3__description {
   padding-inline: 40px;
 }
 
+@media screen and (min-width: 90rem) {
+  [role="main"] {
+    max-width: 1175px;
+    padding-inline: 70px;
+
+    margin-inline: auto;
+  }
+
+  div[class*="main-section-content"] {
+    padding-block: 56px;
+  }
+
+  .main-section-content1,
+  .main-section-content2,
+  .main-section-content3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-inline-start: 105px;
+    padding-inline-end: 30px;
+  }
+
+  .main-content-text-wrapper {
+    margin-block-start: revert;
+    text-align: revert;
+  }
+
+  .main-content__img-wrapper1,
+  .main-content__img-wrapper2,
+  .main-content__img-wrapper3 {
+    width: 345px;
+    margin-inline: revert;
+  }
+  .main-content__img-wrapper1,
+  .main-content__img-wrapper3 {
+    order: 1;
+  }
+
+  [class*="main-section-content"] h2 {
+    font-size: 1.5rem;
+  }
+
+  [class*="main-section-content"] p {
+    max-width: 47ch;
+    margin-inline: revert;
+  }
+
+  /* call to action */
+
+  .call-to-action {
+    max-width: 670px;
+    padding: 55px;
+    padding-inline: 90px;
+
+    margin-inline: auto;
+
+    /* declaring bg-color: white and position relative will have our call to action element
+        over laid over footer section
+    */
+    background-color: white;
+    margin-block-start: 124px;
+    margin-block-end: -80px;
+    position: relative;
+  }
+
+  .call-to-action__title {
+    font-size: 1.7rem;
+  }
+
+  .call-to-action__btn {
+    font-size: 1rem;
+    margin-block-start: 28px;
+    padding: 20px;
+    padding-inline: 80px;
+  }
+}
+
 /* footer */
 
 [role="content-info"] {
@@ -603,6 +743,13 @@ p.main-section-content3__description {
 
 .footer-copyright {
   font-size: 0.75rem;
+}
+
+@media screen and (min-width: 90rem) {
+  [role="content-info"] {
+    max-width: 1175px;
+    margin-inline: auto;
+  }
 }
 
 /* declare anchor tag display: inline-block */
