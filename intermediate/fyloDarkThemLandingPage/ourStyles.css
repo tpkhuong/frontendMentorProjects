@@ -3,6 +3,7 @@
   --col-pri-main-bg: hsl(218, 28%, 13%);
   --col-pri-footer-bg: hsl(216, 53%, 9%);
   --col-pri-testimonials-bg: hsl(219, 30%, 18%);
+  --col-nav-link-nonactive: hsl(215, 8%, 60%);
 
   --col-accent-cyan-start-gradient: hsl(176, 68%, 64%);
   --col-accent-blue-end-gradient: hsl(198, 60%, 50%);
@@ -42,6 +43,7 @@ bottom margin on block and top margin on inline-block will not collapse. interes
 } */
 
 body {
+  color: var(--col-neutral-white);
   font-family: var(--font-family-open-sans);
   /* use color: revert for text that we dont want to be grayish blue */
   /* color: var(--color-neutral-grayish-blue); */
@@ -63,6 +65,7 @@ h2,
 h3,
 h4 {
   line-height: 1;
+  font-family: var(--font-family-raleway);
 }
 
 p {
@@ -385,3 +388,112 @@ a:hover {
 /* hide h2 which are title for our section element */
 
 /* individual sections */
+
+/* header */
+
+[role="banner"] {
+  background-image: url("images/bg-curvy-mobile.svg");
+  background-repeat: no-repeat;
+  background-position-y: 300px;
+  text-align: center;
+  background-color: var(--col-pri-intro-email-bg);
+  padding-block: 34px;
+  padding-inline: 24px;
+  position: relative;
+  z-index: 0;
+}
+
+[role="banner"]::after {
+  /* will behind everything in the header except for the bg img of role="banner" */
+  content: "";
+  background-color: var(--col-pri-main-bg);
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 64%;
+}
+
+/* nav */
+
+[class="header-style-wrapper"] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-logo-wrapper {
+  width: 85px;
+}
+
+/* [role="navigation"] {
+  color: var(--col-nav-link-nonactive);
+} */
+
+[role="navigation"] ul {
+  display: flex;
+  gap: 16px;
+}
+
+[role="navigation"] a {
+  font-size: 0.85rem;
+  font-family: var(--font-family-raleway);
+}
+
+/* hero-content */
+
+[class="hero-image"] {
+  width: 275px;
+  margin-block: 56px;
+  margin-block-end: 40px;
+  margin-inline: auto;
+}
+
+/* title */
+
+[class="hero-title"] {
+  line-height: 1.5;
+}
+
+/* description */
+
+.hero-description {
+  font-size: 0.9rem;
+  width: 37ch;
+  margin-inline: auto;
+  margin-block-end: 32px;
+  /* 36ch 52ch */
+}
+
+/* hero button */
+
+[class="hero-content-button"] {
+  /* --col-accent-cyan-start-gradient: hsl(176, 68%, 64%);
+  --col-accent-blue-end-gradient: hsl(198, 60%, 50%); */
+  background-image: linear-gradient(
+    var(--col-accent-cyan-start-gradient),
+    var(--col-accent-blue-end-gradient)
+  );
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 14px;
+  padding-inline: 80px;
+  border-radius: 100vw;
+}
+
+/* main */
+
+[role="main"] {
+  background-color: var(--col-pri-main-bg);
+}
+
+.call-to-action {
+  font-family: var(--font-family-raleway);
+}
+
+/* footer */
+
+[role="content-info"] {
+  background-color: var(--col-pri-footer-bg);
+}
