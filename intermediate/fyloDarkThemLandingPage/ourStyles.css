@@ -1,9 +1,12 @@
 :root {
   --col-pri-intro-email-bg: hsl(217, 28%, 15%);
-  --col-pri-main-bg: hsl(218, 28%, 13%);
+  --col-pri-main-bg: hsl(220, 27%, 13%);
   --col-pri-footer-bg: hsl(216, 53%, 9%);
   --col-pri-testimonials-bg: hsl(219, 30%, 18%);
   --col-nav-link-nonactive: hsl(215, 8%, 60%);
+  --col-lighter-text: hsl(206, 9%, 89%);
+  --col-link: hsl(182, 25%, 46%);
+  --col-testimonial-shadow: hsl(219, 25%, 11%);
 
   --col-accent-cyan-start-gradient: hsl(176, 68%, 64%);
   --col-accent-blue-end-gradient: hsl(198, 60%, 50%);
@@ -463,6 +466,7 @@ a:hover {
   width: 37ch;
   margin-inline: auto;
   margin-block-end: 32px;
+  color: var(--col-lighter-text);
   /* 36ch 52ch */
 }
 
@@ -486,14 +490,325 @@ a:hover {
 
 [role="main"] {
   background-color: var(--col-pri-main-bg);
+  padding-inline: 20px;
+}
+
+/* features */
+
+.features {
+  padding-block-start: 104px;
+}
+
+div.main-content-style-wrapper {
+  text-align: center;
+}
+
+section[class*="main-content-style-wrapper"] img {
+  width: 65px;
+  margin-inline: auto;
+}
+
+section[class*="main-content-style-wrapper"] h3 {
+  font-size: 1.2rem;
+  margin-block-start: 48px;
+}
+
+section[class*="main-content-style-wrapper"] p {
+  font-size: 0.85rem;
+  width: 40ch;
+  margin-inline: auto;
+  line-height: 1.7;
+  color: var(--col-lighter-text);
+}
+
+section.main-content-style-wrapper3 img {
+  width: 55px;
+}
+
+/* lower specificity: 0 1 0 */
+
+.main-content-style-wrapper > * + * {
+  margin-block-start: 96px;
+}
+
+/* higher specificity: 0 2 1 */
+
+/* section[class*="main-content-style-wrapper"]:not(:first-child) {
+  margin-block-start: 96px;
+} */
+
+/* marketing */
+
+.marketing {
+  padding-block-start: 120px;
+  padding-inline: 26px;
+}
+
+[class="marketing-section-image"] {
+  width: 310px;
+  margin-inline: auto;
+}
+
+.marketing h3 {
+  font-size: 1.2rem;
+  text-align: center;
+}
+.marketing p {
+  font-size: 0.9rem;
+  width: 39ch;
+  margin-inline: auto;
+  color: var(--col-lighter-text);
+}
+
+.marketing-link {
+  font-size: 0.85rem;
+  color: var(--col-accent-cyan-start-gradient);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.marketing-link::before {
+  content: "";
+  height: 1px;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  background-color: currentColor;
+  display: inline-block;
+  position: absolute;
+}
+
+/* testimonials */
+
+.testimonials {
+  padding-block-start: 158px;
+  padding-inline: 24px;
+}
+
+.testimonials-style-wrapper > * + * {
+  margin-block-start: 24px;
+}
+
+.testimonials-style-wrapper section[class*="testimonial"] {
+  background-color: var(--col-pri-testimonials-bg);
+  padding: 14px;
+  padding-inline: 20px;
+  border-radius: 4px;
+  position: relative;
+  box-shadow: 0.2px 0.5px 2.2px rgba(226, 221, 221, 0.02);
+  /* without z-index 0 on positon: relative element we wont see red ::before elemt */
+  /* z-index: 0; */
+}
+/* 
+.testimonials-style-wrapper section[class*="testimonial"]::before {
+  content: "";
+  background-color: red;
+  display: inline-block;
+  z-index: -1;
+  position: absolute;
+
+declaring left: 99% and right: 1px we see red ::before element on the right of testimonial element
+  
+  top: 0;
+  left: 99%;
+  right: 1px;
+  bottom: 0;
+}
+
+.testimonials-style-wrapper section[class*="testimonial"]::after {
+  content: "";
+} */
+
+.quote-img-wrapper {
+  width: 23px;
+  /* position: absolute and fixed are intrinic
+  width is based on content. putting a div img wrapper as a parent to our quote img
+we can control the size of the img by declaring width on the img wrapper
+  */
+  position: absolute;
+  top: -19px;
+  left: 0;
+}
+
+.testimonials-style-wrapper p[class*="__description"] {
+  color: var(--col-lighter-text);
+  font-size: 0.7rem;
+  width: 37ch;
+  line-height: 1.7;
+  margin-inline: auto;
+}
+
+.profile-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.profile-img-wrapper {
+  width: 25px;
+  /* having border-radius and overflow: hidden on img-wrapper there
+  was a cut of at the bottom of img. putting border-radius on img worked
+  */
+  /* border-radius: 50%; */
+  /* img inside of img-wrapper is overflowing using overflow hidden
+  made img into a circle or we could declare border-radius on img element.
+  */
+  /* overflow: hidden; */
+}
+
+.profile-img-wrapper img {
+  border-radius: 50%;
+}
+
+.profile-name-position {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.profile-name {
+  font-size: 0.7rem;
+}
+
+.profile-position {
+  color: var(--col-lighter-text);
+  font-size: 0.5rem;
+}
+
+/* form call to action */
+
+.call-to-action-input-button-container {
+  margin-block-start: 32px;
 }
 
 .call-to-action {
+  background-color: var(--col-pri-intro-email-bg);
   font-family: var(--font-family-raleway);
+  text-align: center;
+  border-radius: 8px;
+  padding: 40px;
+  padding-inline: 36px;
+  /* declaring position: relative on this element will make it appear over footer section
+  when we declare a negative value for margin-block-end
+  */
+  position: relative;
+  /* create space between call to action and last testimonial element */
+  margin-block-start: 164px;
+  /* to make call to action element appear between main and footer section */
+  margin-block-end: -175px;
+}
+
+.call-to-action__title {
+  font-size: 1.1rem;
+}
+
+.call-to-action__description {
+  font-size: 0.9rem;
+  width: 32ch;
+  margin-inline: auto;
+}
+
+[id="email"] {
+  padding-block: 14px;
+  padding-inline-start: 32px;
+  border-radius: 100vw;
+  border-width: 0;
+  width: 100%;
+  color: hsl(0, 0%, 0%);
+}
+
+[id="email"]::placeholder {
+  color: gray;
+  font-size: 0.8rem;
+}
+
+.call-to-action-button {
+  background-image: linear-gradient(
+    var(--col-accent-cyan-start-gradient),
+    var(--col-accent-blue-end-gradient)
+  );
+  font-size: 0.9rem;
+  width: 100%;
+  padding-block: 14px;
+  border-radius: 100vw;
+  font-weight: 700;
+  margin-block-start: 24px;
 }
 
 /* footer */
 
 [role="content-info"] {
   background-color: var(--col-pri-footer-bg);
+  padding: 20px;
+  padding-block-start: 252px;
+}
+
+.footer-logo-wrapper {
+  padding-inline-start: 14px;
+}
+
+.contact-info {
+  margin-block-start: 42px;
+}
+
+.contact-description,
+.contact-phone,
+.contact-email {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.contact-phone {
+  margin-block: 16px;
+}
+
+.location-icon-wrapper {
+  align-self: flex-start;
+  margin-block-start: 10px;
+  margin-inline-end: 6px;
+}
+
+/* location icon when it is a flex item, its sibling the text
+was making the img extremely small
+we declared a width on description and made the location img regular size
+*/
+
+.contact-info__location {
+  width: 31ch;
+  line-height: 1.6;
+}
+
+.footer-nav-container {
+  margin-block: 72px;
+}
+
+div.footer-nav-container ul {
+  /* display: flex and gap is coming from 
+    [role="navigation"] ul {
+    display: flex;
+    gap: 16px;
+}
+
+just need to change flex direction on footer ul
+    */
+  flex-direction: column;
+}
+
+.footer-nav-contact {
+  margin-block-start: 40px;
+}
+
+.footer-nav-container a {
+  font-size: 1rem;
+}
+
+.social-icon-wrapper {
+  text-align: center;
+}
+
+.social-icon-wrapper path {
+  fill: var(--col-neutral-white);
 }
