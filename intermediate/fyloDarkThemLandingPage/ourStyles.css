@@ -404,6 +404,8 @@ a:hover {
   padding-inline: 24px;
   position: relative;
   z-index: 0;
+  max-width: 1150px;
+  margin-inline: auto;
 }
 
 [role="banner"]::after {
@@ -486,10 +488,49 @@ a:hover {
   border-radius: 100vw;
 }
 
+@media screen and (min-width: 78.125rem) {
+  [role="banner"] {
+    padding: 64px;
+    background-image: url("images/bg-curvy-desktop.svg");
+    background-size: contain;
+    background-position-y: 105%;
+  }
+
+  [role="banner"]::after {
+    content: none;
+  }
+  .header-logo-wrapper {
+    width: 150px;
+  }
+  .header-style-wrapper nav ul {
+    gap: 56px;
+  }
+
+  /* hero content */
+  .hero-image {
+    width: 550px;
+    margin-block: 72px;
+    margin-block-end: 42px;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+    width: 28ch;
+    margin-inline: auto;
+  }
+
+  [class="hero-description"] {
+    width: 54ch;
+    font-size: 1rem;
+  }
+}
+
 /* main */
 
 [role="main"] {
   background-color: var(--col-pri-main-bg);
+  max-width: 1150px;
+  margin-inline: auto;
   padding-inline: 20px;
 }
 
@@ -537,6 +578,53 @@ section.main-content-style-wrapper3 img {
   margin-block-start: 96px;
 } */
 
+@media screen and (min-width: 78.125rem) {
+  .main-content-style-wrapper > * + * {
+    margin-block-start: revert;
+  }
+
+  .main-content-style-wrapper {
+    width: 800px;
+    margin-inline: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 90px;
+  }
+
+  .main-content-style-wrapper3 {
+    margin-inline-start: 32px;
+  }
+
+  section[class*="main-content-style-wrapper"] h3 {
+    /* margin-block-start: 19px; */
+    margin-block-start: 30px;
+  }
+
+  section.main-content-style-wrapper3 h3 {
+    margin-block-start: 24px;
+  }
+
+  section.main-content-style-wrapper5 h3 {
+    margin-block-start: 39px;
+  }
+
+  section[class*="main-content-style-wrapper"] p {
+    font-size: 0.8rem;
+  }
+
+  [class*="main-content-style-wrapper"] .main-content-subsection__description1 {
+    width: 44ch;
+  }
+
+  [class*="main-content-style-wrapper"] .main-content-subsection__description2,
+  [class*="main-content-style-wrapper"] .main-content-subsection__description3 {
+    width: 48ch;
+  }
+  [class*="main-content-style-wrapper"] .main-content-subsection__description4 {
+    width: 47ch;
+  }
+}
+
 /* marketing */
 
 .marketing {
@@ -580,6 +668,33 @@ section.main-content-style-wrapper3 img {
   position: absolute;
 }
 
+@media screen and (min-width: 78.125rem) {
+  .marketing {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 42px;
+    padding-block-start: 100px;
+  }
+  [class="marketing-section-image"] {
+    width: 490px;
+    margin-inline: revert;
+  }
+
+  .marketing h3 {
+    font-size: 1.9rem;
+    text-align: revert;
+    width: 20ch;
+    line-height: 1.2;
+  }
+
+  .marketing p {
+    font-size: 0.8rem;
+    width: 60ch;
+    margin-inline: revert;
+  }
+}
+
 /* testimonials */
 
 .testimonials {
@@ -591,16 +706,20 @@ section.main-content-style-wrapper3 img {
   margin-block-start: 24px;
 }
 
+.quote-img-style-container {
+  position: relative;
+}
+
 .testimonials-style-wrapper section[class*="testimonial"] {
   background-color: var(--col-pri-testimonials-bg);
   padding: 14px;
   padding-inline: 20px;
   border-radius: 4px;
-  position: relative;
   box-shadow: 0.2px 0.5px 2.2px rgba(226, 221, 221, 0.02);
   /* without z-index 0 on positon: relative element we wont see red ::before elemt */
   /* z-index: 0; */
 }
+
 /* 
 .testimonials-style-wrapper section[class*="testimonial"]::before {
   content: "";
@@ -635,7 +754,7 @@ we can control the size of the img by declaring width on the img wrapper
 .testimonials-style-wrapper p[class*="__description"] {
   color: var(--col-lighter-text);
   font-size: 0.7rem;
-  width: 37ch;
+  max-width: 37ch;
   line-height: 1.7;
   margin-inline: auto;
 }
@@ -677,11 +796,91 @@ we can control the size of the img by declaring width on the img wrapper
   font-size: 0.5rem;
 }
 
+@media screen and (min-width: 78.125rem) {
+  /* we set a fixed width on our descriptions inside our testimonials so its not shrinking
+    so once our testimonial container is the smallest size it can be with the width of the description it will overflow if we made its parent container
+    smaller using padding of that parent container.
+
+    declaring max-width on the description allowed the text in description to shrink
+    */
+  .testimonials {
+    /* if we declared a higher padding-inline value our children/content will overflow this container/element */
+    padding-inline: 56px;
+  }
+  .testimonials-style-wrapper {
+    display: flex;
+    /* having justify-content: center and declaring padding-inline on the parent element of the parent container of our testimonials
+    the values didnt shrink the testimonials. the padding-inline worked when we used justify-content: space-between
+    setting justify-content center or space between did not give us the effect we want
+    the space on the left and right were off
+    */
+    /* width: max-content;
+    margin-inline: auto; */
+    /* we declared width: max-content and margin-inline: auto then declared a smaller gap: value 
+    to get the same space on the left and right of the testimonials
+    */
+
+    justify-content: space-between;
+    /* gap: 22px; */
+  }
+  .testimonials-style-wrapper > * + * {
+    margin-block-start: revert;
+  }
+
+  /* .quote-img-style-container is the parent of .testimonials1 and qoute-img-wrapper
+  when we had the quote-img-wrapper inside of .testimonials1, the quote-img-wrapper parent stacking context is .testimonial1
+  declaring z-index: -1 on quote-img-wrapper made it disappear and declaring a high z-index on .testimonial did not give us the effect we wanted because
+  .quote-img-wrapper will always be a part of .testimonial1 stacking context since it is a child of .testimonial1
+
+  we made a wrapper around both .testimonial1 and .quote-img-wrapper. we made both .testimonial1 and .quote-img-wrapper siblings that belonged to 
+  .quote-img-style-container.
+
+  then we declared postion:relative on .quote-img-style-container it will create a stacking context
+  both .testimonial1 and .quote-img-wrapper will belong to the same stacking context.
+
+  since we have .quote-img-wrapper as an element that is below .testimonial1 element, .quote-img-wrapper will appear above .testimonial1
+  declaring z-index: -1 on qoute-img-wrapper will put it behind .testimonial1
+  */
+  .quote-img-style-container {
+    z-index: 0;
+  }
+
+  .testimonials-style-wrapper section[class*="testimonial"] {
+    padding: 24px;
+  }
+
+  /* .testimonial1::before {
+    content: url("images/bg-quotes.png");
+    position: absolute;
+    top: 0;
+    left: 0;
+  } */
+
+  .testimonials-style-wrapper p[class*="__description"] {
+    font-size: 0.8rem;
+
+    line-height: 1.4;
+  }
+
+  .quote-img-wrapper {
+    width: 48px;
+    top: -30px;
+    left: -10px;
+    z-index: -1;
+  }
+}
+
 /* form call to action */
 
 .call-to-action-input-button-container {
   margin-block-start: 32px;
 }
+
+/* without position: relative on .call-to-action every element will be a part of the html stacking context(default) 
+the element that is lower in the html tree will appear above a higher element in the html tree
+
+creating a stacking context on .call-to-action will make it appear above footer section when we use margin-block-end: negative value on .call-to-action
+*/
 
 .call-to-action {
   background-color: var(--col-pri-intro-email-bg);
@@ -729,6 +928,7 @@ we can control the size of the img by declaring width on the img wrapper
     var(--col-accent-cyan-start-gradient),
     var(--col-accent-blue-end-gradient)
   );
+
   font-size: 0.9rem;
   width: 100%;
   padding-block: 14px;
@@ -737,12 +937,50 @@ we can control the size of the img by declaring width on the img wrapper
   margin-block-start: 24px;
 }
 
+@media screen and (min-width: 78.125rem) {
+  .call-to-action {
+    max-width: 720px;
+    margin-inline: auto;
+    margin-block-end: -106px;
+  }
+
+  .call-to-action__title {
+    font-size: 1.8rem;
+  }
+
+  .call-to-action__description {
+    font-size: 0.75rem;
+    width: 71ch;
+    margin-block-start: 20px;
+  }
+
+  [id="email"] {
+    padding-block: 10px;
+    padding-inline-end: 174px;
+    margin-inline-end: 28px;
+    width: revert;
+  }
+
+  [id="email"]::placeholder {
+    font-size: 0.7rem;
+  }
+
+  .call-to-action-button {
+    font-size: 0.7rem;
+    width: revert;
+    padding-inline: 37px;
+    margin-block-start: revert;
+  }
+}
+
 /* footer */
 
 [role="content-info"] {
   background-color: var(--col-pri-footer-bg);
   padding: 20px;
   padding-block-start: 252px;
+  max-width: 1150px;
+  margin-inline: auto;
 }
 
 .footer-logo-wrapper {
@@ -811,4 +1049,22 @@ just need to change flex direction on footer ul
 
 .social-icon-wrapper path {
   fill: var(--col-neutral-white);
+}
+
+@media screen and (min-width: 78.125rem) {
+  [role="content-info"] {
+    padding-block-start: 185px;
+    padding-inline-start: 64px;
+  }
+
+  .footer-logo-wrapper {
+    width: 154px;
+    padding-inline-start: revert;
+  }
+
+  .contact-info__location {
+    width: 37ch;
+    line-height: 1.6;
+    font-size: 0.85rem;
+  }
 }
