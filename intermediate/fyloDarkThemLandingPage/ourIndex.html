@@ -61,13 +61,16 @@
         them wherever you need, share and collaborate with friends family, and
         co-workers.
       </p>
-      <button
-        class="hero-content-button"
-        role="button"
-        aria-label="Fill out Trial Form"
-      >
-        Get Started
-      </button>
+      <span class="white-bg-for-button-wrapper">
+        <button
+          class="hero-content-button"
+          role="button"
+          aria-label="Fill out Trial Form"
+        >
+          Get Started
+        </button>
+        <span class="background-for-button"></span>
+      </span>
     </header>
     <main role="main">
       <section class="features">
@@ -159,7 +162,46 @@
           <!-- use ::before or ::after to add icon -->
           <a class="marketing-link" href="">
             <span>See how Fylo works</span>
-            <img class="arrow-for-link" src="images/icon-arrow.svg" alt="" />
+            <svg
+              width="16"
+              height="16"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <defs>
+                <circle id="b" cx="6" cy="6" r="6" />
+                <filter
+                  x="-25%"
+                  y="-25%"
+                  width="150%"
+                  height="150%"
+                  filterUnits="objectBoundingBox"
+                  id="a"
+                >
+                  <feOffset in="SourceAlpha" result="shadowOffsetOuter1" />
+                  <feGaussianBlur
+                    stdDeviation="1"
+                    in="shadowOffsetOuter1"
+                    result="shadowBlurOuter1"
+                  />
+                  <feColorMatrix
+                    values="0 0 0 0 0.384313725 0 0 0 0 0.878431373 0 0 0 0 0.850980392 0 0 0 0.811141304 0"
+                    in="shadowBlurOuter1"
+                  />
+                </filter>
+              </defs>
+              <g fill="none" fill-rule="evenodd">
+                <g transform="translate(2 2)">
+                  <use fill="#000" filter="url(#a)" xlink:href="#b" />
+                  <use fill="#62E0D9" xlink:href="#b" />
+                </g>
+                <path
+                  d="M8.582 6l-.363.35 1.452 1.4H5.333v.5h4.338L8.22 9.65l.363.35 2.074-2z"
+                  fill="#1B2330"
+                />
+              </g>
+            </svg>
+            <!-- <img class="arrow-for-link" src="images/icon-arrow.svg" alt="" /> -->
           </a>
         </section>
       </section>
@@ -236,7 +278,7 @@
           </section>
         </div>
       </section>
-      <form action="#" class="call-to-action">
+      <form novalidate action="#" class="call-to-action">
         <h2 class="call-to-action__title">Get early access today</h2>
         <p class="call-to-action__description">
           It only takes a minute to sign up and our free starter tier is
@@ -248,10 +290,16 @@
           <input
             id="email"
             type="email"
-            required
+            required=""
             placeholder="email@example.com"
           />
-          <button class="call-to-action-button">Get Started For Free</button>
+          <span class="error-message">Please enter a valid email address</span>
+          <span class="white-bg-for-button-wrapper">
+            <button type="submit" class="call-to-action-button">
+              Get Started For Free
+            </button>
+            <span class="background-for-button"></span>
+          </span>
         </div>
       </form>
     </main>
