@@ -390,6 +390,81 @@ a:hover {
 
 /* hide h2 which are title for our section element */
 
+/* hover effect */
+
+.header-style-wrapper [role="navigation"] li:hover a,
+.header-style-wrapper [role="navigation"] a:focus {
+  font-weight: 700;
+  border-bottom: 1px solid currentColor;
+}
+
+.marketing-link:hover,
+.marketing-link:focus {
+  color: hsl(0, 100%, 100%);
+}
+.marketing-link:hover g use,
+.marketing-link:focus g use {
+  fill: hsl(0, 100%, 100%);
+}
+
+.hero-content-button:hover,
+.hero-content-button:focus,
+.call-to-action-button:hover,
+.call-to-action-button:focus {
+  opacity: 0.7;
+}
+
+/* rules for span with white-bg-for-button-wrapper to get white effect on button 
+
+without our white-bg-for-button-wrapper when we declare opacity: .7 on button
+it will be the bg color behind the button
+
+we just need to have a container over the button and set bg color white on that container instead of having a container with position:relative for the button and a span
+that we declare position: absolute and inset: 0 and set background-color as white, z-index: -1 to put it behind the behind
+
+.white-bg-for-button-wrapper,
+.background-for-button {
+  display: inline-block;
+  border-radius: 100vw;
+}
+
+.white-bg-for-button-wrapper {
+  position: relative;
+  color: var(--col-neutral-white);
+  z-index: 0;
+}
+
+.background-for-button {
+  position: absolute;
+  inset: 0;
+  background-color: var(--col-neutral-white);
+
+  z-index: -1;
+}
+
+*/
+
+.white-bg-for-button-wrapper {
+  display: inline-block;
+  border-radius: 100vw;
+  background-color: var(--col-neutral-white);
+  color: var(--col-neutral-white);
+}
+
+.background-for-button {
+  display: none;
+}
+
+.footer-nav-container li:hover a,
+.footer-nav-container li:focus a {
+  font-weight: 700;
+}
+
+.social-icon-wrapper a:hover path,
+.social-icon-wrapper a:focus path {
+  fill: var(--col-link);
+}
+
 /* individual sections */
 
 /* header */
@@ -487,6 +562,10 @@ a:hover {
   padding-inline: 80px;
   border-radius: 100vw;
 }
+
+/* .background-for-button {
+  background-color: hsl(0, 100%, 100%);
+} */
 
 @media screen and (min-width: 78.125rem) {
   [role="banner"] {
@@ -715,7 +794,13 @@ section.main-content-style-wrapper3 img {
   padding: 14px;
   padding-inline: 20px;
   border-radius: 4px;
-  box-shadow: 0.2px 0.5px 2.2px rgba(226, 221, 221, 0.02);
+
+  box-shadow: 0.3px 0.3px 0px rgba(0, 0, 0, 0.165),
+    0.7px 0.7px 0px rgba(0, 0, 0, 0.186), 1.3px 1.3px 0px rgba(0, 0, 0, 0.205),
+    2.2px 2.2px 0px rgba(0, 0, 0, 0.228), 4.2px 4.2px 0px rgba(0, 0, 0, 0.256),
+    10px 10px 0px rgba(0, 0, 0, 0.29);
+
+  /* box-shadow: 0.2px 0.5px 2.2px rgba(226, 221, 221, 0.02); */
   /* without z-index 0 on positon: relative element we wont see red ::before elemt */
   /* z-index: 0; */
 }
@@ -897,6 +982,11 @@ creating a stacking context on .call-to-action will make it appear above footer 
   margin-block-start: 164px;
   /* to make call to action element appear between main and footer section */
   margin-block-end: -175px;
+
+  box-shadow: 0.3px 0.3px 0px rgba(0, 0, 0, 0.02),
+    0.7px 0.7px 0px rgba(0, 0, 0, 0.028), 1.3px 1.3px 0px rgba(0, 0, 0, 0.035),
+    2.2px 2.2px 0px rgba(0, 0, 0, 0.042), 4.2px 4.2px 0px rgba(0, 0, 0, 0.05),
+    10px 10px 0px rgba(0, 0, 0, 0.07);
 }
 
 .call-to-action__title {
@@ -923,6 +1013,25 @@ creating a stacking context on .call-to-action will make it appear above footer 
   font-size: 0.8rem;
 }
 
+[id="email"]:invalid + .error-message {
+  display: revert;
+}
+
+.error-message {
+  display: none;
+  color: var(--col-accent-light-red);
+  font-size: 0.7rem;
+  font-weight: 700;
+  position: absolute;
+  bottom: 92px;
+  left: 68px;
+}
+
+.call-to-action-input-button-container .white-bg-for-button-wrapper {
+  margin-block-start: 24px;
+  width: 100%;
+}
+
 .call-to-action-button {
   background-image: linear-gradient(
     var(--col-accent-cyan-start-gradient),
@@ -934,7 +1043,6 @@ creating a stacking context on .call-to-action will make it appear above footer 
   padding-block: 14px;
   border-radius: 100vw;
   font-weight: 700;
-  margin-block-start: 24px;
 }
 
 @media screen and (min-width: 78.125rem) {
@@ -965,11 +1073,26 @@ creating a stacking context on .call-to-action will make it appear above footer 
     font-size: 0.7rem;
   }
 
+  .call-to-action-input-button-container .white-bg-for-button-wrapper,
+  .call-to-action-button {
+    margin-block-start: revert;
+    width: revert;
+  }
+
   .call-to-action-button {
     font-size: 0.7rem;
-    width: revert;
+
     padding-inline: 37px;
-    margin-block-start: revert;
+  }
+
+  .error-message {
+    /* display: none;
+  color: var(--col-accent-light-red);
+  font-size: 0.7rem;
+  font-weight: 700;
+  position: absolute; */
+    bottom: 24px;
+    left: 83px;
   }
 }
 
@@ -1047,6 +1170,10 @@ just need to change flex direction on footer ul
   text-align: center;
 }
 
+.social-icon-wrapper a {
+  display: inline-block;
+}
+
 .social-icon-wrapper path {
   fill: var(--col-neutral-white);
 }
@@ -1055,6 +1182,7 @@ just need to change flex direction on footer ul
   [role="content-info"] {
     padding-block-start: 185px;
     padding-inline-start: 64px;
+    padding-block-end: 80px;
   }
 
   .footer-logo-wrapper {
@@ -1062,9 +1190,41 @@ just need to change flex direction on footer ul
     padding-inline-start: revert;
   }
 
+  .contact-info {
+    display: flex;
+    gap: 70px;
+  }
+
+  .location-icon-wrapper {
+    margin-block-start: 7px;
+  }
+
   .contact-info__location {
-    width: 37ch;
-    line-height: 1.6;
+    align-self: flex-start;
     font-size: 0.85rem;
+    transform: translateY(-4px);
+    line-height: 1.5;
+    width: 36ch;
+  }
+
+  .contact-phone-email {
+    margin-block: revert;
+    font-size: 0.85rem;
+  }
+
+  .contact-phone {
+    margin-block: revert;
+    margin-block-end: 20px;
+  }
+
+  .footer-nav-container {
+    margin-block: revert;
+    display: flex;
+    gap: 48px;
+    font-size: 0.7rem;
+  }
+
+  .footer-nav-contact {
+    margin-block-start: revert;
   }
 }
