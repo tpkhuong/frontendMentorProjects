@@ -633,10 +633,51 @@ input[id="call-to-action-email"] {
 [role="content-info"] {
   background-color: var(--col-pri-dark-blue);
   color: var(--col-neutral-grayish-blue);
+  padding: 24px;
+  padding-block-start: 72px;
 }
 
 [role="content-info"] svg path {
   fill: var(--col-neutral-white);
+}
+
+.footer-style-wrapper {
+  margin-block-start: 42px;
+}
+
+.contact-phone {
+  margin-block-end: 16px;
+}
+
+.contact-phone,
+.contact-email {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.footer-nav-info {
+  margin-block-start: 56px;
+}
+
+.footer-nav-info ul,
+.footer-nav-contact ul {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.footer-nav-contact {
+  margin-block-start: 56px;
+}
+
+.social-media-icons {
+  text-align: center;
+  margin-block-start: 48px;
+}
+
+.social-media-icons > * + * {
+  margin-inline-start: 8px;
 }
 
 .social-media-icons a {
