@@ -406,6 +406,7 @@ h2,
   display: flex;
   justify-content: space-between;
   align-items: center;
+  max-width: 1125px;
 }
 
 .header-img-wrapper {
@@ -422,11 +423,33 @@ h2,
   font-size: 0.85rem;
 }
 
+@media screen and (min-width: 78.125rem) {
+  [role="banner"] {
+    padding: 54px;
+    /* padding-inline: 20px; */
+  }
+
+  .header-img-wrapper {
+    width: 110px;
+  }
+
+  [role="banner"] ul {
+    display: flex;
+    gap: 46px;
+  }
+
+  [role="banner"] a {
+    font-weight: 400;
+    font-size: 0.75rem;
+  }
+}
+
 /* main */
 
 [role="main"] {
   /* padding-inline: 16px; */
   padding-block-start: 106px;
+  max-width: 1125px;
 }
 
 [class="main-content-text-container"] {
@@ -478,6 +501,68 @@ input[type="email"]::placeholder {
   margin-block-start: 20px;
   border-radius: 4px;
   box-shadow: var(--box-shadow);
+}
+
+@media screen and (min-width: 78.125rem) {
+  .first-content-style-wrapper,
+  .second-content-style-wrapper {
+    display: flex;
+    padding-inline: 54px;
+    gap: 28px;
+  }
+
+  .main-content-text-container,
+  .second-content__text-wrapper {
+    order: -1;
+  }
+
+  .first-content-style-wrapper {
+    align-items: center;
+    padding-inline: revert;
+  }
+
+  .first-content__img-wrapper {
+    width: 500px;
+  }
+
+  [class="main-content-text-container"] {
+    margin-block-start: revert;
+    text-align: left;
+  }
+
+  .first-content__title {
+    width: 25ch;
+    margin-inline-end: revert;
+    padding-inline-end: revert;
+    margin-inline: revert;
+  }
+
+  .first-content__description {
+    width: 56ch;
+    margin-inline: revert;
+  }
+
+  [role="form"] {
+    padding-inline: revert;
+    margin-block-start: revert;
+  }
+
+  input[type="email"] {
+    width: revert;
+    padding-inline-end: 64px;
+  }
+
+  .main-content-button {
+    padding-block: 16px;
+    font-size: 0.8rem;
+    padding-inline: 56px;
+    margin-inline-start: 14px;
+    width: revert;
+    margin-block-start: revert;
+  }
+  /* .first-content__img-wrapper{
+    
+  } */
 }
 
 /* second-content-style-wrapper */
@@ -539,6 +624,39 @@ input[type="email"]::placeholder {
   bottom: -5px;
 }
 
+@media screen and (min-width: 78.125rem) {
+  .second-content__img-wrapper {
+    padding-inline: revert;
+  }
+  .second-content-style-wrapper {
+    margin-block-start: 132px;
+  }
+
+  .second-content__text-wrapper {
+    margin-block-start: revert;
+    text-align: left;
+  }
+  /* .second-content__img-wrapper{
+
+} */
+
+  .second-content__title {
+    font-size: 2rem;
+    width: 28ch;
+    text-align: left;
+  }
+
+  .second-content__description {
+    width: 57ch;
+    font-size: 0.85rem;
+    margin-inline: revert;
+  }
+
+  .second-content__description:nth-of-type(2) {
+    margin-block-end: 14px;
+  }
+}
+
 /* testimonial */
 
 .testimonial {
@@ -593,6 +711,12 @@ input[type="email"]::placeholder {
   font-size: 0.6rem;
 }
 
+@media screen and (min-width: 78.125rem) {
+  .testimonial {
+    margin-inline: revert;
+  }
+}
+
 /* separator */
 
 .call-to-action-separator {
@@ -602,6 +726,7 @@ input[type="email"]::placeholder {
   padding-inline: 42px;
   padding-block-end: 72px;
   text-align: center;
+  max-width: 1125px;
 }
 
 .call-to-action__title {
@@ -628,6 +753,39 @@ input[id="call-to-action-email"] {
   box-shadow: var(--box-shadow);
 }
 
+@media screen and (min-width: 78.125rem) {
+  .call-to-action-separator {
+    padding-inline: 54px;
+    display: flex;
+    gap: 172px;
+    padding-block: 72px;
+    text-align: revert;
+  }
+
+  .call-to-action__title {
+    font-size: 1.7rem;
+  }
+
+  .call-to-action__description {
+    color: var(--col-neutral-white);
+    font-size: 0.85rem;
+    width: 55ch;
+  }
+
+  input[id="call-to-action-email"] {
+    width: revert;
+    display: block;
+    padding-inline-start: 24px;
+    padding-inline-end: 188px;
+  }
+
+  .call-to-action-button {
+    width: revert;
+    display: block;
+    padding-inline: 26px;
+  }
+}
+
 /* footer */
 
 [role="content-info"] {
@@ -635,6 +793,7 @@ input[id="call-to-action-email"] {
   color: var(--col-neutral-grayish-blue);
   padding: 24px;
   padding-block-start: 72px;
+  max-width: 1125px;
 }
 
 [role="content-info"] svg path {
@@ -686,4 +845,11 @@ input[id="call-to-action-email"] {
 
 .social-media-icons svg path {
   fill: var(--col-neutral-grayish-blue);
+}
+
+@media screen and (min-width: 78.125rem) {
+  [role="content-info"] {
+    padding-block-start: 98px;
+    padding-inline: 54px;
+  }
 }
