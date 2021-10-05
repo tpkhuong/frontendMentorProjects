@@ -67,6 +67,9 @@
           <form action="" role="form" novalidate>
             <label for="email" class="visually-hidden">Email</label>
             <input type="email" placeholder="Enter your email..." required />
+            <span class="error-message-first-content">
+              Please check your email
+            </span>
             <button type="submit" class="main-content-button btn-light">
               Get Started
             </button>
@@ -171,10 +174,16 @@
           type="email"
           id="call-to-action-email"
           placeholder="email@example.com"
+          required
         />
-        <button role="button" class="call-to-action-button btn-light">
-          Get Started For Free
-        </button>
+        <span class="error-message-call-to-action">
+          Please check your email
+        </span>
+        <div class="bg-color-opacity">
+          <button role="button" class="call-to-action-button btn-light">
+            Get Started For Free
+          </button>
+        </div>
       </form>
     </section>
     <footer role="content-info">
