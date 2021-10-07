@@ -60,9 +60,9 @@
     0px 11px 26px rgba(0, 0, 0, 0.07);
 
   /* headings */
-  --font-family-poppins: "Poppins", sans-serif;
+  /* --font-family-poppins: "Poppins", sans-serif; */
   /* body, call-to-actions */
-  --font-family-open-sans: "Open Sans", sans-serif;
+  --font-family-spartan: "Spartan", sans-serif;
 }
 
 /* margin collapse: when one of the element is block and the other element is inline-block
@@ -84,7 +84,7 @@ bottom margin on block and top margin on inline-block will not collapse. interes
 
 body {
   color: var(--col-neutral-black);
-  font-family: var(--font-family-open-sans);
+  font-family: var(--font-family-spartan);
   /* use color: revert for text that we dont want to be grayish blue */
   /* color: var(--color-neutral-grayish-blue); */
 }
@@ -266,7 +266,9 @@ body {
   color: var(--fg, hsl(0, 0%, 0%));
 }
 
-[class*="btn-"] {
+/* change for next project */
+
+[class="btn-"] {
   background-color: var(--btn-bg);
   /* background-image: var(--btn-bg-img, hsl(0, 100%, 100%)); */
   /* text-transform: uppercase; */
@@ -337,7 +339,30 @@ body {
   --btn-fg: var(--col-neutral-white);
 }
 
+/* themes */
+
+[class*="-theme"] {
+  background-color: var(--theme-bg);
+  color: var(--theme-fg);
+}
+
+.dark-theme {
+  background-color: var(--dark-bg);
+  color: var(--dark-fg);
+  --dark-bg: var(--first-color);
+}
+
 .light-theme {
+  background-color: var(--light-bg);
+  color: var(--light-fg);
+}
+
+.accent-theme {
+  background-color: var(--accent-bg);
+  color: var(--accent-fg);
+}
+
+/* .light-theme {
   background-color: var(--light-theme-bg);
   color: var(--light-theme-fg);
 }
@@ -345,7 +370,7 @@ body {
 .dark-theme {
   background-color: var(--dark-theme-bg);
   color: var(--dark-theme-fg);
-}
+} */
 
 .low-bold {
   font-weight: 400;
@@ -431,3 +456,330 @@ a:hover {
 }
 
 /* hide h2 which are title for our section element */
+
+/* .front-to-fit.extra-padding-to-fit.extra-padding-to-fit {
+  padding-block: 14px;
+} */
+
+/* general style */
+
+.calculator-app-bg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.calculator-style-wrapper {
+  padding: 24px;
+}
+
+/* theme-controller */
+
+.theme-controller-wrapper {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.app-title {
+  font-size: 2rem;
+}
+
+.toggle-container {
+  font-size: 0.75rem;
+  display: flex;
+  gap: 16px;
+}
+
+.theme-title {
+  align-self: flex-end;
+  margin-block-end: 3px;
+}
+
+.theme-toggle-controller {
+  width: 64px;
+}
+
+.theme-label-btn-wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding-inline: 8px;
+  margin-block-end: 5px;
+}
+
+/* .theme-label-btn-wrapper > * + * {
+  margin-inline-start: 5px;
+} */
+
+.toggle-slider {
+  border-radius: 100vw;
+  padding: 5px;
+}
+
+.toggle-circle {
+  display: block;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+}
+
+/* display */
+
+.display {
+  margin-block-start: 24px;
+  margin-block-end: 16px;
+  border-radius: 8px;
+  padding-block: 16px;
+  padding-block-start: 22px;
+  padding-inline-end: 24px;
+  text-align: right;
+}
+
+.current-total-number {
+  font-size: 2.5rem;
+  display: block;
+}
+
+/* keys */
+
+.back-of-key,
+.front-of-key {
+  border-radius: 4px;
+}
+
+.keys-container {
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.number-operator-delate-keys-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.number-operator-delate-keys-container span.front-of-key {
+  display: block;
+  padding: 14px;
+  padding-inline: 18px;
+  padding-block-start: 16px;
+}
+
+.number-key,
+.operator-button {
+  font-size: 1.7rem;
+}
+
+.delete-button,
+.reset-button,
+.equal-button {
+  font-size: 1rem;
+}
+
+.delete-button span.front-of-key {
+  padding-inline: 12px;
+}
+
+.delete-button span.front-of-key,
+.decimal-key span.front-of-key {
+  padding-block: 21px;
+}
+
+.back-of-key {
+  display: block;
+}
+
+.back-of-key,
+.reset-button,
+.equal-button {
+  padding: 0px;
+}
+
+/* reset and equal buttons */
+
+.reset-button,
+.equal-button {
+  display: block;
+  border-radius: 8px;
+}
+
+.reset-equal-buttons {
+  margin-block-start: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.reset-equal-buttons .front-of-key {
+  display: block;
+  padding-block: 16px;
+}
+
+/* bg and fg color */
+
+/* calculator */
+
+/* toggle container */
+
+.calculator-app-bg {
+  min-height: 100%;
+}
+
+.calculator-style-wrapper {
+  max-width: 450px;
+}
+
+/***** dark-theme *****/
+
+.dark-theme.calculator-app-bg {
+  background-color: var(--col-theme1-bg-main);
+  color: var(--col-neutral-white);
+}
+
+.dark-theme .toggle-slider {
+  background-color: var(--col-theme1-bg-toggle-keypad);
+}
+
+.dark-theme .toggle-circle {
+  background-color: var(--col-theme1-keys-bg-toggle);
+}
+
+/* .dark-theme .theme-controller-wrapper {
+    background-color: ;
+} */
+
+/***** light-theme *****/
+
+.light-theme.calculator-app-bg {
+  background-color: var(--col-theme2-bg-main);
+  color: var(--col-theme2-text-grayish-yellow);
+}
+
+.light-theme .toggle-slider {
+  background-color: var(--col-theme2-bg-toggle-keypad);
+}
+
+.light-theme .toggle-circle {
+  background-color: var(--col-theme2-keys-bg-toggle);
+}
+
+/***** accent-theme *****/
+
+.accent-theme.calculator-app-bg {
+  background-color: var(--col-theme3-bg-main);
+  color: var(--col-theme3-text-light-yellow);
+}
+
+.accent-theme .toggle-slider {
+  background-color: var(--col-theme3-bg-toggle-keypad-screen);
+}
+
+.accent-theme .toggle-circle {
+  background-color: var(--col-theme3-keys-bg-toggle);
+}
+
+/* display container */
+
+/***** dark-theme *****/
+
+.dark-theme .display {
+  background-color: var(--col-theme1-bg-screen);
+}
+
+/***** light-theme *****/
+
+.light-theme .display {
+  background-color: var(--col-theme2-bg-screen);
+}
+
+/***** accent-theme *****/
+
+.accent-theme .display {
+  background-color: var(--col-theme3-bg-toggle-keypad-screen);
+}
+
+/* keys container */
+
+/***** dark-theme *****/
+
+.dark-theme .keys-container {
+  background-color: var(--col-theme1-bg-toggle-keypad);
+}
+
+/* number and operator */
+
+.dark-theme .front-of-key {
+  background-color: var(--col-theme1-keys-orange-bg);
+  color: var(--col-theme1-text-grayish-blue);
+}
+
+/* reset and delete */
+
+.dark-theme .reset-button .front-of-key,
+.dark-theme .delete-button .front-of-key {
+  background-color: var(--col-theme1-keys-bg);
+  color: var(--col-neutral-white);
+}
+
+/* equal  */
+
+.dark-theme .equal-button .front-of-key {
+  background-color: var(--col-theme1-keys-bg-toggle);
+  color: var(--col-neutral-white);
+}
+
+/***** light-theme *****/
+
+.light-theme .keys-container {
+  background-color: var(--col-theme2-bg-toggle-keypad);
+}
+
+/* number and operator */
+
+.light-theme .front-of-key {
+  background-color: var(--col-theme2-keys-yellow-bg);
+  /* color: var(--col-theme1-text-grayish-blue); */
+}
+
+/* reset and delete */
+
+.light-theme .reset-button .front-of-key,
+.light-theme .delete-button .front-of-key {
+  background-color: var(--col-theme2-keys-bg);
+  color: var(--col-neutral-white);
+}
+
+/* equal  */
+
+.light-theme .equal-button .front-of-key {
+  background-color: var(--col-theme2-keys-bg-toggle);
+  color: var(--col-neutral-white);
+}
+
+/***** accent-theme *****/
+
+.accent-theme .keys-container {
+  background-color: var(--col-theme3-bg-toggle-keypad-screen);
+}
+
+/* number and operator */
+
+.accent-theme .front-of-key {
+  background-color: var(--col-theme3-keys-bg);
+  /* color: var(--col-theme1-text-grayish-blue); */
+}
+
+/* reset and delete */
+
+.accent-theme .reset-button .front-of-key,
+.accent-theme .delete-button .front-of-key {
+  background-color: var(--col-theme3-keys-bg);
+  color: var(--col-neutral-white);
+}
+
+/* equal  */
+
+.accent-theme .equal-button .front-of-key {
+  background-color: var(--col-theme3-keys-bg-toggle);
+  color: var(--col-theme3-text-dark-blue);
+}
