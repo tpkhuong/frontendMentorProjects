@@ -25,7 +25,130 @@
     <title>Calculator App</title>
   </head>
   <body>
-    <h1 class="visually-hidden">Calculator App</h1>
+    <section class="calculator-app-bg dark-theme">
+      <h1 class="visually-hidden">Calculator App</h1>
+      <!--  -->
+      <div class="calculator-style-wrapper">
+        <!-- theme controller -->
+        <div class="theme-controller-wrapper">
+          <!-- flex -->
+          <span class="app-title"> calc </span>
+          <div class="toggle-container">
+            <span class="theme-title"> THEME </span>
+            <div class="theme-toggle-controller">
+              <div class="theme-label-btn-wrapper">
+                <!-- dark theme -->
+                <label aria-label="dark-theme" for="dark-theme">
+                  1
+                  <!-- <button aria-label="button 1 of 3">1</button> -->
+                  <input
+                    class="visually-hidden"
+                    id="dark-theme"
+                    name="theme"
+                    value="dark-theme"
+                    type="radio"
+                  />
+                </label>
+                <!-- light theme -->
+                <label aria-label="light-theme" for="light-theme">
+                  2
+                  <!-- <button aria-label="button 2 of 3">2</button> -->
+                  <input
+                    class="visually-hidden"
+                    id="light-theme"
+                    name="theme"
+                    value="light-theme"
+                    type="radio"
+                  />
+                </label>
+                <!-- accent theme -->
+                <label aria-label="accent-theme" for="accent-theme">
+                  3
+                  <!-- <button aria-label="button 3 of 3">3</button> -->
+                  <input
+                    class="visually-hidden"
+                    id="accent-theme"
+                    name="theme"
+                    value="accent-theme"
+                    type="radio"
+                  />
+                </label>
+              </div>
+              <div class="toggle-slider">
+                <span class="toggle-circle"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- display -->
+        <div class="display">
+          <span class="current-total-number"> 0 </span>
+        </div>
+        <div class="keys-container">
+          <!-- grid: 16 buttons -->
+          <div class="number-operator-delate-keys-container">
+            <button class="number-key back-of-key">
+              <span class="front-of-key">7</span>
+            </button>
+            <button class="number-key back-of-key">
+              <span class="front-of-key">8</span>
+            </button>
+            <button class="number-key back-of-key">
+              <span class="front-of-key">9</span>
+            </button>
+            <button class="delete-button back-of-key">
+              <span class="front-of-key">DEL </span>
+            </button>
+            <button class="number-key back-of-key">
+              <span class="front-of-key">4</span>
+            </button>
+            <button class="number-key back-of-key">
+              <span class="front-of-key">5</span>
+            </button>
+            <button class="number-key back-of-key">
+              <span class="front-of-key">6</span>
+            </button>
+            <button class="operator-button back-of-key">
+              <span class="front-of-key">+</span>
+            </button>
+            <button class="number-key back-of-key">
+              <span class="front-of-key">1</span>
+            </button>
+            <button class="number-key back-of-key">
+              <span class="front-of-key">2</span>
+            </button>
+            <button class="number-key back-of-key">
+              <span class="front-of-key">3</span>
+            </button>
+            <button class="operator-button back-of-key">
+              <span class="front-of-key">-</span>
+            </button>
+            <button class="decimal-key back-of-key">
+              <span class="front-of-key">.</span>
+            </button>
+            <button class="number-key back-of-key">
+              <span class="front-of-key">0</span>
+            </button>
+            <button class="operator-button back-of-key">
+              <span class="front-of-key">/</span>
+            </button>
+            <button class="operator-button back-of-key">
+              <span class="front-of-key">x</span>
+            </button>
+          </div>
+          <!-- flexbox: two buttons -->
+          <div class="reset-equal-buttons">
+            <button class="reset-button">
+              <span class="front-of-key">RESET</span>
+            </button>
+            <button class="equal-button">
+              <span class="front-of-key">=</span>
+            </button>
+          </div>
+        </div>
+        <!-- keys -->
+      </div>
+    </section>
     <script src="ourApp.js"></script>
   </body>
 </html>
