@@ -25,7 +25,7 @@
     <title>Calculator App</title>
   </head>
   <body>
-    <section class="calculator-app-bg dark-theme">
+    <section class="calculator-app-bg">
       <h1 class="visually-hidden">Calculator App</h1>
       <!--  -->
       <div class="calculator-style-wrapper">
@@ -82,66 +82,131 @@
         </div>
         <!-- display -->
         <div class="display">
+          <span class="top-display-keys-pressed">0</span>
           <span class="current-total-number"> 0 </span>
         </div>
         <div class="keys-container">
           <!-- grid: 16 buttons -->
           <div class="number-operator-delate-keys-container">
-            <button class="number-key back-of-key">
+            <button
+              role="button"
+              aria-label="number 7"
+              class="number-key back-of-key"
+            >
               <span class="front-of-key">7</span>
             </button>
-            <button class="number-key back-of-key">
+            <button
+              role="button"
+              aria-label="number 8"
+              class="number-key back-of-key"
+            >
               <span class="front-of-key">8</span>
             </button>
-            <button class="number-key back-of-key">
+            <button
+              role="button"
+              aria-label="number 9"
+              class="number-key back-of-key"
+            >
               <span class="front-of-key">9</span>
             </button>
-            <button class="delete-button back-of-key">
+            <button
+              role="button"
+              aria-label="delete"
+              class="delete-button back-of-key"
+            >
               <span class="front-of-key">DEL </span>
             </button>
-            <button class="number-key back-of-key">
+            <button
+              role="button"
+              aria-label="number 4"
+              class="number-key back-of-key"
+            >
               <span class="front-of-key">4</span>
             </button>
-            <button class="number-key back-of-key">
+            <button
+              role="button"
+              aria-label="number 5"
+              class="number-key back-of-key"
+            >
               <span class="front-of-key">5</span>
             </button>
-            <button class="number-key back-of-key">
+            <button
+              role="button"
+              aria-label="number 6"
+              class="number-key back-of-key"
+            >
               <span class="front-of-key">6</span>
             </button>
-            <button class="operator-button back-of-key">
+            <button
+              role="button"
+              aria-label="addition sign"
+              class="operator-button back-of-key"
+            >
               <span class="front-of-key">+</span>
             </button>
-            <button class="number-key back-of-key">
+            <button
+              role="button"
+              aria-label="number 1"
+              class="number-key back-of-key"
+            >
               <span class="front-of-key">1</span>
             </button>
-            <button class="number-key back-of-key">
+            <button
+              role="button"
+              aria-label="number 2"
+              class="number-key back-of-key"
+            >
               <span class="front-of-key">2</span>
             </button>
-            <button class="number-key back-of-key">
+            <button
+              role="button"
+              aria-label="number 3"
+              class="number-key back-of-key"
+            >
               <span class="front-of-key">3</span>
             </button>
-            <button class="operator-button back-of-key">
+            <button
+              role="button"
+              aria-label="subtraction sign"
+              class="operator-button back-of-key"
+            >
               <span class="front-of-key">-</span>
             </button>
-            <button class="decimal-key back-of-key">
+            <button
+              role="button"
+              aria-label="decimal"
+              class="decimal-key back-of-key"
+            >
               <span class="front-of-key">.</span>
             </button>
-            <button class="number-key back-of-key">
+            <button
+              role="button"
+              aria-label="number 0"
+              class="number-key back-of-key"
+            >
               <span class="front-of-key">0</span>
             </button>
-            <button class="operator-button back-of-key">
+            <button
+              role="button"
+              aria-label="division sign"
+              class="operator-button back-of-key"
+            >
               <span class="front-of-key">/</span>
             </button>
-            <button class="operator-button back-of-key">
+            <button
+              role="button"
+              aria-label="multiply sign"
+              class="operator-button back-of-key"
+            >
               <span class="front-of-key">x</span>
             </button>
           </div>
           <!-- flexbox: two buttons -->
           <div class="reset-equal-buttons">
-            <button class="reset-button">
+            <button role="button" aria-label="reset" class="reset-button">
               <span class="front-of-key">RESET</span>
             </button>
-            <button class="equal-button">
+            <button role="button" aria-label="equal" class="equal-button">
               <span class="front-of-key">=</span>
             </button>
           </div>
