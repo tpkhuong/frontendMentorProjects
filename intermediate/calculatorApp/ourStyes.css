@@ -471,6 +471,38 @@ a:hover {
 
 .calculator-style-wrapper {
   padding: 24px;
+  /* this declaration */
+  flex-basis: 450px;
+  /*  
+  when our container is a flex item, max-width will not work on this element.
+  flex item are intrinsic, max-width element will grow to the property value we set
+
+  flex item will take precedence over max-width which means it will be the width of its content
+  max-width: 450px;
+
+  to make it responsive we can set width on this element that is also a flex item
+  or we can declare flex-basis.
+
+  flex-basis default is auto but we can set a idle width on our element.
+  flex items default values are: flex-grow is 0 so it wont grow
+  flex-shrink is 1 which will allow the element to shrink.
+  flex-basis is auto. it will take up all the available space.
+
+  we also declared justify-content and align-items: center. our element with
+  max-width is being push inline and block direction to the center. so its not allow to grow.
+  we can set flex-grow: 1 to make max-width work for our element.
+
+  we can have to make our element responsive:
+
+  flex-basis: 450px without setting a max-width or width declaration on element.
+  max-width: 450px and flex-grow: 1;
+  
+  */
+
+  /* or declaration below will work */
+
+  /* max-width: 450px;
+  flex-grow: 1; */
 }
 
 /* theme-controller */
@@ -497,6 +529,12 @@ a:hover {
 }
 
 .theme-toggle-controller {
+  /* setting a width on the parent of both 
+    .theme-toggle-controller and .toggle-slider
+
+    we can control the size of both .theme-toggle-controller and .toggle-slider
+    by adjusting the width/size of .theme-toglle-controller
+    */
   width: 64px;
 }
 
@@ -521,6 +559,21 @@ a:hover {
   height: 16px;
   width: 16px;
   border-radius: 50%;
+
+  transition: transform ease-out 300ms;
+}
+
+.toggle-circle.light-theme-movement-onLoad {
+  transform: translateX(19px);
+}
+
+/* move circle based on input selected */
+
+.toggle-circle.light-movement {
+  transform: translateX(19px);
+}
+.toggle-circle.accent-movement {
+  transform: translateX(38px);
 }
 
 /* display */
@@ -615,6 +668,69 @@ a:hover {
   padding-block: 16px;
 }
 
+@media screen and (min-width: 90rem) {
+  /* input has focus */
+
+  button:focus {
+    outline-offset: 4px;
+    outline: 4px solid blue;
+  }
+
+  /* border: 1px solid red; */
+  [aria-label*="-theme"]:focus-within {
+    outline-offset: 2px;
+    outline: 2px solid var(--col-theme2-keys-bg-toggle);
+    /* border: 1px solid red; */
+  }
+
+  .app-title {
+    font-size: 1.6rem;
+  }
+  .toggle-container {
+    font-size: 0.55rem;
+  }
+
+  .theme-toggle-controller {
+    /* setting a width on the parent of both 
+    .theme-toggle-controller and .toggle-slider
+
+    we can control the size of both .theme-toggle-controller and .toggle-slider
+    by adjusting the width/size of .theme-toglle-controller
+    */
+    width: 58px;
+  }
+
+  .toggle-slider {
+    padding: 4px;
+  }
+
+  .toggle-circle {
+    height: 10px;
+    width: 10px;
+  }
+
+  .number-key,
+  .operator-button {
+    font-size: 1.5rem;
+  }
+
+  .number-operator-delate-keys-container span.front-of-key {
+    padding: 10px;
+    padding-block-start: 13px;
+  }
+
+  .delete-button span.front-of-key,
+  .decimal-key span.front-of-key {
+    padding-block: 16px;
+  }
+
+  .decimal-key span.front-of-key {
+    font-size: 1.8rem;
+    padding-block-end: 10px;
+    padding-block-start: 8px;
+  }
+}
+
 /* bg and fg color */
 
 /* calculator */
@@ -623,10 +739,6 @@ a:hover {
 
 .calculator-app-bg {
   min-height: 100%;
-}
-
-.calculator-style-wrapper {
-  max-width: 450px;
 }
 
 /***** dark-theme *****/
@@ -642,6 +754,21 @@ a:hover {
 
 .dark-theme .toggle-circle {
   background-color: var(--col-theme1-keys-bg-toggle);
+}
+
+@media (prefers-color-scheme: dark) {
+  .dark-theme.calculator-app-bg {
+    background-color: var(--col-theme1-bg-main);
+    color: var(--col-neutral-white);
+  }
+
+  .dark-theme .toggle-slider {
+    background-color: var(--col-theme1-bg-toggle-keypad);
+  }
+
+  .dark-theme .toggle-circle {
+    background-color: var(--col-theme1-keys-bg-toggle);
+  }
 }
 
 /* .dark-theme .theme-controller-wrapper {
@@ -661,6 +788,21 @@ a:hover {
 
 .light-theme .toggle-circle {
   background-color: var(--col-theme2-keys-bg-toggle);
+}
+
+@media (prefers-color-scheme: light) {
+  .light-theme.calculator-app-bg {
+    background-color: var(--col-theme2-bg-main);
+    color: var(--col-theme2-text-grayish-yellow);
+  }
+
+  .light-theme .toggle-slider {
+    background-color: var(--col-theme2-bg-toggle-keypad);
+  }
+
+  .light-theme .toggle-circle {
+    background-color: var(--col-theme2-keys-bg-toggle);
+  }
 }
 
 /***** accent-theme *****/
@@ -686,10 +828,21 @@ a:hover {
   background-color: var(--col-theme1-bg-screen);
 }
 
+@media (prefers-color-scheme: dark) {
+  .dark-theme .display {
+    background-color: var(--col-theme1-bg-screen);
+  }
+}
+
 /***** light-theme *****/
 
 .light-theme .display {
   background-color: var(--col-theme2-bg-screen);
+}
+@media (prefers-color-scheme: light) {
+  .light-theme .display {
+    background-color: var(--col-theme2-bg-screen);
+  }
 }
 
 /***** accent-theme *****/
@@ -728,6 +881,36 @@ a:hover {
   color: var(--col-neutral-white);
 }
 
+@media (prefers-color-scheme: dark) {
+  /***** dark-theme *****/
+
+  .dark-theme .keys-container {
+    background-color: var(--col-theme1-bg-toggle-keypad);
+  }
+
+  /* number and operator */
+
+  .dark-theme .front-of-key {
+    background-color: var(--col-theme1-keys-orange-bg);
+    color: var(--col-theme1-text-grayish-blue);
+  }
+
+  /* reset and delete */
+
+  .dark-theme .reset-button .front-of-key,
+  .dark-theme .delete-button .front-of-key {
+    background-color: var(--col-theme1-keys-bg);
+    color: var(--col-neutral-white);
+  }
+
+  /* equal  */
+
+  .dark-theme .equal-button .front-of-key {
+    background-color: var(--col-theme1-keys-bg-toggle);
+    color: var(--col-neutral-white);
+  }
+}
+
 /***** light-theme *****/
 
 .light-theme .keys-container {
@@ -754,6 +937,36 @@ a:hover {
 .light-theme .equal-button .front-of-key {
   background-color: var(--col-theme2-keys-bg-toggle);
   color: var(--col-neutral-white);
+}
+
+@media (prefers-color-scheme: light) {
+  /***** light-theme *****/
+
+  .light-theme .keys-container {
+    background-color: var(--col-theme2-bg-toggle-keypad);
+  }
+
+  /* number and operator */
+
+  .light-theme .front-of-key {
+    background-color: var(--col-theme2-keys-yellow-bg);
+    /* color: var(--col-theme1-text-grayish-blue); */
+  }
+
+  /* reset and delete */
+
+  .light-theme .reset-button .front-of-key,
+  .light-theme .delete-button .front-of-key {
+    background-color: var(--col-theme2-keys-bg);
+    color: var(--col-neutral-white);
+  }
+
+  /* equal  */
+
+  .light-theme .equal-button .front-of-key {
+    background-color: var(--col-theme2-keys-bg-toggle);
+    color: var(--col-neutral-white);
+  }
 }
 
 /***** accent-theme *****/
