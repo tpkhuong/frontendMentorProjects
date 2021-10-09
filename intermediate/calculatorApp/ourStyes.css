@@ -582,10 +582,14 @@ a:hover {
   margin-block-start: 24px;
   margin-block-end: 16px;
   border-radius: 8px;
-  padding-block: 16px;
-  padding-block-start: 22px;
+  /* padding-block: 16px;
+  padding-block-start: 22px; */
   padding-inline-end: 24px;
   text-align: right;
+
+  /* desktop */
+  padding-block: 8px;
+  padding-block-start: 16px;
 }
 
 .current-total-number {
@@ -593,7 +597,22 @@ a:hover {
   display: block;
 }
 
+.top-display-keys-pressed {
+  display: block;
+  font-size: 0.8rem;
+  margin-block-end: 6px;
+}
+
 /* keys */
+
+.front-of-key {
+  /* since our span is a child of our button
+    we want to set pointer-events none on the span element
+    so when our user clicks on the "keys" with the mouse
+    the event.target will be our button element instead of the span element
+    */
+  pointer-events: none;
+}
 
 .back-of-key,
 .front-of-key {
