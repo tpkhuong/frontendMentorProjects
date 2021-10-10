@@ -1,5 +1,6 @@
 (function scopeOurVaribles() {
   const {
+    ourObjElement,
     sectionAppWrapper,
     sliderCircle,
     themeLabelBtnContainer,
@@ -7,7 +8,7 @@
     keysContainer,
     arrofKeyPadButtons,
     totalDisplay,
-    keysPressedDisplay,
+    operatorKeyPressedDisplay,
   } = ourSelectors();
   // calling our functions
 
@@ -38,6 +39,12 @@
   ] = arrofKeyPadButtons;
 
   function addEventListenersToElements() {
+    //   instantiate our obj
+    ourObjElement.dataObj = {
+      previousClickedBtn: [],
+      currentTotal: 0,
+      newUserInput: "",
+    };
     window.addEventListener("load", addDarkOrLightThemeClassBasedOnSystemTheme);
     themeLabelBtnContainer.addEventListener(
       "change",
@@ -514,6 +521,7 @@
         operatorButtonPressed(buttonPressedValue);
         break;
       case buttonPressedValue == "RESET":
+        resetButtonPressed();
         console.log("reset button pressed");
         break;
       case buttonPressedValue == "DEL":
@@ -538,30 +546,84 @@
   function resetButtonPressed() {
     // set everything back to zero/default
     //set displays to 0
-    keysPressedDisplay.innerText = "0";
+    operatorKeyPressedDisplay.innerText = "";
     totalDisplay.innerText = "0";
   }
 
   function equalButtonPressed() {}
 
-  function operatorButtonPressed(input) {}
+  function operatorButtonPressed(operatorInput) {
+    //   when user click on an operator(+,-,/,x)
+    //we will display the value enter before clicking on an operator
+    //with the operator clicked to operatorKeyPressedDisplay element
+    const valueOfDisplayAboveTotal = operatorKeyPressedDisplay.innerText;
+    if (valueOfDisplayAboveTotal === "") {
+      const strOfNumberBtnPressed = operatorPressedDisplayHelperFunc();
+      operatorKeyPressedDisplay.innerText =
+        strOfNumberBtnPressed + ` ${operatorInput}`;
+    } else {
+      const arrOfValueAndOperator = valueOfDisplayAboveTotal.split(" ");
+
+      //   replace current operator on display with operator user click
+      //when user already click numbers and clicked an operator
+      arrOfValueAndOperator[1] = operatorInput;
+      const strForDisplayWithChnagedOperator = arrOfValueAndOperator.join(" ");
+      operatorKeyPressedDisplay.innerText = strForDisplayWithChnagedOperator;
+    }
+  }
+
+  function operatorPressedDisplayHelperFunc() {
+    const displayValue = utilityStrFunc();
+    const arrOfOnlyNumbersWithoutCommas =
+      displayValueWithoutCommas(displayValue);
+
+    const strValueUsedForDisplay = arrOfOnlyNumbersWithoutCommas.join("");
+    return strValueUsedForDisplay;
+  }
 
   function numberKeyPressed(buttonPressedInput) {
+    //buttonPressedInput type is string
+
     const displayValue = utilityStrFunc();
     const arrOfOnlyNumbersWithoutCommas =
       displayValueWithoutCommas(displayValue);
     const lengthOfArrOfOnlyNumValues = arrOfOnlyNumbersWithoutCommas.length;
-    //   length of 3 or less
-    workingWithDisplayLengthOfLessThanThree(
-      lengthOfArrOfOnlyNumValues,
-      buttonPressedInput
-    );
-    //length of 4 to 6
-    //length of 7 to 9
+    switch (true) {
+      //   length of 3 or less
+      case lengthOfArrOfOnlyNumValues <= 3:
+        workingWithDisplayLengthOfLessThanThree(
+          lengthOfArrOfOnlyNumValues,
+          buttonPressedInput,
+          arrOfOnlyNumbersWithoutCommas
+        );
+        break;
+      //length of 4 to 6
+      case lengthOfArrOfOnlyNumValues >= 4 && lengthOfArrOfOnlyNumValues <= 6:
+        workingWithDisplayLengthMoreThanThreeLessThanSeven(
+          arrOfOnlyNumbersWithoutCommas,
+          lengthOfArrOfOnlyNumValues,
+          buttonPressedInput
+        );
+        break;
+      //length of 7 to 9
+      case lengthOfArrOfOnlyNumValues >= 6 && lengthOfArrOfOnlyNumValues <= 9:
+        workingWithDisplayLengthOfMoreThanSixLessThanTen(
+          arrOfOnlyNumbersWithoutCommas,
+          lengthOfArrOfOnlyNumValues,
+          buttonPressedInput
+        );
+        break;
+    }
     //length of 10 to 12
   }
-
-  function workingWithDisplayLengthOfLessThanThree(lengthInput, keyBtnPressed) {
+  //   length of 3 or less
+  function workingWithDisplayLengthOfLessThanThree(
+    lengthInput,
+    keyBtnPressed,
+    arrOfValuesWithoutCommas
+  ) {
+    //   this function is being called when a number button is pressed
+    const totalDisplayValue = utilityStrFunc();
     if (lengthInput == 1 && keyBtnPressed === "0") {
       //display is 0 and user pressed 0
       strValueForTotalDisplayELement(keyBtnPressed);
@@ -570,16 +632,217 @@
       //display is 0 and user pressed any number button that is not 0
       strValueForTotalDisplayELement(keyBtnPressed);
     }
-    if (lengthInput >= 1 && displayValue !== "0") {
-      // when js gets here we want to add to the displayValue
+    if (lengthInput >= 1 && lengthInput != 3 && totalDisplayValue !== "0") {
+      // when js gets here we want to add to the totalDisplayValue
       //display is 1 or any value that is not 0 and the user pressed a number key
-      convertDisplayValueToArr(displayValue, buttonPressedInput);
+      addKeyBtnPressedToStrLengthLessThanThree(
+        totalDisplayValue,
+        keyBtnPressed
+      );
     }
+    if (lengthInput == 3 && totalDisplay !== "0") {
+      addingCommaToDisplayWhenLengthIsThreeInputIsNumber(
+        arrOfValuesWithoutCommas,
+        keyBtnPressed
+      );
+    }
+  }
+  //length of 4 to 6
+  function workingWithDisplayLengthMoreThanThreeLessThanSeven(
+    arrInput,
+    lengthInput,
+    keyPressed
+  ) {
+    const copyArrInput = [].concat(arrInput);
+    switch (lengthInput) {
+      case 4:
+        const [firstStr, secondStr, thirdStr, fourthStr] = copyArrInput;
+        const arrOfValuesWithComma = [
+          firstStr,
+          secondStr,
+          ",",
+          thirdStr,
+          fourthStr,
+          keyPressed,
+        ];
+        convertArrToStrAndDisplayValueInApp(
+          strValueForTotalDisplayELement,
+          convertArrOfValuesToStrUsingJoinMethod,
+          arrOfValuesWithComma
+        );
+        break;
+      case 5:
+        const [
+          firstString,
+          secondString,
+          thirdString,
+          fourthString,
+          fifthString,
+        ] = copyArrInput;
+        const arrOfValuesAndComma = [
+          firstString,
+          secondString,
+          thirdString,
+          ",",
+          fourthString,
+          fifthString,
+          keyPressed,
+        ];
+        convertArrToStrAndDisplayValueInApp(
+          strValueForTotalDisplayELement,
+          convertArrOfValuesToStrUsingJoinMethod,
+          arrOfValuesAndComma
+        );
+        break;
+      case 6:
+        const [
+          firstValue,
+          secondValue,
+          thirdValue,
+          fourthValue,
+          fifthValue,
+          sixthValue,
+        ] = copyArrInput;
+        const arrOfStrValuesAndComma = [
+          firstValue,
+          ",",
+          secondValue,
+          thirdValue,
+          fourthValue,
+          ",",
+          fifthValue,
+          sixthValue,
+          keyPressed,
+        ];
+        convertArrToStrAndDisplayValueInApp(
+          strValueForTotalDisplayELement,
+          convertArrOfValuesToStrUsingJoinMethod,
+          arrOfStrValuesAndComma
+        );
+        break;
+    }
+  }
+  //length of 7 to 9
+  function workingWithDisplayLengthOfMoreThanSixLessThanTen(
+    arrInput,
+    lengthInput,
+    keyPressed
+  ) {
+    const copyArrInput = arrInput.slice();
+    switch (lengthInput) {
+      case 7:
+        const [
+          firstVal,
+          secondVal,
+          thirdVal,
+          fourthVal,
+          fifthVal,
+          sixthVal,
+          sevenVal,
+        ] = copyArrInput;
+        const arrOfStrValsAndComma = [
+          firstVal,
+          secondVal,
+          ",",
+          thirdVal,
+          fourthVal,
+          fifthVal,
+          ",",
+          sixthVal,
+          sevenVal,
+          keyPressed,
+        ];
+        convertArrToStrAndDisplayValueInApp(
+          strValueForTotalDisplayELement,
+          convertArrOfValuesToStrUsingJoinMethod,
+          arrOfStrValsAndComma
+        );
+        break;
+      case 8:
+        const [
+          firstStrVal,
+          secondStrVal,
+          thirdStrVal,
+          fourthStrVal,
+          fifthStrVal,
+          sixthStrVal,
+          sevenStrVal,
+          eighthStrVal,
+        ] = copyArrInput;
+        const arrOfValsAndCommas = [
+          firstStrVal,
+          secondStrVal,
+          thirdStrVal,
+          ",",
+          fourthStrVal,
+          fifthStrVal,
+          sixthStrVal,
+          ",",
+          sevenStrVal,
+          eighthStrVal,
+          keyPressed,
+        ];
+        convertArrToStrAndDisplayValueInApp(
+          strValueForTotalDisplayELement,
+          convertArrOfValuesToStrUsingJoinMethod,
+          arrOfValsAndCommas
+        );
+        break;
+      case 9:
+        const [
+          firstStrValue,
+          secondStrValue,
+          thirdStrValue,
+          fourthStrValue,
+          fifthStrValue,
+          sixthStrValue,
+          sevenStrValue,
+          eighthStrValue,
+          ninthStrValue,
+        ] = copyArrInput;
+        const arrOfValuesAndCommas = [
+          firstStrValue,
+          ",",
+          secondStrValue,
+          thirdStrValue,
+          fourthStrValue,
+          ",",
+          fifthStrValue,
+          sixthStrValue,
+          sevenStrValue,
+          ",",
+          eighthStrValue,
+          ninthStrValue,
+          keyPressed,
+        ];
+        convertArrToStrAndDisplayValueInApp(
+          strValueForTotalDisplayELement,
+          convertArrOfValuesToStrUsingJoinMethod,
+          arrOfValuesAndCommas
+        );
+        break;
+    }
+  }
+
+  function addingCommaToDisplayWhenLengthIsThreeInputIsNumber(
+    arrInputWithoutComma,
+    keypadBtnPressed
+  ) {
+    // arrInputWithoutComma will be an array of length 3 [4,5,2]
+    const [firstStr, secondStr, thirdStr] = arrInputWithoutComma;
+    const arrOfValuesWithOneComma = [
+      firstStr,
+      ",",
+      secondStr,
+      thirdStr,
+      keypadBtnPressed,
+    ];
+    hundredsValueDisplayFunc(arrOfValuesWithOneComma);
   }
 
   function resetToDefaultOnReload() {
     //set displays to 0
-    keysPressedDisplay.innerText = "0";
+    operatorKeyPressedDisplay.innerText = "";
     totalDisplay.innerText = "0";
   }
   // operation function add,minus,times and divide
@@ -598,56 +861,39 @@
 
   // utility functions
 
-  function convertDisplayValueToArr(displayString, keypadValuePressed) {
+  function addKeyBtnPressedToStrLengthLessThanThree(
+    displayString,
+    keypadValuePressed
+  ) {
     const arrOfStrChars = displayString.split("");
     /*****add value to arr using push method *****/
     arrOfStrChars.push(keypadValuePressed);
-    const lengthOfArr = arrOfStrChars.length;
 
-    switch (true) {
-      case lengthOfArr <= 3:
-        hundredsValueDisplayFunc(arrOfStrChars, lengthOfArr);
-        break;
-      case lengthOfArr >= 4 && lengthOfArr <= 6:
-        break;
-      case lengthOfArr >= 7 && lengthOfArr <= 9:
-        break;
-      case lengthOfArr >= 10 && lengthOfArr <= 12:
-        break;
-    }
+    hundredsValueDisplayFunc(arrOfStrChars);
   }
 
   function hundredsValueDisplayFunc(arrInput) {
     const copyArrPassedIn = [...arrInput];
-    strValueForTotalDisplayELement(
-      convertArrOfValuesToStrUsingJoinMethod(copyArrPassedIn)
+    convertArrToStrAndDisplayValueInApp(
+      strValueForTotalDisplayELement,
+      convertArrOfValuesToStrUsingJoinMethod,
+      copyArrPassedIn
     );
+    // strValueForTotalDisplayELement(
+    //   convertArrOfValuesToStrUsingJoinMethod(copyArrPassedIn)
+    // );
   }
-  function thousandsValueDisplayFunc(arrInput, lengthInput) {
-    const copyArrPassedIn = [...arrInput];
-    switch (lengthInput) {
-      case 4:
-        const [first, second, third, fourth] = copyArrPassedIn;
-        const arrPassedToJoinHelperFunc = [first, ",", second, third, fourth];
-        console.log(arrPassedToJoinHelperFunc);
-        break;
-      case 5:
-        // const [first, second, third, fourth, fifth] = copyArrPassedIn;
-        // const arrPassedToJoinHelperFunc = [first, second, third, fourth];
-        console.log(arrPassedToJoinHelperFunc);
-        break;
-      case 6:
-        // const [first, second, third, fourth, fifth, sixth] = copyArrPassedIn;
-        break;
-    }
-  }
-  function millionsValueDisplayFunc(arrInput, lengthInput) {}
-  function billionsValueDisplayFunc(arrInput, lengthInput) {}
 
   function utilityStrFunc() {
     const currentDisplayValue = totalDisplay.innerText;
 
     return currentDisplayValue;
+  }
+
+  function topDisplayStrFunc() {
+    const currentTopDisplayValue = operatorKeyPressedDisplay.innerText;
+
+    return currentTopDisplayValue;
   }
 
   //   function getLengthOfStrValueOfDisplayElement(strInput) {
@@ -665,7 +911,16 @@
     return strValue;
   }
 
+  function convertArrToStrAndDisplayValueInApp(func1, func2, arrInput) {
+    func1(func2(arrInput));
+  }
+
   function strValueForKeyPressedDisplayElement(valueInput) {}
+
+  function topDisplayMatchOperators(strInput) {
+    // "145 -".match(/[+-/x]/ig)
+    const arrOfOperatorsInTopDisplay = strInput.match(/[+-/x]/gi);
+  }
 
   function displayValueWithoutCommas(displayValue) {
     // "166,245".match(/\d/ig)
@@ -677,6 +932,7 @@
   // selector our elements
 
   function ourSelectors() {
+    const ourObjElement = document.getElementById("hidden-span");
     const sectionAppWrapper = document.querySelector(".calculator-app-bg");
     const sliderCircle = document.querySelector(".toggle-circle");
     const themeLabelBtnContainer = document.querySelector(
@@ -691,7 +947,7 @@
     const arrofKeyPadButtons = Array.from(document.querySelectorAll("button"));
 
     //   display
-    const keysPressedDisplay = document.querySelector(
+    const operatorKeyPressedDisplay = document.querySelector(
       ".top-display-keys-pressed"
     );
     const totalDisplay = document.querySelector(".current-total-number");
@@ -700,6 +956,7 @@
     //     document.querySelectorAll("button")
     //   );
     return {
+      ourObjElement,
       sectionAppWrapper,
       sliderCircle,
       themeLabelBtnContainer,
@@ -707,7 +964,41 @@
       keysContainer,
       arrofKeyPadButtons,
       totalDisplay,
-      keysPressedDisplay,
+      operatorKeyPressedDisplay,
     };
+  }
+
+  function firstAttemptCodes() {
+    // switch (true) {
+    //   case lengthOfArr <= 3:
+    //     hundredsValueDisplayFunc(arrOfStrChars, lengthOfArr);
+    //     break;
+    //   case lengthOfArr >= 4 && lengthOfArr <= 6:
+    //     break;
+    //   case lengthOfArr >= 7 && lengthOfArr <= 9:
+    //     break;
+    //   case lengthOfArr >= 10 && lengthOfArr <= 12:
+    //     break;
+    // }
+    function thousandsValueDisplayFunc(arrInput, lengthInput) {
+      const copyArrPassedIn = [...arrInput];
+      switch (lengthInput) {
+        case 4:
+          const [first, second, third, fourth] = copyArrPassedIn;
+          const arrPassedToJoinHelperFunc = [first, ",", second, third, fourth];
+          console.log(arrPassedToJoinHelperFunc);
+          break;
+        case 5:
+          // const [first, second, third, fourth, fifth] = copyArrPassedIn;
+          // const arrPassedToJoinHelperFunc = [first, second, third, fourth];
+          console.log(arrPassedToJoinHelperFunc);
+          break;
+        case 6:
+          // const [first, second, third, fourth, fifth, sixth] = copyArrPassedIn;
+          break;
+      }
+    }
+    function millionsValueDisplayFunc(arrInput, lengthInput) {}
+    function billionsValueDisplayFunc(arrInput, lengthInput) {}
   }
 })();
