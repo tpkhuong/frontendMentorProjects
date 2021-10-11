@@ -41,7 +41,8 @@
   function addEventListenersToElements() {
     //   instantiate our obj
     ourObjElement.dataObj = {
-      previousClickedBtn: [],
+      clickedBtns: [],
+      previousClickedBtn: "",
       currentTotal: 0,
       newUserInput: "",
     };
@@ -513,29 +514,60 @@
     // console.log(event.target.firstElementChild.textContent);
     console.log(event.target);
     const buttonPressedValue = event.target.firstElementChild.innerText;
+    // if (ourObjElement.dataObj.clickedBtns.length == 2) {
+    //   const elementIndex = ourObjElement.dataObj.clickedBtns.length - 1;
+    //   const prevClickedBtn = ourObjElement.dataObj.clickedBtns[elementIndex];
+    //   ourObjElement.dataObj.previousClickedBtn = prevClickedBtn;
+    //   ourObjElement.dataObj.clickedBtns.length = 0;
+    // }
+    //   another approach
+    lastItemClicked();
     switch (true) {
       case buttonPressedValue == "+" ||
         buttonPressedValue == "-" ||
         buttonPressedValue == "/" ||
         buttonPressedValue == "x":
-        operatorButtonPressed(buttonPressedValue);
+        // ourObjElement.dataObj.clickedBtns.push("operator");
+        ourObjElement.dataObj.clickedBtns.push(buttonPressedValue);
+        operatorButtonPressed(
+          buttonPressedValue,
+          ourObjElement.dataObj.previousClickedBtn
+        );
         break;
       case buttonPressedValue == "RESET":
         resetButtonPressed();
+        ourObjElement.dataObj.clickedBtns.push("reset");
         console.log("reset button pressed");
         break;
       case buttonPressedValue == "DEL":
         console.log("delete key pressed");
+        ourObjElement.dataObj.clickedBtns.push("delete");
         break;
       case buttonPressedValue == "=":
         console.log("equal key pressed");
+        ourObjElement.dataObj.clickedBtns.push("equal");
         break;
       case buttonPressedValue == ".":
         console.log("equal decimal pressed");
+        ourObjElement.dataObj.clickedBtns.push("decimal");
         break;
       default:
-        numberKeyPressed(buttonPressedValue);
+        // ourObjElement.dataObj.clickedBtns.push("number");
+        ourObjElement.dataObj.clickedBtns.push(buttonPressedValue);
+
+        numberKeyPressed(
+          buttonPressedValue,
+          ourObjElement.dataObj.previousClickedBtn
+        );
         console.log("number key pressed", buttonPressedValue);
+    }
+  }
+
+  function lastItemClicked() {
+    if (ourObjElement.dataObj.clickedBtns.length == 1) {
+      const prevItem = ourObjElement.dataObj.clickedBtns.pop();
+      ourObjElement.dataObj.previousClickedBtn = prevItem;
+      ourObjElement.dataObj.clickedBtns.length = 0;
     }
   }
 
@@ -552,11 +584,13 @@
 
   function equalButtonPressed() {}
 
-  function operatorButtonPressed(operatorInput) {
+  function operatorButtonPressed(operatorInput, lastPressedBtn) {
     //   when user click on an operator(+,-,/,x)
     //we will display the value enter before clicking on an operator
     //with the operator clicked to operatorKeyPressedDisplay element
     const valueOfDisplayAboveTotal = operatorKeyPressedDisplay.innerText;
+    console.log(ourObjElement.dataObj.clickedBtns);
+    console.log(lastPressedBtn);
     if (valueOfDisplayAboveTotal === "") {
       const strOfNumberBtnPressed = operatorPressedDisplayHelperFunc();
       operatorKeyPressedDisplay.innerText =
@@ -581,13 +615,15 @@
     return strValueUsedForDisplay;
   }
 
-  function numberKeyPressed(buttonPressedInput) {
+  function numberKeyPressed(buttonPressedInput, lastPressedBtn) {
     //buttonPressedInput type is string
-
+    console.log(ourObjElement.dataObj.clickedBtns);
+    console.log(lastPressedBtn);
     const displayValue = utilityStrFunc();
     const arrOfOnlyNumbersWithoutCommas =
       displayValueWithoutCommas(displayValue);
     const lengthOfArrOfOnlyNumValues = arrOfOnlyNumbersWithoutCommas.length;
+
     switch (true) {
       //   length of 3 or less
       case lengthOfArrOfOnlyNumValues <= 3:
