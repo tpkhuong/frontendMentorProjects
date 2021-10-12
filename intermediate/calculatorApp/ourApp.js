@@ -11,7 +11,7 @@
     operatorKeyPressedDisplay,
   } = ourSelectors();
   // calling our functions
-
+  declareOurDataObj();
   addEventListenersToElements();
   changeThemeBasedOnSystemThemeChange();
   resetToDefaultOnReload();
@@ -38,14 +38,18 @@
     equalKey,
   ] = arrofKeyPadButtons;
 
-  function addEventListenersToElements() {
+  function declareOurDataObj() {
     //   instantiate our obj
     ourObjElement.dataObj = {
+      arrOfOperators: ["x", "/", "+", "-"],
       clickedBtns: [],
       previousClickedBtn: "",
       currentTotal: 0,
-      newUserInput: "",
+      operatorKeyPressed: false,
     };
+  }
+
+  function addEventListenersToElements() {
     window.addEventListener("load", addDarkOrLightThemeClassBasedOnSystemTheme);
     themeLabelBtnContainer.addEventListener(
       "change",
@@ -513,53 +517,59 @@
     // console.log("work with length of 53 for keys press display");
     // console.log(event.target.firstElementChild.textContent);
     console.log(event.target);
-    const buttonPressedValue = event.target.firstElementChild.innerText;
-    // if (ourObjElement.dataObj.clickedBtns.length == 2) {
-    //   const elementIndex = ourObjElement.dataObj.clickedBtns.length - 1;
-    //   const prevClickedBtn = ourObjElement.dataObj.clickedBtns[elementIndex];
-    //   ourObjElement.dataObj.previousClickedBtn = prevClickedBtn;
-    //   ourObjElement.dataObj.clickedBtns.length = 0;
-    // }
-    //   another approach
-    lastItemClicked();
-    switch (true) {
-      case buttonPressedValue == "+" ||
-        buttonPressedValue == "-" ||
-        buttonPressedValue == "/" ||
-        buttonPressedValue == "x":
-        // ourObjElement.dataObj.clickedBtns.push("operator");
-        ourObjElement.dataObj.clickedBtns.push(buttonPressedValue);
-        operatorButtonPressed(
-          buttonPressedValue,
-          ourObjElement.dataObj.previousClickedBtn
-        );
-        break;
-      case buttonPressedValue == "RESET":
-        resetButtonPressed();
-        ourObjElement.dataObj.clickedBtns.push("reset");
-        console.log("reset button pressed");
-        break;
-      case buttonPressedValue == "DEL":
-        console.log("delete key pressed");
-        ourObjElement.dataObj.clickedBtns.push("delete");
-        break;
-      case buttonPressedValue == "=":
-        console.log("equal key pressed");
-        ourObjElement.dataObj.clickedBtns.push("equal");
-        break;
-      case buttonPressedValue == ".":
-        console.log("equal decimal pressed");
-        ourObjElement.dataObj.clickedBtns.push("decimal");
-        break;
-      default:
-        // ourObjElement.dataObj.clickedBtns.push("number");
-        ourObjElement.dataObj.clickedBtns.push(buttonPressedValue);
 
-        numberKeyPressed(
-          buttonPressedValue,
-          ourObjElement.dataObj.previousClickedBtn
-        );
-        console.log("number key pressed", buttonPressedValue);
+    if (event.target.tagName == "BUTTON") {
+      const buttonPressedValue = event.target.firstElementChild.innerText;
+
+      // if (ourObjElement.dataObj.clickedBtns.length == 2) {
+      //   const elementIndex = ourObjElement.dataObj.clickedBtns.length - 1;
+      //   const prevClickedBtn = ourObjElement.dataObj.clickedBtns[elementIndex];
+      //   ourObjElement.dataObj.previousClickedBtn = prevClickedBtn;
+      //   ourObjElement.dataObj.clickedBtns.length = 0;
+      // }
+      //   another approach
+      lastItemClicked();
+      switch (true) {
+        case buttonPressedValue == "+" ||
+          buttonPressedValue == "-" ||
+          buttonPressedValue == "/" ||
+          buttonPressedValue == "x":
+          ourObjElement.dataObj.clickedBtns.push("operator");
+          // ourObjElement.dataObj.clickedBtns.push(buttonPressedValue);
+          operatorButtonPressed(
+            buttonPressedValue,
+            ourObjElement.dataObj.previousClickedBtn
+          );
+          break;
+        case buttonPressedValue == "RESET":
+          resetButtonPressed();
+          ourObjElement.dataObj.clickedBtns.push("reset");
+          console.log("reset button pressed");
+          break;
+        case buttonPressedValue == "DEL":
+          console.log("delete key pressed");
+          ourObjElement.dataObj.clickedBtns.push("delete");
+          deleteButtonPressed(ourObjElement.dataObj.previousClickedBtn);
+          break;
+        case buttonPressedValue == "=":
+          console.log("equal key pressed");
+          ourObjElement.dataObj.clickedBtns.push("equal");
+          break;
+        case buttonPressedValue == ".":
+          console.log("decimal pressed");
+          ourObjElement.dataObj.clickedBtns.push("decimal");
+          decimalButtonPressed(buttonPressedValue);
+          break;
+        default:
+          ourObjElement.dataObj.clickedBtns.push("number");
+          // ourObjElement.dataObj.clickedBtns.push(buttonPressedValue);
+
+          numberKeyPressed(
+            buttonPressedValue,
+            ourObjElement.dataObj.previousClickedBtn
+          );
+          console.log("number key pressed", buttonPressedValue);
+      }
     }
   }
 
@@ -568,12 +578,99 @@
       const prevItem = ourObjElement.dataObj.clickedBtns.pop();
       ourObjElement.dataObj.previousClickedBtn = prevItem;
       ourObjElement.dataObj.clickedBtns.length = 0;
+      console.log(
+        "previousClickedBtn",
+        ourObjElement.dataObj.previousClickedBtn
+      );
     }
   }
 
   // calculation helper functions
 
-  function deleteButtonPressed() {}
+  function decimalButtonPressed(decimalBtnInput) {
+    /***** when user click on decimal button  *****/
+    const currentTotalDisplay = utilityStrFunc();
+    const arrOfValuesWithComma = currentTotalDisplay.split("");
+    const arrDoesNotIncludeDecimal = arrOfValuesWithComma.includes(".");
+    //before we hit decimal key our displayTotal does not include a decimal
+    //arrDoesNotIncludeDecimal will return false we will negate that !
+    //to enter if block
+    if (!arrDoesNotIncludeDecimal) {
+      //add "." to our array
+      arrOfValuesWithComma.push(".");
+      convertArrToStrAndDisplayValueInApp(
+        strValueForTotalDisplayELement,
+        convertArrOfValuesToStrUsingJoinMethod,
+        arrOfValuesWithComma
+      );
+    }
+    /*****
+         * "42.00030".slice(2 + 1).split("").every((val)=>{
+            return val === "0"
+            });
+         *  *****/
+    // if our displayTotal str has a decimal we dont want to add another decimal to displayTotal
+    //string
+  }
+
+  // decimal helper functions
+
+  function findIndexOfDecimal(totalDisplayStrOrArr) {
+    const indexOfDecimal = totalDisplayStrOrArr.indexOf(".");
+
+    return indexOfDecimal;
+  }
+
+  function leftSideOfDecimal(strInput) {
+    const arrOfValuesLeftSideFunc = strInput.split("");
+    const indexInArrLeftSideFunc = findIndexOfDecimal(arrOfValuesLeftSideFunc);
+    const leftSide = arrOfValuesLeftSideFunc.slice(0, indexInArrLeftSideFunc);
+    //will return an array
+    return leftSide;
+  }
+
+  function rightSideOfDecimal(strInput) {
+    const arrOfValuesRightSideFunc = strInput.split("");
+    const indexInArrRightSideFunc = findIndexOfDecimal(
+      arrOfValuesRightSideFunc
+    );
+    const rightSide = arrOfValuesRightSideFunc.slice(indexInArrRightSideFunc);
+    //will return an array with the decimal at the 0 index
+    return rightSide;
+  }
+
+  function combineLeftAndRightSideWithNumberPressed(
+    leftSideArr,
+    rightSideArr,
+    numberBtnPressed
+  ) {
+    //add numberBtnPressed to rightSide array
+
+    /*const rightSideArrWithNumBtnPressedAdded =
+      rightSideArr.push(numberBtnPressed); //this will return the index the value was added and assign it to rightSideArrWithNumBtnPressedAdded */
+    rightSideArr.push(numberBtnPressed);
+    //return an array with values of leftside and rightside array
+    const combinedLeftAndRightSideArr = [...leftSideArr, ...rightSideArr];
+    return combinedLeftAndRightSideArr;
+  }
+
+  function deleteButtonPressed(lastPressedBtn) {
+    const operatorNotPressed = ourObjElement.dataObj.operatorKeyPressed;
+    //when operatorKeyPressed is false we want to delete the last value of totalDisplayStr
+    if (!operatorNotPressed) {
+      const currentTotalDisplay = utilityStrFunc();
+      // const arrOfStrValues = currentTotalDisplay.split("");
+      const arrOfStrValues = [...currentTotalDisplay];
+      //remove last value in displayStr
+      arrOfStrValues.pop();
+      //passing arr to display composition func
+      convertArrToStrAndDisplayValueInApp(
+        strValueForTotalDisplayELement,
+        convertArrOfValuesToStrUsingJoinMethod,
+        arrOfStrValues
+      );
+    }
+  }
 
   function resetButtonPressed() {
     // set everything back to zero/default
@@ -585,6 +682,8 @@
   function equalButtonPressed() {}
 
   function operatorButtonPressed(operatorInput, lastPressedBtn) {
+    //   switch operatorKeyPressed from false to true when user click on operator btn this is for delete key functionality
+    ourObjElement.dataObj.operatorKeyPressed = true;
     //   when user click on an operator(+,-,/,x)
     //we will display the value enter before clicking on an operator
     //with the operator clicked to operatorKeyPressedDisplay element
@@ -616,41 +715,150 @@
   }
 
   function numberKeyPressed(buttonPressedInput, lastPressedBtn) {
-    //buttonPressedInput type is string
-    console.log(ourObjElement.dataObj.clickedBtns);
-    console.log(lastPressedBtn);
-    const displayValue = utilityStrFunc();
-    const arrOfOnlyNumbersWithoutCommas =
-      displayValueWithoutCommas(displayValue);
-    const lengthOfArrOfOnlyNumValues = arrOfOnlyNumbersWithoutCommas.length;
-
-    switch (true) {
-      //   length of 3 or less
-      case lengthOfArrOfOnlyNumValues <= 3:
-        workingWithDisplayLengthOfLessThanThree(
-          lengthOfArrOfOnlyNumValues,
-          buttonPressedInput,
-          arrOfOnlyNumbersWithoutCommas
-        );
-        break;
-      //length of 4 to 6
-      case lengthOfArrOfOnlyNumValues >= 4 && lengthOfArrOfOnlyNumValues <= 6:
-        workingWithDisplayLengthMoreThanThreeLessThanSeven(
-          arrOfOnlyNumbersWithoutCommas,
-          lengthOfArrOfOnlyNumValues,
-          buttonPressedInput
-        );
-        break;
-      //length of 7 to 9
-      case lengthOfArrOfOnlyNumValues >= 6 && lengthOfArrOfOnlyNumValues <= 9:
-        workingWithDisplayLengthOfMoreThanSixLessThanTen(
-          arrOfOnlyNumbersWithoutCommas,
-          lengthOfArrOfOnlyNumValues,
-          buttonPressedInput
-        );
-        break;
+    //we want to switch operatorKeyPressed to false when user click on operator btn
+    //then click on number btn
+    //   switch operatorKeyPressed to false when user click on number key. this is for delete key functionality
+    const currentValueOfTopDisplay = topDisplayStrFunc();
+    if (currentValueOfTopDisplay !== "") {
+      console.log("currentValueOfTopDisplay", currentValueOfTopDisplay);
+      ourObjElement.dataObj.operatorKeyPressed = false;
     }
-    //length of 10 to 12
+
+    //buttonPressedInput type is string
+    // console.log(ourObjElement.dataObj.clickedBtns);
+    console.log(lastPressedBtn);
+    /***** if user click on an operator btn: /,x,+,- then click a number btn
+     * displayTotal will be the number btn pressed
+     *  *****/
+    //   we can use Array.prototype.some or .includes() to check if lastItemClicked is an operator
+    /***** using includes *****/
+    // const lastBtnPressedIsOperator =
+    //   ourObjElement.dataObj.arrOfOperators.includes(lastPressedBtn);
+    /***** using Array.prototype.some() *****/
+    // const lastBtnPressedIsOperator = ourObjElement.dataObj.arrOfOperators.some(
+    //   function lastItemPressedIsAnOperator(eachStr) {
+    //     return eachStr == lastPressedBtn;
+    //   }
+    // );
+    //   lastBtn clicked is an x,/,+,-
+    // if (lastBtnPressedIsOperator) {
+    //   strValueForTotalDisplayELement(buttonPressedInput);
+    // }
+    // //   lastBtn clicked is not an x,/,+,-
+    //   //this will run when lastPressedBtn is an "" (empty string)
+    //   //because "" is falsy !"" will be true so we enter if block below
+    // if (!lastBtnPressedIsOperator) {
+    //   const displayValue = utilityStrFunc();
+    //   const arrOfOnlyNumbersWithoutCommas =
+    //     displayValueWithoutCommas(displayValue);
+    //   const lengthOfArrOfOnlyNumValues = arrOfOnlyNumbersWithoutCommas.length;
+
+    //   switch (true) {
+    //     //   length of 3 or less
+    //     case lengthOfArrOfOnlyNumValues <= 3:
+    //       workingWithDisplayLengthOfLessThanThree(
+    //         lengthOfArrOfOnlyNumValues,
+    //         buttonPressedInput,
+    //         arrOfOnlyNumbersWithoutCommas
+    //       );
+    //       break;
+    //     //length of 4 to 6
+    //     case lengthOfArrOfOnlyNumValues >= 4 && lengthOfArrOfOnlyNumValues <= 6:
+    //       workingWithDisplayLengthMoreThanThreeLessThanSeven(
+    //         arrOfOnlyNumbersWithoutCommas,
+    //         lengthOfArrOfOnlyNumValues,
+    //         buttonPressedInput
+    //       );
+    //       break;
+    //     //length of 7 to 9
+    //     case lengthOfArrOfOnlyNumValues >= 6 && lengthOfArrOfOnlyNumValues <= 9:
+    //       workingWithDisplayLengthOfMoreThanSixLessThanTen(
+    //         arrOfOnlyNumbersWithoutCommas,
+    //         lengthOfArrOfOnlyNumValues,
+    //         buttonPressedInput
+    //       );
+    //       break;
+    //   }
+    //   //length of 10 to 12
+    // }
+    const currentStrTotalDisplay = utilityStrFunc();
+    const totalDisplayStrContainDecimal = findIndexOfDecimal(
+      currentStrTotalDisplay
+    );
+    /***** better approach: check for "operator", "number", "decimal", etc *****/
+    // lastBtn is x,/,+,-
+    if (lastPressedBtn == "operator") {
+      strValueForTotalDisplayELement(buttonPressedInput);
+    }
+    //lastBtn is a number
+    if (lastPressedBtn == "number" || lastPressedBtn === "") {
+      const displayValue = utilityStrFunc();
+      const arrOfOnlyNumbersWithoutCommas =
+        displayValueWithoutCommas(displayValue);
+      const lengthOfArrOfOnlyNumValues = arrOfOnlyNumbersWithoutCommas.length;
+
+      switch (true) {
+        //   length of 3 or less
+        case lengthOfArrOfOnlyNumValues <= 3:
+          workingWithDisplayLengthOfLessThanThree(
+            lengthOfArrOfOnlyNumValues,
+            buttonPressedInput,
+            arrOfOnlyNumbersWithoutCommas
+          );
+          break;
+        //length of 4 to 6
+        case lengthOfArrOfOnlyNumValues >= 4 && lengthOfArrOfOnlyNumValues <= 6:
+          workingWithDisplayLengthMoreThanThreeLessThanSeven(
+            arrOfOnlyNumbersWithoutCommas,
+            lengthOfArrOfOnlyNumValues,
+            buttonPressedInput
+          );
+          break;
+        //length of 7 to 9
+        case lengthOfArrOfOnlyNumValues >= 6 && lengthOfArrOfOnlyNumValues <= 9:
+          workingWithDisplayLengthOfMoreThanSixLessThanTen(
+            arrOfOnlyNumbersWithoutCommas,
+            lengthOfArrOfOnlyNumValues,
+            buttonPressedInput
+          );
+          break;
+      }
+    }
+    //lastBtn is a number and display str includes decimal
+    if (lastPressedBtn == "number" && totalDisplayStrContainDecimal !== -1) {
+      const leftSide = leftSideOfDecimal(currentStrTotalDisplay);
+      const rightSide = rightSideOfDecimal(currentStrTotalDisplay);
+      const arrUsedInCompositionFunc = combineLeftAndRightSideWithNumberPressed(
+        leftSide,
+        rightSide,
+        buttonPressedInput
+      );
+
+      convertArrToStrAndDisplayValueInApp(
+        strValueForTotalDisplayELement,
+        convertArrOfValuesToStrUsingJoinMethod,
+        arrUsedInCompositionFunc
+      );
+    }
+    //   user clicked on number and last clicked btn is "delete"
+    if (lastPressedBtn == "delete") {
+      console.log("delete clicked then number", lastPressedBtn);
+    }
+    if (lastPressedBtn == "decimal") {
+      //lastBtn is a decimal
+      console.log("numberKeyPressed decimal pressed");
+      //when user click on decimal then number we want to add number to display
+      const currentTotalDisplayWithDecimal = utilityStrFunc();
+      const arrOfValuesWithDecimal = currentTotalDisplayWithDecimal.split("");
+      //add number pressed to arr
+      arrOfValuesWithDecimal.push(buttonPressedInput);
+      //pass arr to our composition func
+      convertArrToStrAndDisplayValueInApp(
+        strValueForTotalDisplayELement,
+        convertArrOfValuesToStrUsingJoinMethod,
+        arrOfValuesWithDecimal
+      );
+    }
   }
   //   length of 3 or less
   function workingWithDisplayLengthOfLessThanThree(
