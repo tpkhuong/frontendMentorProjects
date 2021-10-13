@@ -655,21 +655,120 @@
   }
 
   function deleteButtonPressed(lastPressedBtn) {
+    //when we want to work with the displayTotal without the comma
+    const currentTotalDisplay = utilityStrFunc();
+    const arrOfDisplayValuesWithoutComma = currentTotalDisplay.match(/\d/gi);
+    //the displayTotal contain decimal
+    const decimalInTotalDisplay = currentTotalDisplay.includes(".");
     const operatorNotPressed = ourObjElement.dataObj.operatorKeyPressed;
     //when operatorKeyPressed is false we want to delete the last value of totalDisplayStr
     if (!operatorNotPressed) {
-      const currentTotalDisplay = utilityStrFunc();
-      // const arrOfStrValues = currentTotalDisplay.split("");
-      const arrOfStrValues = [...currentTotalDisplay];
-      //remove last value in displayStr
-      arrOfStrValues.pop();
-      //passing arr to display composition func
-      convertArrToStrAndDisplayValueInApp(
-        strValueForTotalDisplayELement,
-        convertArrOfValuesToStrUsingJoinMethod,
-        arrOfStrValues
-      );
+      // how to deal with commas in operator
+      //get length of displayStr
+      //when length is 1. display is "3"
+      if (arrOfDisplayValuesWithoutComma.length == 1) {
+        strValueForTotalDisplayELement("0");
+      }
+
+      if (
+        (arrOfDisplayValuesWithoutComma.length > 1 &&
+          arrOfDisplayValuesWithoutComma.length <= 3) ||
+        decimalInTotalDisplay
+      ) {
+        // const arrOfStrValues = currentTotalDisplay.split("");
+        const arrOfStrValues = [...currentTotalDisplay];
+        //remove last value in displayStr
+        arrOfStrValues.pop();
+        //passing arr to display composition func
+        convertArrToStrAndDisplayValueInApp(
+          strValueForTotalDisplayELement,
+          convertArrOfValuesToStrUsingJoinMethod,
+          arrOfStrValues
+        );
+      }
+      // displayTotal does not contain decimal and length is greater than 3
+      if (
+        arrOfDisplayValuesWithoutComma.length >= 4 &&
+        !decimalInTotalDisplay
+      ) {
+        deleteButtonDealingWithLengthOfTotalDisplay(
+          arrOfDisplayValuesWithoutComma
+        );
+      }
     }
+  }
+
+  function deleteButtonDealingWithLengthOfTotalDisplay(arrInputWithoutComma) {
+    const copyOfArrInput = [...arrInputWithoutComma];
+    const lengthOfArrOfValuesWithoutComma = arrInputWithoutComma.length;
+    switch (lengthOfArrOfValuesWithoutComma) {
+      case 4:
+        copyOfArrInput.pop();
+        convertArrToStrAndDisplayValueInApp(
+          strValueForTotalDisplayELement,
+          convertArrOfValuesToStrUsingJoinMethod,
+          copyOfArrInput
+        );
+        break;
+      case 5:
+        copyOfArrInput.pop();
+        //[7,8,2,3,4] remove the last value
+        //[7,8,2,3] pass in an array of ["0","0"]
+
+        workingWithOneComma(copyOfArrInput, ["0", "0"]);
+        break;
+      case 6:
+        copyOfArrInput.pop();
+
+        //[7,8,2,3,4,8] remove the last value
+        //[7,8,2,3,4] pass in an array of ["0"]
+        workingWithOneComma(copyOfArrInput, ["0"]);
+        break;
+      case 7:
+        break;
+      case 8:
+        break;
+      case 9:
+        break;
+      case 10:
+        break;
+    }
+  }
+
+  function workingWithOneComma(arrInputWithoutComma, arrOfZeros) {
+    const copiedArrInput = [...arrInputWithoutComma];
+    //we want to work with an array of length 6: [0,0,3,","",6,7,8] or [0,3,4,6,7,8]
+    const arrOfValuesWithZeros = [...arrOfZeros, ",", ...copiedArrInput];
+    const indexOfComma = arrOfValuesWithZeros.indexOf(",");
+    const leftSideOfArrWithoutComma = arrOfValuesWithZeros.slice(
+      0,
+      indexOfComma
+    );
+    const rightSideOfArrWithComma = arrOfValuesWithZeros.slice(indexOfComma);
+    //turn leftside to a string then use Number.parseInt to get only number with 0
+    const convertLeftSideToString = leftSideOfArrWithoutComma.join("");
+    const removeZeroThenConvertBackToString = String(
+      Number.parseInt(convertLeftSideToString)
+    );
+    debugger;
+    const arrOfLeftSideWithoutZeros = [...removeZeroThenConvertBackToString];
+    const modifiedArrays = [
+      ...arrOfLeftSideWithoutZeros,
+      ...rightSideOfArrWithComma,
+    ];
+    convertArrToStrAndDisplayValueInApp(
+      strValueForTotalDisplayELement,
+      convertArrOfValuesToStrUsingJoinMethod,
+      modifiedArrays
+    );
+  }
+
+  function workingWithTwoCommas(arrInputWithoutComma) {
+    const copiedArrInput = [].concat(arrInputWithoutComma);
+  }
+
+  function workingWithThreeCommas(arrInputWithoutComma) {
+    const copiedArrInput = arrInputWithoutComma.slice();
   }
 
   function resetButtonPressed() {
@@ -843,6 +942,21 @@
     //   user clicked on number and last clicked btn is "delete"
     if (lastPressedBtn == "delete") {
       console.log("delete clicked then number", lastPressedBtn);
+      const currentTotalDisplay = utilityStrFunc();
+      const arrForCompositionFunc = splitStrAddKeyPressedToArrForDisplay(
+        currentTotalDisplay,
+        buttonPressedInput
+      );
+      // composition func
+      convertArrToStrAndDisplayValueInApp(
+        strValueForTotalDisplayELement,
+        convertArrOfValuesToStrUsingJoinMethod,
+        arrForCompositionFunc
+      );
+    }
+    //   user clicked on number and last clicked btn is "delete" and totalDisplay is "0"
+    if (lastPressedBtn == "delete" && currentStrTotalDisplay === "0") {
+      strValueForTotalDisplayELement(buttonPressedInput);
     }
     if (lastPressedBtn == "decimal") {
       //lastBtn is a decimal
@@ -1114,6 +1228,13 @@
     arrOfStrChars.push(keypadValuePressed);
 
     hundredsValueDisplayFunc(arrOfStrChars);
+  }
+
+  function splitStrAddKeyPressedToArrForDisplay(strInput, keyPressed) {
+    const arrOfChars = strInput.split("");
+    arrOfChars.push(keyPressed);
+
+    return arrOfChars;
   }
 
   function hundredsValueDisplayFunc(arrInput) {
