@@ -725,10 +725,24 @@
         workingWithOneComma(copyOfArrInput, ["0"]);
         break;
       case 7:
+        copyOfArrInput.pop();
+        const leftSide = copyOfArrInput.slice(0, 3);
+        const rightSide = copyOfArrInput.slice(3);
+        const arrOfLeftAndRightWithComma = [...leftSide, ",", ...rightSide];
+
+        convertArrToStrAndDisplayValueInApp(
+          strValueForTotalDisplayELement,
+          convertArrOfValuesToStrUsingJoinMethod,
+          arrOfLeftAndRightWithComma
+        );
         break;
       case 8:
+        copyOfArrInput.pop();
+        workingWithTwoCommas(copyOfArrInput, ["0", "0"]);
         break;
       case 9:
+        copyOfArrInput.pop();
+        workingWithTwoCommas(copyOfArrInput, ["0"]);
         break;
       case 10:
         break;
@@ -737,38 +751,74 @@
 
   function workingWithOneComma(arrInputWithoutComma, arrOfZeros) {
     const copiedArrInput = [...arrInputWithoutComma];
-    //we want to work with an array of length 6: [0,0,3,","",6,7,8] or [0,3,4,6,7,8]
-    const arrOfValuesWithZeros = [...arrOfZeros, ",", ...copiedArrInput];
-    const indexOfComma = arrOfValuesWithZeros.indexOf(",");
-    const leftSideOfArrWithoutComma = arrOfValuesWithZeros.slice(
-      0,
-      indexOfComma
+    //we want to work with an array of length 6: [0,0,3,6,7,8] or [0,3,4,6,7,8]
+    const arrOfValuesWithZeros = combineTwoArrays(arrOfZeros, copiedArrInput);
+
+    const leftSideOfArrWithoutComma = arrOfValuesWithZeros.slice(0, 3);
+    // remove leading 0 of leftSide
+    //using filter method to remove leading 0
+    // const leftSideWithoutLeadingZeros = leftSideOfArrWithoutComma.filter(function removeZeros(eachStr) {
+    //   return eachStr !== "0";
+    // });
+    //using reduce method to remove leading 0
+    const leftSideWithoutLeadingZeros = removeZeroValuesInArray(
+      leftSideOfArrWithoutComma
     );
-    const rightSideOfArrWithComma = arrOfValuesWithZeros.slice(indexOfComma);
-    //turn leftside to a string then use Number.parseInt to get only number with 0
-    const convertLeftSideToString = leftSideOfArrWithoutComma.join("");
-    const removeZeroThenConvertBackToString = String(
-      Number.parseInt(convertLeftSideToString)
-    );
-    debugger;
-    const arrOfLeftSideWithoutZeros = [...removeZeroThenConvertBackToString];
-    const modifiedArrays = [
-      ...arrOfLeftSideWithoutZeros,
-      ...rightSideOfArrWithComma,
+    const rightSideOfArrWithoutComma = arrOfValuesWithZeros.slice(3);
+    const combineLeftAndRightSideWithComma = [
+      ...leftSideWithoutLeadingZeros,
+      ",",
+      ...rightSideOfArrWithoutComma,
     ];
+    //passing arr to display composition func
     convertArrToStrAndDisplayValueInApp(
       strValueForTotalDisplayELement,
       convertArrOfValuesToStrUsingJoinMethod,
-      modifiedArrays
+      combineLeftAndRightSideWithComma
     );
   }
 
-  function workingWithTwoCommas(arrInputWithoutComma) {
+  function workingWithTwoCommas(arrInputWithoutComma, arrOfZeros) {
     const copiedArrInput = [].concat(arrInputWithoutComma);
+    // code below will give us an array of [0,0,3,4,5,6,7,8,9]
+    const arraysWithZerosAdded = combineTwoArrays(arrOfZeros, copiedArrInput);
+
+    const beginningOfArray = arraysWithZerosAdded.slice(0, 3);
+    const middleOfArray = arraysWithZerosAdded.slice(3, 6);
+    const endOfArray = arraysWithZerosAdded.slice(6, 9);
+
+    // remove zeros of beginning array
+    const beginningOfArrayWithoutZeros =
+      removeZeroValuesInArray(beginningOfArray);
+    // combine our arrays
+    const combineOurArraysAddingCommas = [
+      ...beginningOfArrayWithoutZeros,
+      ",",
+      ...middleOfArray,
+      ",",
+      ...endOfArray,
+    ];
+    //passing arr to display composition func
+    convertArrToStrAndDisplayValueInApp(
+      strValueForTotalDisplayELement,
+      convertArrOfValuesToStrUsingJoinMethod,
+      combineOurArraysAddingCommas
+    );
   }
 
   function workingWithThreeCommas(arrInputWithoutComma) {
     const copiedArrInput = arrInputWithoutComma.slice();
+  }
+
+  function combineTwoArrays(arrayOne, arrayTwo) {
+    return [...arrayOne, ...arrayTwo];
+  }
+
+  function removeZeroValuesInArray(arrInput) {
+    return arrInput.reduce(function removeZeros(buildingUp, currentValue) {
+      if (currentValue !== "0") buildingUp.push(currentValue);
+      return buildingUp;
+    }, []);
   }
 
   function resetButtonPressed() {
