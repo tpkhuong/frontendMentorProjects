@@ -45,6 +45,9 @@
       clickedBtns: [],
       previousClickedBtn: "",
       currentTotal: 0,
+      // operatorKeyPressed is false when our app loads
+      //and when user click on a number btn
+      /***** keep this in mind for x,/,+,- and equal btn calculations *****/
       operatorKeyPressed: false,
     };
   }
@@ -554,6 +557,7 @@
         case buttonPressedValue == "=":
           console.log("equal key pressed");
           ourObjElement.dataObj.clickedBtns.push("equal");
+          equalButtonPressed(ourObjElement.dataObj.previousClickedBtn);
           break;
         case buttonPressedValue == ".":
           console.log("decimal pressed");
@@ -662,6 +666,8 @@
     const decimalInTotalDisplay = currentTotalDisplay.includes(".");
     const operatorNotPressed = ourObjElement.dataObj.operatorKeyPressed;
     //when operatorKeyPressed is false we want to delete the last value of totalDisplayStr
+    //when user click on a number btn we set ourObjElement.dataObj.operatorKeyPressed to false
+    //which will take us into this if statement block
     if (!operatorNotPressed) {
       // how to deal with commas in operator
       //get length of displayStr
@@ -735,6 +741,7 @@
           convertArrOfValuesToStrUsingJoinMethod,
           arrOfLeftAndRightWithComma
         );
+
         break;
       case 8:
         copyOfArrInput.pop();
@@ -745,6 +752,32 @@
         workingWithTwoCommas(copyOfArrInput, ["0"]);
         break;
       case 10:
+        copyOfArrInput.pop();
+        const beginningOfArray = copyOfArrInput.slice(0, 3);
+        const middleOfArray = copyOfArrInput.slice(3, 6);
+        const endOfArray = copyOfArrInput.slice(6, 9);
+        const combinedArrays = [
+          ...beginningOfArray,
+          ",",
+          ...middleOfArray,
+          ",",
+          ...endOfArray,
+        ];
+
+        convertArrToStrAndDisplayValueInApp(
+          strValueForTotalDisplayELement,
+          convertArrOfValuesToStrUsingJoinMethod,
+          combinedArrays
+        );
+        break;
+      case 11:
+        //[1,2,3,4,5,6,7,8,9,10,11].pop() becomes [1,2,3,4,5,6,7,8,9,10]
+        copyOfArrInput.pop();
+        workingWithThreeCommas(copyOfArrInput, ["0", "0"]);
+        break;
+      case 12:
+        copyOfArrInput.pop();
+        workingWithThreeCommas(copyOfArrInput, ["0"]);
         break;
     }
   }
@@ -806,8 +839,35 @@
     );
   }
 
-  function workingWithThreeCommas(arrInputWithoutComma) {
+  function workingWithThreeCommas(arrInputWithoutComma, arrOfZeros) {
     const copiedArrInput = arrInputWithoutComma.slice();
+    const arraysWithZeros = combineTwoArrays(arrOfZeros, copiedArrInput);
+
+    const firstFourthOfArray = arraysWithZeros.slice(0, 3);
+    const secondFourthOfArray = arraysWithZeros.slice(3, 6);
+    const thirdFourthOfArray = arraysWithZeros.slice(6, 9);
+    const lastFourthOfArray = arraysWithZeros.slice(9, 12);
+
+    // remove zeros of beginning array
+    const beginningOfArrayWithoutZeros =
+      removeZeroValuesInArray(firstFourthOfArray);
+
+    // combine our arrays
+    const combineArraysAddingCommas = [
+      ...beginningOfArrayWithoutZeros,
+      ",",
+      ...secondFourthOfArray,
+      ",",
+      ...thirdFourthOfArray,
+      ",",
+      ...lastFourthOfArray,
+    ];
+    //passing arr to display composition func
+    convertArrToStrAndDisplayValueInApp(
+      strValueForTotalDisplayELement,
+      convertArrOfValuesToStrUsingJoinMethod,
+      combineArraysAddingCommas
+    );
   }
 
   function combineTwoArrays(arrayOne, arrayTwo) {
@@ -828,7 +888,16 @@
     totalDisplay.innerText = "0";
   }
 
-  function equalButtonPressed() {}
+  function equalButtonPressed(lastPressedBtn) {
+    const innerTextTopDisplay = topDisplayStrFunc();
+    if (innerTextTopDisplay === "") {
+      const currentTotalDisplay = utilityStrFunc();
+      strValueForKeyPressedDisplayElement(currentTotalDisplay);
+      // operatorKeyPressedDisplay.innerText = currentTotalDisplay;
+    }
+    console.log("innerTextTopDisplay", innerTextTopDisplay);
+    console.log("lastPressedBtn", lastPressedBtn);
+  }
 
   function operatorButtonPressed(operatorInput, lastPressedBtn) {
     //   switch operatorKeyPressed from false to true when user click on operator btn this is for delete key functionality
@@ -844,13 +913,25 @@
       operatorKeyPressedDisplay.innerText =
         strOfNumberBtnPressed + ` ${operatorInput}`;
     } else {
-      const arrOfValueAndOperator = valueOfDisplayAboveTotal.split(" ");
+      // when we get here the display above totalDisplay is not empty
+      switch (lastPressedBtn) {
+        case "operator":
+          //lastPressedBtn is x,/,+,-
+          const arrOfValueAndOperator = valueOfDisplayAboveTotal.split(" ");
 
-      //   replace current operator on display with operator user click
-      //when user already click numbers and clicked an operator
-      arrOfValueAndOperator[1] = operatorInput;
-      const strForDisplayWithChnagedOperator = arrOfValueAndOperator.join(" ");
-      operatorKeyPressedDisplay.innerText = strForDisplayWithChnagedOperator;
+          //   replace current operator on display with operator user click
+          //when user already click numbers and clicked an operator
+          arrOfValueAndOperator[1] = operatorInput;
+          const strForDisplayWithChangedOperator =
+            arrOfValueAndOperator.join(" ");
+          operatorKeyPressedDisplay.innerText =
+            strForDisplayWithChangedOperator;
+          break;
+        case "equal":
+          //lastPressedBtn is =
+          console.log("equal pressed");
+          break;
+      }
     }
   }
 
@@ -870,6 +951,8 @@
     const currentValueOfTopDisplay = topDisplayStrFunc();
     if (currentValueOfTopDisplay !== "") {
       console.log("currentValueOfTopDisplay", currentValueOfTopDisplay);
+      // setting ourObjElement.dataObj.operatorKeyPressed = false to make our delete btn func
+      //work
       ourObjElement.dataObj.operatorKeyPressed = false;
     }
 
@@ -966,6 +1049,14 @@
         //length of 7 to 9
         case lengthOfArrOfOnlyNumValues >= 6 && lengthOfArrOfOnlyNumValues <= 9:
           workingWithDisplayLengthOfMoreThanSixLessThanTen(
+            arrOfOnlyNumbersWithoutCommas,
+            lengthOfArrOfOnlyNumValues,
+            buttonPressedInput
+          );
+          break;
+        case lengthOfArrOfOnlyNumValues >= 9 &&
+          lengthOfArrOfOnlyNumValues <= 12:
+          workingWithDisplayLengthOfMoreThanNineLessThanTwelve(
             arrOfOnlyNumbersWithoutCommas,
             lengthOfArrOfOnlyNumValues,
             buttonPressedInput
@@ -1228,6 +1319,98 @@
           convertArrOfValuesToStrUsingJoinMethod,
           arrOfValuesAndCommas
         );
+
+        break;
+    }
+  }
+
+  function workingWithDisplayLengthOfMoreThanNineLessThanTwelve(
+    arrInput,
+    lengthInput,
+    keyPressed
+  ) {
+    const copyArrInput = arrInput.slice();
+    // const copyArrInput = [].concat(arrInput);
+    // const copyArrInput = [...arrInput];
+
+    switch (lengthInput) {
+      case 10:
+        //[1,2,3,4,5,6,7,8,9,10] with btn user click we will make a display of 12,345,678,978
+        const [
+          firstValue,
+          secondValue,
+          thirdValue,
+          fourthValue,
+          fifthValue,
+          sixthValue,
+          sevenValue,
+          eighthValue,
+          ninthValue,
+          tenthValue,
+        ] = copyArrInput;
+
+        const valuesAndCommasArray = [
+          firstValue,
+          secondValue,
+          ",",
+          thirdValue,
+          fourthValue,
+          fifthValue,
+          ",",
+          sixthValue,
+          sevenValue,
+          eighthValue,
+          ",",
+          ninthValue,
+          tenthValue,
+          keyPressed,
+        ];
+
+        convertArrToStrAndDisplayValueInApp(
+          strValueForTotalDisplayELement,
+          convertArrOfValuesToStrUsingJoinMethod,
+          valuesAndCommasArray
+        );
+
+        break;
+      case 11:
+        const [
+          firstStr,
+          secondStr,
+          thirdStr,
+          fourthStr,
+          fifthStr,
+          sixthStr,
+          sevenStr,
+          eighthStr,
+          ninthStr,
+          tenthStr,
+          eleventhStr,
+        ] = copyArrInput;
+
+        const arrayOfValAndCommas = [
+          firstStr,
+          secondStr,
+          thirdStr,
+          ",",
+          fourthStr,
+          fifthStr,
+          sixthStr,
+          ",",
+          sevenStr,
+          eighthStr,
+          ninthStr,
+          ",",
+          tenthStr,
+          eleventhStr,
+          keyPressed,
+        ];
+
+        convertArrToStrAndDisplayValueInApp(
+          strValueForTotalDisplayELement,
+          convertArrOfValuesToStrUsingJoinMethod,
+          arrayOfValAndCommas
+        );
         break;
     }
   }
@@ -1330,7 +1513,9 @@
     func1(func2(arrInput));
   }
 
-  function strValueForKeyPressedDisplayElement(valueInput) {}
+  function strValueForKeyPressedDisplayElement(strInput) {
+    operatorKeyPressedDisplay.innerText = `${strInput} =`;
+  }
 
   function topDisplayMatchOperators(strInput) {
     // "145 -".match(/[+-/x]/ig)
