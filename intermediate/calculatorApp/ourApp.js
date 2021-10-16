@@ -895,8 +895,6 @@
       strValueForKeyPressedDisplayElement(currentTotalDisplay);
       // operatorKeyPressedDisplay.innerText = currentTotalDisplay;
     }
-    console.log("innerTextTopDisplay", innerTextTopDisplay);
-    console.log("lastPressedBtn", lastPressedBtn);
   }
 
   function operatorButtonPressed(operatorInput, lastPressedBtn) {
@@ -927,6 +925,40 @@
           operatorKeyPressedDisplay.innerText =
             strForDisplayWithChangedOperator;
           break;
+        case "number":
+          console.log(lastPressedBtn);
+          //topDisplay will look like 10 + bottom display will be another number 8
+          switch (operatorInput) {
+            case "x":
+              console.log("times");
+              calculationThenUpdateTopAndTotalDisplay(
+                valueOfDisplayAboveTotal,
+                "x"
+              );
+              break;
+            case "/":
+              console.log("divide");
+              calculationThenUpdateTopAndTotalDisplay(
+                valueOfDisplayAboveTotal,
+                "/"
+              );
+              break;
+            case "+":
+              console.log("add");
+              calculationThenUpdateTopAndTotalDisplay(
+                valueOfDisplayAboveTotal,
+                "+"
+              );
+              break;
+            case "-":
+              console.log("subtract");
+              calculationThenUpdateTopAndTotalDisplay(
+                valueOfDisplayAboveTotal,
+                "-"
+              );
+              break;
+          }
+          break;
         case "equal":
           //lastPressedBtn is =
           console.log("equal pressed");
@@ -935,6 +967,74 @@
     }
   }
 
+  function calculationThenUpdateTopAndTotalDisplay(
+    topDisplayValue,
+    arithmeticOrEqualSign
+  ) {
+    const currentNumInTotalDisplay = utilityStrFunc();
+    let sumValue;
+    //passing in str "8 +"
+    //array will be ["8","+"]
+    const [numValue, operatorValue] = topDisplayValue.split(" ");
+    switch (operatorValue) {
+      case "x":
+        sumValue = multiplyFunctionality(
+          Number(numValue),
+          Number(currentNumInTotalDisplay)
+        );
+
+        break;
+      case "/":
+        sumValue = divisionFunctionality(
+          Number(numValue),
+          Number(currentNumInTotalDisplay)
+        );
+        break;
+      case "+":
+        sumValue = addFunctionality(
+          Number(numValue),
+          Number(currentNumInTotalDisplay)
+        );
+        break;
+      case "-":
+        sumValue = minusFunctionality(
+          Number(numValue),
+          Number(currentNumInTotalDisplay)
+        );
+        break;
+    }
+    //update topDisplay with sum and current operator btn pressed
+    //when arithmeticOrEqualSign is an operator(x,/,+,-) topDisplay will be number operator
+    //when arithmeticOrEqualSign is equal(=) topDisplay will be numValue operator currentNumInTotalDisplay =
+    //totalDisplay will be the sumValue
+    if (arithmeticOrEqualSign === "=") {
+      const arrOfEqualSumAndArithmeticStr = [
+        String(sumValue),
+        operatorValue,
+        arithmeticOrEqualSign,
+      ];
+      const convertArrWithEqualSignToStringForTopDisplay =
+        arrOfEqualSumAndArithmeticStr.join(" ");
+      //topDisplay
+      strValueForKeyPressedDisplayElement(
+        convertArrWithEqualSignToStringForTopDisplay
+      );
+      //totalDisplay
+      strValueForTotalDisplayELement(String(sumValue));
+    } else {
+      const arrOfSumAndArithmeticString = [
+        String(sumValue),
+        arithmeticOrEqualSign,
+      ];
+      const convertArrToStringForTopDisplay =
+        arrOfSumAndArithmeticString.join(" ");
+      //topDisplay
+      strValueForKeyPressedDisplayElement(convertArrToStringForTopDisplay);
+      //totalDisplay
+      strValueForTotalDisplayELement(String(sumValue));
+    }
+  }
+  console.log("TEST OUR ALGORITHM");
   function operatorPressedDisplayHelperFunc() {
     const displayValue = utilityStrFunc();
     const arrOfOnlyNumbersWithoutCommas =
@@ -1437,14 +1537,34 @@
     totalDisplay.innerText = "0";
   }
   // operation function add,minus,times and divide
-  function addFunctionality() {}
-  function minusFunctionality() {}
-  function multiplyFunctionality() {}
-  function divisionFunctionality() {}
+  // if topDisplay has number and operator and operatorKeyPressed is false
+  //it means user click on number btn then one of the operator
+  //then click on another number btn. that will explains why operatorKeyPressed will be false
+  //because in our number btn func we set operatorKeyPressed to false when user click on btn
+  function addFunctionality(leftOfOperand, rightOfOperand) {
+    // values passed into this function will be number type
+    const addBothOperand = leftOfOperand + rightOfOperand;
+    return String(addBothOperand);
+  }
+  function minusFunctionality(leftOfOperand, rightOfOperand) {
+    // values passed into this function will be number type
+    const subtractBothOperand = leftOfOperand - rightOfOperand;
+    return String(subtractBothOperand);
+  }
+  function multiplyFunctionality(leftOfOperand, rightOfOperand) {
+    // values passed into this function will be number type
+    const multiplyBothOperand = leftOfOperand * rightOfOperand;
+    return String(multiplyBothOperand);
+  }
+  function divisionFunctionality(leftOfOperand, rightOfOperand) {
+    // values passed into this function will be number type
+    const divideBothOperand = leftOfOperand / rightOfOperand;
+    return String(divideBothOperand);
+  }
 
   // convert display value (string type) in to number type
   function convertDisplayNumberInputToNumberType(strType) {
-    const convertedStrToNumType = Number(strInput);
+    const convertedStrToNumType = Number(strType);
 
     return convertedStrToNumType;
   }
