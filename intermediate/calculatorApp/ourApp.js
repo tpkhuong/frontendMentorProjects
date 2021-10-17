@@ -892,8 +892,28 @@
     const innerTextTopDisplay = topDisplayStrFunc();
     if (innerTextTopDisplay === "") {
       const currentTotalDisplay = utilityStrFunc();
-      strValueForKeyPressedDisplayElement(currentTotalDisplay);
+      strValueForKeyPressedDisplayElement(`${currentTotalDisplay} =`);
       // operatorKeyPressedDisplay.innerText = currentTotalDisplay;
+    } else {
+      // topDisplay
+      const valueOfDisplayAboveTotal = operatorKeyPressedDisplay.innerText;
+      const currentTotalDisplay = utilityStrFunc();
+      const [leftValue, operatorSign] = valueOfDisplayAboveTotal.split(" ");
+      // when top display is not empty it means user click on a number then operator or
+      //use click on equal btn
+      switch (lastPressedBtn) {
+        case "number":
+          if (!ourObjElement.dataObj.operatorButtonPressed) {
+            // if user has not clicked on operator btn and last pressed btn is a number
+            //update left side of = with currentTotalDisplay
+            strValueForKeyPressedDisplayElement(`${currentTotalDisplay} =`);
+          }
+          break;
+        case "operator":
+          console.log("operator in equalbtnpressed");
+          break;
+      }
+      calculationThenUpdateTopAndTotalDisplay(innerTextTopDisplay, "=");
     }
   }
 
@@ -903,7 +923,10 @@
     //   when user click on an operator(+,-,/,x)
     //we will display the value enter before clicking on an operator
     //with the operator clicked to operatorKeyPressedDisplay element
+    // topDisplay
     const valueOfDisplayAboveTotal = operatorKeyPressedDisplay.innerText;
+    // totalDisplay
+    const currentTotalDisplay = utilityStrFunc();
     console.log(ourObjElement.dataObj.clickedBtns);
     console.log(lastPressedBtn);
     if (valueOfDisplayAboveTotal === "") {
@@ -961,6 +984,8 @@
           break;
         case "equal":
           //lastPressedBtn is =
+          const strPassedToTopDisplayFunc = `${currentTotalDisplay} ${operatorInput}`;
+          strValueForKeyPressedDisplayElement(strPassedToTopDisplayFunc);
           console.log("equal pressed");
           break;
       }
@@ -1011,6 +1036,7 @@
       const arrOfEqualSumAndArithmeticStr = [
         String(sumValue),
         operatorValue,
+        currentNumInTotalDisplay,
         arithmeticOrEqualSign,
       ];
       const convertArrWithEqualSignToStringForTopDisplay =
@@ -1034,7 +1060,7 @@
       strValueForTotalDisplayELement(String(sumValue));
     }
   }
-  console.log("TEST OUR ALGORITHM");
+
   function operatorPressedDisplayHelperFunc() {
     const displayValue = utilityStrFunc();
     const arrOfOnlyNumbersWithoutCommas =
@@ -1199,6 +1225,7 @@
     if (lastPressedBtn == "delete" && currentStrTotalDisplay === "0") {
       strValueForTotalDisplayELement(buttonPressedInput);
     }
+
     if (lastPressedBtn == "decimal") {
       //lastBtn is a decimal
       console.log("numberKeyPressed decimal pressed");
@@ -1213,6 +1240,9 @@
         convertArrOfValuesToStrUsingJoinMethod,
         arrOfValuesWithDecimal
       );
+    }
+    // user pressed equal
+    if (lastPressedBtn == "equal") {
     }
   }
   //   length of 3 or less
@@ -1634,7 +1664,7 @@
   }
 
   function strValueForKeyPressedDisplayElement(strInput) {
-    operatorKeyPressedDisplay.innerText = `${strInput} =`;
+    operatorKeyPressedDisplay.innerText = strInput;
   }
 
   function topDisplayMatchOperators(strInput) {
