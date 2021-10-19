@@ -45,7 +45,7 @@
       clickedBtns: [],
       previousClickedBtn: "",
       currentTotal: 0,
-      valueForWhenEqualBtnIsLastBtnPressed: null,
+      totalDisplayValueForWhenEqualBtnIsLastBtnPressed: null,
       // operatorKeyPressed is false when our app loads
       //and when user click on a number btn
       /***** keep this in mind for x,/,+,- and equal btn calculations *****/
@@ -891,40 +891,62 @@
 
   function equalButtonPressed(lastPressedBtn) {
     const innerTextTopDisplay = topDisplayStrFunc();
+    const currentTotalDisplayWithoutCommas =
+      operatorAndEqualBtnPressedDisplayHelperFunc();
     if (innerTextTopDisplay === "") {
-      const currentTotalDisplay = utilityStrFunc();
-      strValueForKeyPressedDisplayElement(`${currentTotalDisplay} =`);
-      // operatorKeyPressedDisplay.innerText = currentTotalDisplay;
+      strValueForKeyPressedDisplayElement(
+        `${currentTotalDisplayWithoutCommas} =`
+      );
+      // operatorKeyPressedDisplay.innerText = currentTotalDisplayWithoutCommas;
+      // our other condition
+      // when user pressed number operator then equal
+      // or when user pressed number operator number then equal
+      // both condition will give us a sum
+      // then when user click number it will make topDisplay empty
+      // we will check that too
     } else {
       // topDisplay
       const [leftValue, operatorSign] = innerTextTopDisplay.split(" ");
-      const currentTotalDisplay = utilityStrFunc();
+      // const currentTotalDisplayWithoutCommas = utilityStrFunc(); declaring a identifier with valuesOfTotalDisplayWithoutCommas
       // when top display is not empty it means user click on a number then operator or
       //use click on equal btn
       switch (lastPressedBtn) {
         case "number":
           if (!ourObjElement.dataObj.operatorButtonPressed) {
             // if user has not clicked on operator btn and last pressed btn is a number
-            //update left side of = with currentTotalDisplay
-            strValueForKeyPressedDisplayElement(`${currentTotalDisplay} =`);
+            //update left side of = with currentTotalDisplayWithoutCommas
+            strValueForKeyPressedDisplayElement(
+              `${currentTotalDisplayWithoutCommas} =`
+            );
             //if use click on number then operator then another number for calculation
             //that would set ourObjElement.dataObj.operatorButtonPressed to false
             //we would enter this if statement
             // topDisplay: 5 +
             //totalDisplay: 3 then user hit equal
+            // operatorSign identifier is from const [leftValue, operatorSign] = innerTextTopDisplay.split(" ");
             if (operatorSign) {
               const sumValue = calculationHelperFunc(innerTextTopDisplay);
               // topDisplay
               const strConvertedFromArr = [
                 leftValue,
                 operatorSign,
-                currentTotalDisplay,
+                currentTotalDisplayWithoutCommas,
                 "=",
               ].join(" ");
               strValueForKeyPressedDisplayElement(strConvertedFromArr);
               //totalDisplay
               strValueForTotalDisplayELement(String(sumValue));
+              /**
+               * we want to save the value in totalDisplay when user pressed number then operator than equal
+               * also look at when lastPressed is number
+               * **/
+              ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed =
+                currentTotalDisplayWithoutCommas;
             }
+            /**
+             * check if topDisplay is empty
+             * if totalDisplayValueForWhenEqualBtnIsLastBtnPressed is not null or undefined
+             * **/
           }
           break;
         case "operator":
@@ -936,17 +958,22 @@
           const strForCalcFuncUsingJoinMethod = [
             leftValue,
             operatorSign,
-            currentTotalDisplay,
+            currentTotalDisplayWithoutCommas,
             "=",
           ].join(" ");
           strValueForKeyPressedDisplayElement(strForCalcFuncUsingJoinMethod);
-
           //totalDisplay
           strValueForTotalDisplayELement(String(sumValue));
+          /**
+           * we want to save the value in totalDisplay when user pressed number then operator than equal
+           * also look at when lastPressed is number
+           * **/
+          ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed =
+            currentTotalDisplayWithoutCommas;
           break;
         case "equal":
-          console.log("use this func for leftValue", displayValueWithoutCommas);
-          console.log("look at how topDisplay does not have commas");
+          //
+
           break;
       }
     }
@@ -960,12 +987,12 @@
     //with the operator clicked to operatorKeyPressedDisplay element
     // topDisplay
     const valueOfDisplayAboveTotal = operatorKeyPressedDisplay.innerText;
-    // totalDisplay
-    const currentTotalDisplay = utilityStrFunc();
+    // totalDisplay without commas
+    const strOfNumberBtnPressed = operatorAndEqualBtnPressedDisplayHelperFunc();
+    // const currentTotalDisplay = utilityStrFunc();
     console.log(ourObjElement.dataObj.clickedBtns);
     console.log(lastPressedBtn);
     if (valueOfDisplayAboveTotal === "") {
-      const strOfNumberBtnPressed = operatorPressedDisplayHelperFunc();
       operatorKeyPressedDisplay.innerText =
         strOfNumberBtnPressed + ` ${operatorInput}`;
     } else {
@@ -1004,7 +1031,7 @@
           break;
         case "equal":
           //lastPressedBtn is =
-          const strPassedToTopDisplayFunc = `${currentTotalDisplay} ${operatorInput}`;
+          const strPassedToTopDisplayFunc = `${strOfNumberBtnPressed} ${operatorInput}`;
           strValueForKeyPressedDisplayElement(strPassedToTopDisplayFunc);
           console.log("equal pressed");
           break;
@@ -1012,8 +1039,18 @@
     }
   }
 
-  function calculationHelperFunc(topDisplayValue) {
-    const currentNumInTotalDisplay = utilityStrFunc();
+  function calculationHelperFunc(
+    topDisplayValue,
+    savedValueForEqualBtnPressed
+  ) {
+    console.log(
+      "how do we want to handle when user click equal after a calculation is processed"
+    );
+    console.log("savedValueForEqualBtnPressed parameter will be a str value");
+    // const currentNumInTotalDisplay = utilityStrFunc();
+    // want to work with valueOfTotalDisplay without comma
+    const currentTotalDisplayWithoutCommas =
+      operatorAndEqualBtnPressedDisplayHelperFunc();
     let sumValue;
     //passing in str "8 +"
     //array will be ["8","+"]
@@ -1022,26 +1059,26 @@
       case "x":
         sumValue = multiplyFunctionality(
           Number(numValue),
-          Number(currentNumInTotalDisplay)
+          Number(currentTotalDisplayWithoutCommas)
         );
 
         break;
       case "/":
         sumValue = divisionFunctionality(
           Number(numValue),
-          Number(currentNumInTotalDisplay)
+          Number(currentTotalDisplayWithoutCommas)
         );
         break;
       case "+":
         sumValue = addFunctionality(
           Number(numValue),
-          Number(currentNumInTotalDisplay)
+          Number(currentTotalDisplayWithoutCommas)
         );
         break;
       case "-":
         sumValue = minusFunctionality(
           Number(numValue),
-          Number(currentNumInTotalDisplay)
+          Number(currentTotalDisplayWithoutCommas)
         );
         break;
     }
@@ -1083,7 +1120,7 @@
     strValueForTotalDisplayELement(String(sumInput));
   }
 
-  function operatorPressedDisplayHelperFunc() {
+  function operatorAndEqualBtnPressedDisplayHelperFunc() {
     const displayValue = utilityStrFunc();
     const arrOfOnlyNumbersWithoutCommas =
       displayValueWithoutCommas(displayValue);
@@ -1265,6 +1302,27 @@
     }
     // user pressed equal
     if (lastPressedBtn == "equal") {
+      const ourConditionBasedOnCalculation =
+        ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed;
+      // conditions
+      // user pressed number btn then operator then pressed equal
+      // topDisplay 5 +
+      //totalDisplay 3
+      /**
+       * user click on equal btn
+       * we will get below
+       *  **/
+      //topDisplay will be leftValue operator valueOfTotalDisplay equal =
+      //5 + 3 =
+      //totalDisplay will be sumValue
+      //check our conditions
+      if (ourConditionBasedOnCalculation) {
+        //if ourConditionBasedOnCalculation is not null or undefined we will enter this if block
+        // topDisplay will be empty string
+        strValueForKeyPressedDisplayElement(buttonPressedInput);
+        // totalDisplay
+        strValueForTotalDisplayELement(buttonPressedInput);
+      }
     }
   }
   //   length of 3 or less
