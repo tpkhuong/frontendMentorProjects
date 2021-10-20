@@ -46,6 +46,7 @@
       previousClickedBtn: "",
       currentTotal: 0,
       totalDisplayValueForWhenEqualBtnIsLastBtnPressed: null,
+      operatorSignUsedForCalcWhenTopDisplayIsEmpty: null,
       // operatorKeyPressed is false when our app loads
       //and when user click on a number btn
       /***** keep this in mind for x,/,+,- and equal btn calculations *****/
@@ -942,11 +943,35 @@
                * **/
               ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed =
                 currentTotalDisplayWithoutCommas;
+              /**
+               * save operatorSign pressed to variable ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty
+               * for calculation below
+               * **/
+
+              ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty =
+                operatorSign;
             }
             /**
              * check if topDisplay is empty
              * if totalDisplayValueForWhenEqualBtnIsLastBtnPressed is not null or undefined
+             * when we enter this if statement block it eiter means user pressed operator then number
+             * in our algorithm when user pressed number btn it set ourObjElement.dataObj.operatorButtonPressed to false
              * **/
+            const savedValueOfTotalDisplay =
+              ourObjElement.dataObj
+                .totalDisplayValueForWhenEqualBtnIsLastBtnPressed;
+            if (
+              innerTextTopDisplay.length === 0 &&
+              savedValueOfTotalDisplay !== null
+            ) {
+              // when we get here topDisplay is empty
+              //totalDisplay will be the number user pressed
+              //take totalDisplay and pass it to calculation func
+              console.log(
+                "start here. working on calc when user clicked equal after processing a calc"
+              );
+              console.log("then clicked a number. ");
+            }
           }
           break;
         case "operator":
@@ -972,8 +997,40 @@
             currentTotalDisplayWithoutCommas;
           break;
         case "equal":
-          //
-
+          let bottomDisplayWhenEqualIsPressed =
+            ourObjElement.dataObj
+              .totalDisplayValueForWhenEqualBtnIsLastBtnPressed;
+          //when lastPressed is equal topDisplay will be 5 + 3 =
+          // totalDisplay will be sum of 5 + 3
+          if (innerTextTopDisplay.length > 3) {
+            // when topDisplay length is greater than 3 it will look like: "5 + 3 ="
+            // const arrOfValuesWithTwoNumbersOperatorAndEqual =
+            //   innerTextTopDisplay.split(" ");
+            /**
+             * use destructuring
+             * **/
+            const [leftValue, operatorSign, rightValue, equalSign] =
+              innerTextTopDisplay.split(" ");
+            let sumTotal = calculationHelperFunc(
+              innerTextTopDisplay,
+              bottomDisplayWhenEqualIsPressed
+            );
+            // update displays
+            // build array for topDisplay
+            const strOfValuesFromArrayUsingJoinMethod = [
+              currentTotalDisplayWithoutCommas,
+              operatorSign,
+              bottomDisplayWhenEqualIsPressed,
+              equalSign,
+            ].join(" ");
+            strValueForKeyPressedDisplayElement(
+              strOfValuesFromArrayUsingJoinMethod
+            );
+            // total display
+            //convert sumTotal to string
+            //totalDisplay
+            strValueForTotalDisplayELement(String(sumTotal));
+          }
           break;
       }
     }
@@ -1054,34 +1111,55 @@
     let sumValue;
     //passing in str "8 +"
     //array will be ["8","+"]
-    const [numValue, operatorValue] = topDisplayValue.split(" ");
-    switch (operatorValue) {
-      case "x":
-        sumValue = multiplyFunctionality(
-          Number(numValue),
-          Number(currentTotalDisplayWithoutCommas)
-        );
-
-        break;
-      case "/":
-        sumValue = divisionFunctionality(
-          Number(numValue),
-          Number(currentTotalDisplayWithoutCommas)
-        );
-        break;
-      case "+":
-        sumValue = addFunctionality(
-          Number(numValue),
-          Number(currentTotalDisplayWithoutCommas)
-        );
-        break;
-      case "-":
-        sumValue = minusFunctionality(
-          Number(numValue),
-          Number(currentTotalDisplayWithoutCommas)
-        );
-        break;
+    if (topDisplayValue.length <= 3) {
+      const [numValue, operatorValue] = topDisplayValue.split(" ");
+      sumValue = calculationFunc(
+        numValue,
+        currentTotalDisplayWithoutCommas,
+        operatorValue
+      );
     }
+    if (topDisplayValue.length > 3) {
+      // topDisplayValue will be "5 + 3 =".split(" "); the array will be ["5","+","3","="]
+      //we just want the first two values in array
+      const [, operatorSign] = topDisplayValue.split(" ");
+      sumValue = calculationFunc(
+        currentTotalDisplayWithoutCommas,
+        savedValueForEqualBtnPressed,
+        operatorSign
+      );
+    }
+    /** 
+       * first approach
+       * switch (operatorValue) {
+        case "x":
+          sumValue = multiplyFunctionality(
+            Number(numValue),
+            Number(currentTotalDisplayWithoutCommas)
+          );
+
+          break;
+        case "/":
+          sumValue = divisionFunctionality(
+            Number(numValue),
+            Number(currentTotalDisplayWithoutCommas)
+          );
+          break;
+        case "+":
+          sumValue = addFunctionality(
+            Number(numValue),
+            Number(currentTotalDisplayWithoutCommas)
+          );
+          break;
+        case "-":
+          sumValue = minusFunctionality(
+            Number(numValue),
+            Number(currentTotalDisplayWithoutCommas)
+          );
+          break;
+      }
+       * 
+       * **/
 
     return sumValue;
 
@@ -1108,6 +1186,33 @@
     } else {
     }
     */
+  }
+
+  function calculationFunc(leftValue, rightValue, operatorSign) {
+    let totalValue;
+
+    switch (operatorSign) {
+      case "x":
+        totalValue = multiplyFunctionality(
+          Number(leftValue),
+          Number(rightValue)
+        );
+        break;
+      case "/":
+        totalValue = divisionFunctionality(
+          Number(leftValue),
+          Number(rightValue)
+        );
+        break;
+      case "+":
+        totalValue = addFunctionality(Number(leftValue), Number(rightValue));
+        break;
+      case "-":
+        totalValue = minusFunctionality(Number(leftValue), Number(rightValue));
+        break;
+    }
+
+    return totalValue;
   }
 
   function displayHelperFuncForOperatorCalculation(sumInput, arithmeticSign) {
