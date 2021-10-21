@@ -965,12 +965,25 @@
               savedValueOfTotalDisplay !== null
             ) {
               // when we get here topDisplay is empty
-              //totalDisplay will be the number user pressed
+              //totalDisplay will be the number(s) user pressed
               //take totalDisplay and pass it to calculation func
-              console.log(
-                "start here. working on calc when user clicked equal after processing a calc"
+              //after we get sum from calculation func
+              const totalValue = calculationFunc(
+                currentTotalDisplayWithoutCommas,
+                savedValueOfTotalDisplay
               );
-              console.log("then clicked a number. ");
+              //topDisplay will be currValue in totalDisplay operatorSign savedValueOfTotalDisplay from previous calc equal sign
+              const convertArrToStrUsingJoinMethod = [
+                currentTotalDisplayWithoutCommas,
+                operatorSign,
+                savedValueOfTotalDisplay,
+                "=",
+              ].join(" ");
+              strValueForKeyPressedDisplayElement(
+                convertArrToStrUsingJoinMethod
+              );
+              //totalDisplay will be totalValue
+              strValueForTotalDisplayELement(String(totalValue));
             }
           }
           break;
@@ -1405,7 +1418,7 @@
         arrOfValuesWithDecimal
       );
     }
-    // user pressed equal
+    // user pressed equal then pressed number
     if (lastPressedBtn == "equal") {
       const ourConditionBasedOnCalculation =
         ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed;
@@ -1424,7 +1437,8 @@
       if (ourConditionBasedOnCalculation) {
         //if ourConditionBasedOnCalculation is not null or undefined we will enter this if block
         // topDisplay will be empty string
-        strValueForKeyPressedDisplayElement(buttonPressedInput);
+        operatorKeyPressedDisplay.innerText = "";
+        // strValueForKeyPressedDisplayElement("");
         // totalDisplay
         strValueForTotalDisplayELement(buttonPressedInput);
       }
