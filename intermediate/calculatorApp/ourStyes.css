@@ -7,10 +7,13 @@
   --col-theme1-bg-screen: hsl(224, 36%, 15%);
 
   /* keys 1 */
+  /* delete and reset btn */
   --col-theme1-keys-bg: hsl(225, 21%, 49%);
   --col-theme1-keys-dark-blue-shadow: hsl(224, 28%, 35%);
+  /* equal btn */
   --col-theme1-keys-bg-toggle: hsl(6, 63%, 50%);
   --col-theme1-keys-dark-red-shadow: hsl(6, 70%, 34%);
+  /* number and operator */
   --col-theme1-keys-orange-bg: hsl(30, 25%, 89%);
   --col-theme1-keys-orange-shadow: hsl(28, 16%, 65%);
 
@@ -23,10 +26,13 @@
   --col-theme2-bg-toggle-keypad: hsl(0, 5%, 81%);
   --col-theme2-bg-screen: hsl(0, 0%, 93%);
   /* keys 2 */
+  /* delete and reset */
   --col-theme2-keys-bg: hsl(185, 42%, 37%);
   --col-theme2-keys-dark-cyan-shadow: hsl(185, 58%, 25%);
+  /* equal btn */
   --col-theme2-keys-bg-toggle: hsl(25, 98%, 40%);
   --col-theme2-keys-dark-orange-shadow: hsl(25, 99%, 27%);
+  /* number and operator */
   --col-theme2-keys-yellow-bg: hsl(45, 7%, 89%);
   --col-theme2-keys-grayish-orange-shadow: hsl(35, 11%, 61%);
 
@@ -39,10 +45,13 @@
   --col-theme3-bg-main: hsl(268, 75%, 9%);
   --col-theme3-bg-toggle-keypad-screen: hsl(268, 71%, 12%);
   /* keys 3 */
+  /* delete and reset btn */
   --col-theme3-keys-bg: hsl(281, 89%, 26%);
   --col-theme3-keys-magenta-shadow: hsl(285, 91%, 52%);
+  /* equal btn */
   --col-theme3-keys-bg-toggle: hsl(176, 100%, 44%);
   --col-theme3-keys-soft-cyan-shadow: hsl(177, 92%, 70%);
+  /* number and operator */
   --col-theme3-keys-violet-bg: hsl(268, 47%, 21%);
   --col-theme3-keys-dark-magenta-shadow: hsl(290, 70%, 36%);
   /* text 3 */
