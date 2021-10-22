@@ -891,13 +891,30 @@
   }
 
   function equalButtonPressed(lastPressedBtn) {
+    /**
+     * saved values
+     * **/
+    const savedTotalDisplayValue =
+      ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed;
+    const savedOperatorSign =
+      ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty;
+
+    /*****
+     * break
+     *  *****/
     const innerTextTopDisplay = topDisplayStrFunc();
     const currentTotalDisplayWithoutCommas =
       operatorAndEqualBtnPressedDisplayHelperFunc();
     if (innerTextTopDisplay === "") {
-      strValueForKeyPressedDisplayElement(
-        `${currentTotalDisplayWithoutCommas} =`
-      );
+      /**
+       * display when both savedTotalDisplay and savedOperatorSign are null
+       * **/
+
+      if (savedTotalDisplayValue == null && savedOperatorSign == null) {
+        strValueForKeyPressedDisplayElement(
+          `${currentTotalDisplayWithoutCommas} =`
+        );
+      }
       // operatorKeyPressedDisplay.innerText = currentTotalDisplayWithoutCommas;
       // our other condition
       // when user pressed number operator then equal
@@ -905,89 +922,106 @@
       // both condition will give us a sum
       // then when user click number it will make topDisplay empty
       // we will check that too
+      /**
+       * best to check if these properties/keys in our object
+       * have values assigned to them
+       * totalDisplayValueForWhenEqualBtnIsLastBtnPressed
+       * operatorSignUsedForCalcWhenTopDisplayIsEmpty
+       * here.
+       * when we had our algorithm in the else statement it was never going to enter the if statement block because
+       * when our topDisplay is an empty "" js will enter this if statement
+       * **/
+      /**
+       * check if topDisplay is empty
+       * if totalDisplayValueForWhenEqualBtnIsLastBtnPressed is not null or undefined
+       * when we enter this if statement block it eiter means user pressed operator then number
+       * in our algorithm when user pressed number btn it set ourObjElement.dataObj.operatorButtonPressed to false
+       * const savedValueOfTotalDisplay =
+        ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed;
+       * **/
+      if (savedTotalDisplayValue != null && savedOperatorSign != null) {
+        // when we get here topDisplay is empty
+        //totalDisplay will be the number(s) user pressed
+        //take totalDisplay and pass it to calculation func
+        //after we get sum from calculation func
+        const totalValue = calculationFunc(
+          currentTotalDisplayWithoutCommas,
+          savedTotalDisplayValue
+        );
+        //topDisplay will be currValue in totalDisplay operatorSign savedValueOfTotalDisplay from previous calc equal sign
+        const convertArrToStrUsingJoinMethod = [
+          currentTotalDisplayWithoutCommas,
+          savedOperatorSign,
+          savedValueOfTotalDisplay,
+          "=",
+        ].join(" ");
+        strValueForKeyPressedDisplayElement(convertArrToStrUsingJoinMethod);
+        //totalDisplay will be totalValue
+        strValueForTotalDisplayELement(String(totalValue));
+      }
     } else {
       // topDisplay
-      const [leftValue, operatorSign] = innerTextTopDisplay.split(" ");
+      const [leftValue, operatorOrEqualSign] = innerTextTopDisplay.split(" ");
       // const currentTotalDisplayWithoutCommas = utilityStrFunc(); declaring a identifier with valuesOfTotalDisplayWithoutCommas
       // when top display is not empty it means user click on a number then operator or
       //use click on equal btn
       switch (lastPressedBtn) {
         case "number":
-          if (!ourObjElement.dataObj.operatorButtonPressed) {
+          if (
+            !ourObjElement.dataObj.operatorButtonPressed &&
+            operatorOrEqualSign == "="
+          ) {
             // if user has not clicked on operator btn and last pressed btn is a number
             //update left side of = with currentTotalDisplayWithoutCommas
             strValueForKeyPressedDisplayElement(
               `${currentTotalDisplayWithoutCommas} =`
             );
-            //if use click on number then operator then another number for calculation
-            //that would set ourObjElement.dataObj.operatorButtonPressed to false
-            //we would enter this if statement
-            // topDisplay: 5 +
-            //totalDisplay: 3 then user hit equal
-            // operatorSign identifier is from const [leftValue, operatorSign] = innerTextTopDisplay.split(" ");
-            if (operatorSign) {
-              const sumValue = calculationHelperFunc(innerTextTopDisplay);
-              // topDisplay
-              const strConvertedFromArr = [
-                leftValue,
-                operatorSign,
-                currentTotalDisplayWithoutCommas,
-                "=",
-              ].join(" ");
-              strValueForKeyPressedDisplayElement(strConvertedFromArr);
-              //totalDisplay
-              strValueForTotalDisplayELement(String(sumValue));
-              /**
-               * we want to save the value in totalDisplay when user pressed number then operator than equal
-               * also look at when lastPressed is number
-               * **/
-              ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed =
-                currentTotalDisplayWithoutCommas;
-              /**
-               * save operatorSign pressed to variable ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty
-               * for calculation below
-               * **/
-
-              ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty =
-                operatorSign;
-            }
+          }
+          /**
+           * better condition when topDisplay is 5 +
+           * totalDisplay is 3
+           * means user pressed 5 then + then 3
+           *  **/
+          //if use click on number then operator then another number for calculation
+          //that would set ourObjElement.dataObj.operatorButtonPressed to false
+          //we would enter this if statement
+          // topDisplay: 5 +
+          //totalDisplay: 3 then user hit equal
+          // operatorSign identifier is from const [leftValue, operatorSign] = innerTextTopDisplay.split(" ");
+          if (
+            !ourObjElement.dataObj.operatorButtonPressed &&
+            operatorOrEqualSign != "="
+          ) {
+            // when we get here operatorOrEqualSign will be an operator sign
+            const operatorSign = operatorOrEqualSign;
+            const sumValue = calculationHelperFunc(innerTextTopDisplay);
+            // topDisplay
+            const strConvertedFromArr = [
+              leftValue,
+              operatorSign,
+              currentTotalDisplayWithoutCommas,
+              "=",
+            ].join(" ");
+            strValueForKeyPressedDisplayElement(strConvertedFromArr);
+            //totalDisplay
+            strValueForTotalDisplayELement(String(sumValue));
             /**
-             * check if topDisplay is empty
-             * if totalDisplayValueForWhenEqualBtnIsLastBtnPressed is not null or undefined
-             * when we enter this if statement block it eiter means user pressed operator then number
-             * in our algorithm when user pressed number btn it set ourObjElement.dataObj.operatorButtonPressed to false
+             * we want to save the value in totalDisplay when user pressed number then operator than equal
+             * also look at when lastPressed is number
              * **/
-            const savedValueOfTotalDisplay =
-              ourObjElement.dataObj
-                .totalDisplayValueForWhenEqualBtnIsLastBtnPressed;
-            if (
-              innerTextTopDisplay.length === 0 &&
-              savedValueOfTotalDisplay !== null
-            ) {
-              // when we get here topDisplay is empty
-              //totalDisplay will be the number(s) user pressed
-              //take totalDisplay and pass it to calculation func
-              //after we get sum from calculation func
-              const totalValue = calculationFunc(
-                currentTotalDisplayWithoutCommas,
-                savedValueOfTotalDisplay
-              );
-              //topDisplay will be currValue in totalDisplay operatorSign savedValueOfTotalDisplay from previous calc equal sign
-              const convertArrToStrUsingJoinMethod = [
-                currentTotalDisplayWithoutCommas,
-                operatorSign,
-                savedValueOfTotalDisplay,
-                "=",
-              ].join(" ");
-              strValueForKeyPressedDisplayElement(
-                convertArrToStrUsingJoinMethod
-              );
-              //totalDisplay will be totalValue
-              strValueForTotalDisplayELement(String(totalValue));
-            }
+            ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed =
+              currentTotalDisplayWithoutCommas;
+            /**
+             * save operatorSign pressed to variable ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty
+             * for calculation below
+             * **/
+
+            ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty =
+              operatorSign;
           }
           break;
         case "operator":
+          const operatorSign = operatorOrEqualSign;
           // if operator is last pressed btn when user click equal btn
           // take leftValue and totalDisplay value and pass those values to calculation based on
           //operator pressed
@@ -1008,6 +1042,11 @@
            * **/
           ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed =
             currentTotalDisplayWithoutCommas;
+          /**
+           * save operator sign pressed
+           * **/
+          ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty =
+            operatorSign;
           break;
         case "equal":
           let bottomDisplayWhenEqualIsPressed =
@@ -1024,6 +1063,11 @@
              * **/
             const [leftValue, operatorSign, rightValue, equalSign] =
               innerTextTopDisplay.split(" ");
+            /**
+             * save operator sign pressed
+             * **/
+            ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty =
+              operatorSign;
             let sumTotal = calculationHelperFunc(
               innerTextTopDisplay,
               bottomDisplayWhenEqualIsPressed
@@ -1044,6 +1088,11 @@
             //totalDisplay
             strValueForTotalDisplayELement(String(sumTotal));
           }
+          /**
+           * save operatorSign pressed
+           * **/
+          ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty =
+            operatorSign;
           break;
       }
     }
@@ -1326,7 +1375,11 @@
       strValueForTotalDisplayELement(buttonPressedInput);
     }
     //lastBtn is a number
-    if (lastPressedBtn == "number" || lastPressedBtn === "") {
+    if (
+      lastPressedBtn == "number" ||
+      lastPressedBtn === "" ||
+      lastPressedBtn == "reset"
+    ) {
       const displayValue = utilityStrFunc();
       const arrOfOnlyNumbersWithoutCommas =
         displayValueWithoutCommas(displayValue);
