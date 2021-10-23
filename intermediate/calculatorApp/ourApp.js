@@ -906,32 +906,52 @@
     const currentTotalDisplayWithoutCommas =
       operatorAndEqualBtnPressedDisplayHelperFunc();
     if (innerTextTopDisplay === "") {
-      /**
-       * display when both savedTotalDisplay and savedOperatorSign are null
-       * **/
-
       if (savedTotalDisplayValue == null && savedOperatorSign == null) {
-        strValueForKeyPressedDisplayElement(
-          `${currentTotalDisplayWithoutCommas} =`
-        );
+        /**
+         * display when both savedTotalDisplay and savedOperatorSign are null
+         * **/
+        /**
+         * working with decimal
+         * **/
+        if (totalDisplay.innerText.includes(".")) {
+          const arrOfNumValues = totalDisplay.innerText.match(/\d/gi);
+          const arrContainAllZeros = arrOfNumValues.every(function findAllZeros(
+            eachStr
+          ) {
+            return eachStr === "0";
+          });
+
+          // if arrOfNumVales contain all zeros arrContainAllZeros identifier will be true
+          if (arrContainAllZeros) {
+            console.log("here");
+            strValueForKeyPressedDisplayElement("0 =");
+          } else {
+            strValueForKeyPressedDisplayElement(`${totalDisplay.innerText} =`);
+          }
+        }
+        // strValueForKeyPressedDisplayElement(
+        //   `${currentTotalDisplayWithoutCommas} =`
+        // );
       }
-      // operatorKeyPressedDisplay.innerText = currentTotalDisplayWithoutCommas;
-      // our other condition
-      // when user pressed number operator then equal
-      // or when user pressed number operator number then equal
-      // both condition will give us a sum
-      // then when user click number it will make topDisplay empty
-      // we will check that too
-      /**
-       * best to check if these properties/keys in our object
-       * have values assigned to them
-       * totalDisplayValueForWhenEqualBtnIsLastBtnPressed
-       * operatorSignUsedForCalcWhenTopDisplayIsEmpty
-       * here.
-       * when we had our algorithm in the else statement it was never going to enter the if statement block because
-       * when our topDisplay is an empty "" js will enter this if statement
-       * **/
-      /**
+
+      function useLater() {
+        // operatorKeyPressedDisplay.innerText = currentTotalDisplayWithoutCommas;
+        // our other condition
+        // when user pressed number operator then equal
+        // or when user pressed number operator number then equal
+        // both condition will give us a sum
+        // then when user click number it will make topDisplay empty
+        // we will check that too
+        /**
+         * best to check if these properties/keys in our object
+         * have values assigned to them
+         * totalDisplayValueForWhenEqualBtnIsLastBtnPressed
+         * operatorSignUsedForCalcWhenTopDisplayIsEmpty
+         * here.
+         * when we had our algorithm in the else statement it was never going to enter the if statement block because
+         * when our topDisplay is an empty "" js will enter this if statement
+         * **/
+        /**
        * check if topDisplay is empty
        * if totalDisplayValueForWhenEqualBtnIsLastBtnPressed is not null or undefined
        * when we enter this if statement block it eiter means user pressed operator then number
@@ -939,25 +959,26 @@
        * const savedValueOfTotalDisplay =
         ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed;
        * **/
-      if (savedTotalDisplayValue != null && savedOperatorSign != null) {
-        // when we get here topDisplay is empty
-        //totalDisplay will be the number(s) user pressed
-        //take totalDisplay and pass it to calculation func
-        //after we get sum from calculation func
-        const totalValue = calculationFunc(
-          currentTotalDisplayWithoutCommas,
-          savedTotalDisplayValue
-        );
-        //topDisplay will be currValue in totalDisplay operatorSign savedValueOfTotalDisplay from previous calc equal sign
-        const convertArrToStrUsingJoinMethod = [
-          currentTotalDisplayWithoutCommas,
-          savedOperatorSign,
-          savedValueOfTotalDisplay,
-          "=",
-        ].join(" ");
-        strValueForKeyPressedDisplayElement(convertArrToStrUsingJoinMethod);
-        //totalDisplay will be totalValue
-        strValueForTotalDisplayELement(String(totalValue));
+        if (savedTotalDisplayValue != null && savedOperatorSign != null) {
+          // when we get here topDisplay is empty
+          //totalDisplay will be the number(s) user pressed
+          //take totalDisplay and pass it to calculation func
+          //after we get sum from calculation func
+          const totalValue = calculationFunc(
+            currentTotalDisplayWithoutCommas,
+            savedTotalDisplayValue
+          );
+          //topDisplay will be currValue in totalDisplay operatorSign savedValueOfTotalDisplay from previous calc equal sign
+          const convertArrToStrUsingJoinMethod = [
+            currentTotalDisplayWithoutCommas,
+            savedOperatorSign,
+            savedValueOfTotalDisplay,
+            "=",
+          ].join(" ");
+          strValueForKeyPressedDisplayElement(convertArrToStrUsingJoinMethod);
+          //totalDisplay will be totalValue
+          strValueForTotalDisplayELement(String(totalValue));
+        }
       }
     } else {
       // topDisplay
@@ -1089,15 +1110,24 @@
             strValueForTotalDisplayELement(String(sumTotal));
           }
           /**
+           * if innerTextTopDisplay.length is equal or less than 3 do nothing
+           * **/
+          // if (innerTextTopDisplay.length <= 3) {
+          // //topDisplay
+          //   strValueForKeyPressedDisplayElement;
+          //   //totalDisplay
+          //   strValueForTotalDisplayELement;
+          // }
+          /**
            * save operatorSign pressed
            * **/
-          ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty =
-            operatorSign;
+          // ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty =
+          //   operatorSign;
           break;
       }
     }
   }
-
+  alert("calculation algorithm work with decimal");
   function operatorButtonPressed(operatorInput, lastPressedBtn) {
     //   switch operatorKeyPressed from false to true when user click on operator btn this is for delete key functionality
     ourObjElement.dataObj.operatorKeyPressed = true;
@@ -1493,6 +1523,8 @@
         operatorKeyPressedDisplay.innerText = "";
         // strValueForKeyPressedDisplayElement("");
         // totalDisplay
+        strValueForTotalDisplayELement(buttonPressedInput);
+      } else {
         strValueForTotalDisplayELement(buttonPressedInput);
       }
     }
