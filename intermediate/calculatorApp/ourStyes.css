@@ -621,6 +621,7 @@ a:hover {
     the event.target will be our button element instead of the span element
     */
   pointer-events: none;
+  transform: translateY(-4px);
 }
 
 .back-of-key,
@@ -894,6 +895,10 @@ a:hover {
   color: var(--col-theme1-text-grayish-blue);
 }
 
+.dark-theme .back-of-key {
+  background-color: var(--col-theme1-keys-orange-shadow);
+}
+
 /* reset and delete */
 
 .dark-theme .reset-button .front-of-key,
@@ -902,11 +907,20 @@ a:hover {
   color: var(--col-neutral-white);
 }
 
+.dark-theme .reset-button,
+.dark-theme .delete-button {
+  background-color: var(--col-theme1-keys-dark-blue-shadow);
+}
+
 /* equal  */
 
 .dark-theme .equal-button .front-of-key {
   background-color: var(--col-theme1-keys-bg-toggle);
   color: var(--col-neutral-white);
+}
+
+.dark-theme .equal-button {
+  background-color: var(--col-theme1-keys-dark-red-shadow);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -923,6 +937,10 @@ a:hover {
     color: var(--col-theme1-text-grayish-blue);
   }
 
+  .dark-theme .back-of-key {
+    background-color: var(--col-theme1-keys-orange-shadow);
+  }
+
   /* reset and delete */
 
   .dark-theme .reset-button .front-of-key,
@@ -931,11 +949,20 @@ a:hover {
     color: var(--col-neutral-white);
   }
 
+  .dark-theme .reset-button,
+  .dark-theme .delete-button {
+    background-color: var(--col-theme1-keys-dark-blue-shadow);
+  }
+
   /* equal  */
 
   .dark-theme .equal-button .front-of-key {
     background-color: var(--col-theme1-keys-bg-toggle);
     color: var(--col-neutral-white);
+  }
+
+  .dark-theme .equal-button {
+    background-color: var(--col-theme1-keys-dark-red-shadow);
   }
 }
 
@@ -952,6 +979,10 @@ a:hover {
   /* color: var(--col-theme1-text-grayish-blue); */
 }
 
+.light-theme .back-of-key {
+  background-color: var(--col-theme2-keys-grayish-orange-shadow);
+}
+
 /* reset and delete */
 
 .light-theme .reset-button .front-of-key,
@@ -960,11 +991,20 @@ a:hover {
   color: var(--col-neutral-white);
 }
 
+.light-theme .reset-button,
+.light-theme .delete-button {
+  background-color: var(--col-theme2-keys-dark-cyan-shadow);
+}
+
 /* equal  */
 
 .light-theme .equal-button .front-of-key {
   background-color: var(--col-theme2-keys-bg-toggle);
   color: var(--col-neutral-white);
+}
+
+.light-theme .equal-button {
+  background-color: var(--col-theme2-keys-dark-orange-shadow);
 }
 
 @media (prefers-color-scheme: light) {
@@ -981,6 +1021,10 @@ a:hover {
     /* color: var(--col-theme1-text-grayish-blue); */
   }
 
+  .light-theme .back-of-key {
+    background-color: var(--col-theme2-keys-grayish-orange-shadow);
+  }
+
   /* reset and delete */
 
   .light-theme .reset-button .front-of-key,
@@ -989,11 +1033,20 @@ a:hover {
     color: var(--col-neutral-white);
   }
 
+  .light-theme .reset-button,
+  .light-theme .delete-button {
+    background-color: var(--col-theme2-keys-dark-cyan-shadow);
+  }
+
   /* equal  */
 
   .light-theme .equal-button .front-of-key {
     background-color: var(--col-theme2-keys-bg-toggle);
     color: var(--col-neutral-white);
+  }
+
+  .light-theme .equal-button {
+    background-color: var(--col-theme2-keys-dark-orange-shadow);
   }
 }
 
@@ -1010,6 +1063,10 @@ a:hover {
   /* color: var(--col-theme1-text-grayish-blue); */
 }
 
+.accent-theme .back-of-key {
+  background-color: var(--col-theme3-keys-dark-magenta-shadow);
+}
+
 /* reset and delete */
 
 .accent-theme .reset-button .front-of-key,
@@ -1018,9 +1075,18 @@ a:hover {
   color: var(--col-neutral-white);
 }
 
+.accent-theme .reset-button,
+.accent-theme .delete-button {
+  background-color: var(--col-theme3-keys-magenta-shadow);
+}
+
 /* equal  */
 
 .accent-theme .equal-button .front-of-key {
   background-color: var(--col-theme3-keys-bg-toggle);
   color: var(--col-theme3-text-dark-blue);
+}
+
+.accent-theme .equal-button {
+  background-color: var(--col-theme3-keys-soft-cyan-shadow);
 }
