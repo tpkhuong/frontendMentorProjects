@@ -913,8 +913,9 @@
         /**
          * working with decimal
          * **/
-        if (totalDisplay.innerText.includes(".")) {
-          const arrOfNumValues = totalDisplay.innerText.match(/\d/gi);
+        if (currentTotalDisplayWithoutCommas.includes(".")) {
+          const arrOfNumValues =
+            currentTotalDisplayWithoutCommas.innerText.match(/\d/gi);
           const arrContainAllZeros = arrOfNumValues.every(function findAllZeros(
             eachStr
           ) {
@@ -926,7 +927,9 @@
             console.log("here");
             strValueForKeyPressedDisplayElement("0 =");
           } else {
-            strValueForKeyPressedDisplayElement(`${totalDisplay.innerText} =`);
+            strValueForKeyPressedDisplayElement(
+              `${currentTotalDisplayWithoutCommas} =`
+            );
           }
         }
         // strValueForKeyPressedDisplayElement(
@@ -1127,7 +1130,7 @@
       }
     }
   }
-  alert("calculation algorithm work with decimal");
+
   function operatorButtonPressed(operatorInput, lastPressedBtn) {
     //   switch operatorKeyPressed from false to true when user click on operator btn this is for delete key functionality
     ourObjElement.dataObj.operatorKeyPressed = true;
@@ -1192,10 +1195,6 @@
     topDisplayValue,
     savedValueForEqualBtnPressed
   ) {
-    console.log(
-      "how do we want to handle when user click equal after a calculation is processed"
-    );
-    console.log("savedValueForEqualBtnPressed parameter will be a str value");
     // const currentNumInTotalDisplay = utilityStrFunc();
     // want to work with valueOfTotalDisplay without comma
     const currentTotalDisplayWithoutCommas =
@@ -1319,10 +1318,17 @@
 
   function operatorAndEqualBtnPressedDisplayHelperFunc() {
     const displayValue = utilityStrFunc();
+    // make this work with decimal
+    // working with decimal
+    const arrOfValuesWithDecimal =
+      displayValueWorkingWithDecimalWithoutCommas(displayValue);
+    //working without decimal
     const arrOfOnlyNumbersWithoutCommas =
       displayValueWithoutCommas(displayValue);
 
-    const strValueUsedForDisplay = arrOfOnlyNumbersWithoutCommas.join("");
+    const strValueUsedForDisplay = displayValue.includes(".")
+      ? arrOfValuesWithDecimal.join("")
+      : arrOfOnlyNumbersWithoutCommas.join("");
     return strValueUsedForDisplay;
   }
 
@@ -1961,6 +1967,13 @@
     const arrOfDisplayValuesOnlyNumbers = displayValue.match(/\d/gi);
 
     return arrOfDisplayValuesOnlyNumbers;
+  }
+
+  function displayValueWorkingWithDecimalWithoutCommas(displayValue) {
+    //"88,800.88".match(/[^,]gi/)
+    const arrOfDisplayValuesDecimalAndNumbers = displayValue.match(/[^,]/gi);
+    debugger;
+    return arrOfDisplayValuesDecimalAndNumbers;
   }
 
   // selector our elements
