@@ -912,26 +912,31 @@
          * **/
         /**
          * working with decimal
+         * put in stand alone func
          * **/
-        if (currentTotalDisplayWithoutCommas.includes(".")) {
-          const arrOfNumValues =
-            currentTotalDisplayWithoutCommas.innerText.match(/\d/gi);
-          const arrContainAllZeros = arrOfNumValues.every(function findAllZeros(
-            eachStr
-          ) {
-            return eachStr === "0";
-          });
+        handleTotalDisplayWithZerosCommasAndDecimal(
+          currentTotalDisplayWithoutCommas,
+          "="
+        );
+        // if (currentTotalDisplayWithoutCommas.includes(".")) {
+        //   const arrOfNumValues =
+        //     currentTotalDisplayWithoutCommas.innerText.match(/\d/gi);
+        //   const arrContainAllZeros = arrOfNumValues.every(function findAllZeros(
+        //     eachStr
+        //   ) {
+        //     return eachStr === "0";
+        //   });
 
-          // if arrOfNumVales contain all zeros arrContainAllZeros identifier will be true
-          if (arrContainAllZeros) {
-            console.log("here");
-            strValueForKeyPressedDisplayElement("0 =");
-          } else {
-            strValueForKeyPressedDisplayElement(
-              `${currentTotalDisplayWithoutCommas} =`
-            );
-          }
-        }
+        //   // if arrOfNumVales contain all zeros arrContainAllZeros identifier will be true
+        //   if (arrContainAllZeros) {
+        //     console.log("here");
+        //     strValueForKeyPressedDisplayElement("0 =");
+        //   } else {
+        //     strValueForKeyPressedDisplayElement(
+        //       `${currentTotalDisplayWithoutCommas} =`
+        //     );
+        //   }
+        // }
         // strValueForKeyPressedDisplayElement(
         //   `${currentTotalDisplayWithoutCommas} =`
         // );
@@ -1131,6 +1136,30 @@
     }
   }
 
+  // func to handle when totalDisplay is 0.00000 or just zeros, commas, and decimal
+  //made this func to work with equal or operator sign
+  function handleTotalDisplayWithZerosCommasAndDecimal(
+    totalDisplayString,
+    operatorOrEqualSign
+  ) {
+    const arrOfNumValues = totalDisplayString.innerText.match(/\d/gi);
+    const arrContainAllZeros = arrOfNumValues.every(function findAllZeros(
+      eachStr
+    ) {
+      return eachStr === "0";
+    });
+
+    // if arrOfNumVales contain all zeros arrContainAllZeros identifier will be true
+    if (arrContainAllZeros) {
+      console.log("here");
+      strValueForKeyPressedDisplayElement(`0 ${operatorOrEqualSign}`);
+    } else {
+      strValueForKeyPressedDisplayElement(
+        `${totalDisplayString} ${operatorOrEqualSign}`
+      );
+    }
+  }
+
   function operatorButtonPressed(operatorInput, lastPressedBtn) {
     //   switch operatorKeyPressed from false to true when user click on operator btn this is for delete key functionality
     ourObjElement.dataObj.operatorKeyPressed = true;
@@ -1145,8 +1174,12 @@
     console.log(ourObjElement.dataObj.clickedBtns);
     console.log(lastPressedBtn);
     if (valueOfDisplayAboveTotal === "") {
-      operatorKeyPressedDisplay.innerText =
-        strOfNumberBtnPressed + ` ${operatorInput}`;
+      // operatorKeyPressedDisplay.innerText =
+      //   strOfNumberBtnPressed + ` ${operatorInput}`;
+      handleTotalDisplayWithZerosCommasAndDecimal(
+        strOfNumberBtnPressed,
+        operatorInput
+      );
     } else {
       // when we get here the display above totalDisplay is not empty
       switch (lastPressedBtn) {
@@ -1321,7 +1354,7 @@
     // make this work with decimal
     // working with decimal
     const arrOfValuesWithDecimal =
-      displayValueWorkingWithDecimalWithoutCommas(displayValue);
+      trailingZerosWorkingWithDecimal(displayValue);
     //working without decimal
     const arrOfOnlyNumbersWithoutCommas =
       displayValueWithoutCommas(displayValue);
@@ -1331,6 +1364,37 @@
       : arrOfOnlyNumbersWithoutCommas.join("");
     return strValueUsedForDisplay;
   }
+
+  function trailingZerosWorkingWithDecimal(totalDisplayString) {
+    //arr of values with decimal
+    const arrOfValuesAndDecimalWithoutCommas =
+      displayValueWorkingWithDecimalWithoutCommas(totalDisplayString);
+    //find index of decimal
+    const indexOfDecimal = arrOfValuesAndDecimalWithoutCommas.indexOf(".");
+    //left side of decimal only use if values of right side of decimal is all zeros
+    const arrOfLeftSideOfDecimal = arrOfValuesAndDecimalWithoutCommas.slice(
+      0,
+      index
+    );
+    //make copy of values right to decimal
+    const arrOfRightSideOfDecimal = arrOfValuesAndDecimalWithoutCommas.slice(
+      indexOfDecimal + 1
+    );
+    //values of right side of array is all zeros
+    const booleanArrContainAllZeros = checkIfValuesAreAllZeros(
+      arrOfRightSideOfDecimal
+    );
+    //if that is the case return an array without decimal just the left side. arrOfLeftSideOfDecimal will be an array with values left of decimal
+    // if not run recursive func to find index of arr where the value is not a "0"
+  }
+
+  function checkIfValuesAreAllZeros(arrInput) {
+    return arrInput.every(function checkForZeros(eachValue) {
+      return eachValue === "0";
+    });
+  }
+
+  function trailingZerosHelperFunc() {}
 
   function numberKeyPressed(buttonPressedInput, lastPressedBtn) {
     //we want to switch operatorKeyPressed to false when user click on operator btn
