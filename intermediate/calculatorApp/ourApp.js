@@ -905,6 +905,9 @@
     const innerTextTopDisplay = topDisplayStrFunc();
     const currentTotalDisplayWithoutCommas =
       operatorAndEqualBtnPressedDisplayHelperFunc();
+    /**
+     * totalDisplay will be different for equal and operator btn pressed when there is a decimal
+     * **/
     if (innerTextTopDisplay === "") {
       if (savedTotalDisplayValue == null && savedOperatorSign == null) {
         /**
@@ -914,7 +917,7 @@
          * working with decimal
          * put in stand alone func
          * **/
-        handleTotalDisplayWithZerosCommasAndDecimal(
+        handleTopDisplayWithZerosCommasAndDecimal(
           currentTotalDisplayWithoutCommas,
           "="
         );
@@ -1138,7 +1141,7 @@
 
   // func to handle when totalDisplay is 0.00000 or just zeros, commas, and decimal
   //made this func to work with equal or operator sign
-  function handleTotalDisplayWithZerosCommasAndDecimal(
+  function handleTopDisplayWithZerosCommasAndDecimal(
     totalDisplayString,
     operatorOrEqualSign
   ) {
@@ -1176,7 +1179,7 @@
     if (valueOfDisplayAboveTotal === "") {
       // operatorKeyPressedDisplay.innerText =
       //   strOfNumberBtnPressed + ` ${operatorInput}`;
-      handleTotalDisplayWithZerosCommasAndDecimal(
+      handleTopDisplayWithZerosCommasAndDecimal(
         strOfNumberBtnPressed,
         operatorInput
       );
@@ -1353,8 +1356,7 @@
     const displayValue = utilityStrFunc();
     // make this work with decimal
     // working with decimal
-    const arrOfValuesWithDecimal =
-      trailingZerosWorkingWithDecimal(displayValue);
+    const arrOfValuesWithDecimal = topDisplayDecimalHelperFunc(displayValue);
     //working without decimal
     const arrOfOnlyNumbersWithoutCommas =
       displayValueWithoutCommas(displayValue);
@@ -1365,27 +1367,70 @@
     return strValueUsedForDisplay;
   }
 
-  function trailingZerosWorkingWithDecimal(totalDisplayString) {
+  function totalDisplayOperatorAndEqualBtnDecimalHelperFunc(
+    totalDisplayString
+  ) {
+    const arrOfValuesWithCommaAndDecimal = totalDisplayString.split("");
+  }
+
+  function topDisplayDecimalHelperFunc(totalDisplayString) {
     //arr of values with decimal
     const arrOfValuesAndDecimalWithoutCommas =
       displayValueWorkingWithDecimalWithoutCommas(totalDisplayString);
+  }
+
+  function trailingZerosWorkingWithDecimal(arrInput) {
+    // //arr of values with decimal
+    // const arrOfValuesAndDecimalWithoutCommas =
+    //   displayValueWorkingWithDecimalWithoutCommas(totalDisplayString);
+    /**
+     * arrInput will be an array of ["1",",","2","5","4",".","5","0","0"] or
+     * ["1","2","5","4",".","5","0","0"]
+     * **/
+    /**
+     * use this index for right side of decimal
+     * **/
+    let indexForRightSideOfDecimalAlgorithm;
     //find index of decimal
-    const indexOfDecimal = arrOfValuesAndDecimalWithoutCommas.indexOf(".");
+    const indexOfDecimal = arrInput.indexOf(".");
     //left side of decimal only use if values of right side of decimal is all zeros
-    const arrOfLeftSideOfDecimal = arrOfValuesAndDecimalWithoutCommas.slice(
-      0,
-      index
-    );
+    const arrOfLeftSideOfDecimal = arrInput.slice(0, index);
     //make copy of values right to decimal
-    const arrOfRightSideOfDecimal = arrOfValuesAndDecimalWithoutCommas.slice(
-      indexOfDecimal + 1
-    );
+    const arrOfRightSideOfDecimal = arrInput.slice(indexOfDecimal + 1);
+    // length of right side of decimal for recursive func
+    const lengthOfRightSideOfDecimal = arrOfRightSideOfDecimal.length;
     //values of right side of array is all zeros
     const booleanArrContainAllZeros = checkIfValuesAreAllZeros(
       arrOfRightSideOfDecimal
     );
     //if that is the case return an array without decimal just the left side. arrOfLeftSideOfDecimal will be an array with values left of decimal
-    // if not run recursive func to find index of arr where the value is not a "0"
+    if (booleanArrContainAllZeros) {
+      return arrOfLeftSideOfDecimal;
+    } else {
+      // if not run recursive func to find index of arr where the value is not a "0"
+      trailingZerosHelperFuncRecursive(
+        arrOfRightSideOfDecimal,
+        lengthOfRightSideOfDecimal - 1
+      );
+    }
+
+    function trailingZerosHelperFuncRecursive(arrInput, index) {
+      // we will send in the right side of the decimal
+      //and the right side does not contain all zeros
+      const currentValue = arrInput[index];
+
+      if (currentValue !== "0") {
+        // each time this return statement is called it will
+        //return the index of that function call
+        //once currentValue is not "0" it will return that index then the index will increase for each function call return
+        /**
+         * assign the index to an identifier outside this recursive func
+         * **/
+        indexForRightSideOfDecimalAlgorithm = index;
+      }
+
+      trailingZerosHelperFuncRecursive(arrInput, index - 1);
+    }
   }
 
   function checkIfValuesAreAllZeros(arrInput) {
@@ -1393,8 +1438,6 @@
       return eachValue === "0";
     });
   }
-
-  function trailingZerosHelperFunc() {}
 
   function numberKeyPressed(buttonPressedInput, lastPressedBtn) {
     //we want to switch operatorKeyPressed to false when user click on operator btn
