@@ -903,7 +903,7 @@
      * break
      *  *****/
     const innerTextTopDisplay = topDisplayStrFunc();
-    const currentTotalDisplayWithoutCommas =
+    const [currentTotalDisplayWithoutCommas, totalDisplayWithCommaAndDecimal] =
       operatorAndEqualBtnPressedDisplayHelperFunc();
     /**
      * totalDisplay will be different for equal and operator btn pressed when there is a decimal
@@ -1163,7 +1163,18 @@
     }
   }
 
+  /*
+
+convertArrToStrAndDisplayValueInApp(
+          strValueForTotalDisplayELement,
+          convertArrOfValuesToStrUsingJoinMethod,
+          arrayOfValAndCommas
+        );
+
+*/
+
   function operatorButtonPressed(operatorInput, lastPressedBtn) {
+    // totalDisplayOperatorAndEqualBtnDecimalHelperFunc;
     //   switch operatorKeyPressed from false to true when user click on operator btn this is for delete key functionality
     ourObjElement.dataObj.operatorKeyPressed = true;
     //   when user click on an operator(+,-,/,x)
@@ -1171,9 +1182,20 @@
     //with the operator clicked to operatorKeyPressedDisplay element
     // topDisplay
     const valueOfDisplayAboveTotal = operatorKeyPressedDisplay.innerText;
-    // totalDisplay without commas
-    const strOfNumberBtnPressed = operatorAndEqualBtnPressedDisplayHelperFunc();
+    // totalDisplay without commas for calculation
+    const [strOfNumberBtnPressed, totalDisplayWithCommaAndDecimal] =
+      operatorAndEqualBtnPressedDisplayHelperFunc();
     // const currentTotalDisplay = utilityStrFunc();
+    // totalDisplay with commas and decimal for display
+    //run if totalDisplay includes decimal
+    const checkForDecimalTotalDisplay = utilityStrFunc();
+    if (checkForDecimalTotalDisplay.includes(".")) {
+      convertArrToStrAndDisplayValueInApp(
+        strValueForTotalDisplayELement,
+        convertArrOfValuesToStrUsingJoinMethod,
+        totalDisplayWithCommaAndDecimal
+      );
+    }
     console.log(ourObjElement.dataObj.clickedBtns);
     console.log(lastPressedBtn);
     if (valueOfDisplayAboveTotal === "") {
@@ -1233,7 +1255,7 @@
   ) {
     // const currentNumInTotalDisplay = utilityStrFunc();
     // want to work with valueOfTotalDisplay without comma
-    const currentTotalDisplayWithoutCommas =
+    const [currentTotalDisplayWithoutCommas] =
       operatorAndEqualBtnPressedDisplayHelperFunc();
     let sumValue;
     //passing in str "8 +"
@@ -1352,11 +1374,253 @@
     strValueForTotalDisplayELement(String(sumInput));
   }
 
+  /**
+   * add comma to totalDisplay after running calculation func
+   * **/
+
+  function addCommaTotalDisplayWithDecimalAfterCalculation(
+    totalValueInputNumForm
+  ) {
+    /** trailing zeros will be taken cared of before we run calc func  **/
+    const convertTotalValueFromNumToString = String(totalValueInputNumForm);
+    const arrOfValuesWithCommaAndDecimal = [
+      ...convertTotalValueFromNumToString,
+    ];
+    const indexOfDecimal = arrOfValuesWithCommaAndDecimal.indexOf(".");
+    /**
+     * add comma to left side array
+     * **/
+    const leftOfDecimalTotalDisplay = arrOfValuesWithCommaAndDecimal.slice(
+      0,
+      indexOfDecimal
+    );
+    const rightOfDecimalTotalDisplay =
+      arrOfValuesWithCommaAndDecimal.slice(indexOfDecimal);
+  }
+
+  function addCommaHelperFunc(arrayInput) {
+    const lengthOfArrInput = arrayInput.length;
+    let resultArr;
+    switch (true) {
+      case lengthOfArrInput < 3:
+        result = [...arrInput];
+        break;
+      case (lengthOfArrInput = 4):
+        const [first, second, third, fourth] = arrInput;
+        resultArr = [first, ",", second, third, fourth];
+        break;
+      case (lengthOfArrInput = 5):
+        const [firstValue, secondValue, thirdValue, fourthValue, fifth] =
+          arrInput;
+        resultArr = [
+          firstValue,
+          secondValue,
+          ",",
+          thirdValue,
+          fourthValue,
+          fifth,
+        ];
+        break;
+      case (lengthOfArrInput = 6):
+        const [firstVal, secondVal, thirdVal, fourthVal, fifthVal, sixth] =
+          arrInput;
+        resultArr = [
+          firstVal,
+          secondVal,
+          thirdVal,
+          ",",
+          fourthVal,
+          fifthVal,
+          sixth,
+        ];
+        break;
+      case (lengthOfArrInput = 7):
+        const [
+          firstValStr,
+          secondValStr,
+          thirdValStr,
+          fourthValStr,
+          fifthValStr,
+          sixthValStr,
+          seventh,
+        ] = arrInput;
+        resultArr = [
+          firstValStr,
+          ",",
+          secondValStr,
+          thirdValStr,
+          fourthValStr,
+          ",",
+          fifthValStr,
+          sixthValStr,
+          seventh,
+        ];
+        break;
+      case (lengthOfArrInput = 8):
+        const [
+          firstValueStr,
+          secondValueStr,
+          thirdValueStr,
+          fourthValueStr,
+          fifthValueStr,
+          sixthValueStr,
+          seventhValueStr,
+          eighth,
+        ] = arrInput;
+
+        resultArr = [
+          firstValueStr,
+          secondValueStr,
+          ",",
+          thirdValueStr,
+          fourthValueStr,
+          fifthValueStr,
+          ",",
+          sixthValueStr,
+          seventhValueStr,
+          eighth,
+        ];
+
+        break;
+      case (lengthOfArrInput = 9):
+        const [
+          firstValueString,
+          secondValueString,
+          thirdValueString,
+          fourthValueString,
+          fifthValueString,
+          sixthValueString,
+          seventhValueString,
+          eighthValueString,
+          ninth,
+        ] = arrInput;
+
+        resultArr = [
+          firstValueString,
+          secondValueString,
+          thirdValueString,
+          ",",
+          fourthValueString,
+          fifthValueString,
+          sixthValueString,
+          ",",
+          seventhValueString,
+          eighthValueString,
+          ninth,
+        ];
+
+        break;
+      case (lengthOfArrInput = 10):
+        const [
+          firstStr,
+          secondStr,
+          thirdStr,
+          fourthStr,
+          fifthStr,
+          sixthStr,
+          seventhStr,
+          eighthStr,
+          ninthStr,
+          tenth,
+        ] = arrInput;
+
+        resultArr = [
+          firstStr,
+          ",",
+          secondStr,
+          thirdStr,
+          fourthStr,
+          ",",
+          fifthStr,
+          sixthStr,
+          seventhStr,
+          ",",
+          eighthStr,
+          ninthStr,
+          tenth,
+        ];
+
+        break;
+      case (lengthOfArrInput = 11):
+        const [
+          firstString,
+          secondString,
+          thirdString,
+          fourthString,
+          fifthString,
+          sixthString,
+          seventhString,
+          eighthString,
+          ninthString,
+          tenthString,
+          eleventh,
+        ] = arrInput;
+
+        resultArr = [
+          firstString,
+          secondString,
+          ",",
+          thirdString,
+          fourthString,
+          fifthString,
+          ",",
+          sixthString,
+          seventhString,
+          eighthString,
+          ",",
+          ninthString,
+          tenthString,
+          eleventh,
+        ];
+
+        break;
+      case (lengthOfArrInput = 12):
+        const [
+          firstStringValue,
+          secondStringValue,
+          thirdStringValue,
+          fourthStringValue,
+          fifthStringValue,
+          sixthStringValue,
+          seventhStringValue,
+          eighthStringValue,
+          ninthStringValue,
+          tenthStringValue,
+          eleventhStringValue,
+          twelfth,
+        ] = arrInput;
+
+        resultArr = [
+          firstStringValue,
+          secondStringValue,
+          thirdStringValue,
+          ",",
+          fourthStringValue,
+          fifthStringValue,
+          sixthStringValue,
+          ",",
+          seventhStringValue,
+          eighthStringValue,
+          ninthStringValue,
+          ",",
+          tenthStringValue,
+          eleventhStringValue,
+          twelfth,
+        ];
+        break;
+    }
+
+    return resultArr;
+  }
+
   function operatorAndEqualBtnPressedDisplayHelperFunc() {
     const displayValue = utilityStrFunc();
     // make this work with decimal
     // working with decimal
     const arrOfValuesWithDecimal = topDisplayDecimalHelperFunc(displayValue);
+    // totalDisplayWithCommaAndDecimal
+    const totalDisplayWithCommaAndDecimal =
+      totalDisplayOperatorAndEqualBtnDecimalHelperFunc(displayValue);
     //working without decimal
     const arrOfOnlyNumbersWithoutCommas =
       displayValueWithoutCommas(displayValue);
@@ -1364,22 +1628,33 @@
     const strValueUsedForDisplay = displayValue.includes(".")
       ? arrOfValuesWithDecimal.join("")
       : arrOfOnlyNumbersWithoutCommas.join("");
-    return strValueUsedForDisplay;
+    return [strValueUsedForDisplay, totalDisplayWithCommaAndDecimal];
   }
 
   function totalDisplayOperatorAndEqualBtnDecimalHelperFunc(
     totalDisplayString
   ) {
+    /**
+     * run this when user press operator or equal before running calculation
+     *  **/
     const arrOfValuesWithCommaAndDecimal = totalDisplayString.split("");
+
+    return trailingZerosWorkingWithDecimal(arrOfValuesWithCommaAndDecimal);
   }
 
   function topDisplayDecimalHelperFunc(totalDisplayString) {
-    //arr of values with decimal
+    //arr of values with decimal without commas
     const arrOfValuesAndDecimalWithoutCommas =
       displayValueWorkingWithDecimalWithoutCommas(totalDisplayString);
+
+    return trailingZerosWorkingWithDecimal(arrOfValuesAndDecimalWithoutCommas);
   }
 
   function trailingZerosWorkingWithDecimal(arrInput) {
+    /** this func will return an array that depends on the arr input that is passed into this func when it is executed,called,invoked
+     * we are calling it in both totalDisplayOperatorAndEqualBtnDecimalHelperFunc where we pass in an array with comma and decimal
+     * and topDisplayDecimalHelperFunc where we pass in an array with values and decimal
+     * **/
     // //arr of values with decimal
     // const arrOfValuesAndDecimalWithoutCommas =
     //   displayValueWorkingWithDecimalWithoutCommas(totalDisplayString);
@@ -1387,18 +1662,14 @@
      * arrInput will be an array of ["1",",","2","5","4",".","5","0","0"] or
      * ["1","2","5","4",".","5","0","0"]
      * **/
-    /**
-     * use this index for right side of decimal
-     * **/
-    let indexForRightSideOfDecimalAlgorithm;
+
     //find index of decimal
     const indexOfDecimal = arrInput.indexOf(".");
     //left side of decimal only use if values of right side of decimal is all zeros
     const arrOfLeftSideOfDecimal = arrInput.slice(0, index);
     //make copy of values right to decimal
     const arrOfRightSideOfDecimal = arrInput.slice(indexOfDecimal + 1);
-    // length of right side of decimal for recursive func
-    const lengthOfRightSideOfDecimal = arrOfRightSideOfDecimal.length;
+
     //values of right side of array is all zeros
     const booleanArrContainAllZeros = checkIfValuesAreAllZeros(
       arrOfRightSideOfDecimal
@@ -1407,12 +1678,40 @@
     if (booleanArrContainAllZeros) {
       return arrOfLeftSideOfDecimal;
     } else {
-      // if not run recursive func to find index of arr where the value is not a "0"
-      trailingZerosHelperFuncRecursive(
-        arrOfRightSideOfDecimal,
-        lengthOfRightSideOfDecimal - 1
+      //want to return an array with left side decimal right side
+      const builtRightSideOfDecimal = buildArrRightOfDecimal(
+        arrOfRightSideOfDecimal
       );
+
+      //build our array left side of decimal decimal right side of decimal
+      return [...arrOfLeftSideOfDecimal, ".", ...builtRightSideOfDecimal];
     }
+  }
+
+  function buildArrRightOfDecimal(arrRightSideOfDecimal) {
+    // length of right side of decimal for recursive func
+    const lengthOfRightSideOfDecimal = arrRightSideOfDecimal.length;
+
+    /**
+     * use this index for right side of decimal
+     * **/
+    let indexForRightSideOfDecimalAlgorithm;
+    // if not run recursive func to find index of arr where the value is not a "0"
+    //to build an array with the values right of decimal
+    trailingZerosHelperFuncRecursive(
+      arrRightSideOfDecimal,
+      lengthOfRightSideOfDecimal - 1
+    );
+    //use indexForRightSideOfDecimalAlgorithm to copy arr right side of decimal from 0 index to indexForRightSideOfDecimalAlgorithm + 1
+    //we dont want to copy the trailing zeros
+    const rightOfDecimalWithoutZeros = arrRightSideOfDecimal.slice(
+      0,
+      indexForRightSideOfDecimalAlgorithm + 1
+    );
+
+    return rightOfDecimalWithoutZeros;
+
+    /** recursive helper func **/
 
     function trailingZerosHelperFuncRecursive(arrInput, index) {
       // we will send in the right side of the decimal
