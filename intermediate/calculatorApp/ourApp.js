@@ -902,12 +902,20 @@
     /*****
      * break
      *  *****/
+
     const innerTextTopDisplay = topDisplayStrFunc();
     const [currentTotalDisplayWithoutCommas, totalDisplayWithCommaAndDecimal] =
       operatorAndEqualBtnPressedDisplayHelperFunc();
     /**
      * totalDisplay will be different for equal and operator btn pressed when there is a decimal
      * **/
+    if (checkForDecimalTotalDisplay.includes(".")) {
+      convertArrToStrAndDisplayValueInApp(
+        strValueForTotalDisplayELement,
+        convertArrOfValuesToStrUsingJoinMethod,
+        totalDisplayWithCommaAndDecimal
+      );
+    }
     if (innerTextTopDisplay === "") {
       if (savedTotalDisplayValue == null && savedOperatorSign == null) {
         /**
@@ -917,6 +925,7 @@
          * working with decimal
          * put in stand alone func
          * **/
+
         handleTopDisplayWithZerosCommasAndDecimal(
           currentTotalDisplayWithoutCommas,
           "="
@@ -945,24 +954,23 @@
         // );
       }
 
-      function useLater() {
-        // operatorKeyPressedDisplay.innerText = currentTotalDisplayWithoutCommas;
-        // our other condition
-        // when user pressed number operator then equal
-        // or when user pressed number operator number then equal
-        // both condition will give us a sum
-        // then when user click number it will make topDisplay empty
-        // we will check that too
-        /**
-         * best to check if these properties/keys in our object
-         * have values assigned to them
-         * totalDisplayValueForWhenEqualBtnIsLastBtnPressed
-         * operatorSignUsedForCalcWhenTopDisplayIsEmpty
-         * here.
-         * when we had our algorithm in the else statement it was never going to enter the if statement block because
-         * when our topDisplay is an empty "" js will enter this if statement
-         * **/
-        /**
+      // operatorKeyPressedDisplay.innerText = currentTotalDisplayWithoutCommas;
+      // our other condition
+      // when user pressed number operator then equal
+      // or when user pressed number operator number then equal
+      // both condition will give us a sum
+      // then when user click number it will make topDisplay empty
+      // we will check that too
+      /**
+       * best to check if these properties/keys in our object
+       * have values assigned to them
+       * totalDisplayValueForWhenEqualBtnIsLastBtnPressed
+       * operatorSignUsedForCalcWhenTopDisplayIsEmpty
+       * here.
+       * when we had our algorithm in the else statement it was never going to enter the if statement block because
+       * when our topDisplay is an empty "" js will enter this if statement
+       * **/
+      /**
        * check if topDisplay is empty
        * if totalDisplayValueForWhenEqualBtnIsLastBtnPressed is not null or undefined
        * when we enter this if statement block it eiter means user pressed operator then number
@@ -970,26 +978,30 @@
        * const savedValueOfTotalDisplay =
         ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed;
        * **/
-        if (savedTotalDisplayValue != null && savedOperatorSign != null) {
-          // when we get here topDisplay is empty
-          //totalDisplay will be the number(s) user pressed
-          //take totalDisplay and pass it to calculation func
-          //after we get sum from calculation func
-          const totalValue = calculationFunc(
-            currentTotalDisplayWithoutCommas,
-            savedTotalDisplayValue
-          );
-          //topDisplay will be currValue in totalDisplay operatorSign savedValueOfTotalDisplay from previous calc equal sign
-          const convertArrToStrUsingJoinMethod = [
-            currentTotalDisplayWithoutCommas,
-            savedOperatorSign,
-            savedValueOfTotalDisplay,
-            "=",
-          ].join(" ");
-          strValueForKeyPressedDisplayElement(convertArrToStrUsingJoinMethod);
-          //totalDisplay will be totalValue
-          strValueForTotalDisplayELement(String(totalValue));
-        }
+      if (savedTotalDisplayValue != null && savedOperatorSign != null) {
+        // when we get here topDisplay is empty
+        //totalDisplay will be the number(s) user pressed
+        //take totalDisplay and pass it to calculation func
+        //after we get sum from calculation func
+        const totalValue = calculationFunc(
+          currentTotalDisplayWithoutCommas,
+          savedTotalDisplayValue
+        );
+        //topDisplay will be currValue in totalDisplay operatorSign savedValueOfTotalDisplay from previous calc equal sign
+        const convertArrToStrUsingJoinMethod = [
+          currentTotalDisplayWithoutCommas,
+          savedOperatorSign,
+          savedValueOfTotalDisplay,
+          "=",
+        ].join(" ");
+        strValueForKeyPressedDisplayElement(convertArrToStrUsingJoinMethod);
+        //totalDisplay will be totalValue
+        /**
+         * run addCommaTotalDisplayWithDecimalAfterCalculation passing sumInput here
+         * **/
+        const commaAddedToTotalDisplayStr =
+          addCommaTotalDisplayWithDecimalAfterCalculation(totalValue);
+        strValueForTotalDisplayELement(commaAddedToTotalDisplayStr);
       }
     } else {
       // topDisplay
@@ -1036,7 +1048,12 @@
             ].join(" ");
             strValueForKeyPressedDisplayElement(strConvertedFromArr);
             //totalDisplay
-            strValueForTotalDisplayELement(String(sumValue));
+            /**
+             * run addCommaTotalDisplayWithDecimalAfterCalculation passing sumInput here
+             * **/
+            const commaAddedToSumValueForTotalDisplay =
+              addCommaTotalDisplayWithDecimalAfterCalculation(sumValue);
+            strValueForTotalDisplayELement(commaAddedToSumValueForTotalDisplay);
             /**
              * we want to save the value in totalDisplay when user pressed number then operator than equal
              * also look at when lastPressed is number
@@ -1067,7 +1084,12 @@
           ].join(" ");
           strValueForKeyPressedDisplayElement(strForCalcFuncUsingJoinMethod);
           //totalDisplay
-          strValueForTotalDisplayELement(String(sumValue));
+          /**
+           * run addCommaTotalDisplayWithDecimalAfterCalculation passing sumInput here
+           * **/
+          const commaAddedForTotalDisplay =
+            addCommaTotalDisplayWithDecimalAfterCalculation(sumValue);
+          strValueForTotalDisplayELement(commaAddedForTotalDisplay);
           /**
            * we want to save the value in totalDisplay when user pressed number then operator than equal
            * also look at when lastPressed is number
@@ -1118,7 +1140,12 @@
             // total display
             //convert sumTotal to string
             //totalDisplay
-            strValueForTotalDisplayELement(String(sumTotal));
+            /**
+             * run addCommaTotalDisplayWithDecimalAfterCalculation passing sumInput here
+             * **/
+            const commaAddedToSumTotalForTotalDisplay =
+              addCommaTotalDisplayWithDecimalAfterCalculation(sumTotal);
+            strValueForTotalDisplayELement(commaAddedToSumTotalForTotalDisplay);
           }
           /**
            * if innerTextTopDisplay.length is equal or less than 3 do nothing
@@ -1145,7 +1172,7 @@
     totalDisplayString,
     operatorOrEqualSign
   ) {
-    const arrOfNumValues = totalDisplayString.innerText.match(/\d/gi);
+    const arrOfNumValues = totalDisplayString.match(/\d/gi);
     const arrContainAllZeros = arrOfNumValues.every(function findAllZeros(
       eachStr
     ) {
@@ -1185,6 +1212,7 @@ convertArrToStrAndDisplayValueInApp(
     // totalDisplay without commas for calculation
     const [strOfNumberBtnPressed, totalDisplayWithCommaAndDecimal] =
       operatorAndEqualBtnPressedDisplayHelperFunc();
+    debugger;
     // const currentTotalDisplay = utilityStrFunc();
     // totalDisplay with commas and decimal for display
     //run if totalDisplay includes decimal
@@ -1371,7 +1399,12 @@ convertArrToStrAndDisplayValueInApp(
     //topDisplay
     strValueForKeyPressedDisplayElement(convertArrToStringForTopDisplay);
     //totalDisplay
-    strValueForTotalDisplayELement(String(sumInput));
+    /**
+     * run addCommaTotalDisplayWithDecimalAfterCalculation passing sumInput here
+     * **/
+    const commaAddedToSumInputForDisplayHelperFunc =
+      addCommaTotalDisplayWithDecimalAfterCalculation(sumInput);
+    strValueForTotalDisplayELement(commaAddedToSumInputForDisplayHelperFunc);
   }
 
   /**
@@ -1389,13 +1422,23 @@ convertArrToStrAndDisplayValueInApp(
     const indexOfDecimal = arrOfValuesWithCommaAndDecimal.indexOf(".");
     /**
      * add comma to left side array
+     * this array will look like [8,8,8]
      * **/
     const leftOfDecimalTotalDisplay = arrOfValuesWithCommaAndDecimal.slice(
       0,
       indexOfDecimal
     );
+    /**
+     * this array will look like [.,8,8]
+     * **/
     const rightOfDecimalTotalDisplay =
       arrOfValuesWithCommaAndDecimal.slice(indexOfDecimal);
+
+    const leftOfDecimalWithAddedCommas = addCommaHelperFunc(
+      leftOfDecimalTotalDisplay
+    );
+
+    return [...leftOfDecimalWithAddedCommas, ...rightOfDecimalTotalDisplay];
   }
 
   function addCommaHelperFunc(arrayInput) {
@@ -1617,6 +1660,7 @@ convertArrToStrAndDisplayValueInApp(
     const displayValue = utilityStrFunc();
     // make this work with decimal
     // working with decimal
+
     const arrOfValuesWithDecimal = topDisplayDecimalHelperFunc(displayValue);
     // totalDisplayWithCommaAndDecimal
     const totalDisplayWithCommaAndDecimal =
@@ -1624,7 +1668,6 @@ convertArrToStrAndDisplayValueInApp(
     //working without decimal
     const arrOfOnlyNumbersWithoutCommas =
       displayValueWithoutCommas(displayValue);
-
     const strValueUsedForDisplay = displayValue.includes(".")
       ? arrOfValuesWithDecimal.join("")
       : arrOfOnlyNumbersWithoutCommas.join("");
@@ -1636,6 +1679,9 @@ convertArrToStrAndDisplayValueInApp(
   ) {
     /**
      * run this when user press operator or equal before running calculation
+     *  **/
+    /**
+     * arr of values with commas and decimal
      *  **/
     const arrOfValuesWithCommaAndDecimal = totalDisplayString.split("");
 
@@ -1666,7 +1712,7 @@ convertArrToStrAndDisplayValueInApp(
     //find index of decimal
     const indexOfDecimal = arrInput.indexOf(".");
     //left side of decimal only use if values of right side of decimal is all zeros
-    const arrOfLeftSideOfDecimal = arrInput.slice(0, index);
+    const arrOfLeftSideOfDecimal = arrInput.slice(0, indexOfDecimal);
     //make copy of values right to decimal
     const arrOfRightSideOfDecimal = arrInput.slice(indexOfDecimal + 1);
 
@@ -2378,7 +2424,7 @@ convertArrToStrAndDisplayValueInApp(
   function displayValueWorkingWithDecimalWithoutCommas(displayValue) {
     //"88,800.88".match(/[^,]gi/)
     const arrOfDisplayValuesDecimalAndNumbers = displayValue.match(/[^,]/gi);
-    debugger;
+
     return arrOfDisplayValuesDecimalAndNumbers;
   }
 
