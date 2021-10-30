@@ -47,6 +47,7 @@
       currentTotal: 0,
       totalDisplayValueForWhenEqualBtnIsLastBtnPressed: null,
       operatorSignUsedForCalcWhenTopDisplayIsEmpty: null,
+      calcFuncExecutedByEqualBtn: false,
       // operatorKeyPressed is false when our app loads
       //and when user click on a number btn
       /***** keep this in mind for x,/,+,- and equal btn calculations *****/
@@ -662,11 +663,24 @@
 
   function deleteButtonPressed(lastPressedBtn) {
     //when we want to work with the displayTotal without the comma
+    //because we will add it back based on the length of display
     const currentTotalDisplay = utilityStrFunc();
     const arrOfDisplayValuesWithoutComma = currentTotalDisplay.match(/\d/gi);
     //the displayTotal contain decimal
     const decimalInTotalDisplay = currentTotalDisplay.includes(".");
     const operatorNotPressed = ourObjElement.dataObj.operatorKeyPressed;
+    const calcFuncExecutedInEqualBtnFunc =
+      ourObjElement.dataObj.calcFuncExecutedByEqualBtn;
+    /**
+     * when calcFuncExecutedByEqualBtn is true and lastPressedBtn is equal set topDisplay to empty string
+     * **/
+    if (lastPressedBtn == "equal" && calcFuncExecutedInEqualBtnFunc) {
+      operatorKeyPressedDisplay.innerText = "";
+    }
+
+    /**
+     * break
+     *  **/
     //when operatorKeyPressed is false we want to delete the last value of totalDisplayStr
     //when user click on a number btn we set ourObjElement.dataObj.operatorKeyPressed to false
     //which will take us into this if statement block
@@ -909,7 +923,8 @@
     /**
      * totalDisplay will be different for equal and operator btn pressed when there is a decimal
      * **/
-    if (checkForDecimalTotalDisplay.includes(".")) {
+    const checkingForDecimal = utilityStrFunc();
+    if (checkingForDecimal.includes(".")) {
       convertArrToStrAndDisplayValueInApp(
         strValueForTotalDisplayELement,
         convertArrOfValuesToStrUsingJoinMethod,
@@ -1067,6 +1082,12 @@
 
             ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty =
               operatorSign;
+            /**
+             * make a property on ourObjElement set it to true when we git equal and perform calc func
+             * and equal btn is pressed. set topDisplay to empty string
+             * this is for delete btn.
+             * **/
+            ourObjElement.dataObj.calcFuncExecutedByEqualBtn = true;
           }
           break;
         case "operator":
@@ -1212,7 +1233,6 @@ convertArrToStrAndDisplayValueInApp(
     // totalDisplay without commas for calculation
     const [strOfNumberBtnPressed, totalDisplayWithCommaAndDecimal] =
       operatorAndEqualBtnPressedDisplayHelperFunc();
-    debugger;
     // const currentTotalDisplay = utilityStrFunc();
     // totalDisplay with commas and decimal for display
     //run if totalDisplay includes decimal
@@ -1446,15 +1466,15 @@ convertArrToStrAndDisplayValueInApp(
     let resultArr;
     switch (true) {
       case lengthOfArrInput < 3:
-        result = [...arrInput];
+        result = [...arrayInput];
         break;
       case (lengthOfArrInput = 4):
-        const [first, second, third, fourth] = arrInput;
+        const [first, second, third, fourth] = arrayInput;
         resultArr = [first, ",", second, third, fourth];
         break;
       case (lengthOfArrInput = 5):
         const [firstValue, secondValue, thirdValue, fourthValue, fifth] =
-          arrInput;
+          arrayInput;
         resultArr = [
           firstValue,
           secondValue,
@@ -1466,7 +1486,7 @@ convertArrToStrAndDisplayValueInApp(
         break;
       case (lengthOfArrInput = 6):
         const [firstVal, secondVal, thirdVal, fourthVal, fifthVal, sixth] =
-          arrInput;
+          arrayInput;
         resultArr = [
           firstVal,
           secondVal,
@@ -1486,7 +1506,7 @@ convertArrToStrAndDisplayValueInApp(
           fifthValStr,
           sixthValStr,
           seventh,
-        ] = arrInput;
+        ] = arrayInput;
         resultArr = [
           firstValStr,
           ",",
@@ -1509,7 +1529,7 @@ convertArrToStrAndDisplayValueInApp(
           sixthValueStr,
           seventhValueStr,
           eighth,
-        ] = arrInput;
+        ] = arrayInput;
 
         resultArr = [
           firstValueStr,
@@ -1536,7 +1556,7 @@ convertArrToStrAndDisplayValueInApp(
           seventhValueString,
           eighthValueString,
           ninth,
-        ] = arrInput;
+        ] = arrayInput;
 
         resultArr = [
           firstValueString,
@@ -1565,7 +1585,7 @@ convertArrToStrAndDisplayValueInApp(
           eighthStr,
           ninthStr,
           tenth,
-        ] = arrInput;
+        ] = arrayInput;
 
         resultArr = [
           firstStr,
@@ -1597,7 +1617,7 @@ convertArrToStrAndDisplayValueInApp(
           ninthString,
           tenthString,
           eleventh,
-        ] = arrInput;
+        ] = arrayInput;
 
         resultArr = [
           firstString,
@@ -1631,7 +1651,7 @@ convertArrToStrAndDisplayValueInApp(
           tenthStringValue,
           eleventhStringValue,
           twelfth,
-        ] = arrInput;
+        ] = arrayInput;
 
         resultArr = [
           firstStringValue,
@@ -1772,6 +1792,7 @@ convertArrToStrAndDisplayValueInApp(
          * assign the index to an identifier outside this recursive func
          * **/
         indexForRightSideOfDecimalAlgorithm = index;
+        return;
       }
 
       trailingZerosHelperFuncRecursive(arrInput, index - 1);
