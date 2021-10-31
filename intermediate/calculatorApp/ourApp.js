@@ -1020,6 +1020,7 @@
       }
     } else {
       // topDisplay
+      debugger;
       const [leftValue, operatorOrEqualSign] = innerTextTopDisplay.split(" ");
       // const currentTotalDisplayWithoutCommas = utilityStrFunc(); declaring a identifier with valuesOfTotalDisplayWithoutCommas
       // when top display is not empty it means user click on a number then operator or
@@ -1306,9 +1307,35 @@ convertArrToStrAndDisplayValueInApp(
     const [currentTotalDisplayWithoutCommas] =
       operatorAndEqualBtnPressedDisplayHelperFunc();
     let sumValue;
-    //passing in str "8 +"
-    //array will be ["8","+"]
-    if (topDisplayValue.length <= 3) {
+    /**
+     * shouldn't have algorithm run based on length of topDisplayValue
+     * **/
+    const arrOfValuesWithEitherOperatorOrEqualSign = topDisplayValue.split(" ");
+    const lengthOfArrOfValuesEitherOperatorOrEqual =
+      arrOfValuesWithEitherOperatorOrEqualSign.length;
+    const lastItemInArr =
+      arrOfValuesWithEitherOperatorOrEqualSign[
+        lengthOfArrOfValuesEitherOperatorOrEqual - 1
+      ];
+    /**
+     * different approach
+     * **/
+    alert("test this");
+    // topDisplayValue will be "5 + 3 =".split(" "); the array will be ["5","+","3","="]
+    //we just want the first two values in array
+    if (lastItemInArr == "=") {
+      const [, operatorSign] = topDisplayValue.split(" ");
+      sumValue = calculationFunc(
+        currentTotalDisplayWithoutCommas,
+        savedValueForEqualBtnPressed,
+        operatorSign
+      );
+    } else {
+      //passing in str "8 +"
+      //array will be ["8","+"]
+      /**
+       * different approach
+       * **/
       const [numValue, operatorValue] = topDisplayValue.split(" ");
       sumValue = calculationFunc(
         numValue,
@@ -1316,16 +1343,25 @@ convertArrToStrAndDisplayValueInApp(
         operatorValue
       );
     }
-    if (topDisplayValue.length > 3) {
-      // topDisplayValue will be "5 + 3 =".split(" "); the array will be ["5","+","3","="]
-      //we just want the first two values in array
-      const [, operatorSign] = topDisplayValue.split(" ");
-      sumValue = calculationFunc(
-        currentTotalDisplayWithoutCommas,
-        savedValueForEqualBtnPressed,
-        operatorSign
-      );
-    }
+    // if (topDisplayValue.length <= 3) {
+    //   const [numValue, operatorValue] = topDisplayValue.split(" ");
+    //   sumValue = calculationFunc(
+    //     numValue,
+    //     currentTotalDisplayWithoutCommas,
+    //     operatorValue
+    //   );
+    // }
+    // if (topDisplayValue.length > 3) {
+    //   // topDisplayValue will be "5 + 3 =".split(" "); the array will be ["5","+","3","="]
+    //   //we just want the first two values in array
+
+    //   const [, operatorSign] = topDisplayValue.split(" ");
+    //   sumValue = calculationFunc(
+    //     currentTotalDisplayWithoutCommas,
+    //     savedValueForEqualBtnPressed,
+    //     operatorSign
+    //   );
+    // }
     /** 
        * first approach
        * switch (operatorValue) {
@@ -1436,29 +1472,41 @@ convertArrToStrAndDisplayValueInApp(
   ) {
     /** trailing zeros will be taken cared of before we run calc func  **/
     const convertTotalValueFromNumToString = String(totalValueInputNumForm);
-    const arrOfValuesWithCommaAndDecimal = [
+    const arrOfValuesWithDecimalOrWithoutDecimal = [
       ...convertTotalValueFromNumToString,
     ];
-    const indexOfDecimal = arrOfValuesWithCommaAndDecimal.indexOf(".");
-    /**
-     * add comma to left side array
-     * this array will look like [8,8,8]
-     * **/
-    const leftOfDecimalTotalDisplay = arrOfValuesWithCommaAndDecimal.slice(
-      0,
-      indexOfDecimal
-    );
-    /**
-     * this array will look like [.,8,8]
-     * **/
-    const rightOfDecimalTotalDisplay =
-      arrOfValuesWithCommaAndDecimal.slice(indexOfDecimal);
+    /** handle when totalValueInputNumForm has not decimal **/
+    const indexOfDecimal = arrOfValuesWithDecimalOrWithoutDecimal.indexOf(".");
+    if (indexOfDecimal != -1) {
+      /**
+       * add comma to left side array
+       * this array will look like [8,8,8]
+       * **/
+      const leftOfDecimalTotalDisplay =
+        arrOfValuesWithDecimalOrWithoutDecimal.slice(0, indexOfDecimal);
+      /**
+       * this array will look like [.,8,8]
+       * **/
+      const rightOfDecimalTotalDisplay =
+        arrOfValuesWithDecimalOrWithoutDecimal.slice(indexOfDecimal);
+      /** we add commas to our array here. we pass in an array in number form without commas. **/
+      const leftOfDecimalWithAddedCommas = addCommaHelperFunc(
+        leftOfDecimalTotalDisplay
+      );
 
-    const leftOfDecimalWithAddedCommas = addCommaHelperFunc(
-      leftOfDecimalTotalDisplay
-    );
+      return [...leftOfDecimalWithAddedCommas, ...rightOfDecimalTotalDisplay];
+    } else {
+      /**
+       * when we get here it means our value does not have a decimal
+       * **/
 
-    return [...leftOfDecimalWithAddedCommas, ...rightOfDecimalTotalDisplay];
+      const addCommasToArrWithoutDecimal = addCommaHelperFunc(
+        arrOfValuesWithDecimalOrWithoutDecimal
+      );
+
+      // return array after adding commas
+      return addCommasToArrWithoutDecimal;
+    }
   }
 
   function addCommaHelperFunc(arrayInput) {
