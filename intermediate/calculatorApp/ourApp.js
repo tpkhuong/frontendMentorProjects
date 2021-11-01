@@ -903,7 +903,6 @@
     operatorKeyPressedDisplay.innerText = "";
     totalDisplay.innerText = "0";
   }
-
   function equalButtonPressed(lastPressedBtn) {
     /**
      * saved values
@@ -1016,7 +1015,8 @@
          * **/
         const commaAddedToTotalDisplayStr =
           addCommaTotalDisplayWithDecimalAfterCalculation(totalValue);
-        strValueForTotalDisplayELement(commaAddedToTotalDisplayStr);
+        const convertToStringForDisplay = commaAddedToTotalDisplayStr.join("");
+        strValueForTotalDisplayELement(convertToStringForDisplay);
       }
     } else {
       // topDisplay
@@ -1069,7 +1069,9 @@
              * **/
             const commaAddedToSumValueForTotalDisplay =
               addCommaTotalDisplayWithDecimalAfterCalculation(sumValue);
-            strValueForTotalDisplayELement(commaAddedToSumValueForTotalDisplay);
+            const convertToStringForDisplay =
+              commaAddedToSumValueForTotalDisplay.join("");
+            strValueForTotalDisplayELement(convertToStringForDisplay);
             /**
              * we want to save the value in totalDisplay when user pressed number then operator than equal
              * also look at when lastPressed is number
@@ -1111,7 +1113,8 @@
            * **/
           const commaAddedForTotalDisplay =
             addCommaTotalDisplayWithDecimalAfterCalculation(sumValue);
-          strValueForTotalDisplayELement(commaAddedForTotalDisplay);
+          const convertToStringForDisplay = commaAddedForTotalDisplay.join("");
+          strValueForTotalDisplayELement(convertToStringForDisplay);
           /**
            * we want to save the value in totalDisplay when user pressed number then operator than equal
            * also look at when lastPressed is number
@@ -1167,7 +1170,9 @@
              * **/
             const commaAddedToSumTotalForTotalDisplay =
               addCommaTotalDisplayWithDecimalAfterCalculation(sumTotal);
-            strValueForTotalDisplayELement(commaAddedToSumTotalForTotalDisplay);
+            const convertToStringForDisplay =
+              commaAddedToSumTotalForTotalDisplay.join("");
+            strValueForTotalDisplayELement(convertToStringForDisplay);
           }
           /**
            * if innerTextTopDisplay.length is equal or less than 3 do nothing
@@ -1320,7 +1325,6 @@ convertArrToStrAndDisplayValueInApp(
     /**
      * different approach
      * **/
-    alert("test this");
     // topDisplayValue will be "5 + 3 =".split(" "); the array will be ["5","+","3","="]
     //we just want the first two values in array
     if (lastItemInArr == "=") {
@@ -1460,18 +1464,19 @@ convertArrToStrAndDisplayValueInApp(
      * **/
     const commaAddedToSumInputForDisplayHelperFunc =
       addCommaTotalDisplayWithDecimalAfterCalculation(sumInput);
-    strValueForTotalDisplayELement(commaAddedToSumInputForDisplayHelperFunc);
+    const convertToStringForDisplay =
+      commaAddedToSumInputForDisplayHelperFunc.join("");
+    strValueForTotalDisplayELement(convertToStringForDisplay);
   }
 
   /**
    * add comma to totalDisplay after running calculation func
    * **/
 
-  function addCommaTotalDisplayWithDecimalAfterCalculation(
-    totalValueInputNumForm
-  ) {
+  function addCommaTotalDisplayWithDecimalAfterCalculation(totalValueInput) {
     /** trailing zeros will be taken cared of before we run calc func  **/
-    const convertTotalValueFromNumToString = String(totalValueInputNumForm);
+    /** totalValueInput is already in string form. our add,subtract,multiple,divide func return a string value**/
+    const convertTotalValueFromNumToString = totalValueInput;
     const arrOfValuesWithDecimalOrWithoutDecimal = [
       ...convertTotalValueFromNumToString,
     ];
@@ -1513,8 +1518,9 @@ convertArrToStrAndDisplayValueInApp(
     const lengthOfArrInput = arrayInput.length;
     let resultArr;
     switch (true) {
-      case lengthOfArrInput < 3:
-        result = [...arrayInput];
+      case lengthOfArrInput <= 3:
+        /** we had resultArr as result we were assigning [...arrayInput] to result instead of resultArr **/
+        resultArr = [...arrayInput];
         break;
       case (lengthOfArrInput = 4):
         const [first, second, third, fourth] = arrayInput;
