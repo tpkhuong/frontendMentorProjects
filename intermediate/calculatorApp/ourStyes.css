@@ -706,7 +706,13 @@ a:hover {
   }
 
   /* border: 1px solid red; */
-  [aria-label*="-theme"]:focus-within {
+  /***  
+  * we changed the selector from [aria-label*="-theme"] to [for*="-theme"]
+  *because we changed the attributes on our label elements that are parents to our input radio btns
+  *we changed it because when we had aria-label on our label elements screen reader/NVDA would say 1 of 1 when the user
+  *has focus on the input btn. we want it to say 1 of 3 or how many radio btns we have
+  ***/
+  [for*="-theme"]:focus-within {
     outline-offset: 2px;
     outline: 2px solid var(--col-theme2-keys-bg-toggle);
     /* border: 1px solid red; */
