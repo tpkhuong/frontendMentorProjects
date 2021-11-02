@@ -38,9 +38,14 @@
             <span class="theme-title"> THEME </span>
             <div class="theme-toggle-controller">
               <div class="theme-label-btn-wrapper">
+                <!-- 
+                    we had to get rid of aria-label or aria-describedby on our label elements because screen reader/NVDA would say 1 of 1 when the user
+                    has focus on the input btn. we want it to say 1 of 3 or how many radio btns we have
+                 -->
                 <!-- dark theme -->
-                <label aria-label="dark-theme" for="dark-theme">
+                <label for="dark-theme" >
                   1
+                  <span class="visually-hidden">Dark Theme</span>
                   <!-- <button aria-label="button 1 of 3">1</button> -->
                   <input
                     class="visually-hidden"
@@ -51,7 +56,7 @@
                   />
                 </label>
                 <!-- light theme -->
-                <label aria-label="light-theme" for="light-theme">
+                <label for="light-theme">
                   2
                   <!-- <button aria-label="button 2 of 3">2</button> -->
                   <input
@@ -63,7 +68,7 @@
                   />
                 </label>
                 <!-- accent theme -->
-                <label aria-label="accent-theme" for="accent-theme">
+                <label for="accent-theme">
                   3
                   <!-- <button aria-label="button 3 of 3">3</button> -->
                   <input
@@ -86,8 +91,14 @@
           <span class="top-display-keys-pressed"></span>
           <span class="current-total-number"> 0 </span>
         </div>
+        <!-- put tabindex of 0 on keys container for keyboard users -->
         <div class="keys-container">
           <!-- grid: 16 buttons -->
+          <span tabindex="0" class="visually-hidden">
+            Works with keys on number pad
+          </span>
+            
+          </button>
           <div class="number-operator-delate-keys-container">
             <button
               role="button"
