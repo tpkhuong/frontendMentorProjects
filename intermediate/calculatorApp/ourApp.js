@@ -184,6 +184,7 @@
 
   // keyboard functionality
 
+  // using arrow keys
   function keyboardKeypadMovement(event) {
     const keyPressed = event.key;
     const eventTarget = event.target;
@@ -199,6 +200,79 @@
         break;
       case "ArrowUp":
         arrowUpKeyDown(eventTarget);
+        break;
+      default:
+        keyboardFunctionalityNumberPad(keyPressed);
+    }
+  }
+
+  /** using keys on number pad **/
+
+  function keyboardFunctionalityNumberPad(keyBtnPressed) {
+    /**
+     * instead of have our callback func in the addEventListener
+     * run our keyboard arrow btn pressed or keys on number pad func we will call this func inside of keyboardKeyPadMovement
+     * listen to see if a key on the number pad is pressed and backspace(for delete feature)
+     * **/
+    /**
+     * we will change "*" to "x"
+     * dont need to change backspace to "DEL" because we are not passing in "DEL"
+     * to any func call
+     * **/
+    // let numberKeyPadPressed;
+    // if (keyBtnPressed == "*") {
+    //   numberKeyPadPressed = "x";
+    // } else {
+    //   numberKeyPadPressed = keyBtnPressed;
+    // }
+    /**
+     * ternary operator
+     * **/
+    keyBtnPressed == "*"
+      ? (numberKeyPadPressed = "x")
+      : (numberKeyPadPressed = keyBtnPressed);
+    switch (numberKeyPadPressed) {
+      /**
+       * operator
+       * **/
+      case "/":
+      case "x":
+      case "+":
+      case "-":
+        console.log("operator", numberKeyPadPressed);
+        break;
+      /**
+       * number
+       * **/
+      case "9":
+      case "8":
+      case "7":
+      case "6":
+      case "5":
+      case "4":
+      case "3":
+      case "2":
+      case "1":
+      case "0":
+        console.log("number", numberKeyPadPressed);
+        break;
+      /**
+       * decimal
+       * **/
+      case ".":
+        console.log("decimal", numberKeyPadPressed);
+        break;
+      /**
+       * backspace
+       * **/
+      case "Backspace":
+        console.log("delete/backspace", numberKeyPadPressed);
+        break;
+      /**
+       * enter/equal
+       * **/
+      case "Enter":
+        console.log("enter", numberKeyPadPressed);
         break;
     }
   }
