@@ -219,18 +219,32 @@
      * dont need to change backspace to "DEL" because we are not passing in "DEL"
      * to any func call
      * **/
-    // let numberKeyPadPressed;
+    /**
+     * get previous clicked element
+     * **/
+    lastItemClicked();
+    const previousClickedBtn = ourObjElement.dataObj.previousClickedBtn;
+    let numberKeyPadPressed;
     // if (keyBtnPressed == "*") {
     //   numberKeyPadPressed = "x";
     // } else {
     //   numberKeyPadPressed = keyBtnPressed;
     // }
     /**
+     * figure out how to change Backspace to "delete"
+     * "Enter" to "equal"
+     * here or inside our equalBtnPressed we can add a case "Enter" for "equal" algorithm and
+     * "Backspace" for "delete"
+     * NEVERMIND we were passing in two values/arguments our equalBtn and deletebtn func only takes one value/argument
+     * just need to pass in previousClickedBtn to equalBtn and deleteBtn func
+     * **/
+    /**
      * ternary operator
      * **/
     keyBtnPressed == "*"
       ? (numberKeyPadPressed = "x")
       : (numberKeyPadPressed = keyBtnPressed);
+
     switch (numberKeyPadPressed) {
       /**
        * operator
@@ -240,6 +254,8 @@
       case "+":
       case "-":
         console.log("operator", numberKeyPadPressed);
+        ourObjElement.dataObj.clickedBtns.push("operator");
+        operatorButtonPressed(numberKeyPadPressed, previousClickedBtn);
         break;
       /**
        * number
@@ -255,24 +271,32 @@
       case "1":
       case "0":
         console.log("number", numberKeyPadPressed);
+        ourObjElement.dataObj.clickedBtns.push("number");
+        numberKeyPressed(numberKeyPadPressed, previousClickedBtn);
         break;
       /**
        * decimal
        * **/
       case ".":
         console.log("decimal", numberKeyPadPressed);
+        ourObjElement.dataObj.clickedBtns.push("decimal");
+        decimalButtonPressed();
         break;
       /**
        * backspace
        * **/
       case "Backspace":
         console.log("delete/backspace", numberKeyPadPressed);
+        ourObjElement.dataObj.clickedBtns.push("delete");
+        deleteButtonPressed(previousClickedBtn);
         break;
       /**
        * enter/equal
        * **/
       case "Enter":
         console.log("enter", numberKeyPadPressed);
+        ourObjElement.dataObj.clickedBtns.push("equal");
+        equalButtonPressed(previousClickedBtn);
         break;
     }
   }
@@ -738,6 +762,12 @@
   function deleteButtonPressed(lastPressedBtn) {
     //when we want to work with the displayTotal without the comma
     //because we will add it back based on the length of display
+    const topDisplay = topDisplayStrFunc();
+    const savedTotalDisplayValueForEqualFunc =
+      ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed;
+    const savedOperatorSignForEqualFunc =
+      ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty;
+
     const currentTotalDisplay = utilityStrFunc();
     const arrOfDisplayValuesWithoutComma = currentTotalDisplay.match(/\d/gi);
     //the displayTotal contain decimal
@@ -750,14 +780,37 @@
      * **/
     if (lastPressedBtn == "equal" && calcFuncExecutedInEqualBtnFunc) {
       operatorKeyPressedDisplay.innerText = "";
+      return;
     }
-
+    /**
+     * when user clicked "equal" then delete but click "delete" again
+     * we want to do nothing
+     * we could check for lastPressedBtn == to "delete" && calcFuncExecutedInEqualBtnFunc is truthy
+     * rethink this algorithm
+     * this if statement will always run once user click equal btn because when equal btn is clicked calcFuncExecutedInEqualBtnFunc will be assign boolean true
+     * if (lastPressedBtn == "delete" && calcFuncExecutedInEqualBtnFunc) {
+      return;
+      }
+      we will check if saveTotalDisplayValueForEqualFunc && savedOperatorSignForEqualFunc is not null && topDisplay is empty string
+      if that is the case do nothing
+     * **/
+    alert("test our algorithm!!!");
+    if (
+      topDisplay === "" &&
+      savedOperatorSignForEqualFunc != null &&
+      savedOperatorSignForEqualFunc != null
+    ) {
+      return;
+    }
     /**
      * break
      *  **/
     //when operatorKeyPressed is false we want to delete the last value of totalDisplayStr
     //when user click on a number btn we set ourObjElement.dataObj.operatorKeyPressed to false
     //which will take us into this if statement block
+    /**
+     * only time we dont run this if statement is when user click on operatorBtn
+     * **/
     if (!operatorNotPressed) {
       // how to deal with commas in operator
       //get length of displayStr
@@ -792,6 +845,9 @@
         );
       }
     }
+    /**
+     * could just have a return statement in an else block
+     * **/
   }
 
   function deleteButtonDealingWithLengthOfTotalDisplay(arrInputWithoutComma) {
@@ -1094,7 +1150,6 @@
       }
     } else {
       // topDisplay
-      debugger;
       const [leftValue, operatorOrEqualSign] = innerTextTopDisplay.split(" ");
       // const currentTotalDisplayWithoutCommas = utilityStrFunc(); declaring a identifier with valuesOfTotalDisplayWithoutCommas
       // when top display is not empty it means user click on a number then operator or
@@ -1596,11 +1651,11 @@ convertArrToStrAndDisplayValueInApp(
         /** we had resultArr as result we were assigning [...arrayInput] to result instead of resultArr **/
         resultArr = [...arrayInput];
         break;
-      case (lengthOfArrInput = 4):
+      case lengthOfArrInput == 4:
         const [first, second, third, fourth] = arrayInput;
         resultArr = [first, ",", second, third, fourth];
         break;
-      case (lengthOfArrInput = 5):
+      case lengthOfArrInput == 5:
         const [firstValue, secondValue, thirdValue, fourthValue, fifth] =
           arrayInput;
         resultArr = [
@@ -1612,7 +1667,7 @@ convertArrToStrAndDisplayValueInApp(
           fifth,
         ];
         break;
-      case (lengthOfArrInput = 6):
+      case lengthOfArrInput == 6:
         const [firstVal, secondVal, thirdVal, fourthVal, fifthVal, sixth] =
           arrayInput;
         resultArr = [
@@ -1625,7 +1680,7 @@ convertArrToStrAndDisplayValueInApp(
           sixth,
         ];
         break;
-      case (lengthOfArrInput = 7):
+      case lengthOfArrInput == 7:
         const [
           firstValStr,
           secondValStr,
@@ -1647,7 +1702,7 @@ convertArrToStrAndDisplayValueInApp(
           seventh,
         ];
         break;
-      case (lengthOfArrInput = 8):
+      case lengthOfArrInput == 8:
         const [
           firstValueStr,
           secondValueStr,
@@ -1673,7 +1728,7 @@ convertArrToStrAndDisplayValueInApp(
         ];
 
         break;
-      case (lengthOfArrInput = 9):
+      case lengthOfArrInput == 9:
         const [
           firstValueString,
           secondValueString,
@@ -1701,7 +1756,7 @@ convertArrToStrAndDisplayValueInApp(
         ];
 
         break;
-      case (lengthOfArrInput = 10):
+      case lengthOfArrInput == 10:
         const [
           firstStr,
           secondStr,
@@ -1732,7 +1787,7 @@ convertArrToStrAndDisplayValueInApp(
         ];
 
         break;
-      case (lengthOfArrInput = 11):
+      case lengthOfArrInput == 11:
         const [
           firstString,
           secondString,
@@ -1765,7 +1820,7 @@ convertArrToStrAndDisplayValueInApp(
         ];
 
         break;
-      case (lengthOfArrInput = 12):
+      case lengthOfArrInput == 12:
         const [
           firstStringValue,
           secondStringValue,
@@ -1934,6 +1989,10 @@ convertArrToStrAndDisplayValueInApp(
   }
 
   function numberKeyPressed(buttonPressedInput, lastPressedBtn) {
+    const savedTotalDisplayValueForEqualFunc =
+      ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed;
+    const savedOperatorSignForEqualFunc =
+      ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty;
     //we want to switch operatorKeyPressed to false when user click on operator btn
     //then click on number btn
     //   switch operatorKeyPressed to false when user click on number key. this is for delete key functionality
@@ -1944,7 +2003,17 @@ convertArrToStrAndDisplayValueInApp(
       //work
       ourObjElement.dataObj.operatorKeyPressed = false;
     }
-
+    /**
+     * we also want to assign boolean false to ourObjElement.dataObj.opeartorKeyPressed when topDisplay is empty string and saveTotalDisplayValue
+     * and savedOperatorSign is not null
+     * **/
+    if (
+      currentValueOfTopDisplay === "" &&
+      savedTotalDisplayValueForEqualFunc != null &&
+      savedOperatorSignForEqualFunc != null
+    ) {
+      ourObjElement.dataObj.operatorKeyPressed = false;
+    }
     //buttonPressedInput type is string
     // console.log(ourObjElement.dataObj.clickedBtns);
     console.log(lastPressedBtn);
