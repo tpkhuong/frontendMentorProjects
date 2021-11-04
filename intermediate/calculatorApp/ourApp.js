@@ -794,7 +794,6 @@
       we will check if saveTotalDisplayValueForEqualFunc && savedOperatorSignForEqualFunc is not null && topDisplay is empty string
       if that is the case do nothing
      * **/
-    alert("test our algorithm!!!");
     if (
       topDisplay === "" &&
       savedOperatorSignForEqualFunc != null &&
@@ -1045,7 +1044,6 @@
     /*****
      * break
      *  *****/
-
     const innerTextTopDisplay = topDisplayStrFunc();
     const [currentTotalDisplayWithoutCommas, totalDisplayWithCommaAndDecimal] =
       operatorAndEqualBtnPressedDisplayHelperFunc();
@@ -1076,7 +1074,7 @@
         );
         // if (currentTotalDisplayWithoutCommas.includes(".")) {
         //   const arrOfNumValues =
-        //     currentTotalDisplayWithoutCommas.innerText.match(/\d/gi);
+        //     currentTotalDisplayWithoutCommas.innerText.match(/\d/gi)
         //   const arrContainAllZeros = arrOfNumValues.every(function findAllZeros(
         //     eachStr
         //   ) {
@@ -1135,7 +1133,7 @@
         const convertArrToStrUsingJoinMethod = [
           currentTotalDisplayWithoutCommas,
           savedOperatorSign,
-          savedValueOfTotalDisplay,
+          savedTotalDisplayValue,
           "=",
         ].join(" ");
         strValueForKeyPressedDisplayElement(convertArrToStrUsingJoinMethod);
