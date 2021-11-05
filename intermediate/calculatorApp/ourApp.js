@@ -668,7 +668,6 @@
         default:
           ourObjElement.dataObj.clickedBtns.push("number");
           // ourObjElement.dataObj.clickedBtns.push(buttonPressedValue);
-
           numberKeyPressed(
             buttonPressedValue,
             ourObjElement.dataObj.previousClickedBtn
@@ -2011,6 +2010,7 @@ convertArrToStrAndDisplayValueInApp(
       savedOperatorSignForEqualFunc != null
     ) {
       ourObjElement.dataObj.operatorKeyPressed = false;
+      totalDisplayHelperFunc(buttonPressedInput);
     }
     //buttonPressedInput type is string
     // console.log(ourObjElement.dataObj.clickedBtns);
@@ -2084,45 +2084,47 @@ convertArrToStrAndDisplayValueInApp(
       lastPressedBtn === "" ||
       lastPressedBtn == "reset"
     ) {
-      const displayValue = utilityStrFunc();
-      const arrOfOnlyNumbersWithoutCommas =
-        displayValueWithoutCommas(displayValue);
-      const lengthOfArrOfOnlyNumValues = arrOfOnlyNumbersWithoutCommas.length;
+      debugger;
+      totalDisplayHelperFunc(buttonPressedInput);
+      // const displayValue = utilityStrFunc();
+      // const arrOfOnlyNumbersWithoutCommas =
+      //   displayValueWithoutCommas(displayValue);
+      // const lengthOfArrOfOnlyNumValues = arrOfOnlyNumbersWithoutCommas.length;
 
-      switch (true) {
-        //   length of 3 or less
-        case lengthOfArrOfOnlyNumValues <= 3:
-          workingWithDisplayLengthOfLessThanThree(
-            lengthOfArrOfOnlyNumValues,
-            buttonPressedInput,
-            arrOfOnlyNumbersWithoutCommas
-          );
-          break;
-        //length of 4 to 6
-        case lengthOfArrOfOnlyNumValues >= 4 && lengthOfArrOfOnlyNumValues <= 6:
-          workingWithDisplayLengthMoreThanThreeLessThanSeven(
-            arrOfOnlyNumbersWithoutCommas,
-            lengthOfArrOfOnlyNumValues,
-            buttonPressedInput
-          );
-          break;
-        //length of 7 to 9
-        case lengthOfArrOfOnlyNumValues >= 6 && lengthOfArrOfOnlyNumValues <= 9:
-          workingWithDisplayLengthOfMoreThanSixLessThanTen(
-            arrOfOnlyNumbersWithoutCommas,
-            lengthOfArrOfOnlyNumValues,
-            buttonPressedInput
-          );
-          break;
-        case lengthOfArrOfOnlyNumValues >= 9 &&
-          lengthOfArrOfOnlyNumValues <= 12:
-          workingWithDisplayLengthOfMoreThanNineLessThanTwelve(
-            arrOfOnlyNumbersWithoutCommas,
-            lengthOfArrOfOnlyNumValues,
-            buttonPressedInput
-          );
-          break;
-      }
+      // switch (true) {
+      //   //   length of 3 or less
+      //   case lengthOfArrOfOnlyNumValues <= 3:
+      //     workingWithDisplayLengthOfLessThanThree(
+      //       lengthOfArrOfOnlyNumValues,
+      //       buttonPressedInput,
+      //       arrOfOnlyNumbersWithoutCommas
+      //     );
+      //     break;
+      //   //length of 4 to 6
+      //   case lengthOfArrOfOnlyNumValues >= 4 && lengthOfArrOfOnlyNumValues <= 6:
+      //     workingWithDisplayLengthMoreThanThreeLessThanSeven(
+      //       arrOfOnlyNumbersWithoutCommas,
+      //       lengthOfArrOfOnlyNumValues,
+      //       buttonPressedInput
+      //     );
+      //     break;
+      //   //length of 7 to 9
+      //   case lengthOfArrOfOnlyNumValues >= 6 && lengthOfArrOfOnlyNumValues <= 9:
+      //     workingWithDisplayLengthOfMoreThanSixLessThanTen(
+      //       arrOfOnlyNumbersWithoutCommas,
+      //       lengthOfArrOfOnlyNumValues,
+      //       buttonPressedInput
+      //     );
+      //     break;
+      //   case lengthOfArrOfOnlyNumValues >= 9 &&
+      //     lengthOfArrOfOnlyNumValues <= 12:
+      //     workingWithDisplayLengthOfMoreThanNineLessThanTwelve(
+      //       arrOfOnlyNumbersWithoutCommas,
+      //       lengthOfArrOfOnlyNumValues,
+      //       buttonPressedInput
+      //     );
+      //     break;
+      // }
     }
     //lastBtn is a number and display str includes decimal
     if (lastPressedBtn == "number" && totalDisplayStrContainDecimal !== -1) {
@@ -2201,6 +2203,89 @@ convertArrToStrAndDisplayValueInApp(
       } else {
         strValueForTotalDisplayELement(buttonPressedInput);
       }
+    }
+  }
+  /**
+   * use this func for when topDisplay is empty and when topDisplay is empty and savedOperatorSign and savedTotalDisplayValue
+   * **/
+  function totalDisplayHelperFunc(btnPressed) {
+    const displayValue = utilityStrFunc();
+    const arrOfOnlyNumbersWithoutCommas =
+      displayValueWithoutCommas(displayValue);
+    const lengthOfArrOfOnlyNumValues = arrOfOnlyNumbersWithoutCommas.length;
+
+    switch (true) {
+      //   length of 3 or less
+      case lengthOfArrOfOnlyNumValues <= 3:
+        workingWithDisplayLengthOfLessThanThree(
+          lengthOfArrOfOnlyNumValues,
+          btnPressed,
+          arrOfOnlyNumbersWithoutCommas
+        );
+        break;
+      //length of 4 to 6
+      case lengthOfArrOfOnlyNumValues >= 4 && lengthOfArrOfOnlyNumValues <= 6:
+        workingWithDisplayLengthMoreThanThreeLessThanSeven(
+          arrOfOnlyNumbersWithoutCommas,
+          lengthOfArrOfOnlyNumValues,
+          btnPressed
+        );
+        break;
+      //length of 7 to 9
+      case lengthOfArrOfOnlyNumValues >= 6 && lengthOfArrOfOnlyNumValues <= 9:
+        workingWithDisplayLengthOfMoreThanSixLessThanTen(
+          arrOfOnlyNumbersWithoutCommas,
+          lengthOfArrOfOnlyNumValues,
+          btnPressed
+        );
+        break;
+      case lengthOfArrOfOnlyNumValues >= 9 && lengthOfArrOfOnlyNumValues <= 12:
+        workingWithDisplayLengthOfMoreThanNineLessThanTwelve(
+          arrOfOnlyNumbersWithoutCommas,
+          lengthOfArrOfOnlyNumValues,
+          btnPressed
+        );
+        break;
+    }
+  }
+  function notes() {
+    const displayValue = utilityStrFunc();
+    const arrOfOnlyNumbersWithoutCommas =
+      displayValueWithoutCommas(displayValue);
+    const lengthOfArrOfOnlyNumValues = arrOfOnlyNumbersWithoutCommas.length;
+
+    switch (true) {
+      //   length of 3 or less
+      case lengthOfArrOfOnlyNumValues <= 3:
+        workingWithDisplayLengthOfLessThanThree(
+          lengthOfArrOfOnlyNumValues,
+          buttonPressedInput,
+          arrOfOnlyNumbersWithoutCommas
+        );
+        break;
+      //length of 4 to 6
+      case lengthOfArrOfOnlyNumValues >= 4 && lengthOfArrOfOnlyNumValues <= 6:
+        workingWithDisplayLengthMoreThanThreeLessThanSeven(
+          arrOfOnlyNumbersWithoutCommas,
+          lengthOfArrOfOnlyNumValues,
+          buttonPressedInput
+        );
+        break;
+      //length of 7 to 9
+      case lengthOfArrOfOnlyNumValues >= 6 && lengthOfArrOfOnlyNumValues <= 9:
+        workingWithDisplayLengthOfMoreThanSixLessThanTen(
+          arrOfOnlyNumbersWithoutCommas,
+          lengthOfArrOfOnlyNumValues,
+          buttonPressedInput
+        );
+        break;
+      case lengthOfArrOfOnlyNumValues >= 9 && lengthOfArrOfOnlyNumValues <= 12:
+        workingWithDisplayLengthOfMoreThanNineLessThanTwelve(
+          arrOfOnlyNumbersWithoutCommas,
+          lengthOfArrOfOnlyNumValues,
+          buttonPressedInput
+        );
+        break;
     }
   }
   //   length of 3 or less
