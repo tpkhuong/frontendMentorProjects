@@ -48,6 +48,11 @@
       totalDisplayValueForWhenEqualBtnIsLastBtnPressed: null,
       operatorSignUsedForCalcWhenTopDisplayIsEmpty: null,
       calcFuncExecutedByEqualBtn: false,
+      /**
+       * saveTopDisplay for calc func when our algorithm runs calc func
+       * then user click delete btn, making topDisplay an empty ""
+       *
+       * **/
       // operatorKeyPressed is false when our app loads
       //and when user click on a number btn
       /***** keep this in mind for x,/,+,- and equal btn calculations *****/
@@ -616,12 +621,10 @@
   }
 
   // calculator functionality
-
   function identifyButtonPressed(event) {
     // console.log("work with length of 53 for keys press display");
     // console.log(event.target.firstElementChild.textContent);
     console.log(event.target);
-
     if (event.target.tagName == "BUTTON") {
       const buttonPressedValue = event.target.firstElementChild.innerText;
 
@@ -778,6 +781,15 @@
      * when calcFuncExecutedByEqualBtn is true and lastPressedBtn is equal set topDisplay to empty string
      * **/
     if (lastPressedBtn == "equal" && calcFuncExecutedInEqualBtnFunc) {
+      /**
+       * thinking about saving the topDisplay before we set it to an empty string
+       * we will need a reference to the topDisplay to run calcFunc when user click delete then enter a new number for display(totalDisplay)
+       * ex: 808 + 10 =
+       * then user under a number to display(totalDisplay) before pressing enter or clicking on equal btn.80
+       * replace 808 with 80
+       * top will look like 80 + 10 =
+       * after we run calc func
+       * **/
       operatorKeyPressedDisplay.innerText = "";
       return;
     }
@@ -795,7 +807,7 @@
      * **/
     if (
       topDisplay === "" &&
-      savedOperatorSignForEqualFunc != null &&
+      savedTotalDisplayValueForEqualFunc != null &&
       savedOperatorSignForEqualFunc != null
     ) {
       return;
@@ -1031,6 +1043,7 @@
     operatorKeyPressedDisplay.innerText = "";
     totalDisplay.innerText = "0";
   }
+
   function equalButtonPressed(lastPressedBtn) {
     /**
      * saved values
@@ -1120,13 +1133,22 @@
         ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed;
        * **/
       if (savedTotalDisplayValue != null && savedOperatorSign != null) {
+        /**
+         * this if block will also run when user runs calc func then click delete making topDisplay empty string
+         * then click a number then click equal to run calc func
+         * &&
+         * then click equal/enter to run calc func
+         * WORKS!!!
+         * **/
+        debugger;
         // when we get here topDisplay is empty
         //totalDisplay will be the number(s) user pressed
         //take totalDisplay and pass it to calculation func
         //after we get sum from calculation func
         const totalValue = calculationFunc(
           currentTotalDisplayWithoutCommas,
-          savedTotalDisplayValue
+          savedTotalDisplayValue,
+          savedOperatorSign
         );
         //topDisplay will be currValue in totalDisplay operatorSign savedValueOfTotalDisplay from previous calc equal sign
         const convertArrToStrUsingJoinMethod = [
@@ -1259,7 +1281,14 @@
               .totalDisplayValueForWhenEqualBtnIsLastBtnPressed;
           //when lastPressed is equal topDisplay will be 5 + 3 =
           // totalDisplay will be sum of 5 + 3
-          if (innerTextTopDisplay.length > 3) {
+          /**
+           * lets check for the equal sign instead of length of topDisplay text
+           * **/
+          const lengthOfTopDisplay = innerTextTopDisplay.length;
+          const arrOfValuesForConditional = innerTextTopDisplay.split(" ");
+          const lastValueOfArr =
+            arrOfValuesForConditional[lengthOfTopDisplay - 1];
+          if (lastValueOfArr == "=") {
             // when topDisplay length is greater than 3 it will look like: "5 + 3 ="
             // const arrOfValuesWithTwoNumbersOperatorAndEqual =
             //   innerTextTopDisplay.split(" ");
@@ -1990,6 +2019,8 @@ convertArrToStrAndDisplayValueInApp(
       ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed;
     const savedOperatorSignForEqualFunc =
       ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty;
+
+    const calcFuncExecuted = ourObjElement.dataObj.calcFuncExecutedByEqualBtn;
     //we want to switch operatorKeyPressed to false when user click on operator btn
     //then click on number btn
     //   switch operatorKeyPressed to false when user click on number key. this is for delete key functionality
@@ -2007,10 +2038,14 @@ convertArrToStrAndDisplayValueInApp(
     if (
       currentValueOfTopDisplay === "" &&
       savedTotalDisplayValueForEqualFunc != null &&
-      savedOperatorSignForEqualFunc != null
+      savedOperatorSignForEqualFunc != null &&
+      calcFuncExecuted
     ) {
       ourObjElement.dataObj.operatorKeyPressed = false;
-      totalDisplayHelperFunc(buttonPressedInput);
+      ourObjElement.dataObj.calcFuncExecutedByEqualBtn = false;
+      strValueForTotalDisplayELement(buttonPressedInput);
+      return;
+      // totalDisplayHelperFunc(buttonPressedInput);
     }
     //buttonPressedInput type is string
     // console.log(ourObjElement.dataObj.clickedBtns);
@@ -2084,7 +2119,6 @@ convertArrToStrAndDisplayValueInApp(
       lastPressedBtn === "" ||
       lastPressedBtn == "reset"
     ) {
-      debugger;
       totalDisplayHelperFunc(buttonPressedInput);
       // const displayValue = utilityStrFunc();
       // const arrOfOnlyNumbersWithoutCommas =
@@ -2244,46 +2278,6 @@ convertArrToStrAndDisplayValueInApp(
           arrOfOnlyNumbersWithoutCommas,
           lengthOfArrOfOnlyNumValues,
           btnPressed
-        );
-        break;
-    }
-  }
-  function notes() {
-    const displayValue = utilityStrFunc();
-    const arrOfOnlyNumbersWithoutCommas =
-      displayValueWithoutCommas(displayValue);
-    const lengthOfArrOfOnlyNumValues = arrOfOnlyNumbersWithoutCommas.length;
-
-    switch (true) {
-      //   length of 3 or less
-      case lengthOfArrOfOnlyNumValues <= 3:
-        workingWithDisplayLengthOfLessThanThree(
-          lengthOfArrOfOnlyNumValues,
-          buttonPressedInput,
-          arrOfOnlyNumbersWithoutCommas
-        );
-        break;
-      //length of 4 to 6
-      case lengthOfArrOfOnlyNumValues >= 4 && lengthOfArrOfOnlyNumValues <= 6:
-        workingWithDisplayLengthMoreThanThreeLessThanSeven(
-          arrOfOnlyNumbersWithoutCommas,
-          lengthOfArrOfOnlyNumValues,
-          buttonPressedInput
-        );
-        break;
-      //length of 7 to 9
-      case lengthOfArrOfOnlyNumValues >= 6 && lengthOfArrOfOnlyNumValues <= 9:
-        workingWithDisplayLengthOfMoreThanSixLessThanTen(
-          arrOfOnlyNumbersWithoutCommas,
-          lengthOfArrOfOnlyNumValues,
-          buttonPressedInput
-        );
-        break;
-      case lengthOfArrOfOnlyNumValues >= 9 && lengthOfArrOfOnlyNumValues <= 12:
-        workingWithDisplayLengthOfMoreThanNineLessThanTwelve(
-          arrOfOnlyNumbersWithoutCommas,
-          lengthOfArrOfOnlyNumValues,
-          buttonPressedInput
         );
         break;
     }
