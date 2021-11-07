@@ -1282,7 +1282,6 @@ function updateTotalAmtDisplay(strInput) {
 }
 
 alert("refactor our app.js file");
-
 function updateProgressBar(strInput) {
   var convertStrToNum = Number(strInput);
   var calculatedPercentForProgressBar = (convertStrToNum / 100000) * 100;
