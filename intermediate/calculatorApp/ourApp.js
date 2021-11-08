@@ -40,6 +40,10 @@
 
   function declareOurDataObj() {
     //   instantiate our obj
+    /**
+     * which properties do we want to set back to default values when reset btn is pressed
+     * run this func when reset btn is clicked
+     * **/
     ourObjElement.dataObj = {
       arrOfOperators: ["x", "/", "+", "-"],
       clickedBtns: [],
@@ -51,7 +55,6 @@
       /**
        * saveTopDisplay for calc func when our algorithm runs calc func
        * then user click delete btn, making topDisplay an empty ""
-       *
        * **/
       // operatorKeyPressed is false when our app loads
       //and when user click on a number btn
@@ -1042,6 +1045,8 @@
     //set displays to 0
     operatorKeyPressedDisplay.innerText = "";
     totalDisplay.innerText = "0";
+    alert("test this");
+    declareOurDataObj();
   }
 
   function equalButtonPressed(lastPressedBtn) {
@@ -1276,6 +1281,7 @@
             operatorSign;
           break;
         case "equal":
+          debugger;
           let bottomDisplayWhenEqualIsPressed =
             ourObjElement.dataObj
               .totalDisplayValueForWhenEqualBtnIsLastBtnPressed;
@@ -1284,10 +1290,11 @@
           /**
            * lets check for the equal sign instead of length of topDisplay text
            * **/
-          const lengthOfTopDisplay = innerTextTopDisplay.length;
           const arrOfValuesForConditional = innerTextTopDisplay.split(" ");
+          const lengthOfarrOfValuesForConditional =
+            arrOfValuesForConditional.length;
           const lastValueOfArr =
-            arrOfValuesForConditional[lengthOfTopDisplay - 1];
+            arrOfValuesForConditional[lengthOfarrOfValuesForConditional - 1];
           if (lastValueOfArr == "=") {
             // when topDisplay length is greater than 3 it will look like: "5 + 3 ="
             // const arrOfValuesWithTwoNumbersOperatorAndEqual =
