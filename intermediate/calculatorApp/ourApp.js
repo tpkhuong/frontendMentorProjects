@@ -52,6 +52,7 @@
       totalDisplayValueForWhenEqualBtnIsLastBtnPressed: null,
       operatorSignUsedForCalcWhenTopDisplayIsEmpty: null,
       calcFuncExecutedByEqualBtn: false,
+      clearTopDisplayAfterCalcFuncCalled: false,
       /**
        * saveTopDisplay for calc func when our algorithm runs calc func
        * then user click delete btn, making topDisplay an empty ""
@@ -772,7 +773,8 @@
       ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed;
     const savedOperatorSignForEqualFunc =
       ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty;
-
+    const booleanValueOfCleatTopDisplay =
+      ourObjElement.dataObj.clearTopDisplayAfterCalcFuncCalled;
     const currentTotalDisplay = utilityStrFunc();
     const arrOfDisplayValuesWithoutComma = currentTotalDisplay.match(/\d/gi);
     //the displayTotal contain decimal
@@ -794,6 +796,10 @@
        * after we run calc func
        * **/
       operatorKeyPressedDisplay.innerText = "";
+      /**
+       * keep track of when user clear topDisplay which will happen when user run calc func then hit delete btn
+       * **/
+      ourObjElement.dataObj.clearTopDisplayAfterCalcFuncCalled = true;
       return;
     }
     /**
@@ -811,7 +817,8 @@
     if (
       topDisplay === "" &&
       savedTotalDisplayValueForEqualFunc != null &&
-      savedOperatorSignForEqualFunc != null
+      savedOperatorSignForEqualFunc != null &&
+      booleanValueOfCleatTopDisplay
     ) {
       return;
     }
@@ -828,6 +835,17 @@
       // how to deal with commas in operator
       //get length of displayStr
       //when length is 1. display is "3"
+      /**
+       * moving this algorithm into its own func to be reused
+       * **/
+      debugger;
+      deleteHelperFunc(
+        arrOfDisplayValuesWithoutComma,
+        decimalInTotalDisplay,
+        currentTotalDisplay
+      );
+
+      /*
       if (arrOfDisplayValuesWithoutComma.length == 1) {
         strValueForTotalDisplayELement("0");
       }
@@ -857,10 +875,43 @@
           arrOfDisplayValuesWithoutComma
         );
       }
+      */
     }
+
     /**
      * could just have a return statement in an else block
      * **/
+  }
+
+  function deleteHelperFunc(
+    arrOfValuesWithoutComma,
+    decimalInDisplayBoolean,
+    totalDisplay
+  ) {
+    if (arrOfValuesWithoutComma.length == 1) {
+      strValueForTotalDisplayELement("0");
+    }
+
+    if (
+      (arrOfValuesWithoutComma.length > 1 &&
+        arrOfValuesWithoutComma.length <= 3) ||
+      decimalInDisplayBoolean
+    ) {
+      // const arrOfStrValues = currentTotalDisplay.split("");
+      const arrOfStrValues = [...totalDisplay];
+      //remove last value in displayStr
+      arrOfStrValues.pop();
+      //passing arr to display composition func
+      convertArrToStrAndDisplayValueInApp(
+        strValueForTotalDisplayELement,
+        convertArrOfValuesToStrUsingJoinMethod,
+        arrOfStrValues
+      );
+    }
+    // displayTotal does not contain decimal and length is greater than 3
+    if (arrOfValuesWithoutComma.length >= 4 && !decimalInDisplayBoolean) {
+      deleteButtonDealingWithLengthOfTotalDisplay(arrOfValuesWithoutComma);
+    }
   }
 
   function deleteButtonDealingWithLengthOfTotalDisplay(arrInputWithoutComma) {
@@ -1045,7 +1096,6 @@
     //set displays to 0
     operatorKeyPressedDisplay.innerText = "";
     totalDisplay.innerText = "0";
-    alert("test this");
     declareOurDataObj();
   }
 
@@ -1057,7 +1107,7 @@
       ourObjElement.dataObj.totalDisplayValueForWhenEqualBtnIsLastBtnPressed;
     const savedOperatorSign =
       ourObjElement.dataObj.operatorSignUsedForCalcWhenTopDisplayIsEmpty;
-
+    console.log(ourObjElement);
     /*****
      * break
      *  *****/
@@ -2050,6 +2100,21 @@ convertArrToStrAndDisplayValueInApp(
     ) {
       ourObjElement.dataObj.operatorKeyPressed = false;
       ourObjElement.dataObj.calcFuncExecutedByEqualBtn = false;
+      /**
+       * assign the boolean value of false ourObjElement.dataObj.clearTopDisplayAfterCalcFuncCalled
+       * when user pressed or click on a number btn. this way we won't enter our if statement in our deleteBtn algorithm
+       * if (
+      topDisplay === "" &&
+      savedTotalDisplayValueForEqualFunc != null &&
+      savedOperatorSignForEqualFunc != null
+      ourObjElement.dataObj.clearTopDisplayAfterCalcFuncCalled
+      ) {
+        return;
+      }
+      then we will enter our  if (!operatorNotPressed) {} block because the value of operatorNotPressed will be false but we negate that !false
+      we will enter the if statement block
+       * **/
+      ourObjElement.dataObj.clearTopDisplayAfterCalcFuncCalled = false;
       strValueForTotalDisplayELement(buttonPressedInput);
       return;
       // totalDisplayHelperFunc(buttonPressedInput);
