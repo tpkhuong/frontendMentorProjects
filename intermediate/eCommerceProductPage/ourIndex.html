@@ -16,7 +16,11 @@
       href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="shortcut icon" href="" type="image/x-icon" />
+    <link
+      rel="shortcut icon"
+      href="images/favicon-32x32.png"
+      type="image/x-icon"
+    />
     <link rel="stylesheet" href="ourStyles.css" />
     <title>Ecommerce Product Page</title>
   </head>
@@ -31,14 +35,14 @@
             aria-label="open mobile menu"
             class="open-menu-btn"
           >
-            <img src="" alt="" />
+            <img src="images/icon-menu.svg" alt="" />
           </button>
           <!-- modal(mobile navbar) display none at desktop -->
           <div
             class="mobile-modal"
             role="dialog"
             aria-modal="true"
-            id="modal-1"
+            id="modal-one"
           >
             <!-- opacity .7 black bg -->
             <div id="mobile-modal-style-wrapper">
@@ -47,51 +51,51 @@
                 aria-label="close mobile menu"
                 class="close-menu-btn"
               >
-                <img src="" alt="" />
+                <img src="images/icon-close.svg" alt="" />
               </button>
               <!-- white bg -->
               <nav role="navigation">
                 <h2 class="visually-hidden">Mobile Navigation</h2>
                 <ul role="menu" class="navlist">
                   <li role="none" class="navitem">
-                    <a href="" role="menuitem" class="navlink"></a>
+                    <a href="" role="menuitem" class="navlink"> Collections </a>
                   </li>
                   <li role="none" class="navitem">
-                    <a href="" role="menuitem" class="navlink"></a>
+                    <a href="" role="menuitem" class="navlink"> Men </a>
                   </li>
                   <li role="none" class="navitem">
-                    <a href="" role="menuitem" class="navlink"></a>
+                    <a href="" role="menuitem" class="navlink"> Women </a>
                   </li>
                   <li role="none" class="navitem">
-                    <a href="" role="menuitem" class="navlink"></a>
+                    <a href="" role="menuitem" class="navlink"> About </a>
                   </li>
                   <li role="none" class="navitem">
-                    <a href="" role="menuitem" class="navlink"></a>
+                    <a href="" role="menuitem" class="navlink"> Contact </a>
                   </li>
                 </ul>
               </nav>
             </div>
           </div>
           <!-- logo -->
-          <img src="" alt="sneakers company logo" />
+          <img src="images/logo.svg" alt="sneakers company logo" />
           <!-- desktop navbar display none at mobile size-->
           <nav role="navigation">
             <h2 class="visually-hidden">Desktop Navigation</h2>
             <ul role="menu" class="navlist">
               <li role="none" class="navitem">
-                <a href="" role="menuitem" class="navlink"></a>
+                <a href="" role="menuitem" class="navlink"> Collections </a>
               </li>
               <li role="none" class="navitem">
-                <a href="" role="menuitem" class="navlink"></a>
+                <a href="" role="menuitem" class="navlink"> Men </a>
               </li>
               <li role="none" class="navitem">
-                <a href="" role="menuitem" class="navlink"></a>
+                <a href="" role="menuitem" class="navlink"> Women </a>
               </li>
               <li role="none" class="navitem">
-                <a href="" role="menuitem" class="navlink"></a>
+                <a href="" role="menuitem" class="navlink"> About </a>
               </li>
               <li role="none" class="navitem">
-                <a href="" role="menuitem" class="navlink"></a>
+                <a href="" role="menuitem" class="navlink"> Contact </a>
               </li>
             </ul>
           </nav>
@@ -99,39 +103,45 @@
           <div class="cart-avatar-style-wrapper">
             <!-- cart -->
             <button role="button" aria-label="open cart content display">
-              <img src="" alt="" />
+              <img src="images/icon-cart.svg" alt="" />
               <!-- cart quantity display -->
               <span class="cart-quantity-display"></span>
             </button>
             <!-- cart click/hover/focus show effect -->
             <div
-              id="modal-3"
+              id="modal-two"
               role="dialog"
               aria-modal="true"
-              class="card-modal"
+              class="cart-modal"
             >
               <!-- top -->
               <div class="top-cart-style-wrapper">
-                <span></span>
+                <span>Cart</span>
               </div>
               <!-- bottom -->
               <div class="bottom-cart-style-wrapper">
                 <!-- img -->
                 <img src="" alt="" />
                 <div class="title-quantity-total-style-wrapper">
+                  <!-- use js to apply content -->
                   <p class="cart-selection-title"></p>
                   <div class="price-quantity">
+                    <!-- use js to apply content -->
                     <span class="price-quantity__price"></span>
-                    <span class="price-quantity__operator"></span>
+                    <span class="price-quantity__operator">x</span>
+                    <!-- use js to apply content -->
                     <span class="price-quantity__quantity"></span>
+                    <!-- use js to apply content -->
                     <span class="price-quantity__total"></span>
                   </div>
                 </div>
-                <button class="trash-btn" aria-label="empty cart"></button>
+                <button class="trash-btn" aria-label="empty cart">
+                  <img src="images/icon-delete.svg" alt="" />
+                </button>
                 <!-- cart quantity and total -->
                 <!-- delete/trash btn -->
               </div>
-              <a href="#" class="checkout-btn"></a>
+              <a href="#" class="checkout-btn">Checkout</a>
             </div>
             <!-- avatar -->
             <button
@@ -139,7 +149,7 @@
               class="user-avatar"
               aria-label="show user detail"
             >
-              <img src="" alt="" />
+              <img src="images/image-avatar.png" alt="" />
             </button>
           </div>
         </div>
@@ -151,36 +161,194 @@
           <h2 class="visually-hidden">Product Section</h2>
           <div id="img-display-container">
             <!-- img display -->
+            <!-- mobile img -->
             <div class="mobile-img-display">
               <div class="mobile-img-display-controller-container">
-                <button aria-label="previous image">
-                  <img src="" alt="" />
+                <button aria-label="previous image" class="arrow-btn">
+                  <img src="images/icon-previous.svg" alt="" />
                 </button>
-                <button aria-label="next image">
-                  <img src="" alt="" />
+                <button aria-label="next image" class="arrow-btn">
+                  <img src="images/icon-next.svg" alt="" />
                 </button>
               </div>
               <div class="mobile-images-container">
                 <div class="mobile-images-container__img-container">
-                  <img src="" alt="" />
+                  <img src="images/image-product-1.jpg" alt="" />
                 </div>
                 <div class="mobile-images-container__img-container">
-                  <img src="" alt="" />
+                  <img src="images/image-product-2.jpg" alt="" />
                 </div>
                 <div class="mobile-images-container__img-container">
-                  <img src="" alt="" />
+                  <img src="images/image-product-3.jpg" alt="" />
                 </div>
                 <div class="mobile-images-container__img-container">
-                  <img src="" alt="" />
+                  <img src="images/image-product-4.jpg" alt="" />
                 </div>
               </div>
             </div>
-            <!-- mobile img -->
             <!-- desktop mobile -->
+            <div class="desktop-img-display">
+              <!-- large img -->
+              <div class="desktop-img-display__large-img-container">
+                <button role="button" class="desktop-img-display__large-img">
+                  <img src="images/image-product-1.jpg" alt="" />
+                </button>
+                <button role="button" class="desktop-img-display__large-img">
+                  <img src="images/image-product-2.jpg" alt="" />
+                </button>
+                <button role="button" class="desktop-img-display__large-img">
+                  <img src="images/image-product-3.jpg" alt="" />
+                </button>
+                <button role="button" class="desktop-img-display__large-img">
+                  <img src="images/image-product-4.jpg" alt="" />
+                </button>
+              </div>
+              <!-- bottom row -->
+              <div class="desktop-img-display__small-img-container">
+                <button role="button" class="desktop-img-display__small-img">
+                  <img src="images/image-product-1-thumbnail.jpg" alt="" />
+                </button>
+                <button role="button" class="desktop-img-display__small-img">
+                  <img src="images/image-product-2-thumbnail.jpg" alt="" />
+                </button>
+                <button role="button" class="desktop-img-display__small-img">
+                  <img src="images/image-product-3-thumbnail.jpg" alt="" />
+                </button>
+                <button role="button" class="desktop-img-display__small-img">
+                  <img src="images/image-product-4-thumbnail.jpg" alt="" />
+                </button>
+              </div>
+            </div>
             <!-- img modal -->
+            <div
+              id="modal-three"
+              role="dialog"
+              aria-modal="true"
+              class="lightbox-modal"
+            >
+              <div class="light-box-style-wrapper">
+                <button
+                  role="button"
+                  class="light-box-close-btn"
+                  aria-label="close lightbox"
+                >
+                  <img src="images/icon-close.svg" alt="" />
+                </button>
+                <div class="lightbox-large-img-style-wrapper">
+                  <!-- four imgs -->
+                  <div class="lightbox-large-img-container">
+                    <div class="large-img">
+                      <img src="images/image-product-1.jpg" alt="" />
+                    </div>
+                    <div class="large-img">
+                      <img src="images/image-product-2.jpg" alt="" />
+                    </div>
+                    <div class="large-img">
+                      <img src="images/image-product-3.jpg" alt="" />
+                    </div>
+                    <div class="large-img">
+                      <img src="images/image-product-4.jpg" alt="" />
+                    </div>
+                  </div>
+                  <div class="lightbox-arrow-container">
+                    <!-- two buttons -->
+                    <button
+                      role="button"
+                      class="arrow-btn"
+                      aria-label="previous image"
+                    >
+                      <img src="images/icon-previous.svg" alt="" />
+                    </button>
+                    <button
+                      role="button"
+                      class="arrow-btn"
+                      aria-label="next image"
+                    >
+                      <img src="images/icon-next.svg" alt="" />
+                    </button>
+                  </div>
+                </div>
+                <!-- lightbox bottom row of images -->
+                <div class="lightbox-img-display__small-img-container">
+                  <button role="button" class="lightbox-img-display__small-img">
+                    <img src="images/image-product-1-thumbnail.jpg" alt="" />
+                  </button>
+                  <button role="button" class="lightbox-img-display__small-img">
+                    <img src="images/image-product-2-thumbnail.jpg" alt="" />
+                  </button>
+                  <button role="button" class="lightbox-img-display__small-img">
+                    <img src="images/image-product-3-thumbnail.jpg" alt="" />
+                  </button>
+                  <button role="button" class="lightbox-img-display__small-img">
+                    <img src="images/image-product-4-thumbnail.jpg" alt="" />
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
           <!-- product name, description, price, quantity controller -->
-          <article class="product-details"></article>
+          <article class="product-details">
+            <h2 class="product-details__company-name">Sneaker Company</h2>
+            <h3 class="product-details__sneaker-name">
+              Fall Limited Edition Sneakers
+            </h3>
+            <p class="product-details__description">
+              These low-profile sneakers are your perfect casual wear companion.
+              Featuring a durable rubber outer sole, they’ll withstand
+              everything the weather can offer.
+            </p>
+            <!-- price -->
+            <div class="product-details__price-style-wrapper">
+              <div class="price-style-wrapper__discount-price-wrapper">
+                <span class="discount-price-wrapper__discount-price"
+                  >$125.00</span
+                >
+                <span class="discount-price-wrapper__percent">50%</span>
+              </div>
+              <!-- use pseudo element for line through regular price -->
+              <span class="regular-price">$250.00</span>
+            </div>
+            <!-- quantity-controller and add to cart -->
+            <div class="quantity-controller-cart-btn-style-wrapper">
+              <!-- quantity controller -->
+              <div
+                class="quantity-controller-cart-btn__button-quantity-display"
+              >
+                <button
+                  role="button"
+                  class="quantity-buttons"
+                  aria-label="decrement quantity"
+                >
+                  <img src="images/icon-minus.svg" alt="" />
+                </button>
+                <label for="quantity-display" class="visually-hidden"
+                  >Enter Quantity</label
+                >
+                <input
+                  type="number"
+                  id="quantity-display"
+                  placeholder="0"
+                  aria-placeholder="0"
+                />
+                <button
+                  role="button"
+                  class="quantity-buttons"
+                  aria-label="increment quantity"
+                >
+                  <img src="images/icon-plus.svg" alt="" />
+                </button>
+              </div>
+              <!-- add to cart -->
+              <button
+                role="button"
+                aria-label="add to cart"
+                class="add-to-cart-button"
+              >
+                <img src="images/icon-cart.svg" alt="" />
+                <span>Add to cart</span>
+              </button>
+            </div>
+          </article>
         </section>
       </main>
     </div>
