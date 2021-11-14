@@ -38,44 +38,50 @@
             <img src="images/icon-menu.svg" alt="" />
           </button>
           <!-- modal(mobile navbar) display none at desktop -->
-          <div
-            class="mobile-modal"
-            role="dialog"
-            aria-modal="true"
-            id="modal-one"
-          >
-            <!-- opacity .7 black bg -->
-            <div id="mobile-modal-style-wrapper">
-              <button
-                role="button"
-                aria-label="close mobile menu"
-                class="close-menu-btn"
-              >
-                <img src="images/icon-close.svg" alt="" />
-              </button>
-              <!-- white bg -->
-              <nav role="navigation">
-                <h2 class="visually-hidden">Mobile Navigation</h2>
-                <ul role="menu" class="navlist">
-                  <li role="none" class="navitem">
-                    <a href="" role="menuitem" class="navlink"> Collections </a>
-                  </li>
-                  <li role="none" class="navitem">
-                    <a href="" role="menuitem" class="navlink"> Men </a>
-                  </li>
-                  <li role="none" class="navitem">
-                    <a href="" role="menuitem" class="navlink"> Women </a>
-                  </li>
-                  <li role="none" class="navitem">
-                    <a href="" role="menuitem" class="navlink"> About </a>
-                  </li>
-                  <li role="none" class="navitem">
-                    <a href="" role="menuitem" class="navlink"> Contact </a>
-                  </li>
-                </ul>
-              </nav>
+          <div class="faded-bg-modal-wrapper">
+            <!-- opacity .7 black bg faded element -->
+            <div class="faded-bg-element"></div>
+            <div
+              class="mobile-modal"
+              role="dialog"
+              aria-modal="true"
+              id="modal-one"
+            >
+              <div id="mobile-modal-style-wrapper">
+                <button
+                  role="button"
+                  aria-label="close mobile menu"
+                  class="close-menu-btn"
+                >
+                  <img src="images/icon-close.svg" alt="" />
+                </button>
+                <!-- white bg -->
+                <nav role="navigation" class="mobile-menu-navigation">
+                  <h2 class="visually-hidden">Mobile Navigation</h2>
+                  <ul role="menu" class="navlist">
+                    <li role="none" class="navitem">
+                      <a href="" role="menuitem" class="navlink">
+                        Collections
+                      </a>
+                    </li>
+                    <li role="none" class="navitem">
+                      <a href="" role="menuitem" class="navlink"> Men </a>
+                    </li>
+                    <li role="none" class="navitem">
+                      <a href="" role="menuitem" class="navlink"> Women </a>
+                    </li>
+                    <li role="none" class="navitem">
+                      <a href="" role="menuitem" class="navlink"> About </a>
+                    </li>
+                    <li role="none" class="navitem">
+                      <a href="" role="menuitem" class="navlink"> Contact </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
             </div>
           </div>
+
           <!-- logo -->
           <img src="images/logo.svg" alt="sneakers company logo" />
           <!-- desktop navbar display none at mobile size-->
