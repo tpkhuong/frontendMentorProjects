@@ -413,3 +413,81 @@ a:hover {
 }
 
 /* hide h2 which are title for our section element */
+
+/* general styles */
+
+/* individual sections */
+
+/* mobile nav menu */
+
+.faded-bg-modal-wrapper {
+  /* this element will act as a stacking context container for our element with 
+  bg black (faded) and navbar with white bg
+  */
+  /* position: fixed;
+  inset: 0; */
+}
+
+/* when we use ::after the stacking context will apply ::after above/on top
+of modal element in that case we will use order to get the result we want which is the modal to be
+above/on top of the faded element wit the background color of black so we dont have to use a z-index
+on modal element
+.faded-bg-modal-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--col-neutral-black);
+  opacity: 0.5;
+}
+
+*/
+
+/** 
+** this didnt give the effect we wanted **
+different approach. keep the element faded-bg-modal-wrapper
+but have two element then we will make the faded-bg-modal-wrapper element be the one that control the stacking context of its elements
+**/
+
+/** 
+different approach. keep the element faded-bg-modal-wrapper
+but have declare positon: fixed on both children of faded-bg-modal-wrapper since the order in our html file
+the faded-bg-element is before mobile-modal.
+
+the mobile-modal element will be on top / above the faded-bg-element
+**/
+
+.faded-bg-element {
+  position: fixed;
+  inset: 0;
+  background-color: var(--col-neutral-black);
+  opacity: 0.7;
+}
+
+.mobile-modal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 30%;
+  background-color: var(--col-neutral-white);
+  padding: 24px;
+}
+
+.close-menu-btn {
+  background: transparent;
+  padding: 0;
+}
+
+.mobile-menu-navigation {
+  margin-block-start: 48px;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.mobile-menu-navigation .navlist > * + * {
+  margin-block-start: 20px;
+}
+
+/* header */
+
+/* main */
