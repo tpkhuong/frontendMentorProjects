@@ -2,6 +2,7 @@
   // activate mobile menu selectors
   const {
     // close mobile menu
+    modalWrapperElement,
     mobileModalElement,
     openMobileMenuBtn,
     headerElement,
@@ -12,6 +13,10 @@
   addEventListener(openMobileMenuBtn, "click", mobileMenuFunctionality);
   console.log(openMobileMenuBtn);
   function ourSelectors() {
+    // faded modal wrapper
+    const modalWrapperElement = document.querySelector(
+      ".faded-bg-modal-wrapper"
+    );
     // mobile-modal
     const mobileModalElement = document.querySelector(".mobile-modal");
     // activate mobile menu
@@ -27,6 +32,7 @@
     //   header element
     const headerElement = document.querySelector("[role='banner']");
     return {
+      modalWrapperElement,
       mobileModalElement,
       openMobileMenuBtn,
       headerElement,
@@ -44,13 +50,18 @@
 
   function mobileMenuFunctionality(event) {
     // declare our selector at top of func
-    const { openMobileMenuBtn, mobileCloseBtn } = ourSelectors();
+    const { openMobileMenuBtn, mobileCloseBtn, modalWrapperElement } =
+      ourSelectors();
     //add click listener to closebtn
     addClickListenerToCloseMobileBtn();
     //add keydown listener to mobile modal element
     addKeydownListenerToMobileModalElement();
     removeEventListener(openMobileMenuBtn, "click", mobileMenuFunctionality);
     // openMobileMenuBtn.removeEventListener("click", mobileMenuFunctionality);
+    // hide open menu button
+    addingAttr(openMobileMenuBtn, "hidden", "");
+    // show mobile modal
+    addingClass(modalWrapperElement, "active");
     // focus on close btn
     focusElement(mobileCloseBtn);
   }
@@ -64,12 +75,19 @@
 
   function closeMobileBtnFunctionality(eventInput) {
     // declare our selector at top of func
-    const { openMobileMenuBtn, mobileCloseBtn } = ourSelectors();
+    const { openMobileMenuBtn, mobileCloseBtn, modalWrapperElement } =
+      ourSelectors();
 
     // remove event listener from mobile modal element
     removeKeydownListenerOnMobileModalElement();
     // remove event listener from close btn
     removeEventListener(mobileCloseBtn, "click", closeMobileBtnFunctionality);
+    // add click event to open menu btn
+    addEventListener(openMobileMenuBtn, "click", mobileMenuFunctionality);
+    // hide mobile modal
+    removingClass(modalWrapperElement, "active");
+    // show mobile menu btn
+    removingAttr(openMobileMenuBtn, "hidden");
     // focus on hamburger btn
     focusElement(openMobileMenuBtn);
   }
@@ -83,7 +101,7 @@
 
   function removeKeydownListenerOnMobileModalElement() {
     const { mobileModalElement } = ourSelectors();
-    removeEventListener(mobileModalElement, "keydown", mobileMenuFunctionality);
+    removeEventListener(mobileModalElement, "keydown", tabThroughMobileMenu);
   }
 
   function tabThroughMobileMenu(event) {
@@ -96,15 +114,58 @@
     keyboardTabbingHelperFunc(event, mobileCloseBtn, lastItemOfMobileMenu);
   }
 
-  alert("work on this first");
   function keyboardTabbingHelperFunc(eventInput, firstElement, lastElement) {
     // check for shift btn first
-    console.log(eventInput);
-    console.log(firstElement);
-    console.log(lastElement);
+    // const targetElement = eventInput.target;
+    // const targetKeyStrForm = eventInput.key;
+    // const booleanShiftKeyPressed = eventInput.shiftKey;
+
+    const { targetElement, targetKeyStrForm, booleanShiftKeyPressed } =
+      propertiesOfEventObj(eventInput);
+    // if shift key pressed enter check if tab key is pressed too
+    if (booleanShiftKeyPressed) {
+      targetKeyStrForm == "Tab" && targetElement == firstElement
+        ? (focusElement(lastElement), eventInput.preventDefault())
+        : null;
+    } else {
+      // user is not pressing down on shift key
+      targetKeyStrForm == "Tab" && targetElement == lastElement
+        ? (focusElement(firstElement), eventInput.preventDefault())
+        : null;
+    }
+  }
+  // helper func
+
+  function propertiesOfEventObj(event) {
+    return {
+      targetElement: event.target,
+      targetKeyStrForm: event.key,
+      booleanShiftKeyPressed: event.shiftKey,
+    };
   }
 
-  // helper func
+  /**
+   * show element
+   * **/
+
+  function addingClass(element, attrStrValue) {
+    element.classList.add(attrStrValue);
+  }
+
+  function addingAttr(element, attributeStr, attrStrValue) {
+    element.setAttribute(attributeStr, attrStrValue);
+  }
+  /**
+   * hide element
+   * **/
+
+  function removingAttr(element, attributeStr, attrStrValue) {
+    element.removeAttribute(attributeStr);
+  }
+
+  function removingClass(element, attrStrValue) {
+    element.classList.remove(attrStrValue);
+  }
 
   /**
    * focus element
