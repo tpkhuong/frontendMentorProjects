@@ -39,7 +39,7 @@
             <img src="images/icon-menu.svg" alt="" />
           </button>
           <!-- modal(mobile navbar) display none at desktop -->
-          <div class="faded-bg-modal-wrapper">
+          <div id="mobile-menu-navigation" class="faded-bg-modal-wrapper">
             <!-- opacity .7 black bg faded element -->
             <div class="faded-bg-element"></div>
             <div
@@ -86,7 +86,7 @@
           <!-- logo -->
           <img src="images/logo.svg" alt="sneakers company logo" />
           <!-- desktop navbar display none at mobile size-->
-          <nav role="navigation">
+          <nav role="navigation" id="desktop-navigation">
             <h2 class="visually-hidden">Desktop Navigation</h2>
             <ul role="menu" class="navlist">
               <li role="none" class="navitem">
@@ -109,7 +109,11 @@
           <!-- cart/avatar container -->
           <div class="cart-avatar-style-wrapper">
             <!-- cart -->
-            <button role="button" aria-label="open cart content display">
+            <button
+              role="button"
+              class="open-cart-btn"
+              aria-label="open cart content display"
+            >
               <img src="images/icon-cart.svg" alt="" />
               <!-- cart quantity display -->
               <span class="cart-quantity-display"></span>
