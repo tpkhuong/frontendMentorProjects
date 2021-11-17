@@ -225,11 +225,12 @@ body {
 
 /* change for next project */
 
-[class="btn-"] {
-  background-color: var(--btn-bg);
+[class*="-btn"] {
+  padding: 0;
+  /* background-color: var(--btn-bg); */
   /* background-image: var(--btn-bg-img, hsl(0, 100%, 100%)); */
   /* text-transform: uppercase; */
-  color: var(--btn-fg, hsl(0, 100%, 100%));
+  /* color: var(--btn-fg, hsl(0, 100%, 100%)); */
   /* padding-block: 16px;
   margin-block-start: 34px;
   border-radius: 6px; */
@@ -420,12 +421,32 @@ a:hover {
 
 /* mobile nav menu */
 
-.faded-bg-modal-wrapper {
+/* faded-bg-modal-wrapper element without active class will be hidden */
+.faded-bg-modal-wrapper.active {
   /* this element will act as a stacking context container for our element with 
   bg black (faded) and navbar with white bg
   */
   /* position: fixed;
   inset: 0; */
+  display: revert;
+}
+
+.faded-bg-modal-wrapper {
+  display: none;
+}
+
+/* hide at desktop size */
+
+@media screen and (min-width: 90rem) {
+  [id="mobile-menu-navigation"] {
+    display: none;
+  }
+  .faded-bg-modal-wrapper.active {
+    display: none;
+  }
+  .open-mobile-menu-btn {
+    display: none;
+  }
 }
 
 /* when we use ::after the stacking context will apply ::after above/on top
@@ -475,7 +496,6 @@ the mobile-modal element will be on top / above the faded-bg-element
 
 .close-menu-btn {
   background: transparent;
-  padding: 0;
 }
 
 .mobile-menu-navigation {
@@ -486,6 +506,22 @@ the mobile-modal element will be on top / above the faded-bg-element
 
 .mobile-menu-navigation .navlist > * + * {
   margin-block-start: 20px;
+}
+
+/* desktop navigation */
+
+/* hide at mobile size */
+
+@media screen and (max-width: 90rem) {
+  [id="desktop-navigation"] {
+    display: none;
+  }
+}
+
+/* cart */
+
+[id="modal-two"] {
+  display: none;
 }
 
 /* header */
