@@ -7,6 +7,7 @@
   --col-neutral-dark-grayish-blue: hsl(219, 9%, 45%);
   --col-neutral-grayish-blue: hsl(220, 14%, 75%);
   --col-neutral-light-grayish-blue: hsl(223, 64%, 98%);
+  --col-neutral-bg-gray: hsl(230, 60%, 98%);
   /* white and black */
   --col-neutral-white: hsl(0, 100%, 100%);
   --col-neutral-black: hsl(0, 0%, 0%);
@@ -409,15 +410,32 @@ a:hover {
 }
 
 .skip-link {
-  display: inline-block;
+  display: none;
   border: 1px solid red;
   padding-block: 16px;
   padding-inline: 32px;
 }
 
+@media screen and (min-width: 90rem) {
+  .skip-link {
+    display: inline-block;
+  }
+}
+
 /* hide h2 which are title for our section element */
 
 /* general styles */
+
+[class="separator"] {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: lightgray;
+}
+
+.accent-color {
+  color: var(--col-primary-orange);
+}
 
 /* individual sections */
 
@@ -540,12 +558,67 @@ the mobile-modal element will be on top / above the faded-bg-element
 
 /* cart */
 
+.cart-avatar-img-wrapper path {
+  fill: var(--col-neutral-black);
+}
+
 .cart-avatar-style-wrapper {
   margin-inline-start: auto;
+  display: flex;
+}
+
+.cart-avatar-img-wrapper {
+  height: 18px;
+}
+
+[class*="bottom-cart-style-wrapper"] {
+  color: var(--col-neutral-dark-grayish-blue);
 }
 
 [id="modal-two"] {
+  /* display: none; */
+}
+
+[id="modal-two"] {
+  /* declare z-index on modal-two to have it appear above other elements
+  the way stacking context works is the element below will appear above the element above in the html
+  structure
+  */
+  font-weight: 700;
+  z-index: 1;
+  position: fixed;
+  top: 88px;
+  border-radius: 8px;
+  left: 10px;
+  right: 10px;
+  background: var(--col-neutral-white);
+  box-shadow: var(--box-shadow);
+}
+
+.top-cart-style-wrapper {
+  padding: 24px;
+}
+
+.bottom-cart-style-wrapper-empty {
+  padding-block: 84px;
+}
+
+.bottom-cart-style-wrapper-empty span {
+  display: block;
+  width: max-content;
+  margin-inline: auto;
+}
+
+.bottom-cart-style-wrapper-filled {
   display: none;
+}
+
+.title-quantity-total-style-wrapper {
+  font-weight: 400;
+}
+
+.show-cart {
+  display: revert;
 }
 
 [class="user-avatar"] {
@@ -558,13 +631,215 @@ the mobile-modal element will be on top / above the faded-bg-element
 /* header */
 
 /* main */
+
 /* lets have a class that will declare grid-colum and grid-row and display:revert 
 to show the img instead of working with z-index
 */
 
-/* start here */
+/* mobile img container */
+
+.mobile-img-display {
+  position: relative;
+}
+
+.mobile-img-display-controller-container {
+  /* since we are using position: absolute, it will make our element intrinic which means the width will be
+  based on its content we will use width: 100%
+  */
+  /* width: 100%; */
+  /* or use left: 0px and right: 0px since our element is position: absolute */
+  position: absolute;
+  padding-inline: 24px;
+  display: flex;
+  justify-content: space-between;
+  /* center vertically */
+  /* top: 0px;
+  bottom: 0px; */
+  height: min-content;
+  margin-block: auto;
+  /* since we are not using width: 100% we will use inset: 0px which is like declaring left: 0px, right: 0px, top: 0px, bottom: 0px */
+  inset: 0px;
+}
+
+/* previous and next arrow mobile img section */
+
+[class="mobile-img-display"] .arrow-btn {
+  padding: 10px;
+  border-radius: 50%;
+}
+
+/* set height on previous arrow img to match next arrow img size */
+
+.mobile-img-display [aria-label="previous-image"] img {
+  height: 13.833px;
+}
+
+.arrow-btn {
+  background-color: var(--col-neutral-white);
+}
+
+.mobile-img-display .arrow-img-wrapper {
+  display: block;
+  width: 10px;
+}
 
 .mobile-images-container__img-container {
-  grid-column: 1 / 2;
-  grid-row: 1 /2;
+  display: none;
+}
+
+.mobile-images-container__img-container > img {
+  max-height: 300px;
+  min-width: 375px;
+}
+
+.active-show-img {
+  display: revert;
+  /* might not need display: grid */
+  /* grid-column: 1 / 2;
+  grid-row: 1 /2; */
+}
+
+/* desktop image container */
+
+/* not show for mobile display */
+
+[class="desktop-img-display"],
+[id="modal-three"] {
+  display: none;
+}
+
+/* product details section */
+
+.product-details {
+  padding: 24px;
+}
+
+.product-details__company-name {
+  font-size: 0.8rem;
+
+  text-transform: uppercase;
+}
+
+.product-details__sneaker-name {
+  font-size: 1.8rem;
+  margin-block-start: 16px;
+}
+
+.product-details__description {
+  font-size: 0.95rem;
+  color: var(--col-neutral-dark-grayish-blue);
+}
+
+.product-details__price-style-wrapper {
+  font-weight: 700;
+}
+
+.product-details__price-style-wrapper,
+.price-style-wrapper__discount-price-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.discount-price-wrapper__discount-price {
+  font-size: 1.8rem;
+}
+
+.discount-price-wrapper__percent {
+  margin-inline-start: 16px;
+  background-color: var(--col-primary-pale-orange);
+  padding: 4px;
+  padding-inline: 10px;
+  border-radius: 4px;
+}
+
+.product-details__price-style-wrapper .regular-price {
+  color: var(--col-neutral-grayish-blue);
+  position: relative;
+  margin-inline-start: auto;
+}
+
+.product-details__price-style-wrapper .regular-price::after {
+  content: "";
+  display: block;
+  position: absolute;
+  background-color: currentColor;
+  width: 100%;
+  height: 2px;
+  /* center vertically */
+  top: 0px;
+  bottom: 0px;
+  margin-block: auto;
+}
+
+/* quantity control */
+
+.quantity-controller-cart-btn__button-quantity-display {
+  margin-block: 24px;
+  margin-block-end: 16px;
+
+  display: flex;
+  /* padding: 24px;
+  padding-block: 16px; */
+  border-radius: 8px;
+  /* to show our border-radius since our buttons are at both of the edges of this element
+  we will declare overflow: hidden
+  */
+  overflow: hidden;
+}
+
+/* to center our input */
+
+.quantity-controller-cart-btn__button-quantity-display button:first-child {
+  margin-inline-end: auto;
+}
+
+.quantity-controller-cart-btn__button-quantity-display button:last-child {
+  margin-inline-start: auto;
+}
+
+.quantity-buttons {
+  padding: 16px;
+  /* border-radius: 8px; */
+}
+
+.quantity-buttons,
+.quantity-controller-cart-btn__button-quantity-display,
+[id="quantity-display"] {
+  background-color: var(--col-neutral-bg-gray);
+}
+
+[id="quantity-display"] {
+  padding: 0;
+  border: 0;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* add to cart btn */
+
+/* cart image in add to cart btn */
+
+.add-to-cart-button path {
+  fill: var(--col-neutral-white);
+}
+
+.add-to-cart-button span {
+  margin-inline-start: 8px;
+}
+
+.add-cart-img-wrapper {
+  height: 18px;
+}
+
+.add-to-cart-button {
+  background-color: var(--col-primary-orange);
+  color: var(--col-neutral-white);
+  font-weight: 700;
+  display: flex;
+  width: 100%;
+  border-radius: 8px;
+  padding-block: 16px;
+  justify-content: center;
+  align-items: center;
+  box-shadow: var(--box-shadow);
 }
