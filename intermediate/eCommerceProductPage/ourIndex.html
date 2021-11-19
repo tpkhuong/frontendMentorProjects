@@ -114,7 +114,21 @@
               class="open-cart-btn"
               aria-label="open cart content display"
             >
-              <img src="images/icon-cart.svg" alt="" />
+              <div class="cart-avatar-img-wrapper">
+                <svg
+                  width="22"
+                  height="20"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 21 20"
+                >
+                  <path
+                    d="M20.925 3.641H3.863L3.61.816A.896.896 0 0 0 2.717 0H.897a.896.896 0 1 0 0 1.792h1l1.031 11.483c.073.828.52 1.726 1.291 2.336C2.83 17.385 4.099 20 6.359 20c1.875 0 3.197-1.87 2.554-3.642h4.905c-.642 1.77.677 3.642 2.555 3.642a2.72 2.72 0 0 0 2.717-2.717 2.72 2.72 0 0 0-2.717-2.717H6.365c-.681 0-1.274-.41-1.53-1.009l14.321-.842a.896.896 0 0 0 .817-.677l1.821-7.283a.897.897 0 0 0-.87-1.114ZM6.358 18.208a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm10.015 0a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm2.021-7.243-13.8.81-.57-6.341h15.753l-1.383 5.53Z"
+                    fill="#69707D"
+                    fill-rule="nonzero"
+                  />
+                </svg>
+              </div>
+              <!-- <img src="images/icon-cart.svg" alt="" /> -->
               <!-- cart quantity display -->
               <span class="cart-quantity-display"></span>
             </button>
@@ -129,30 +143,38 @@
               <div class="top-cart-style-wrapper">
                 <span>Cart</span>
               </div>
-              <!-- bottom -->
-              <div class="bottom-cart-style-wrapper">
-                <!-- img -->
-                <img src="" alt="" />
-                <div class="title-quantity-total-style-wrapper">
-                  <!-- use js to apply content -->
-                  <p class="cart-selection-title"></p>
-                  <div class="price-quantity">
-                    <!-- use js to apply content -->
-                    <span class="price-quantity__price"></span>
-                    <span class="price-quantity__operator">x</span>
-                    <!-- use js to apply content -->
-                    <span class="price-quantity__quantity"></span>
-                    <!-- use js to apply content -->
-                    <span class="price-quantity__total"></span>
-                  </div>
-                </div>
-                <button class="trash-btn" aria-label="empty cart">
-                  <img src="images/icon-delete.svg" alt="" />
-                </button>
-                <!-- cart quantity and total -->
-                <!-- delete/trash btn -->
+              <!-- separtor -->
+              <span class="separator"></span>
+              <!-- bottom cart empty-->
+              <div class="bottom-cart-style-wrapper-empty">
+                <span>Your cart is empty.</span>
               </div>
-              <a href="#" class="checkout-btn">Checkout</a>
+              <!-- bottom cart fill-->
+              <div class="bottom-cart-style-wrapper-filled">
+                <div class="bottom-cart-style-wrapper-filled__details">
+                  <!-- img -->
+                  <img src="" alt="" />
+                  <div class="title-quantity-total-style-wrapper">
+                    <!-- use js to apply content -->
+                    <p class="cart-selection-title"></p>
+                    <!-- cart quantity and total -->
+                    <div class="price-quantity">
+                      <!-- use js to apply content -->
+                      <span class="price-quantity__price"></span>
+                      <span class="price-quantity__operator">x</span>
+                      <!-- use js to apply content -->
+                      <span class="price-quantity__quantity"></span>
+                      <!-- use js to apply content -->
+                      <span class="price-quantity__total"></span>
+                    </div>
+                  </div>
+                  <button class="trash-btn" aria-label="empty cart">
+                    <img src="images/icon-delete.svg" alt="" />
+                  </button>
+                  <!-- delete/trash btn -->
+                </div>
+                <a href="#" class="checkout-btn">Checkout</a>
+              </div>
             </div>
             <!-- avatar -->
             <button
@@ -166,7 +188,7 @@
         </div>
       </header>
       <!-- separator -->
-      <hr class="separator" />
+      <span class="separator"></span>
       <main id="main-content" role="main">
         <section>
           <h2 class="visually-hidden">Product Section</h2>
@@ -176,14 +198,20 @@
             <div class="mobile-img-display">
               <div class="mobile-img-display-controller-container">
                 <button aria-label="previous image" class="arrow-btn">
-                  <img src="images/icon-previous.svg" alt="" />
+                  <span class="arrow-img-wrapper"
+                    ><img src="images/icon-previous.svg" alt=""
+                  /></span>
                 </button>
                 <button aria-label="next image" class="arrow-btn">
-                  <img src="images/icon-next.svg" alt="" />
+                  <span class="arrow-img-wrapper"
+                    ><img src="images/icon-next.svg" alt=""
+                  /></span>
                 </button>
               </div>
               <div class="mobile-images-container">
-                <div class="mobile-images-container__img-container">
+                <div
+                  class="mobile-images-container__img-container active-show-img"
+                >
                   <img src="images/image-product-1.jpg" alt="" />
                 </div>
                 <div class="mobile-images-container__img-container">
@@ -299,7 +327,9 @@
           </div>
           <!-- product name, description, price, quantity controller -->
           <article class="product-details">
-            <h2 class="product-details__company-name">Sneaker Company</h2>
+            <h2 class="product-details__company-name accent-color">
+              Sneaker Company
+            </h2>
             <h3 class="product-details__sneaker-name">
               Fall Limited Edition Sneakers
             </h3>
@@ -314,7 +344,9 @@
                 <span class="discount-price-wrapper__discount-price"
                   >$125.00</span
                 >
-                <span class="discount-price-wrapper__percent">50%</span>
+                <span class="discount-price-wrapper__percent accent-color"
+                  >50%</span
+                >
               </div>
               <!-- use pseudo element for line through regular price -->
               <span class="regular-price">$250.00</span>
@@ -355,13 +387,29 @@
                 aria-label="add to cart"
                 class="add-to-cart-button"
               >
-                <img src="images/icon-cart.svg" alt="" />
+                <div class="add-cart-img-wrapper">
+                  <svg
+                    width="22"
+                    height="20"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 26"
+                  >
+                    <path
+                      d="M20.925 3.641H3.863L3.61.816A.896.896 0 0 0 2.717 0H.897a.896.896 0 1 0 0 1.792h1l1.031 11.483c.073.828.52 1.726 1.291 2.336C2.83 17.385 4.099 20 6.359 20c1.875 0 3.197-1.87 2.554-3.642h4.905c-.642 1.77.677 3.642 2.555 3.642a2.72 2.72 0 0 0 2.717-2.717 2.72 2.72 0 0 0-2.717-2.717H6.365c-.681 0-1.274-.41-1.53-1.009l14.321-.842a.896.896 0 0 0 .817-.677l1.821-7.283a.897.897 0 0 0-.87-1.114ZM6.358 18.208a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm10.015 0a.926.926 0 0 1 0-1.85.926.926 0 0 1 0 1.85Zm2.021-7.243-13.8.81-.57-6.341h15.753l-1.383 5.53Z"
+                      fill="#69707D"
+                      fill-rule="nonzero"
+                    />
+                  </svg>
+                </div>
+
+                <!-- <img src="images/icon-cart.svg" alt="" /> -->
                 <span>Add to cart</span>
               </button>
             </div>
           </article>
         </section>
       </main>
+      <!-- modal -->
     </div>
     <script src="ourApp.js"></script>
   </body>
