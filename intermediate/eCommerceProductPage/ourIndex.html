@@ -25,6 +25,7 @@
     <title>Ecommerce Product Page</title>
   </head>
   <body>
+    <span id="data" hidden></span>
     <a href="#main-content" class="skip-link">Skip to Main Content</a>
     <div id="app-wrapper">
       <header role="banner" id="header-one">
@@ -146,34 +147,43 @@
               <!-- separtor -->
               <span class="separator"></span>
               <!-- bottom cart empty-->
-              <div class="bottom-cart-style-wrapper-empty">
+              <div class="bottom-cart-style-wrapper-empty active">
                 <span>Your cart is empty.</span>
               </div>
               <!-- bottom cart fill-->
               <div class="bottom-cart-style-wrapper-filled">
                 <div class="bottom-cart-style-wrapper-filled__details">
                   <!-- img -->
-                  <img src="" alt="" />
+                  <div class="bottom-cart-filled-img-wrapper">
+                    <img
+                      src="images/image-product-1-thumbnail.jpg"
+                      alt="pair of shoes. front view and bottom view"
+                    />
+                  </div>
                   <div class="title-quantity-total-style-wrapper">
                     <!-- use js to apply content -->
-                    <p class="cart-selection-title"></p>
+                    <p class="cart-selection-title">
+                      Autumn Limited Edition...
+                    </p>
+                    <!-- seprator -->
+                    <span class="cart-seprator"></span>
                     <!-- cart quantity and total -->
                     <div class="price-quantity">
                       <!-- use js to apply content -->
-                      <span class="price-quantity__price"></span>
+                      <span class="price-quantity__price">$125.00</span>
                       <span class="price-quantity__operator">x</span>
                       <!-- use js to apply content -->
-                      <span class="price-quantity__quantity"></span>
+                      <span class="price-quantity__quantity">3</span>
                       <!-- use js to apply content -->
-                      <span class="price-quantity__total"></span>
+                      <span class="price-quantity__total">$375.00</span>
                     </div>
                   </div>
                   <button class="trash-btn" aria-label="empty cart">
-                    <img src="images/icon-delete.svg" alt="" />
+                    <img src="images/icon-delete.svg" alt="gray trash can" />
                   </button>
                   <!-- delete/trash btn -->
                 </div>
-                <a href="#" class="checkout-btn">Checkout</a>
+                <a href="#" role="link" class="checkout-btn">Checkout</a>
               </div>
             </div>
             <!-- avatar -->
@@ -197,30 +207,60 @@
             <!-- mobile img -->
             <div class="mobile-img-display">
               <div class="mobile-img-display-controller-container">
-                <button aria-label="previous image" class="arrow-btn">
+                <button
+                  aria-label="previous image"
+                  class="arrow-btn"
+                  aria-controls="mobile-image-slider"
+                >
                   <span class="arrow-img-wrapper"
                     ><img src="images/icon-previous.svg" alt=""
                   /></span>
                 </button>
-                <button aria-label="next image" class="arrow-btn">
+                <button
+                  aria-label="next image"
+                  class="arrow-btn"
+                  aria-controls="mobile-image-slider"
+                >
                   <span class="arrow-img-wrapper"
                     ><img src="images/icon-next.svg" alt=""
                   /></span>
                 </button>
               </div>
-              <div class="mobile-images-container">
+              <div
+                class="mobile-images-container"
+                id="mobile-image-slider"
+                aria-live="polite"
+              >
                 <div
                   class="mobile-images-container__img-container active-show-img"
+                  aria-roledescription="slide"
+                  role="group"
+                  aria-label="1 of 4"
                 >
                   <img src="images/image-product-1.jpg" alt="" />
                 </div>
-                <div class="mobile-images-container__img-container">
+                <div
+                  class="mobile-images-container__img-container"
+                  aria-roledescription="slide"
+                  role="group"
+                  aria-label="2 of 4"
+                >
                   <img src="images/image-product-2.jpg" alt="" />
                 </div>
-                <div class="mobile-images-container__img-container">
+                <div
+                  class="mobile-images-container__img-container"
+                  aria-roledescription="slide"
+                  role="group"
+                  aria-label="3 of 4"
+                >
                   <img src="images/image-product-3.jpg" alt="" />
                 </div>
-                <div class="mobile-images-container__img-container">
+                <div
+                  class="mobile-images-container__img-container"
+                  aria-roledescription="slide"
+                  role="group"
+                  aria-label="4 of 4"
+                >
                   <img src="images/image-product-4.jpg" alt="" />
                 </div>
               </div>
