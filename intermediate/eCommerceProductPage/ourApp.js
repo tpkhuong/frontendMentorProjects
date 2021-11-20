@@ -1,6 +1,8 @@
 (function scopeOurVariables() {
   // activate mobile menu selectors
   const {
+    ourDataElement,
+    cartModalElement,
     // close mobile menu
     modalWrapperElement,
     mobileModalElement,
@@ -11,8 +13,14 @@
   } = ourSelectors();
   // add event listener to hamburger btn
   addEventListener(openMobileMenuBtn, "click", mobileMenuFunctionality);
+  // add event listener to cart btn
+
   console.log(openMobileMenuBtn);
   function ourSelectors() {
+    // data obj
+    const ourDataElement = document.querySelector("#data");
+    //cart modal
+    const cartModalElement = document.querySelector("#modal-two");
     // faded modal wrapper
     const modalWrapperElement = document.querySelector(
       ".faded-bg-modal-wrapper"
@@ -32,12 +40,22 @@
     //   header element
     const headerElement = document.querySelector("[role='banner']");
     return {
+      ourDataElement,
+      cartModalElement,
       modalWrapperElement,
       mobileModalElement,
       openMobileMenuBtn,
       headerElement,
       mobileCloseBtn,
       arrOfMobileNavbarAnchorTags,
+    };
+  }
+  // declare our data obj
+  declareOurDataObj(ourDataElement);
+
+  function declareOurDataObj(element) {
+    element.dataElement = {
+      cartIconQuantity: 0,
     };
   }
 
@@ -47,8 +65,9 @@
       console.log("here");
     }
   }
-
+  alert("work on cart btn algorithm");
   function mobileMenuFunctionality(event) {
+    console.log(elementContainClass(cartModalElement, "active"));
     // declare our selector at top of func
     const { openMobileMenuBtn, mobileCloseBtn, modalWrapperElement } =
       ourSelectors();
@@ -66,6 +85,11 @@
     focusElement(mobileCloseBtn);
   }
 
+  /**
+   * cart btn algorithm
+   * **/
+
+  function cartBtnFunctionality() {}
   function addClickListenerToCloseMobileBtn() {
     console.log("addClickListenerToCloseMobileBtn");
     const { mobileCloseBtn } = ourSelectors();
@@ -135,6 +159,18 @@
     }
   }
   // helper func
+
+  /**
+   * look for class of element
+   * **/
+
+  function elementContainClass(element, classStr) {
+    // use .attributes["class"].value
+    const booleanValue = element.attributes["class"].value.includes(
+      `${classStr}`
+    );
+    return booleanValue;
+  }
 
   function propertiesOfEventObj(event) {
     return {
