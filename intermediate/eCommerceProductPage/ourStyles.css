@@ -571,15 +571,31 @@ the mobile-modal element will be on top / above the faded-bg-element
   height: 18px;
 }
 
+.open-cart-btn {
+  position: relative;
+}
+
+.cart-quantity-display {
+  display: none;
+  position: absolute;
+  top: -2px;
+  right: -8px;
+  background-color: var(--col-primary-orange);
+  color: var(--col-neutral-white);
+  font-size: 0.6rem;
+  font-weight: 700;
+  /* display: inline-block; */
+  padding: 6px;
+  padding-block: 1px;
+  border-radius: 100vw;
+}
+
 [class*="bottom-cart-style-wrapper"] {
   color: var(--col-neutral-dark-grayish-blue);
 }
 
 [id="modal-two"] {
-  /* display: none; */
-}
-
-[id="modal-two"] {
+  display: none;
   /* declare z-index on modal-two to have it appear above other elements
   the way stacking context works is the element below will appear above the element above in the html
   structure
@@ -601,6 +617,7 @@ the mobile-modal element will be on top / above the faded-bg-element
 
 .bottom-cart-style-wrapper-empty {
   padding-block: 84px;
+  display: none;
 }
 
 .bottom-cart-style-wrapper-empty span {
@@ -609,8 +626,53 @@ the mobile-modal element will be on top / above the faded-bg-element
   margin-inline: auto;
 }
 
+.bottom-cart-style-wrapper-filled__details {
+  display: flex;
+  align-items: center;
+}
+
+.bottom-cart-filled-img-wrapper {
+  flex-basis: 50px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.title-quantity-total-style-wrapper {
+  margin-inline-start: 16px;
+}
+
+.title-quantity-total-style-wrapper .cart-selection-title {
+  margin: 0;
+}
+
+/* element separator instead of using margin */
+.cart-seprator {
+  display: block;
+  height: 5px;
+}
+
+.price-quantity__total {
+  font-weight: 700;
+  color: var(--col-neutral-black);
+}
+
+.trash-btn {
+  margin-inline-start: auto;
+}
+
+.checkout-btn {
+  background-color: var(--col-primary-orange);
+  color: var(--col-neutral-white);
+  display: block;
+  text-align: center;
+  border-radius: 8px;
+  padding-block: 16px;
+  margin-block-start: 28px;
+}
+
 .bottom-cart-style-wrapper-filled {
   display: none;
+  padding: 24px;
 }
 
 .title-quantity-total-style-wrapper {
@@ -690,6 +752,13 @@ to show the img instead of working with z-index
 .mobile-images-container__img-container > img {
   max-height: 300px;
   min-width: 375px;
+}
+
+/* declaration below will work for screen size 414px. we want the img width to be 414px */
+@media screen and (min-width: 414px) {
+  .mobile-images-container__img-container > img {
+    min-width: 414px;
+  }
 }
 
 .active-show-img {
@@ -842,4 +911,10 @@ to show the img instead of working with z-index
   justify-content: center;
   align-items: center;
   box-shadow: var(--box-shadow);
+}
+
+/* show helper declaration */
+
+.active {
+  display: revert;
 }
