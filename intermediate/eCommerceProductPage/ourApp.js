@@ -1,6 +1,7 @@
 (function scopeOurVariables() {
   // activate mobile menu selectors
   const {
+    cartBtn,
     ourDataElement,
     cartModalElement,
     // close mobile menu
@@ -13,10 +14,12 @@
   } = ourSelectors();
   // add event listener to hamburger btn
   addEventListener(openMobileMenuBtn, "click", mobileMenuFunctionality);
+  addEventListener(cartBtn, "click", cartBtnFunctionality);
   // add event listener to cart btn
 
   console.log(openMobileMenuBtn);
   function ourSelectors() {
+    const cartBtn = document.querySelector(".open-cart-btn");
     // data obj
     const ourDataElement = document.querySelector("#data");
     //cart modal
@@ -40,6 +43,7 @@
     //   header element
     const headerElement = document.querySelector("[role='banner']");
     return {
+      cartBtn,
       ourDataElement,
       cartModalElement,
       modalWrapperElement,
@@ -56,6 +60,9 @@
   function declareOurDataObj(element) {
     element.dataElement = {
       cartIconQuantity: 0,
+      // when we click on hamburger btn
+      //look to see if cart modal has class "active"
+      cartModalShown: null,
     };
   }
 
@@ -65,9 +72,37 @@
       console.log("here");
     }
   }
-  alert("work on cart btn algorithm");
+
   function mobileMenuFunctionality(event) {
-    console.log(elementContainClass(cartModalElement, "active"));
+    /**
+     * when we click on hamburger btn
+     * look to see if cart modal has class "active"
+     * if cartModal has class "active" we want to remove it when hamburger btn is clicked
+     * but we want to save a ref letting our other algorithm know that cartModal was shown
+     * when user clicked on hamburger btn
+     * when user click on "x" btn of mobile menu
+     * we will apply class 'active' to cartModal
+     * if user didnt click cartBtn to show cartModal leave it alone
+     * **/
+    // cartModal has class "active" or doesnt
+    const booleanToCheckClassActiveOnCartModal = elementContainClass(
+      cartModalElement,
+      "active"
+    );
+    // func below will change value of cartModalShown based on booleanToCheckClassActiveOnCartModal
+    changeValueOfCartModalShown(
+      ourDataElement,
+      booleanToCheckClassActiveOnCartModal
+    );
+    // if cartModal does have active class remove it
+    if (booleanToCheckClassActiveOnCartModal) {
+      removeClassFromElement(cartModalElement, "active");
+    }
+    /**
+     * tenary operator
+     * booleanToCheckClassActiveOnCartModal ? removeClassFromElement(cartModalElement, "active") : null
+     * **/
+    // console.log(elementContainClass(cartModalElement, "active"));
     // declare our selector at top of func
     const { openMobileMenuBtn, mobileCloseBtn, modalWrapperElement } =
       ourSelectors();
@@ -89,7 +124,10 @@
    * cart btn algorithm
    * **/
 
-  function cartBtnFunctionality() {}
+  function cartBtnFunctionality(event) {
+    cartModalElement.classList.toggle("active");
+  }
+  alert("test our algorithm");
   function addClickListenerToCloseMobileBtn() {
     console.log("addClickListenerToCloseMobileBtn");
     const { mobileCloseBtn } = ourSelectors();
@@ -102,6 +140,22 @@
     const { openMobileMenuBtn, mobileCloseBtn, modalWrapperElement } =
       ourSelectors();
 
+    /**
+     * check if cartModalShown is true or false
+     * **/
+    // if cartModalShown is true add active class to cartModalElement
+    const cartModalShownBooleanValue =
+      booleanValueOfCartModalShownPropertyInDataElement(ourDataElement);
+    if (cartModalShownBooleanValue) {
+      addClassToElement(cartModalElement, "active");
+    }
+    /**
+     * tenary operator 
+     * cartModalShownBooleanValue ? addClassToElement(cartModalElement, "active") : null
+     cartModalShownBooleanValue
+       ? addClassToElement(cartModalElement, "active")
+       : null;
+     *  **/
     // remove event listener from mobile modal element
     removeKeydownListenerOnMobileModalElement();
     // remove event listener from close btn
@@ -159,6 +213,48 @@
     }
   }
   // helper func
+
+  /**
+   * change value of dataObj
+   * **/
+
+  function changeValueOfCartModalShown(element, booleanInput) {
+    // if booleanInput is truthy
+    // we will see true value to cartModalShown property in data obj
+    if (booleanInput) {
+      element.dataElement.cartModalShown = true;
+    } else {
+      element.dataElement.cartModalShown = false;
+    }
+  }
+
+  /**
+   * value of cartModalShown in dataElement
+   * **/
+
+  function booleanValueOfCartModalShownPropertyInDataElement(element) {
+    return element.dataElement.cartModalShown;
+  }
+
+  /**
+   * remove class
+   * **/
+  function removeClassFromElement(element, classStr) {
+    element.classList.remove(classStr);
+  }
+
+  /**
+   * add class
+   * **/
+
+  function addClassToElement(element, classStr) {
+    element.classList.add(classStr);
+  }
+  /**
+   *cartModalAndCloseBtnAlgorithm
+   * **/
+
+  function cartModalAndClosedBtnAlgorithm(cartElement) {}
 
   /**
    * look for class of element
