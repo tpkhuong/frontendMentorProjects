@@ -523,6 +523,10 @@ the mobile-modal element will be on top / above the faded-bg-element
 }
 
 .mobile-modal {
+  /* declare z-index of 1, we want this element to be above the other element when user click on hamburger menu btn
+  to show modal one
+  */
+  z-index: 1;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -694,7 +698,7 @@ the mobile-modal element will be on top / above the faded-bg-element
 
 /* main */
 
-/* lets have a class that will declare grid-colum and grid-row and display:revert 
+/* lets have a class that will declare grid-column and grid-row and display:revert 
 to show the img instead of working with z-index
 */
 

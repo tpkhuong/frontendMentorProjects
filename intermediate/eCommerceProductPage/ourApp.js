@@ -127,7 +127,7 @@
   function cartBtnFunctionality(event) {
     cartModalElement.classList.toggle("active");
   }
-  alert("test our algorithm");
+
   function addClickListenerToCloseMobileBtn() {
     console.log("addClickListenerToCloseMobileBtn");
     const { mobileCloseBtn } = ourSelectors();
@@ -328,3 +328,5 @@
     return lastItemOfArr;
   }
 })();
+
+alert("work on img slider");
