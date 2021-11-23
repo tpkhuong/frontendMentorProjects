@@ -734,6 +734,23 @@ to show the img instead of working with z-index
   border-radius: 50%;
 }
 
+/** 
+
+arrow btn looks more centered adding padding-inline
+
+**/
+
+/* previous btn */
+
+[class="mobile-img-display"] button[aria-label="previous image"] {
+  padding-inline-end: 12px;
+}
+
+/* next btn */
+
+[class="mobile-img-display"] button[aria-label="next image"] {
+  padding-inline-start: 12px;
+}
 /* set height on previous arrow img to match next arrow img size */
 
 .mobile-img-display [aria-label="previous-image"] img {
