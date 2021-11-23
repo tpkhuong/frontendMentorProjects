@@ -7,16 +7,23 @@
     // close mobile menu
     modalWrapperElement,
     mobileModalElement,
+    mobileArrowBtnContainer,
+    mobilePreviousImgBtn,
+    mobileNextImgBtn,
     openMobileMenuBtn,
     headerElement,
     mobileCloseBtn,
     arrOfMobileNavbarAnchorTags,
+    arrOfMobileImgSliderContainers,
   } = ourSelectors();
   // add event listener to hamburger btn
   addEventListener(openMobileMenuBtn, "click", mobileMenuFunctionality);
   addEventListener(cartBtn, "click", cartBtnFunctionality);
   // add event listener to cart btn
 
+  if (window.innerWidth < 415) {
+    addEventListener(mobileArrowBtnContainer, "click", mobileLayoutImgSlider);
+  }
   console.log(openMobileMenuBtn);
   function ourSelectors() {
     const cartBtn = document.querySelector(".open-cart-btn");
@@ -28,6 +35,18 @@
     const modalWrapperElement = document.querySelector(
       ".faded-bg-modal-wrapper"
     );
+    // mobile previous and next btn container
+    const mobileArrowBtnContainer = document.querySelector(
+      ".mobile-img-display-controller-container"
+    );
+    // mobile previous btn
+    const mobilePreviousImgBtn = document.querySelector(
+      ".mobile-img-display-controller-container [aria-label='previous image'"
+    );
+    const mobileNextImgBtn = document.querySelector(
+      ".mobile-img-display-controller-container [aria-label='next image'"
+    );
+    // mobile next btn
     // mobile-modal
     const mobileModalElement = document.querySelector(".mobile-modal");
     // activate mobile menu
@@ -42,16 +61,29 @@
     );
     //   header element
     const headerElement = document.querySelector("[role='banner']");
+    /** array of img containers **/
+    // mobile
+    // const arrOfMobileImgSliderContainers = Array.from(document.querySelectorAll(
+    //   ".mobile-images-container__img-container"
+    // ));
+
+    const arrOfMobileImgSliderContainers = Array.prototype.slice.call(
+      document.querySelectorAll(".mobile-images-container__img-container")
+    );
     return {
       cartBtn,
       ourDataElement,
       cartModalElement,
       modalWrapperElement,
+      mobileArrowBtnContainer,
+      mobilePreviousImgBtn,
+      mobileNextImgBtn,
       mobileModalElement,
       openMobileMenuBtn,
       headerElement,
       mobileCloseBtn,
       arrOfMobileNavbarAnchorTags,
+      arrOfMobileImgSliderContainers,
     };
   }
   // declare our data obj
@@ -63,6 +95,10 @@
       // when we click on hamburger btn
       //look to see if cart modal has class "active"
       cartModalShown: null,
+      // number of img for mobile slider
+      //our img slider will start at aria-label=1 of 4
+      positionNumFormMobileSlider: 1,
+      // valueOfQuantityDisplayInput
     };
   }
 
@@ -102,6 +138,10 @@
      * tenary operator
      * booleanToCheckClassActiveOnCartModal ? removeClassFromElement(cartModalElement, "active") : null
      * **/
+    /** ANOTHER APPROACH: remove active class on cartModal element when user click hamburger btn
+     * not perform our check in the closeBtn algorithm
+     * **/
+
     // console.log(elementContainClass(cartModalElement, "active"));
     // declare our selector at top of func
     const { openMobileMenuBtn, mobileCloseBtn, modalWrapperElement } =
@@ -149,6 +189,10 @@
     if (cartModalShownBooleanValue) {
       addClassToElement(cartModalElement, "active");
     }
+    /** ANOTHER APPROACH: remove active class on cartModal element when user click hamburger btn
+     * not perform our check in the closeBtn algorithm and add class active based on our
+     * cartModalShown property in our dataElement
+     * **/
     /**
      * tenary operator 
      * cartModalShownBooleanValue ? addClassToElement(cartModalElement, "active") : null
@@ -212,7 +256,102 @@
         : null;
     }
   }
+
+  /**
+   * mobile layout img slider
+   * **/
+
+  function mobileLayoutImgSlider(event) {
+    // declare element at top of func
+    const { mobilePreviousImgBtn, mobileNextImgBtn } = ourSelectors();
+    const { targetElement: clickedTarget } = propertiesOfEventObj(event);
+    /**
+     * run previous arrow btn algorith,
+     * **/
+    if (
+      clickedTarget == mobilePreviousImgBtn ||
+      clickedTarget.parentElement.parentElement == mobilePreviousImgBtn
+    ) {
+      mobilePreviousImgBtnAlgorithm(event);
+    }
+    /**
+     * run next arrow btn algorith,
+     * **/
+    if (
+      clickedTarget == mobileNextImgBtn ||
+      clickedTarget.parentElement.parentElement == mobileNextImgBtn
+    ) {
+      mobileNextImgBtnAlgorithm(event);
+    }
+  }
   // helper func
+
+  /**
+   * mobile previous btn
+   * **/
+
+  function mobilePreviousImgBtnAlgorithm(event) {
+    const { arrOfMobileImgSliderContainers, ourDataElement } = ourSelectors();
+    // get element with class active-show-img
+    const [currentElementWithActiveClass] = getElementWithActiveImgClass(
+      arrOfMobileImgSliderContainers
+    );
+    console.log(currentElementWithActiveClass);
+    //remove class from element
+    removeClassFromElement(currentElementWithActiveClass, "active-show-img");
+    //get aria-label value
+    const ariaLabelValue = getAttrValueOfElement(
+      currentElementWithActiveClass,
+      "aria-label"
+    );
+    //first value of aria label
+    const numFormOfAriaLabelFirstValue =
+      getFirstValueOfStrAndConvertToNum(ariaLabelValue);
+    // if numFormOfAriaLabelFirstValue is 1 set positionNumFormMobileSlider to 4
+    if (numFormOfAriaLabelFirstValue == 1) {
+      updateValueOfPropertyOfDataObj(
+        ourDataElement,
+        "positionNumFormMobileSlider",
+        4
+      );
+    } else {
+      // if numFormOfAriaLabelFirstValue is not 1 run decrementValueOfPositionNumFormMobileSlider
+      decrementValueOfPositionNumFormMobileSlider(ourDataElement);
+    }
+    //get value of positionNumFormMobileSlider
+    const updatedValueOfPositionNumFormMobileSlider = String(
+      getPropertyOfDataObj(ourDataElement, "positionNumFormMobileSlider")
+    );
+    //use that value in algorithm to find element with matching value of aria-label
+    const [previousImgContainerElement] =
+      getElementThatMatchesAriaLabelForMobileImgContainer(
+        arrOfMobileImgSliderContainers,
+        `${updatedValueOfPositionNumFormMobileSlider} of 4`
+      );
+    //add class active-show-img to that element
+    addClassToElement(previousImgContainerElement, "active-show-img");
+    console.log("previous");
+    // console.log(arrOfMobileImgSliderContainers);
+  }
+  alert("test this previous btn algorithm");
+  /**
+   * mobile next btn
+   * **/
+
+  function mobileNextImgBtnAlgorithm(event) {
+    const { arrOfMobileImgSliderContainers, ourDataElement } = ourSelectors();
+    const [currentElementWithActiveClass] = getElementWithActiveImgClass(
+      arrOfMobileImgSliderContainers
+    );
+    console.log(currentElementWithActiveClass);
+    console.log("next");
+    const ourValue = getPropertyOfDataObj(
+      ourDataElement,
+      "positionNumFormMobileSlider"
+    );
+    console.log(ourValue);
+    // console.log(arrOfMobileImgSliderContainers);
+  }
 
   /**
    * change value of dataObj
@@ -268,6 +407,85 @@
     return booleanValue;
   }
 
+  /**
+   * get attribute value of element
+   * **/
+
+  function getAttrValueOfElement(element, attributeStr) {
+    const valueOfAttr = element.attributes[`${attributeStr}`].value;
+    return valueOfAttr;
+  }
+
+  /**
+   * get first value of aria label
+   * **/
+  function getFirstValueOfStrAndConvertToNum(strInput) {
+    const [firstValueOfArr] = strInput.split(" ");
+    return convertToNumForm(firstValueOfArr);
+  }
+
+  function convertToNumForm(strValue) {
+    return Number(strValue);
+  }
+
+  /**
+   * get element with active class
+   * **/
+  // this func will return an array with one value/element in it
+  function getElementWithActiveImgClass(arrInput) {
+    return arrInput.filter(function findElementWithActiveClass(eachElement) {
+      return elementContainClass(eachElement, "active-show-img");
+    });
+  }
+
+  /**
+   * decrement value of positionNumFormMobileSlider
+   * **/
+
+  function decrementValueOfPositionNumFormMobileSlider(element) {
+    element.dataElement.positionNumFormMobileSlider -= 1;
+  }
+
+  /**
+   * increment value of positionNumFormMobileSlider
+   * **/
+
+  function incrementValueOfPositionNumFormMobileSlider(element) {
+    element.dataElement.positionNumFormMobileSlider += 1;
+  }
+
+  /**
+   * get value of property of dataElement
+   * **/
+
+  function getPropertyOfDataObj(element, propertyString) {
+    return element.dataElement[propertyString];
+  }
+
+  /**
+   * update value of property of dataElement
+   * **/
+
+  function updateValueOfPropertyOfDataObj(element, propertyStr, valueInput) {
+    element.dataElement[propertyStr] = valueInput;
+  }
+
+  /**
+   * get element that matches aria label for mobile img container
+   * **/
+
+  function getElementThatMatchesAriaLabelForMobileImgContainer(
+    arrInput,
+    strInput
+  ) {
+    return arrInput.filter(function findElementMatchesAriaLabel(eachElement) {
+      return (eachElement.attributes["aria-label"].value = strInput);
+    });
+  }
+
+  /**
+   * get properties of element
+   * **/
   function propertiesOfEventObj(event) {
     return {
       targetElement: event.target,
@@ -328,5 +546,3 @@
     return lastItemOfArr;
   }
 })();
-
-alert("work on img slider");
