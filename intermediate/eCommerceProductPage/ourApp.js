@@ -12,13 +12,45 @@
     mobileNextImgBtn,
     openMobileMenuBtn,
     headerElement,
+    quantityControllerCartBtn,
+    quantityDisplayInput,
+    incrementQuantityBtn,
+    decrementQuantityBtn,
     mobileCloseBtn,
     arrOfMobileNavbarAnchorTags,
     arrOfMobileImgSliderContainers,
   } = ourSelectors();
   // add event listener to hamburger btn
+  window.addEventListener("load", function resetInputValue(event) {
+    quantityDisplayInput.value = "";
+  });
+  addEventListener(
+    quantityDisplayInput,
+    "keydown",
+    function spaceBarInputWillNotAddSpaceForInputDisplay(event) {
+      const { targetKeyCode } = propertiesOfEventObj(event);
+      /**
+       * when focus is on quantityDisplay and user hit space key
+       * it will not add a space to input display
+       * if user hit enter key it will not trigger event listener "change"
+       * **/
+      if (targetKeyCode == "Space" || targetKeyCode == "Enter") {
+        event.preventDefault();
+      }
+    }
+  );
   addEventListener(openMobileMenuBtn, "click", mobileMenuFunctionality);
   addEventListener(cartBtn, "click", cartBtnFunctionality);
+  addEventListener(
+    quantityControllerCartBtn,
+    "click",
+    quantityDisplayAlgorithm
+  );
+  addEventListener(
+    quantityDisplayInput,
+    "change",
+    changeValueOfQuantityDisplayInputWhenUserClickOnUpDownArrow
+  );
   // add event listener to cart btn
 
   if (window.innerWidth < 415) {
@@ -61,6 +93,20 @@
     );
     //   header element
     const headerElement = document.querySelector("[role='banner']");
+    // quantity-controller-cart-btn-style-wrapper
+    const quantityControllerCartBtn = document.querySelector(
+      ".quantity-controller-cart-btn-style-wrapper"
+    );
+    // input for quantity display
+    const quantityDisplayInput = document.querySelector("#quantity-display");
+    // increment quantity btn
+    const incrementQuantityBtn = document.querySelector(
+      "[aria-label='increment quantity']"
+    );
+    // decrement quantity btn
+    const decrementQuantityBtn = document.querySelector(
+      "[aria-label='decrement quantity']"
+    );
     /** array of img containers **/
     // mobile
     // const arrOfMobileImgSliderContainers = Array.from(document.querySelectorAll(
@@ -81,6 +127,10 @@
       mobileModalElement,
       openMobileMenuBtn,
       headerElement,
+      quantityControllerCartBtn,
+      quantityDisplayInput,
+      incrementQuantityBtn,
+      decrementQuantityBtn,
       mobileCloseBtn,
       arrOfMobileNavbarAnchorTags,
       arrOfMobileImgSliderContainers,
@@ -99,6 +149,7 @@
       //our img slider will start at aria-label=1 of 4
       positionNumFormMobileSlider: 1,
       // valueOfQuantityDisplayInput
+      valueOfQuantityDisplayInput: 0,
     };
   }
 
@@ -284,7 +335,86 @@
       mobileNextImgBtnAlgorithm(event);
     }
   }
+  /** quanity display algorithm **/
+
+  function quantityDisplayAlgorithm(event) {
+    // console.log(event.target);
+    const { incrementQuantityBtn, decrementQuantityBtn } = ourSelectors();
+    const { targetElement: clickedBtn } = propertiesOfEventObj(event);
+    /**
+     * run increment quantity btn func
+     * **/
+
+    if (
+      clickedBtn == incrementQuantityBtn ||
+      clickedBtn.parentElement == incrementQuantityBtn
+    ) {
+      incrementQuantityBtnHelperFunc(event);
+    }
+
+    /**
+     * run decrement quantity btn func
+     * **/
+    if (
+      clickedBtn == decrementQuantityBtn ||
+      clickedBtn.parentElement == decrementQuantityBtn
+    ) {
+      decrementQuantityBtnHelperFunc(event);
+    }
+  }
   // helper func
+
+  /**
+   * decrement quantity btn
+   * **/
+
+  function decrementQuantityBtnHelperFunc(event) {
+    // valueOfQuantityDisplayInput getPropertyOfDataObj
+    const { quantityDisplayInput, ourDataElement } = ourSelectors();
+    //get value of quantityDisplay
+    const valueOfQuantityDisplayInput = getElementValue(quantityDisplayInput);
+    //update value of valueOfQuantityDisplayInput with value of quantityDisplay
+    updateValueOfPropertyOfDataObj(
+      ourDataElement,
+      "valueOfQuantityDisplayInput",
+      Number(valueOfQuantityDisplayInput)
+    );
+    //decrement that value by 1
+    decrementValueOfPropertyOfDataElement(
+      ourDataElement,
+      "valueOfQuantityDisplayInput"
+    );
+    //get updated value of valueOfQuantityDisplayInput from dataElement
+    const updatedValueOfQuantityDisplayInput = getPropertyOfDataObj(
+      quantityDisplayInput,
+      "valueOfQuantityDisplayInput"
+    );
+    //assign update value to value of quantityDisplayInput
+    assignValueToElement(
+      quantityDisplayInput,
+      String(updatedValueOfQuantityDisplayInput)
+    );
+    console.log(quantityDisplayInput.value);
+  }
+
+  /**
+   * increment quantity btn
+   * **/
+
+  function incrementQuantityBtnHelperFunc(event) {
+    // get value of quantityDisplayInput
+    // increment that value by 1
+    // assign that value to valueOfQuantityDisplayInput in dataElement
+    // retrive updated value of valueOfQuantityDisplayInput in dataElement
+    // assign that value to quantityDisplayInput
+  }
+
+  /**
+   * update value of quantity display
+   * function updateValueOfElement(element, valueInput) {
+   * element.value = valueInput;
+   * }
+   * **/
 
   /**
    * mobile previous btn
@@ -294,7 +424,8 @@
     const { arrOfMobileImgSliderContainers, ourDataElement } = ourSelectors();
     // get element with class active-show-img
     const [currentElementWithActiveClass] = getElementWithActiveImgClass(
-      arrOfMobileImgSliderContainers
+      arrOfMobileImgSliderContainers,
+      "active-show-img"
     );
     console.log(currentElementWithActiveClass);
     //remove class from element
@@ -315,8 +446,11 @@
         4
       );
     } else {
-      // if numFormOfAriaLabelFirstValue is not 1 run decrementValueOfPositionNumFormMobileSlider
-      decrementValueOfPositionNumFormMobileSlider(ourDataElement);
+      // if numFormOfAriaLabelFirstValue is not 1 run decrementValueOfPropertyOfDataElement
+      decrementValueOfPropertyOfDataElement(
+        ourDataElement,
+        "positionNumFormMobileSlider"
+      );
     }
     //get value of positionNumFormMobileSlider
     const updatedValueOfPositionNumFormMobileSlider = String(
@@ -333,24 +467,55 @@
     console.log("previous");
     // console.log(arrOfMobileImgSliderContainers);
   }
-  alert("test this previous btn algorithm");
+
   /**
    * mobile next btn
    * **/
 
   function mobileNextImgBtnAlgorithm(event) {
-    const { arrOfMobileImgSliderContainers, ourDataElement } = ourSelectors();
-    const [currentElementWithActiveClass] = getElementWithActiveImgClass(
-      arrOfMobileImgSliderContainers
-    );
-    console.log(currentElementWithActiveClass);
     console.log("next");
-    const ourValue = getPropertyOfDataObj(
-      ourDataElement,
-      "positionNumFormMobileSlider"
+    const { arrOfMobileImgSliderContainers, ourDataElement } = ourSelectors();
+    // get element with class active-show-img
+    const [currentElementWithActiveClass] = getElementWithActiveImgClass(
+      arrOfMobileImgSliderContainers,
+      "active-show-img"
     );
-    console.log(ourValue);
-    // console.log(arrOfMobileImgSliderContainers);
+    //remove class from element
+    removeClassFromElement(currentElementWithActiveClass, "active-show-img");
+    //get aria-label value
+    const ariaLabelValue = getAttrValueOfElement(
+      currentElementWithActiveClass,
+      "aria-label"
+    );
+    //first value of aria label
+    const firstValueOfAriaLabelNum =
+      getFirstValueOfStrAndConvertToNum(ariaLabelValue);
+    // if firstValueOfAriaLabelNum is 4 set positionNumFormMobileSlider to 1
+    if (firstValueOfAriaLabelNum == 4) {
+      updateValueOfPropertyOfDataObj(
+        ourDataElement,
+        "positionNumFormMobileSlider",
+        1
+      );
+    } else {
+      // if firstValueOfAriaLabelNum is not 1 run incrementValueOfPropertyOfDataElement
+      incrementValueOfPropertyOfDataElement(
+        ourDataElement,
+        "positionNumFormMobileSlider"
+      );
+    }
+    //get value of positionNumFormMobileSlider
+    const updatedValueOfPositionNumFormMobileSlider = String(
+      getPropertyOfDataObj(ourDataElement, "positionNumFormMobileSlider")
+    );
+    //use that value in algorithm to find element with matching value of aria-label
+    const [nextImgContainerElement] =
+      getElementThatMatchesAriaLabelForMobileImgContainer(
+        arrOfMobileImgSliderContainers,
+        `${updatedValueOfPositionNumFormMobileSlider} of 4`
+      );
+    //add class active-show-img to that element
+    addClassToElement(nextImgContainerElement, "active-show-img");
   }
 
   /**
@@ -406,7 +571,6 @@
     );
     return booleanValue;
   }
-
   /**
    * get attribute value of element
    * **/
@@ -432,9 +596,9 @@
    * get element with active class
    * **/
   // this func will return an array with one value/element in it
-  function getElementWithActiveImgClass(arrInput) {
+  function getElementWithActiveImgClass(arrInput, classStr) {
     return arrInput.filter(function findElementWithActiveClass(eachElement) {
-      return elementContainClass(eachElement, "active-show-img");
+      return elementContainClass(eachElement, classStr);
     });
   }
 
@@ -442,16 +606,16 @@
    * decrement value of positionNumFormMobileSlider
    * **/
 
-  function decrementValueOfPositionNumFormMobileSlider(element) {
-    element.dataElement.positionNumFormMobileSlider -= 1;
+  function decrementValueOfPropertyOfDataElement(element, propertyStr) {
+    element.dataElement[propertyStr] -= 1;
   }
 
   /**
    * increment value of positionNumFormMobileSlider
    * **/
 
-  function incrementValueOfPositionNumFormMobileSlider(element) {
-    element.dataElement.positionNumFormMobileSlider += 1;
+  function incrementValueOfPropertyOfDataElement(element, propertyStr) {
+    element.dataElement[propertyStr] += 1;
   }
 
   /**
@@ -479,7 +643,7 @@
     strInput
   ) {
     return arrInput.filter(function findElementMatchesAriaLabel(eachElement) {
-      return (eachElement.attributes["aria-label"].value = strInput);
+      return eachElement.attributes["aria-label"].value == strInput;
     });
   }
 
@@ -490,6 +654,7 @@
     return {
       targetElement: event.target,
       targetKeyStrForm: event.key,
+      targetKeyCode: event.code,
       booleanShiftKeyPressed: event.shiftKey,
     };
   }
@@ -540,6 +705,40 @@
   function removeEventListener(element, eventStrForm, eventListenerCallback) {
     element.removeEventListener(eventStrForm, eventListenerCallback);
   }
+
+  /**
+   * change value of valueOfQuantityDisplayInput when user click on up or down arrow
+   * of quantity display input
+   * **/
+
+  function changeValueOfQuantityDisplayInputWhenUserClickOnUpDownArrow(event) {
+    const { ourDataElement } = ourSelectors();
+    updateValueOfPropertyOfDataObj(
+      ourDataElement,
+      "valueOfQuantityDisplayInput",
+      Number(this.value)
+    );
+  }
+
+  /**
+   * get element value
+   * **/
+
+  function getElementValue(element) {
+    return element.value;
+  }
+
+  /**
+   * assign value to element
+   * **/
+
+  function assignValueToElement(element, valueInput) {
+    element.value = valueInput;
+  }
+
+  /**
+   * get lastElementNavMenu
+   * **/
   function getLastElementOfNavMenu(arrInput) {
     const lengthOfArrInput = arrInput.length;
     const lastItemOfArr = arrInput[lengthOfArrInput - 1];
