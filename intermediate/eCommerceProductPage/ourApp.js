@@ -19,6 +19,11 @@
     mobileCloseBtn,
     arrOfMobileNavbarAnchorTags,
     arrOfMobileImgSliderContainers,
+    addToCartBtn,
+    notFocusableAddToCartBtn,
+    cartQuantityDisplayElement,
+    bottomCartDisplayEmpty,
+    bottomCartDisplayHasItem,
   } = ourSelectors();
   // add event listener to hamburger btn
   window.addEventListener("load", function resetInputValue(event) {
@@ -107,6 +112,29 @@
     const decrementQuantityBtn = document.querySelector(
       "[aria-label='decrement quantity']"
     );
+    // add to cart btn
+    const addToCartBtn = document.querySelector(".add-to-cart-button");
+    // add to cart btn not focusable
+    const notFocusableAddToCartBtn = document.querySelector(
+      ".add-cart-not-focusable"
+    );
+    // cart quantity display element
+    const cartQuantityDisplayElement = document.querySelector(
+      ".cart-quantity-display"
+    );
+    // bottom cart empty
+    const bottomCartDisplayEmpty = document.querySelector(
+      ".bottom-cart-style-wrapper-empty"
+    );
+    const bottomCartDisplayHasItem = document.querySelector(
+      ".bottom-cart-style-wrapper-filled"
+    );
+    // bottom cart has item
+    // cart display img element
+    // cart display title element
+    // cart display price element
+    // cart display quantity element
+    // cart display price total element
     /** array of img containers **/
     // mobile
     // const arrOfMobileImgSliderContainers = Array.from(document.querySelectorAll(
@@ -134,6 +162,11 @@
       mobileCloseBtn,
       arrOfMobileNavbarAnchorTags,
       arrOfMobileImgSliderContainers,
+      addToCartBtn,
+      notFocusableAddToCartBtn,
+      cartQuantityDisplayElement,
+      bottomCartDisplayEmpty,
+      bottomCartDisplayHasItem,
     };
   }
   // declare our data obj
@@ -150,6 +183,15 @@
       positionNumFormMobileSlider: 1,
       // valueOfQuantityDisplayInput
       valueOfQuantityDisplayInput: 0,
+      autumnEdition: {
+        shoeTitle: "Autumn Limited Edition...",
+        shoePrice: "$125.00",
+        imgURL: "images/image-product-1-thumbnail.jpg",
+      },
+      selectorObjForCartDisplay: {
+        bottomCartDisplayEmpty,
+        bottomCartDisplayHasItem,
+      },
     };
   }
 
@@ -339,7 +381,9 @@
 
   function quantityDisplayAlgorithm(event) {
     // console.log(event.target);
-    const { incrementQuantityBtn, decrementQuantityBtn } = ourSelectors();
+    // console.log(event.target);
+    const { incrementQuantityBtn, decrementQuantityBtn, addToCartBtn } =
+      ourSelectors();
     const { targetElement: clickedBtn } = propertiesOfEventObj(event);
     /**
      * run increment quantity btn func
@@ -361,7 +405,65 @@
     ) {
       decrementQuantityBtnHelperFunc(event);
     }
+    /**
+     * run add to cart algorithm
+     * **/
+    if (clickedBtn == addToCartBtn) {
+      addToCartBtnAlgorithm(event);
+    }
   }
+
+  /**
+   * algorithm for when user click on add to cart btn
+   * **/
+
+  function addToCartBtnAlgorithm(event) {
+    const {
+      quantityDisplayInput,
+      cartQuantityDisplayElement,
+      ourDataElement: {
+        // destructure ourDataElement obj
+        dataElement: { autumnEdition, selectorObjForCartDisplay },
+        // destructure dataElement obj
+      },
+    } = ourSelectors();
+    // console.log(selectorObjForCartDisplay);
+    //get value of quantityDisplayInput
+    const valueOfQuantityInput = Number(
+      getElementValue(quantityDisplayInput, "value")
+    );
+    // if value is <= 0
+    if (valueOfQuantityInput <= 0) {
+      //set value of cartQuantityDisplay element to empty string
+      assignValueToElement(cartQuantityDisplayElement, "innerText", "");
+      //remove class show-element cartQuantityDisplay element
+      removeClassFromElement(cartQuantityDisplayElement, "show-element");
+    } else {
+      // if value is >= 1
+      assignValueToElement(
+        cartQuantityDisplayElement,
+        "innerText",
+        String(valueOfQuantityInput)
+      );
+      // set value of cartQuantityDisplay element to value of quantityDisplayInput
+      addClassToElement(cartQuantityDisplayElement, "show-element");
+      //add class show-element to cartQuantityDisplay element
+      cartModalEmptyOrFilledAlgorithm.call(autumnEdition, "hello", " world");
+    }
+  }
+
+  /**
+   *cartModalAndCloseBtnAlgorithm
+   * **/
+
+  function cartModalEmptyOrFilledAlgorithm(cartSelectorObj, quantityValue) {
+    console.log(this.shoeTitle);
+    console.log(this.shoePrice);
+    console.log(this.imgURL);
+    console.log("cartSelectorObj", cartSelectorObj);
+    console.log("quantityValue", quantityValue);
+  }
+
   // helper func
 
   /**
@@ -372,7 +474,10 @@
     // valueOfQuantityDisplayInput getPropertyOfDataObj
     const { quantityDisplayInput, ourDataElement } = ourSelectors();
     //get value of quantityDisplay
-    const valueOfQuantityDisplayInput = getElementValue(quantityDisplayInput);
+    const valueOfQuantityDisplayInput = getElementValue(
+      quantityDisplayInput,
+      "value"
+    );
     //update value of valueOfQuantityDisplayInput with value of quantityDisplay
     updateValueOfPropertyOfDataObj(
       ourDataElement,
@@ -386,15 +491,20 @@
     );
     //get updated value of valueOfQuantityDisplayInput from dataElement
     const updatedValueOfQuantityDisplayInput = getPropertyOfDataObj(
-      quantityDisplayInput,
+      ourDataElement,
       "valueOfQuantityDisplayInput"
     );
     //assign update value to value of quantityDisplayInput
     assignValueToElement(
       quantityDisplayInput,
+      "value",
       String(updatedValueOfQuantityDisplayInput)
     );
-    console.log(quantityDisplayInput.value);
+    /**
+     * run algorithm to show cart btn after we increment valueOfQuantityDisplayInput
+     * **/
+    showAddToCartBtnAlgorithm(updatedValueOfQuantityDisplayInput);
+    // console.log(quantityDisplayInput.value);
   }
 
   /**
@@ -402,11 +512,39 @@
    * **/
 
   function incrementQuantityBtnHelperFunc(event) {
+    const { quantityDisplayInput, ourDataElement } = ourSelectors();
     // get value of quantityDisplayInput
+    const valueOfQuantityDisplay = getElementValue(
+      quantityDisplayInput,
+      "value"
+    );
+    //update value of valueOfQuantityDisplayInput with value of quantityDisplay
+    updateValueOfPropertyOfDataObj(
+      ourDataElement,
+      "valueOfQuantityDisplayInput",
+      Number(valueOfQuantityDisplay)
+    );
     // increment that value by 1
-    // assign that value to valueOfQuantityDisplayInput in dataElement
+    incrementValueOfPropertyOfDataElement(
+      ourDataElement,
+      "valueOfQuantityDisplayInput"
+    );
     // retrive updated value of valueOfQuantityDisplayInput in dataElement
+    const updateValueOfQuantityDisplay = getPropertyOfDataObj(
+      ourDataElement,
+      "valueOfQuantityDisplayInput"
+    );
     // assign that value to quantityDisplayInput
+    assignValueToElement(
+      quantityDisplayInput,
+      "value",
+      `${updateValueOfQuantityDisplay}`
+    );
+
+    /**
+     * run algorithm to show cart btn after we increment valueOfQuantityDisplayInput
+     * **/
+    showAddToCartBtnAlgorithm(updateValueOfQuantityDisplay);
   }
 
   /**
@@ -554,11 +692,6 @@
   function addClassToElement(element, classStr) {
     element.classList.add(classStr);
   }
-  /**
-   *cartModalAndCloseBtnAlgorithm
-   * **/
-
-  function cartModalAndClosedBtnAlgorithm(cartElement) {}
 
   /**
    * look for class of element
@@ -718,22 +851,46 @@
       "valueOfQuantityDisplayInput",
       Number(this.value)
     );
+    showAddToCartBtnAlgorithm(this.value);
   }
 
   /**
    * get element value
    * **/
 
-  function getElementValue(element) {
-    return element.value;
+  function getElementValue(element, propertyStr) {
+    return element[propertyStr];
   }
 
   /**
    * assign value to element
    * **/
 
-  function assignValueToElement(element, valueInput) {
-    element.value = valueInput;
+  function assignValueToElement(element, propertyStr, valueInput) {
+    element[propertyStr] = valueInput;
+  }
+
+  /**
+   *
+   * **/
+
+  /**
+   * show add to cart btn algorithm
+   * **/
+
+  function showAddToCartBtnAlgorithm(valueOfDisplayInput) {
+    const { addToCartBtn, notFocusableAddToCartBtn } = ourSelectors();
+    if (valueOfDisplayInput <= 0) {
+      // if valueOfDisplayInput is <= 0, notFocusableAddToCartBtn should have class add-display-flex
+      addClassToElement(notFocusableAddToCartBtn, "add-flex-display");
+      // addToCartBtn element should not
+      removeClassFromElement(addToCartBtn, "add-flex-display");
+    } else {
+      // if valueOfDisplayInput is >= 1 addToCartBtn element should have class add-display-flex
+      addClassToElement(addToCartBtn, "add-flex-display");
+      // notFocusableAddToCartBtn element should not
+      removeClassFromElement(notFocusableAddToCartBtn, "add-flex-display");
+    }
   }
 
   /**
