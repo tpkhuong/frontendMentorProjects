@@ -909,23 +909,36 @@ arrow btn looks more centered adding padding-inline
 
 /* cart image in add to cart btn */
 
-.add-to-cart-button path {
+.add-to-cart-button path,
+.add-cart-not-focusable-img-wrapper path {
   fill: var(--col-neutral-white);
 }
 
-.add-to-cart-button span {
+.add-to-cart-button span,
+.add-cart-not-focusable-img-wrapper path {
   margin-inline-start: 8px;
 }
 
-.add-cart-img-wrapper {
+.add-cart-img-wrapper,
+.add-to-cart-button span {
+  pointer-events: none;
+}
+
+.add-cart-img-wrapper,
+.add-cart-not-focusable-img-wrapper {
   height: 18px;
 }
 
-.add-to-cart-button {
+.add-cart-not-focusable {
+  opacity: 0.5;
+}
+
+.add-to-cart-button,
+.add-cart-not-focusable {
   background-color: var(--col-primary-orange);
   color: var(--col-neutral-white);
   font-weight: 700;
-  display: flex;
+  display: none;
   width: 100%;
   border-radius: 8px;
   padding-block: 16px;
@@ -934,7 +947,15 @@ arrow btn looks more centered adding padding-inline
   box-shadow: var(--box-shadow);
 }
 
+.add-flex-display {
+  display: flex;
+}
+
 /* show helper declaration */
+
+.show-element {
+  display: revert;
+}
 
 .active {
   display: revert;
