@@ -24,6 +24,12 @@
     cartQuantityDisplayElement,
     bottomCartDisplayEmpty,
     bottomCartDisplayHasItem,
+    bottomCartHasItemImg,
+    bottomCartTitleElement,
+    bottomCartPriceElement,
+    bottomCartQuantityElement,
+    bottomCartPriceTotalElement,
+    trashBtn,
   } = ourSelectors();
   // add event listener to hamburger btn
   window.addEventListener("load", function resetInputValue(event) {
@@ -46,6 +52,7 @@
   );
   addEventListener(openMobileMenuBtn, "click", mobileMenuFunctionality);
   addEventListener(cartBtn, "click", cartBtnFunctionality);
+  addEventListener(cartModalElement, "click", cartModalDisplayAlgorithm);
   addEventListener(
     quantityControllerCartBtn,
     "click",
@@ -61,7 +68,7 @@
   if (window.innerWidth < 415) {
     addEventListener(mobileArrowBtnContainer, "click", mobileLayoutImgSlider);
   }
-  console.log(openMobileMenuBtn);
+  // console.log(openMobileMenuBtn);
   function ourSelectors() {
     const cartBtn = document.querySelector(".open-cart-btn");
     // data obj
@@ -126,15 +133,34 @@
     const bottomCartDisplayEmpty = document.querySelector(
       ".bottom-cart-style-wrapper-empty"
     );
+    // bottom cart has item
     const bottomCartDisplayHasItem = document.querySelector(
       ".bottom-cart-style-wrapper-filled"
     );
-    // bottom cart has item
     // cart display img element
+    const bottomCartHasItemImg = document.querySelector(
+      ".bottom-cart-filled-img-wrapper img"
+    );
     // cart display title element
+    const bottomCartTitleElement = document.querySelector(
+      ".cart-selection-title"
+    );
     // cart display price element
+    const bottomCartPriceElement = document.querySelector(
+      ".price-quantity__price"
+    );
     // cart display quantity element
+    const bottomCartQuantityElement = document.querySelector(
+      ".price-quantity__quantity"
+    );
     // cart display price total element
+    const bottomCartPriceTotalElement = document.querySelector(
+      ".price-quantity__total"
+    );
+
+    // bottom cart display trash btn
+    const trashBtn = document.querySelector(".trash-btn");
+
     /** array of img containers **/
     // mobile
     // const arrOfMobileImgSliderContainers = Array.from(document.querySelectorAll(
@@ -144,6 +170,7 @@
     const arrOfMobileImgSliderContainers = Array.prototype.slice.call(
       document.querySelectorAll(".mobile-images-container__img-container")
     );
+
     return {
       cartBtn,
       ourDataElement,
@@ -167,6 +194,12 @@
       cartQuantityDisplayElement,
       bottomCartDisplayEmpty,
       bottomCartDisplayHasItem,
+      bottomCartHasItemImg,
+      bottomCartTitleElement,
+      bottomCartPriceElement,
+      bottomCartQuantityElement,
+      bottomCartPriceTotalElement,
+      trashBtn,
     };
   }
   // declare our data obj
@@ -191,6 +224,11 @@
       selectorObjForCartDisplay: {
         bottomCartDisplayEmpty,
         bottomCartDisplayHasItem,
+        bottomCartHasItemImg,
+        bottomCartTitleElement,
+        bottomCartPriceElement,
+        bottomCartQuantityElement,
+        bottomCartPriceTotalElement,
       },
     };
   }
@@ -423,10 +461,16 @@
       cartQuantityDisplayElement,
       ourDataElement: {
         // destructure ourDataElement obj
-        dataElement: { autumnEdition, selectorObjForCartDisplay },
+        // dataElement: { autumnEdition, selectorObjForCartDisplay },
+        dataElement,
         // destructure dataElement obj
+        /**
+         * pass in dataElement as our this to .call()
+         * use destructuring in that func cartModalEmptyOrFilledAlgorithm
+         * **/
       },
     } = ourSelectors();
+    console.log(dataElement);
     // console.log(selectorObjForCartDisplay);
     //get value of quantityDisplayInput
     const valueOfQuantityInput = Number(
@@ -440,15 +484,16 @@
       removeClassFromElement(cartQuantityDisplayElement, "show-element");
     } else {
       // if value is >= 1
+      // set value of cartQuantityDisplay element to value of quantityDisplayInput
       assignValueToElement(
         cartQuantityDisplayElement,
         "innerText",
         String(valueOfQuantityInput)
       );
-      // set value of cartQuantityDisplay element to value of quantityDisplayInput
-      addClassToElement(cartQuantityDisplayElement, "show-element");
       //add class show-element to cartQuantityDisplay element
-      cartModalEmptyOrFilledAlgorithm.call(autumnEdition, "hello", " world");
+      addClassToElement(cartQuantityDisplayElement, "show-element");
+      // using .call() method and passing in dataElement as our this binding to the func call
+      cartModalEmptyOrFilledAlgorithm.call(dataElement, valueOfQuantityInput);
     }
   }
 
@@ -456,15 +501,198 @@
    *cartModalAndCloseBtnAlgorithm
    * **/
 
-  function cartModalEmptyOrFilledAlgorithm(cartSelectorObj, quantityValue) {
-    console.log(this.shoeTitle);
-    console.log(this.shoePrice);
-    console.log(this.imgURL);
-    console.log("cartSelectorObj", cartSelectorObj);
-    console.log("quantityValue", quantityValue);
+  function cartModalEmptyOrFilledAlgorithm(quantityValue) {
+    /**
+     * passing in quantityValue as a number when we assign the value to an element
+     * convert it to String form
+     * **/
+    /**
+     * console.log below we were passing in autumnEdition as our this obj to .call() method
+     * **/
+    // console.log(this.shoeTitle);
+    // console.log(this.shoePrice);
+    // console.log(this.imgURL);
+    /**
+     * another approach we will pass in dataElement as our this obj to .call() method
+     * destructure that obj in this func
+     * **/
+    const {
+      autumnEdition: { shoeTitle, shoePrice, imgURL },
+      selectorObjForCartDisplay: {
+        bottomCartDisplayEmpty,
+        bottomCartDisplayHasItem,
+        bottomCartHasItemImg,
+        bottomCartTitleElement,
+        bottomCartPriceElement,
+        bottomCartQuantityElement,
+        bottomCartPriceTotalElement,
+      },
+    } = this;
+    // console.log("autumnEdition", autumnEdition);
+    // console.log("shoeTitle,shoePrice,imgURL", shoeTitle, shoePrice, imgURL);
+    // console.log("selectorObjForCartDisplay", selectorObjForCartDisplay);
+    // console.log(
+    //   bottomCartDisplayEmpty,
+    //   bottomCartDisplayHasItem,
+    //   bottomCartHasItemImg,
+    //   bottomCartTitleElement,
+    //   bottomCartPriceElement,
+    //   bottomCartQuantityElement,
+    //   bottomCartPriceTotalElement
+    // );
+    // console.log("cartSelectorObj", cartSelectorObj);
+    // console.log("quantityValue", quantityValue);
+    /**
+     * algorithm steps
+     * **/
+    //if quantityValue is <= 0
+    if (quantityValue <= 0) {
+      //add class active to bottom cart empty display
+      addClassToElement(bottomCartDisplayEmpty, "active");
+      //remove class active to bottom cart has item display
+      removeClassFromElement(bottomCartDisplayHasItem, "active");
+      //if quantityValue is >= 1
+    } else {
+      //add class active to bottom cart has item display
+      addClassToElement(bottomCartDisplayHasItem, "active");
+      //remove class active to bottom cart empty display
+      removeClassFromElement(bottomCartDisplayEmpty, "active");
+    }
+    // calc totalPrice
+    /**
+     * shoePrice is string "$125.00" remove decimal and trailing zeros
+     * then use regex to get only number of "$125"
+     * convert string "125" to number
+     * **/
+
+    /**
+     * shoePrice algorithm before we pass the value to calc func
+     * **/
+
+    const shoePriceWithoutDecimalAndTrailingZeros =
+      removeDecimalAndTrailingZeros(shoePrice);
+
+    const shoePriceWithoutDollarSign = getOnlyNumberOfStrUsingRegex(
+      shoePriceWithoutDecimalAndTrailingZeros
+    );
+    /**
+     * shoePrice algorithm before we pass the value to calc func
+     * **/
+    const { totalValue } = bottomCartDisplayTotalCalcHelperFunc(
+      quantityValue,
+      Number(shoePriceWithoutDollarSign)
+    );
+    /**
+     * assign value to elements
+     * **/
+    // img element
+    assignValueUsingAttr(
+      bottomCartHasItemImg,
+      "attributes",
+      "src",
+      "value",
+      imgURL
+    );
+    // title element
+    assignValueToElement(bottomCartTitleElement, "innerText", shoeTitle);
+    // price element
+    assignValueToElement(bottomCartPriceElement, "innerText", shoePrice);
+    // quantity element
+    assignValueToElement(
+      bottomCartQuantityElement,
+      "innerText",
+      String(quantityValue)
+    );
+    // totalPrice element
+    /**
+     * use template literal to pass in totalPrice with $ sign
+     * **/
+    assignValueToElement(
+      bottomCartPriceTotalElement,
+      "innerText",
+      `$${totalValue}.00`
+    );
+  }
+
+  /**
+   * cartModalDisplay Algorithm
+   * **/
+
+  function cartModalDisplayAlgorithm(event) {
+    const { trashBtn } = ourSelectors();
+    const { targetElement: clickedBtn } = propertiesOfEventObj(event);
+
+    /**
+     * run trashBtn algorithm
+     * **/
+    if (clickedBtn == trashBtn) {
+      trashBtnAlgorithm(event);
+    }
+    /**
+     * run checkoutBtn algorithm
+     * **/
+  }
+
+  /**
+   * trash btn algorithm
+   * **/
+
+  function trashBtnAlgorithm(event) {
+    const {
+      ourDataElement: {
+        dataElement: {
+          selectorObjForCartDisplay: {
+            bottomCartDisplayEmpty,
+            bottomCartDisplayHasItem,
+            bottomCartHasItemImg,
+            bottomCartTitleElement,
+            bottomCartPriceElement,
+            bottomCartQuantityElement,
+            bottomCartPriceTotalElement,
+          },
+        },
+      },
+    } = ourSelectors();
+    /**
+     * set value of
+     * bottomCartHasItemImg,
+     * bottomCartTitleElement,
+     * bottomCartPriceElement,
+     * bottomCartQuantityElement,
+     * bottomCartPriceTotalElement,
+     * to default value
+     * **/
+    // set value of bottomCartHasItemImg
+    assignValueUsingAttr(
+      bottomCartHasItemImg,
+      "attributes",
+      "src",
+      "value",
+      ""
+    );
+    // set value of bottomCartTitleElement
+    assignValueToElement(bottomCartTitleElement, "innerText", "");
+    // set value of bottomCartPriceElement
+    assignValueToElement(bottomCartPriceElement, "innerText", "");
+    // set value of bottomCartQuantityElement
+    assignValueToElement(bottomCartQuantityElement, "innerText", "");
+    // set value of bottomCartPriceTotalElement
+    assignValueToElement(bottomCartPriceTotalElement, "innerText", "");
+    // remove class active from bottomCartDisplayHasItem
+    removeClassFromElement(bottomCartDisplayHasItem, "active");
+    // add class active from bottomCartDisplayEmpty
+    addClassToElement(bottomCartDisplayEmpty, "active");
   }
 
   // helper func
+
+  function bottomCartDisplayTotalCalcHelperFunc(quantity, price) {
+    // take price value multiply by quantity to get total
+    const totalValue = quantity * price;
+    return {
+      totalValue,
+    };
+  }
 
   /**
    * decrement quantity btn
@@ -871,6 +1099,20 @@
   }
 
   /**
+   * assign value to element using attribute
+   * **/
+
+  function assignValueUsingAttr(
+    element,
+    attrProperty,
+    attrStr,
+    propertyStr,
+    value
+  ) {
+    element[attrProperty][attrStr][propertyStr] = value;
+  }
+
+  /**
    *
    * **/
 
@@ -891,6 +1133,19 @@
       // notFocusableAddToCartBtn element should not
       removeClassFromElement(notFocusableAddToCartBtn, "add-flex-display");
     }
+  }
+
+  /**
+   * get number value of string of price
+   * **/
+
+  function removeDecimalAndTrailingZeros(stringValue) {
+    const [priceWithoutDecimal] = stringValue.split(".");
+    return priceWithoutDecimal;
+  }
+
+  function getOnlyNumberOfStrUsingRegex(strInput) {
+    return strInput.match(/\w/gi).join("");
   }
 
   /**
