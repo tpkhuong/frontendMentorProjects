@@ -664,6 +664,9 @@ the mobile-modal element will be on top / above the faded-bg-element
   margin-inline-start: auto;
 }
 
+.trash-btn img {
+}
+
 .checkout-btn {
   background-color: var(--col-primary-orange);
   color: var(--col-neutral-white);
@@ -920,7 +923,8 @@ arrow btn looks more centered adding padding-inline
 }
 
 .add-cart-img-wrapper,
-.add-to-cart-button span {
+.add-to-cart-button span,
+.trash-btn img {
   pointer-events: none;
 }
 
