@@ -51,7 +51,6 @@
     }
   );
   addEventListener(openMobileMenuBtn, "click", mobileMenuFunctionality);
-  addEventListener(cartBtn, "click", cartBtnFunctionality);
   addEventListener(cartModalElement, "click", cartModalDisplayAlgorithm);
   addEventListener(
     quantityControllerCartBtn,
@@ -65,8 +64,27 @@
   );
   // add event listener to cart btn
 
+  /**
+   * run at mobile size
+   * **/
+  addEventListener(cartBtn, "click", cartBtnMobileSizeFunctionality);
   if (window.innerWidth < 415) {
     addEventListener(mobileArrowBtnContainer, "click", mobileLayoutImgSlider);
+  }
+  /**
+   * run at desktop size
+   * **/
+  if (window.innerWidth > 430) {
+    addEventListener(
+      cartBtn,
+      "mouseenter",
+      mouseenterCartBtnDesktopSizeFunctionality
+    );
+    addEventListener(
+      cartBtn,
+      "mouseleave",
+      mouseleaveCartBtnDesktopSizeFunctionality
+    );
   }
   // console.log(openMobileMenuBtn);
   function ourSelectors() {
@@ -211,13 +229,14 @@
       // when we click on hamburger btn
       //look to see if cart modal has class "active"
       cartModalShown: null,
+      mouseenterForCartBtn: null,
       // number of img for mobile slider
       //our img slider will start at aria-label=1 of 4
       positionNumFormMobileSlider: 1,
       // valueOfQuantityDisplayInput
       valueOfQuantityDisplayInput: 0,
       autumnEdition: {
-        shoeTitle: "Autumn Limited Edition...",
+        shoeTitle: "Fall Limited Edition Sneakers",
         shoePrice: "$125.00",
         imgURL: "images/image-product-1-thumbnail.jpg",
       },
@@ -292,13 +311,67 @@
   }
 
   /**
-   * cart btn algorithm
+   * cart btn algorithm run cartBtnFunctionality at mobile size
    * **/
 
-  function cartBtnFunctionality(event) {
-    cartModalElement.classList.toggle("active");
+  function cartBtnMobileSizeFunctionality(event) {
+    let { cartModalElement, ourDataElement } = ourSelectors();
+    const {
+      dataElement: { mouseenterForCartBtn },
+    } = ourDataElement;
+    const booleanToCheckClassActiveOnCartModal = elementContainClass(
+      cartModalElement,
+      "active"
+    );
+    if (!booleanToCheckClassActiveOnCartModal) {
+      cartModalElement.classList.add("active");
+      ourDataElement.dataElement.cartModalShown = true;
+    } else {
+      cartModalElement.classList.remove("active");
+      ourDataElement.dataElement.cartModalShown = false;
+    }
   }
 
+  /**
+   * cartBtnMobileSizeFunctionality helper func at desktop size
+   * **/
+
+  function cartBtnFunctionalityDesktopHelperFunc(event) {}
+
+  /**
+   * run cartBtnFunctionality at desktop size
+   * **/
+  function mouseenterCartBtnDesktopSizeFunctionality(event) {
+    const { ourDataElement, cartModalElement } = ourSelectors();
+    const {
+      dataElement: { cartModalShown },
+    } = ourDataElement;
+    // cartModalElement.classList.toggle("active");
+    // when cartModalShown is faley null or false
+    // it means cartModalElement does not have active class
+    if (!cartModalShown) {
+      addClassToElement(cartModalElement, "active");
+    }
+    ourDataElement.dataElement.mouseenterForCartBtn = true;
+  }
+
+  function mouseleaveCartBtnDesktopSizeFunctionality(event) {
+    const { ourDataElement, cartModalElement } = ourSelectors();
+    const {
+      dataElement: { cartModalShown },
+    } = ourDataElement;
+
+    // when cartModalShown is faley null or false
+    // it means cartModalElement does not have active class
+    if (!cartModalShown) {
+      removeClassFromElement(cartModalElement, "active");
+    }
+    ourDataElement.dataElement.mouseenterForCartBtn = false;
+  }
+
+  /**
+   * run cartBtnFunctionality at desktop size
+   * **/
   function addClickListenerToCloseMobileBtn() {
     console.log("addClickListenerToCloseMobileBtn");
     const { mobileCloseBtn } = ourSelectors();
@@ -639,6 +712,7 @@
 
   function trashBtnAlgorithm(event) {
     const {
+      cartQuantityDisplayElement,
       ourDataElement: {
         dataElement: {
           selectorObjForCartDisplay: {
@@ -678,6 +752,10 @@
     assignValueToElement(bottomCartQuantityElement, "innerText", "");
     // set value of bottomCartPriceTotalElement
     assignValueToElement(bottomCartPriceTotalElement, "innerText", "");
+    // set value of cartQuantityDisplayElement to default
+    assignValueToElement(cartQuantityDisplayElement, "innerText", "");
+    // remove class show-element to cartQuantityDisplayElement
+    removeClassFromElement(cartQuantityDisplayElement, "show-element");
     // remove class active from bottomCartDisplayHasItem
     removeClassFromElement(bottomCartDisplayHasItem, "active");
     // add class active from bottomCartDisplayEmpty
@@ -890,6 +968,7 @@
 
   function changeValueOfCartModalShown(element, booleanInput) {
     // if booleanInput is truthy
+    debugger;
     // we will see true value to cartModalShown property in data obj
     if (booleanInput) {
       element.dataElement.cartModalShown = true;
