@@ -8,6 +8,7 @@
   --col-neutral-grayish-blue: hsl(220, 14%, 75%);
   --col-neutral-light-grayish-blue: hsl(223, 64%, 98%);
   --col-neutral-bg-gray: hsl(230, 60%, 98%);
+  --col-neutral-nav-gray: hsl(217, 3%, 51%);
   /* white and black */
   --col-neutral-white: hsl(0, 100%, 100%);
   --col-neutral-black: hsl(0, 0%, 0%);
@@ -165,18 +166,18 @@ body {
 
 .max-width {
   /* or the width we want our container/parent element to be */
-  max-width: 350px;
+  max-width: 1440px;
   margin-inline-start: auto;
   margin-inline-end: auto;
   /* padding-inline-start: 16px;
   padding-inline-end: 16px; */
 }
 
-@media screen and (min-width: 90rem) {
+/* @media screen and (min-width: 90rem) {
   .max-width {
     max-width: 550px;
   }
-}
+} */
 
 .text-max-width-wrapper {
   max-width: 150px;
@@ -554,9 +555,62 @@ the mobile-modal element will be on top / above the faded-bg-element
 
 /* hide at mobile size */
 
-@media screen and (max-width: 90rem) {
+[id="desktop-navigation"] {
+  display: none;
+}
+
+@media screen and (min-width: 90rem) {
+  [id="header-one"] {
+    padding-inline: 0px;
+    padding-block: 32px;
+    padding-block-start: 20px;
+  }
   [id="desktop-navigation"] {
+    margin-inline-start: 64px;
+    display: revert;
+    color: var(--col-neutral-nav-gray);
+  }
+
+  [id="desktop-navigation"] .navlist {
+    display: flex;
+    gap: 32px;
+  }
+
+  /* one way to create space between list items */
+  /* [id="desktop-navigation"] .navlist > * + * {
+    margin-inline-start: 32px;
+  } */
+
+  /* another way to create space between list items */
+  /* [id="desktop-navigation"] .navlist li:not(:last-child) {
+    margin-inline-end: 16px;
+  } */
+  /* [id="desktop-navigation"] .navlist li:not(:first-child) {
+    margin-inline-start: 16px;
+  } */
+
+  [id="desktop-navigation"] .navlink {
+    position: relative;
+  }
+
+  [id="desktop-navigation"] .navlink::after {
+    content: "";
+    position: absolute;
     display: none;
+    width: 100%;
+    height: 4px;
+    background-color: var(--col-primary-orange);
+    top: 63px;
+  }
+
+  [id="desktop-navigation"] li:hover .navlink::after {
+    display: block;
+  }
+
+  [id="desktop-navigation"] li:hover .navlink,
+  [id="desktop-navigation"] li:focus .navlink {
+    color: var(--col-neutral-vark-blue);
+    font-weight: 700;
   }
 }
 
@@ -577,6 +631,7 @@ the mobile-modal element will be on top / above the faded-bg-element
 
 .open-cart-btn {
   position: relative;
+  align-self: center;
 }
 
 .cart-quantity-display {
@@ -599,6 +654,7 @@ the mobile-modal element will be on top / above the faded-bg-element
 }
 
 [id="modal-two"] {
+  max-width: 365px;
   display: none;
   /* declare z-index on modal-two to have it appear above other elements
   the way stacking context works is the element below will appear above the element above in the html
@@ -647,6 +703,8 @@ the mobile-modal element will be on top / above the faded-bg-element
 
 .title-quantity-total-style-wrapper .cart-selection-title {
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* element separator instead of using margin */
@@ -662,9 +720,6 @@ the mobile-modal element will be on top / above the faded-bg-element
 
 .trash-btn {
   margin-inline-start: auto;
-}
-
-.trash-btn img {
 }
 
 .checkout-btn {
@@ -697,6 +752,44 @@ the mobile-modal element will be on top / above the faded-bg-element
   margin-inline-start: 16px;
 }
 
+@media screen and (min-width: 90rem) {
+  .cart-avatar-style-wrapper {
+    position: relative;
+  }
+
+  /* .open-cart-btn:hover + [id="modal-two"],
+  .open-cart-btn:focus + [id="modal-two"] {
+    display: revert;
+  } */
+
+  [id="modal-two"] {
+    position: absolute;
+    top: 64px;
+    left: -175px;
+    right: -96px;
+  }
+  .cart-quantity-display {
+    top: 10px;
+  }
+  [class="user-avatar"] {
+    max-width: 50px;
+    margin-inline-start: 48px;
+    border-radius: 50%;
+  }
+
+  [class="user-avatar"]:hover img,
+  [class="user-avatar"]:focus img {
+    border: 2px solid var(--col-primary-orange);
+  }
+
+  [class="user-avatar"] img {
+    border-radius: 50%;
+  }
+  .cart-avatar-img-wrapper path {
+    fill: var(--col-neutral-nav-gray);
+  }
+}
+
 /* header */
 
 /* main */
@@ -709,6 +802,12 @@ to show the img instead of working with z-index
 
 .mobile-img-display {
   position: relative;
+}
+
+@media screen and (min-width: 90rem) {
+  .mobile-img-display {
+    display: none;
+  }
 }
 
 .mobile-img-display-controller-container {
@@ -799,6 +898,12 @@ arrow btn looks more centered adding padding-inline
 [class="desktop-img-display"],
 [id="modal-three"] {
   display: none;
+}
+
+@media screen and (min-width: 90rem) {
+  [class="desktop-img-display"] {
+    display: revert;
+  }
 }
 
 /* product details section */
@@ -924,7 +1029,8 @@ arrow btn looks more centered adding padding-inline
 
 .add-cart-img-wrapper,
 .add-to-cart-button span,
-.trash-btn img {
+.trash-btn img,
+.cart-avatar-img-wrapper {
   pointer-events: none;
 }
 
