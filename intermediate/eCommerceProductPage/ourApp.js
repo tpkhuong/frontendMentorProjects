@@ -1,6 +1,7 @@
 (function scopeOurVariables() {
   // activate mobile menu selectors
   const {
+    cartAvatarWrapper,
     cartBtn,
     ourDataElement,
     cartModalElement,
@@ -67,27 +68,31 @@
   /**
    * run at mobile size
    * **/
-  addEventListener(cartBtn, "click", cartBtnMobileSizeFunctionality);
   if (window.innerWidth < 415) {
     addEventListener(mobileArrowBtnContainer, "click", mobileLayoutImgSlider);
+    addEventListener(
+      cartBtn,
+      "click",
+      cartBtnMobileSizeClickEventFunctionality
+    );
   }
   /**
    * run at desktop size
    * **/
   if (window.innerWidth > 430) {
+    addEventListener(cartAvatarWrapper, "focusin", cartAvatarWrapperFocusEvent);
     addEventListener(
       cartBtn,
       "mouseenter",
       mouseenterCartBtnDesktopSizeFunctionality
     );
-    addEventListener(
-      cartBtn,
-      "mouseleave",
-      mouseleaveCartBtnDesktopSizeFunctionality
-    );
   }
   // console.log(openMobileMenuBtn);
   function ourSelectors() {
+    // cartAvatarWrapper element
+    const cartAvatarWrapper = document.querySelector(
+      ".cart-avatar-style-wrapper"
+    );
     const cartBtn = document.querySelector(".open-cart-btn");
     // data obj
     const ourDataElement = document.querySelector("#data");
@@ -190,6 +195,7 @@
     );
 
     return {
+      cartAvatarWrapper,
       cartBtn,
       ourDataElement,
       cartModalElement,
@@ -230,6 +236,7 @@
       //look to see if cart modal has class "active"
       cartModalShown: null,
       mouseenterForCartBtn: null,
+      userClickedOnCartBtn: false,
       // number of img for mobile slider
       //our img slider will start at aria-label=1 of 4
       positionNumFormMobileSlider: 1,
@@ -314,7 +321,8 @@
    * cart btn algorithm run cartBtnFunctionality at mobile size
    * **/
 
-  function cartBtnMobileSizeFunctionality(event) {
+  function cartBtnMobileSizeClickEventFunctionality(event) {
+    console.log(event);
     let { cartModalElement, ourDataElement } = ourSelectors();
     const {
       dataElement: { mouseenterForCartBtn },
@@ -333,39 +341,152 @@
   }
 
   /**
-   * cartBtnMobileSizeFunctionality helper func at desktop size
+   * add keyboard event to cartBtn when it has focus
    * **/
 
-  function cartBtnFunctionalityDesktopHelperFunc(event) {}
+  function cartAvatarWrapperFocusEvent(event) {
+    // addEventListener(cartBtn, "click", cartBtnFunctionalityDesktopClickEvent);
+    const { cartBtn } = ourSelectors();
+    const { targetElement } = propertiesOfEventObj(event);
+
+    if (targetElement == cartBtn) {
+      addEventListener(cartBtn, "keydown", cartBtnDesktopKeyboardFunc);
+    } else {
+      removeEventListener(cartBtn, "keydown", cartBtnDesktopKeyboardFunc);
+    }
+  }
+
+  /**
+   * cartBtnMobileSizeClickEventFunctionality helper func at desktop size
+   * **/
+
+  function cartBtnFunctionalityDesktopClickEvent(event) {
+    const { cartBtn, ourDataElement, cartModalElement } = ourSelectors();
+    const { targetElement } = propertiesOfEventObj(event);
+    const {
+      dataElement: { mouseenterForCartBtn, userClickedOnCartBtn },
+    } = ourDataElement;
+    const cartModalContainActive = elementContainClass(
+      cartModalElement,
+      "active"
+    );
+    /**
+     * if mouseenterForCartBtn is truthy and elementContainClass("active") returns true
+     * remove mouseenter and mouseleave event from cartBtn
+     * it will leave active class on cartModalElement which will show cartModalElement
+     * set userClickedOnCartBtn to true
+     * **/
+    if (mouseenterForCartBtn && cartModalContainActive) {
+      // remove mouseenter and mouseleave event from cartBtn
+      removeEventListener(
+        cartBtn,
+        "mouseenter",
+        mouseenterCartBtnDesktopSizeFunctionality
+      );
+      removeEventListener(
+        cartBtn,
+        "mouseleave",
+        mouseleaveCartBtnDesktopSizeFunctionality
+      );
+      // set userClickedOnCartBtn to true
+      ourDataElement.dataElement.userClickedOnCartBtn = true;
+      return;
+    }
+    /**
+     * when user click on cartBtn we also want to check if userClickedOnCartBtn is truthy
+     * and if elementContainClass("active") returns true
+     * we will remove click event from cartBtn, remove class "active" from cartModalElement
+     * then add mouseenter event to cartBtn set mouseenterForCartBtn to false
+     * set userClickedOnCartBtn to false
+     * **/
+    if (userClickedOnCartBtn && cartModalContainActive) {
+      // remove click event from cartBtn
+      removeEventListener(
+        cartBtn,
+        "click",
+        cartBtnFunctionalityDesktopClickEvent
+      );
+      // remove class "active" from cartBtn
+      removeClassFromElement(cartModalElement, "active");
+      // add mouseenter event to cartBtn
+      addEventListener(
+        cartBtn,
+        "mouseenter",
+        mouseenterCartBtnDesktopSizeFunctionality
+      );
+      // set false boolean value to mouseenterForCartBtn
+      ourDataElement.dataElement.mouseenterForCartBtn = false;
+      // set userClickedOnCartBtn to false
+      ourDataElement.dataElement.userClickedOnCartBtn = false;
+    }
+  }
+  alert("start here");
+  /**
+   * cartBtn keyboard for when user has focus on cartBtn
+   * **/
+
+  function cartBtnDesktopKeyboardFunc(event) {
+    const {} = propertiesOfEventObj(event);
+  }
 
   /**
    * run cartBtnFunctionality at desktop size
    * **/
+
   function mouseenterCartBtnDesktopSizeFunctionality(event) {
-    const { ourDataElement, cartModalElement } = ourSelectors();
+    const { ourDataElement, cartModalElement, cartBtn } = ourSelectors();
     const {
-      dataElement: { cartModalShown },
+      dataElement: { userClickedOnCartBtn },
     } = ourDataElement;
+    /**
+     * when user hover over cartBtn add event click to cartBtn
+     * **/
+
     // cartModalElement.classList.toggle("active");
-    // when cartModalShown is faley null or false
+    // when userClickedOnCartBtn is faley null or false
     // it means cartModalElement does not have active class
-    if (!cartModalShown) {
+    if (!userClickedOnCartBtn) {
       addClassToElement(cartModalElement, "active");
     }
+    /**
+     * add click event and mouseleave event when user hover mouse over cartBtn
+     * **/
+
+    addEventListener(cartBtn, "click", cartBtnFunctionalityDesktopClickEvent);
+    addEventListener(
+      cartBtn,
+      "mouseleave",
+      mouseleaveCartBtnDesktopSizeFunctionality
+    );
     ourDataElement.dataElement.mouseenterForCartBtn = true;
   }
 
   function mouseleaveCartBtnDesktopSizeFunctionality(event) {
-    const { ourDataElement, cartModalElement } = ourSelectors();
+    const { ourDataElement, cartModalElement, cartBtn } = ourSelectors();
     const {
-      dataElement: { cartModalShown },
+      dataElement: { userClickedOnCartBtn },
     } = ourDataElement;
-
-    // when cartModalShown is faley null or false
+    /**
+     * when user hover over cartBtn remove event click to cartBtn
+     * **/
+    // when userClickedOnCartBtn is faley null or false
     // it means cartModalElement does not have active class
-    if (!cartModalShown) {
+    if (!userClickedOnCartBtn) {
       removeClassFromElement(cartModalElement, "active");
     }
+    /**
+     * remove click event and mouseleave event when user leave cartBtn with mouse
+     * **/
+    removeEventListener(
+      cartBtn,
+      "click",
+      cartBtnFunctionalityDesktopClickEvent
+    );
+    removeEventListener(
+      cartBtn,
+      "mouseleave",
+      mouseleaveCartBtnDesktopSizeFunctionality
+    );
     ourDataElement.dataElement.mouseenterForCartBtn = false;
   }
 
@@ -968,7 +1089,6 @@
 
   function changeValueOfCartModalShown(element, booleanInput) {
     // if booleanInput is truthy
-    debugger;
     // we will see true value to cartModalShown property in data obj
     if (booleanInput) {
       element.dataElement.cartModalShown = true;
