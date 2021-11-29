@@ -5,6 +5,8 @@
     cartBtn,
     ourDataElement,
     cartModalElement,
+    cartModalCloseBtn,
+    cartModalCheckoutBtn,
     // close mobile menu
     modalWrapperElement,
     mobileModalElement,
@@ -98,6 +100,10 @@
     const ourDataElement = document.querySelector("#data");
     //cart modal
     const cartModalElement = document.querySelector("#modal-two");
+    // cart modal close btn
+    const cartModalCloseBtn = document.querySelector(".close-cart-modal-btn");
+    // cart modal checkout btn
+    const cartModalCheckoutBtn = document.querySelector(".checkout-btn");
     // faded modal wrapper
     const modalWrapperElement = document.querySelector(
       ".faded-bg-modal-wrapper"
@@ -199,6 +205,8 @@
       cartBtn,
       ourDataElement,
       cartModalElement,
+      cartModalCloseBtn,
+      cartModalCheckoutBtn,
       modalWrapperElement,
       mobileArrowBtnContainer,
       mobilePreviousImgBtn,
@@ -237,6 +245,7 @@
       cartModalShown: null,
       mouseenterForCartBtn: null,
       userClickedOnCartBtn: false,
+      userClickedOnCartBtnFirstTime: false,
       // number of img for mobile slider
       //our img slider will start at aria-label=1 of 4
       positionNumFormMobileSlider: 1,
@@ -364,19 +373,24 @@
     const { cartBtn, ourDataElement, cartModalElement } = ourSelectors();
     const { targetElement } = propertiesOfEventObj(event);
     const {
-      dataElement: { mouseenterForCartBtn, userClickedOnCartBtn },
+      dataElement: {
+        mouseenterForCartBtn,
+        userClickedOnCartBtn,
+        userClickedOnCartBtnFirstTime,
+      },
     } = ourDataElement;
     const cartModalContainActive = elementContainClass(
       cartModalElement,
       "active"
     );
     /**
-     * if mouseenterForCartBtn is truthy and elementContainClass("active") returns true
+     * if userClickedOnCartBtnFirstTime is falsey and elementContainClass("active") returns true
      * remove mouseenter and mouseleave event from cartBtn
      * it will leave active class on cartModalElement which will show cartModalElement
      * set userClickedOnCartBtn to true
      * **/
-    if (mouseenterForCartBtn && cartModalContainActive) {
+
+    if (!userClickedOnCartBtnFirstTime && cartModalContainActive) {
       // remove mouseenter and mouseleave event from cartBtn
       removeEventListener(
         cartBtn,
@@ -389,17 +403,17 @@
         mouseleaveCartBtnDesktopSizeFunctionality
       );
       // set userClickedOnCartBtn to true
-      ourDataElement.dataElement.userClickedOnCartBtn = true;
+      ourDataElement.dataElement.userClickedOnCartBtnFirstTime = true;
       return;
     }
     /**
-     * when user click on cartBtn we also want to check if userClickedOnCartBtn is truthy
+     * when user click on cartBtn we also want to check if userClickedOnCartBtnFirstTime is truthy
      * and if elementContainClass("active") returns true
      * we will remove click event from cartBtn, remove class "active" from cartModalElement
      * then add mouseenter event to cartBtn set mouseenterForCartBtn to false
-     * set userClickedOnCartBtn to false
+     * set userClickedOnCartBtnFirstTime to false
      * **/
-    if (userClickedOnCartBtn && cartModalContainActive) {
+    if (userClickedOnCartBtnFirstTime && cartModalContainActive) {
       // remove click event from cartBtn
       removeEventListener(
         cartBtn,
@@ -417,16 +431,72 @@
       // set false boolean value to mouseenterForCartBtn
       ourDataElement.dataElement.mouseenterForCartBtn = false;
       // set userClickedOnCartBtn to false
-      ourDataElement.dataElement.userClickedOnCartBtn = false;
+      ourDataElement.dataElement.userClickedOnCartBtnFirstTime = false;
     }
   }
-  alert("start here");
+
   /**
    * cartBtn keyboard for when user has focus on cartBtn
    * **/
 
   function cartBtnDesktopKeyboardFunc(event) {
-    const {} = propertiesOfEventObj(event);
+    const { cartModalCloseBtn, cartModalCheckoutBtn } = ourSelectors();
+    const {
+      targetElement,
+      targetKeyCode: keyCode,
+      booleanShiftKeyPressed: shiftKeyPressed,
+    } = propertiesOfEventObj(event);
+    if (keyCode == "Space" || keyCode == "Enter") {
+      console.log("here");
+    }
+  }
+
+  /**
+   * cartModal keyboard helper
+   * **/
+  addEventListener(cartModalElement, "keydown", cartModalKeyboardFunctionality);
+
+  function cartModalKeyboardFunctionality(event) {
+    const { cartModalCloseBtn, cartModalCheckoutBtn } = ourSelectors();
+
+    const {
+      targetElement,
+      targetKeyCode: keyCode,
+      booleanShiftKeyPressed: shiftKeyPressed,
+    } = propertiesOfEventObj(event);
+
+    /**
+     * if user press hold shift and tab
+     * **/
+    // if (shiftKeyPressed && keyCode == "Tab") {
+    //   targetElement == cartModalCloseBtn
+    //     ? (focusElement(cartModalCheckoutBtn), event.preventDefault())
+    //     : null;
+    // } else {
+    //   /**
+    //    * tab
+    //    * **/
+    //   if (keyCode == "Tab") {
+    //     targetElement == cartModalCheckoutBtn
+    //       ? (focusElement(cartModalCloseBtn), event.preventDefault())
+    //       : null;
+    //   }
+    // }
+    /**
+     * another way of coding keyboard tabbing
+     * **/
+
+    if (shiftKeyPressed) {
+      // shift pressed and tab key pressed
+      keyCode == "Tab" && targetElement == cartModalCloseBtn
+        ? (focusElement(cartModalCheckoutBtn), event.preventDefault())
+        : null;
+    } else {
+      // tab pressed without shift
+      keyCode == "Tab" && targetElement == cartModalCheckoutBtn
+        ? (focusElement(cartModalCloseBtn), event.preventDefault())
+        : null;
+    }
   }
 
   /**
@@ -882,6 +952,10 @@
     // add class active from bottomCartDisplayEmpty
     addClassToElement(bottomCartDisplayEmpty, "active");
   }
+
+  /**
+   *
+   * **/
 
   // helper func
 
