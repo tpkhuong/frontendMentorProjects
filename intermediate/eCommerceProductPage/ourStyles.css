@@ -673,6 +673,17 @@ the mobile-modal element will be on top / above the faded-bg-element
 
 .top-cart-style-wrapper {
   padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+[class="close-cart-modal-btn"] {
+  display: inline-flex;
+}
+
+[class="close-cart-modal-btn"] path {
+  fill: var(--col-neutral-black);
 }
 
 .bottom-cart-style-wrapper-empty {
