@@ -911,9 +911,25 @@ arrow btn looks more centered adding padding-inline
   display: none;
 }
 
+/* desktop img slider */
+
 @media screen and (min-width: 90rem) {
+  [id="content-wrapper"] {
+    padding-inline: 40px;
+    padding-block: 80px;
+  }
   [class="desktop-img-display"] {
     display: revert;
+  }
+  /* desktop img container */
+  [class="desktop-img-display__large-img"] {
+    display: none;
+  }
+  [class="desktop-img-display__small-img"],
+  [class*="desktop-img-display__large-img"] {
+    border-radius: 12px;
+    padding: 0px;
+    overflow: hidden;
   }
 }
 
@@ -1041,6 +1057,7 @@ arrow btn looks more centered adding padding-inline
 .add-cart-img-wrapper,
 .add-to-cart-button span,
 .trash-btn img,
+.close-cart-modal-btn svg,
 .cart-avatar-img-wrapper {
   pointer-events: none;
 }
