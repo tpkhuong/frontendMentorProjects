@@ -54,7 +54,13 @@
     }
   );
   addEventListener(openMobileMenuBtn, "click", mobileMenuFunctionality);
-  addEventListener(cartModalElement, "click", cartModalDisplayAlgorithm);
+  /**
+   * this algorithm that will work with trashBtn will work for both mouse and keyboard user
+   * for our closeModalBtn and trashBtn we will have one algorithm
+   * add event click listener to cartModal when user click on cartBtn and user keydown
+   * on space or enter key when focus is on cartBtn
+   * addEventListener(cartModalElement, "click", cartModalDisplayAlgorithm);
+   * **/
   addEventListener(
     quantityControllerCartBtn,
     "click",
@@ -359,8 +365,10 @@
     const { targetElement } = propertiesOfEventObj(event);
 
     if (targetElement == cartBtn) {
+      // when focus is cartBtn add keydown event to cartBtnDesktopKeyboardFunc
       addEventListener(cartBtn, "keydown", cartBtnDesktopKeyboardFunc);
     } else {
+      // when focus is not cartBtn remove keydown event to cartBtnDesktopKeyboardFunc
       removeEventListener(cartBtn, "keydown", cartBtnDesktopKeyboardFunc);
     }
   }
@@ -402,6 +410,8 @@
         "mouseleave",
         mouseleaveCartBtnDesktopSizeFunctionality
       );
+      // add click event to cartModalElement for functionality with closeBtn,trashBtn, checkoutBtn
+      addEventListener(cartModalElement, "click", cartModalDisplayAlgorithm);
       // set userClickedOnCartBtn to true
       ourDataElement.dataElement.userClickedOnCartBtnFirstTime = true;
       return;
@@ -428,6 +438,8 @@
         "mouseenter",
         mouseenterCartBtnDesktopSizeFunctionality
       );
+      // remove click event from cartModalElement
+      removeEventListener(cartModalElement, "click", cartModalDisplayAlgorithm);
       // set false boolean value to mouseenterForCartBtn
       ourDataElement.dataElement.mouseenterForCartBtn = false;
       // set userClickedOnCartBtn to false
@@ -440,24 +452,71 @@
    * **/
 
   function cartBtnDesktopKeyboardFunc(event) {
-    const { cartModalCloseBtn, cartModalCheckoutBtn } = ourSelectors();
+    const { cartModalElement, cartModalCloseBtn, ourDataElement } =
+      ourSelectors();
     const {
       targetElement,
       targetKeyCode: keyCode,
       booleanShiftKeyPressed: shiftKeyPressed,
     } = propertiesOfEventObj(event);
+    // without event.preventDefault() when user keyDown on "Enter" key
+    // JS did not add active class to cartModalELement, add event to cartModalElement
+    // set focus on cartModalCloseBtn
+    if (keyCode == "Enter") {
+      event.preventDefault();
+    }
+    // const {
+    //   dataElement: { userClickedOnCartBtnFirstTime },
+    // } = ourDataElement;
     if (keyCode == "Space" || keyCode == "Enter") {
-      console.log("here");
+      // when user on cartBtn with "Space" or "Enter" key
+      // add keydown event to cartModalElement
+      // focus cartModalCloseBtn
+      // when user click cartBtn for firstTime add keydown event to cartModalElement
+      // we want to check if userClickedOnCartBtnFirstTime is falsy because that would mean
+      //user have not clicked on cartBtn
+      /**if (!userClickedOnCartBtnFirstTime) {
+         addEventListener(
+          cartModalElement,
+          "keydown",
+          cartModalKeyboardFunctionality
+          );
+        }**/
+      console.log(keyCode == "Enter");
+
+      /**
+       * another approach we can remove keydown event listener on cartModalElement
+       * when user click on closeBtn of cartModalELement that algorithm will be in
+       * cartModalKeyboardFunctionality func
+       * **/
+      // this is for tabbing through focusable element of cartModalElement
+      addEventListener(
+        cartModalElement,
+        "keydown",
+        cartModalKeyboardFunctionality
+      );
+      /**
+       * add event click for cartModalElement for closeBtn, trashBt, and checkoutBtn algorithm
+       * **/
+      addEventListener(cartModalElement, "click", cartModalDisplayAlgorithm);
+      // add active class to cartModalElement to show that element
+      addClassToElement(cartModalElement, "active");
+      // set focus to cartModalCloseBtn
+      focusElement(cartModalCloseBtn);
     }
   }
 
   /**
    * cartModal keyboard helper
    * **/
-  addEventListener(cartModalElement, "keydown", cartModalKeyboardFunctionality);
 
   function cartModalKeyboardFunctionality(event) {
-    const { cartModalCloseBtn, cartModalCheckoutBtn } = ourSelectors();
+    const {
+      cartModalElement,
+      cartBtn,
+      cartModalCloseBtn,
+      cartModalCheckoutBtn,
+    } = ourSelectors();
 
     const {
       targetElement,
@@ -497,6 +556,34 @@
         ? (focusElement(cartModalCloseBtn), event.preventDefault())
         : null;
     }
+    /**
+     * another approach
+     * **/
+    /**
+     * we moved the algorithm below to cartModalDisplayAlgorithm.
+     * the cartModalDisplayAlgorithm func will take care of when user click
+     * or keyDown(space or enter) on trashBtn and cartModalCloseBtn
+     * **/
+    /**
+     * if click target is cartModalCloseBtn remove class "active"
+     * remove keydown event from cartModalElement
+     * set focus on cartBtn
+     * **/
+    // if (targetElement == cartModalCloseBtn) {
+    //   // if click target is cartModalCloseBtn remove class "active"
+    //   removeClassFromElement(cartModalElement, "active");
+    //   // remove keydown event from cartModalElement
+    //   removeEventListener(
+    //     cartModalElement,
+    //     "keydown",
+    //     cartModalKeyboardFunctionality
+    //   );
+    //   // set focus on cartBtn
+    //   focusElement(cartBtn);
+    // }
+    /**
+     * another approach
+     * **/
   }
 
   /**
@@ -528,9 +615,10 @@
       "mouseleave",
       mouseleaveCartBtnDesktopSizeFunctionality
     );
+    addEventListener(cartModalElement, "click", cartModalDisplayAlgorithm);
     ourDataElement.dataElement.mouseenterForCartBtn = true;
   }
-
+  alert("work on desktop layout for desktop img slider. start there");
   function mouseleaveCartBtnDesktopSizeFunctionality(event) {
     const { ourDataElement, cartModalElement, cartBtn } = ourSelectors();
     const {
@@ -539,7 +627,7 @@
     /**
      * when user hover over cartBtn remove event click to cartBtn
      * **/
-    // when userClickedOnCartBtn is faley null or false
+    // when userClickedOnCartBtn is falsey null or false
     // it means cartModalElement does not have active class
     if (!userClickedOnCartBtn) {
       removeClassFromElement(cartModalElement, "active");
@@ -557,6 +645,7 @@
       "mouseleave",
       mouseleaveCartBtnDesktopSizeFunctionality
     );
+    removeEventListener(cartModalElement, "click", cartModalDisplayAlgorithm);
     ourDataElement.dataElement.mouseenterForCartBtn = false;
   }
 
@@ -883,9 +972,8 @@
    * **/
 
   function cartModalDisplayAlgorithm(event) {
-    const { trashBtn } = ourSelectors();
+    const { trashBtn, cartModalCloseBtn } = ourSelectors();
     const { targetElement: clickedBtn } = propertiesOfEventObj(event);
-
     /**
      * run trashBtn algorithm
      * **/
@@ -893,8 +981,11 @@
       trashBtnAlgorithm(event);
     }
     /**
-     * run checkoutBtn algorithm
+     * run cartModalCloseBtn algorithm
      * **/
+    if (clickedBtn == cartModalCloseBtn) {
+      closeBtnModalElementAlgorithm(event);
+    }
   }
 
   /**
@@ -903,6 +994,7 @@
 
   function trashBtnAlgorithm(event) {
     const {
+      cartModalCloseBtn,
       cartQuantityDisplayElement,
       ourDataElement: {
         dataElement: {
@@ -951,11 +1043,29 @@
     removeClassFromElement(bottomCartDisplayHasItem, "active");
     // add class active from bottomCartDisplayEmpty
     addClassToElement(bottomCartDisplayEmpty, "active");
+    // focus cartModalCloseBtn
+    focusElement(cartModalCloseBtn);
   }
 
   /**
-   *
+   * cartModalCloseBtn
    * **/
+
+  function closeBtnModalElementAlgorithm(event) {
+    const { cartModalElement, cartBtn } = ourSelectors();
+    //when user click on cartModalCloseBtn
+    // remove click and keydown event from cartModalELement
+    removeEventListener(cartModalElement, "click", cartModalDisplayAlgorithm);
+    removeEventListener(
+      cartModalElement,
+      "keydown",
+      cartModalKeyboardFunctionality
+    );
+    // remove class active from cartModalElement
+    removeClassFromElement(cartModalElement, "active");
+    // focus on cartBtn
+    focusElement(cartBtn);
+  }
 
   // helper func
 
