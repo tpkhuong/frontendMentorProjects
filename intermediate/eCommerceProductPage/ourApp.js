@@ -605,6 +605,7 @@
     if (!userClickedOnCartBtn) {
       addClassToElement(cartModalElement, "active");
     }
+
     /**
      * add click event and mouseleave event when user hover mouse over cartBtn
      * **/
@@ -618,7 +619,6 @@
     addEventListener(cartModalElement, "click", cartModalDisplayAlgorithm);
     ourDataElement.dataElement.mouseenterForCartBtn = true;
   }
-  alert("work on desktop layout for desktop img slider. start there");
   function mouseleaveCartBtnDesktopSizeFunctionality(event) {
     const { ourDataElement, cartModalElement, cartBtn } = ourSelectors();
     const {
