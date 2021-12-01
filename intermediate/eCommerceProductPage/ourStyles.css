@@ -166,14 +166,14 @@ body {
 
 .max-width {
   /* or the width we want our container/parent element to be */
-  max-width: 1440px;
+  max-width: 1250px;
   margin-inline-start: auto;
   margin-inline-end: auto;
   /* padding-inline-start: 16px;
   padding-inline-end: 16px; */
 }
 
-/* @media screen and (min-width: 90rem) {
+/* @media screen and (min-width: 70rem) {
   .max-width {
     max-width: 550px;
   }
@@ -190,7 +190,7 @@ body {
   margin: var(--gap, 8px) 0 0 0;
 }
 
-/* @media screen and (min-width: 90rem){
+/* @media screen and (min-width: 70rem){
 
 } */
 
@@ -417,7 +417,7 @@ a:hover {
   padding-inline: 32px;
 }
 
-@media screen and (min-width: 90rem) {
+@media screen and (min-width: 70rem) {
   .skip-link {
     display: inline-block;
   }
@@ -476,7 +476,7 @@ a:hover {
 
 /* hide at desktop size */
 
-@media screen and (min-width: 90rem) {
+@media screen and (min-width: 70rem) {
   [id="mobile-menu-navigation"] {
     display: none;
   }
@@ -559,7 +559,7 @@ the mobile-modal element will be on top / above the faded-bg-element
   display: none;
 }
 
-@media screen and (min-width: 90rem) {
+@media screen and (min-width: 70rem) {
   [id="header-one"] {
     padding-inline: 0px;
     padding-block: 32px;
@@ -763,7 +763,7 @@ the mobile-modal element will be on top / above the faded-bg-element
   margin-inline-start: 16px;
 }
 
-@media screen and (min-width: 90rem) {
+@media screen and (min-width: 70rem) {
   .cart-avatar-style-wrapper {
     position: relative;
   }
@@ -790,7 +790,7 @@ the mobile-modal element will be on top / above the faded-bg-element
 
   [class="user-avatar"]:hover img,
   [class="user-avatar"]:focus img {
-    border: 2px solid var(--col-primary-orange);
+    outline: 2px solid var(--col-primary-orange);
   }
 
   [class="user-avatar"] img {
@@ -815,7 +815,7 @@ to show the img instead of working with z-index
   position: relative;
 }
 
-@media screen and (min-width: 90rem) {
+@media screen and (min-width: 70rem) {
   .mobile-img-display {
     display: none;
   }
@@ -913,23 +913,90 @@ arrow btn looks more centered adding padding-inline
 
 /* desktop img slider */
 
-@media screen and (min-width: 90rem) {
+@media screen and (min-width: 70rem) {
   [id="content-wrapper"] {
     padding-inline: 40px;
     padding-block: 80px;
+    display: grid;
+    grid-template-columns: repeat(2, 550px);
+    /* justify-content: space-between; */
+    align-items: center;
+    gap: 110px;
   }
   [class="desktop-img-display"] {
     display: revert;
   }
-  /* desktop img container */
+  /* desktop large img container */
   [class="desktop-img-display__large-img"] {
     display: none;
   }
   [class="desktop-img-display__small-img"],
-  [class*="desktop-img-display__large-img"] {
+  [class="desktop-img-display__small-img"] img,
+  [class*="desktop-img-display__large-img"],
+  [class*="desktop-img-display__large-img"] img {
     border-radius: 12px;
     padding: 0px;
-    overflow: hidden;
+  }
+
+  /* hover and focus on small img desktop layout */
+  /* when we had border on button element or the img wrapper for hover effect
+  there was a white space between the img and border
+  we put the border effect on img instead
+  */
+
+  [class*="desktop-img-display__large-img"]:hover img,
+  [class="desktop-img-display__small-img"]:hover img {
+    /** use outline instead of border
+    to not have the effect of the img getting smaller when user hover over button element
+    **/
+    outline: 2px solid var(--col-primary-orange);
+    /* max-width: calc(100% - 2px); */
+  }
+
+  [class="desktop-img-display__small-img"]:hover,
+  [class="desktop-img-display__small-img"]:focus {
+    opacity: 0.5;
+  }
+
+  /* desktop small img container */
+  [class="desktop-img-display__small-img-container"] {
+    /* using display flex when user hover over button which will apply border on img
+    the add 2px also change the size of the other button > img elements
+    we will use display grid instead
+    ** grid-template-columns: repeat(4, 1fr); **
+    ** use outline instead of border with display flex will not have the effect of resizing the other element button > img 
+    when user hover of one of the button img container for bottom row of images at desktop layout
+    **
+    */
+    display: flex;
+    gap: 36px;
+    margin-block-start: 36px;
+  }
+  /* modal three: lightbox */
+  [id="modal-three"] {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    background-color: hsla(0, 0%, 0%, 0.7);
+  }
+  /* this is container for modal three large img and bottom row container of small imgs */
+  /* when we had this selector lightbox-large-img-container .large-img
+  our large-img still had declaration display: none when we added class "active" because
+  the specificity is 0 2 0 which wins over 0 1 0 of class active
+  not .large-img and .active have the same specificity and .active wins because of source order
+  we placed .active at the bottom of our css
+  */
+  .large-img {
+    display: none;
+  }
+  .light-box-style-wrapper {
+    max-width: 550px;
+  }
+  .lightbox-img-display__small-img-container {
+    display: flex;
   }
 }
 
@@ -1087,6 +1154,53 @@ arrow btn looks more centered adding padding-inline
 
 .add-flex-display {
   display: flex;
+}
+
+/* product details section desktop layout */
+
+@media screen and (min-width: 70rem) {
+  .product-details__company-name {
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+  }
+  .product-details__sneaker-name {
+    font-size: 2.8rem;
+  }
+  .product-details__description {
+    font-size: 1rem;
+    max-width: 46ch;
+    line-height: 1.5;
+    margin-block-start: 36px;
+    margin-block-end: 26px;
+  }
+  .product-details__price-style-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .price-style-wrapper__discount-price-wrapper {
+    align-items: center;
+    margin-block-end: 10px;
+  }
+  .product-details__price-style-wrapper .regular-price {
+    margin-inline-start: 0;
+  }
+  /* quantity controller and add to cart btn */
+  .quantity-controller-cart-btn-style-wrapper {
+    display: flex;
+    gap: 16px;
+    margin-block-start: 36px;
+  }
+  /* set explicit width on input and add to cart btn */
+  .quantity-controller-cart-btn__button-quantity-display {
+    margin: 0;
+  }
+  [id="quantity-display"] {
+    max-width: 50px;
+  }
+  .add-to-cart-button,
+  .add-cart-not-focusable {
+    width: 55%;
+  }
 }
 
 /* show helper declaration */
