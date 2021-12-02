@@ -930,6 +930,7 @@ arrow btn looks more centered adding padding-inline
   [class="desktop-img-display__large-img"] {
     display: none;
   }
+
   [class="desktop-img-display__small-img"],
   [class="desktop-img-display__small-img"] img,
   [class*="desktop-img-display__large-img"],
@@ -941,7 +942,7 @@ arrow btn looks more centered adding padding-inline
   /* hover and focus on small img desktop layout */
   /* when we had border on button element or the img wrapper for hover effect
   there was a white space between the img and border
-  we put the border effect on img instead
+  we put the outline effect on img instead
   */
 
   [class*="desktop-img-display__large-img"]:hover img,
@@ -982,6 +983,18 @@ arrow btn looks more centered adding padding-inline
     z-index: 1;
     background-color: hsla(0, 0%, 0%, 0.7);
   }
+
+  [class="light-box-close-btn"] {
+    margin-inline-start: auto;
+    display: flex;
+    margin-block-end: 20px;
+  }
+
+  .light-box-close-btn:hover path,
+  .light-box-close-btn:focus path {
+    fill: var(--col-primary-orange);
+  }
+
   /* this is container for modal three large img and bottom row container of small imgs */
   /* when we had this selector lightbox-large-img-container .large-img
   our large-img still had declaration display: none when we added class "active" because
@@ -991,12 +1004,91 @@ arrow btn looks more centered adding padding-inline
   */
   .large-img {
     display: none;
+    border-radius: 14px;
+    overflow: hidden;
   }
+
+  .large .light-box-close-btn {
+    display: flex;
+    margin-inline-start: auto;
+    margin-block-end: 14px;
+  }
+
   .light-box-style-wrapper {
     max-width: 550px;
   }
+
+  .lightbox-arrow-container {
+    display: flex;
+    justify-content: space-between;
+    min-width: 108%;
+    position: absolute;
+    top: 50%;
+    left: -21px;
+  }
+
+  .lightbox-arrow-container .arrow-btn {
+    display: flex;
+    padding: 16px;
+    border-radius: 50%;
+  }
+
+  .lightbox-arrow-container .arrow-btn:hover path,
+  .lightbox-arrow-container .arrow-btn:focus path {
+    stroke: var(--col-primary-orange);
+  }
+
+  [class="lightbox-large-img-style-wrapper"] {
+    position: relative;
+  }
+
+  .lightbox-arrow-container .arrow-btn:first-child {
+    padding-inline-end: 18px;
+  }
+
+  .lightbox-arrow-container .arrow-btn:last-child {
+    padding-inline-start: 18px;
+  }
+
   .lightbox-img-display__small-img-container {
     display: flex;
+    padding-block-start: 38px;
+    padding-inline: 38px;
+    gap: 38px;
+  }
+
+  /* using outline instead of border we can declare border-radius and overflow hidden on img container
+  and not have the white space between the img and border
+  */
+
+  .lightbox-img-display__small-img {
+    position: relative;
+  }
+
+  .lightbox-img-display__small-img::before {
+    content: "";
+    inset: 0;
+    position: absolute;
+    display: none;
+    border-radius: 14px;
+    background-color: var(--col-neutral-white);
+  }
+
+  .lightbox-img-display__small-img,
+  .lightbox-img-display__small-img img {
+    padding: 0;
+    border-radius: 14px;
+  }
+
+  .lightbox-img-display__small-img:hover::before,
+  .lightbox-img-display__small-img:focus::before {
+    display: revert;
+    opacity: 0.5;
+  }
+
+  .lightbox-img-display__small-img:hover,
+  .lightbox-img-display__small-img:focus {
+    outline: 2px solid var(--col-primary-orange);
   }
 }
 
