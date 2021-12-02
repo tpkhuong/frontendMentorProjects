@@ -284,35 +284,77 @@
             <!-- desktop mobile -->
             <div class="desktop-img-display">
               <!-- large img -->
-              <div class="desktop-img-display__large-img-container">
+              <div
+                class="desktop-img-display__large-img-container"
+                aria-live="polite"
+                id="desktop-img-slider"
+                aria-roledescription="carousel"
+              >
                 <button
-                  role="button"
+                  role="group"
                   class="desktop-img-display__large-img active"
+                  aria-label="1 of 4"
+                  aria-roledescription="slide"
                 >
                   <img src="images/image-product-1.jpg" alt="" />
                 </button>
-                <button role="button" class="desktop-img-display__large-img">
+                <button
+                  role="group"
+                  class="desktop-img-display__large-img"
+                  aria-label="2 of 4"
+                  aria-roledescription="slide"
+                >
                   <img src="images/image-product-2.jpg" alt="" />
                 </button>
-                <button role="button" class="desktop-img-display__large-img">
+                <button
+                  role="group"
+                  class="desktop-img-display__large-img"
+                  aria-label="3 of 4"
+                  aria-roledescription="slide"
+                >
                   <img src="images/image-product-3.jpg" alt="" />
                 </button>
-                <button role="button" class="desktop-img-display__large-img">
+                <button
+                  role="group"
+                  class="desktop-img-display__large-img"
+                  aria-label="4 of 4"
+                  aria-roledescription="slide"
+                >
                   <img src="images/image-product-4.jpg" alt="" />
                 </button>
               </div>
               <!-- bottom row -->
               <div class="desktop-img-display__small-img-container">
-                <button role="button" class="desktop-img-display__small-img">
+                <button
+                  role="button"
+                  class="desktop-img-display__small-img"
+                  aria-controls="desktop-img-slider"
+                  aria-label="first image"
+                >
                   <img src="images/image-product-1-thumbnail.jpg" alt="" />
                 </button>
-                <button role="button" class="desktop-img-display__small-img">
+                <button
+                  role="button"
+                  class="desktop-img-display__small-img"
+                  aria-controls="desktop-img-slider"
+                  aria-label="second image"
+                >
                   <img src="images/image-product-2-thumbnail.jpg" alt="" />
                 </button>
-                <button role="button" class="desktop-img-display__small-img">
+                <button
+                  role="button"
+                  class="desktop-img-display__small-img"
+                  aria-controls="desktop-img-slider"
+                  aria-label="third image"
+                >
                   <img src="images/image-product-3-thumbnail.jpg" alt="" />
                 </button>
-                <button role="button" class="desktop-img-display__small-img">
+                <button
+                  role="button"
+                  class="desktop-img-display__small-img"
+                  aria-controls="desktop-img-slider"
+                  aria-label="fourth image"
+                >
                   <img src="images/image-product-4-thumbnail.jpg" alt="" />
                 </button>
               </div>
@@ -331,8 +373,9 @@
                   aria-label="close lightbox"
                 >
                   <svg
-                    width="14"
-                    height="15"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 15 15"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
@@ -342,19 +385,45 @@
                     />
                   </svg>
                 </button>
+                <!-- large img container -->
                 <div class="lightbox-large-img-style-wrapper">
                   <!-- four imgs -->
-                  <div class="lightbox-large-img-container">
-                    <div class="large-img active">
+                  <div
+                    class="lightbox-large-img-container"
+                    id="desktop-modal-img-slider"
+                    aria-live="polite"
+                    aria-roledescription="carousel"
+                  >
+                    <div
+                      class="large-img active"
+                      role="group"
+                      aria-roledescription="slide"
+                      aria-label="1 of 4"
+                    >
                       <img src="images/image-product-1.jpg" alt="" />
                     </div>
-                    <div class="large-img">
+                    <div
+                      class="large-img"
+                      role="group"
+                      aria-roledescription="slide"
+                      aria-label="2 of 4"
+                    >
                       <img src="images/image-product-2.jpg" alt="" />
                     </div>
-                    <div class="large-img">
+                    <div
+                      class="large-img"
+                      role="group"
+                      aria-roledescription="slide"
+                      aria-label="3 of 4"
+                    >
                       <img src="images/image-product-3.jpg" alt="" />
                     </div>
-                    <div class="large-img">
+                    <div
+                      class="large-img"
+                      role="group"
+                      aria-roledescription="slide"
+                      aria-label="4 of 4"
+                    >
                       <img src="images/image-product-4.jpg" alt="" />
                     </div>
                   </div>
@@ -364,6 +433,7 @@
                       role="button"
                       class="arrow-btn"
                       aria-label="previous image"
+                      aria-controls="desktop-modal-img-slider"
                     >
                       <svg
                         width="12"
@@ -383,6 +453,7 @@
                       role="button"
                       class="arrow-btn"
                       aria-label="next image"
+                      aria-controls="desktop-modal-img-slider"
                     >
                       <svg
                         width="13"
@@ -402,16 +473,40 @@
                 </div>
                 <!-- lightbox bottom row of images -->
                 <div class="lightbox-img-display__small-img-container">
-                  <button role="button" class="lightbox-img-display__small-img">
+                  <button
+                    role="button"
+                    class="lightbox-img-display__small-img"
+                    aria-controls="desktop-modal-img-slider"
+                    id="desktop-modal-img-slider"
+                    aria-label="first image"
+                  >
                     <img src="images/image-product-1-thumbnail.jpg" alt="" />
                   </button>
-                  <button role="button" class="lightbox-img-display__small-img">
+                  <button
+                    role="button"
+                    class="lightbox-img-display__small-img"
+                    aria-controls="desktop-modal-img-slider"
+                    id="desktop-modal-img-slider"
+                    aria-label="second image"
+                  >
                     <img src="images/image-product-2-thumbnail.jpg" alt="" />
                   </button>
-                  <button role="button" class="lightbox-img-display__small-img">
+                  <button
+                    role="button"
+                    class="lightbox-img-display__small-img"
+                    aria-controls="desktop-modal-img-slider"
+                    id="desktop-modal-img-slider"
+                    aria-label="third image"
+                  >
                     <img src="images/image-product-3-thumbnail.jpg" alt="" />
                   </button>
-                  <button role="button" class="lightbox-img-display__small-img">
+                  <button
+                    role="button"
+                    class="lightbox-img-display__small-img"
+                    aria-controls="desktop-modal-img-slider"
+                    id="desktop-modal-img-slider"
+                    aria-label="fourth image"
+                  >
                     <img src="images/image-product-4-thumbnail.jpg" alt="" />
                   </button>
                 </div>
