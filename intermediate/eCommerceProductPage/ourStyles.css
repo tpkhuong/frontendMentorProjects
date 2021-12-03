@@ -1217,7 +1217,8 @@ arrow btn looks more centered adding padding-inline
 .add-to-cart-button span,
 .trash-btn img,
 .close-cart-modal-btn svg,
-.cart-avatar-img-wrapper {
+.cart-avatar-img-wrapper,
+[class="light-box-close-btn"] svg {
   pointer-events: none;
 }
 
