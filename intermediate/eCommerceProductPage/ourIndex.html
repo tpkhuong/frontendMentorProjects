@@ -221,7 +221,7 @@
           <div id="img-display-container">
             <!-- img display -->
             <!-- mobile img -->
-            <div class="mobile-img-display">
+            <div class="mobile-img-display" aria-roledescription="carousel">
               <div class="mobile-img-display-controller-container">
                 <button
                   aria-label="previous image"
@@ -282,13 +282,12 @@
               </div>
             </div>
             <!-- desktop mobile -->
-            <div class="desktop-img-display">
+            <div class="desktop-img-display" aria-roledescription="carousel">
               <!-- large img -->
               <div
                 class="desktop-img-display__large-img-container"
                 aria-live="polite"
                 id="desktop-img-slider"
-                aria-roledescription="carousel"
               >
                 <button
                   role="group"
@@ -366,7 +365,10 @@
               aria-modal="true"
               class="lightbox-modal"
             >
-              <div class="light-box-style-wrapper">
+              <div
+                class="light-box-style-wrapper"
+                aria-roledescription="carousel"
+              >
                 <button
                   role="button"
                   class="light-box-close-btn"
@@ -392,7 +394,6 @@
                     class="lightbox-large-img-container"
                     id="desktop-modal-img-slider"
                     aria-live="polite"
-                    aria-roledescription="carousel"
                   >
                     <div
                       class="large-img active"
