@@ -33,6 +33,15 @@
     bottomCartQuantityElement,
     bottomCartPriceTotalElement,
     trashBtn,
+    desktopImgModalLightbox,
+    closeBtnLightBox,
+    lastELementOfLightBox,
+    arrDesktopLargeImages,
+    arrDesktopSmallImages,
+    arrLightboxLargeImages,
+    arrLightboxSmallImages,
+    lightboxPreviousImgBtn,
+    lightboxNextImgBtn,
   } = ourSelectors();
   // add event listener to hamburger btn
   window.addEventListener("load", function resetInputValue(event) {
@@ -195,17 +204,57 @@
 
     // bottom cart display trash btn
     const trashBtn = document.querySelector(".trash-btn");
-
+    // desktop img modal (lightbox)
+    const desktopImgModalLightbox =
+      document.querySelector("[id='modal-three']");
+    // close btn for lightBox
+    const closeBtnLightBox = document.querySelector(".light-box-close-btn");
+    //last item for lightbox keyboard tabbing feature
+    const lastELementOfLightBox = document.querySelector(
+      "[id='desktop-modal-img-slider'][aria-label='fourth image']"
+    );
     /** array of img containers **/
     // mobile
     // const arrOfMobileImgSliderContainers = Array.from(document.querySelectorAll(
     //   ".mobile-images-container__img-container"
     // ));
-
+    // mobile modal
     const arrOfMobileImgSliderContainers = Array.prototype.slice.call(
       document.querySelectorAll(".mobile-images-container__img-container")
     );
-
+    // desktop img slider large images
+    const arrDesktopLargeImages = Array.from(
+      document.querySelectorAll(
+        ".desktop-img-display__large-img-container button"
+      )
+    );
+    //desktop img slider small images
+    const arrDesktopSmallImages = Array.prototype.slice.call(
+      document.querySelectorAll(
+        ".desktop-img-display__small-img-container button"
+      )
+    );
+    // lightbox large images
+    const arrLightboxLargeImages = Array.prototype.slice.call(
+      document.querySelectorAll(
+        ".lightbox-large-img-container div[class*='large-img']"
+      )
+    );
+    //lightbox small images
+    const arrLightboxSmallImages = Array.from(
+      document.querySelectorAll(
+        ".lightbox-img-display__small-img-container button"
+      )
+    );
+    // lightbox previous and next arrow btn
+    // previous arrow
+    const lightboxPreviousImgBtn = document.querySelector(
+      ".lightbox-arrow-container [aria-label='previous image']"
+    );
+    // next arrow
+    const lightboxNextImgBtn = document.querySelector(
+      ".lightbox-arrow-container [aria-label='next image']"
+    );
     return {
       cartAvatarWrapper,
       cartBtn,
@@ -238,6 +287,15 @@
       bottomCartQuantityElement,
       bottomCartPriceTotalElement,
       trashBtn,
+      desktopImgModalLightbox,
+      closeBtnLightBox,
+      lastELementOfLightBox,
+      arrDesktopLargeImages,
+      arrDesktopSmallImages,
+      arrLightboxLargeImages,
+      arrLightboxSmallImages,
+      lightboxPreviousImgBtn,
+      lightboxNextImgBtn,
     };
   }
   // declare our data obj
@@ -261,6 +319,20 @@
         shoeTitle: "Fall Limited Edition Sneakers",
         shoePrice: "$125.00",
         imgURL: "images/image-product-1-thumbnail.jpg",
+      },
+      objOfConversionsForDesktopImgSlider: {
+        numToStr: {
+          1: "first",
+          2: "second",
+          3: "third",
+          4: "fourth",
+        },
+        strToNum: {
+          first: "1",
+          second: "2",
+          third: "3",
+          fourth: "4",
+        },
       },
       selectorObjForCartDisplay: {
         bottomCartDisplayEmpty,
@@ -1027,6 +1099,7 @@
       "value",
       ""
     );
+
     // set value of bottomCartTitleElement
     assignValueToElement(bottomCartTitleElement, "innerText", "");
     // set value of bottomCartPriceElement
@@ -1047,6 +1120,17 @@
     focusElement(cartModalCloseBtn);
   }
 
+  logOurElements(
+    arrDesktopLargeImages,
+    arrDesktopSmallImages,
+    arrLightboxLargeImages,
+    arrLightboxSmallImages,
+    lightboxPreviousImgBtn,
+    lightboxNextImgBtn
+  );
+  function logOurElements(...ourArguments) {
+    console.log(...ourArguments, "our arrays");
+  }
   /**
    * cartModalCloseBtn
    * **/
@@ -1066,6 +1150,29 @@
     // focus on cartBtn
     focusElement(cartBtn);
   }
+
+  /**
+   * desktop img modal tabbing through focusable element
+   * **/
+  addEventListener(
+    desktopImgModalLightbox,
+    "keydown",
+    tabbingThroughLighBoxModalElements
+  );
+
+  function tabbingThroughLighBoxModalElements(event) {
+    const { closeBtnLightBox, lastELementOfLightBox } = ourSelectors();
+    // call keyboardTabbingHelperFunc func passing in closeBtnLightBox and lastELementOfLightBox
+    keyboardTabbingHelperFunc(event, closeBtnLightBox, lastELementOfLightBox);
+  }
+
+  /**
+   * desktop img slider functionality
+   * **/
+
+  /**
+   * think about what we want to do before we code
+   * **/
 
   // helper func
 
