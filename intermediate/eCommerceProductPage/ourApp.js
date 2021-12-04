@@ -313,6 +313,7 @@
       // number of img for mobile slider
       //our img slider will start at aria-label=1 of 4
       positionNumFormMobileSlider: 1,
+      positionNumberFormLightboxSlider: 1,
       // valueOfQuantityDisplayInput
       valueOfQuantityDisplayInput: 0,
       autumnEdition: {
@@ -1154,6 +1155,7 @@
   /**
    * desktop img modal tabbing through focusable element
    * **/
+
   addEventListener(
     desktopImgModalLightbox,
     "keydown",
@@ -1170,11 +1172,288 @@
    * desktop img slider functionality
    * **/
 
+  function desktopImgSliderAlgorithm(event) {
+    // declare our elements at top of function
+    const { targetElement: clickedElement } = propertiesOfEventObj(event);
+    /**
+     * if user click on button with class desktop-img-display__large-img
+     * run desktopLargeImgAlgorithm
+     * add click event to desktopImgModalLightbox
+     * **/
+
+    const elementClickedIsLargeImg = elementContainClass(
+      clickedElement,
+      "desktop-img-display__large-img"
+    );
+
+    if (elementClickedIsLargeImg) {
+      //
+    }
+
+    addEventListener(
+      desktopImgModalLightbox,
+      "click",
+      lightboxImgModalAlgorithm
+    );
+
+    /**
+     * if user click on button with class desktop-img-display__small-img
+     * run desktopSmallImgAlgorithm
+     * **/
+    const elementClickedIsSmallImg = elementContainClass(
+      clickedElement,
+      "desktop-img-display__small-img"
+    );
+
+    if (elementClickedIsSmallImg) {
+      //
+    }
+  }
+
   /**
    * think about what we want to do before we code
    * **/
 
+  /**
+   * desktop img large and small img
+   * **/
+
+  //when user click on large img
+  // get aria-label of element with class active get first value which will be str "1" to "4"
+  // use "1" to find that key in our numToStr obj
+  // get the value that match key in numToStr obj
+  // add class active to modal-three
+  // loop through arr of element of lightbox large img
+  // find matching element of element in lightbox large img arr
+  // use reduce to loop through elements in arr and remove class active
+  // add element that matches aria-label to array
+  /**
+   * what if user click on same button multiple times
+   * then we might have to loop through arr of element and remove class active
+   * **/
+
+  // or use foreach without adding the element that match aria-label to an arr
+  // find matching element of element in lightbox small img arr
+  // use "first" to find the element that match aria-label="first image"
+  // set focus on that lightbox small img
+  // when user click on small img
+  // get aria-label, get first value it will be one of "first" to "fourth"
+  // use "first" key and find value that matches key in strToNum obj
+
+  /**
+   * desktop large img
+   * **/
+
+  function desktopLargeImgAlgorithm() {}
+
+  /**
+   * desktop small img
+   * **/
+
+  function desktopSmallImgAlgorithm() {}
+
+  /**
+   * lightbox algorithm
+   * we will have a property/key in our dataElement that will keep track of
+   * positionNum of lightbox large imgs
+   * **/
+
+  function lightboxImgModalAlgorithm(event) {
+    // declare our elements at top of function
+    const {
+      lightboxPreviousImgBtn,
+      lightboxNextImgBtn,
+      arrLightboxLargeImages,
+      ourDataElement,
+    } = ourSelectors();
+    const { targetElement: clickedElement } = propertiesOfEventObj(event);
+    /**
+     * if user click on button with class lightbox-img-display__small-img
+     * run lightboxSmallImgHelperFunc
+     * */
+
+    /**
+     * run previousImgBtnHelperFunc or nextImgBtnHelperFunc
+     * based on element clicked
+     * **/
+
+    // previous img arrow btn clicked
+    if (clickedElement == lightboxPreviousImgBtn) {
+      previousImgBtnHelperFunc(
+        arrLightboxLargeImages,
+        ourDataElement,
+        "positionNumberFormLightboxSlider",
+        "active"
+      );
+    }
+    // next img arrow btn clicked
+    if (clickedElement == lightboxNextImgBtn) {
+      nextImgBtnHelperFunc(
+        arrLightboxLargeImages,
+        ourDataElement,
+        "positionNumberFormLightboxSlider",
+        "active"
+      );
+    }
+  }
+
+  // when user click on close btn of lightbox
+  // get aria-label of element with active class
+  // get first value of aria-label ex it will be "1"
+  // use "1" key in numToStr obj get value ex it will be "first"
+  // use value "1" to find matching element with the same aria-label in arr of elements for desktop large imgs
+  // use value "first" to find element that match aria-label in the arr of elements for desktop small images
+  // when user click on prev or next img arrow btn
+  // find element with class active
+  // get that element aria-label
+  // get the first value of aria-label ex "1"
+  // based on that value run decrement or increment func
+  // when user click on small img(button)
+  // get that element aria-label, get first value ex it will be "first"
+  // use that value "first" as a key in our strToNum obj get the value that matches key "first"
+  // ex it will be "1"
+  // use value "1" to find matching large img in arr of large images for lightbox
+  /**
+   * what if user click on same button multiple times
+   * then we might have to loop through arr of element and remove class active
+   * **/
+  // loop through arr remove class active element
+  // add class active to element that match aria-label
+  // convert to number form
+  // use "1" update propertyNumForLightBoxImgSlider in our dataElement
+
+  /**
+   * lightbox small img helper
+   * **/
+
+  function lightboxSmallImgHelperFunc() {}
+
+  /**
+   * previous and next img arrow lightbox
+   * **/
+
+  /**
+   * to do desktopImgModalLightbox positionNumberFormLightboxSlider
+   * **/
+
+  // great effort
+
+  function arrowBtnLightboxAlgorithm(event) {}
+
   // helper func
+
+  /**
+   * func to get value using "1" or "first"
+   * **/
+
+  function getValueFromObjInDataElement(dataObj, key) {
+    const copyOfObj = { ...dataObj };
+    return copyOfObj[key];
+  }
+
+  /**
+   * helper func for previous and next img arrow btn
+   * **/
+
+  /**
+   * previous img helper func
+   * **/
+
+  function previousImgBtnHelperFunc(
+    arrOfImages,
+    dataElement,
+    positionNumFormProperty,
+    classToShowImg
+  ) {
+    // copy of array
+    const copyOfArr = [...arrOfImages];
+    // get element with class active-show-img
+    const [currentElementWithActiveClass] = getElementWithActiveImgClass(
+      copyOfArr,
+      classToShowImg
+    );
+
+    //remove class from element
+    removeClassFromElement(currentElementWithActiveClass, classToShowImg);
+    //get aria-label value
+    const ariaLabelValue = getAttrValueOfElement(
+      currentElementWithActiveClass,
+      "aria-label"
+    );
+    //first value of aria label
+    const numFormOfAriaLabelFirstValue =
+      getFirstValueOfStrAndConvertToNum(ariaLabelValue);
+    // if numFormOfAriaLabelFirstValue is 1 set positionNumFormMobileSlider to 4
+    if (numFormOfAriaLabelFirstValue == 1) {
+      updateValueOfPropertyOfDataObj(dataElement, positionNumFormProperty, 4);
+    } else {
+      // if numFormOfAriaLabelFirstValue is not 1 run decrementValueOfPropertyOfDataElement
+      decrementValueOfPropertyOfDataElement(
+        dataElement,
+        positionNumFormProperty
+      );
+    }
+    //get value of positionNumFormMobileSlider
+    const updatedValueOfPositionNumFormLightbox = String(
+      getPropertyOfDataObj(dataElement, positionNumFormProperty)
+    );
+    //use that value in algorithm to find element with matching value of aria-label
+    const [previousImgElement] = getElementThatMatchesAriaLabelForImgContainer(
+      copyOfArr,
+      `${updatedValueOfPositionNumFormLightbox} of 4`
+    );
+    //add class active-show-img to that element
+    addClassToElement(previousImgElement, classToShowImg);
+  }
+
+  /**
+   * next img helper func
+   * **/
+  function nextImgBtnHelperFunc(
+    arrOfImages,
+    dataElement,
+    positionNumFormProperty,
+    classToShowImg
+  ) {
+    // copy of array
+    const copyArray = [...arrOfImages];
+    // get element with class active-show-img
+    const [currentElementWithActiveClass] = getElementWithActiveImgClass(
+      copyArray,
+      classToShowImg
+    );
+    //remove class from element
+    removeClassFromElement(currentElementWithActiveClass, classToShowImg);
+    //get aria-label value
+    const ariaLabelValue = getAttrValueOfElement(
+      currentElementWithActiveClass,
+      "aria-label"
+    );
+    //first value of aria label
+    const firstValueOfAriaLabelNum =
+      getFirstValueOfStrAndConvertToNum(ariaLabelValue);
+    // if numFormOfAriaLabelFirstValue is 4 set positionNumFormMobileSlider to 1
+    if (firstValueOfAriaLabelNum == 4) {
+      updateValueOfPropertyOfDataObj(dataElement, positionNumFormProperty, 1);
+    } else {
+      // if numFormOfAriaLabelFirstValue is not 1 run incrementValueOfPropertyOfDataElement
+      incrementValueOfPropertyOfDataElement(
+        dataElement,
+        positionNumFormProperty
+      );
+    }
+    //get value of positionNumFormMobileSlider
+    const updatedValueOfPositionNumFormLightbox = String(
+      getPropertyOfDataObj(dataElement, positionNumFormProperty)
+    );
+    //use that value in algorithm to find element with matching value of aria-label
+    const [nextImgElement] = getElementThatMatchesAriaLabelForImgContainer(
+      copyArray,
+      `${updatedValueOfPositionNumFormLightbox} of 4`
+    );
+    //add class active-show-img to that element
+    addClassToElement(nextImgElement, classToShowImg);
+  }
 
   function bottomCartDisplayTotalCalcHelperFunc(quantity, price) {
     // take price value multiply by quantity to get total
@@ -1278,6 +1557,19 @@
 
   function mobilePreviousImgBtnAlgorithm(event) {
     const { arrOfMobileImgSliderContainers, ourDataElement } = ourSelectors();
+
+    previousImgBtnHelperFunc(
+      arrOfMobileImgSliderContainers,
+      ourDataElement,
+      "positionNumberFormLightboxSlider",
+      "active-show-img"
+    );
+
+    /**
+     * we moved code below into its own function so we could reuse it
+     * for lightboxImgSlider
+     * **/
+    /*
     // get element with class active-show-img
     const [currentElementWithActiveClass] = getElementWithActiveImgClass(
       arrOfMobileImgSliderContainers,
@@ -1314,14 +1606,14 @@
     );
     //use that value in algorithm to find element with matching value of aria-label
     const [previousImgContainerElement] =
-      getElementThatMatchesAriaLabelForMobileImgContainer(
+      getElementThatMatchesAriaLabelForImgContainer(
         arrOfMobileImgSliderContainers,
         `${updatedValueOfPositionNumFormMobileSlider} of 4`
       );
     //add class active-show-img to that element
     addClassToElement(previousImgContainerElement, "active-show-img");
     console.log("previous");
-    // console.log(arrOfMobileImgSliderContainers);
+    // console.log(arrOfMobileImgSliderContainers);*/
   }
 
   /**
@@ -1331,6 +1623,18 @@
   function mobileNextImgBtnAlgorithm(event) {
     console.log("next");
     const { arrOfMobileImgSliderContainers, ourDataElement } = ourSelectors();
+    nextImgBtnHelperFunc(
+      arrOfMobileImgSliderContainers,
+      ourDataElement,
+      "positionNumberFormLightboxSlider",
+      "active-show-img"
+    );
+
+    /**
+     * we moved code below into its own function so we could reuse it
+     * for lightboxImgSlider
+     * **/
+    /*
     // get element with class active-show-img
     const [currentElementWithActiveClass] = getElementWithActiveImgClass(
       arrOfMobileImgSliderContainers,
@@ -1366,12 +1670,12 @@
     );
     //use that value in algorithm to find element with matching value of aria-label
     const [nextImgContainerElement] =
-      getElementThatMatchesAriaLabelForMobileImgContainer(
+      getElementThatMatchesAriaLabelForImgContainer(
         arrOfMobileImgSliderContainers,
         `${updatedValueOfPositionNumFormMobileSlider} of 4`
       );
     //add class active-show-img to that element
-    addClassToElement(nextImgContainerElement, "active-show-img");
+    addClassToElement(nextImgContainerElement, "active-show-img");*/
   }
 
   /**
@@ -1444,6 +1748,18 @@
   }
 
   /**
+   * get first value of string for aria label
+   * "1 of 4"
+   * or
+   * "first image"
+   * **/
+
+  function getValueAtZeroIndexOfStr(strValue) {
+    const [firstValue] = strValue.split(" ")[0];
+    return firstValue;
+  }
+
+  /**
    * get element with active class
    * **/
   // this func will return an array with one value/element in it
@@ -1489,10 +1805,7 @@
    * get element that matches aria label for mobile img container
    * **/
 
-  function getElementThatMatchesAriaLabelForMobileImgContainer(
-    arrInput,
-    strInput
-  ) {
+  function getElementThatMatchesAriaLabelForImgContainer(arrInput, strInput) {
     return arrInput.filter(function findElementMatchesAriaLabel(eachElement) {
       return eachElement.attributes["aria-label"].value == strInput;
     });
