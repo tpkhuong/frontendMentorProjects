@@ -895,13 +895,6 @@ arrow btn looks more centered adding padding-inline
   }
 }
 
-.active-show-img {
-  display: revert;
-  /* might not need display: grid */
-  /* grid-column: 1 / 2;
-  grid-row: 1 /2; */
-}
-
 /* desktop image container */
 
 /* not show for mobile display */
@@ -1218,7 +1211,12 @@ arrow btn looks more centered adding padding-inline
 .trash-btn img,
 .close-cart-modal-btn svg,
 .cart-avatar-img-wrapper,
-[class="light-box-close-btn"] svg {
+[class="light-box-close-btn"] svg,
+.lightbox-arrow-container svg,
+.mobile-img-display-controller-container span,
+.mobile-img-display-controller-container img,
+.desktop-img-display__small-img-container img,
+.lightbox-img-display__small-img-container img {
   pointer-events: none;
 }
 
@@ -1304,4 +1302,11 @@ arrow btn looks more centered adding padding-inline
 
 .active {
   display: revert;
+}
+
+.active-show-img {
+  display: revert;
+  /* might not need display: grid */
+  /* grid-column: 1 / 2;
+  grid-row: 1 /2; */
 }
