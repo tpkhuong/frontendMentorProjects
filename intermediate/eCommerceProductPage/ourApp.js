@@ -33,6 +33,7 @@
     bottomCartQuantityElement,
     bottomCartPriceTotalElement,
     trashBtn,
+    desktopImgDisplayContainer,
     desktopImgModalLightbox,
     closeBtnLightBox,
     lastELementOfLightBox,
@@ -102,6 +103,14 @@
       cartBtn,
       "mouseenter",
       mouseenterCartBtnDesktopSizeFunctionality
+    );
+    /**
+     * add click event to container element of desktop large and small images
+     * **/
+    addEventListener(
+      desktopImgDisplayContainer,
+      "click",
+      desktopImgSliderAlgorithm
     );
   }
   // console.log(openMobileMenuBtn);
@@ -204,6 +213,10 @@
 
     // bottom cart display trash btn
     const trashBtn = document.querySelector(".trash-btn");
+    // desktop img display container for large and small images
+    const desktopImgDisplayContainer = document.querySelector(
+      ".desktop-img-display"
+    );
     // desktop img modal (lightbox)
     const desktopImgModalLightbox =
       document.querySelector("[id='modal-three']");
@@ -287,6 +300,7 @@
       bottomCartQuantityElement,
       bottomCartPriceTotalElement,
       trashBtn,
+      desktopImgDisplayContainer,
       desktopImgModalLightbox,
       closeBtnLightBox,
       lastELementOfLightBox,
@@ -1121,6 +1135,9 @@
     focusElement(cartModalCloseBtn);
   }
 
+  /** 
+   * when we want to log our elements
+
   logOurElements(
     arrDesktopLargeImages,
     arrDesktopSmallImages,
@@ -1132,6 +1149,8 @@
   function logOurElements(...ourArguments) {
     console.log(...ourArguments, "our arrays");
   }
+
+  **/
   /**
    * cartModalCloseBtn
    * **/
@@ -1180,14 +1199,14 @@
      * run desktopLargeImgAlgorithm
      * add click event to desktopImgModalLightbox
      * **/
-
+    console.log(clickedElement);
     const elementClickedIsLargeImg = elementContainClass(
       clickedElement,
       "desktop-img-display__large-img"
     );
-
+    alert("start here");
     if (elementClickedIsLargeImg) {
-      //
+      //run desktopLargeImgAlgorithm
     }
 
     addEventListener(
@@ -1206,7 +1225,7 @@
     );
 
     if (elementClickedIsSmallImg) {
-      //
+      //run desktopSmallImgAlgorithm
     }
   }
 
