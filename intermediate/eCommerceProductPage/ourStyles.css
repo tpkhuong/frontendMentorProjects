@@ -1214,6 +1214,7 @@ arrow btn looks more centered adding padding-inline
 [class="light-box-close-btn"] svg,
 .lightbox-arrow-container svg,
 .mobile-img-display-controller-container span,
+.desktop-img-display__large-img-container img,
 .mobile-img-display-controller-container img,
 .desktop-img-display__small-img-container img,
 .lightbox-img-display__small-img-container img {
