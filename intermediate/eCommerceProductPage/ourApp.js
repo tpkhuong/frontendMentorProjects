@@ -1199,21 +1199,25 @@
      * run desktopLargeImgAlgorithm
      * add click event to desktopImgModalLightbox
      * **/
-    console.log(clickedElement);
     const elementClickedIsLargeImg = elementContainClass(
       clickedElement,
       "desktop-img-display__large-img"
     );
-    alert("start here");
-    if (elementClickedIsLargeImg) {
-      //run desktopLargeImgAlgorithm
-    }
 
-    addEventListener(
-      desktopImgModalLightbox,
-      "click",
-      lightboxImgModalAlgorithm
-    );
+    if (elementClickedIsLargeImg) {
+      addEventListener(
+        desktopImgModalLightbox,
+        "click",
+        lightboxImgModalAlgorithm
+      );
+      //run desktopLargeImgAlgorithm
+      desktopLargeImgAlgorithm(event);
+
+      /**
+       * use return to break out of this func if user click
+       * on large img because we dont want to run code below
+       * **/
+    }
 
     /**
      * if user click on button with class desktop-img-display__small-img
@@ -1263,13 +1267,64 @@
    * desktop large img
    * **/
 
-  function desktopLargeImgAlgorithm() {}
+  function desktopLargeImgAlgorithm(event) {
+    const { arrLightboxLargeImages, arrLightboxSmallImages, ourDataElement } =
+      ourSelectors();
+    const { targetElement: clickedElement } = propertiesOfEventObj(event);
+    // destructuring
+    const {
+      dataElement: {
+        objOfConversionsForDesktopImgSlider: { numToStr },
+      },
+    } = ourDataElement;
+    // the element we clicked will be the button element with active
+    // we dont need to check for active class on element
+    // we will get aria label of eleemnt click
+    const ariaLabelStrFormOfClickedElement = getAttrValueOfElement(
+      clickedElement,
+      "aria-label"
+    );
+    // get first value of aria label ex this will be "1"
+    const numOneToFourOfAriaLabelStrForm = getValueAtZeroIndexOfStr(
+      ariaLabelStrFormOfClickedElement
+    );
+    // find matching element with img in lightbox large img arr ex "1 of 4"
+    const [matchingImgElementInLightboxLargeArr] =
+      getElementThatMatchesAriaLabelForImgContainer(
+        arrLightboxLargeImages,
+        `${numOneToFourOfAriaLabelStrForm} of 4`
+      );
+    // arr of element that does not match matchingImgElementInLightboxLargeArr
+    const arrNotMatchingAriaLabel =
+      arrOfElementNotMatchingArialabelUsingFilterMethod(
+        arrLightboxLargeImages,
+        matchingImgElementInLightboxLargeArr
+      );
+    // using algorithm below
+    /**
+     * using reduce we will loop though an array return an array with two subarrays
+     * one subarray will have element that match aria-label
+     * one subarray will have elements that does not match aria-label
+     * **/
+    const arrayWithSubarrays =
+      arrWithTwoSubarraysOneMatchingElementThreeNotMatching(
+        arrLightboxLargeImages,
+        `${numOneToFourOfAriaLabelStrForm} of 4`
+      );
+    console.log(arrayWithSubarrays);
+    // get string "first" to "fourth" using "1" to "4"
+    const strIsEitherFirstToFourth = getValueFromObjInDataElement(
+      numToStr,
+      numOneToFourOfAriaLabelStrForm
+    );
+    // use strIsEitherFirstToFourth to find element in lightbox small img arr
+  }
 
   /**
    * desktop small img
    * **/
 
-  function desktopSmallImgAlgorithm() {}
+  function desktopSmallImgAlgorithm(event) {}
 
   /**
    * lightbox algorithm
@@ -1368,6 +1423,53 @@
   function getValueFromObjInDataElement(dataObj, key) {
     const copyOfObj = { ...dataObj };
     return copyOfObj[key];
+  }
+
+  /**
+   * func will loop through arr return an array with elements that does not match
+   * element with aria-label lightbox large img
+   * using filter
+   * **/
+
+  function arrOfElementNotMatchingArialabelUsingFilterMethod(
+    arrInput,
+    element
+  ) {
+    const copyArr = [...arrInput];
+    return copyArr.filter(function findElementThatDoesNotMatch(eachElement) {
+      return eachElement !== element;
+    });
+  }
+  /**
+   * func will loop through arr return an array with elements that does not match
+   * element with aria-label lightbox large img
+   * using reduce
+   * **/
+
+  function arrWithTwoSubarraysOneMatchingElementThreeNotMatching(
+    arrInput,
+    ariaLabelStr
+  ) {
+    // const copyOfArray = [].concat(arrInput);
+    const copyOfArray = [...arrInput];
+    return copyOfArray.reduce(
+      function findMatchingElementAndNotMatchingElements(
+        buildingUp,
+        currentElement
+      ) {
+        const [elementMatchesAriaLabel, arrofElementNotMatchigAriaLabel] =
+          buildingUp;
+        // const strOfAriaLabel = currentElement.attributes["aria-label"].value
+        const strOfAriaLabel = currentElement.getAttribute("aria-label");
+        if (strOfAriaLabel == ariaLabelStr) {
+          elementMatchesAriaLabel.push(currentElement);
+        } else {
+          arrofElementNotMatchigAriaLabel.push(currentElement);
+        }
+        return buildingUp;
+      },
+      [[], []]
+    );
   }
 
   /**
