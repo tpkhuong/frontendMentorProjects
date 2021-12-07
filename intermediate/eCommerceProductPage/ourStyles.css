@@ -24,6 +24,11 @@
   --font-family-kumbh: "Kumbh Sans", sans-serif;
 }
 
+/* 
+put opacity on the backgroung-color: hsla()
+not on the element
+*/
+
 /* margin collapse: when one of the element is block and the other element is inline-block
 bottom margin on block and top margin on inline-block will not collapse. interesting
 */
@@ -1244,10 +1249,6 @@ arrow btn looks more centered adding padding-inline
   box-shadow: var(--box-shadow);
 }
 
-.add-flex-display {
-  display: flex;
-}
-
 /* product details section desktop layout */
 
 @media screen and (min-width: 70rem) {
@@ -1303,6 +1304,10 @@ arrow btn looks more centered adding padding-inline
 
 .active {
   display: revert;
+}
+
+.add-flex-display {
+  display: flex;
 }
 
 .active-show-img {
