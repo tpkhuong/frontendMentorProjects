@@ -1193,6 +1193,7 @@
 
   function desktopImgSliderAlgorithm(event) {
     // declare our elements at top of function
+    const { desktopImgModalLightbox } = ourSelectors();
     const { targetElement: clickedElement } = propertiesOfEventObj(event);
     /**
      * if user click on button with class desktop-img-display__large-img
@@ -1211,12 +1212,16 @@
         lightboxImgModalAlgorithm
       );
       //run desktopLargeImgAlgorithm
-      desktopLargeImgAlgorithm(event);
-
+      const { focusElementOfSmallImgsArr } = desktopLargeImgAlgorithm(event);
+      // add class add-flex-display to modal-three element
+      addClassToElement(desktopImgModalLightbox, "add-flex-display");
+      // focus on element that match "first image" to "fourth image" of arr of lightbox small img
+      focusElement(focusElementOfSmallImgsArr);
       /**
        * use return to break out of this func if user click
        * on large img because we dont want to run code below
        * **/
+      return;
     }
 
     /**
@@ -1230,6 +1235,7 @@
 
     if (elementClickedIsSmallImg) {
       //run desktopSmallImgAlgorithm
+      desktopSmallImgAlgorithm(event);
     }
   }
 
@@ -1288,43 +1294,116 @@
     const numOneToFourOfAriaLabelStrForm = getValueAtZeroIndexOfStr(
       ariaLabelStrFormOfClickedElement
     );
+    /**
     // find matching element with img in lightbox large img arr ex "1 of 4"
     const [matchingImgElementInLightboxLargeArr] =
       getElementThatMatchesAriaLabelForImgContainer(
         arrLightboxLargeImages,
         `${numOneToFourOfAriaLabelStrForm} of 4`
       );
+    
     // arr of element that does not match matchingImgElementInLightboxLargeArr
     const arrNotMatchingAriaLabel =
       arrOfElementNotMatchingArialabelUsingFilterMethod(
         arrLightboxLargeImages,
         matchingImgElementInLightboxLargeArr
       );
+      **/
+
     // using algorithm below
     /**
      * using reduce we will loop though an array return an array with two subarrays
      * one subarray will have element that match aria-label
      * one subarray will have elements that does not match aria-label
+     const [[matchingImgElementInLightboxLargeArr], arrNotMatchingAriaLabel] =
+       arrWithTwoSubarraysOneMatchingElementThreeNotMatching(
+         arrLightboxLargeImages,
+         `${numOneToFourOfAriaLabelStrForm} of 4`
+       );
      * **/
-    const arrayWithSubarrays =
-      arrWithTwoSubarraysOneMatchingElementThreeNotMatching(
+    /**
+     * console.log(matchingImgElementInLightboxLargeArr);
+     * console.log(arrNotMatchingAriaLabel);
+     **/
+    /**
+     * different approach, we will remove class from all element in lightbox large img array
+     * then we will find the element in the lightbox large img array that matches
+     * the large img in the desktop large img array
+     * add class active-show-img to that element
+     * **/
+    // matching element in lightbox large img array
+    const [matchingImgElementInLightboxLargeArr] =
+      getElementThatMatchesAriaLabelForImgContainer(
         arrLightboxLargeImages,
         `${numOneToFourOfAriaLabelStrForm} of 4`
       );
-    console.log(arrayWithSubarrays);
+    // run func that will loop through array and remove class active-show-img to all element
+    loopThroughArrRemovingClass(arrLightboxLargeImages);
+    // add clas active-show-img to large img in lightbox large img array that matches aria-label
+    addClassToElement(matchingImgElementInLightboxLargeArr, "active-show-img");
     // get string "first" to "fourth" using "1" to "4"
     const strIsEitherFirstToFourth = getValueFromObjInDataElement(
       numToStr,
       numOneToFourOfAriaLabelStrForm
     );
     // use strIsEitherFirstToFourth to find element in lightbox small img arr
+    const [focusElementOfSmallImgsArr] =
+      getElementThatMatchesAriaLabelForImgContainer(
+        arrLightboxSmallImages,
+        `${strIsEitherFirstToFourth} image`
+      );
+    // return an obj with the element that matches ex "first image" in lightbox small img array
+    // we will apply .focus() to that element in the desktopImgSliderAlgorithm func
+    // when user click on large img
+    return {
+      focusElementOfSmallImgsArr,
+    };
   }
 
   /**
    * desktop small img
    * **/
 
-  function desktopSmallImgAlgorithm(event) {}
+  function desktopSmallImgAlgorithm(event) {
+    // declare element at top of func
+    const { ourDataElement, arrDesktopLargeImages } = ourSelectors();
+    // destructure ourDataElement
+    const {
+      dataElement: {
+        objOfConversionsForDesktopImgSlider: { strToNum },
+      },
+    } = ourDataElement;
+    const { targetElement: clickedBtn } = propertiesOfEventObj(event);
+    // get aria label value of element clicked
+    const ariaLabelStrFormOfClickedElement = getAttrValueOfElement(
+      clickedBtn,
+      "aria-label"
+    );
+    // get the first value it should be "first" to "fourth"
+    const numOneToFourOfAriaLabelStrForm = getValueAtZeroIndexOfStr(
+      ariaLabelStrFormOfClickedElement
+    );
+
+    // use that value as a key to get value of obj strToNum
+    // using "first" to "fourth" we should return "1" to "4"
+    // get first value of aria label ex this will be "1"
+    const numInStrFormWillEitherBeOneToFour = getValueFromObjInDataElement(
+      strToNum,
+      numOneToFourOfAriaLabelStrForm
+    );
+    // use numInStrFormWillEitherBeOneToFour to find element in desktop large img array
+    // that matches aria-label "1 of 4" etc
+    const [addClassActiveImgToELement] =
+      getElementThatMatchesAriaLabelForImgContainer(
+        arrDesktopLargeImages,
+        `${numInStrFormWillEitherBeOneToFour} of 4`
+      );
+    // use loopThroughArrRemovingClass to remove class active-show-img from element
+    // in desktop large img array
+    loopThroughArrRemovingClass(arrDesktopLargeImages);
+    // add class active-show-img to addClassActiveImgToELement
+    addClassToElement(addClassActiveImgToELement, "active-show-img");
+  }
 
   /**
    * lightbox algorithm
@@ -1353,21 +1432,39 @@
 
     // previous img arrow btn clicked
     if (clickedElement == lightboxPreviousImgBtn) {
-      previousImgBtnHelperFunc(
-        arrLightboxLargeImages,
-        ourDataElement,
-        "positionNumberFormLightboxSlider",
-        "active"
-      );
+      const { updatedValueOfPositionNumFormLightbox: valueIsEiterOneToFour } =
+        previousImgBtnHelperFunc(
+          arrLightboxLargeImages,
+          ourDataElement,
+          "positionNumberFormLightboxSlider",
+          "active-show-img"
+        );
+      focusLightBoxSmallImgFunc(valueIsEiterOneToFour, ourDataElement);
     }
     // next img arrow btn clicked
     if (clickedElement == lightboxNextImgBtn) {
-      nextImgBtnHelperFunc(
-        arrLightboxLargeImages,
-        ourDataElement,
-        "positionNumberFormLightboxSlider",
-        "active"
-      );
+      const { updatedValueOfPositionNumFormLightbox: valueIsEiterOneToFour } =
+        nextImgBtnHelperFunc(
+          arrLightboxLargeImages,
+          ourDataElement,
+          "positionNumberFormLightboxSlider",
+          "active-show-img"
+        );
+      focusLightBoxSmallImgFunc(valueIsEiterOneToFour, ourDataElement);
+    }
+
+    /**
+     * if user click on button with class lightbox-img-display__small-img
+     * run lightboxSmallImgHelperFunc
+     * **/
+
+    const elementClickedIsLightboxSmallImg = elementContainClass(
+      clickedElement,
+      "lightbox-img-display__small-img"
+    );
+    if (elementClickedIsLightboxSmallImg) {
+      // run lightboxSmallImgHelperFunc
+      lightboxSmallImgHelperFunc(event);
     }
   }
 
@@ -1400,7 +1497,7 @@
    * lightbox small img helper
    * **/
 
-  function lightboxSmallImgHelperFunc() {}
+  function lightboxSmallImgHelperFunc(event) {}
 
   /**
    * previous and next img arrow lightbox
@@ -1415,6 +1512,18 @@
   function arrowBtnLightboxAlgorithm(event) {}
 
   // helper func
+
+  /**
+   * loop through array removing class
+   * **/
+
+  function loopThroughArrRemovingClass(arrInput) {
+    const copyOfArray = [...arrInput];
+
+    copyOfArray.forEach(function removeClassFromEachElement(eachElement) {
+      removeClassFromElement(eachElement, "active-show-img");
+    });
+  }
 
   /**
    * func to get value using "1" or "first"
@@ -1501,6 +1610,7 @@
       currentElementWithActiveClass,
       "aria-label"
     );
+    debugger;
     //first value of aria label
     const numFormOfAriaLabelFirstValue =
       getFirstValueOfStrAndConvertToNum(ariaLabelValue);
@@ -1525,6 +1635,12 @@
     );
     //add class active-show-img to that element
     addClassToElement(previousImgElement, classToShowImg);
+    // return the value of "1" to "4" in an obj
+    // pass that value to a func
+    // use that value as a key in numToStr to get value of
+    // either "first" to "fourth"
+
+    return { updatedValueOfPositionNumFormLightbox };
   }
 
   /**
@@ -1574,6 +1690,11 @@
     );
     //add class active-show-img to that element
     addClassToElement(nextImgElement, classToShowImg);
+    // return the value of "1" to "4" in an obj
+    // pass that value to a func
+    // use that value as a key in numToStr to get value of
+    // either "first" to "fourth"
+    return { updatedValueOfPositionNumFormLightbox };
   }
 
   function bottomCartDisplayTotalCalcHelperFunc(quantity, price) {
@@ -1582,6 +1703,37 @@
     return {
       totalValue,
     };
+  }
+
+  /**
+   * focus on small img element of lightbox
+   * **/
+
+  function focusLightBoxSmallImgFunc(
+    keyUsedToFindValueInNumToStrObj,
+    {
+      dataElement: {
+        objOfConversionsForDesktopImgSlider: { numToStr },
+      },
+    }
+  ) {
+    // declare element at top of function
+    const { arrLightboxSmallImages } = ourSelectors();
+    // use keyUsedToFindValueInNumToStrObj as key to find value in numToStr obj
+    const valueIsEitherFirstToFourth = getValueFromObjInDataElement(
+      numToStr,
+      keyUsedToFindValueInNumToStrObj
+    );
+    // we will get either "first" to "fourth"
+    // use that value as a string(aria-label) in func that will look for
+    // element in lightbox small img array that match that string
+    const [smallImgOfLightboxToFocusWhenPrevOrNextImgBtnClicked] =
+      getElementThatMatchesAriaLabelForImgContainer(
+        arrLightboxSmallImages,
+        `${valueIsEitherFirstToFourth} image`
+      );
+    // focus element
+    focusElement(smallImgOfLightboxToFocusWhenPrevOrNextImgBtnClicked);
   }
 
   /**
@@ -1876,7 +2028,7 @@
    * **/
 
   function getValueAtZeroIndexOfStr(strValue) {
-    const [firstValue] = strValue.split(" ")[0];
+    const [firstValue] = strValue.split(" ");
     return firstValue;
   }
 
@@ -2081,3 +2233,6 @@
     return lastItemOfArr;
   }
 })();
+console.log(
+  "remove active class on large img element of lightbox in html file"
+);
