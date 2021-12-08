@@ -598,6 +598,9 @@ the mobile-modal element will be on top / above the faded-bg-element
     position: relative;
   }
 
+  /* the width of the ::after is 3.6334px wider than the .navlink 
+  use calc() func
+  */
   [id="desktop-navigation"] .navlink::after {
     content: "";
     position: absolute;
@@ -607,11 +610,10 @@ the mobile-modal element will be on top / above the faded-bg-element
     background-color: var(--col-primary-orange);
     top: 63px;
   }
-
   [id="desktop-navigation"] li:hover .navlink::after {
     display: block;
   }
-
+  /* working on animation of opacity */
   [id="desktop-navigation"] li:hover .navlink,
   [id="desktop-navigation"] li:focus .navlink {
     color: var(--col-neutral-vark-blue);
