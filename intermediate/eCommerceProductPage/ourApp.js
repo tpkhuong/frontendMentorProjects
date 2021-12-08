@@ -1193,7 +1193,8 @@
 
   function desktopImgSliderAlgorithm(event) {
     // declare our elements at top of function
-    const { desktopImgModalLightbox } = ourSelectors();
+    const { desktopImgModalLightbox, ourDataElement, arrDesktopLargeImages } =
+      ourSelectors();
     const { targetElement: clickedElement } = propertiesOfEventObj(event);
     /**
      * if user click on button with class desktop-img-display__large-img
@@ -1235,7 +1236,7 @@
 
     if (elementClickedIsSmallImg) {
       //run desktopSmallImgAlgorithm
-      desktopSmallImgAlgorithm(event);
+      desktopSmallImgAlgorithm(event, arrDesktopLargeImages, ourDataElement);
     }
   }
 
@@ -1364,7 +1365,17 @@
    * desktop small img
    * **/
 
-  function desktopSmallImgAlgorithm(event) {
+  function desktopSmallImgAlgorithm(event, arrInput, dataElement) {
+    // copy our objects/arrays
+    const copiedArray = [...arrInput];
+    const copiedObj = Object.assign({}, dataElement);
+    // const copiedObj = { ...dataElement };
+    smallImgClickedHelperFunc(event, copiedArray, copiedObj);
+    /**
+     * moved algorithm below in to smallImgClickedHelperFunc
+     * to be used with both desktop img slider and lightbox img modal
+     * **/
+    /*
     // declare element at top of func
     const { ourDataElement, arrDesktopLargeImages } = ourSelectors();
     // destructure ourDataElement
@@ -1397,12 +1408,30 @@
       getElementThatMatchesAriaLabelForImgContainer(
         arrDesktopLargeImages,
         `${numInStrFormWillEitherBeOneToFour} of 4`
-      );
+      );*/
+    // we also want to update the value of our property
+    // positionNumberFormLightboxSlider in our data eleement obj
+    // so our previous and next img btn algorithm will work
     // use loopThroughArrRemovingClass to remove class active-show-img from element
     // in desktop large img array
+    /**
+     * update positionNumberFormLightboxSlider in dataELement obj
+     * passing in a number form of numInStrFormWillEitherBeOneToFour
+     * into updateValueOfPropertyOfDataObj
+     * **/
+    /*updateValueOfPropertyOfDataObj(
+      ourDataElement,
+      "positionNumberFormLightboxSlider",
+      Number(numInStrFormWillEitherBeOneToFour)
+    );
     loopThroughArrRemovingClass(arrDesktopLargeImages);
     // add class active-show-img to addClassActiveImgToELement
-    addClassToElement(addClassActiveImgToELement, "active-show-img");
+    addClassToElement(addClassActiveImgToELement, "active-show-img");*/
+
+    /**
+     * moved algorithm below in to smallImgClickedHelperFunc
+     * to be used with both desktop img slider and lightbox img modal
+     * **/
   }
 
   /**
@@ -1416,7 +1445,10 @@
     const {
       lightboxPreviousImgBtn,
       lightboxNextImgBtn,
+      arrDesktopLargeImages,
+      arrDesktopSmallImages,
       arrLightboxLargeImages,
+      closeBtnLightBox,
       ourDataElement,
     } = ourSelectors();
     const { targetElement: clickedElement } = propertiesOfEventObj(event);
@@ -1439,7 +1471,9 @@
           "positionNumberFormLightboxSlider",
           "active-show-img"
         );
+      // focus on the matching small img of lightbox small img array
       focusLightBoxSmallImgFunc(valueIsEiterOneToFour, ourDataElement);
+      return;
     }
     // next img arrow btn clicked
     if (clickedElement == lightboxNextImgBtn) {
@@ -1450,7 +1484,9 @@
           "positionNumberFormLightboxSlider",
           "active-show-img"
         );
+      // focus on the matching small img of lightbox small img array
       focusLightBoxSmallImgFunc(valueIsEiterOneToFour, ourDataElement);
+      return;
     }
 
     /**
@@ -1464,7 +1500,14 @@
     );
     if (elementClickedIsLightboxSmallImg) {
       // run lightboxSmallImgHelperFunc
-      lightboxSmallImgHelperFunc(event);
+      lightboxSmallImgHelperFunc(event, arrLightboxLargeImages, ourDataElement);
+      return;
+    }
+    /**
+     * user clicked on close btn of lightbox modal
+     * **/
+    if (clickedElement == closeBtnLightBox) {
+      // run closeBtnLightboxModalAlgorithm
     }
   }
 
@@ -1497,7 +1540,25 @@
    * lightbox small img helper
    * **/
 
-  function lightboxSmallImgHelperFunc(event) {}
+  function lightboxSmallImgHelperFunc(event, arrValue, dataObj) {
+    // copy our objects/arrays
+    const copiedArray = [...arrValue];
+    // const copiedObj = Object.assign({}, dataObj)
+    const copiedObj = { ...dataObj };
+    smallImgClickedHelperFunc(event, copiedArray, copiedObj);
+    // declare our element top of function
+    // get aria label of element clicked should be "first" to "fourth"
+    // use that value as a key to get a value in the obj strToNum
+    // the func we will use will return "1" to "4"
+    // we also want to update the value of our property
+    // positionNumberFormLightboxSlider in our data eleement obj
+    // so our previous and next img btn algorithm will work
+    // run getElementThatMatchesAriaLabelForImgContainer passing in arrLightboxLargeImages
+    // and string "1 of 4" to get element of lightbox large img array to add class
+    // before we add class to element of lightbox large img array we want to remove class
+    // active-show-img to all elements in lightbox large img array
+    // active-show-img
+  }
 
   /**
    * previous and next img arrow lightbox
@@ -1508,10 +1569,104 @@
    * **/
 
   // great effort
+  // function arrowBtnLightboxAlgorithm(event) {}
 
-  function arrowBtnLightboxAlgorithm(event) {}
+  /**
+   * close btn lightbox modal algorithm
+   * **/
+
+  function closeBtnLightboxModalAlgorithm(event, dataObj, ...arrayOfImages) {
+    // copy our obj and arrays
+    const copyOfObj = { ...dataObj };
+    const [lightboxLargeImg, desktopLargeImg, desktopSmallImg] = [
+      ...arrayOfImages,
+    ];
+    // loop through arr of large img lightbox
+    // find element that has class active-show-img
+    const [elementWithActiveShowImg] = getElementWithActiveImgClass(
+      lightboxLargeImg,
+      "active-show-img"
+    );
+    // get that element aria-label
+    const ariaLabelOfElementWithActiveShowImg = getAttrValueOfElement(
+      elementWithActiveShowImg,
+      "aria-label"
+    );
+    // get value at index 0 after using split method on aria-label
+    // will be either "1" to "4"
+    // use value as key to get value from numToStr obj in our dataobj
+    // value will be either "first" to "fourth"
+    // loop through arr of large desktop img find element that match aria-label ex: "1 of 4"
+    // loop through arr of small desktop img find element that match aria-label ex: "first image"
+    // remove class add-flex-display to lightbox modal element
+    // run func that will loop through large desktop img arr and remove class active-show-img
+    // add class active-show-img to elemeht that match aria-label ex: "1 of 4"
+    // call .focus() on element that match aria-label ex: "first image"
+  }
 
   // helper func
+
+  /**
+   * make a func that will handle the conditions when user click on small images in both
+   * desktop img slider and lightbox modal img
+   * **/
+
+  function smallImgClickedHelperFunc(event, arrInput, dataElementObj) {
+    // copy of array passed in
+    const copyOfArray = [...arrInput];
+    const copyOfObj = { ...dataElementObj };
+    // declare element at top of func
+    // const { copyOfObj } = ourSelectors();
+    // destructure copyOfObj
+    const {
+      dataElement: {
+        objOfConversionsForDesktopImgSlider: { strToNum },
+      },
+    } = copyOfObj;
+    const { targetElement: clickedBtn } = propertiesOfEventObj(event);
+    // get aria label value of element clicked
+    const ariaLabelStrFormOfClickedElement = getAttrValueOfElement(
+      clickedBtn,
+      "aria-label"
+    );
+    // get the first value it should be "first" to "fourth"
+    const numOneToFourOfAriaLabelStrForm = getValueAtZeroIndexOfStr(
+      ariaLabelStrFormOfClickedElement
+    );
+
+    // use that value as a key to get value of obj strToNum
+    // using "first" to "fourth" we should return "1" to "4"
+    // get first value of aria label ex this will be "1"
+    const numInStrFormWillEitherBeOneToFour = getValueFromObjInDataElement(
+      strToNum,
+      numOneToFourOfAriaLabelStrForm
+    );
+    // use numInStrFormWillEitherBeOneToFour to find element in desktop large img array
+    // that matches aria-label "1 of 4" etc
+    const [addClassActiveImgToELement] =
+      getElementThatMatchesAriaLabelForImgContainer(
+        copyOfArray,
+        `${numInStrFormWillEitherBeOneToFour} of 4`
+      );
+    // we also want to update the value of our property
+    // positionNumberFormLightboxSlider in our data eleement obj
+    // so our previous and next img btn algorithm will work
+    // use loopThroughArrRemovingClass to remove class active-show-img from element
+    // in desktop large img array
+    /**
+     * update positionNumberFormLightboxSlider in dataELement obj
+     * passing in a number form of numInStrFormWillEitherBeOneToFour
+     * into updateValueOfPropertyOfDataObj
+     * **/
+    updateValueOfPropertyOfDataObj(
+      copyOfObj,
+      "positionNumberFormLightboxSlider",
+      Number(numInStrFormWillEitherBeOneToFour)
+    );
+    loopThroughArrRemovingClass(copyOfArray);
+    // add class active-show-img to addClassActiveImgToELement
+    addClassToElement(addClassActiveImgToELement, "active-show-img");
+  }
 
   /**
    * loop through array removing class
@@ -1610,7 +1765,6 @@
       currentElementWithActiveClass,
       "aria-label"
     );
-    debugger;
     //first value of aria label
     const numFormOfAriaLabelFirstValue =
       getFirstValueOfStrAndConvertToNum(ariaLabelValue);
