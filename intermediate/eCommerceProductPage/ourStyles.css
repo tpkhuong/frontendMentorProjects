@@ -600,6 +600,9 @@ the mobile-modal element will be on top / above the faded-bg-element
 
   /* the width of the ::after is 3.6334px wider than the .navlink 
   use calc() func
+  instead of using display none and block
+  we can test out opacity, display block and using transition
+  add animation
   */
   [id="desktop-navigation"] .navlink::after {
     content: "";
