@@ -86,6 +86,15 @@
   /**
    * run at mobile size
    * **/
+  window.addEventListener("resize", (event) => {
+    // use setTimeout, have the clearTimeout variable in our dataElement
+    if (window.innerWidth < 415) {
+      ourDataElement.dataElement.windowSizeIsLessThanMobileSize = true;
+    }
+    if (ourDataElement.dataElement.windowSizeIsLessThanMobileSize) {
+      console.log();
+    }
+  });
   if (window.innerWidth < 415) {
     addEventListener(mobileArrowBtnContainer, "click", mobileLayoutImgSlider);
     addEventListener(
@@ -318,6 +327,7 @@
   function declareOurDataObj(element) {
     element.dataElement = {
       cartIconQuantity: 0,
+      windowSizeIsLessThanMobileSize: false,
       // when we click on hamburger btn
       //look to see if cart modal has class "active"
       cartModalShown: null,
@@ -1443,6 +1453,7 @@
   function lightboxImgModalAlgorithm(event) {
     // declare our elements at top of function
     const {
+      desktopImgModalLightbox,
       lightboxPreviousImgBtn,
       lightboxNextImgBtn,
       arrDesktopLargeImages,
@@ -1508,6 +1519,14 @@
      * **/
     if (clickedElement == closeBtnLightBox) {
       // run closeBtnLightboxModalAlgorithm
+      closeBtnLightboxModalAlgorithm(
+        event,
+        ourDataElement,
+        desktopImgModalLightbox,
+        arrLightboxLargeImages,
+        arrDesktopLargeImages,
+        arrDesktopSmallImages
+      );
     }
   }
 
@@ -1575,12 +1594,24 @@
    * close btn lightbox modal algorithm
    * **/
 
-  function closeBtnLightboxModalAlgorithm(event, dataObj, ...arrayOfImages) {
+  function closeBtnLightboxModalAlgorithm(
+    event,
+    dataObj,
+    ...arrayOfImagesAndElement
+  ) {
     // copy our obj and arrays
     const copyOfObj = { ...dataObj };
-    const [lightboxLargeImg, desktopLargeImg, desktopSmallImg] = [
-      ...arrayOfImages,
-    ];
+    const [
+      desktopModalThree,
+      lightboxLargeImg,
+      desktopLargeImg,
+      desktopSmallImg,
+    ] = [...arrayOfImagesAndElement];
+    const {
+      dataElement: {
+        objOfConversionsForDesktopImgSlider: { numToStr },
+      },
+    } = copyOfObj;
     // loop through arr of large img lightbox
     // find element that has class active-show-img
     const [elementWithActiveShowImg] = getElementWithActiveImgClass(
@@ -1594,15 +1625,48 @@
     );
     // get value at index 0 after using split method on aria-label
     // will be either "1" to "4"
+    const useValueInFuncToGetValueInObjNumToStr = getValueAtZeroIndexOfStr(
+      ariaLabelOfElementWithActiveShowImg
+    );
     // use value as key to get value from numToStr obj in our dataobj
     // value will be either "first" to "fourth"
+    const strFromObjNumToStr = getValueFromObjInDataElement(
+      numToStr,
+      useValueInFuncToGetValueInObjNumToStr
+    );
     // loop through arr of large desktop img find element that match aria-label ex: "1 of 4"
+    // use useValueInFuncToGetValueInObjNumToStr
+    const [elementMatchesOneOfFour] =
+      getElementThatMatchesAriaLabelForImgContainer(
+        desktopLargeImg,
+        `${useValueInFuncToGetValueInObjNumToStr} of 4`
+      );
     // loop through arr of small desktop img find element that match aria-label ex: "first image"
+    // use strFromObjNumToStr
+    const [imgElementMatchesFirstToFourthImage] =
+      getElementThatMatchesAriaLabelForImgContainer(
+        desktopSmallImg,
+        `${strFromObjNumToStr} image`
+      );
     // remove class add-flex-display to lightbox modal element
+    removeClassFromElement(desktopModalThree, "add-flex-display");
     // run func that will loop through large desktop img arr and remove class active-show-img
+    loopThroughArrRemovingClass(desktopLargeImg);
     // add class active-show-img to elemeht that match aria-label ex: "1 of 4"
+    // pass elementMatchesOneOfFour as argument
+    addClassToElement(elementMatchesOneOfFour, "active-show-img");
     // call .focus() on element that match aria-label ex: "first image"
+    // pass imgElementMatchesFirstToFourthImage as argument
+    focusElement(imgElementMatchesFirstToFourthImage);
   }
+
+  // const thisObj = {
+  //   name: "Deadpool",
+  //   profession: "Marvel Char",
+  //   sayHi() {
+  //     console.log(`${this.name} says hi, he is a ${this.profession}`)
+  //   }
+  // }
 
   // helper func
 
