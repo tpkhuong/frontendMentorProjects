@@ -607,14 +607,32 @@ the mobile-modal element will be on top / above the faded-bg-element
   [id="desktop-navigation"] .navlink::after {
     content: "";
     position: absolute;
-    display: none;
-    width: 100%;
+    display: block;
     height: 4px;
     background-color: var(--col-primary-orange);
     top: 63px;
+    opacity: 0;
+    transition: opacity 1000ms ease-out;
   }
+  /* when we had width: calc(100% - 3.6334px) on .navlink::after element
+  everytime user has mouse over li browser applied opacity to .navlink::after
+  as the user mouse is removed from li there is a little jerk with the .navlink::after
+  think it is because we are also applying font-weight to .navlink
+  which makes the width of .navlink wider
+  */
+  /* once we moved width: calc(100% - 3.6334px) to 
+  [id="desktop-navigation"] li:hover .navlink::after
+  there is not more jerk.
+  reason the .navlink::after and the text of .navlink width will be the same
+  when user hover over the li
+  before .navlink::after width is wider than .navlink because of this declaration on .navlink::after
+  width: calc(100% - 3.6334px) and because the font-weight of 700 is applied to .navlink(anchor tag)
+  on hover
+  */
   [id="desktop-navigation"] li:hover .navlink::after {
-    display: block;
+    /* display: block; */
+    opacity: 1;
+    width: calc(100% - 3.6334px);
   }
   /* working on animation of opacity */
   [id="desktop-navigation"] li:hover .navlink,
@@ -1321,3 +1339,28 @@ arrow btn looks more centered adding padding-inline
   /* grid-column: 1 / 2;
   grid-row: 1 /2; */
 }
+/* code our cart modal will slide down from top of the page 
+fast as it slide down or start of 1000ms slow as it reaches 1000ms with ease-out
+slow as it slide up or start of 1000ms fast as it reaches 1000ms with ease-in
+
+@media screen and (min-width: 70rem) {
+  [id="modal-two"] {
+    position: absolute;
+    /* top: -9999px; */
+/* display: block;
+    transform: translateY(calc(-100% + -90px)); */
+/* transform: translateY(-350px); */
+/* ease in slow sliding in fast out */
+/* transition: transform 1000ms ease-in;
+  }
+
+  .open-cart-btn:hover + [id="modal-two"] { */
+/* display: revert; */
+/* top: 64px; */
+/* ease out means slow out, fast in */
+/* transition: transform 1000ms ease-out;
+    transform: translateY(0px);
+    left: -175px;
+    right: -96px;
+  }
+}  */
