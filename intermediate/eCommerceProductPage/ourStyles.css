@@ -967,7 +967,9 @@ arrow btn looks more centered adding padding-inline
   */
 
   [class*="desktop-img-display__large-img"]:hover img,
-  [class="desktop-img-display__small-img"]:hover img {
+  [class="desktop-img-display__small-img"]:hover img,
+  [class*="desktop-img-display__large-img"]:focus img,
+  [class="desktop-img-display__small-img"]:focus img {
     /** use outline instead of border
     to not have the effect of the img getting smaller when user hover over button element
     **/
@@ -1339,6 +1341,7 @@ arrow btn looks more centered adding padding-inline
   /* grid-column: 1 / 2;
   grid-row: 1 /2; */
 }
+
 /* code our cart modal will slide down from top of the page 
 fast as it slide down or start of 1000ms slow as it reaches 1000ms with ease-out
 slow as it slide up or start of 1000ms fast as it reaches 1000ms with ease-in

@@ -1,4 +1,5 @@
 (function scopeOurVariables() {
+  // $0.getClientRects() our friend for progress bar
   // activate mobile menu selectors
   const {
     cartAvatarWrapper,
@@ -326,6 +327,7 @@
 
   function declareOurDataObj(element) {
     element.dataElement = {
+      count: 0,
       cartIconQuantity: 0,
       windowSizeIsLessThanMobileSize: false,
       // when we click on hamburger btn
@@ -367,6 +369,15 @@
         bottomCartPriceElement,
         bottomCartQuantityElement,
         bottomCartPriceTotalElement,
+      },
+      /**
+       * when we call method below it will increment count property by 1
+       * we are also executing the method in an event listener
+       * increment is call when user click on desktop small img button
+       * **/
+      increment() {
+        this.count += 1;
+        return this.count;
       },
     };
   }
@@ -1239,6 +1250,7 @@
      * if user click on button with class desktop-img-display__small-img
      * run desktopSmallImgAlgorithm
      * **/
+    // use .getAttribute()
     const elementClickedIsSmallImg = elementContainClass(
       clickedElement,
       "desktop-img-display__small-img"
@@ -1375,11 +1387,24 @@
    * desktop small img
    * **/
 
-  function desktopSmallImgAlgorithm(event, arrInput, dataElement) {
+  function desktopSmallImgAlgorithm(event, arrInput, dataElementInput) {
     // copy our objects/arrays
     const copiedArray = [...arrInput];
-    const copiedObj = Object.assign({}, dataElement);
-    // const copiedObj = { ...dataElement };
+    const copiedObj = Object.assign({}, dataElementInput);
+    // const copiedObj = { ...dataElementInput };
+    const {
+      dataElement: { increment },
+    } = copiedObj;
+    // console.log(copiedObj.dataElement);
+    /**
+     * code increment.call(copiedObj.dataElement)
+     * will execute increment method in our dataElement obj
+     * which will increment/+= 1 to the count property in our dataElement obj
+     * when we call increment.call() we are passing in the element.dataElement
+     * as the this to increment.call()
+     * **/
+    console.log(event.target);
+    // console.log(increment.call(copiedObj.dataElement));
     smallImgClickedHelperFunc(event, copiedArray, copiedObj);
     /**
      * moved algorithm below in to smallImgClickedHelperFunc
@@ -1390,7 +1415,7 @@
     const { ourDataElement, arrDesktopLargeImages } = ourSelectors();
     // destructure ourDataElement
     const {
-      dataElement: {
+      dataElementInput: {
         objOfConversionsForDesktopImgSlider: { strToNum },
       },
     } = ourDataElement;
