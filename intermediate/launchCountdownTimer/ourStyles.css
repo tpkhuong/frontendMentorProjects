@@ -1,0 +1,70 @@
+/* width will based on parent */
+
+[class="digit-style-wrapper"] {
+  border: 1px solid red;
+  background-color: hsl(100, 0%, 0%);
+  perspective: 250px;
+  width: min-content;
+}
+
+/* height will be based on children */
+
+.top,
+.bottom {
+  min-width: 350px;
+  min-height: 100px;
+}
+
+.top {
+  background-color: hsl(240, 21%, 22%);
+}
+
+.test-container {
+  position: relative;
+}
+
+.middle {
+  /* background-color: hsl(0, 100%, 100%); */
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% - 4px);
+}
+
+.left {
+  margin-inline-start: 0px;
+}
+
+.right {
+  margin-inline-end: 0px;
+}
+
+.left,
+.right,
+.middle-line {
+  display: block;
+}
+
+.left,
+.right {
+  min-height: 12px;
+  min-width: 12px;
+  background-color: black;
+  border-radius: 50%;
+}
+
+.middle-line {
+  box-shadow: 2px 2px 5px rgba(189, 132, 132, 0.5),
+    inset 5px 5px 8px rgba(0, 0, 0, 0.5);
+}
+
+.right {
+}
+
+.bottom {
+  background-color: hsl(236, 21%, 26%);
+}
+
+.bottom {
+  /* transform-origin: top; */
+}
