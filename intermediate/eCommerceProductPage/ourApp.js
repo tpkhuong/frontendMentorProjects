@@ -84,6 +84,26 @@
   );
   // add event listener to cart btn
 
+  function objKeepTrackingOfWindowSize() {
+    const data = {
+      count: 0,
+      modalClicked: false,
+      increment() {
+        this.count++;
+        return this.count;
+      },
+      windowSizeIsLessThanMobileSize: false,
+      windowSizeIsGreaterThanMobileSize: false,
+    };
+    return function rememberVariables() {
+      return {
+        data,
+      };
+    };
+  }
+
+  const accessOurData = objKeepTrackingOfWindowSize();
+
   /**
    * run at mobile size
    * **/
@@ -1251,11 +1271,16 @@
      * run desktopSmallImgAlgorithm
      * **/
     // use .getAttribute()
+    const elementClickedIsSmallImg = usingGetAttrElementContainClass(
+      clickedElement,
+      "desktop-img-display__small-img"
+    );
+    /**
     const elementClickedIsSmallImg = elementContainClass(
       clickedElement,
       "desktop-img-display__small-img"
     );
-
+**/
     if (elementClickedIsSmallImg) {
       //run desktopSmallImgAlgorithm
       desktopSmallImgAlgorithm(event, arrDesktopLargeImages, ourDataElement);
@@ -1397,13 +1422,40 @@
     } = copiedObj;
     // console.log(copiedObj.dataElement);
     /**
+     * accessOurData is a func ref to rememberVariables. 
+     * when we call accessOurData it will return 
+     * const data = {
+      count: 0,
+      modalClicked: false,
+      increment() {
+        this.count++;
+        return this.count;
+      },
+    };
+     * 
+    **/
+    // calling/executing accessOurData will return
+    // data which is an object
+    const dataObject = accessOurData();
+    const { increment: addOne, modalClicked } = dataObject.data;
+    // console.log(dataObject.data);
+    console.log(addOne.call(dataObject.data));
+
+    !modalClicked
+      ? (dataObject.data.modalClicked = true)
+      : (dataObject.data.modalClicked = false);
+    console.log("modalClicked", modalClicked); //will be false because of our obj destructuring of
+    // dataObject.data;
+    console.log("dataObject.data.modalClicked", dataObject.data.modalClicked); //will true because we are accessing
+    // the property in our data obj which is inside ourDataObj func
+    /**
      * code increment.call(copiedObj.dataElement)
      * will execute increment method in our dataElement obj
      * which will increment/+= 1 to the count property in our dataElement obj
      * when we call increment.call() we are passing in the element.dataElement
      * as the this to increment.call()
      * **/
-    console.log(event.target);
+    // console.log(event.target);
     // console.log(increment.call(copiedObj.dataElement));
     smallImgClickedHelperFunc(event, copiedArray, copiedObj);
     /**
@@ -2452,6 +2504,15 @@
       // notFocusableAddToCartBtn element should not
       removeClassFromElement(notFocusableAddToCartBtn, "add-flex-display");
     }
+  }
+
+  /**
+   * element contain class using .getAttribute
+   *  **/
+
+  function usingGetAttrElementContainClass(element, classString) {
+    // will return true or false if element class matches classString
+    return element.getAttribute("class") == classString;
   }
 
   /**
