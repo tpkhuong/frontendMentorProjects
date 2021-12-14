@@ -1,8 +1,14 @@
+/* first effort attempt */
+
+body {
+  font-family: "Red Hat Text", sans-serif;
+}
+
 /* width will based on parent */
 
 [class="digit-style-wrapper"] {
   border: 1px solid red;
-  background-color: hsl(100, 0%, 0%);
+  /* background-color: hsl(100, 0%, 0%); */
   perspective: 250px;
   width: min-content;
 }
@@ -68,3 +74,64 @@
 .bottom {
   /* transform-origin: top; */
 }
+
+/* first effort attempt */
+
+/* second effort attempt */
+/***** 
+we have perspective declared on .digit-style-wrapper
+which is the parent of .test-container
+any element with perspective declared will create its own stacking context
+removing perspective declared on .digit-style-wrapper didnt show ::before and ::after elements
+
+in terms of stacking context, declaring high z-index on children elements does not matter
+because the child stacking context over will not be higher than its parent
+*****/
+
+/* .content {
+  color: hsl(0, 100%, 100%);
+  font-size: 4.5rem;
+  position: relative;
+}
+
+.test-container {
+  position: relative;
+  padding-inline: 32px;
+}
+
+.content::before,
+.content::after {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 50%;
+  width: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.content::before {
+  background-color: red;
+  top: 50%;
+}
+
+.content::after {
+  background-color: blue;
+  bottom: 50%;
+} */
+
+/* second effort attempt */
+
+/* getting better effort attempt */
+
+.content {
+  font-size: 4.5rem;
+  position: absolute;
+  width: min-content;
+  height: min-content;
+  inset: 0;
+  margin: auto;
+}
+
+/* getting better effort attempt */
