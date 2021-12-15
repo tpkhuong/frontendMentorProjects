@@ -2,6 +2,7 @@
 
 body {
   font-family: "Red Hat Text", sans-serif;
+  background-color: rgb(119, 115, 115);
 }
 
 /* width will based on parent */
@@ -10,23 +11,23 @@ body {
   border: 1px solid red;
   /* background-color: hsl(100, 0%, 0%); */
   perspective: 250px;
-  width: min-content;
+  /* width: min-content; */
 }
 
 /* height will be based on children */
 
-.top,
+/* .top,
 .bottom {
   min-width: 350px;
   min-height: 100px;
-}
+} */
 
 .top {
   background-color: hsl(240, 21%, 22%);
 }
 
 .test-container {
-  position: relative;
+  /* position: relative; */
 }
 
 .middle {
@@ -125,13 +126,100 @@ because the child stacking context over will not be higher than its parent
 
 /* getting better effort attempt */
 
+.top,
+.bottom {
+  /* min-width: 350px;
+  min-height: 100px; */
+}
+
 .content {
-  font-size: 4.5rem;
+  /* font-size: 4.5rem;
   position: absolute;
   width: min-content;
   height: min-content;
   inset: 0;
-  margin: auto;
+  margin: auto; */
 }
 
 /* getting better effort attempt */
+
+/* getting better effort attempt */
+
+.digit-style-wrapper {
+  width: max-content;
+}
+
+.test-container {
+  position: relative;
+  width: max-content;
+  padding: 16px;
+  padding-inline: 32px;
+  border-radius: 6px;
+}
+
+.test-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  bottom: -10px;
+  background-color: hsl(0, 0%, 0%);
+  z-index: -1;
+  border-radius: 0 0 4px 4px;
+}
+
+.top,
+.bottom {
+  position: absolute;
+  height: 50%;
+  left: 0;
+  right: 0;
+  z-index: -1;
+}
+
+.top {
+  bottom: 50%;
+  border-radius: 6px 6px 0 0;
+}
+
+.bottom {
+  top: 50%;
+  /* border-bottom: 8px solid hsl(0, 0%, 0%); */
+  /* border-radius: 0 0 6px 6px; */
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.content {
+  font-size: 4.5rem;
+}
+
+.content::after {
+  content: "";
+  height: 1.5px;
+  display: block;
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+  margin: auto;
+  box-shadow: 0 0 0 0.5px hsl(0, 0%, 0%);
+}
+
+/* getting better effort attempt */
+
+/* getting better effort attempt element two */
+
+[class="digit-style-wrapper-two"] {
+  margin-block-start: 48px;
+  width: min-content;
+  background-color: hsl(0, 0%, 0%);
+  border-radius: 0 0 6px 6px;
+}
+
+.test-container-two {
+  transform: translateY(0px);
+  padding: 56px;
+  background-color: hsl(0, 100%, 100%);
+  border-radius: 0 0 4px 4px;
+}
+
+/* getting better effort attempt element two */
