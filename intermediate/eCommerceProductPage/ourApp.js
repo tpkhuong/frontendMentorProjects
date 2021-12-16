@@ -1056,6 +1056,7 @@
     const shoePriceWithoutDollarSign = getOnlyNumberOfStrUsingRegex(
       shoePriceWithoutDecimalAndTrailingZeros
     );
+
     /**
      * shoePrice algorithm before we pass the value to calc func
      * **/
@@ -1063,6 +1064,7 @@
       quantityValue,
       Number(shoePriceWithoutDollarSign)
     );
+
     /**
      * assign value to elements
      * **/
