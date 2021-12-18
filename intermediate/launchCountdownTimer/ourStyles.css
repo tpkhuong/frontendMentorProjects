@@ -281,6 +281,13 @@ clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%); */
   position: relative;
 }
 
+/* half circle center of digit style wrapper */
+
+[class="test-container-three"]::before {
+}
+[class="test-container-three"]::after {
+}
+
 [class*="content-three"] {
   grid-row: 1 / 2;
   grid-column: 1 / -1;
@@ -289,35 +296,20 @@ clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%); */
 }
 
 .content-three-top {
-  opacity: 0;
-}
-
-.content-three-back {
   /* position: absolute;
   inset: 0;
   min-height: 50%; */
   /* background-color: red; */
-
-  background: linear-gradient(
+  clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 0% 50%);
+  background-color: royalblue;
+  /* background: linear-gradient(
     hsl(240, 21%, 22%) 0%,
     hsla(0, 100%, 100%, 0.1) 10%
-  );
+  ); */
 }
 
-.content-three-bottom {
-  background: rebeccapurple;
-  clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
-  position: relative;
-}
-
-.content-three-bottom::after {
-  background-color: hsla(0, 100%, 100%, 0.8);
-  /* content: ""; */
-  height: 100%;
-  position: absolute;
-  inset: 0;
-  display: block;
-  z-index: -1;
+.content-three-back {
+  /* opacity: 1; */
 }
 
 /* 
@@ -334,6 +326,83 @@ opacity: 1;
 90deg to 0deg
 opacity: 1
 
-
 */
+
+.content-three-bottom {
+  background: rebeccapurple;
+  clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+  position: relative;
+  transform: rotateX(180deg);
+  opacity: 0;
+}
+
+/* hover effect */
+
+.test-container-three:hover .content-three-bottom {
+  transform: rotateX(0deg);
+  opacity: 1;
+  transition: transform 1000ms ease-in, opacity 1000ms ease-in;
+}
+
+/*
+
+work with new Date()?
+
+working on white background to bottom half of digit
+
+.content-three-bottom::after {
+  background-color: hsla(0, 100%, 100%, 0.8);
+  content: "";
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  display: block;
+  z-index: -1;
+}
+*/
+
 /* getting better effort attempt element three */
+
+/* activate modal only using CSS */
+
+/*
+button:active + [id="modal-one"] {
+  display: flex;
+}
+
+[id="modal-one"] {
+  position: fixed;
+  inset: 0;
+  background-color: hsla(0, 0%, 0%, 0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-style-wrapper {
+  max-width: 500px;
+  background-color: hsl(0, 100%, 100%);
+  border-radius: 5px;
+  padding: 142px;
+}
+*/
+
+/* modal slide from right side of screen on hover */
+
+/*
+[id="modal-one"] {
+  position: fixed;
+  min-width: 350px;
+  background-color: hsl(0, 100%, 100%);
+  padding: 125px;
+  top: 25%;
+  right: 0;
+  transform: translateX(100%);
+  transition: transform 1000ms ease-in;
+}
+
+button[aria-label="open modal"]:hover + [id="modal-one"] {
+  transform: translateX(0px);
+  transition: transform 1000ms ease-out;
+}
+*/
