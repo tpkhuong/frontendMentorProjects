@@ -20,6 +20,8 @@
     <title>Launch Countdown Timer</title>
   </head>
   <body>
+    <!-- keep track of days, hours, mins, seconds -->
+    <!-- when either days, hours, mins, seconds reaches 0 apply display none -->
     <main role="main">
       <div class="digit-style-wrapper">
         <!-- black bg -->
@@ -40,6 +42,7 @@
         <!-- black bg -->
         <div class="test-container-two">
           <!-- <div class="top-two"></div> -->
+          <!-- nvda was reading our ::befor element which has content of attr(data-digit) -->
           <span class="content-two" data-digit="08">08</span>
           <!-- <div class="middle-separator"></div> -->
           <!-- <div class="bottom-two"></div> -->
@@ -56,8 +59,12 @@
         <div class="test-container-three">
           <!-- <div class="top-two"></div> -->
           <span class="content-three-back" data-digit="08">08</span>
-          <span class="content-three-top" data-digit="08">08</span>
-          <span class="content-three-bottom" data-digit="08">08</span>
+          <span class="content-three-top" aria-hidden="true" data-digit="08"
+            >08</span
+          >
+          <span class="content-three-bottom" aria-hidden="true" data-digit="08"
+            >08</span
+          >
           <!-- <div class="middle-separator"></div> -->
           <!-- <div class="bottom-two"></div> -->
           <!-- <div class="middle">
@@ -76,3 +83,4 @@
     <script src="ourApp.js"></script>
   </body>
 </html>
+<!-- notes: use aria-hidden="true" on element we dont want nvda to read to user -->
