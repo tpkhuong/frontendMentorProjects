@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html" />
+    <meta name="author" content="KhuongCorp" />
+    <meta name="description" content="Learning Nodejs" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <link rel="stylesheet" href="effortsStyles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:wght@700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- keep track of days, hours, mins, seconds -->
+    <!-- when either days, hours, mins, seconds reaches 0 apply display none -->
+    <main role="main">
+      <div class="digit-style-wrapper">
+        <!-- black bg -->
+        <div class="test-container">
+          <div class="top"></div>
+          <span class="content">8</span>
+          <!-- <div class="middle-separator"></div> -->
+          <div class="bottom"></div>
+          <!-- <div class="middle">
+            <span class="left"></span>
+            <span class="middle-line"></span>
+            <span class="right"></span>
+          </div> -->
+        </div>
+      </div>
+
+      <div class="digit-style-wrapper-two">
+        <!-- black bg -->
+        <div class="test-container-two">
+          <!-- <div class="top-two"></div> -->
+          <!-- nvda was reading our ::befor element which has content of attr(data-digit) -->
+          <span class="content-two" data-digit="08">08</span>
+          <!-- <div class="middle-separator"></div> -->
+          <!-- <div class="bottom-two"></div> -->
+          <!-- <div class="middle">
+            <span class="left"></span>
+            <span class="middle-line"></span>
+            <span class="right"></span>
+          </div> -->
+        </div>
+      </div>
+
+      <div class="digit-style-wrapper-three">
+        <!-- black bg -->
+        <div class="test-container-three">
+          <!-- <div class="top-two"></div> -->
+          <span class="content-three-back" data-digit="08">08</span>
+          <span class="content-three-top" aria-hidden="true" data-digit="08"
+            >08</span
+          >
+          <span class="content-three-bottom" aria-hidden="true" data-digit="08"
+            >08</span
+          >
+          <!-- <div class="middle-separator"></div> -->
+          <!-- <div class="bottom-two"></div> -->
+          <!-- <div class="middle">
+            <span class="left"></span>
+            <span class="middle-line"></span>
+            <span class="right"></span>
+          </div> -->
+        </div>
+      </div>
+      <!-- testing idea -->
+      <button hidden aria-label="open modal">Open Modal</button>
+      <div hidden id="modal-one" aria-modal="true" role="dialog">
+        <div class="modal-style-wrapper"></div>
+      </div>
+    </main>
+
+    <script src="ourApp.js"></script>
+  </body>
+</html>
