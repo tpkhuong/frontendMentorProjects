@@ -1,423 +1,436 @@
-/* first effort attempt */
+:root {
+  /* primary */
+  /* text and social media */
+  --col-primary-grayish-blue: hsl(237, 18%, 59%);
+  /* top text color */
+  --col-primary-soft-red-top: hsl(344, 61%, 57%);
+  /* bottom text color */
+  --col-primary-soft-red-bottom: hsl(345, 95%, 68%);
+  /* neutral */
+  --col-neutral-dark-blue-top: hsl(240, 21%, 22%);
+  --col-neutral-dark-blue-bottom: hsl(236, 21%, 26%);
+  --col-neutral-black-blue-bg: hsl(234, 17%, 12%);
+  --col-neutral-vary-dark-blue: hsl(235, 16%, 14%);
+  /* white and black */
+  --col-neutral-white: hsl(0, 100%, 100%);
+  --col-neutral-black: hsl(0, 0%, 0%);
+
+  --box-shadow: 0px 0.3px 0.7px rgba(0, 0, 0, 0.02),
+    0px 0.7px 1.7px rgba(0, 0, 0, 0.028), 0px 1.4px 3.3px rgba(0, 0, 0, 0.035),
+    0px 2.5px 5.8px rgba(0, 0, 0, 0.042), 0px 4.6px 10.9px rgba(0, 0, 0, 0.05),
+    0px 11px 26px rgba(0, 0, 0, 0.07);
+
+  /* headings */
+  /* --font-family-poppins: "Poppins", sans-serif; */
+  /* body, call-to-actions */
+  --font-family-red-hat: "Red Hat Text", sans-serif;
+}
+/* 
+put opacity on the backgroung-color: hsla()
+not on the element
+*/
+
+/* margin collapse: when one of the element is block and the other element is inline-block
+bottom margin on block and top margin on inline-block will not collapse. interesting
+*/
+
+/* reset */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* code below is from inclusive design patterns */
+/* html {
+  font-size: calc(1em + 1vw);
+} */
 
 body {
-  font-family: "Red Hat Text", sans-serif;
-  background-color: rgb(119, 115, 115);
+  color: var(--col-neutral-black);
+  font-family: var(--font-family-kumbh);
+  /* use color: revert for text that we dont want to be grayish blue */
+  /* color: var(--color-neutral-grayish-blue); */
 }
 
-/* width will based on parent */
-
-[class="digit-style-wrapper"] {
-  border: 1px solid red;
-  /* background-color: hsl(100, 0%, 0%); */
-  perspective: 250px;
-  /* width: min-content; */
+h1,
+h2,
+h3,
+h4,
+body,
+ul,
+hr {
+  margin: 0;
+  /* figure, dl, and dd have default margin */
+  /* font-weight: 100; */
 }
 
-/* height will be based on children */
-
-/* .top,
-.bottom {
-  min-width: 350px;
-  min-height: 100px;
-} */
-
-.top {
-  background-color: hsl(240, 21%, 22%);
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1;
+  font-family: var(--font-family-poppins);
 }
 
-.test-container {
-  /* position: relative; */
+p {
+  line-height: 1.5;
 }
 
-.middle {
-  /* background-color: hsl(0, 100%, 100%); */
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(50% - 4px);
+a {
+  text-decoration: none;
+  color: var(--link-fg, var(--clr-neutral-black));
+  font-weight: var(--fw-700);
+  font-size: var(--fs-300);
 }
 
-.left {
-  margin-inline-start: 0px;
+a:hover,
+a:focus {
+  /* text-decoration: underline; */
 }
 
-.right {
-  margin-inline-end: 0px;
+a:focus {
+  outline: 3px solid rgb(9, 138, 180);
+  /* outline-offset: 2px; */
 }
 
-.left,
-.right,
-.middle-line {
+img {
+  /* using object-fit for images. we have to set a height or a min-height on the image and the width of 100% 
+  exception to the rule of setting a height. we can sometime use it on a child element.
+  */
+  max-width: 100%;
+  /* we use max-width: 100% so when we have an img element inside of a div and we want to use flex which means the div will be a flex item
+    the img will shrink and grow as its parent element shrink and grows
+    */
+  /* use display: block so our img fits the container.
+    when we didnt have display: block on img element the image did not fill the container.
+    there were some white space
+    */
   display: block;
+  height: auto;
 }
 
-.left,
-.right {
-  min-height: 12px;
-  min-width: 12px;
-  background-color: black;
-  border-radius: 50%;
+ul[role],
+li[role] {
+  list-style: none;
+  padding: 0;
 }
 
-.middle-line {
-  box-shadow: 2px 2px 5px rgba(189, 132, 132, 0.5),
-    inset 5px 5px 8px rgba(0, 0, 0, 0.5);
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
 }
 
-.right {
+button {
+  border: none;
 }
 
-.bottom {
-  background-color: hsl(236, 21%, 26%);
-}
+/* button {
 
-.bottom {
-  /* transform-origin: top; */
-}
-
-/* first effort attempt */
-
-/* second effort attempt */
-/***** 
-we have perspective declared on .digit-style-wrapper
-which is the parent of .test-container
-any element with perspective declared will create its own stacking context
-removing perspective declared on .digit-style-wrapper didnt show ::before and ::after elements
-
-in terms of stacking context, declaring high z-index on children elements does not matter
-because the child stacking context over will not be higher than its parent
-*****/
-
-/* .content {
-  color: hsl(0, 100%, 100%);
-  font-size: 4.5rem;
-  position: relative;
-}
-
-.test-container {
-  position: relative;
-  padding-inline: 32px;
-}
-
-.content::before,
-.content::after {
-  content: "";
-  display: block;
-  position: absolute;
-  height: 50%;
-  width: 100%;
-  left: 0;
-  right: 0;
-  z-index: 1;
-}
-
-.content::before {
-  background-color: red;
-  top: 50%;
-}
-
-.content::after {
-  background-color: blue;
-  bottom: 50%;
-} */
-
-/* second effort attempt */
-
-/* getting better effort attempt */
-
-.top,
-.bottom {
-  /* min-width: 350px;
-  min-height: 100px; */
-}
-
-.content {
-  /* font-size: 4.5rem;
-  position: absolute;
-  width: min-content;
-  height: min-content;
-  inset: 0;
-  margin: auto; */
-}
-
-/* getting better effort attempt */
-
-/* getting better effort attempt */
-
-.digit-style-wrapper {
-  width: max-content;
-}
-
-.test-container {
-  position: relative;
-  width: max-content;
-  padding: 16px;
-  padding-inline: 32px;
-  border-radius: 6px;
-}
-
-.test-container::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  bottom: -10px;
-  background-color: hsl(0, 0%, 0%);
-  z-index: -1;
-  border-radius: 0 0 4px 4px;
-}
-
-.top,
-.bottom {
-  position: absolute;
-  height: 50%;
-  left: 0;
-  right: 0;
-  z-index: -1;
-}
-
-.top {
-  bottom: 50%;
-  border-radius: 6px 6px 0 0;
-  background: linear-gradient(
-    hsl(240, 21%, 22%) 0%,
-    hsla(0, 100%, 100%, 0.1) 500%
-  );
-}
-
-.bottom {
-  top: 50%;
-  /* border-bottom: 8px solid hsl(0, 0%, 0%); */
-  /* border-radius: 0 0 6px 6px; */
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-}
-
-.content {
-  font-size: 4.5rem;
-}
-
-.content::after {
-  content: "";
-  height: 1.5px;
-  display: block;
-  position: absolute;
-  inset: 0;
-  opacity: 0.2;
-  margin: auto;
-  box-shadow: 0 0 0 0.5px hsl(0, 0%, 0%);
-}
-
-/* getting better effort attempt */
-
-/* getting better effort attempt element two */
-
-[class="digit-style-wrapper-two"] {
-  margin-block-start: 48px;
-  width: min-content;
-  background-color: hsl(0, 0%, 0%);
-  border-radius: 6px;
-}
-
-.test-container-two {
-  transform: translateY(-10px);
-  /* padding: 56px; */
-  background-color: hsl(0, 100%, 100%);
-  border-radius: 4px;
-}
-
-/* clip-path: inset(50% 0 0 0); */
-
-/* 
-
-hide bottom
-clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 0% 50%);
-*/
-/* 
-hide top
-clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%); */
-
-/* use linear gradient */
-
-.content-two {
-  position: relative;
-  font-size: 4rem;
-  padding-inline: 32px;
-  background-image: linear-gradient(
-    rgba(0, 0, 255, 0.5) 50%,
-    rgba(255, 255, 0, 0.5) 50%
-  );
-}
-
-.content-two::before {
-  content: attr(data-digit);
-  position: absolute;
-  background-color: red;
-  height: 50%;
-  /* transform: translateY(-10px); */
-}
-
-/* .content-two::after {
-  content: attr(data-digit);
-  position: absolute;
-} */
-
-/* getting better effort attempt element two */
-
-/* getting better effort attempt element three */
-
-[class="digit-style-wrapper-three"] {
-  margin-block-start: 48px;
-  font-size: 4rem;
-  color: hsl(0, 100%, 100%);
-  background-color: hsl(0, 0%, 0%);
-  max-width: min-content;
-}
-
-.test-container-three {
-  background-color: hsl(236, 21%, 26%);
-  max-width: min-content;
-  display: grid;
-  position: relative;
-}
-
-/* half circle center of digit style wrapper */
-
-[class="test-container-three"]::before {
-}
-[class="test-container-three"]::after {
-}
-
-[class*="content-three"] {
-  grid-row: 1 / 2;
-  grid-column: 1 / -1;
-  padding: 28px;
-  padding-block: 14px;
-}
-
-.content-three-top {
-  /* position: absolute;
-  inset: 0;
-  min-height: 50%; */
-  /* background-color: red; */
-  clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 0% 50%);
-  background-color: royalblue;
-  /* background: linear-gradient(
-    hsl(240, 21%, 22%) 0%,
-    hsla(0, 100%, 100%, 0.1) 10%
-  ); */
-}
-
-.content-three-back {
-  /* opacity: 1; */
-}
-
-/* 
-
-transform: rotateX(180deg)
-opacity: 0;
-* 180deg to 90deg
-opacity will be .3
-opacity: .3;
-*
-transform: rotateX(90deg);
-opacity: 1;
-
-90deg to 0deg
-opacity: 1
-
-*/
-
-.content-three-bottom {
-  background: rebeccapurple;
-  clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
-  position: relative;
-  /* transform: rotateX(180deg);
-  opacity: 0; */
-  /* animation: flipTopToBottom 1000ms ease-in infinite forwards; */
-}
-
-/* hover effect */
-
-/* .test-container-three:hover .content-three-bottom {
-  transform: rotateX(0deg);
-  opacity: 1;
-  transition: transform 1000ms ease-in, opacity 1000ms ease-in;
-} */
-
-/* animation */
-
-@keyframes flipTopToBottom {
-  0% {
-    transform: rotateX(180deg);
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-    transition: transform 1000ms ease-in, opacity 1000ms ease-in;
+/* Remove all animations and transitions for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-/*
+/* reset */
 
-work with new Date()?
+/* utilities */
 
-working on white background to bottom half of digit
+/* skip link using attr selector */
 
-.content-three-bottom::after {
-  background-color: hsla(0, 100%, 100%, 0.8);
-  content: "";
+[href="#main-content"] {
+  position: absolute;
+  top: 0;
+  right: 100%; /* moves off screen */
+}
+[href="#main-content"]:focus {
+  right: auto;
+}
+
+/* skip link using attr selector */
+
+/* we can use min-height on the element we want its height to be 100% */
+html,
+body {
   height: 100%;
-  position: absolute;
-  inset: 0;
-  display: block;
-  z-index: -1;
 }
-*/
+/* we can use min-height on the element we want its height to be 100% */
 
-/* getting better effort attempt element three */
+/* container wrapper */
 
-/* activate modal only using CSS */
+.max-width {
+  /* or the width we want our container/parent element to be */
+  max-width: 1250px;
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+  /* padding-inline-start: 16px;
+  padding-inline-end: 16px; */
+}
 
-/*
-button:active + [id="modal-one"] {
+/* @media screen and (min-width: 70rem) {
+  .max-width {
+    max-width: 550px;
+  }
+} */
+
+.text-max-width-wrapper {
+  max-width: 150px;
+  margin-inline: auto;
+}
+
+/* container wrapper */
+
+.flow-content > * + * {
+  margin: var(--gap, 8px) 0 0 0;
+}
+
+/* @media screen and (min-width: 70rem){
+
+} */
+
+.columns {
   display: flex;
+  flex-direction: column;
+  /* flex-flow: column; */
 }
 
-[id="modal-one"] {
-  position: fixed;
-  inset: 0;
-  background-color: hsla(0, 0%, 0%, 0.7);
+.columns > * {
+  /* flex:1 => flex-basis will be 0px */
+  flex: 1;
+  flex-basis: 100%;
+}
+
+[class*="col-"] {
+  flex-basis: var(--col-basis, 100%);
+}
+
+.col-1 {
+  --col-basis: 25%;
+}
+.col-2 {
+  --col-basis: 50%;
+}
+.col-3 {
+  --col-basis: 75%;
+}
+
+[class*="bg-"] {
+  background-color: var(--bg, hsl(0, 100%, 100%));
+  background-image: var(--bg-img, hsl(0, 100%, 100%));
+  color: var(--fg, hsl(0, 0%, 0%));
+}
+
+/* change for next project */
+
+[class*="-btn"] {
+  padding: 0;
+  background: transparent;
+  /* background-color: var(--btn-bg); */
+  /* background-image: var(--btn-bg-img, hsl(0, 100%, 100%)); */
+  /* text-transform: uppercase; */
+  /* color: var(--btn-fg, hsl(0, 100%, 100%)); */
+  /* padding-block: 16px;
+  margin-block-start: 34px;
+  border-radius: 6px; */
+  /* padding: 12px;
+  padding-inline: 46px;
+  border-radius: 100vw; */
+}
+
+.bg-dark {
+  /* --bg: ; */
+  --bg-img: var(--col-bg-image);
+  --fg: var(--col-neutral-very-grayish-blue);
+}
+
+.bg-light {
+  --bg: var(--col-neutral-very-grayish-blue);
+  --fg: var(--col-neutral-grayish-blue);
+}
+
+/* .btn-primary .front-of-button {
+  --btn-bg: var(--col-pri-strong-cyan);
+}
+
+.btn-primary.back-of-button {
+  --btn-bg: var(--col-pri-back-bg);
+}
+
+.btn-secondary .front-of-button {
+  --btn-bg: var(--col-pri-light-blue);
+}
+
+.btn-secondary.back-of-button {
+  --btn-bg: var(--col-sec-back-bg);
+} */
+
+.btn-light {
+  /* --btn-bg: ; */
+  /* --fg is declared in .bg-dark which is applied to the parent element of the element that has .btn-light */
+  /* <div class="bg-dark">
+      <button class="btn-light">hello</button>
+    </div> */
+  /* since <button> is a child of div with .bg-dark we can use --fg on div children */
+  --btn-bg: var(--col-neutral-white);
+  --btn-fg: var(--col-pri-pink);
+}
+
+.btn-dark {
+  --btn-bg-img: var(--col-bg-image);
+  --btn-bg: ;
+  --btn-fg: var(--col-neutral-very-grayish-blue);
+}
+
+.btn-accent {
+  font-size: 0.75rem;
+  font-weight: 700;
+
+  padding: 12px;
+  padding-inline: 56px;
+  border-radius: 100vw;
+
+  box-shadow: var(--box-shadow);
+
+  --btn-bg: var(--col-pri-pink);
+  --btn-fg: var(--col-neutral-white);
+}
+
+/* themes */
+
+[class*="-theme"] {
+  background-color: var(--theme-bg);
+  color: var(--theme-fg);
+}
+
+.dark-theme {
+  background-color: var(--dark-bg);
+  color: var(--dark-fg);
+  --dark-bg: var(--first-color);
+}
+
+.light-theme {
+  background-color: var(--light-bg);
+  color: var(--light-fg);
+}
+
+.accent-theme {
+  background-color: var(--accent-bg);
+  color: var(--accent-fg);
+}
+
+/* .light-theme {
+  background-color: var(--light-theme-bg);
+  color: var(--light-theme-fg);
+}
+
+.dark-theme {
+  background-color: var(--dark-theme-bg);
+  color: var(--dark-theme-fg);
+} */
+
+.low-bold {
+  font-weight: 400;
+}
+
+.high-bold {
+  font-weight: 700;
+}
+
+.uppercase-text {
+  text-transform: uppercase;
+}
+
+.custom-margin {
+  margin-block-start: 120px;
+  margin-inline-start: 24px;
+}
+
+/* .btn-light:hover,
+.btn-light:focus {
+  background: transparent;
+  color: var(--fg);
+  border: 0.1px solid currentColor;
+} */
+
+.btn-dark:hover,
+.btn-dark:focus {
+  background: transparent;
+  color: var(--col-pri-button-bg);
+  border: solid currentColor;
+}
+
+button:hover,
+a:hover {
+  cursor: pointer;
+}
+
+/* test out [class*=btn-]{} 
+.btn-light{
+    --bg
+    --fg
+}
+.btn-dark{
+    --bg
+    --fg
+} 
+*/
+/* hide h2 which are title for our section element */
+.visually-hidden:not(:focus):not(:active) {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* .visually-hidden{
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  clip: rect(1px 1px 1px 1px)
+} */
+
+.visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+}
+
+.skip-link {
   display: none;
-  justify-content: center;
-  align-items: center;
+  border: 1px solid red;
+  padding-block: 16px;
+  padding-inline: 32px;
 }
 
-.modal-style-wrapper {
-  max-width: 500px;
-  background-color: hsl(0, 100%, 100%);
-  border-radius: 5px;
-  padding: 142px;
-}
-*/
-
-/* modal slide from right side of screen on hover */
-
-/*
-[id="modal-one"] {
-  position: fixed;
-  min-width: 350px;
-  background-color: hsl(0, 100%, 100%);
-  padding: 125px;
-  top: 25%;
-  right: 0;
-  transform: translateX(100%);
-  transition: transform 1000ms ease-in;
+@media screen and (min-width: 70rem) {
+  .skip-link {
+    display: inline-block;
+  }
 }
 
-button[aria-label="open modal"]:hover + [id="modal-one"] {
-  transform: translateX(0px);
-  transition: transform 1000ms ease-out;
-}
-*/
+/* hide h2 which are title for our section element */
+
+/* general styles */
+
+/* individial sections */
