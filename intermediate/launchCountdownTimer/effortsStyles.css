@@ -1,0 +1,445 @@
+/* first effort attempt */
+
+body {
+  font-family: "Red Hat Text", sans-serif;
+  background-color: rgb(119, 115, 115);
+}
+
+/* width will based on parent */
+
+[class="digit-style-wrapper"] {
+  border: 1px solid red;
+  /* background-color: hsl(100, 0%, 0%); */
+  perspective: 250px;
+  /* width: min-content; */
+}
+
+/* height will be based on children */
+
+/* .top,
+.bottom {
+  min-width: 350px;
+  min-height: 100px;
+} */
+
+.top {
+  background-color: hsl(240, 21%, 22%);
+}
+
+.test-container {
+  /* position: relative; */
+}
+
+.middle {
+  /* background-color: hsl(0, 100%, 100%); */
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% - 4px);
+}
+
+.left {
+  margin-inline-start: 0px;
+}
+
+.right {
+  margin-inline-end: 0px;
+}
+
+.left,
+.right,
+.middle-line {
+  display: block;
+}
+
+.left,
+.right {
+  min-height: 12px;
+  min-width: 12px;
+  background-color: black;
+  border-radius: 50%;
+}
+
+.middle-line {
+  box-shadow: 2px 2px 5px rgba(189, 132, 132, 0.5),
+    inset 5px 5px 8px rgba(0, 0, 0, 0.5);
+}
+
+.right {
+}
+
+.bottom {
+  background-color: hsl(236, 21%, 26%);
+}
+
+.bottom {
+  /* transform-origin: top; */
+}
+
+/* first effort attempt */
+
+/* second effort attempt */
+/***** 
+we have perspective declared on .digit-style-wrapper
+which is the parent of .test-container
+any element with perspective declared will create its own stacking context
+removing perspective declared on .digit-style-wrapper didnt show ::before and ::after elements
+
+in terms of stacking context, declaring high z-index on children elements does not matter
+because the child stacking context over will not be higher than its parent
+*****/
+
+/* .content {
+  color: hsl(0, 100%, 100%);
+  font-size: 4.5rem;
+  position: relative;
+}
+
+.test-container {
+  position: relative;
+  padding-inline: 32px;
+}
+
+.content::before,
+.content::after {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 50%;
+  width: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.content::before {
+  background-color: red;
+  top: 50%;
+}
+
+.content::after {
+  background-color: blue;
+  bottom: 50%;
+} */
+
+/* second effort attempt */
+
+/* getting better effort attempt */
+
+.top,
+.bottom {
+  /* min-width: 350px;
+  min-height: 100px; */
+}
+
+.content {
+  /* font-size: 4.5rem;
+  position: absolute;
+  width: min-content;
+  height: min-content;
+  inset: 0;
+  margin: auto; */
+}
+
+/* getting better effort attempt */
+
+/* getting better effort attempt */
+
+.digit-style-wrapper {
+  width: max-content;
+}
+
+.test-container {
+  position: relative;
+  width: max-content;
+  padding: 16px;
+  padding-inline: 32px;
+  border-radius: 6px;
+}
+
+.test-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  bottom: -10px;
+  background-color: hsl(0, 0%, 0%);
+  z-index: -1;
+  border-radius: 0 0 4px 4px;
+}
+
+.top,
+.bottom {
+  position: absolute;
+  height: 50%;
+  left: 0;
+  right: 0;
+  z-index: -1;
+}
+
+.top {
+  bottom: 50%;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(
+    hsl(240, 21%, 22%) 0%,
+    hsla(0, 100%, 100%, 0.1) 500%
+  );
+}
+
+.bottom {
+  top: 50%;
+  /* border-bottom: 8px solid hsl(0, 0%, 0%); */
+  /* border-radius: 0 0 6px 6px; */
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.content {
+  font-size: 4.5rem;
+}
+
+.content::after {
+  content: "";
+  height: 1.5px;
+  display: block;
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+  margin: auto;
+  box-shadow: 0 0 0 0.5px hsl(0, 0%, 0%);
+}
+
+/* getting better effort attempt */
+
+/* getting better effort attempt element two */
+
+[class="digit-style-wrapper-two"] {
+  margin-block-start: 48px;
+  width: min-content;
+  background-color: hsl(0, 0%, 0%);
+  border-radius: 6px;
+}
+
+.test-container-two {
+  transform: translateY(-10px);
+  /* padding: 56px; */
+  background-color: hsl(0, 100%, 100%);
+  border-radius: 4px;
+}
+
+/* clip-path: inset(50% 0 0 0); */
+
+/* 
+
+hide bottom
+clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 0% 50%);
+*/
+/* 
+hide top
+clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%); */
+
+/* use linear gradient */
+
+.content-two {
+  position: relative;
+  font-size: 4rem;
+  padding-inline: 32px;
+  background-image: linear-gradient(
+    rgba(0, 0, 255, 0.5) 50%,
+    rgba(255, 255, 0, 0.5) 50%
+  );
+}
+
+.content-two::before {
+  content: attr(data-digit);
+  position: absolute;
+  background-color: red;
+  height: 50%;
+  /* transform: translateY(-10px); */
+}
+
+/* .content-two::after {
+  content: attr(data-digit);
+  position: absolute;
+} */
+
+/* getting better effort attempt element two */
+
+/* getting better effort attempt element three */
+
+[class="digit-style-wrapper-three"] {
+  margin-block-start: 48px;
+  font-size: 4rem;
+  color: hsl(0, 100%, 100%);
+  background-color: hsl(0, 0%, 0%);
+  max-width: min-content;
+}
+
+.test-container-three {
+  background-color: hsl(236, 21%, 26%);
+  max-width: min-content;
+  display: grid;
+  position: relative;
+}
+
+/* half circle center of digit style wrapper */
+
+[class="test-container-three"]::before,
+[class="test-container-three"]::after {
+  content: "";
+  display: block;
+  width: 11px;
+  height: 11px;
+  position: absolute;
+  top: calc(50% - 6px);
+  border-radius: 50%;
+  background-color: hsl(0, 0%, 0%);
+}
+
+[class="test-container-three"]::before {
+  /* the width of our dots in center is 10px we want half circle effect
+  so we will take 10 / 2 to get 5px for left
+  */
+  left: -5px;
+  z-index: 1;
+}
+
+[class="test-container-three"]::after {
+  /* the width of our dots in center is 10px we want half circle effect
+  so we will take 10 / 2 to get 5px for 
+  */
+  right: -5px;
+}
+
+[class*="content-three"] {
+  grid-row: 1 / 2;
+  grid-column: 1 / -1;
+  padding: 28px;
+  padding-block: 14px;
+}
+
+.content-three-top {
+  /* position: absolute;
+  inset: 0;
+  min-height: 50%; */
+  /* background-color: red; */
+  clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 0% 50%);
+  background-color: royalblue;
+  /* background: linear-gradient(
+    hsl(240, 21%, 22%) 0%,
+    hsla(0, 100%, 100%, 0.1) 10%
+  ); */
+}
+
+.content-three-back {
+  /* opacity: 1; */
+}
+
+/* 
+
+transform: rotateX(180deg)
+opacity: 0;
+* 180deg to 90deg
+opacity will be .3
+opacity: .3;
+*
+transform: rotateX(90deg);
+opacity: 1;
+
+90deg to 0deg
+opacity: 1
+
+*/
+
+.content-three-bottom {
+  background: rebeccapurple;
+  clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+  position: relative;
+  /* transform: rotateX(180deg);
+  opacity: 0; */
+  /* animation: flipTopToBottom 1000ms ease-in infinite forwards; */
+}
+
+/* hover effect */
+
+/* .test-container-three:hover .content-three-bottom {
+  transform: rotateX(0deg);
+  opacity: 1;
+  transition: transform 1000ms ease-in, opacity 1000ms ease-in;
+} */
+
+/* animation */
+
+@keyframes flipTopToBottom {
+  0% {
+    transform: rotateX(180deg);
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+    transition: transform 1000ms ease-in, opacity 1000ms ease-in;
+  }
+}
+
+/*
+
+work with new Date()?
+
+working on white background to bottom half of digit
+
+.content-three-bottom::after {
+  background-color: hsla(0, 100%, 100%, 0.8);
+  content: "";
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  display: block;
+  z-index: -1;
+}
+*/
+
+/* getting better effort attempt element three */
+
+/* activate modal only using CSS */
+
+/*
+button:active + [id="modal-one"] {
+  display: flex;
+}
+
+[id="modal-one"] {
+  position: fixed;
+  inset: 0;
+  background-color: hsla(0, 0%, 0%, 0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-style-wrapper {
+  max-width: 500px;
+  background-color: hsl(0, 100%, 100%);
+  border-radius: 5px;
+  padding: 142px;
+}
+*/
+
+/* modal slide from right side of screen on hover */
+
+/*
+[id="modal-one"] {
+  position: fixed;
+  min-width: 350px;
+  background-color: hsl(0, 100%, 100%);
+  padding: 125px;
+  top: 25%;
+  right: 0;
+  transform: translateX(100%);
+  transition: transform 1000ms ease-in;
+}
+
+button[aria-label="open modal"]:hover + [id="modal-one"] {
+  transform: translateX(0px);
+  transition: transform 1000ms ease-out;
+}
+*/
