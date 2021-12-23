@@ -48,8 +48,8 @@ bottom margin on block and top margin on inline-block will not collapse. interes
 } */
 
 body {
-  color: var(--col-neutral-black);
-  font-family: var(--font-family-kumbh);
+  color: var(--col-primary-grayish-blue);
+  font-family: var(--font-family-red-hat);
   /* use color: revert for text that we dont want to be grayish blue */
   /* color: var(--color-neutral-grayish-blue); */
 }
@@ -433,4 +433,131 @@ a:hover {
 
 /* general styles */
 
+.app-style-wrapper {
+  border: 1px solid red;
+  max-width: 750px;
+  margin-inline: auto;
+}
+
 /* individial sections */
+
+/* background images section */
+
+.countdown-background-style-wrapper {
+  padding-block: 170px;
+  padding-block-end: 48px;
+  background-image: url("./images/bg-stars.svg"),
+    url("./images/pattern-hills.svg"),
+    linear-gradient(to bottom, hsl(249, 18%, 14%), hsl(266, 19%, 14%));
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: top, 84% bottom, top;
+  background-size: auto, 72rem, auto;
+}
+
+/* app wrapper */
+
+/* title */
+
+[id="app-title"] {
+  color: var(--col-neutral-white);
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  letter-spacing: 3px;
+  max-width: 23ch;
+  text-align: center;
+  margin-inline: auto;
+}
+
+/* digits */
+
+[class="countdown-digits-container"] {
+  margin-block-start: 72px;
+  display: flex;
+  gap: 8px;
+  /* display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+  justify-items: center; */
+  width: min-content;
+  margin-inline: auto;
+}
+
+.digit-text-wrapper div[id] {
+  font-size: 2.5rem;
+}
+
+.digit-text-wrapper {
+  text-align: center;
+  /* border: 1px solid antiquewhite; */
+}
+
+.countdown-digit-container {
+  padding: 14px;
+  padding-block: 10px;
+  background-color: hsl(0, 100%, 100%);
+}
+
+.digit-top {
+  color: var(--col-primary-soft-red-top);
+}
+
+.digit-back,
+.digit-bottom {
+  color: var(--col-primary-soft-red-bottom);
+}
+
+.date-time-text {
+  font-size: 0.5rem;
+  display: inline-block;
+  font-weight: normal;
+  letter-spacing: 2px;
+  margin-block-start: 20px;
+}
+
+/* modal */
+
+div[role="dialog"] {
+  margin-block-start: 145px;
+}
+
+/* button */
+
+[class="modal-launcher-back"]:focus [class="modal-launcher-front"],
+[class="modal-launcher-back"]:hover [class="modal-launcher-front"] {
+  transform: translate(0px);
+  transition: transform 500ms ease-out;
+}
+
+[class="modal-launcher-back"] {
+  margin-block-start: 210px;
+  margin-block-end: 72px;
+  color: var(--col-primary-soft-red-bottom);
+  background-color: var(--col-neutral-dark-blue-bottom);
+  border-radius: 5px;
+  padding: 0;
+  display: block;
+  margin-inline: auto;
+}
+
+[class="modal-launcher-front"] {
+  padding: 8px;
+  background-color: var(--col-neutral-white);
+  border-radius: 5px;
+  display: block;
+  transform: translate(4px, -6px);
+  transition: transform 500ms ease-in;
+}
+
+/* social media icons */
+
+[class="social-media-icons"] a {
+  display: inline-block;
+}
+
+[class="social-media-icons"] svg {
+  display: inline-block;
+  width: 24px;
+}
+
+[class="social-media-icons"] svg path {
+  fill: var(--col-primary-grayish-blue);
+}
