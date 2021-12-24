@@ -34,53 +34,72 @@
           <!-- digits containers -->
           <div class="countdown-digits-container">
             <div class="digit-text-wrapper">
-              <!-- days -->
-              <div id="days" class="countdown-digit-container">
-                <div class="digit-back">08</div>
-                <div hidden class="digit-top">08</div>
-                <div hidden class="digit-bottom">08</div>
+              <div class="countdown-digit-black-bg">
+                <!-- days -->
+                <div id="days" class="countdown-digit-container">
+                  <div class="digit-back">08</div>
+                  <div class="digit-top">08</div>
+                  <div class="digit-bottom">08</div>
+                </div>
               </div>
               <span class="date-time-text">DAYS</span>
             </div>
             <div class="digit-text-wrapper">
-              <!-- hours -->
-              <div id="hours" class="countdown-digit-container">
-                <div class="digit-back">08</div>
-                <div hidden class="digit-top">08</div>
-                <div hidden class="digit-bottom">08</div>
+              <div class="countdown-digit-black-bg">
+                <!-- hours -->
+                <div id="hours" class="countdown-digit-container">
+                  <div class="digit-back">08</div>
+                  <div class="digit-top">08</div>
+                  <div class="digit-bottom">08</div>
+                </div>
               </div>
               <span class="date-time-text">HOURS</span>
             </div>
             <div class="digit-text-wrapper">
-              <!-- minutes -->
-              <div id="minutes" class="countdown-digit-container">
-                <div class="digit-back">08</div>
-                <div hidden class="digit-top">08</div>
-                <div hidden class="digit-bottom">08</div>
+              <div class="countdown-digit-black-bg">
+                <!-- minutes -->
+                <div id="minutes" class="countdown-digit-container">
+                  <div class="digit-back">08</div>
+                  <div class="digit-top">08</div>
+                  <div class="digit-bottom">08</div>
+                </div>
               </div>
               <span class="date-time-text">MINUTES</span>
             </div>
             <div class="digit-text-wrapper">
-              <!-- seconds -->
-              <div id="seconds" class="countdown-digit-container">
-                <div class="digit-back">08</div>
-                <div hidden class="digit-top">08</div>
-                <div hidden class="digit-bottom">08</div>
+              <div class="countdown-digit-black-bg">
+                <!-- seconds -->
+                <div id="seconds" class="countdown-digit-container">
+                  <div class="digit-back">08</div>
+                  <div class="digit-top">08</div>
+                  <div class="digit-bottom">08</div>
+                </div>
               </div>
               <span class="date-time-text">SECONDS</span>
             </div>
           </div>
+          <!-- button -->
+          <button
+            role="button"
+            class="modal-launcher-back"
+            aria-label="enter starting date"
+          >
+            <span class="modal-launcher-front">Starting Date </span>
+          </button>
           <!-- user input -->
           <!-- enter unique countdown date -->
           <div
+            id="modal-one"
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-one-title"
-            hidden
           >
             <form action="#">
-              <h2 id="modal-one-title">Enter Countdown Date</h2>
+              <h2 id="modal-one-title" class="visually-hidden">
+                Enter Countdown Date
+              </h2>
               <div class="date-input-wrapper">
+                <!-- date: month, day, year -->
                 <label for="month">Month</label>
                 <select name="" id="month">
                   <option value="">Select Month</option>
@@ -98,84 +117,206 @@
                   <option value="December">December</option>
                 </select>
                 <label for="day">Day</label>
-                <select name="" id="day"></select>
+                <select name="" id="day">
+                  <option value="">Select Day</option>
+                  <!-- option[value="$"]{$}*31 -->
+                  <option value="1">01</option>
+                  <option value="2">02</option>
+                  <option value="3">03</option>
+                  <option value="4">04</option>
+                  <option value="5">05</option>
+                  <option value="6">06</option>
+                  <option value="7">07</option>
+                  <option value="8">08</option>
+                  <option value="9">09</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                  <option value="13">13</option>
+                  <option value="14">14</option>
+                  <option value="15">15</option>
+                  <option value="16">16</option>
+                  <option value="17">17</option>
+                  <option value="18">18</option>
+                  <option value="19">19</option>
+                  <option value="20">20</option>
+                  <option value="21">21</option>
+                  <option value="22">22</option>
+                  <option value="23">23</option>
+                  <option value="24">24</option>
+                  <option value="25">25</option>
+                  <option value="26">26</option>
+                  <option value="27">27</option>
+                  <option value="28">28</option>
+                  <option value="29">29</option>
+                  <option value="30">30</option>
+                  <option value="31">31</option>
+                </select>
                 <label for="year">Year</label>
-                <select name="" id="year"></select>
+                <select name="" id="year">
+                  <option value="">Select Year</option>
+                  <option value="2021">2021</option>
+                  <option value="2022">2022</option>
+                  <option value="2023">2023</option>
+                  <option value="2024">2024</option>
+                  <option value="2025">2025</option>
+                  <option value="2026">2026</option>
+                  <option value="2027">2027</option>
+                  <option value="2028">2028</option>
+                  <option value="2029">2029</option>
+                  <option value="2030">2030</option>
+                </select>
+                <!-- time: hr, min, am/pm -->
+                <label for="hour">Hour</label>
+                <select name="" id="hour">
+                  <option value="">Select Hour</option>
+                  <option value="1">01</option>
+                  <option value="2">02</option>
+                  <option value="3">03</option>
+                  <option value="4">04</option>
+                  <option value="5">05</option>
+                  <option value="6">06</option>
+                  <option value="7">07</option>
+                  <option value="8">08</option>
+                  <option value="9">09</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                </select>
+                <label for="minute">Minute</label>
+                <select name="" id="minute">
+                  <option value="">Select Minute</option>
+                  <option value="1">01</option>
+                  <option value="2">02</option>
+                  <option value="3">03</option>
+                  <option value="4">04</option>
+                  <option value="5">05</option>
+                  <option value="6">06</option>
+                  <option value="7">07</option>
+                  <option value="8">08</option>
+                  <option value="9">09</option>
+                  <option value="10">10</option>
+                  <option value="11">11</option>
+                  <option value="12">12</option>
+                  <option value="13">13</option>
+                  <option value="14">14</option>
+                  <option value="15">15</option>
+                  <option value="16">16</option>
+                  <option value="17">17</option>
+                  <option value="18">18</option>
+                  <option value="19">19</option>
+                  <option value="20">20</option>
+                  <option value="21">21</option>
+                  <option value="22">22</option>
+                  <option value="23">23</option>
+                  <option value="24">24</option>
+                  <option value="25">25</option>
+                  <option value="26">26</option>
+                  <option value="27">27</option>
+                  <option value="28">28</option>
+                  <option value="29">29</option>
+                  <option value="30">30</option>
+                  <option value="31">31</option>
+                  <option value="32">32</option>
+                  <option value="33">33</option>
+                  <option value="34">34</option>
+                  <option value="35">35</option>
+                  <option value="36">36</option>
+                  <option value="37">37</option>
+                  <option value="38">38</option>
+                  <option value="39">39</option>
+                  <option value="40">40</option>
+                  <option value="41">41</option>
+                  <option value="42">42</option>
+                  <option value="43">43</option>
+                  <option value="44">44</option>
+                  <option value="45">45</option>
+                  <option value="46">46</option>
+                  <option value="47">47</option>
+                  <option value="48">48</option>
+                  <option value="49">49</option>
+                  <option value="50">50</option>
+                  <option value="51">51</option>
+                  <option value="52">52</option>
+                  <option value="53">53</option>
+                  <option value="54">54</option>
+                  <option value="55">55</option>
+                  <option value="56">56</option>
+                  <option value="57">57</option>
+                  <option value="58">58</option>
+                  <option value="59">59</option>
+                  <option value="60">60</option>
+                </select>
+                <label for="meridiem">AM/PM</label>
+                <select name="" id="meridiem">
+                  <option value="">Select AM/PM</option>
+                  <option value="AM">AM</option>
+                  <option value="PM">PM</option>
+                </select>
               </div>
-              <!-- time -->
-              <div class="date-time-wrapper">
-                <label for="hour"></label>
-                <select name="" id="hour"></select>
-                <label for="minute"></label>
-                <select name="" id="minute"></select>
-                <label for="time-periods"></label>
-                <select name="" id="time-periods"></select>
-              </div>
+              <button type="submit">Submit Date</button>
             </form>
           </div>
-          <!-- button -->
-          <button role="button" class="modal-launcher-back">
-            <span class="modal-launcher-front"> Enter Starting Date </span>
-          </button>
+
           <!-- social media icons/links -->
-          <div class="social-media-icons">
-            <a href="">
-              <!-- github -->
-              <span class="visually-hidden">Toan Khuong github</span>
-              <svg
-                role="img"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <title>GitHub</title>
-                <path
-                  d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
-                />
-              </svg>
-            </a>
-            <a href="">
-              <!-- linkedin -->
-              <span class="visually-hidden">Toan Khuong Linked In</span>
-              <svg
-                role="img"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <title>LinkedIn</title>
-                <path
-                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
-                />
-              </svg>
-            </a>
-            <a href="">
-              <!-- twitter -->
-              <span class="visually-hidden">Toan Khuong Twitter</span>
-              <svg
-                role="img"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <title>Twitter</title>
-                <path
-                  d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"
-                />
-              </svg>
-            </a>
-            <a href="">
-              <!-- medium -->
-              <span class="visually-hidden">Toan Khuong Medium</span>
-              <svg
-                role="img"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <title>Medium</title>
-                <path
-                  d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"
-                />
-              </svg>
-            </a>
-          </div>
+        </div>
+        <div class="social-media-icons">
+          <a href="">
+            <!-- github -->
+            <span class="visually-hidden">Toan Khuong github</span>
+            <svg
+              role="img"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <title>GitHub</title>
+              <path
+                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+              />
+            </svg>
+          </a>
+          <a href="">
+            <!-- linkedin -->
+            <span class="visually-hidden">Toan Khuong Linked In</span>
+            <svg
+              role="img"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <title>LinkedIn</title>
+              <path
+                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+              />
+            </svg>
+          </a>
+          <a href="">
+            <!-- twitter -->
+            <span class="visually-hidden">Toan Khuong Twitter</span>
+            <svg
+              role="img"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <title>Twitter</title>
+              <path
+                d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"
+              />
+            </svg>
+          </a>
+          <a href="">
+            <!-- medium -->
+            <span class="visually-hidden">Toan Khuong Medium</span>
+            <svg
+              role="img"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <title>Medium</title>
+              <path
+                d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"
+              />
+            </svg>
+          </a>
         </div>
       </section>
     </main>
@@ -203,3 +344,62 @@
       </a>
 
  -->
+
+<!-- 
+  first effort: good start
+  
+
+  <div class="date-input-wrapper">
+  <div class="left">
+    <div class="date-label-select-wrapper">
+      <label for="month">Month</label>
+      <select name="" id="month">
+        <option value="">Select Month</option>
+        <option value="Jan">January</option>
+        <option value="Feb">February</option>
+        <option value="Mar">March</option>
+        <option value="Apr">April</option>
+        <option value="May">May</option>
+        <option value="Jun">June</option>
+        <option value="Jul">July</option>
+        <option value="Aug">August</option>
+        <option value="Sep">September</option>
+        <option value="Oct">October</option>
+        <option value="Nov">November</option>
+        <option value="December">December</option>
+      </select>
+    </div>
+    <div class="date-label-select-wrapper">
+      <label for="day">Day</label>
+      <select name="" id="day">
+        <option value="">Select Day</option>
+      </select>
+    </div>
+    <div class="date-label-select-wrapper">
+      <label for="year">Year</label>
+      <select name="" id="year">
+        <option value="">Select Year</option>
+      </select>
+    </div>
+  </div>
+  <div class="right">
+    <div class="date-label-select-wrapper">
+      <label for="hour">Hour</label>
+      <select name="" id="hour">
+        <option value="">Select Hour</option>
+      </select>
+    </div>
+    <div class="date-label-select-wrapper">
+      <label for="minute">Minute</label>
+      <select name="" id="minute">
+        <option value="">Select Minute</option>
+      </select>
+    </div>
+    <div class="date-label-select-wrapper">
+      <label for="time-periods">AM/PM</label>
+      <select name="" id="time-periods">
+        <option value="">Day/Night</option>
+      </select>
+    </div>
+  </div>
+</div> -->
