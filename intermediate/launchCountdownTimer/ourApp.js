@@ -1,9 +1,32 @@
 (function scoprOurVariables() {
   //   declare selector at top of func
-  const { effortTwo } = ourSelectors();
+  const { effortTwo, monthSelectElement, userInputModalDiv, formElement } =
+    ourSelectors();
+
+  addEventListener.call(userInputModalDiv, "change", function TODO(event) {
+    if (event.target.value == "Mar") {
+      console.log("Hello");
+    }
+  });
+
+  addEventListener.call(formElement, "submit", function TODO(event) {
+    console.log(monthSelectElement.value);
+    console.log(
+      Array.prototype.slice
+        .call(event.target.children[1].children)
+        .reduce((buildingUp, currentElement) => {
+          if (currentElement.tagName == "SELECT") {
+            const elementID = currentElement.getAttribute("id");
+            const elementValue = currentElement.value;
+            buildingUp[elementID] = elementValue;
+          }
+          return buildingUp;
+        }, {})
+    );
+  });
 
   //   addEventListener.call(effortTwo, "keydown", testingCallback);
-
+  console.log(userInputModalDiv);
   function testingCallback(event) {
     console.log(event);
     const eventObjProperties = propertiesOfEventObj.call(event);
@@ -72,9 +95,15 @@
   console.log(dataObj.sayHi.call(testObj));
 
   function ourSelectors() {
+    const monthSelectElement = document.querySelector("select[id='month']");
+    const formElement = document.querySelector("form");
+    const userInputModalDiv = document.getElementById("modal-one");
     const effortTwo = document.querySelector("digit-style-wrapper-two");
 
     return {
+      monthSelectElement,
+      formElement,
+      userInputModalDiv,
       effortTwo,
     };
   }
