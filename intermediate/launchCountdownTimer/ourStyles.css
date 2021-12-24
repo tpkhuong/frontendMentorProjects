@@ -433,10 +433,20 @@ a:hover {
 
 /* general styles */
 
+main[role="main"] {
+  height: 100%;
+}
+
 .app-style-wrapper {
-  border: 1px solid red;
+  /* border: 1px solid red; */
+  /*
+  use declaration below if we want to declare margin-top on social media icon container
+  border: .1px solid transparent; 
+  will cause margin to not collapse
+  */
   max-width: 750px;
   margin-inline: auto;
+  position: relative;
 }
 
 /* individial sections */
@@ -444,14 +454,16 @@ a:hover {
 /* background images section */
 
 .countdown-background-style-wrapper {
-  padding-block: 170px;
-  padding-block-end: 48px;
+  min-height: 100%;
+  padding-block-start: 148px;
+  /* padding-block-end: 48px; */
   background-image: url("./images/bg-stars.svg"),
     url("./images/pattern-hills.svg"),
     linear-gradient(to bottom, hsl(249, 18%, 14%), hsl(266, 19%, 14%));
   background-repeat: no-repeat, no-repeat, no-repeat;
   background-position: top, 84% bottom, top;
   background-size: auto, 72rem, auto;
+  text-align: center;
 }
 
 /* app wrapper */
@@ -481,6 +493,38 @@ a:hover {
   margin-inline: auto;
 }
 
+/* [class="countdown-digits-container"] > * + * {
+  margin-inline-start: 8px;
+} */
+
+/* [class="countdown-digits-container"] .digit-text-wrapper:not(:last-child) {
+  margin-inline-end: 8px;
+} */
+
+/* [class="countdown-digits-container"] .digit-text-wrapper:not(:first-child) {
+  margin-inline-start: 8px;
+} */
+
+/* individual digit container */
+
+.countdown-digit-container {
+  display: grid;
+  /* for used with half circle at center of digits */
+  position: relative;
+  transform: translateY(-5px);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.digit-back,
+.digit-top,
+.digit-bottom {
+  grid-column: 1 / -1;
+  grid-row: 1/-1;
+  padding: 14px;
+  padding-block: 10px;
+}
+
 .digit-text-wrapper div[id] {
   font-size: 2.5rem;
 }
@@ -490,19 +534,63 @@ a:hover {
   /* border: 1px solid antiquewhite; */
 }
 
-.countdown-digit-container {
-  padding: 14px;
-  padding-block: 10px;
-  background-color: hsl(0, 100%, 100%);
+.countdown-digit-black-bg {
+  background-color: var(--col-neutral-black-blue-bg);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+/* half circle at center of digits */
+
+.countdown-digit-container::before,
+.countdown-digit-container::after {
+  content: "";
+  display: block;
+  /* desktop size 
+  width: 11px;
+  height: 11px;
+  
+  top: calc(50% - 6px);
+  */
+  width: 8px;
+  height: 8px;
+  top: calc(50% - 5px);
+  position: absolute;
+  border-radius: 50%;
+  background-color: var(--col-neutral-black-blue-bg);
+}
+
+.countdown-digit-container::before {
+  /* 
+  desktop size
+  left: -5px;
+  */
+  left: -4px;
+  z-index: 1;
+}
+
+.countdown-digit-container::after {
+  right: -4px;
+  /* 
+  desktop size
+  right: -5px;
+  */
 }
 
 .digit-top {
   color: var(--col-primary-soft-red-top);
+  background-color: var(--col-neutral-dark-blue-top);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 50%, 0% 50%);
+}
+
+.digit-bottom {
+  clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
 }
 
 .digit-back,
 .digit-bottom {
   color: var(--col-primary-soft-red-bottom);
+  background-color: var(--col-neutral-dark-blue-bottom);
 }
 
 .date-time-text {
@@ -510,14 +598,88 @@ a:hover {
   display: inline-block;
   font-weight: normal;
   letter-spacing: 2px;
-  margin-block-start: 20px;
+  margin-block-start: 10px;
 }
 
 /* modal */
 
 div[role="dialog"] {
-  margin-block-start: 145px;
+  /* margin-block-start: 145px; */
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  /* width: max-content; */
+  margin-inline: auto;
+  font-size: 0.8rem;
+  padding-inline: 11px;
+  opacity: 0;
+  transition: opacity 1000ms ease-out;
 }
+
+/* using grid area */
+
+.date-input-wrapper {
+  text-align: left;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, min-content 1fr);
+  grid-template-areas:
+    "label-month select-month label-hour select-hour"
+    "label-day select-day label-minute select-minute"
+    "label-year select-year label-meridiem select-meridiem";
+  align-items: center;
+}
+
+/* label elements */
+
+label[for="month"] {
+  grid-area: label-month;
+}
+label[for="day"] {
+  grid-area: label-day;
+}
+label[for="year"] {
+  grid-area: label-year;
+}
+label[for="hour"] {
+  grid-area: label-hour;
+}
+label[for="minute"] {
+  grid-area: label-minute;
+}
+label[for="meridiem"] {
+  grid-area: label-meridiem;
+}
+
+/* select element */
+
+select[id="month"] {
+  grid-area: select-month;
+}
+select[id="day"] {
+  grid-area: select-day;
+}
+select[id="year"] {
+  grid-area: select-year;
+}
+select[id="hour"] {
+  grid-area: select-hour;
+}
+select[id="minute"] {
+  grid-area: select-minute;
+}
+select[id="meridiem"] {
+  grid-area: select-meridiem;
+}
+
+button[type="submit"] {
+  margin-block-start: 20px;
+}
+
+/* .date-time-wrapper {
+  margin-block: 10px;
+} */
 
 /* button */
 
@@ -528,9 +690,9 @@ div[role="dialog"] {
 }
 
 [class="modal-launcher-back"] {
-  margin-block-start: 210px;
-  margin-block-end: 72px;
-  color: var(--col-primary-soft-red-bottom);
+  margin-block-start: 240px;
+  /* margin-block-end: 72px; */
+  margin-block-end: 125px;
   background-color: var(--col-neutral-dark-blue-bottom);
   border-radius: 5px;
   padding: 0;
@@ -538,19 +700,56 @@ div[role="dialog"] {
   margin-inline: auto;
 }
 
-[class="modal-launcher-front"] {
+[class="modal-launcher-front"],
+button[type="submit"] {
   padding: 8px;
+  color: var(--col-primary-soft-red-bottom);
   background-color: var(--col-neutral-white);
   border-radius: 5px;
+}
+
+[class="modal-launcher-front"] {
   display: block;
   transform: translate(4px, -6px);
   transition: transform 500ms ease-in;
 }
 
+/* opacity effect on modal */
+
+[class="modal-launcher-back"]:hover + div[id="modal-one"] {
+  opacity: 1;
+  transition: opacity 1000ms ease-in;
+}
+
 /* social media icons */
+
+.social-media-icons {
+  /* we had border around app-style-wrapper
+  which did not allow for margin-collapse with starting date button
+  and container for social media icon
+  had to use margin-block-start on this element
+  */
+  /* when we moved border on around app-style-wrapper
+  margin-top on this element margin-bottom on starting date button
+  collapsed. we can remove the declaration margin-top on this element
+  add more margin-bottom on starting date button
+  margin-block-start: 62px;
+  */
+}
+
+/* hover/focus effect */
+
+[class="social-media-icons"] a:hover path,
+[class="social-media-icons"] a:focus path {
+  fill: var(--col-primary-soft-red-bottom);
+}
 
 [class="social-media-icons"] a {
   display: inline-block;
+}
+
+[class="social-media-icons"] > * + * {
+  margin-inline-start: 8px;
 }
 
 [class="social-media-icons"] svg {
