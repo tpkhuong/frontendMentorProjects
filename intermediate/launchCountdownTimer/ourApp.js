@@ -2,7 +2,10 @@
   //   declare selector at top of func
   const { effortTwo, monthSelectElement, userInputModalDiv, formElement } =
     ourSelectors();
-
+  // execute/call/invoke our data obj func
+  const accessOurData = scopeOurData();
+  const dataObj = accessOurData();
+  // add event listeners
   addEventListener.call(userInputModalDiv, "change", function TODO(event) {
     if (event.target.value == "Mar") {
       console.log("Hello");
@@ -10,33 +13,33 @@
   });
 
   addEventListener.call(formElement, "submit", function TODO(event) {
+    // copy obj
+    // const copyOfDataObj = { ...dataObj.userStartingDateInput };
+    // console.log(copyOfDataObj);
+    event.preventDefault();
     console.log(monthSelectElement.value);
-    console.log(
-      Array.prototype.slice
-        .call(event.target.children[1].children)
-        .reduce((buildingUp, currentElement) => {
-          if (currentElement.tagName == "SELECT") {
-            const elementID = currentElement.getAttribute("id");
-            const elementValue = currentElement.value;
-            buildingUp[elementID] = elementValue;
-          }
-          return buildingUp;
-        }, {})
-    );
+    dataObj.userStartingDateInput = Array.prototype.slice
+      .call(event.target.children[1].children)
+      .reduce((buildingUp, currentElement) => {
+        if (currentElement.tagName == "SELECT") {
+          const elementID = currentElement.getAttribute("id");
+          const elementValue = currentElement.value;
+          buildingUp[elementID] = elementValue;
+        }
+        return buildingUp;
+      }, {});
+    console.log(dataObj);
   });
 
-  //   addEventListener.call(effortTwo, "keydown", testingCallback);
-  console.log(userInputModalDiv);
-  function testingCallback(event) {
-    console.log(event);
-    const eventObjProperties = propertiesOfEventObj.call(event);
-    console.log(eventObjProperties);
-  }
+  /**
+   * how to use addEventListener below
+   * addEventListener.call(effortTwo, "keydown", testingCallback);
+   * **/
 
   function addEventListener(eventStr, eventCallback) {
     this.addEventListener(eventStr, eventCallback);
-    console.log(eventStr);
-    console.log(eventCallback);
+    // console.log(eventStr);
+    // console.log(eventCallback);
   }
 
   function propertiesOfEventObj() {
@@ -49,19 +52,48 @@
   }
   // countDown();
   function countDown() {
-    setInterval(() => {
+    return setInterval(() => {
       const currentDate = new Date();
       let currentSecond = 60 - currentDate.getSeconds();
       if (currentSecond == 60) {
+        // call checkMinute and checkHour here
+        checkMinute();
+        checkHour();
         currentSecond = 0;
       }
+      console.log(dataObj);
       console.log(currentSecond);
     }, 1000);
   }
 
-  const accessOurData = scopedOurData();
+  function checkMinute() {
+    console.log("minute");
+    console.log(dataObj.minutesDigit);
+    let minuteValue = dataObj.minutesDigit;
+    // if dataObj.minutesDigit is 0 we want to assign 59 to
+    // dataObj.minutesDigit AND NOT subtract 1 from it
+    // that will make dataObj.minutesDigit 58
+    if (minuteValue === 0) {
+      dataObj.minutesDigit = 59;
+    } else {
+      // else
+      // subtract 1 from minuteDigit
+      dataObj.minutesDigit--;
+    }
+  }
 
-  function scopedOurData() {
+  function checkHour() {
+    const { minutesDigit: minute } = dataObj;
+    if (minute == 59) {
+      dataObj.hoursDigit--;
+    }
+    console.log("hour");
+    console.log(dataObj.hoursDigit);
+  }
+
+  // day checker
+
+  function scopeOurData() {
     const innerDataObj = {
       numOfDaysOfMonths: {
         Jan: 31,
@@ -77,22 +109,20 @@
         Nov: 30,
         Dec: 31,
       },
-      name: "Deadpool",
-      sayHi() {
-        console.log(`${this.name} hello`);
-      },
+      userStartingDateInput: {},
+      minutesDigit: 2,
+      hoursDigit: 8,
+      daysDigit: 8,
+      // name: "Deadpool",
+      // sayHi() {
+      //   console.log(`${this.name} hello`);
+      // },
     };
 
     return function closureOverOurVariables() {
       return innerDataObj;
     };
   }
-
-  const dataObj = accessOurData();
-  const testObj = {
-    name: "Spider-Man",
-  };
-  console.log(dataObj.sayHi.call(testObj));
 
   function ourSelectors() {
     const monthSelectElement = document.querySelector("select[id='month']");
@@ -282,4 +312,21 @@
      return [firstValue, betweenValues, lastValue];
    }
    * **/
+  /**
+   * notes
+   * **/
+  const notes = function () {
+    const dataObj = accessOurData();
+    const testObj = {
+      name: "Spider-Man",
+    };
+    console.log(dataObj.sayHi.call(testObj));
+    /*****/
+    console.log(userInputModalDiv);
+    function testingCallback(event) {
+      console.log(event);
+      const eventObjProperties = propertiesOfEventObj.call(event);
+      console.log(eventObjProperties);
+    }
+  };
 })();
