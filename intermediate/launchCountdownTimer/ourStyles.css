@@ -614,7 +614,7 @@ div[role="dialog"] {
   font-size: 0.8rem;
   padding-inline: 11px;
   opacity: 0;
-  transition: opacity 1000ms ease-out;
+  transition: opacity 500ms ease-out;
 }
 
 /* using grid area */
@@ -716,9 +716,20 @@ button[type="submit"] {
 
 /* opacity effect on modal */
 
-[class="modal-launcher-back"]:hover + div[id="modal-one"] {
+[class="modal-launcher-back"][user-clicked="true"] + div[id="modal-one"] {
   opacity: 1;
   transition: opacity 1000ms ease-in;
+}
+
+/* opacity effect on starting date button */
+
+[class="modal-launcher-back"][user-clicked="false"] {
+  opacity: 1;
+  transition: opacity 1000ms ease-in;
+}
+[class="modal-launcher-back"][user-clicked="true"] {
+  opacity: 0;
+  transition: opacity 500ms ease-out;
 }
 
 /* social media icons */
