@@ -381,6 +381,18 @@ opacity: 1
   }
 }
 
+.content-three-bottom {
+  transform: rotateX(180deg);
+  opacity: 0;
+}
+
+[id="testing-btn"]:hover + .digit-style-wrapper-three .content-three-bottom {
+  transform: rotateX(0deg);
+  opacity: 1;
+  transition: transform 1000ms ease-out, opacity 700ms ease-out;
+  transition-delay: 1000ms;
+}
+
 /*
 
 work with new Date()?
