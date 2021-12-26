@@ -5,6 +5,10 @@
   // execute/call/invoke our data obj func
   const accessOurData = scopeOurData();
   const dataObj = accessOurData();
+  // declare/define our days, hours, and minutes func
+  const handleDaysChange = daysHoursMinutesHelper();
+  const handleHoursChange = daysHoursMinutesHelper();
+  const handleMinutesChange = daysHoursMinutesHelper();
   // add event listeners
   addEventListener.call(userInputModalDiv, "change", function TODO(event) {
     if (event.target.value == "Mar") {
@@ -16,7 +20,7 @@
     // copy obj
     // const copyOfDataObj = { ...dataObj.userStartingDateInput };
     // console.log(copyOfDataObj);
-    event.preventDefault();
+    // event.preventDefault();
     console.log(monthSelectElement.value);
     dataObj.userStartingDateInput = Array.prototype.slice
       .call(event.target.children[1].children)
@@ -29,6 +33,7 @@
         return buildingUp;
       }, {});
     console.log(dataObj);
+    this.reset();
   });
 
   /**
@@ -55,16 +60,38 @@
     return setInterval(() => {
       const currentDate = new Date();
       let currentSecond = 60 - currentDate.getSeconds();
-      if (currentSecond == 60) {
-        // call checkMinute and checkHour here
-        checkMinute();
-        checkHour();
-        currentSecond = 0;
+      // call our handleDays, handleHours, handleMinutesChange func
+      // when currentSecound is 59
+      // if (currentSecond == 60) {
+      // // call checkMinute and checkHour here
+      // handleDaysChange("daysDigit");
+      // handleHoursChange("hoursDigit");
+      // handleMinutesChange("minutesDigit");
+      // // checkMinute();
+      // // checkHour();
+      // //   minutesDigit: 2,
+      // // hoursDigit: 8,
+      // // daysDigit
+      //   currentSecond = 0;
+      // }
+      switch (currentSecond) {
+        case 60:
+          currentSecond = 0;
+          break;
+        case 59:
+          handleDaysChange("daysDigit");
+          handleHoursChange("hoursDigit");
+          handleMinutesChange("minutesDigit");
+          break;
       }
       console.log(dataObj);
       console.log(currentSecond);
     }, 1000);
   }
+
+  /**
+   * han
+   * **/
 
   function checkMinute() {
     console.log("minute");
@@ -91,7 +118,64 @@
     console.log(dataObj.hoursDigit);
   }
 
-  // day checker
+  /**
+   * days, hours, minutes helper/factory func
+   * **/
+
+  function daysHoursMinutesHelper() {
+    return function innerFunc(daysHoursOrMin) {
+      // this func runs when currentSecond is 59
+      const {
+        daysDigit: days,
+        hoursDigit: hours,
+        minutesDigit: minutes,
+      } = dataObj;
+      // use switch
+      switch (daysHoursOrMin) {
+        case "daysDigit":
+          console.log("daysDigit", daysHoursOrMin);
+          if (hours == 23) {
+            dataObj[daysHoursOrMin]--;
+          }
+          break;
+        case "hoursDigit":
+          console.log("hoursDigit", daysHoursOrMin);
+          // check if hours is 0 inside of a condition
+          // where we check if minute value is 59
+          if (minutes == 59) {
+            if (hours === 0) {
+              dataObj[daysHoursOrMin] = 23;
+            } else {
+              dataObj[daysHoursOrMin]--;
+            }
+          }
+          // what is tenary operator version
+          // null is met if minutes is not 59
+          minutes == 59
+            ? hours === 0
+              ? (dataObj[daysHoursOrMin] = 23)
+              : dataObj[daysHoursOrMin]--
+            : null;
+          break;
+        case "minutesDigit":
+          console.log("minutesDigit", daysHoursOrMin);
+          // when currentSecond is 59
+          // we want to subtract 1 off minute
+          // if statement
+          // if (minutes === 0) {
+          //   dataObj[daysHoursOrMin] = 59;
+          // } else {
+          //   dataObj[daysHoursOrMin]--
+          // }
+          // ternary operator
+          minutes === 0
+            ? (dataObj[daysHoursOrMin] = 59)
+            : dataObj[daysHoursOrMin]--;
+          break;
+      }
+      console.log("here", dataObj[daysHoursOrMin]);
+    };
+  }
 
   function scopeOurData() {
     const innerDataObj = {
