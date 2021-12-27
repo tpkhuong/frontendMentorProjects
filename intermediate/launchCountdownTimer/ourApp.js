@@ -1,7 +1,14 @@
 (function scoprOurVariables() {
   //   declare selector at top of func
-  const { effortTwo, monthSelectElement, userInputModalDiv, formElement } =
-    ourSelectors();
+  const {
+    monthSelectElement,
+    userInputModalDiv,
+    formElement,
+    arrayOfDaysDivElement,
+    arrayOfHoursDivElement,
+    arrayOfMinutesDivElement,
+    arrayOfSecondsDivElement,
+  } = ourSelectors();
   // execute/call/invoke our data obj func
   const accessOurData = scopeOurData();
   const dataObj = accessOurData();
@@ -15,7 +22,7 @@
       console.log("Hello");
     }
   });
-
+  console.log(document.querySelectorAll("div[id='seconds'] > div"));
   addEventListener.call(formElement, "submit", function TODO(event) {
     // copy obj
     // const copyOfDataObj = { ...dataObj.userStartingDateInput };
@@ -41,6 +48,17 @@
    * addEventListener.call(effortTwo, "keydown", testingCallback);
    * **/
 
+  consoleElement(
+    arrayOfDaysDivElement,
+    arrayOfHoursDivElement,
+    arrayOfMinutesDivElement,
+    arrayOfSecondsDivElement
+  );
+
+  function consoleElement(...element) {
+    console.log(element);
+  }
+
   function addEventListener(eventStr, eventCallback) {
     this.addEventListener(eventStr, eventCallback);
     // console.log(eventStr);
@@ -55,6 +73,7 @@
       booleanShiftKeyPressed: this.shiftKey,
     };
   }
+  // new Date("January 18, 2022, 0:00"); 12am
   // countDown();
   function countDown() {
     return setInterval(() => {
@@ -197,6 +216,7 @@
       minutesDigit: 2,
       hoursDigit: 8,
       daysDigit: 8,
+      dateOfHolidays: {},
       // name: "Deadpool",
       // sayHi() {
       //   console.log(`${this.name} hello`);
@@ -210,15 +230,32 @@
 
   function ourSelectors() {
     const monthSelectElement = document.querySelector("select[id='month']");
+    // form
     const formElement = document.querySelector("form");
     const userInputModalDiv = document.getElementById("modal-one");
-    const effortTwo = document.querySelector("digit-style-wrapper-two");
+    // array of back, top, bottom elements for days, hours, minutes, seconds
+    const arrayOfDaysDivElement = Array.from(
+      document.querySelectorAll("div[id='days'] > div")
+    );
+    const arrayOfHoursDivElement = Array.prototype.slice.call(
+      document.querySelectorAll("div[id='hours'] > div")
+    );
+    const arrayOfMinutesDivElement = Array.from(
+      document.querySelectorAll("div[id='minutes'] > div")
+    );
+    const arrayOfSecondsDivElement = Array.prototype.slice.call(
+      document.querySelectorAll("div[id='seconds'] > div")
+    );
+    // const effortTwo = document.querySelector("digit-style-wrapper-two");
 
     return {
       monthSelectElement,
       formElement,
       userInputModalDiv,
-      effortTwo,
+      arrayOfDaysDivElement,
+      arrayOfHoursDivElement,
+      arrayOfMinutesDivElement,
+      arrayOfSecondsDivElement,
     };
   }
 
