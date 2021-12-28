@@ -13,7 +13,7 @@
   const accessOurData = scopeOurData();
   const dataObj = accessOurData();
   // declare/define our days, hours, and minutes func
-  const handleDaysChange = daysHoursMinutesHelper();
+  // const handleDaysChange = daysHoursMinutesHelper();
   const handleHoursChange = daysHoursMinutesHelper();
   const handleMinutesChange = daysHoursMinutesHelper();
   // add event listeners
@@ -48,16 +48,16 @@
    * addEventListener.call(effortTwo, "keydown", testingCallback);
    * **/
 
-  consoleElement(
-    arrayOfDaysDivElement,
-    arrayOfHoursDivElement,
-    arrayOfMinutesDivElement,
-    arrayOfSecondsDivElement
-  );
+  // consoleElement(
+  //   arrayOfDaysDivElement,
+  //   arrayOfHoursDivElement,
+  //   arrayOfMinutesDivElement,
+  //   arrayOfSecondsDivElement
+  // );
 
-  function consoleElement(...element) {
-    console.log(element);
-  }
+  // function consoleElement(...element) {
+  //   console.log(element);
+  // }
 
   function addEventListener(eventStr, eventCallback) {
     this.addEventListener(eventStr, eventCallback);
@@ -74,7 +74,10 @@
     };
   }
   // new Date("January 18, 2022, 0:00"); 12am
+  // 23:00 is 11pm
+  // 24:00 is 12am
   // countDown();
+
   function countDown() {
     return setInterval(() => {
       const currentDate = new Date();
@@ -93,14 +96,31 @@
       // // daysDigit
       //   currentSecond = 0;
       // }
+      let {
+        daysDigit: days,
+        hoursDigit: hours,
+        minutesDigit: minutes,
+        stopTimer: happyHoliday,
+      } = dataObj;
       switch (currentSecond) {
         case 60:
           currentSecond = 0;
+          // check if days, hours, minutes are 0
+          // if all properties in dataObj are 0, we have reached the holiday date or
+          // userStartingDateInput
+          console.log("days", days);
+          console.log("hours", hours);
+          console.log("minutes", minutes);
+          if (days === 0 && hours === 0 && minutes === 0) {
+            // call countDown assign the return value of setInterval which will be
+            // the value to stop setInterval to the identifer something stopTimer,etc
+            // we will use that value assign to stopTimer as an argument to clearInterval(stopTimer)
+            clearInterval(happyHoliday);
+          }
           break;
         case 59:
-          handleDaysChange("daysDigit");
-          handleHoursChange("hoursDigit");
           handleMinutesChange("minutesDigit");
+          handleHoursChange("hoursDigit");
           break;
       }
       console.log(dataObj);
@@ -109,7 +129,7 @@
   }
 
   /**
-   * han
+   * handle
    * **/
 
   function checkMinute() {
@@ -161,18 +181,32 @@
           console.log("hoursDigit", daysHoursOrMin);
           // check if hours is 0 inside of a condition
           // where we check if minute value is 59
-          if (minutes == 59) {
-            if (hours === 0) {
-              dataObj[daysHoursOrMin] = 23;
-            } else {
-              dataObj[daysHoursOrMin]--;
-            }
-          }
+          // if (minutes == 59) {
+          //   if (hours === 0) {
+          //     dataObj[daysHoursOrMin] = 23;
+          //     // we could substract 1 from daysDigit
+          //     // in this if statement
+          //     handleDays();
+          //   } else {
+          //     dataObj[daysHoursOrMin]--;
+          //   }
+          // }
           // what is tenary operator version
           // null is met if minutes is not 59
+          /**
+           * first effort
+           * **/
+          // minutes == 59
+          //   ? hours === 0
+          //     ? ((dataObj[daysHoursOrMin] = 23), handleDays())
+          //     : dataObj[daysHoursOrMin]--
+          //   : null;
+          // another effort
           minutes == 59
-            ? hours === 0
-              ? (dataObj[daysHoursOrMin] = 23)
+            ? hours === 0 && days === 0
+              ? null
+              : hours === 0
+              ? ((dataObj[daysHoursOrMin] = 23), handleDays())
               : dataObj[daysHoursOrMin]--
             : null;
           break;
@@ -196,8 +230,36 @@
     };
   }
 
+  /**
+   * handlesDays countdown digit
+   * **/
+
+  function handleDays() {
+    // access daysDigit value in dataObj
+    const { daysDigit: days } = dataObj;
+    // minuteDigit will be the value 23
+    // we are calling this func inside of a switch statement when
+    // string passed in is "hoursDigit"
+    /**
+     * when minuteDigit is 23 and daysDigit is > 0 we will subtract 1 from daysDigit
+     * **/
+    // if (days > 0) {
+    //   dataObj["daysDigit"]--;
+    // }
+    // using ternary operator
+    days > 0 ? dataObj["daysDigit"]-- : null;
+  }
+
+  /**
+   * cached our data variables using closure
+   * **/
+
   function scopeOurData() {
     const innerDataObj = {
+      stopTimer: null,
+      minutesDigit: 1,
+      hoursDigit: 1,
+      daysDigit: 8,
       numOfDaysOfMonths: {
         Jan: 31,
         Feb: 28,
@@ -212,18 +274,73 @@
         Nov: 30,
         Dec: 31,
       },
-      userStartingDateInput: {},
-      minutesDigit: 2,
-      hoursDigit: 8,
-      daysDigit: 8,
-      dateOfHolidays: {},
+      userStartingDateInput: {
+        month: null,
+        day: null,
+        year: null,
+        time: null,
+      },
+      datesOfHoliday2022: {
+        MLKjrDay: {
+          month: "January",
+          day: "17",
+          year: "2022",
+          time: "0:00",
+        },
+        VNtet: {
+          month: "February",
+          day: "1",
+          year: "2022",
+          time: "0:00",
+        },
+        MemorialDay: {
+          month: "May",
+          day: "30",
+          year: "2022",
+          time: "0:00",
+        },
+        IndependenceDay: {
+          month: "July",
+          day: "4",
+          year: "2022",
+          time: "0:00",
+        },
+        LaborDay: {
+          month: "September",
+          day: "5",
+          year: "2022",
+          time: "0:00",
+        },
+        Thanksgiving: {
+          month: "November",
+          day: "24",
+          year: "2022",
+          time: "0:00",
+        },
+        Christmas: {
+          month: "December",
+          day: "25",
+          year: "2022",
+          time: "0:00",
+        },
+        NewYear: {
+          month: "January",
+          day: "1",
+          year: "2023",
+          time: "0:00",
+        },
+      },
       // name: "Deadpool",
       // sayHi() {
       //   console.log(`${this.name} hello`);
       // },
     };
 
-    return function closureOverOurVariables() {
+    return function closureOverOurVariables(days, hours, minutes) {
+      // testing only
+      innerDataObj["daysDigit"] = days;
+      innerDataObj["hoursDigit"] = hours;
+      innerDataObj["minutesDigit"] = minutes;
       return innerDataObj;
     };
   }
