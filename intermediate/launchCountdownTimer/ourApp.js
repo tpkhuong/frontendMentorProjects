@@ -22,14 +22,14 @@
       console.log("Hello");
     }
   });
-  console.log(document.querySelectorAll("div[id='seconds'] > div"));
+
   addEventListener.call(formElement, "submit", function TODO(event) {
     // copy obj
-    // const copyOfDataObj = { ...dataObj.userStartingDateInput };
+    // const copyOfDataObj = { ...dataObj.userDateInput };
     // console.log(copyOfDataObj);
     // event.preventDefault();
     console.log(monthSelectElement.value);
-    dataObj.userStartingDateInput = Array.prototype.slice
+    dataObj.userDateInput = Array.prototype.slice
       .call(event.target.children[1].children)
       .reduce((buildingUp, currentElement) => {
         if (currentElement.tagName == "SELECT") {
@@ -40,6 +40,7 @@
         return buildingUp;
       }, {});
     console.log(dataObj);
+    convertTwelveToTwentyFourHourFormat.call(dataObj.userDateInput);
     this.reset();
   });
 
@@ -76,6 +77,12 @@
   // new Date("January 18, 2022, 0:00"); 12am
   // 23:00 is 11pm
   // 24:00 is 12am
+  /**
+   * currentDate: "Dec 28 2021 11:27"
+   * min: 27
+   * add 33 to make it 12:00
+   * 12 hours to reach Dec 29
+   **/
   // countDown();
 
   function countDown() {
@@ -107,7 +114,7 @@
           currentSecond = 0;
           // check if days, hours, minutes are 0
           // if all properties in dataObj are 0, we have reached the holiday date or
-          // userStartingDateInput
+          // userDateInput
           console.log("days", days);
           console.log("hours", hours);
           console.log("minutes", minutes);
@@ -274,60 +281,76 @@
         Nov: 30,
         Dec: 31,
       },
-      userStartingDateInput: {
+      currentDate: {
         month: null,
         day: null,
         year: null,
-        time: null,
+        hours: null,
+        minutes: null,
+      },
+      userDateInput: {
+        month: null,
+        day: null,
+        year: null,
+        hours: null,
+        minutes: null,
       },
       datesOfHoliday2022: {
         MLKjrDay: {
           month: "January",
           day: "17",
           year: "2022",
-          time: "0:00",
+          hours: "0",
+          minutes: "00",
         },
         VNtet: {
           month: "February",
           day: "1",
           year: "2022",
-          time: "0:00",
+          hours: "0",
+          minutes: "00",
         },
         MemorialDay: {
           month: "May",
           day: "30",
           year: "2022",
-          time: "0:00",
+          hours: "0",
+          minutes: "00",
         },
         IndependenceDay: {
           month: "July",
           day: "4",
           year: "2022",
-          time: "0:00",
+          hours: "0",
+          minutes: "00",
         },
         LaborDay: {
           month: "September",
           day: "5",
           year: "2022",
-          time: "0:00",
+          hours: "0",
+          minutes: "00",
         },
         Thanksgiving: {
           month: "November",
           day: "24",
           year: "2022",
-          time: "0:00",
+          hours: "0",
+          minutes: "00",
         },
         Christmas: {
           month: "December",
           day: "25",
           year: "2022",
-          time: "0:00",
+          hours: "0",
+          minutes: "00",
         },
         NewYear: {
           month: "January",
           day: "1",
           year: "2023",
-          time: "0:00",
+          hours: "0",
+          minutes: "00",
         },
       },
       // name: "Deadpool",
@@ -539,6 +562,79 @@
   }
 
   /**
+   * get year, month, date(number), hours and minute of date
+   * **/
+
+  function getYearMonthAndTimeOfDate(date) {
+    return {
+      year: date.getFullYear(),
+      month: date.getMonth(),
+      day: date.getDate(),
+      hours: date.getHours(),
+      minutes: date.getMinutes(),
+    };
+  }
+
+  /**
+   * convert 12 hour time(AM/PM) format to 24 hour format
+   * **/
+
+  function convertTwelveToTwentyFourHourFormat(userDateInput) {
+    const { hour, minute, meridiem } = this;
+    // if hour is 12 and meridiem is AM subtract 12 from 12 to get 0 by return String(0)
+    // if hour is 12 and meridiem is PM return hrInput because we want the value to be 12
+    let hrInTwentyFourFormat;
+    switch (meridiem) {
+      case "AM":
+        hrInTwentyFourFormat = handleMeridiemAM(hour);
+        break;
+      case "PM":
+        hrInTwentyFourFormat = handleMeridiemPM(hour);
+        break;
+    }
+    console.log(hour, minute, typeof meridiem);
+    console.log(userDateInput);
+    console.log(hrInTwentyFourFormat);
+  }
+
+  /**
+   * handle AM meridiem
+   * **/
+
+  function handleMeridiemAM(hrInput) {
+    // convert to number form
+    const hourNumForm = Number(hrInput);
+    // if (hourNumForm == 12) {
+    //   return String(0);
+    // } else {
+    //   return hrInput
+    // }
+    // ternary operator
+    return hourNumForm == 12 ? String(0) : hrInput;
+  }
+
+  /**
+   * handle PM meridiem
+   * **/
+
+  function handleMeridiemPM(hrInput) {
+    // convert to number form
+    const hourNumForm = Number(hrInput);
+    if (hourNumForm == 12) {
+      return hrInput;
+    } else {
+      // when user input is 1 to 11
+      // take hrInput add 12
+      const hrConvertedToTwentyFourFormat = hourNumForm + 12;
+      return String(hrConvertedToTwentyFourFormat);
+    }
+    // ternary operator
+    // let hrConvertedToTwentyFourFormat;
+    // return hourNumForm == 12
+    //   ? hrInput
+    //   : (hrConvertedToTwentyFourFormat = hourNumForm + 12);
+  }
+  /**
    * using slice
    * 
    function usingSliceToGetNumOfDays(array) {
@@ -554,6 +650,8 @@
    * notes
    * **/
   const notes = function () {
+    console.log(document.querySelectorAll("div[id='seconds'] > div"));
+
     const dataObj = accessOurData();
     const testObj = {
       name: "Spider-Man",
