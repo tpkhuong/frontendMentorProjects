@@ -16,6 +16,11 @@
   // const handleDaysChange = daysHoursMinutesHelper();
   const handleHoursChange = daysHoursMinutesHelper();
   const handleMinutesChange = daysHoursMinutesHelper();
+  // declare/define our updateDays, updateHours, updateMinutes, updateSeconds
+  const updateDaysElements = updateElementFactoryFunc();
+  const updateHoursElements = updateElementFactoryFunc();
+  const updateMinutesElements = updateElementFactoryFunc();
+  const updateSecondElements = updateElementFactoryFunc();
   // add event listeners
   addEventListener.call(userInputModalDiv, "change", function TODO(event) {
     if (event.target.value == "Mar") {
@@ -41,7 +46,7 @@
       }, {});
     console.log(dataObj);
     convertTwelveToTwentyFourHourFormat.call(dataObj.userDateInput);
-    this.reset();
+    // this.reset();
   });
 
   /**
@@ -86,6 +91,10 @@
   // countDown();
 
   function countDown() {
+    /**
+     * seconds element will update outside switch statement
+     *
+     * **/
     return setInterval(() => {
       const currentDate = new Date();
       let currentSecond = 60 - currentDate.getSeconds();
@@ -103,7 +112,7 @@
       // // daysDigit
       //   currentSecond = 0;
       // }
-      let {
+      const {
         daysDigit: days,
         hoursDigit: hours,
         minutesDigit: minutes,
@@ -115,9 +124,9 @@
           // check if days, hours, minutes are 0
           // if all properties in dataObj are 0, we have reached the holiday date or
           // userDateInput
-          console.log("days", days);
-          console.log("hours", hours);
-          console.log("minutes", minutes);
+          // console.log("days", days);
+          // console.log("hours", hours);
+          // console.log("minutes", minutes);
           if (days === 0 && hours === 0 && minutes === 0) {
             // call countDown assign the return value of setInterval which will be
             // the value to stop setInterval to the identifer something stopTimer,etc
@@ -128,15 +137,32 @@
         case 59:
           handleMinutesChange("minutesDigit");
           handleHoursChange("hoursDigit");
+          // console.log(dataObj);
           break;
       }
-      console.log(dataObj);
+      /** 
+      // if we call our func that will update digit element here
+      // with the variables/identifiers we declared using destructuring
+      // before the switch, the values of the variables
+      // will be before we called handleMinutesChange, handleHoursChange;
+      console.log("days", days);
+      console.log("hours", hours);
+      console.log("minutes", minutes); **/
+      // console.log(dataObj);
+      const updateData = prepDigitValueForUpdate(dataObj, currentSecond);
+      const { daysStrForm, hoursStrForm, minutesStrForm, secondsStrForm } =
+        updateData;
+      // console.log(updateData);
+      /**
+       * use switch to see which updateElementFunc will run
+       * we dont want to execute/call/invoke all four updateElementFunc
+       * **/
       console.log(currentSecond);
     }, 1000);
   }
 
   /**
-   * handle
+   * handleTime
    * **/
 
   function checkMinute() {
@@ -634,6 +660,106 @@
     //   ? hrInput
     //   : (hrConvertedToTwentyFourFormat = hourNumForm + 12);
   }
+
+  /**
+   * check length of digit
+   * if digit >= 0 && digit < 10
+   * add prepend 0 to digit
+   * result will be 00 - 09
+   * we could check for length of digit after we convert number to string
+   * if length is 2 dont prepend 0 to digit
+   * if length is 1 prepend 0 to digit
+   * **/
+
+  /**
+   * we want to call this func before we update/change digit element
+   * days, hours, minutes, seconds
+   * the value type of the daysDigit, hoursDigit, minutesDigit
+   * in our dataObj will be number
+   * **/
+  function handlePrependExtraZeroOrNot(digit) {
+    // convert to str form
+    const digitNumForm = convertNumToStr(digit);
+    const lengthOfDigit = digitNumForm.length;
+    // if (lengthOfDigit == 1) {
+    //   return `0${digitNumForm}`;
+    // } else {
+    //   return digitNumForm
+    // }
+    // ternary opertor
+    return lengthOfDigit == 1 ? `0${digitNumForm}` : digitNumForm;
+  }
+
+  /**
+   * prep digit value for element update
+   * **/
+
+  function prepDigitValueForUpdate(
+    { daysDigit: days, hoursDigit: hours, minutesDigit: minutes },
+    digitSeconds
+  ) {
+    return {
+      daysStrForm: handlePrependExtraZeroOrNot(days),
+      hoursStrForm: handlePrependExtraZeroOrNot(hours),
+      minutesStrForm: handlePrependExtraZeroOrNot(minutes),
+      secondsStrForm: handlePrependExtraZeroOrNot(digitSeconds),
+    };
+  }
+
+  /**
+   * update element factory func
+   * **/
+
+  function updateElementFactoryFunc() {
+    return function innerFunc(arrayOfElements, digitString) {
+      // foreach
+      // arrayOfElements.forEach(function updateText(element) {
+      //   element.innerText = digitString
+      // });
+      // for of
+      for (let element of arrayOfElements) {
+        element.innerText = digitString;
+      }
+      // for
+      // for (let index = 0; index < arrayOfElements.length; index++) {
+      //   let element = arrayOfElements[index];
+      //   element.innerText = digitString;
+      // }
+    };
+  }
+
+  /**
+   * call our update element func
+   * **/
+
+  function invokeOurUpdateElementFuncs({
+    daysStrForm,
+    hoursStrForm,
+    minutesStrForm,
+    secondsStrForm,
+  }) {
+    // update days
+    // update hours
+    // update minutes
+    // update seconds
+  }
+
+  /**
+   * convert to str to num
+   * **/
+
+  function convertStrToNum(str) {
+    return Number(str);
+  }
+
+  /**
+   * convert to num to str
+   * **/
+
+  function convertNumToStr(num) {
+    return String(num);
+  }
+
   /**
    * using slice
    * 
@@ -646,6 +772,7 @@
      return [firstValue, betweenValues, lastValue];
    }
    * **/
+
   /**
    * notes
    * **/
