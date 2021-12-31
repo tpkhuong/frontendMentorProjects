@@ -4,6 +4,10 @@
     monthSelectElement,
     userInputModalDiv,
     formElement,
+    daysDigitBottom,
+    hoursDigitBottom,
+    minutesDigitBottom,
+    secondDigitBottom,
     arrayOfDaysDivElement,
     arrayOfHoursDivElement,
     arrayOfMinutesDivElement,
@@ -21,6 +25,10 @@
   const updateHoursElements = updateElementFactoryFunc();
   const updateMinutesElements = updateElementFactoryFunc();
   const updateSecondElements = updateElementFactoryFunc();
+  // declare/define changeObjProp for days, hours, minutes
+  const changeDaysFlipProperty = changeObjProperty();
+  const changeHoursFlipProperty = changeObjProperty();
+  const changeMinutesFlipProperty = changeObjProperty();
   // add event listeners
   addEventListener.call(userInputModalDiv, "change", function TODO(event) {
     if (event.target.value == "Mar") {
@@ -150,13 +158,18 @@
       console.log("minutes", minutes); **/
       // console.log(dataObj);
       const updateData = prepDigitValueForUpdate(dataObj, currentSecond);
-      const { daysStrForm, hoursStrForm, minutesStrForm, secondsStrForm } =
-        updateData;
+      // const { daysStrForm, hoursStrForm, minutesStrForm, secondsStrForm } =
+      //   updateData;
       // console.log(updateData);
       /**
        * use switch to see which updateElementFunc will run
        * we dont want to execute/call/invoke all four updateElementFunc
+       * minDigit: update when second is 59
+       * hourDigit: update when minute is 59
+       * dayDigit: update when hour is 23
+       * ** come up with better approach to updating digit element ***
        * **/
+      invokeOurUpdateElementFuncs(updateData);
       console.log(currentSecond);
     }, 1000);
   }
@@ -201,11 +214,13 @@
         daysDigit: days,
         hoursDigit: hours,
         minutesDigit: minutes,
+        flipDigitObj,
       } = dataObj;
       // use switch
       switch (daysHoursOrMin) {
         case "daysDigit":
           console.log("daysDigit", daysHoursOrMin);
+          // algorithm below moved to handleDays func
           if (hours == 23) {
             dataObj[daysHoursOrMin]--;
           }
@@ -269,7 +284,7 @@
 
   function handleDays() {
     // access daysDigit value in dataObj
-    const { daysDigit: days } = dataObj;
+    const { daysDigit: days, flipDigitObj } = dataObj;
     // minuteDigit will be the value 23
     // we are calling this func inside of a switch statement when
     // string passed in is "hoursDigit"
@@ -293,6 +308,11 @@
       minutesDigit: 1,
       hoursDigit: 1,
       daysDigit: 8,
+      flipDigitObj: {
+        daysFlip: false,
+        hoursFlip: false,
+        minutesFlip: false,
+      },
       numOfDaysOfMonths: {
         Jan: 31,
         Feb: 28,
@@ -399,6 +419,19 @@
     // form
     const formElement = document.querySelector("form");
     const userInputModalDiv = document.getElementById("modal-one");
+    // days, hours, minutes, seconds digit-bottom
+    const daysDigitBottom = document.querySelector(
+      "div[id='days'] .digit-bottom"
+    );
+    const hoursDigitBottom = document.querySelector(
+      "div[id='hours'] .digit-bottom"
+    );
+    const minutesDigitBottom = document.querySelector(
+      "div[id='minutes'] .digit-bottom"
+    );
+    const secondDigitBottom = document.querySelector(
+      "div[id='seconds'] .digit-bottom"
+    );
     // array of back, top, bottom elements for days, hours, minutes, seconds
     const arrayOfDaysDivElement = Array.from(
       document.querySelectorAll("div[id='days'] > div")
@@ -418,6 +451,10 @@
       monthSelectElement,
       formElement,
       userInputModalDiv,
+      daysDigitBottom,
+      hoursDigitBottom,
+      minutesDigitBottom,
+      secondDigitBottom,
       arrayOfDaysDivElement,
       arrayOfHoursDivElement,
       arrayOfMinutesDivElement,
@@ -738,11 +775,43 @@
     minutesStrForm,
     secondsStrForm,
   }) {
+    const {
+      flipDigitObj: { daysFlip, hoursFlip, minutesFlip },
+    } = dataObj;
+    // console.log(daysStrForm, hoursStrForm, minutesStrForm, secondsStrForm);
+    // console.log(daysFlip, hoursFlip, minutesFlip);
     // update days
     // update hours
     // update minutes
     // update seconds
   }
+
+  /**
+   * change obj property
+   * **/
+
+  function changeObjProperty() {
+    return function innerFunc(propStr, booleanValue) {
+      this[propStr] = booleanValue;
+    };
+  }
+
+  /**
+   * we will change flip property to true
+   * inside handleDays,handleHours, handleMinute
+   * when days, hours, minuteFlip property is true
+   * we want to add flip class to digit-bottom
+   * change innerText/textContent of digit-bottom element
+   * when will we change it to false
+   * **/
+
+  /**
+   *  add flip transition
+   * **/
+
+  /**
+   * add flip animation
+   * **/
 
   /**
    * convert to str to num
@@ -758,6 +827,22 @@
 
   function convertNumToStr(num) {
     return String(num);
+  }
+
+  /**
+   * add class
+   * **/
+
+  function addClass() {
+    this.classList.add(classString);
+  }
+
+  /**
+   * remove class
+   * **/
+
+  function removeClass() {
+    this.classList.remove(classString);
   }
 
   /**
