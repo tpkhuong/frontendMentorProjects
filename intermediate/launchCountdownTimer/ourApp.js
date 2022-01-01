@@ -21,14 +21,38 @@
   const handleHoursChange = daysHoursMinutesHelper();
   const handleMinutesChange = daysHoursMinutesHelper();
   // declare/define our updateDays, updateHours, updateMinutes, updateSeconds
+  // call using .call() method
   const updateDaysElements = updateElementFactoryFunc();
   const updateHoursElements = updateElementFactoryFunc();
   const updateMinutesElements = updateElementFactoryFunc();
   const updateSecondElements = updateElementFactoryFunc();
   // declare/define changeObjProp for days, hours, minutes
+  // call using .call() method
   const changeDaysFlipProperty = changeObjProperty();
   const changeHoursFlipProperty = changeObjProperty();
   const changeMinutesFlipProperty = changeObjProperty();
+  // declare/define adding flip css to days, hours or minute digit element
+  // call using .call() method
+
+  /**
+   *  add flip transition
+   * add flip animation
+   * **/
+
+  const addFlipClassToDaysBottomElement = addClass();
+  const addFlipClassToHoursBottomElement = addClass();
+  const addFlipClassToMinutesBottomElement = addClass();
+  /**
+   * declare/define removing flip css to days, hours or minute digit element
+   * call using .call() method
+   * remove flip transition
+   * remove flip animation
+   * **/
+
+  const removeFlipClassToDaysBottomElement = removeClass();
+  const removeFlipClassToHoursBottomElement = removeClass();
+  const removeFlipClassToMinutesBottomElement = removeClass();
+
   // add event listeners
   addEventListener.call(userInputModalDiv, "change", function TODO(event) {
     if (event.target.value == "Mar") {
@@ -125,7 +149,14 @@
         hoursDigit: hours,
         minutesDigit: minutes,
         stopTimer: happyHoliday,
+        flipDigitObj,
       } = dataObj;
+      /**
+       * check if daysFlip, hoursFlip and minutesFlip are true
+       * **/
+
+      changeDaysFlipHoursFlipMinutesFlipPropToFalse(flipDigitObj, flipDigitObj);
+
       switch (currentSecond) {
         case 60:
           currentSecond = 0;
@@ -168,6 +199,9 @@
        * hourDigit: update when minute is 59
        * dayDigit: update when hour is 23
        * ** come up with better approach to updating digit element ***
+       * thinking about calling func that will update digit element and add flip class
+       * in handleDaysChange,handleHoursChange,handleMinuteChange
+       * ** thinking it will be better to call func outside of handle Funcs **
        * **/
       invokeOurUpdateElementFuncs(updateData);
       console.log(currentSecond);
@@ -254,8 +288,11 @@
             ? hours === 0 && days === 0
               ? null
               : hours === 0
-              ? ((dataObj[daysHoursOrMin] = 23), handleDays())
-              : dataObj[daysHoursOrMin]--
+              ? ((dataObj[daysHoursOrMin] = 23),
+                changeHoursFlipProperty.call(flipDigitObj, "hoursFlip", true),
+                handleDays())
+              : (dataObj[daysHoursOrMin]--,
+                changeHoursFlipProperty.call(flipDigitObj, "hoursFlip", true))
             : null;
           break;
         case "minutesDigit":
@@ -270,8 +307,14 @@
           // }
           // ternary operator
           minutes === 0
-            ? (dataObj[daysHoursOrMin] = 59)
-            : dataObj[daysHoursOrMin]--;
+            ? ((dataObj[daysHoursOrMin] = 59),
+              changeMinutesFlipProperty.call(flipDigitObj, "minutesFlip", true))
+            : (dataObj[daysHoursOrMin]--,
+              changeMinutesFlipProperty.call(
+                flipDigitObj,
+                "minutesFlip",
+                true
+              ));
           break;
       }
       console.log("here", dataObj[daysHoursOrMin]);
@@ -295,7 +338,10 @@
     //   dataObj["daysDigit"]--;
     // }
     // using ternary operator
-    days > 0 ? dataObj["daysDigit"]-- : null;
+    days > 0
+      ? (dataObj["daysDigit"]--,
+        changeDaysFlipProperty.call(flipDigitObj, "daysFlip", true))
+      : null;
   }
 
   /**
@@ -778,12 +824,11 @@
     const {
       flipDigitObj: { daysFlip, hoursFlip, minutesFlip },
     } = dataObj;
-    // console.log(daysStrForm, hoursStrForm, minutesStrForm, secondsStrForm);
-    // console.log(daysFlip, hoursFlip, minutesFlip);
+    console.log(daysStrForm, hoursStrForm, minutesStrForm, secondsStrForm);
+    console.log(daysFlip, hoursFlip, minutesFlip);
     // update days
     // update hours
     // update minutes
-    // update seconds
   }
 
   /**
@@ -795,22 +840,39 @@
       this[propStr] = booleanValue;
     };
   }
+  alert("start the effort/process of changing digit element values");
+  /**
+   * change daysFlip, hoursFlip, minutesFlip to false
+   * **/
+
+  function changeDaysFlipHoursFlipMinutesFlipPropToFalse(
+    { daysFlip, hoursFlip, minutesFlip },
+    flipValuesObj
+  ) {
+    // conse[daysFlip, hoursFlip, minutesFlip] = flipValues;
+    // console.log("***** checking if flip value is true *****");
+    // console.log(daysFlip, hoursFlip, minutesFlip);
+    // days
+    if (daysFlip) {
+      changeDaysFlipProperty.call(flipValuesObj, "daysFlip", false);
+    }
+    // hours
+    if (hoursFlip) {
+      changeHoursFlipProperty.call(flipValuesObj, "hoursFlip", false);
+    }
+    // minutes
+    if (minutesFlip) {
+      changeMinutesFlipProperty.call(flipValuesObj, "minutesFlip", false);
+    }
+  }
 
   /**
-   * we will change flip property to true
+   * we will change flip property in dataObj to true
    * inside handleDays,handleHours, handleMinute
    * when days, hours, minuteFlip property is true
    * we want to add flip class to digit-bottom
    * change innerText/textContent of digit-bottom element
    * when will we change it to false
-   * **/
-
-  /**
-   *  add flip transition
-   * **/
-
-  /**
-   * add flip animation
    * **/
 
   /**
@@ -834,7 +896,9 @@
    * **/
 
   function addClass() {
-    this.classList.add(classString);
+    return function innerFunc(classString) {
+      this.classList.add(classString);
+    };
   }
 
   /**
@@ -842,7 +906,9 @@
    * **/
 
   function removeClass() {
-    this.classList.remove(classString);
+    return function innerFunc(classString) {
+      this.classList.remove(classString);
+    };
   }
 
   /**
