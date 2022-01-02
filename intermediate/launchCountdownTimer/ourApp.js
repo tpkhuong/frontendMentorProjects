@@ -53,12 +53,21 @@
   const removeFlipClassToHoursBottomElement = removeClass();
   const removeFlipClassToMinutesBottomElement = removeClass();
 
-  // add event listeners
-  addEventListener.call(userInputModalDiv, "change", function TODO(event) {
-    if (event.target.value == "Mar") {
-      console.log("Hello");
-    }
-  });
+  /**
+   * declare/define add or remove class flip to digit bottom
+   * **/
+
+  // add
+
+  const addFlipClassToDigitElement;
+    // remove
+
+    // add event listeners
+    addEventListener.call(userInputModalDiv, "change", function TODO(event) {
+      if (event.target.value == "Mar") {
+        console.log("Hello");
+      }
+    });
 
   addEventListener.call(formElement, "submit", function TODO(event) {
     // copy obj
@@ -840,7 +849,16 @@
       this[propStr] = booleanValue;
     };
   }
-  alert("start the effort/process of changing digit element values");
+
+  /**
+   * we will change flip property in dataObj to true
+   * inside handleDays,handleHours, handleMinute
+   * when days, hours, minuteFlip property is true
+   * we want to add flip class to digit-bottom
+   * change innerText/textContent of digit-bottom element
+   * when will we change it to false
+   * **/
+
   /**
    * change daysFlip, hoursFlip, minutesFlip to false
    * **/
@@ -867,13 +885,118 @@
   }
 
   /**
-   * we will change flip property in dataObj to true
-   * inside handleDays,handleHours, handleMinute
-   * when days, hours, minuteFlip property is true
-   * we want to add flip class to digit-bottom
-   * change innerText/textContent of digit-bottom element
-   * when will we change it to false
+   * add/remove class factory func
    * **/
+
+  function addOrRemoveFlipClassToDigitBottomElement(addOrRemoveStr) {
+    const { daysDigitBottom, hoursDigitBottom, minutesDigitBottom } =
+      ourSelectors();
+    // if statement
+    // if (addOrRemoveStr == "add") {
+    //   return function innerFunc({ daysFlip, hoursFlip, minutesFlip }) {
+    //     // check days
+    //     if (daysFlip) {
+    //       addFlipClassToDaysBottomElement.call(
+    //         daysDigitBottom,
+    //         "flip-bottom-transition"
+    //       );
+    //     }
+    //     // check hours
+    //     if (hoursFlip) {
+    //       addFlipClassToHoursBottomElement.call(
+    //         hoursDigitBottom,
+    //         "flip-bottom-transition"
+    //       );
+    //     }
+    //     // check minutes
+    //     if (minutesFlip) {
+    //       addFlipClassToMinutesBottomElement.call(
+    //         minutesDigitBottom,
+    //         "flip-bottom-transition"
+    //       );
+    //     }
+    //   };
+    // } else {
+    //   // remove
+    //   return function innerFunc({ daysFlip, hoursFlip, minutesFlip }) {
+    //     // check days
+    //     if (!daysFlip) {
+    //       removeFlipClassToDaysBottomElement.call(
+    //         daysDigitBottom,
+    //         "flip-bottom-transition"
+    //       );
+    //     }
+    //     // check hours
+    //     if (!hoursFlip) {
+    //       removeFlipClassToHoursBottomElement.call(
+    //         hoursDigitBottom,
+    //         "flip-bottom-transition"
+    //       );
+    //     }
+    //     // check minutes
+    //     if (!minutesFlip) {
+    //       removeFlipClassToMinutesBottomElement.call(
+    //         minutesDigitBottom,
+    //         "flip-bottom-transition"
+    //       );
+    //     }
+    //   };
+    // }
+    // switch statement
+    switch (addOrRemoveStr) {
+      // add
+      case "add":
+        return function innerFunc({ daysFlip, hoursFlip, minutesFlip }) {
+          // check days
+          if (daysFlip) {
+            addFlipClassToDaysBottomElement.call(
+              daysDigitBottom,
+              "flip-bottom-transition"
+            );
+          }
+          // check hours
+          if (hoursFlip) {
+            addFlipClassToHoursBottomElement.call(
+              hoursDigitBottom,
+              "flip-bottom-transition"
+            );
+          }
+          // check minutes
+          if (minutesFlip) {
+            addFlipClassToMinutesBottomElement.call(
+              minutesDigitBottom,
+              "flip-bottom-transition"
+            );
+          }
+        };
+
+      // remove
+      case "remove":
+        return function innerFunc({ daysFlip, hoursFlip, minutesFlip }) {
+          // check days
+          if (!daysFlip) {
+            removeFlipClassToDaysBottomElement.call(
+              daysDigitBottom,
+              "flip-bottom-transition"
+            );
+          }
+          // check hours
+          if (!hoursFlip) {
+            removeFlipClassToHoursBottomElement.call(
+              hoursDigitBottom,
+              "flip-bottom-transition"
+            );
+          }
+          // check minutes
+          if (!minutesFlip) {
+            removeFlipClassToMinutesBottomElement.call(
+              minutesDigitBottom,
+              "flip-bottom-transition"
+            );
+          }
+        };
+    }
+  }
 
   /**
    * convert to str to num
