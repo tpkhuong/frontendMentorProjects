@@ -59,15 +59,19 @@
 
   // add
 
-  const addFlipClassToDigitElement;
-    // remove
+  const addFlipClassToDigitElement =
+    addOrRemoveFlipClassToDigitBottomElement("add");
+  // remove
 
-    // add event listeners
-    addEventListener.call(userInputModalDiv, "change", function TODO(event) {
-      if (event.target.value == "Mar") {
-        console.log("Hello");
-      }
-    });
+  const removeFlipClassToDigitElement =
+    addOrRemoveFlipClassToDigitBottomElement("remove");
+
+  // add event listeners
+  addEventListener.call(userInputModalDiv, "change", function TODO(event) {
+    if (event.target.value == "Mar") {
+      console.log("Hello");
+    }
+  });
 
   addEventListener.call(formElement, "submit", function TODO(event) {
     // copy obj
@@ -134,7 +138,6 @@
   function countDown() {
     /**
      * seconds element will update outside switch statement
-     *
      * **/
     return setInterval(() => {
       const currentDate = new Date();
@@ -160,11 +163,19 @@
         stopTimer: happyHoliday,
         flipDigitObj,
       } = dataObj;
+
       /**
        * check if daysFlip, hoursFlip and minutesFlip are true
+       * assign value false if daysFlip, hoursFlip and minutesFlip are true
        * **/
 
-      changeDaysFlipHoursFlipMinutesFlipPropToFalse(flipDigitObj, flipDigitObj);
+      changeDaysFlipHoursFlipMinutesFlipPropToFalse(flipDigitObj);
+
+      /**
+       * if daysFlip, hoursFlip and minutesFlip is false remove class flip-bottom-transition
+       * **/
+
+      removeFlipClassToDigitElement(dataObj.flipDigitObj);
 
       switch (currentSecond) {
         case 60:
@@ -212,7 +223,14 @@
        * in handleDaysChange,handleHoursChange,handleMinuteChange
        * ** thinking it will be better to call func outside of handle Funcs **
        * **/
+
       invokeOurUpdateElementFuncs(updateData);
+      /**
+       * if daysFlip, hoursFlip and minutesFlip is true remove class flip-bottom-transition
+       * **/
+
+      addFlipClassToDigitElement(dataObj.flipDigitObj);
+
       console.log(currentSecond);
     }, 1000);
   }
@@ -812,7 +830,7 @@
       for (let element of arrayOfElements) {
         element.innerText = digitString;
       }
-      // for
+      // for loop
       // for (let index = 0; index < arrayOfElements.length; index++) {
       //   let element = arrayOfElements[index];
       //   element.innerText = digitString;
@@ -863,10 +881,8 @@
    * change daysFlip, hoursFlip, minutesFlip to false
    * **/
 
-  function changeDaysFlipHoursFlipMinutesFlipPropToFalse(
-    { daysFlip, hoursFlip, minutesFlip },
-    flipValuesObj
-  ) {
+  function changeDaysFlipHoursFlipMinutesFlipPropToFalse(flipValuesObj) {
+    const { daysFlip, hoursFlip, minutesFlip } = flipValuesObj;
     // conse[daysFlip, hoursFlip, minutesFlip] = flipValues;
     // console.log("***** checking if flip value is true *****");
     // console.log(daysFlip, hoursFlip, minutesFlip);
@@ -887,6 +903,18 @@
   /**
    * add/remove class factory func
    * **/
+
+  alert("add this to our code");
+
+  // const firstTime = new Date().getSeconds();
+  // console.log(firstTime);
+  // function timer() {
+  //   return setInterval(() => {
+  //     const secondTime = new Date().getSeconds();
+  //     console.log(secondTime);
+  //   }, 1000);
+  // }
+  // const stop = timer();
 
   function addOrRemoveFlipClassToDigitBottomElement(addOrRemoveStr) {
     const { daysDigitBottom, hoursDigitBottom, minutesDigitBottom } =
@@ -946,8 +974,10 @@
     switch (addOrRemoveStr) {
       // add
       case "add":
+        // console.log("add");
         return function innerFunc({ daysFlip, hoursFlip, minutesFlip }) {
           // check days
+          console.log(daysFlip, hoursFlip, minutesFlip);
           if (daysFlip) {
             addFlipClassToDaysBottomElement.call(
               daysDigitBottom,
@@ -970,10 +1000,12 @@
           }
         };
 
-      // remove
-      case "remove":
+        // remove
+        // case "remove":
+        console.log("remove");
         return function innerFunc({ daysFlip, hoursFlip, minutesFlip }) {
           // check days
+          console.log(daysFlip, hoursFlip, minutesFlip);
           if (!daysFlip) {
             removeFlipClassToDaysBottomElement.call(
               daysDigitBottom,
