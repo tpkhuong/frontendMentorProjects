@@ -72,27 +72,12 @@
       console.log("Hello");
     }
   });
-
-  addEventListener.call(formElement, "submit", function TODO(event) {
-    // copy obj
-    // const copyOfDataObj = { ...dataObj.userDateInput };
-    // console.log(copyOfDataObj);
-    // event.preventDefault();
-    console.log(monthSelectElement.value);
-    dataObj.userDateInput = Array.prototype.slice
-      .call(event.target.children[1].children)
-      .reduce((buildingUp, currentElement) => {
-        if (currentElement.tagName == "SELECT") {
-          const elementID = currentElement.getAttribute("id");
-          const elementValue = currentElement.value;
-          buildingUp[elementID] = elementValue;
-        }
-        return buildingUp;
-      }, {});
-    console.log(dataObj);
-    convertTwelveToTwentyFourHourFormat.call(dataObj.userDateInput);
-    // this.reset();
-  });
+  // get user input
+  addEventListener.call(
+    formElement,
+    "submit",
+    getUserDateFromInputsAndAssignValuesToDataObj
+  );
 
   /**
    * how to use addEventListener below
@@ -238,31 +223,6 @@
   /**
    * handleTime
    * **/
-
-  function checkMinute() {
-    console.log("minute");
-    console.log(dataObj.minutesDigit);
-    let minuteValue = dataObj.minutesDigit;
-    // if dataObj.minutesDigit is 0 we want to assign 59 to
-    // dataObj.minutesDigit AND NOT subtract 1 from it
-    // that will make dataObj.minutesDigit 58
-    if (minuteValue === 0) {
-      dataObj.minutesDigit = 59;
-    } else {
-      // else
-      // subtract 1 from minuteDigit
-      dataObj.minutesDigit--;
-    }
-  }
-
-  function checkHour() {
-    const { minutesDigit: minute } = dataObj;
-    if (minute == 59) {
-      dataObj.hoursDigit--;
-    }
-    console.log("hour");
-    console.log(dataObj.hoursDigit);
-  }
 
   /**
    * days, hours, minutes helper/factory func
@@ -414,62 +374,103 @@
         hours: null,
         minutes: null,
       },
-      datesOfHoliday2022: {
-        MLKjrDay: {
-          month: "January",
-          day: "17",
-          year: "2022",
-          hours: "0",
-          minutes: "00",
-        },
-        VNtet: {
-          month: "February",
-          day: "1",
-          year: "2022",
-          hours: "0",
-          minutes: "00",
-        },
-        MemorialDay: {
-          month: "May",
-          day: "30",
-          year: "2022",
-          hours: "0",
-          minutes: "00",
-        },
-        IndependenceDay: {
-          month: "July",
-          day: "4",
-          year: "2022",
-          hours: "0",
-          minutes: "00",
-        },
-        LaborDay: {
-          month: "September",
-          day: "5",
-          year: "2022",
-          hours: "0",
-          minutes: "00",
-        },
-        Thanksgiving: {
-          month: "November",
-          day: "24",
-          year: "2022",
-          hours: "0",
-          minutes: "00",
-        },
-        Christmas: {
-          month: "December",
-          day: "25",
-          year: "2022",
-          hours: "0",
-          minutes: "00",
-        },
-        NewYear: {
-          month: "January",
-          day: "1",
-          year: "2023",
-          hours: "0",
-          minutes: "00",
+
+      /**
+       * idea: since we will be working with the method .toDateString() on the Date obj
+       * calling .split(" ") on that string which will return an array of day month date year
+       * we will have an obj with properties by year each obj will have properties by month
+       * each month property will have properties by date of the holidays for that month
+       * each date properties will have obj of title, hour and minute of that holiday
+       * ex:
+       * datesOfHoliday:{
+       * "2022":{
+       * "Jan":{
+       * "17":{
+       * title: "Martin Luther King Jr Day",
+       * hours:"0",
+       * minutes: "00"
+       * }
+       * }
+       * }
+       * }
+       * **/
+      datesOfHoliday: {
+        2022: {
+          Jan: {
+            17: {
+              title: "Martin Luther King Jr Day",
+              hours: "0",
+              minutes: "00",
+            },
+          },
+          Feb: {
+            1: {
+              title: "Tet: Vietnamese New Year",
+              hours: "0",
+              minutes: "00",
+            },
+            14: {
+              title: "Valentine's Day",
+              hours: "0",
+              minutes: "00",
+            },
+          },
+          Mar: {
+            17: {
+              title: "Saint Patrick's Day",
+              hours: "0",
+              minutes: "00",
+            },
+          },
+          Apr: {
+            17: {
+              title: "Easter Sunday",
+              hours: "0",
+              minutes: "00",
+            },
+          },
+          May: {
+            30: {
+              title: "Memorial Day",
+              hours: "0",
+              minutes: "00",
+            },
+          },
+          Jul: {
+            4: {
+              title: "Independence Day",
+              hours: "0",
+              minutes: "00",
+            },
+          },
+          Sep: {
+            5: {
+              title: "Labor Day",
+              hours: "0",
+              minutes: "00",
+            },
+          },
+          Oct: {
+            31: {
+              title: "Halloween",
+              hours: "0",
+              minutes: "00",
+            },
+          },
+          Nov: {
+            24: {
+              title: "Thanksgiving",
+              hours: "0",
+              minutes: "00",
+            },
+          },
+          Dec: {
+            25: {
+              title: "Christmas",
+              hours: "0",
+              minutes: "00",
+            },
+          },
         },
       },
       // name: "Deadpool",
@@ -622,7 +623,7 @@
     // const copyOfArray = [].concat(arrOfSubarrays);
     const copyOfArray = [...arrOfSubarrays];
     const result = [];
-    let counter = 0;
+    // let counter = 0;
     while (startingIndex !== endingIndex) {
       console.log(copyOfArray[startingIndex]);
       const eachSubarray = copyOfArray[startingIndex];
@@ -701,13 +702,15 @@
    * get year, month, date(number), hours and minute of date
    * **/
 
-  function getYearMonthAndTimeOfDate(date) {
+  function getCurrentYearMonthAndTimeOfDate(currentDateInput) {
+    const [currentDay, currentMonth, currentDate, currentYear] =
+      currentDateInput.toDateString().split(" ");
     return {
-      year: date.getFullYear(),
-      month: date.getMonth(),
-      day: date.getDate(),
-      hours: date.getHours(),
-      minutes: date.getMinutes(),
+      year: currentYear,
+      month: currentMonth,
+      day: currentDateInput.getDate(),
+      hours: currentDateInput.getHours(),
+      minutes: currentDateInput.getMinutes(),
     };
   }
 
@@ -716,21 +719,22 @@
    * **/
 
   function convertTwelveToTwentyFourHourFormat(userDateInput) {
-    const { hour, minute, meridiem } = this;
+    const { hours, minutes, meridiem } = this;
     // if hour is 12 and meridiem is AM subtract 12 from 12 to get 0 by return String(0)
     // if hour is 12 and meridiem is PM return hrInput because we want the value to be 12
     let hrInTwentyFourFormat;
     switch (meridiem) {
       case "AM":
-        hrInTwentyFourFormat = handleMeridiemAM(hour);
+        hrInTwentyFourFormat = handleMeridiemAM(hours);
         break;
       case "PM":
-        hrInTwentyFourFormat = handleMeridiemPM(hour);
+        hrInTwentyFourFormat = handleMeridiemPM(hours);
         break;
     }
-    console.log(hour, minute, typeof meridiem);
+    console.log(hours, minutes, typeof meridiem);
     console.log(userDateInput);
     console.log(hrInTwentyFourFormat);
+    return hrInTwentyFourFormat;
   }
 
   /**
@@ -770,6 +774,18 @@
     //   ? hrInput
     //   : (hrConvertedToTwentyFourFormat = hourNumForm + 12);
   }
+
+  /**
+   * handle hours calculations
+   * **/
+
+  function handleHoursCalculations() {}
+
+  /**
+   * handle minutes calculations
+   * **/
+
+  function handleMinutesCalculations() {}
 
   /**
    * check length of digit
@@ -904,8 +920,6 @@
    * add/remove class factory func
    * **/
 
-  alert("add this to our code");
-
   // const firstTime = new Date().getSeconds();
   // console.log(firstTime);
   // function timer() {
@@ -1000,8 +1014,8 @@
           }
         };
 
-        // remove
-        // case "remove":
+      // remove
+      case "remove":
         console.log("remove");
         return function innerFunc({ daysFlip, hoursFlip, minutesFlip }) {
           // check days
@@ -1067,6 +1081,68 @@
   }
 
   /**
+   * func below
+   * **/
+
+  function initialTimerDaysHoursMinutesSecondsDigit() {
+    //
+  }
+
+  /**
+   * get currentDate: assign values to currentDate obj in dataObj
+   * getCurrentDateAndAssignValuesToDataObj();
+   * *** might not need this func because we always want to work with the
+   * most current time
+   * **/
+
+  function getCurrentDateAndAssignValuesToDataObj() {
+    // create currDate variable
+    const newCurrentDate = new Date();
+    // destructure obj
+    const { year, month, day, hours, minutes } =
+      getCurrentYearMonthAndTimeOfDate(newCurrentDate);
+    // assign current date values to data obj
+    dataObj.currentDate.year = year;
+    dataObj.currentDate.month = month;
+    dataObj.currentDate.day = day;
+    dataObj.currentDate.hours = hours;
+    dataObj.currentDate.minutes = minutes;
+  }
+
+  /**
+   * get userDate: assign values to userDateInput obj in dataObj
+   * **/
+
+  function getUserDateFromInputsAndAssignValuesToDataObj(event) {
+    // copy obj
+    // const copyOfDataObj = { ...dataObj.userDateInput };
+    // console.log(copyOfDataObj);
+    // event.preventDefault();
+    console.log(monthSelectElement.value);
+    dataObj.userDateInput = Array.prototype.slice
+      .call(event.target.children[1].children)
+      .reduce((buildingUp, currentElement) => {
+        if (currentElement.tagName == "SELECT") {
+          const elementID = currentElement.getAttribute("id");
+          const elementValue = currentElement.value;
+          buildingUp[elementID] = elementValue;
+        }
+        return buildingUp;
+      }, {});
+    console.log(dataObj);
+    const hourConvertedToTwentyFourFormat =
+      convertTwelveToTwentyFourHourFormat.call(dataObj.userDateInput);
+    console.log(
+      "hourConvertedToTwentyFourFormat",
+      hourConvertedToTwentyFourFormat
+    );
+    // update userDateInput hour to 24hr format
+    dataObj.userDateInput.hours = hourConvertedToTwentyFourFormat;
+    console.log(dataObj);
+    // this.reset();
+  }
+
+  /**
    * using slice
    * 
    function usingSliceToGetNumOfDays(array) {
@@ -1083,6 +1159,143 @@
    * notes
    * **/
   const notes = function () {
+    // const obj = {
+    //   2022: {
+    //     Jan: {
+    //       17: {
+    //         title: "Martin Luther King Jr Day",
+    //         hours: "0",
+    //         minutes: "00",
+    //       },
+    //     },
+    //     Feb: {
+    //       1: {
+    //         title: "Tet: Vietnamese New Year",
+    //         hours: "0",
+    //         minutes: "00",
+    //       },
+    //       14: {
+    //         title: "Valentine's Day",
+    //         hours: "0",
+    //         minutes: "00",
+    //       },
+    //     },
+    //     Mar: {
+    //       17: {
+    //         title: "Saint Patrick's Day",
+    //         hours: "0",
+    //         minutes: "00",
+    //       },
+    //     },
+    //     Apr: {
+    //       17: {
+    //         title: "Easter Sunday",
+    //         hours: "0",
+    //         minutes: "00",
+    //       },
+    //     },
+    //     May: {
+    //       30: {
+    //         title: "Memorial Day",
+    //         hours: "0",
+    //         minutes: "00",
+    //       },
+    //     },
+    //     Jul: {
+    //       4: {
+    //         title: "Independence Day",
+    //         hours: "0",
+    //         minutes: "00",
+    //       },
+    //     },
+    //     Sep: {
+    //       5: {
+    //         title: "Labor Day",
+    //         hours: "0",
+    //         minutes: "00",
+    //       },
+    //     },
+    //     Oct: {
+    //       31: {
+    //         title: "Halloween",
+    //         hours: "0",
+    //         minutes: "00",
+    //       },
+    //     },
+    //     Nov: {
+    //       24: {
+    //         title: "Thanksgiving",
+    //         hours: "0",
+    //         minutes: "00",
+    //       },
+    //     },
+    //     Dec: {
+    //       25: {
+    //         title: "Christmas",
+    //         hours: "0",
+    //         minutes: "00",
+    //       },
+    //     },
+    //   },
+    //   datesOfHoliday2022: {
+    //     MLKjrDay: {
+    //       month: "January",
+    //       day: "17",
+    //       year: "2022",
+    //       hours: "0",
+    //       minutes: "00",
+    //     },
+    //     VNtet: {
+    //       month: "February",
+    //       day: "1",
+    //       year: "2022",
+    //       hours: "0",
+    //       minutes: "00",
+    //     },
+    //     MemorialDay: {
+    //       month: "May",
+    //       day: "30",
+    //       year: "2022",
+    //       hours: "0",
+    //       minutes: "00",
+    //     },
+    //     IndependenceDay: {
+    //       month: "July",
+    //       day: "4",
+    //       year: "2022",
+    //       hours: "0",
+    //       minutes: "00",
+    //     },
+    //     LaborDay: {
+    //       month: "September",
+    //       day: "5",
+    //       year: "2022",
+    //       hours: "0",
+    //       minutes: "00",
+    //     },
+    //     Thanksgiving: {
+    //       month: "November",
+    //       day: "24",
+    //       year: "2022",
+    //       hours: "0",
+    //       minutes: "00",
+    //     },
+    //     Christmas: {
+    //       month: "December",
+    //       day: "25",
+    //       year: "2022",
+    //       hours: "0",
+    //       minutes: "00",
+    //     },
+    //     NewYear: {
+    //       month: "January",
+    //       day: "1",
+    //       year: "2023",
+    //       hours: "0",
+    //       minutes: "00",
+    //     },
+    //   },
+    // };
     console.log(document.querySelectorAll("div[id='seconds'] > div"));
 
     const dataObj = accessOurData();
@@ -1097,5 +1310,187 @@
       const eventObjProperties = propertiesOfEventObj.call(event);
       console.log(eventObjProperties);
     }
+    function TODO(event) {
+      // copy obj
+      // const copyOfDataObj = { ...dataObj.userDateInput };
+      // console.log(copyOfDataObj);
+      // event.preventDefault();
+      console.log(monthSelectElement.value);
+      dataObj.userDateInput = Array.prototype.slice
+        .call(event.target.children[1].children)
+        .reduce((buildingUp, currentElement) => {
+          if (currentElement.tagName == "SELECT") {
+            const elementID = currentElement.getAttribute("id");
+            const elementValue = currentElement.value;
+            buildingUp[elementID] = elementValue;
+          }
+          return buildingUp;
+        }, {});
+      console.log(dataObj);
+      convertTwelveToTwentyFourHourFormat.call(dataObj.userDateInput);
+      // this.reset();
+    }
+    function checkMinute() {
+      console.log("minute");
+      console.log(dataObj.minutesDigit);
+      let minuteValue = dataObj.minutesDigit;
+      // if dataObj.minutesDigit is 0 we want to assign 59 to
+      // dataObj.minutesDigit AND NOT subtract 1 from it
+      // that will make dataObj.minutesDigit 58
+      if (minuteValue === 0) {
+        dataObj.minutesDigit = 59;
+      } else {
+        // else
+        // subtract 1 from minuteDigit
+        dataObj.minutesDigit--;
+      }
+    }
+
+    function checkHour() {
+      const { minutesDigit: minute } = dataObj;
+      if (minute == 59) {
+        dataObj.hoursDigit--;
+      }
+      console.log("hour");
+      console.log(dataObj.hoursDigit);
+    }
+
+    const obj = {
+      2022: {
+        Jan: {
+          17: {
+            title: "Martin Luther King Jr Day",
+            hours: "0",
+            minutes: "00",
+          },
+        },
+        Feb: {
+          1: {
+            title: "Tet: Vietnamese New Year",
+            hours: "0",
+            minutes: "00",
+          },
+          14: {
+            title: "Valentine's Day",
+            hours: "0",
+            minutes: "00",
+          },
+        },
+        Mar: {
+          17: {
+            title: "Saint Patrick's Day",
+            hours: "0",
+            minutes: "00",
+          },
+        },
+        Apr: {
+          17: {
+            title: "Easter Sunday",
+            hours: "0",
+            minutes: "00",
+          },
+        },
+        May: {
+          30: {
+            title: "Memorial Day",
+            hours: "0",
+            minutes: "00",
+          },
+        },
+        Jul: {
+          4: {
+            title: "Independence Day",
+            hours: "0",
+            minutes: "00",
+          },
+        },
+        Sep: {
+          5: {
+            title: "Labor Day",
+            hours: "0",
+            minutes: "00",
+          },
+        },
+        Oct: {
+          31: {
+            title: "Halloween",
+            hours: "0",
+            minutes: "00",
+          },
+        },
+        Nov: {
+          24: {
+            title: "Thanksgiving",
+            hours: "0",
+            minutes: "00",
+          },
+        },
+        Dec: {
+          25: {
+            title: "Christmas",
+            hours: "0",
+            minutes: "00",
+          },
+        },
+      },
+      datesOfHoliday2022: {
+        MLKjrDay: {
+          month: "January",
+          day: "17",
+          year: "2022",
+          hours: "0",
+          minutes: "00",
+        },
+        VNtet: {
+          month: "February",
+          day: "1",
+          year: "2022",
+          hours: "0",
+          minutes: "00",
+        },
+        MemorialDay: {
+          month: "May",
+          day: "30",
+          year: "2022",
+          hours: "0",
+          minutes: "00",
+        },
+        IndependenceDay: {
+          month: "July",
+          day: "4",
+          year: "2022",
+          hours: "0",
+          minutes: "00",
+        },
+        LaborDay: {
+          month: "September",
+          day: "5",
+          year: "2022",
+          hours: "0",
+          minutes: "00",
+        },
+        Thanksgiving: {
+          month: "November",
+          day: "24",
+          year: "2022",
+          hours: "0",
+          minutes: "00",
+        },
+        Christmas: {
+          month: "December",
+          day: "25",
+          year: "2022",
+          hours: "0",
+          minutes: "00",
+        },
+        NewYear: {
+          month: "January",
+          day: "1",
+          year: "2023",
+          hours: "0",
+          minutes: "00",
+        },
+      },
+    };
   };
 })();
