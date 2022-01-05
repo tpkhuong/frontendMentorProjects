@@ -13,9 +13,16 @@
     arrayOfMinutesDivElement,
     arrayOfSecondsDivElement,
   } = ourSelectors();
+  const dateObj = new Date();
+  // since we will be working with current Date in most of our algorithm
+  // declare date obj at top of App. just year, month and day
+  // for the hour and minute we will use a different func
+  const currentDateObj = getCurrentYearMonthDate(dateObj);
+  const currentTimeObj = getCurrentHourMinutes(dateObj);
   // execute/call/invoke our data obj func
   const accessOurData = scopeOurData();
   const dataObj = accessOurData();
+  console.log(dataObj);
   // declare/define our days, hours, and minutes func
   // const handleDaysChange = daysHoursMinutesHelper();
   const handleHoursChange = daysHoursMinutesHelper();
@@ -346,9 +353,31 @@
         hoursFlip: false,
         minutesFlip: false,
       },
+      /**
+       * we might not need obj currentDate
+       * **/
+      currentDate: {
+        month: currentDateObj.currentMonth,
+        day: currentDateObj.currentDay,
+        year: currentDateObj.currentYear,
+        time: {
+          hours: currentTimeObj.currentHour,
+          minutes: null,
+        },
+      },
+      userDateInput: {
+        month: null,
+        day: null,
+        year: null,
+        hours: null,
+        minutes: null,
+      },
+      defaultEndingDate: null,
+      endYear: null,
+      currentYear: currentDateObj.currentYear,
       numOfDaysOfMonths: {
         Jan: 31,
-        Feb: 28,
+        Feb: this.currentYear % 4 === 0 ? 29 : 28,
         Mar: 31,
         Apr: 30,
         May: 31,
@@ -360,21 +389,6 @@
         Nov: 30,
         Dec: 31,
       },
-      currentDate: {
-        month: null,
-        day: null,
-        year: null,
-        hours: null,
-        minutes: null,
-      },
-      userDateInput: {
-        month: null,
-        day: null,
-        year: null,
-        hours: null,
-        minutes: null,
-      },
-
       /**
        * idea: since we will be working with the method .toDateString() on the Date obj
        * calling .split(" ") on that string which will return an array of day month date year
@@ -398,6 +412,16 @@
         2022: {
           Jan: {
             17: {
+              title: "Martin Luther King Jr Day",
+              hours: "0",
+              minutes: "00",
+            },
+            20: {
+              title: "Martin Luther King Jr Day",
+              hours: "0",
+              minutes: "00",
+            },
+            26: {
               title: "Martin Luther King Jr Day",
               hours: "0",
               minutes: "00",
@@ -607,16 +631,32 @@
   const arrOfMonths = Object.keys(dataObj.numOfDaysOfMonths);
   const arrayOfSubarrays = Object.entries(dataObj.numOfDaysOfMonths);
   const currentMonth = findIndexMonthUsingIndexOf(arrOfMonths, "Dec");
-  const startingMonth = findIndexMonthUsingIndexOf(arrOfMonths, "Mar");
+  const endingMonth = findIndexMonthUsingIndexOf(arrOfMonths, "Mar");
+  const currentYear = 2021;
+  const endingYear = 2023;
 
-  arrayNumsOfDaysInMonth(currentMonth, startingMonth + 1, arrayOfSubarrays);
   /**
-   * have func that loop starting at currentMonth index and ends at startingMonth index
+   * reason we pass in endingMonth + 1
+   * our while loop will loop as long as startingIndex !== endingIndex
+   * we want to include the value at the last index of the array. array.length - 1
+   * if we didnt add 1 to endingMonthIndex while loop will stop when startingIndex == endingIndex
+   * and will not add last value of array to result array
+   * starting: 0,
+   * ending: 4
+   * while(0 !== 4) true enter while loop push value at arr[0]
+   * while(4 !== 4) false not enter while loop we dont push value at arr[4]
+   * **/
+
+  arrayNumsOfDaysInMonth(currentMonth, endingMonth + 1, arrayOfSubarrays);
+
+  /**
+   * have func that loop starting at currentMonth index and ends at endingMonth index
    * while loop add the daysOfMonth of that month into array
    * we will use first and last month values in array to calculate
    * days in current month and days in starting month without have to access that value
    * from dataObj
    * **/
+
   function arrayNumsOfDaysInMonth(startingIndex, endingIndex, arrOfSubarrays) {
     // copy array
     // const copyOfArray = arrOfSubarrays.slice();
@@ -637,25 +677,64 @@
     }
     console.log(result);
     // const startingDateNumOfDays = result.pop();
-    const [lastValue, resultArrWithoutLastValue] =
-      getStartingDateNumOfDays(result);
-    console.log(lastValue);
+    const [endingMonthValue, resultArrWithoutLastValue] =
+      getEndingDateNumOfDays(result);
+    console.log(endingMonthValue);
     console.log(resultArrWithoutLastValue);
-    // const [firstValue, ...rest] = resultArrWithoutLastValue;
-    // console.log(firstValue);
+    // const [currentMonthDaysValue, ...rest] = resultArrWithoutLastValue;
+    // console.log(currentMonthDaysValue);
     // console.log(rest);
-    const firstValue = getCurrentMonthNumOfDays(resultArrWithoutLastValue);
-    console.log(firstValue);
-    const daysBetweenCurrentAndStartingMonth =
-      numOfDaysBetweenCurrAndStartingMonth(resultArrWithoutLastValue);
-    console.log(daysBetweenCurrentAndStartingMonth);
+    const currentMonthDaysValue = getCurrentMonthNumOfDays(
+      resultArrWithoutLastValue
+    );
+    console.log(currentMonthDaysValue);
+    const daysBetweenCurrentAndEndingMonth = numOfDaysBetweenCurrAndEndingMonth(
+      resultArrWithoutLastValue
+    );
+    console.log(daysBetweenCurrentAndEndingMonth);
     console.log(
       "total days",
-      totalDaysOfMonthsBetweenCurrentAndStartingDate(
-        daysBetweenCurrentAndStartingMonth
+      totalDaysOfMonthsBetweenCurrentAndEndingDate(
+        daysBetweenCurrentAndEndingMonth
       )
     );
   }
+
+  /**
+   * makeArrayOfYearsFromCurrentToEnd(startingYear, endingYear + 1);
+   * will return an array of years
+   * when length is one means startYear and endYear equal each other
+   * when length is equal or greater 2
+   *
+   * **/
+
+  /**
+   * calculating days when both currentYear and endingYear equal each other
+   * **/
+
+  /**
+   * calculating days when both currentYear and endingYear and currentMonth and endingMonth
+   * eqaul to each other
+   * **/
+
+  /**
+   * calculating days when both currentYear and endingYear do not equal each other
+   * **/
+
+  /**
+   * make array of years
+   * how to use func below: makeArrayOfYearsFromCurrentToEnd(startingYear, endingYear + 1);
+   * **/
+
+  function makeArrayOfYearsFromCurrentToEnd(startingYear, endingYear) {
+    const result = [];
+    while (startingYear !== endingYear) {
+      result.push(startingYear);
+      startingYear++;
+    }
+    return result;
+  }
+
   /**
    * helper funcs
    * **/
@@ -664,7 +743,7 @@
    * starting month num of days
    * **/
 
-  function getStartingDateNumOfDays(arrInput) {
+  function getEndingDateNumOfDays(arrInput) {
     const copyOfArr = [...arrInput];
     const lastValueOfArr = copyOfArr.pop();
     return [lastValueOfArr, copyOfArr];
@@ -682,7 +761,7 @@
   /**
    * num of days between current and start month
    * **/
-  function numOfDaysBetweenCurrAndStartingMonth(array) {
+  function numOfDaysBetweenCurrAndEndingMonth(array) {
     const copyOfArr = [...array];
     const [, ...rest] = copyOfArr;
     return rest;
@@ -691,7 +770,7 @@
    * get total days months between current and starting date
    * **/
 
-  function totalDaysOfMonthsBetweenCurrentAndStartingDate(array) {
+  function totalDaysOfMonthsBetweenCurrentAndEndingDate(array) {
     const copyOfArr = [...array];
     return copyOfArr.reduce(function addValues(buildingUp, currentDays) {
       return buildingUp + currentDays;
@@ -1081,11 +1160,110 @@
   }
 
   /**
-   * func below
+   * TODO
    * **/
 
-  function initialTimerDaysHoursMinutesSecondsDigit() {
+  function defaultTimerDaysHoursMinutesSecondsDigit() {
     //
+  }
+
+  /**
+   * func below will get upcoming hoilday obj in datesOfHoliday obj in dataObj
+   * **/
+
+  /**
+   * get date, time and title of upcoming holiday helper
+   * **/
+  getNextUpcomingHolidayValues.call(currentDateObj);
+  function getNextUpcomingHolidayValues() {
+    const { currentYear: year, currentMonth: month, currentDay: day } = this;
+    const objOfMonthHolidayDates = dataObj.datesOfHoliday[`${year}`][month];
+    // using filter
+    const arrOfHolidayDates = Object.keys(objOfMonthHolidayDates);
+    const [nextHolidayDate] = findDatesGreaterThanCurrentDateUsingFilter(
+      arrOfHolidayDates,
+      day
+    );
+    const { title, hours, minutes } =
+      dataObj.datesOfHoliday[`${year}`][month][nextHolidayDate];
+    // console.log(dataObj.datesOfHoliday[`${year}`][month][nextHolidayDate]);
+    // using reduce
+    /**const arrWithArrayOfDatesAndObj = Object.entries(objOfMonthHolidayDates);
+    const arrOfObjs = findDatesGreaterThanCurrentDateUsingReduce(
+      arrWithArrayOfDatesAndObj,
+      day
+    );
+    console.log(arrOfObjs[0]);**/
+    dataObj.defaultEndingDate = {
+      title,
+      year,
+      month,
+      day,
+      hours,
+      minutes,
+    };
+    // dataObj.defaultEndingDate.title = title;
+    // dataObj.defaultEndingDate.year = year;
+    // dataObj.defaultEndingDate.month = month;
+    // dataObj.defaultEndingDate.day = day;
+    // dataObj.defaultEndingDate.hours = hours;
+    // dataObj.defaultEndingDate.minutes = minutes;
+  }
+
+  /**
+   * filter dates greater than currentDate using filter
+   * **/
+
+  function findDatesGreaterThanCurrentDateUsingFilter(arrOfDates, dateValue) {
+    // arrofDates will be an array of dates ["8","17","26"]
+    return arrOfDates.filter(function getDatesGreaterThanCurrentDate(
+      dateString
+    ) {
+      const dateInNumForm = convertStrToNum(dateString);
+      return dateInNumForm > dateValue;
+    });
+  }
+
+  /**
+   * filter dates greater than currentDate using reduce
+   * **/
+
+  function findDatesGreaterThanCurrentDateUsingReduce(arrOfDates, dateValue) {
+    // arrOfDates will be array of subarrays [[date,obj]]
+    // this func will find next date and return obj of title,hours, minutes
+    return arrOfDates.reduce(function getObj(buildingUp, currentValue) {
+      const [dateString, holidayObj] = currentValue;
+      const convertToNum = convertStrToNum(dateString);
+      if (convertToNum > dateValue) {
+        buildingUp.push(holidayObj);
+      }
+      return buildingUp;
+    }, []);
+  }
+
+  /**
+   * get current year, month and date
+   * **/
+
+  function getCurrentYearMonthDate(dateInput) {
+    const [day, month, date, year] = dateInput.toDateString().split(" ");
+    return {
+      currentYear: dateInput.getFullYear(),
+      currentMonth: month,
+      currentDay: dateInput.getDate(),
+    };
+  }
+
+  /**
+   * get current time: hour and minutes
+   * **/
+
+  function getCurrentHourMinutes() {
+    const currentTime = new Date();
+    return {
+      currentHour: currentTime.getHours(),
+      currentMinute: currentTime.getMinutes(),
+    };
   }
 
   /**
@@ -1093,6 +1271,8 @@
    * getCurrentDateAndAssignValuesToDataObj();
    * *** might not need this func because we always want to work with the
    * most current time
+   * *** different approach we will split date and time into two func
+   * one for date and one for time ***
    * **/
 
   function getCurrentDateAndAssignValuesToDataObj() {
@@ -1102,11 +1282,11 @@
     const { year, month, day, hours, minutes } =
       getCurrentYearMonthAndTimeOfDate(newCurrentDate);
     // assign current date values to data obj
-    dataObj.currentDate.year = year;
+    dataObj.currentDate.year = Number(year);
     dataObj.currentDate.month = month;
     dataObj.currentDate.day = day;
-    dataObj.currentDate.hours = hours;
-    dataObj.currentDate.minutes = minutes;
+    dataObj.currentDate.time.hours = hours;
+    dataObj.currentDate.time.minutes = minutes;
   }
 
   /**
@@ -1141,6 +1321,10 @@
     console.log(dataObj);
     // this.reset();
   }
+
+  /**
+   * handle feb number of days when its leap year
+   * **/
 
   /**
    * using slice
