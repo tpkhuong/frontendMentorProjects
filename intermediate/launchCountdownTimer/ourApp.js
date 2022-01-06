@@ -21,7 +21,7 @@
   const currentTimeObj = getCurrentHourMinutes(dateObj);
   // execute/call/invoke our data obj func
   const accessOurData = scopeOurData();
-  const dataObj = accessOurData();
+  const dataObj = accessOurData(12, 0, 0);
   console.log(dataObj);
   // declare/define our days, hours, and minutes func
   // const handleDaysChange = daysHoursMinutesHelper();
@@ -86,36 +86,6 @@
     getUserDateFromInputsAndAssignValuesToDataObj
   );
 
-  /**
-   * how to use addEventListener below
-   * addEventListener.call(effortTwo, "keydown", testingCallback);
-   * **/
-
-  // consoleElement(
-  //   arrayOfDaysDivElement,
-  //   arrayOfHoursDivElement,
-  //   arrayOfMinutesDivElement,
-  //   arrayOfSecondsDivElement
-  // );
-
-  // function consoleElement(...element) {
-  //   console.log(element);
-  // }
-
-  function addEventListener(eventStr, eventCallback) {
-    this.addEventListener(eventStr, eventCallback);
-    // console.log(eventStr);
-    // console.log(eventCallback);
-  }
-
-  function propertiesOfEventObj() {
-    return {
-      targetElement: this.target,
-      targetKeyStrForm: this.key,
-      targetKeyCodeStr: this.code,
-      booleanShiftKeyPressed: this.shiftKey,
-    };
-  }
   // new Date("January 18, 2022, 0:00"); 12am
   // 23:00 is 11pm
   // 24:00 is 12am
@@ -126,7 +96,7 @@
    * 12 hours to reach Dec 29
    **/
   // countDown();
-
+  // dataObj.stopTimer = countDown();
   function countDown() {
     /**
      * seconds element will update outside switch statement
@@ -413,86 +383,86 @@
           Jan: {
             17: {
               title: "Martin Luther King Jr Day",
-              hours: "0",
-              minutes: "00",
+              hours: 0,
+              minutes: 00,
             },
             20: {
               title: "Martin Luther King Jr Day",
-              hours: "0",
-              minutes: "00",
+              hours: 0,
+              minutes: 00,
             },
             26: {
               title: "Martin Luther King Jr Day",
-              hours: "0",
-              minutes: "00",
+              hours: 0,
+              minutes: 00,
             },
           },
           Feb: {
             1: {
               title: "Tet: Vietnamese New Year",
-              hours: "0",
-              minutes: "00",
+              hours: 0,
+              minutes: 00,
             },
             14: {
               title: "Valentine's Day",
-              hours: "0",
-              minutes: "00",
+              hours: 0,
+              minutes: 00,
             },
           },
           Mar: {
             17: {
               title: "Saint Patrick's Day",
-              hours: "0",
-              minutes: "00",
+              hours: 0,
+              minutes: 00,
             },
           },
           Apr: {
             17: {
               title: "Easter Sunday",
-              hours: "0",
-              minutes: "00",
+              hours: 0,
+              minutes: 00,
             },
           },
           May: {
             30: {
               title: "Memorial Day",
-              hours: "0",
-              minutes: "00",
+              hours: 0,
+              minutes: 00,
             },
           },
           Jul: {
             4: {
               title: "Independence Day",
-              hours: "0",
-              minutes: "00",
+              hours: 0,
+              minutes: 00,
             },
           },
           Sep: {
             5: {
               title: "Labor Day",
-              hours: "0",
-              minutes: "00",
+              hours: 0,
+              minutes: 00,
             },
           },
           Oct: {
             31: {
               title: "Halloween",
-              hours: "0",
-              minutes: "00",
+              hours: 0,
+              minutes: 00,
             },
           },
           Nov: {
             24: {
               title: "Thanksgiving",
-              hours: "0",
-              minutes: "00",
+              hours: 0,
+              minutes: 00,
             },
           },
           Dec: {
             25: {
               title: "Christmas",
-              hours: "0",
-              minutes: "00",
+              hours: 0,
+              minutes: 00,
             },
           },
         },
@@ -666,6 +636,7 @@
     // let counter = 0;
     while (startingIndex !== endingIndex) {
       console.log(copyOfArray[startingIndex]);
+      // console.log(startingIndex);
       const eachSubarray = copyOfArray[startingIndex];
       const [month, daysOfMonth] = eachSubarray;
       result.push(daysOfMonth);
@@ -701,11 +672,22 @@
   }
 
   /**
+   * handle days calculations
+   * **/
+
+  function handleDaysDigitCalculations(currentDateObj, endDateObj) {
+    // we will be working with hr and min
+    // get hr from currentDateObj and minute by calling new Date()
+    // then using method .getMinutes()
+    // when time is 0:00 take endDate - currentDate
+    // when time is 0:01 subtract 1 from the sum of endDate - currentDate
+  }
+
+  /**
    * makeArrayOfYearsFromCurrentToEnd(startingYear, endingYear + 1);
    * will return an array of years
    * when length is one means startYear and endYear equal each other
-   * when length is equal or greater 2
-   *
+   * when length is equal or greater 2 startYear and endYear do not equal each other
    * **/
 
   /**
@@ -720,6 +702,66 @@
   /**
    * calculating days when both currentYear and endingYear do not equal each other
    * **/
+
+  /**
+   * handle hours calculations
+   * **/
+  console.log(handleHoursDigitCalculations(dataObj.currentDate));
+  function handleHoursDigitCalculations(currentDateObj, endDateObj) {
+    // we will be working with hr and min
+    // get hr from currentDateObj and minute by calling new Date()
+    // then using method .getMinutes()
+    // if currentDate and endDate, year, month and day equal each
+    // take currentDateHour subtract it from endDateHour
+    // we will be working with 24hr format
+    // when time is 0:00 which is 12am
+    // our digit display will be 1day 0hr 0min
+    // when time is 0:01 which is 12:01am
+    // our digit display will be 0day 23hr 59min
+    // const {
+    //   time: { hours: currentHr },
+    // } = currentDateObj;
+    // const currentMin = new Date().getMinutes();
+    // console.log(`${currentHr} ${currentMin}`);
+    /**
+     * testing
+     * const currentHr = 23;
+     * const currentMin = 1;
+     * **/
+
+    /**
+     * when time is 0:00 hr is 0
+     * when minutes is :00 & hr is greater than 0
+     * 1:00 take substract currentHr from 24
+     * when minutes is greater than :00 subtract currentHr from 23
+     *
+     * **/
+    if (currentHr === 0 && currentMin === 0) {
+      // when time is 0:00 enter this if statement
+      return 0;
+    } else {
+      // when time is not 0:00 enter this else
+      // if (currentMin > 0) {
+      //   // take currentHr subtract it from 23
+      //   return 23 - currentHr;
+      // } else {
+      //   // take currentHr subtract it from 24
+      //   return 24 - currentHr;
+      // }
+      // ternary operator
+      return currentMin > 0 ? 23 - currentHr : 24 - currentHr;
+    }
+  }
+
+  /**
+   * handle minutes calculations
+   * **/
+
+  function handleMinutesDigitCalculations(currentDateObj, endDateObj) {
+    // we will be working with hr and min
+    // get hr from currentDateObj and minute by calling new Date()
+    // then using method .getMinutes()
+  }
 
   /**
    * make array of years
@@ -855,18 +897,6 @@
   }
 
   /**
-   * handle hours calculations
-   * **/
-
-  function handleHoursCalculations() {}
-
-  /**
-   * handle minutes calculations
-   * **/
-
-  function handleMinutesCalculations() {}
-
-  /**
    * check length of digit
    * if digit >= 0 && digit < 10
    * add prepend 0 to digit
@@ -874,7 +904,7 @@
    * we could check for length of digit after we convert number to string
    * if length is 2 dont prepend 0 to digit
    * if length is 1 prepend 0 to digit
-   * **/
+   * **
 
   /**
    * we want to call this func before we update/change digit element
@@ -951,16 +981,6 @@
     // update days
     // update hours
     // update minutes
-  }
-
-  /**
-   * change obj property
-   * **/
-
-  function changeObjProperty() {
-    return function innerFunc(propStr, booleanValue) {
-      this[propStr] = booleanValue;
-    };
   }
 
   /**
@@ -1124,42 +1144,6 @@
   }
 
   /**
-   * convert to str to num
-   * **/
-
-  function convertStrToNum(str) {
-    return Number(str);
-  }
-
-  /**
-   * convert to num to str
-   * **/
-
-  function convertNumToStr(num) {
-    return String(num);
-  }
-
-  /**
-   * add class
-   * **/
-
-  function addClass() {
-    return function innerFunc(classString) {
-      this.classList.add(classString);
-    };
-  }
-
-  /**
-   * remove class
-   * **/
-
-  function removeClass() {
-    return function innerFunc(classString) {
-      this.classList.remove(classString);
-    };
-  }
-
-  /**
    * TODO
    * **/
 
@@ -1198,7 +1182,7 @@
       title,
       year,
       month,
-      day,
+      day: Number(nextHolidayDate),
       hours,
       minutes,
     };
@@ -1324,7 +1308,16 @@
 
   /**
    * handle feb number of days when its leap year
+   * Feb index is 1 when we call method .getMonth() on Date() obj
    * **/
+
+  function addOneToYearNumDaysOrMonthNumDaysForLeapYear(
+    yearTotalOrMonthTotal,
+    year
+  ) {
+    // use modolo operator %
+    return year % 4 === 0 ? yearTotalOrMonthTotal + 1 : yearTotalOrMonthTotal;
+  }
 
   /**
    * using slice
@@ -1338,6 +1331,172 @@
      return [firstValue, betweenValues, lastValue];
    }
    * **/
+
+  /**
+   * utilities func
+   * **/
+
+  /**
+   * array of nums using two indices
+   * *** how to use func below:
+   * arrayOfNumUsingTwoIndices(startingIndex, endingIndex + 1, [], "current" or "end", year) ***
+   * **/
+
+  function arrayOfNumUsingTwoIndices(...rest) {
+    let [startingIndex, endingIndex, arrayInput, currentOrEnd, yearValue] =
+      rest;
+    // copy array
+    const copyOfArray = [...arrayInput];
+    // const copyOfArray = [].concat(arrayInput);
+    // const copyOfArray = arrayInput.slice();
+    const result = [];
+    while (startingIndex !== endingIndex) {
+      //
+      const eachSubarray = copyOfArray[startingIndex];
+      const [month, numOfDays] = eachSubarray;
+      if (startingIndex == 1 && currentOrEnd == "end") {
+        // we will handle adding 1 to feb for leap year
+        // when user enter inputs here
+        // func addOneToYearNumDaysOrMonthNumDaysForLeapYear
+        // will return value of days for feb either 28 or 29(for leap year)
+        const valueOfFebBasedOnYear =
+          addOneToYearNumDaysOrMonthNumDaysForLeapYear(numOfDays, yearValue);
+        result.push(valueOfFebBasedOnYear);
+      } else {
+        // we are handling adding 1 to leap year for current year in our data obj
+        result.push(numOfDays);
+      }
+      startingIndex++;
+    }
+    console.log(result);
+    return result;
+  }
+
+  /**
+   * get first value in array
+   * array: [1,2,3,4,5];
+   * return 1
+   * **/
+
+  function valueAtFirstIndexOfArray(array) {
+    const copyArray = [...array];
+    return copyArray[0];
+  }
+
+  /**
+   * get values between first and last value in array
+   * return 2, 3, 4
+   * **/
+
+  function valuesBetweenDynamicIndices(array, beginBetweenOrEnd) {
+    const copyArray = [...array];
+    const lengthOfArray = copyArray.length;
+
+    switch (beginBetweenOrEnd) {
+      case "begin":
+        return copyArray.slice(0, lengthOfArray - 1);
+      case "between":
+        return copyArray.slice(0 + 1, lengthOfArray - 1);
+      case "end":
+        return copyArray.slice(0 + 1);
+    }
+  }
+
+  /**
+   * get last value of array
+   * return 5 use array.length - 1
+   * **/
+
+  function valueAtLastIndexOfArray(array) {
+    const copyArray = [...array];
+    const lengthOfArr = copyArray.length;
+    return copyArray[lengthOfArr - 1];
+  }
+
+  /**
+   * how to use addEventListener below
+   * addEventListener.call(effortTwo, "keydown", testingCallback);
+   * **/
+
+  // consoleElement(
+  //   arrayOfDaysDivElement,
+  //   arrayOfHoursDivElement,
+  //   arrayOfMinutesDivElement,
+  //   arrayOfSecondsDivElement
+  // );
+
+  // function consoleElement(...element) {
+  //   console.log(element);
+  // }
+
+  function addEventListener(eventStr, eventCallback) {
+    this.addEventListener(eventStr, eventCallback);
+    // console.log(eventStr);
+    // console.log(eventCallback);
+  }
+
+  function propertiesOfEventObj() {
+    return {
+      targetElement: this.target,
+      targetKeyStrForm: this.key,
+      targetKeyCodeStr: this.code,
+      booleanShiftKeyPressed: this.shiftKey,
+    };
+  }
+
+  /**
+   * subtraction
+   * **/
+
+  function utilitySubtractionFunc(firstValue, secondValue) {
+    return firstValue - secondValue;
+  }
+
+  /**
+   * convert to str to num
+   * **/
+
+  function convertStrToNum(str) {
+    return Number(str);
+  }
+
+  /**
+   * convert to num to str
+   * **/
+
+  function convertNumToStr(num) {
+    return String(num);
+  }
+
+  /**
+   * add class
+   * **/
+
+  function addClass() {
+    return function innerFunc(classString) {
+      this.classList.add(classString);
+    };
+  }
+
+  /**
+   * remove class
+   * **/
+
+  function removeClass() {
+    return function innerFunc(classString) {
+      this.classList.remove(classString);
+    };
+  }
+
+  /**
+   * change obj property
+   * **/
+
+  function changeObjProperty() {
+    return function innerFunc(propStr, booleanValue) {
+      this[propStr] = booleanValue;
+    };
+  }
 
   /**
    * notes
