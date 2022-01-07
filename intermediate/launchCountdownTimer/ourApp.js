@@ -606,6 +606,18 @@
   const endingYear = 2023;
 
   /**
+   * same year
+   * **/
+  // const currentMonth = findIndexMonthUsingIndexOf(arrOfMonths, "Feb");
+  // const endingMonth = findIndexMonthUsingIndexOf(arrOfMonths, "Dec");
+  // arrayOfNumUsingTwoIndices(
+  //   currentMonth,
+  //   endingMonth + 1,
+  //   arrayOfSubarrays,
+  //   "current"
+  // );
+
+  /**
    * reason we pass in endingMonth + 1
    * our while loop will loop as long as startingIndex !== endingIndex
    * we want to include the value at the last index of the array. array.length - 1
@@ -764,15 +776,15 @@
   }
 
   /**
-   * make array of years
-   * how to use func below: makeArrayOfYearsFromCurrentToEnd(startingYear, endingYear + 1);
+   * make array of years/values
+   * how to use func below: makeArrayOfValuessFromCurrentToEnd(startingNum, endingNum + 1);
    * **/
 
-  function makeArrayOfYearsFromCurrentToEnd(startingYear, endingYear) {
+  function makeArrayOfValuesFromCurrentToEnd(startingNum, endingNum) {
     const result = [];
-    while (startingYear !== endingYear) {
-      result.push(startingYear);
-      startingYear++;
+    while (startingNum !== endingNum) {
+      result.push(startingNum);
+      startingNum++;
     }
     return result;
   }
@@ -1497,6 +1509,46 @@
       this[propStr] = booleanValue;
     };
   }
+
+  /**
+   *
+   * **/
+
+  /**
+   * if time is 14:17 use .getHours() 14 use .getMinutes() give us 17
+   * 14:00 is 2pm take 14 times 60 is 840mins
+   * 1440 - 840 will give us 600mins / 60 will give us 10hr
+   * 10 hr left in the day digit will be 10hr
+   * take 17 subtract it from 60 give us 43min left digit will be 43min
+   * testing: time is 13:25 which is 1:25pm
+   * call .getHours() will give us 13. take 13 times 60 will give us 780
+   * call .getMinutes() will give 25
+   * take 780 + 25 will give us 805
+   * there are 1440 min in a day
+   * 1440 - 805 gives us 635 min left
+   * **/
+
+  /**
+   * if times it 0:00 digit will be 1day 0hr 0min
+   * if times is 0:26 call .getMinutes() to get 26 min
+   * take 26 subtract it from 60 which will give us 34
+   * we can use modulo operator
+   * total min % 60 will give us the reminding mins
+   * take that value subtract it from total min
+   * then take value of subtracting reminder from total min divide by 60
+   * to give us hrs
+   * **/
+
+  /**
+   * example user input:
+   * may 3 2024 15:20
+   * current jan 6 2022
+   * **/
+
+  /**
+   * user input: jan 7 2022 7:10
+   * current jan 6 2022
+   * **/
 
   /**
    * notes
