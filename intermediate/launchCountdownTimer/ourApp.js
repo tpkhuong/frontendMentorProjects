@@ -1,5 +1,6 @@
 (function scoprOurVariables() {
   //   declare selector at top of func
+
   const {
     monthSelectElement,
     userInputModalDiv,
@@ -42,6 +43,12 @@
   // call using .call() method
 
   /**
+   * testing
+   * **/
+
+  getNextUpcomingHolidayValues.call(currentDateObj);
+
+  /**
    *  add flip transition
    * add flip animation
    * **/
@@ -72,6 +79,15 @@
 
   const removeFlipClassToDigitElement =
     addOrRemoveFlipClassToDigitBottomElement("remove");
+
+  /**
+   * declare/define our arithmetic funcs
+   * **/
+
+  const addition = arithmeticFactoryFunc("add");
+  const subtraction = arithmeticFactoryFunc("subtract");
+  const multiply = arithmeticFactoryFunc("multiply");
+  const divide = arithmeticFactoryFunc("divide");
 
   // add event listeners
   addEventListener.call(userInputModalDiv, "change", function TODO(event) {
@@ -332,7 +348,7 @@
         year: currentDateObj.currentYear,
         time: {
           hours: currentTimeObj.currentHour,
-          minutes: null,
+          minutes: currentTimeObj.currentMinute,
         },
       },
       userDateInput: {
@@ -479,54 +495,6 @@
       innerDataObj["hoursDigit"] = hours;
       innerDataObj["minutesDigit"] = minutes;
       return innerDataObj;
-    };
-  }
-
-  function ourSelectors() {
-    const monthSelectElement = document.querySelector("select[id='month']");
-    // form
-    const formElement = document.querySelector("form");
-    const userInputModalDiv = document.getElementById("modal-one");
-    // days, hours, minutes, seconds digit-bottom
-    const daysDigitBottom = document.querySelector(
-      "div[id='days'] .digit-bottom"
-    );
-    const hoursDigitBottom = document.querySelector(
-      "div[id='hours'] .digit-bottom"
-    );
-    const minutesDigitBottom = document.querySelector(
-      "div[id='minutes'] .digit-bottom"
-    );
-    const secondDigitBottom = document.querySelector(
-      "div[id='seconds'] .digit-bottom"
-    );
-    // array of back, top, bottom elements for days, hours, minutes, seconds
-    const arrayOfDaysDivElement = Array.from(
-      document.querySelectorAll("div[id='days'] > div")
-    );
-    const arrayOfHoursDivElement = Array.prototype.slice.call(
-      document.querySelectorAll("div[id='hours'] > div")
-    );
-    const arrayOfMinutesDivElement = Array.from(
-      document.querySelectorAll("div[id='minutes'] > div")
-    );
-    const arrayOfSecondsDivElement = Array.prototype.slice.call(
-      document.querySelectorAll("div[id='seconds'] > div")
-    );
-    // const effortTwo = document.querySelector("digit-style-wrapper-two");
-
-    return {
-      monthSelectElement,
-      formElement,
-      userInputModalDiv,
-      daysDigitBottom,
-      hoursDigitBottom,
-      minutesDigitBottom,
-      secondDigitBottom,
-      arrayOfDaysDivElement,
-      arrayOfHoursDivElement,
-      arrayOfMinutesDivElement,
-      arrayOfSecondsDivElement,
     };
   }
 
@@ -683,17 +651,132 @@
     );
   }
 
+  function digitsElementsCalculation(currentDateObj, endDateObj) {
+    // destructure our dataObjs
+    // figure out days
+    // figure out hours
+    // figure out minutes
+  }
+
   /**
    * handle days calculations
+   * *** previous efforts notes are in notes func at bottom of app ***
+   * **/
+  // go to getNextUpcomingHolidayValues func to test our algorithm
+  handleDaysDigitCalculations(dataObj.currentDate, dataObj.defaultEndingDate);
+  function handleDaysDigitCalculations(currentDateObj, endDateObj) {
+    // we want the year, month, and date
+    // destructure both current and end obj
+
+    const {
+      year: currentYear,
+      month: currentMonth,
+      day: currentDay,
+      time: { hours: currentHour, minutes: currentMinute },
+    } = currentDateObj;
+
+    const {
+      year: endYear,
+      month: endMonth,
+      day: endDay,
+      hours: endHour,
+      minutes: endMinute,
+    } = endDateObj;
+
+    // create array of year between current and end
+    const arrayOfYearBetweenCurrentAndEndDate =
+      makeArrayOfValuesFromCurrentToEnd(currentYear, endYear + 1);
+    // length of array
+    console.log(arrayOfYearBetweenCurrentAndEndDate);
+    const lengthOfArrayOfYears = arrayOfYearBetweenCurrentAndEndDate.length;
+    // if year, month and day === each other return days = 0
+    if (
+      currentYear == endYear &&
+      currentMonth === endMonth &&
+      currentDay === endDay
+    ) {
+      return 0;
+    } else {
+      //
+      dayDigitsWorkingWithYear(
+        arrayOfYearBetweenCurrentAndEndDate,
+        currentDateObj,
+        endDateObj
+      );
+    }
+  }
+
+  /**
+   * day digit working with year func
    * **/
 
-  function handleDaysDigitCalculations(currentDateObj, endDateObj) {
-    // we will be working with hr and min
-    // get hr from currentDateObj and minute by calling new Date()
-    // then using method .getMinutes()
-    // when time is 0:00 take endDate - currentDate
-    // when time is 0:01 subtract 1 from the sum of endDate - currentDate
+  function dayDigitsWorkingWithYear(...rest) {
+    const [arrayOfYears, firstObj, secondObj] = rest;
+    const lengthOfArray = arrayOfYears.length;
+    const {
+      year: currentYear,
+      month: currentMonth,
+      day: currentDay,
+      time: { hours: currentHour, minutes: currentMinute },
+    } = firstObj;
+    // console.log(
+    //   currentYear,
+    //   currentMonth,
+    //   currentDay,
+    //   currentHour,
+    //   currentMinute
+    // );
+    const {
+      year: endYear,
+      month: endMonth,
+      day: endDay,
+      hours: endHour,
+      minutes: endMinute,
+    } = secondObj;
+    // console.log(endYear, endMonth, endDay, endHour, endMinute);
+
+    // const [] = rest;
+    switch (true) {
+      case lengthOfArray == 1:
+        // current year and end year are the same
+        if (currentMonth == endMonth) {
+          figureOutDayFunc(currentDay, endDay);
+        }
+        console.log("1");
+        break;
+      case lengthOfArray == 2:
+        // current year is one less than end year
+        console.log("2");
+        break;
+      case lengthOfArray >= 3:
+        // there is year/s between current and end
+        // we want to get first value
+        // value/s between first and last value
+        // we want to get last value
+        console.log("3");
+        break;
+    }
   }
+
+  /**
+   * day digit working with month
+   * **/
+
+  function dayDigitsWorkingWithMonth() {}
+
+  /**
+   * figure out days
+   * **/
+
+  function figureOutDayFunc(...rest) {
+    const [startDay, endDay] = rest;
+    console.log(startDay, endDay);
+    console.log("figureout func same month");
+  }
+
+  /**
+   *
+   * **/
 
   /**
    * makeArrayOfYearsFromCurrentToEnd(startingYear, endingYear + 1);
@@ -716,64 +799,20 @@
    * **/
 
   /**
-   * handle hours calculations
+   * handle hours calculations and handle minutes calculations
+   * *** previous efforts notes are in notes func at bottom of app ***
+   * console.log(handleHoursDigitCalculations(dataObj.currentDate));
    * **/
-  console.log(handleHoursDigitCalculations(dataObj.currentDate));
-  function handleHoursDigitCalculations(currentDateObj, endDateObj) {
-    // we will be working with hr and min
-    // get hr from currentDateObj and minute by calling new Date()
-    // then using method .getMinutes()
-    // if currentDate and endDate, year, month and day equal each
-    // take currentDateHour subtract it from endDateHour
-    // we will be working with 24hr format
-    // when time is 0:00 which is 12am
-    // our digit display will be 1day 0hr 0min
-    // when time is 0:01 which is 12:01am
-    // our digit display will be 0day 23hr 59min
-    // const {
-    //   time: { hours: currentHr },
-    // } = currentDateObj;
-    // const currentMin = new Date().getMinutes();
-    // console.log(`${currentHr} ${currentMin}`);
-    /**
-     * testing
-     * const currentHr = 23;
-     * const currentMin = 1;
-     * **/
-
-    /**
-     * when time is 0:00 hr is 0
-     * when minutes is :00 & hr is greater than 0
-     * 1:00 take substract currentHr from 24
-     * when minutes is greater than :00 subtract currentHr from 23
-     *
-     * **/
-    if (currentHr === 0 && currentMin === 0) {
-      // when time is 0:00 enter this if statement
-      return 0;
-    } else {
-      // when time is not 0:00 enter this else
-      // if (currentMin > 0) {
-      //   // take currentHr subtract it from 23
-      //   return 23 - currentHr;
-      // } else {
-      //   // take currentHr subtract it from 24
-      //   return 24 - currentHr;
-      // }
-      // ternary operator
-      return currentMin > 0 ? 23 - currentHr : 24 - currentHr;
-    }
-  }
+  function handleHoursAndMinutesDigitCalculations(currentDateObj, endDateObj) {}
 
   /**
    * handle minutes calculations
+   function handleMinutesDigitCalculations(currentDateObj, endDateObj) {
+     // we will be working with hr and min
+     // get hr from currentDateObj and minute by calling new Date()
+     // then using method .getMinutes()
+   }
    * **/
-
-  function handleMinutesDigitCalculations(currentDateObj, endDateObj) {
-    // we will be working with hr and min
-    // get hr from currentDateObj and minute by calling new Date()
-    // then using method .getMinutes()
-  }
 
   /**
    * make array of years/values
@@ -1157,11 +1196,10 @@
 
   /**
    * TODO
+   function defaultTimerDaysHoursMinutesSecondsDigit() {
+     //
+   }
    * **/
-
-  function defaultTimerDaysHoursMinutesSecondsDigit() {
-    //
-  }
 
   /**
    * func below will get upcoming hoilday obj in datesOfHoliday obj in dataObj
@@ -1170,7 +1208,7 @@
   /**
    * get date, time and title of upcoming holiday helper
    * **/
-  getNextUpcomingHolidayValues.call(currentDateObj);
+
   function getNextUpcomingHolidayValues() {
     const { currentYear: year, currentMonth: month, currentDay: day } = this;
     const objOfMonthHolidayDates = dataObj.datesOfHoliday[`${year}`][month];
@@ -1194,7 +1232,8 @@
       title,
       year,
       month,
-      day: Number(nextHolidayDate),
+      day: 10,
+      // day: Number(nextHolidayDate),
       hours,
       minutes,
     };
@@ -1286,7 +1325,12 @@
   }
 
   /**
+   * callback to event listeners
+   * **/
+
+  /**
    * get userDate: assign values to userDateInput obj in dataObj
+   * *** submit button in form submit ***
    * **/
 
   function getUserDateFromInputsAndAssignValuesToDataObj(event) {
@@ -1294,8 +1338,9 @@
     // const copyOfDataObj = { ...dataObj.userDateInput };
     // console.log(copyOfDataObj);
     // event.preventDefault();
+    // dataObj.userDateInput
     console.log(monthSelectElement.value);
-    dataObj.userDateInput = Array.prototype.slice
+    const userInputObj = Array.prototype.slice
       .call(event.target.children[1].children)
       .reduce((buildingUp, currentElement) => {
         if (currentElement.tagName == "SELECT") {
@@ -1307,13 +1352,20 @@
       }, {});
     console.log(dataObj);
     const hourConvertedToTwentyFourFormat =
-      convertTwelveToTwentyFourHourFormat.call(dataObj.userDateInput);
+      convertTwelveToTwentyFourHourFormat.call(userInputObj);
     console.log(
       "hourConvertedToTwentyFourFormat",
       hourConvertedToTwentyFourFormat
     );
     // update userDateInput hour to 24hr format
-    dataObj.userDateInput.hours = hourConvertedToTwentyFourFormat;
+    dataObj.userDateInput = {
+      year: Number(userInputObj.year),
+      month: userInputObj.month,
+      day: Number(userInputObj.day),
+      hours: Number(userInputObj.hours),
+      minutes: Number(userInputObj.minutes),
+      meridiem: userInputObj.meridiem,
+    };
     console.log(dataObj);
     // this.reset();
   }
@@ -1351,10 +1403,14 @@
   /**
    * array of nums using two indices
    * *** how to use func below:
-   * arrayOfNumUsingTwoIndices(startingIndex, endingIndex + 1, [], "current" or "end", year) ***
+   * arrayOfDaysInMonthUsingTwoIndices(startingIndex, endingIndex + 1, [], "current" or "end", year) ***
    * **/
 
-  function arrayOfNumUsingTwoIndices(...rest) {
+  /**
+   * we plan to use to func when arrayOfYears is >= 2
+   * **/
+
+  function arrayOfDaysInMonthUsingTwoIndices(...rest) {
     let [startingIndex, endingIndex, arrayInput, currentOrEnd, yearValue] =
       rest;
     // copy array
@@ -1457,14 +1513,6 @@
   }
 
   /**
-   * subtraction
-   * **/
-
-  function utilitySubtractionFunc(firstValue, secondValue) {
-    return firstValue - secondValue;
-  }
-
-  /**
    * convert to str to num
    * **/
 
@@ -1511,8 +1559,120 @@
   }
 
   /**
-   *
+   * arithmetic factory
    * **/
+
+  function arithmeticFactoryFunc(arithmeticOperator) {
+    switch (arithmeticOperator) {
+      case "add":
+        return function innerFunc(firstNum, secondNum) {
+          return firstNum + secondNum;
+        };
+      case "subtract":
+        return function innerFunc(firstNum, secondNum) {
+          return firstNum - secondNum;
+        };
+      case "multiply":
+        return function innerFunc(firstValue, secondValue = 60) {
+          return firstValue * secondValue;
+        };
+      case "divide":
+        return function innerFunc(firstValue, secondValue = 60) {
+          return firstValue / secondValue;
+        };
+    }
+  }
+
+  /**
+   * modulo func to get minutes for digit minutes element
+   * we will use this func after getting ending date/day minutes
+   * and current date/day minutes. adding to get total of ending and current date/day minutes
+   * when we get this number, subtract this number from total minutes of both current and ending
+   * date/day minutes
+   * **/
+
+  function useModuloToGetMinutesForMinuteDigitElement(numInput) {
+    return numInput % 60;
+  }
+
+  /**
+   * add one to year if its leap year
+   * **/
+
+  function arrOfNumOfDaysInYear(daysValue, arrInput) {
+    const copyOfArray = [...arrInput];
+    return copyOfArray.map(function addOneToDaysInYearOrNot(value) {
+      return addOneToYearNumDaysOrMonthNumDaysForLeapYear(daysValue, value);
+    });
+  }
+
+  /**
+   * get sum from values of array
+   * **/
+
+  function sumCalculation(array) {
+    // copy of array
+    const copyOfArr = [].concat(array);
+    return copyOfArr.reduce(function getTotalOfValues(
+      buildingUp,
+      currentValue
+    ) {
+      return buildingUp + currentValue;
+    },
+    0);
+  }
+
+  /**
+   * selecting our elements
+   * **/
+
+  function ourSelectors() {
+    const monthSelectElement = document.querySelector("select[id='month']");
+    // form
+    const formElement = document.querySelector("form");
+    const userInputModalDiv = document.getElementById("modal-one");
+    // days, hours, minutes, seconds digit-bottom
+    const daysDigitBottom = document.querySelector(
+      "div[id='days'] .digit-bottom"
+    );
+    const hoursDigitBottom = document.querySelector(
+      "div[id='hours'] .digit-bottom"
+    );
+    const minutesDigitBottom = document.querySelector(
+      "div[id='minutes'] .digit-bottom"
+    );
+    const secondDigitBottom = document.querySelector(
+      "div[id='seconds'] .digit-bottom"
+    );
+    // array of back, top, bottom elements for days, hours, minutes, seconds
+    const arrayOfDaysDivElement = Array.from(
+      document.querySelectorAll("div[id='days'] > div")
+    );
+    const arrayOfHoursDivElement = Array.prototype.slice.call(
+      document.querySelectorAll("div[id='hours'] > div")
+    );
+    const arrayOfMinutesDivElement = Array.from(
+      document.querySelectorAll("div[id='minutes'] > div")
+    );
+    const arrayOfSecondsDivElement = Array.prototype.slice.call(
+      document.querySelectorAll("div[id='seconds'] > div")
+    );
+    // const effortTwo = document.querySelector("digit-style-wrapper-two");
+
+    return {
+      monthSelectElement,
+      formElement,
+      userInputModalDiv,
+      daysDigitBottom,
+      hoursDigitBottom,
+      minutesDigitBottom,
+      secondDigitBottom,
+      arrayOfDaysDivElement,
+      arrayOfHoursDivElement,
+      arrayOfMinutesDivElement,
+      arrayOfSecondsDivElement,
+    };
+  }
 
   /**
    * if time is 14:17 use .getHours() 14 use .getMinutes() give us 17
@@ -1551,9 +1711,125 @@
    * **/
 
   /**
+   * using fetch to get holiday API
+   * **/
+
+  /** 
+   * fetch("https://holidays.abstractapi.com/v1/?api_key=223c83a9028a45629d4d7634eac45bb5&country=US&year=2020&month=12&day=25").then((response)=>{
+return response.json();
+}).then((data)=>{
+
+console.log(data);
+});
+   * **/
+
+  // fetch(
+  //   "https://holidays.abstractapi.com/v1/?api_key=223c83a9028a45629d4d7634eac45bb5&country=US&year=2020&month=12&day=25"
+  // )
+  //   .then((response) => {
+  //     return response.json();
+  //   })
+  //   .then((data) => {
+  //     console.log(data);
+  //   });
+
+  /**
    * notes
    * **/
   const notes = function () {
+    /**
+     * handle days calculations
+     * **/
+
+    function handleDaysDigitCalculations(currentDateObj, endDateObj) {
+      // we will be working with hr and min
+      // get hr from currentDateObj and minute by calling new Date()
+      // then using method .getMinutes()
+      // when time is 0:00 take endDate - currentDate
+      // when time is 0:01 subtract 1 from the sum of endDate - currentDate
+    }
+
+    /**
+     * makeArrayOfYearsFromCurrentToEnd(startingYear, endingYear + 1);
+     * will return an array of years
+     * when length is one means startYear and endYear equal each other
+     * when length is equal or greater 2 startYear and endYear do not equal each other
+     * **/
+
+    /**
+     * calculating days when both currentYear and endingYear equal each other
+     * **/
+
+    /**
+     * calculating days when both currentYear and endingYear and currentMonth and endingMonth
+     * eqaul to each other
+     * **/
+
+    /**
+     * calculating days when both currentYear and endingYear do not equal each other
+     * **/
+
+    /**
+     * handle hours calculations and handle minutes calculations
+     * **/
+    console.log(handleHoursDigitCalculations(dataObj.currentDate));
+    function handleHoursAndMinutesDigitCalculations(
+      currentDateObj,
+      endDateObj
+    ) {
+      // we will be working with hr and min
+      // get hr from currentDateObj and minute by calling new Date()
+      // then using method .getMinutes()
+      // if currentDate and endDate, year, month and day equal each
+      // take currentDateHour subtract it from endDateHour
+      // we will be working with 24hr format
+      // when time is 0:00 which is 12am
+      // our digit display will be 1day 0hr 0min
+      // when time is 0:01 which is 12:01am
+      // our digit display will be 0day 23hr 59min
+      // const {
+      //   time: { hours: currentHr },
+      // } = currentDateObj;
+      // const currentMin = new Date().getMinutes();
+      // console.log(`${currentHr} ${currentMin}`);
+      /**
+       * testing
+       * const currentHr = 23;
+       * const currentMin = 1;
+       * **/
+
+      /**
+       * when time is 0:00 hr is 0
+       * when minutes is :00 & hr is greater than 0
+       * 1:00 take substract currentHr from 24
+       * when minutes is greater than :00 subtract currentHr from 23
+       *
+       * **/
+      if (currentHr === 0 && currentMin === 0) {
+        // when time is 0:00 enter this if statement
+        return 0;
+      } else {
+        // when time is not 0:00 enter this else
+        // if (currentMin > 0) {
+        //   // take currentHr subtract it from 23
+        //   return 23 - currentHr;
+        // } else {
+        //   // take currentHr subtract it from 24
+        //   return 24 - currentHr;
+        // }
+        // ternary operator
+        return currentMin > 0 ? 23 - currentHr : 24 - currentHr;
+      }
+    }
+
+    /**
+   * handle minutes calculations
+   function handleMinutesDigitCalculations(currentDateObj, endDateObj) {
+     // we will be working with hr and min
+     // get hr from currentDateObj and minute by calling new Date()
+     // then using method .getMinutes()
+   }
+   * **/
     // const obj = {
     //   2022: {
     //     Jan: {
