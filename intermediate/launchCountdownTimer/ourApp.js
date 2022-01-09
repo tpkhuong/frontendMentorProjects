@@ -68,6 +68,18 @@
   const removeFlipClassToMinutesBottomElement = removeClass();
 
   /**
+   * declare/define funcs that will return beginning, between or ending values of array
+   * begin returns [1,2,3,4]
+   * between return [2, 3, 4]
+   * end returns [2,3,4,5]
+   * **/
+
+  const beginningValuesOfArray = beginBetweenOrEndOfArrayFactoryFunc("begin");
+  const valuesBetweenFirstAndLastValue =
+    beginBetweenOrEndOfArrayFactoryFunc("between");
+  const endingValuesOfArray = beginBetweenOrEndOfArrayFactoryFunc("end");
+
+  /**
    * declare/define add or remove class flip to digit bottom
    * **/
 
@@ -483,6 +495,12 @@
           },
         },
       },
+      arrOfDays: [3, 5, 9],
+      sumOfValuesInArray() {
+        return this.arrOfDays.reduce((buildingUp, currentValue) => {
+          return buildingUp + currentValue;
+        }, 0);
+      },
       // name: "Deadpool",
       // sayHi() {
       //   console.log(`${this.name} hello`);
@@ -586,76 +604,18 @@
   // );
 
   /**
-   * reason we pass in endingMonth + 1
-   * our while loop will loop as long as startingIndex !== endingIndex
-   * we want to include the value at the last index of the array. array.length - 1
-   * if we didnt add 1 to endingMonthIndex while loop will stop when startingIndex == endingIndex
-   * and will not add last value of array to result array
-   * starting: 0,
-   * ending: 4
-   * while(0 !== 4) true enter while loop push value at arr[0]
-   * while(4 !== 4) false not enter while loop we dont push value at arr[4]
+   * Days, Hours, Minutes Digit Calculations
    * **/
-
-  arrayNumsOfDaysInMonth(currentMonth, endingMonth + 1, arrayOfSubarrays);
-
-  /**
-   * have func that loop starting at currentMonth index and ends at endingMonth index
-   * while loop add the daysOfMonth of that month into array
-   * we will use first and last month values in array to calculate
-   * days in current month and days in starting month without have to access that value
-   * from dataObj
-   * **/
-
-  function arrayNumsOfDaysInMonth(startingIndex, endingIndex, arrOfSubarrays) {
-    // copy array
-    // const copyOfArray = arrOfSubarrays.slice();
-    // const copyOfArray = [].concat(arrOfSubarrays);
-    const copyOfArray = [...arrOfSubarrays];
-    const result = [];
-    // let counter = 0;
-    while (startingIndex !== endingIndex) {
-      console.log(copyOfArray[startingIndex]);
-      // console.log(startingIndex);
-      const eachSubarray = copyOfArray[startingIndex];
-      const [month, daysOfMonth] = eachSubarray;
-      result.push(daysOfMonth);
-      if (startingIndex >= 11) {
-        startingIndex = 0;
-      } else {
-        startingIndex++;
-      }
-    }
-    console.log(result);
-    // const startingDateNumOfDays = result.pop();
-    const [endingMonthValue, resultArrWithoutLastValue] =
-      getEndingDateNumOfDays(result);
-    console.log(endingMonthValue);
-    console.log(resultArrWithoutLastValue);
-    // const [currentMonthDaysValue, ...rest] = resultArrWithoutLastValue;
-    // console.log(currentMonthDaysValue);
-    // console.log(rest);
-    const currentMonthDaysValue = getCurrentMonthNumOfDays(
-      resultArrWithoutLastValue
-    );
-    console.log(currentMonthDaysValue);
-    const daysBetweenCurrentAndEndingMonth = numOfDaysBetweenCurrAndEndingMonth(
-      resultArrWithoutLastValue
-    );
-    console.log(daysBetweenCurrentAndEndingMonth);
-    console.log(
-      "total days",
-      totalDaysOfMonthsBetweenCurrentAndEndingDate(
-        daysBetweenCurrentAndEndingMonth
-      )
-    );
-  }
-
+  digitsElementsCalculation(dataObj.currentDate, dataObj.defaultEndingDate);
   function digitsElementsCalculation(currentDateObj, endDateObj) {
-    // destructure our dataObjs
     // figure out days
     // figure out hours
     // figure out minutes
+    // get values from our calculation helper to this func
+    // then we will assign those values to daysDigit,hoursDigit and minuteDigit
+    // in our dataObj
+    const testDayCalc = handleDaysDigitCalculations(currentDateObj, endDateObj);
+    console.log("digitELementsCalc", testDayCalc);
   }
 
   /**
@@ -663,10 +623,11 @@
    * *** previous efforts notes are in notes func at bottom of app ***
    * **/
   // go to getNextUpcomingHolidayValues func to test our algorithm
-  handleDaysDigitCalculations(dataObj.currentDate, dataObj.defaultEndingDate);
-  function handleDaysDigitCalculations(currentDateObj, endDateObj) {
+  // handleDaysDigitCalculations(dataObj.currentDate, dataObj.defaultEndingDate);
+  function handleDaysDigitCalculations(...rest) {
     // we want the year, month, and date
     // destructure both current and end obj
+    const [currentDateObj, endDateObj] = rest;
 
     const {
       year: currentYear,
@@ -687,8 +648,8 @@
     const arrayOfYearBetweenCurrentAndEndDate =
       makeArrayOfValuesFromCurrentToEnd(currentYear, endYear + 1);
     // length of array
-    console.log(arrayOfYearBetweenCurrentAndEndDate);
-    const lengthOfArrayOfYears = arrayOfYearBetweenCurrentAndEndDate.length;
+    // console.log(arrayOfYearBetweenCurrentAndEndDate);
+    // const lengthOfArrayOfYears = arrayOfYearBetweenCurrentAndEndDate.length;
     // if year, month and day === each other return days = 0
     if (
       currentYear == endYear &&
@@ -698,7 +659,7 @@
       return 0;
     } else {
       //
-      dayDigitsWorkingWithYear(
+      return dayDigitsWorkingWithYear(
         arrayOfYearBetweenCurrentAndEndDate,
         currentDateObj,
         endDateObj
@@ -734,18 +695,29 @@
       minutes: endMinute,
     } = secondObj;
     // console.log(endYear, endMonth, endDay, endHour, endMinute);
-
+    console.log(arrayOfYears);
     // const [] = rest;
     switch (true) {
       case lengthOfArray == 1:
+        console.log("1");
         // current year and end year are the same
         if (currentMonth == endMonth) {
-          figureOutDayFunc(currentDay, endDay);
+          return dayDigitsWorkingWithDaysInSingleMonth(
+            currentDay,
+            endDay,
+            currentMinute,
+            endMinute
+          );
         }
-        console.log("1");
+        // pass arrayOfYears to dayDigitsWorkingWithMonth
+        //get first and last value of array returned by dayDigitsWorkingWithMonth
+        dayDigitsWorkingWithMonth(arrayOfYears, currentMonth, endMonth);
         break;
       case lengthOfArray == 2:
         // current year is one less than end year
+        //arrayOfYears will have [start,end] pass it to dayDigitsWorkingWithMonth
+        //get first and last value of array returned by dayDigitsWorkingWithMonth
+        dayDigitsWorkingWithMonth(arrayOfYears, currentMonth, endMonth);
         console.log("2");
         break;
       case lengthOfArray >= 3:
@@ -753,6 +725,25 @@
         // we want to get first value
         // value/s between first and last value
         // we want to get last value
+        // [2022,2023,2024]
+        // pass 2023 to arrOfNumOfDaysInYear func
+        //pass array [2022,2024] to dayDigitsWorkingWithMonth
+        //get first and last value of array returned by dayDigitsWorkingWithMonth
+        const arrayOfYearsBetweenStartingAndEndingYear =
+          valuesBetweenFirstAndLastValue(arrayOfYears);
+        console.log(
+          "arrayOfYearsBetweenStartingAndEndingYear",
+          arrayOfYearsBetweenStartingAndEndingYear
+        );
+        /***** *****/
+        const startingYear = valueAtFirstIndexOfArray(arrayOfYears);
+        const endingYear = valueAtLastIndexOfArray(arrayOfYears);
+        const arrayOfStartingAndEndingYear = [startingYear, endingYear];
+        dayDigitsWorkingWithMonth(
+          arrayOfStartingAndEndingYear,
+          currentMonth,
+          endMonth
+        );
         console.log("3");
         break;
     }
@@ -762,16 +753,95 @@
    * day digit working with month
    * **/
 
-  function dayDigitsWorkingWithMonth() {}
+  function dayDigitsWorkingWithMonth(...rest) {
+    const [arrayOfYear, currentMonthString, endMonthString] = rest;
+    const lengthOfArray = arrayOfYear.length;
+    const arrOfMonths = Object.keys(dataObj.numOfDaysOfMonths);
+    const arrayOfSubarrays = Object.entries(dataObj.numOfDaysOfMonths);
+    const startMonthIndex = findIndexMonthUsingIndexOf(
+      arrOfMonths,
+      currentMonthString
+    );
+    const endingMonthIndex = findIndexMonthUsingIndexOf(
+      arrOfMonths,
+      endMonthString
+    );
+    // we will be working with array of months ["Jan","Feb" etc] and array with subarray
+    // [["Jan", 31]]
+    /**
+     * same year: "Feb" to "Nov"
+     * arrayOfDaysInMonthUsingTwoIndices(indexOfFeb, indexOfNov + 1, [["Jan", 31]], "current")
+     * when length of array passed in is 1 return the array func above returns
+     * **/
+    if (lengthOfArray > 1) {
+      console.log(arrayOfYear);
+      //array will be [2022,2024] etc
+      const [startingYear, endingYear] = arrayOfYear;
+      const arrOfValuesStartingMonthAndYear = arrayOfDaysInMonthUsingTwoIndices(
+        startMonthIndex,
+        11 + 1,
+        arrayOfSubarrays,
+        "current"
+      );
+      const arrOfValuesEndingMonthAndYear = arrayOfDaysInMonthUsingTwoIndices(
+        0,
+        endingMonthIndex + 1,
+        arrayOfSubarrays,
+        "end",
+        endingYear
+      );
+      console.log([
+        ...arrOfValuesStartingMonthAndYear,
+        ...arrOfValuesEndingMonthAndYear,
+      ]);
+    } else {
+      // array will have one value [2022] etc
+    }
+    /**
+     * array passed in has two values [2022,2024] "Feb" to "Nov"
+     * 2022: "Feb" to "Dec"
+     * arrayOfDaysInMonthUsingTwoIndices(indexOfFeb, 11, [["Jan", 31]], "current")
+     * [daysOfFeb first value]
+     * 2024: "Jan" to "Nov"
+     * arrayOfDaysInMonthUsingTwoIndices(0, indexOfNov + 1, [["Jan", 31]], "end", 2024)
+     * [,daysOfNov last value]
+     * when length of array passed in is > 1 take array return by func above merge them
+     * [...currentArray, ...endArray]
+     * **/
+    // we want to return an array of num of day for each month
+    // where we call this func we will want to get first value and last value of that array
+    // use those values in our dayDigitsWorkingWithDaysInSingleMonth
+  }
 
   /**
    * figure out days
    * **/
 
-  function figureOutDayFunc(...rest) {
-    const [startDay, endDay] = rest;
-    console.log(startDay, endDay);
+  function dayDigitsWorkingWithDaysInSingleMonth(...rest) {
+    //
+    let [startDay, endDay, currentDateMinutes, endDateMinutes] = rest;
+
+    console.log(startDay, endDay, currentDateMinutes, endDateMinutes);
     console.log("figureout func same month");
+    // another approach
+    if (currentDateMinutes > 0) {
+      startDay++;
+    }
+    if (endDateMinutes > 0) {
+      endDay--;
+    }
+    console.log(startDay, endDay);
+    return subtraction(endDay, startDay);
+    // another approach
+    // let afterConditionCheckStartingDay = startDay,
+    //   afterConditionCheckEndingDay = endDay;
+    // if (currentDateMinutes > 0) {
+    //   afterConditionCheckStartingDay = startDay + 1;
+    // }
+    // if (endDateMinutes > 0) {
+    //   afterConditionCheckEndingDay = endDay - 1;
+    // }
+    // console.log(afterConditionCheckStartingDay, afterConditionCheckEndingDay);
   }
 
   /**
@@ -815,6 +885,10 @@
    * **/
 
   /**
+   * Days, Hours, Minutes Digit Calculations
+   * **/
+
+  /**
    * make array of years/values
    * how to use func below: makeArrayOfValuessFromCurrentToEnd(startingNum, endingNum + 1);
    * **/
@@ -833,163 +907,23 @@
    * **/
 
   /**
-   * starting month num of days
+   * call our update element func
    * **/
 
-  function getEndingDateNumOfDays(arrInput) {
-    const copyOfArr = [...arrInput];
-    const lastValueOfArr = copyOfArr.pop();
-    return [lastValueOfArr, copyOfArr];
-  }
-  /**
-   * get current month num of days
-   * **/
-
-  function getCurrentMonthNumOfDays(array) {
-    const copyOfArr = [...array];
-    const [firstValue] = copyOfArr;
-    return firstValue;
-  }
-
-  /**
-   * num of days between current and start month
-   * **/
-  function numOfDaysBetweenCurrAndEndingMonth(array) {
-    const copyOfArr = [...array];
-    const [, ...rest] = copyOfArr;
-    return rest;
-  }
-  /**
-   * get total days months between current and starting date
-   * **/
-
-  function totalDaysOfMonthsBetweenCurrentAndEndingDate(array) {
-    const copyOfArr = [...array];
-    return copyOfArr.reduce(function addValues(buildingUp, currentDays) {
-      return buildingUp + currentDays;
-    }, 0);
-  }
-
-  /**
-   * get year, month, date(number), hours and minute of date
-   * **/
-
-  function getCurrentYearMonthAndTimeOfDate(currentDateInput) {
-    const [currentDay, currentMonth, currentDate, currentYear] =
-      currentDateInput.toDateString().split(" ");
-    return {
-      year: currentYear,
-      month: currentMonth,
-      day: currentDateInput.getDate(),
-      hours: currentDateInput.getHours(),
-      minutes: currentDateInput.getMinutes(),
-    };
-  }
-
-  /**
-   * convert 12 hour time(AM/PM) format to 24 hour format
-   * **/
-
-  function convertTwelveToTwentyFourHourFormat(userDateInput) {
-    const { hours, minutes, meridiem } = this;
-    // if hour is 12 and meridiem is AM subtract 12 from 12 to get 0 by return String(0)
-    // if hour is 12 and meridiem is PM return hrInput because we want the value to be 12
-    let hrInTwentyFourFormat;
-    switch (meridiem) {
-      case "AM":
-        hrInTwentyFourFormat = handleMeridiemAM(hours);
-        break;
-      case "PM":
-        hrInTwentyFourFormat = handleMeridiemPM(hours);
-        break;
-    }
-    console.log(hours, minutes, typeof meridiem);
-    console.log(userDateInput);
-    console.log(hrInTwentyFourFormat);
-    return hrInTwentyFourFormat;
-  }
-
-  /**
-   * handle AM meridiem
-   * **/
-
-  function handleMeridiemAM(hrInput) {
-    // convert to number form
-    const hourNumForm = Number(hrInput);
-    // if (hourNumForm == 12) {
-    //   return String(0);
-    // } else {
-    //   return hrInput
-    // }
-    // ternary operator
-    return hourNumForm == 12 ? String(0) : hrInput;
-  }
-
-  /**
-   * handle PM meridiem
-   * **/
-
-  function handleMeridiemPM(hrInput) {
-    // convert to number form
-    const hourNumForm = Number(hrInput);
-    if (hourNumForm == 12) {
-      return hrInput;
-    } else {
-      // when user input is 1 to 11
-      // take hrInput add 12
-      const hrConvertedToTwentyFourFormat = hourNumForm + 12;
-      return String(hrConvertedToTwentyFourFormat);
-    }
-    // ternary operator
-    // let hrConvertedToTwentyFourFormat;
-    // return hourNumForm == 12
-    //   ? hrInput
-    //   : (hrConvertedToTwentyFourFormat = hourNumForm + 12);
-  }
-
-  /**
-   * check length of digit
-   * if digit >= 0 && digit < 10
-   * add prepend 0 to digit
-   * result will be 00 - 09
-   * we could check for length of digit after we convert number to string
-   * if length is 2 dont prepend 0 to digit
-   * if length is 1 prepend 0 to digit
-   * **
-
-  /**
-   * we want to call this func before we update/change digit element
-   * days, hours, minutes, seconds
-   * the value type of the daysDigit, hoursDigit, minutesDigit
-   * in our dataObj will be number
-   * **/
-  function handlePrependExtraZeroOrNot(digit) {
-    // convert to str form
-    const digitNumForm = convertNumToStr(digit);
-    const lengthOfDigit = digitNumForm.length;
-    // if (lengthOfDigit == 1) {
-    //   return `0${digitNumForm}`;
-    // } else {
-    //   return digitNumForm
-    // }
-    // ternary opertor
-    return lengthOfDigit == 1 ? `0${digitNumForm}` : digitNumForm;
-  }
-
-  /**
-   * prep digit value for element update
-   * **/
-
-  function prepDigitValueForUpdate(
-    { daysDigit: days, hoursDigit: hours, minutesDigit: minutes },
-    digitSeconds
-  ) {
-    return {
-      daysStrForm: handlePrependExtraZeroOrNot(days),
-      hoursStrForm: handlePrependExtraZeroOrNot(hours),
-      minutesStrForm: handlePrependExtraZeroOrNot(minutes),
-      secondsStrForm: handlePrependExtraZeroOrNot(digitSeconds),
-    };
+  function invokeOurUpdateElementFuncs({
+    daysStrForm,
+    hoursStrForm,
+    minutesStrForm,
+    secondsStrForm,
+  }) {
+    const {
+      flipDigitObj: { daysFlip, hoursFlip, minutesFlip },
+    } = dataObj;
+    console.log(daysStrForm, hoursStrForm, minutesStrForm, secondsStrForm);
+    console.log(daysFlip, hoursFlip, minutesFlip);
+    // update days
+    // update hours
+    // update minutes
   }
 
   /**
@@ -1012,26 +946,6 @@
       //   element.innerText = digitString;
       // }
     };
-  }
-
-  /**
-   * call our update element func
-   * **/
-
-  function invokeOurUpdateElementFuncs({
-    daysStrForm,
-    hoursStrForm,
-    minutesStrForm,
-    secondsStrForm,
-  }) {
-    const {
-      flipDigitObj: { daysFlip, hoursFlip, minutesFlip },
-    } = dataObj;
-    console.log(daysStrForm, hoursStrForm, minutesStrForm, secondsStrForm);
-    console.log(daysFlip, hoursFlip, minutesFlip);
-    // update days
-    // update hours
-    // update minutes
   }
 
   /**
@@ -1207,6 +1121,7 @@
 
   /**
    * get date, time and title of upcoming holiday helper
+   * *** call this before we call/execute/invoke calculation funcs ***
    * **/
 
   function getNextUpcomingHolidayValues() {
@@ -1230,8 +1145,8 @@
     console.log(arrOfObjs[0]);**/
     dataObj.defaultEndingDate = {
       title,
-      year,
-      month,
+      year: 2024,
+      month: "Feb",
       day: 10,
       // day: Number(nextHolidayDate),
       hours,
@@ -1302,29 +1217,6 @@
   }
 
   /**
-   * get currentDate: assign values to currentDate obj in dataObj
-   * getCurrentDateAndAssignValuesToDataObj();
-   * *** might not need this func because we always want to work with the
-   * most current time
-   * *** different approach we will split date and time into two func
-   * one for date and one for time ***
-   * **/
-
-  function getCurrentDateAndAssignValuesToDataObj() {
-    // create currDate variable
-    const newCurrentDate = new Date();
-    // destructure obj
-    const { year, month, day, hours, minutes } =
-      getCurrentYearMonthAndTimeOfDate(newCurrentDate);
-    // assign current date values to data obj
-    dataObj.currentDate.year = Number(year);
-    dataObj.currentDate.month = month;
-    dataObj.currentDate.day = day;
-    dataObj.currentDate.time.hours = hours;
-    dataObj.currentDate.time.minutes = minutes;
-  }
-
-  /**
    * callback to event listeners
    * **/
 
@@ -1339,17 +1231,26 @@
     // console.log(copyOfDataObj);
     // event.preventDefault();
     // dataObj.userDateInput
+    /**
+     * event.preventDefault() will keep our form with user input element
+     * on screen when submit button is clicked
+     * **/
+    // event.preventDefault();
     console.log(monthSelectElement.value);
     const userInputObj = Array.prototype.slice
       .call(event.target.children[1].children)
-      .reduce((buildingUp, currentElement) => {
+      .reduce(function makeObjWithPropertiesBasedOnElementID(
+        buildingUp,
+        currentElement
+      ) {
         if (currentElement.tagName == "SELECT") {
           const elementID = currentElement.getAttribute("id");
           const elementValue = currentElement.value;
           buildingUp[elementID] = elementValue;
         }
         return buildingUp;
-      }, {});
+      },
+      {});
     console.log(dataObj);
     const hourConvertedToTwentyFourFormat =
       convertTwelveToTwentyFourHourFormat.call(userInputObj);
@@ -1397,17 +1298,135 @@
    * **/
 
   /**
-   * utilities func
+   * our algorithms for our timer func
+   * counting down, converting 12hr format to 24h format
+   * converting number to string for updating elements
+   * **/
+
+  /**
+   * convert 12 hour time(AM/PM) format to 24 hour format
+   * **/
+
+  function convertTwelveToTwentyFourHourFormat(userDateInput) {
+    const { hours, minutes, meridiem } = this;
+    // if hour is 12 and meridiem is AM subtract 12 from 12 to get 0 by return String(0)
+    // if hour is 12 and meridiem is PM return hrInput because we want the value to be 12
+    let hrInTwentyFourFormat;
+    switch (meridiem) {
+      case "AM":
+        hrInTwentyFourFormat = handleMeridiemAM(hours);
+        break;
+      case "PM":
+        hrInTwentyFourFormat = handleMeridiemPM(hours);
+        break;
+    }
+    console.log(hours, minutes, typeof meridiem);
+    console.log(userDateInput);
+    console.log(hrInTwentyFourFormat);
+    return hrInTwentyFourFormat;
+  }
+
+  /**
+   * handle AM meridiem
+   * **/
+
+  function handleMeridiemAM(hrInput) {
+    // convert to number form
+    const hourNumForm = Number(hrInput);
+    // if (hourNumForm == 12) {
+    //   return String(0);
+    // } else {
+    //   return hrInput
+    // }
+    // ternary operator
+    return hourNumForm == 12 ? String(0) : hrInput;
+  }
+
+  /**
+   * handle PM meridiem
+   * **/
+
+  function handleMeridiemPM(hrInput) {
+    // convert to number form
+    const hourNumForm = Number(hrInput);
+    if (hourNumForm == 12) {
+      return hrInput;
+    } else {
+      // when user input is 1 to 11
+      // take hrInput add 12
+      const hrConvertedToTwentyFourFormat = hourNumForm + 12;
+      return String(hrConvertedToTwentyFourFormat);
+    }
+    // ternary operator
+    // let hrConvertedToTwentyFourFormat;
+    // return hourNumForm == 12
+    //   ? hrInput
+    //   : (hrConvertedToTwentyFourFormat = hourNumForm + 12);
+  }
+
+  /**
+   * check length of digit
+   * if digit >= 0 && digit < 10
+   * add prepend 0 to digit
+   * result will be 00 - 09
+   * we could check for length of digit after we convert number to string
+   * if length is 2 dont prepend 0 to digit
+   * if length is 1 prepend 0 to digit
+   * **
+
+  /**
+   * we want to call this func before we update/change digit element
+   * days, hours, minutes, seconds
+   * the value type of the daysDigit, hoursDigit, minutesDigit
+   * in our dataObj will be number
+   * **/
+  function handlePrependExtraZeroOrNot(digit) {
+    // convert to str form
+    const digitNumForm = convertNumToStr(digit);
+    const lengthOfDigit = digitNumForm.length;
+    // if (lengthOfDigit == 1) {
+    //   return `0${digitNumForm}`;
+    // } else {
+    //   return digitNumForm
+    // }
+    // ternary opertor
+    return lengthOfDigit == 1 ? `0${digitNumForm}` : digitNumForm;
+  }
+
+  /**
+   * prep digit value for element update
+   * **/
+
+  function prepDigitValueForUpdate(
+    { daysDigit: days, hoursDigit: hours, minutesDigit: minutes },
+    digitSeconds
+  ) {
+    return {
+      daysStrForm: handlePrependExtraZeroOrNot(days),
+      hoursStrForm: handlePrependExtraZeroOrNot(hours),
+      minutesStrForm: handlePrependExtraZeroOrNot(minutes),
+      secondsStrForm: handlePrependExtraZeroOrNot(digitSeconds),
+    };
+  }
+
+  /**
+   * funcs below will give us first or last value or values of an array excluding last value
+   * or values of an array excluding first value
+   * or values between first and last value
    * **/
 
   /**
    * array of nums using two indices
    * *** how to use func below:
    * arrayOfDaysInMonthUsingTwoIndices(startingIndex, endingIndex + 1, [], "current" or "end", year) ***
+   * arrayOfDaysInMonthUsingTwoIndices will return an array with values of the days in a month
    * **/
 
   /**
    * we plan to use to func when arrayOfYears is >= 2
+   * we will pass in the index of the current month and end month
+   * into this func, adding one to endIndex and an array of subarrays
+   * subarrays will be ["Dec", 31]
    * **/
 
   function arrayOfDaysInMonthUsingTwoIndices(...rest) {
@@ -1453,20 +1472,32 @@
 
   /**
    * get values between first and last value in array
-   * return 2, 3, 4
+   * begin returns [1,2,3,4]
+   * between return [2, 3, 4]
+   * end returns [2,3,4,5]
+   * we declare/defined our funcs at top of app
    * **/
 
-  function valuesBetweenDynamicIndices(array, beginBetweenOrEnd) {
-    const copyArray = [...array];
-    const lengthOfArray = copyArray.length;
-
+  function beginBetweenOrEndOfArrayFactoryFunc(beginBetweenOrEnd) {
     switch (beginBetweenOrEnd) {
       case "begin":
-        return copyArray.slice(0, lengthOfArray - 1);
+        return function innerFunc(array) {
+          const copyArray = [...array];
+          const lengthOfArray = copyArray.length;
+          return copyArray.slice(0, lengthOfArray - 1);
+        };
       case "between":
-        return copyArray.slice(0 + 1, lengthOfArray - 1);
+        return function innerFunc(array) {
+          const copyArray = [...array];
+          const lengthOfArray = copyArray.length;
+          return copyArray.slice(0 + 1, lengthOfArray - 1);
+        };
       case "end":
-        return copyArray.slice(0 + 1);
+        return function innerFunc(array) {
+          const copyArray = [...array];
+          const lengthOfArray = copyArray.length;
+          return copyArray.slice(0 + 1);
+        };
     }
   }
 
@@ -1480,6 +1511,10 @@
     const lengthOfArr = copyArray.length;
     return copyArray[lengthOfArr - 1];
   }
+
+  /**
+   * utilities func
+   * **/
 
   /**
    * how to use addEventListener below
@@ -1675,6 +1710,10 @@
   }
 
   /**
+   * code below this learning efforts/process
+   * **/
+
+  /**
    * if time is 14:17 use .getHours() 14 use .getMinutes() give us 17
    * 14:00 is 2pm take 14 times 60 is 840mins
    * 1440 - 840 will give us 600mins / 60 will give us 10hr
@@ -1732,6 +1771,149 @@ console.log(data);
   //   .then((data) => {
   //     console.log(data);
   //   });
+
+  /**
+   * reason we pass in endingMonth + 1
+   * our while loop will loop as long as startingIndex !== endingIndex
+   * we want to include the value at the last index of the array. array.length - 1
+   * if we didnt add 1 to endingMonthIndex while loop will stop when startingIndex == endingIndex
+   * and will not add last value of array to result array
+   * starting: 0,
+   * ending: 4
+   * while(0 !== 4) true enter while loop push value at arr[0]
+   * while(4 !== 4) false not enter while loop we dont push value at arr[4]
+   * **/
+
+  arrayNumsOfDaysInMonth(currentMonth, endingMonth + 1, arrayOfSubarrays);
+
+  /**
+   * have func that loop starting at currentMonth index and ends at endingMonth index
+   * while loop add the daysOfMonth of that month into array
+   * we will use first and last month values in array to calculate
+   * days in current month and days in starting month without have to access that value
+   * from dataObj
+   * **/
+
+  function arrayNumsOfDaysInMonth(startingIndex, endingIndex, arrOfSubarrays) {
+    // copy array
+    // const copyOfArray = arrOfSubarrays.slice();
+    // const copyOfArray = [].concat(arrOfSubarrays);
+    const copyOfArray = [...arrOfSubarrays];
+    const result = [];
+    // let counter = 0;
+    while (startingIndex !== endingIndex) {
+      console.log(copyOfArray[startingIndex]);
+      // console.log(startingIndex);
+      const eachSubarray = copyOfArray[startingIndex];
+      const [month, daysOfMonth] = eachSubarray;
+      result.push(daysOfMonth);
+      if (startingIndex >= 11) {
+        startingIndex = 0;
+      } else {
+        startingIndex++;
+      }
+    }
+    console.log(result);
+    // const startingDateNumOfDays = result.pop();
+    const [endingMonthValue, resultArrWithoutLastValue] =
+      getEndingDateNumOfDays(result);
+    console.log(endingMonthValue);
+    console.log(resultArrWithoutLastValue);
+    // const [currentMonthDaysValue, ...rest] = resultArrWithoutLastValue;
+    // console.log(currentMonthDaysValue);
+    // console.log(rest);
+    const currentMonthDaysValue = getCurrentMonthNumOfDays(
+      resultArrWithoutLastValue
+    );
+    console.log(currentMonthDaysValue);
+    const daysBetweenCurrentAndEndingMonth = numOfDaysBetweenCurrAndEndingMonth(
+      resultArrWithoutLastValue
+    );
+    console.log(daysBetweenCurrentAndEndingMonth);
+    console.log(
+      "total days",
+      totalDaysOfMonthsBetweenCurrentAndEndingDate(
+        daysBetweenCurrentAndEndingMonth
+      )
+    );
+  }
+
+  /**
+   * starting month num of days
+   * **/
+
+  function getEndingDateNumOfDays(arrInput) {
+    const copyOfArr = [...arrInput];
+    const lastValueOfArr = copyOfArr.pop();
+    return [lastValueOfArr, copyOfArr];
+  }
+  /**
+   * get current month num of days
+   * **/
+
+  function getCurrentMonthNumOfDays(array) {
+    const copyOfArr = [...array];
+    const [firstValue] = copyOfArr;
+    return firstValue;
+  }
+
+  /**
+   * num of days between current and start month
+   * **/
+  function numOfDaysBetweenCurrAndEndingMonth(array) {
+    const copyOfArr = [...array];
+    const [, ...rest] = copyOfArr;
+    return rest;
+  }
+  /**
+   * get total days months between current and starting date
+   * **/
+
+  function totalDaysOfMonthsBetweenCurrentAndEndingDate(array) {
+    const copyOfArr = [...array];
+    return copyOfArr.reduce(function addValues(buildingUp, currentDays) {
+      return buildingUp + currentDays;
+    }, 0);
+  }
+
+  /**
+   * get year, month, date(number), hours and minute of date
+   * **/
+
+  function getCurrentYearMonthAndTimeOfDate(currentDateInput) {
+    const [currentDay, currentMonth, currentDate, currentYear] =
+      currentDateInput.toDateString().split(" ");
+    return {
+      year: currentYear,
+      month: currentMonth,
+      day: currentDateInput.getDate(),
+      hours: currentDateInput.getHours(),
+      minutes: currentDateInput.getMinutes(),
+    };
+  }
+
+  /**
+   * get currentDate: assign values to currentDate obj in dataObj
+   * getCurrentDateAndAssignValuesToDataObj();
+   * *** might not need this func because we always want to work with the
+   * most current time
+   * *** different approach we will split date and time into two func
+   * one for date and one for time ***
+   * **/
+
+  function getCurrentDateAndAssignValuesToDataObj() {
+    // create currDate variable
+    const newCurrentDate = new Date();
+    // destructure obj
+    const { year, month, day, hours, minutes } =
+      getCurrentYearMonthAndTimeOfDate(newCurrentDate);
+    // assign current date values to data obj
+    dataObj.currentDate.year = Number(year);
+    dataObj.currentDate.month = month;
+    dataObj.currentDate.day = day;
+    dataObj.currentDate.time.hours = hours;
+    dataObj.currentDate.time.minutes = minutes;
+  }
 
   /**
    * notes
