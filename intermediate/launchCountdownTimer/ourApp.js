@@ -24,6 +24,13 @@
   const accessOurData = scopeOurData();
   const dataObj = accessOurData(12, 0, 0);
   console.log(dataObj);
+  /*******
+   * call/execute/invoke our nextUpcomingHoliday func to initial end date values(year,month,day etc)
+   * ******/
+  getNextUpcomingHolidayValues.call(currentDateObj);
+  /*******
+   * call/execute/invoke our nextUpcomingHoliday func to initial end date values(year,month,day etc)
+   * ******/
   // declare/define our days, hours, and minutes func
   // const handleDaysChange = daysHoursMinutesHelper();
   const handleHoursChange = daysHoursMinutesHelper();
@@ -41,12 +48,6 @@
   const changeMinutesFlipProperty = changeObjProperty();
   // declare/define adding flip css to days, hours or minute digit element
   // call using .call() method
-
-  /**
-   * testing
-   * **/
-
-  getNextUpcomingHolidayValues.call(currentDateObj);
 
   /**
    *  add flip transition
@@ -99,7 +100,7 @@
   const addition = arithmeticFactoryFunc("add");
   const subtraction = arithmeticFactoryFunc("subtract");
   const multiply = arithmeticFactoryFunc("multiply");
-  const divide = arithmeticFactoryFunc("divide");
+  const division = arithmeticFactoryFunc("divide");
 
   // add event listeners
   addEventListener.call(userInputModalDiv, "change", function TODO(event) {
@@ -415,12 +416,12 @@
               minutes: 00,
             },
             20: {
-              title: "Martin Luther King Jr Day",
+              title: "Happy Day!!!",
               hours: 0,
               minutes: 00,
             },
             26: {
-              title: "Martin Luther King Jr Day",
+              title: "Happy Day Number Two",
               hours: 0,
               minutes: 00,
             },
@@ -584,12 +585,6 @@
       if (counter == 2) break;
     }
    * ***/
-  const arrOfMonths = Object.keys(dataObj.numOfDaysOfMonths);
-  const arrayOfSubarrays = Object.entries(dataObj.numOfDaysOfMonths);
-  const currentMonth = findIndexMonthUsingIndexOf(arrOfMonths, "Dec");
-  const endingMonth = findIndexMonthUsingIndexOf(arrOfMonths, "Mar");
-  const currentYear = 2021;
-  const endingYear = 2023;
 
   /**
    * same year
@@ -604,9 +599,15 @@
   // );
 
   /**
+   * initial app set up
+   * **/
+
+  /**
    * Days, Hours, Minutes Digit Calculations
    * **/
-  digitsElementsCalculation(dataObj.currentDate, dataObj.defaultEndingDate);
+  console.log(
+    digitsElementsCalculation(dataObj.currentDate, dataObj.defaultEndingDate)
+  );
   function digitsElementsCalculation(currentDateObj, endDateObj) {
     // figure out days
     // figure out hours
@@ -614,8 +615,44 @@
     // get values from our calculation helper to this func
     // then we will assign those values to daysDigit,hoursDigit and minuteDigit
     // in our dataObj
-    const testDayCalc = handleDaysDigitCalculations(currentDateObj, endDateObj);
-    console.log("digitELementsCalc", testDayCalc);
+    const arrOfDaysReadyForSumCalcFunc = handleDaysDigitCalculations(
+      currentDateObj,
+      endDateObj
+    );
+    // call sumCalculation func passing arrOfDaysReadyForSumCalcFunc
+    const sumNumOfDaysForDigitElement = sumCalculation(
+      arrOfDaysReadyForSumCalcFunc
+    );
+    console.log("sumNumOfDaysForDigitElement", sumNumOfDaysForDigitElement);
+    // calculating hrs, minute from state date and end date time values
+    // max total minute between state date and end date time will be
+    // 2880 because 1440 is total min in one day.
+    // possible total minute for state date and end date is 1440
+    // if user enter time for 12:59pm for end date
+    // state date time is 0:01 total minute between state and end date is greater than 1440
+    const objWithValueForHourAndMinuteDigitOrAddOneDayDigit =
+      handleHoursAndMinutesDigitCalculations(currentDateObj, endDateObj);
+    // we can destructure the hr and minute value because func will always return an obj with those values
+    const { hourDigit, minuteDigit } =
+      objWithValueForHourAndMinuteDigitOrAddOneDayDigit;
+    // value assigned to identifier will be based on a conditional check using ternary operator
+    const addingValueToSumNumOfDaysBasedOnPropertyOfObjReturnedFromHandleHourFunc =
+      objWithValueForHourAndMinuteDigitOrAddOneDayDigit.hasOwnProperty(
+        "addOneDayDigit"
+      )
+        ? sumNumOfDaysForDigitElement +
+          objWithValueForHourAndMinuteDigitOrAddOneDayDigit.addOneDayDigit
+        : null;
+    // return an obj with days, hr, and minute value for digit element
+    return {
+      dayDigitForElement:
+        addingValueToSumNumOfDaysBasedOnPropertyOfObjReturnedFromHandleHourFunc ==
+        null
+          ? sumNumOfDaysForDigitElement
+          : addingValueToSumNumOfDaysBasedOnPropertyOfObjReturnedFromHandleHourFunc,
+      hourDigit,
+      minuteDigit,
+    };
   }
 
   /**
@@ -704,22 +741,23 @@
         if (currentMonth == endMonth) {
           return dayDigitsWorkingWithDaysInSingleMonth(
             currentDay,
-            endDay,
             currentMinute,
+            endDay,
+
             endMinute
           );
         }
         // pass arrayOfYears to dayDigitsWorkingWithMonth
         //get first and last value of array returned by dayDigitsWorkingWithMonth
-        dayDigitsWorkingWithMonth(arrayOfYears, currentMonth, endMonth);
+        return dayDigitsWorkingWithMonth(arrayOfYears, firstObj, secondObj);
         break;
       case lengthOfArray == 2:
         // current year is one less than end year
         //arrayOfYears will have [start,end] pass it to dayDigitsWorkingWithMonth
         //get first and last value of array returned by dayDigitsWorkingWithMonth
-        dayDigitsWorkingWithMonth(arrayOfYears, currentMonth, endMonth);
         console.log("2");
-        break;
+        return dayDigitsWorkingWithMonth(arrayOfYears, firstObj, secondObj);
+
       case lengthOfArray >= 3:
         // there is year/s between current and end
         // we want to get first value
@@ -731,21 +769,35 @@
         //get first and last value of array returned by dayDigitsWorkingWithMonth
         const arrayOfYearsBetweenStartingAndEndingYear =
           valuesBetweenFirstAndLastValue(arrayOfYears);
+        // pass arrayOfYearsBetweenStartingAndEndingYear to arrOfNumOfDaysInYear
+        // arrOfNumOfDaysInYear will run addOneToYearNumDaysOrMonthNumDaysForLeapYear
+        // check if the year is a leap year if it is add one
         console.log(
           "arrayOfYearsBetweenStartingAndEndingYear",
           arrayOfYearsBetweenStartingAndEndingYear
         );
+        const arrayOfDaysInYearAddingOneIfLeapYear = arrOfNumOfDaysInYear(
+          arrayOfYearsBetweenStartingAndEndingYear
+        );
+        console.log(
+          "arrayOfDaysInYearAddingOneIfLeapYear after running arrOfNumOfDaysInYear",
+          arrayOfDaysInYearAddingOneIfLeapYear
+        );
+
         /***** *****/
         const startingYear = valueAtFirstIndexOfArray(arrayOfYears);
         const endingYear = valueAtLastIndexOfArray(arrayOfYears);
         const arrayOfStartingAndEndingYear = [startingYear, endingYear];
-        dayDigitsWorkingWithMonth(
+        const arrayOfDaysCurrYearAndEndYear = dayDigitsWorkingWithMonth(
           arrayOfStartingAndEndingYear,
-          currentMonth,
-          endMonth
+          firstObj,
+          secondObj
         );
-        console.log("3");
-        break;
+        const mergeArrOfDaysCurrYearEndYearAndArrDaysOfEachBetweenYears = [
+          ...arrayOfDaysCurrYearAndEndYear,
+          ...arrayOfDaysInYearAddingOneIfLeapYear,
+        ];
+        return mergeArrOfDaysCurrYearEndYearAndArrDaysOfEachBetweenYears;
     }
   }
 
@@ -754,7 +806,28 @@
    * **/
 
   function dayDigitsWorkingWithMonth(...rest) {
-    const [arrayOfYear, currentMonthString, endMonthString] = rest;
+    const [arrayOfYear, currentDataObj, endDataObj] = rest;
+    // destructuring
+    const {
+      year: currentYear,
+      month: currentMonthString,
+      day: currentDay,
+      time: { hours: currentHour, minutes: currentMinute },
+    } = currentDataObj;
+    // console.log(
+    //   currentYear,
+    //   currentMonth,
+    //   currentDay,
+    //   currentHour,
+    //   currentMinute
+    // );
+    const {
+      year: endYear,
+      month: endMonthString,
+      day: endDay,
+      hours: endHour,
+      minutes: endMinute,
+    } = endDataObj;
     const lengthOfArray = arrayOfYear.length;
     const arrOfMonths = Object.keys(dataObj.numOfDaysOfMonths);
     const arrayOfSubarrays = Object.entries(dataObj.numOfDaysOfMonths);
@@ -790,12 +863,116 @@
         "end",
         endingYear
       );
-      console.log([
+      const mergeArraysOfValuesStartingMonthYearAndEndingMonthYear = [
         ...arrOfValuesStartingMonthAndYear,
         ...arrOfValuesEndingMonthAndYear,
-      ]);
+      ];
+      const firstMonthValue = valueAtFirstIndexOfArray(
+        mergeArraysOfValuesStartingMonthYearAndEndingMonthYear
+      );
+      const lastMonthValue = valueAtLastIndexOfArray(
+        mergeArraysOfValuesStartingMonthYearAndEndingMonthYear
+      );
+      // get values between first and last values of mergeArraysOfValuesStartingMonthYearAndEndingMonthYear
+      console.log(mergeArraysOfValuesStartingMonthYearAndEndingMonthYear);
+      console.log(
+        valuesBetweenFirstAndLastValue(
+          mergeArraysOfValuesStartingMonthYearAndEndingMonthYear
+        )
+      );
+      const arrOfDaysOfMonthsBetweenStartingMonthAndEndingMonth =
+        valuesBetweenFirstAndLastValue(
+          mergeArraysOfValuesStartingMonthYearAndEndingMonthYear
+        );
+      // past firstMonthValue and lastMonthValue to dayDigitsWorkingWithDaysInSingleMonth
+      // we can run dayDigitsWorkingWithDaysInSingleMonth since we are working in single month
+      // startingDate num of days and endingDate num of days
+      /**
+       * once we get the value from dayDigitsWorkingWithDaysInSingleMonth
+       * we will return an array with the value returned from calling dayDigitsWorkingWithDaysInSingleMonth with firstMonthValue
+       * then values of the array arrOfDaysOfMonthsBetweenStartingMonthAndEndingMonth
+       * the value return from calling dayDigitsWorkingWithDaysInSingleMonth with lastMonthValue
+       * **/
+      console.log(
+        "firstmonth and lastmonth value",
+        firstMonthValue,
+        lastMonthValue
+      );
+      /**
+       * we want to know how many more days left of currentMonth. get current month number of days and subtract current day number
+       * if current month minute is > :01 then we will add one to currentDate
+       * **/
+      const updatedCurrentMonthNumOfDays =
+        dayDigitsWorkingWithDaysInSingleMonth(
+          currentDay,
+          currentMinute,
+          firstMonthValue,
+          0
+        );
+      /**
+       * end month we want to know how many days into the month are we. so we take endDay subtract 0 from it
+       * if endMonth minute is > :01 we will subtract 1 from endDate
+       * **/
+      const updatedEndingMonthNumOfDays = dayDigitsWorkingWithDaysInSingleMonth(
+        0,
+        0,
+        endDay,
+        endMinute
+      );
+      console.log(
+        "updated dates",
+        updatedCurrentMonthNumOfDays,
+        updatedEndingMonthNumOfDays
+      );
+      const arrOfUpdatedStartAndEndMonthWithDaysBetweenStartAndEndMonth = [
+        updatedCurrentMonthNumOfDays,
+        ...arrOfDaysOfMonthsBetweenStartingMonthAndEndingMonth,
+        updatedEndingMonthNumOfDays,
+      ];
+      return arrOfUpdatedStartAndEndMonthWithDaysBetweenStartAndEndMonth;
     } else {
       // array will have one value [2022] etc
+      // call arrayOfDaysInMonthUsingTwoIndices(startMonthIndex, endingMonthIndex + 1,[["Jan", 31]], "current" )
+      // get first and last value of the array returned
+      // past first and last to dayDigitsWorkingWithDaysInSingleMonth
+      // we can run dayDigitsWorkingWithDaysInSingleMonth since we are working in single month
+      // startingDate num of days and endingDate num of days
+      const arrayOfDaysInMonthSameYear = arrayOfDaysInMonthUsingTwoIndices(
+        startMonthIndex,
+        endingMonthIndex + 1,
+        arrayOfSubarrays,
+        "current"
+      );
+      // get values between first and last value in array
+      const daysOfMonthBetweenStartingAndEndingMonth =
+        valuesBetweenFirstAndLastValue(arrayOfDaysInMonthSameYear);
+      console.log(
+        "daysOfMonthBetweenStartingAndEndingMonth",
+        daysOfMonthBetweenStartingAndEndingMonth
+      );
+      const firstMonthDays = valueAtFirstIndexOfArray(
+        arrayOfDaysInMonthSameYear
+      );
+      const lastMonth = valueAtLastIndexOfArray(arrayOfDaysInMonthSameYear);
+      const updatedCurrentMonthDays = dayDigitsWorkingWithDaysInSingleMonth(
+        currentDay,
+        currentMinute,
+        firstMonthDays,
+        0
+      );
+      const updatedEndingMonthDays = dayDigitsWorkingWithDaysInSingleMonth(
+        0,
+        0,
+        endDay,
+        endMinute
+      );
+      const arrOfUpdatedStartAndEndDaysWithDaysOfMonthBetweenStartAndEndMonth =
+        [
+          updatedCurrentMonthDays,
+          ...daysOfMonthBetweenStartingAndEndingMonth,
+          updatedEndingMonthDays,
+        ];
+      return arrOfUpdatedStartAndEndDaysWithDaysOfMonthBetweenStartAndEndMonth;
     }
     /**
      * array passed in has two values [2022,2024] "Feb" to "Nov"
@@ -818,10 +995,16 @@
    * **/
 
   function dayDigitsWorkingWithDaysInSingleMonth(...rest) {
-    //
-    let [startDay, endDay, currentDateMinutes, endDateMinutes] = rest;
+    // when year and month are the same, pass startDate and currentDateMinute
+    // endDate and endDateMinutes
+    // when array of years is >= 2 we will call this func twice
+    // once with startingDate day and currentDateMinutes, endDate will
+    // currentDateMonth num of days endDateMinutes willbe 0
+    // twice with startingDate will be endingDateMonth num of days endDateMinutes will be 0
+    // endingDate and endDateMinutes
+    let [startDay, currentDateMinutes, endDay, endDateMinutes] = rest;
 
-    console.log(startDay, endDay, currentDateMinutes, endDateMinutes);
+    console.log(startDay, currentDateMinutes, endDay, endDateMinutes);
     console.log("figureout func same month");
     // another approach
     if (currentDateMinutes > 0) {
@@ -873,7 +1056,125 @@
    * *** previous efforts notes are in notes func at bottom of app ***
    * console.log(handleHoursDigitCalculations(dataObj.currentDate));
    * **/
-  function handleHoursAndMinutesDigitCalculations(currentDateObj, endDateObj) {}
+  function handleHoursAndMinutesDigitCalculations(currentDateObj, endDateObj) {
+    // code below for testing
+    // currentDateObj.time.hours = 1;
+    // total minute in a day
+    console.log(currentDateObj);
+    const totalMinInADay = 1440;
+    // destructure our objects
+    const {
+      year: currentYear,
+      month: currentMonth,
+      day: currentDay,
+      time: { hours: currentHour, minutes: currentMinute },
+    } = currentDateObj;
+    // console.log(
+    //   currentYear,
+    //   currentMonth,
+    //   currentDay,
+    //   currentHour,
+    //   currentMinute
+    // );
+    const {
+      year: endYear,
+      month: endMonth,
+      day: endDay,
+      hours: endHour,
+      minutes: endMinute,
+    } = endDateObj;
+    // take the hr of each day multiply it by 60
+    // take each day minutes add that number to the value of multipling each day hr by 60
+    /**
+     * start date time is the time already passed, we want to know how many hr and minute are left
+     * take total minute passed for starting date and subtract it from 1440 giving us time left
+     * **/
+    // starting day total minutes
+    // ex: 8:08 take 8hr times 60
+    // add 8 to that total
+    const startDateHrTimesSixty = multiply(currentHour);
+    const minutesUpToStartDateHrAndMinute = addition(
+      startDateHrTimesSixty,
+      currentMinute
+    );
+
+    console.log(
+      "minutesUpToStartDateHrAndMinute",
+      minutesUpToStartDateHrAndMinute
+    );
+    // subtract value of minutesUpToStartDateHrAndMinute from 1440(total min in a day)
+    const minLeftInStartDate = subtraction(
+      totalMinInADay,
+      minutesUpToStartDateHrAndMinute
+    );
+
+    /**
+     * ending date time is the time already passed, we want to know the hr and minute
+     * need to reach ending date time. we wont need to subtract end date total time by 1440
+     * **/
+    // ending day total minutes
+    // ex: 8:08 take 8hr times 60
+    // add 8 to that total
+    const endDateHrTimesSixty = multiply(endHour);
+    const minutesUpToEndDateHrAndMinute = addition(
+      endDateHrTimesSixty,
+      endMinute
+    );
+
+    // total minute of start date and end date
+    const totalMinuteOfStateDateAndEndDate = addition(
+      minLeftInStartDate,
+      minutesUpToEndDateHrAndMinute
+    );
+
+    // thinking about returning an obj with day,hours,minutes
+    // we want to include day in case the sum of minutes of currentDate and endDate
+    // is > 1440min (24hr * 60min)
+    const minuteDigit = useModuloToGetMinutesOrHoursForDigitElement(
+      totalMinuteOfStateDateAndEndDate,
+      60
+    );
+
+    const minuteUsedToCalcHours = subtraction(
+      totalMinuteOfStateDateAndEndDate,
+      minuteDigit
+    );
+    console.log(minuteUsedToCalcHours);
+    const valueForHourDigit = division(minuteUsedToCalcHours);
+    /**
+     * when valueForHourDigit >= 24 we want to take valueForHourDigit - 24 from it
+     * because 24 hr will be 1 day in our algorithm
+     * **/
+    return valueForHourDigit >= 24
+      ? {
+          addOneDayDigit: 1,
+          hourDigit: subtraction(valueForHourDigit, 24),
+          minuteDigit,
+        }
+      : {
+          hourDigit: valueForHourDigit,
+          minuteDigit,
+        };
+  }
+
+  /**
+   * const minuteBeforeWeCalcHrDigit = getMinAndHrValueForDigitElement(
+      totalMinuteOfStateDateAndEndDate,
+      60
+    );
+    const totalMin = minuteBeforeWeCalcHrDigit(
+      useModuloToGetMinutesOrHoursForDigitElement,
+      subtraction
+    );
+    console.log(totalMin);
+   * get min for minute digit and minuteLeftToCalcHrDigit
+   * *** testing idea ***
+   * function getMinAndHrValueForDigitElement(minuteTotal, modulo) {
+   * return function innnerFunc(firstFunc, secondFunc) {
+   * return secondFunc(minuteTotal, firstFunc(minuteTotal, modulo));
+   * };
+   * }
+   * **/
 
   /**
    * handle minutes calculations
@@ -1122,6 +1423,10 @@
   /**
    * get date, time and title of upcoming holiday helper
    * *** call this before we call/execute/invoke calculation funcs ***
+   * *** call this after we call our scopeOurData func because func below is using
+   * the obj we assigned to dataObj identifier/variable the obj that is returned
+   * fron calling/executing/invoking scopeOurData
+   * ***
    * **/
 
   function getNextUpcomingHolidayValues() {
@@ -1147,10 +1452,10 @@
       title,
       year: 2024,
       month: "Feb",
-      day: 10,
+      day: 17,
       // day: Number(nextHolidayDate),
-      hours,
-      minutes,
+      hours: 8,
+      minutes: 08,
     };
     // dataObj.defaultEndingDate.title = title;
     // dataObj.defaultEndingDate.year = year;
@@ -1624,17 +1929,19 @@
    * and current date/day minutes. adding to get total of ending and current date/day minutes
    * when we get this number, subtract this number from total minutes of both current and ending
    * date/day minutes
+   * also using modulo to get hrs for hr digit element
    * **/
 
-  function useModuloToGetMinutesForMinuteDigitElement(numInput) {
-    return numInput % 60;
+  function useModuloToGetMinutesOrHoursForDigitElement(numInput, moduloValue) {
+    return numInput % moduloValue;
   }
 
   /**
    * add one to year if its leap year
+   * arrOfNumOfDaysInYear(365, [2023]) etc
    * **/
 
-  function arrOfNumOfDaysInYear(daysValue, arrInput) {
+  function arrOfNumOfDaysInYear(arrInput, daysValue = 365) {
     const copyOfArray = [...arrInput];
     return copyOfArray.map(function addOneToDaysInYearOrNot(value) {
       return addOneToYearNumDaysOrMonthNumDaysForLeapYear(daysValue, value);
@@ -1784,7 +2091,16 @@ console.log(data);
    * while(4 !== 4) false not enter while loop we dont push value at arr[4]
    * **/
 
-  arrayNumsOfDaysInMonth(currentMonth, endingMonth + 1, arrayOfSubarrays);
+  /** 
+   * testing these code done
+   const arrOfMonths = Object.keys(dataObj.numOfDaysOfMonths);
+   const arrayOfSubarrays = Object.entries(dataObj.numOfDaysOfMonths);
+   const currentMonth = findIndexMonthUsingIndexOf(arrOfMonths, "Dec");
+   const endingMonth = findIndexMonthUsingIndexOf(arrOfMonths, "Mar");
+   const currentYear = 2021;
+   const endingYear = 2023;
+ arrayNumsOfDaysInMonth(currentMonth, endingMonth + 1, arrayOfSubarrays);
+   * **/
 
   /**
    * have func that loop starting at currentMonth index and ends at endingMonth index
@@ -1865,6 +2181,7 @@ console.log(data);
     const [, ...rest] = copyOfArr;
     return rest;
   }
+
   /**
    * get total days months between current and starting date
    * **/
