@@ -14,23 +14,31 @@
     arrayOfMinutesDivElement,
     arrayOfSecondsDivElement,
   } = ourSelectors();
-  const dateObj = new Date();
+  /**
+   * we will call these func when we are working with current date
+   * **/
+
+  // const dateObj = new Date();
   // since we will be working with current Date in most of our algorithm
   // declare date obj at top of App. just year, month and day
   // for the hour and minute we will use a different func
-  const currentDateObj = getCurrentYearMonthDate(dateObj);
-  const currentTimeObj = getCurrentHourMinutes(dateObj);
+  // const currentDateObj = getCurrentYearMonthDate(dateObj);
+  // const currentTimeObj = getCurrentHourMinutes(dateObj);
+  /*******
+   * call/execute/invoke our nextUpcomingHoliday func to initial end date values(year,month,day etc)
+   * ******/
+  // getNextUpcomingHolidayValues.call(currentDateObj);
+  /*******
+   * call/execute/invoke our nextUpcomingHoliday func to initial end date values(year,month,day etc)
+   * ******/
+
+  /**
+   * we will call these func when we are working with current date
+   * **/
   // execute/call/invoke our data obj func
   const accessOurData = scopeOurData();
   const dataObj = accessOurData(12, 0, 0);
   console.log(dataObj);
-  /*******
-   * call/execute/invoke our nextUpcomingHoliday func to initial end date values(year,month,day etc)
-   * ******/
-  getNextUpcomingHolidayValues.call(currentDateObj);
-  /*******
-   * call/execute/invoke our nextUpcomingHoliday func to initial end date values(year,month,day etc)
-   * ******/
   // declare/define our days, hours, and minutes func
   // const handleDaysChange = daysHoursMinutesHelper();
   const handleHoursChange = daysHoursMinutesHelper();
@@ -114,6 +122,12 @@
     "submit",
     getUserDateFromInputsAndAssignValuesToDataObj
   );
+
+  /**
+   * call our initialAppSetUp here
+   * **/
+  console.log("calling initialApp func");
+  initialAppSetUp();
 
   // new Date("January 18, 2022, 0:00"); 12am
   // 23:00 is 11pm
@@ -217,7 +231,7 @@
 
       invokeOurUpdateElementFuncs(updateData);
       /**
-       * if daysFlip, hoursFlip and minutesFlip is true remove class flip-bottom-transition
+       * if daysFlip, hoursFlip and minutesFlip is true add class flip-bottom-transition
        * **/
 
       addFlipClassToDigitElement(dataObj.flipDigitObj);
@@ -353,17 +367,20 @@
         minutesFlip: false,
       },
       /**
-       * we might not need obj currentDate
+       * we might not need obj currentDate in our data obj
+       * we will pass in a obj with the currentDate values
+       * time property is an obj with hours and minutes properties
+       * when we call/execute/invoke digitsElementsCalculation func
+       currentDate: {
+         month: currentDateObj.currentMonth,
+         day: currentDateObj.currentDay,
+         year: currentDateObj.currentYear,
+         time: {
+           hours: currentTimeObj.currentHour,
+           minutes: currentTimeObj.currentMinute,
+         },
+       },
        * **/
-      currentDate: {
-        month: currentDateObj.currentMonth,
-        day: currentDateObj.currentDay,
-        year: currentDateObj.currentYear,
-        time: {
-          hours: currentTimeObj.currentHour,
-          minutes: currentTimeObj.currentMinute,
-        },
-      },
       userDateInput: {
         month: null,
         day: null,
@@ -373,7 +390,7 @@
       },
       defaultEndingDate: null,
       endYear: null,
-      currentYear: currentDateObj.currentYear,
+      currentYear: new Date().getFullYear(),
       numOfDaysOfMonths: {
         Jan: 31,
         Feb: this.currentYear % 4 === 0 ? 29 : 28,
@@ -601,14 +618,54 @@
   /**
    * initial app set up
    * **/
+  function initialAppSetUp() {
+    // instead of calling new Date() getting year,month,day,hr,min at top of app
+    // we will get those date values and call new Date() when we work with currentDate
+    // times we work with current date. when app loads, when user submit their personal
+    // date/time inputs. when we want to resume a timer(nextHoliday or current user date inputs)
+    const dateObjInitial = new Date();
+    const currentDateObjInitial = getCurrentYearMonthDate(dateObjInitial);
+    const currentTimeObjInitial = getCurrentHourMinutes(dateObjInitial);
+    // pass initialCurrentDateObj as first argument/value to digitsElementsCalculation
+    const initialCurrentDateObj = {
+      year: currentDateObjInitial.currentYear,
+      month: currentDateObjInitial.currentMonth,
+      day: currentDateObjInitial.currentDay,
+      time: {
+        hours: currentTimeObjInitial.currentHour,
+        minutes: currentTimeObjInitial.currentMinute,
+      },
+    };
+    // calling func to get next holiday obj
+    getNextUpcomingHolidayValues.call(currentDateObjInitial);
+    // call digitsElementCalculation
+    console.log("calling digitsElementsCalc func inside initialApp Func");
+    console.log(
+      digitsElementsCalculation(
+        initialCurrentDateObj,
+        dataObj.defaultEndingDate
+      )
+    );
+  }
+
+  /**
+   * user submitted date/time inputs
+   * **/
+
+  /**
+   *
+   * **/
 
   /**
    * Days, Hours, Minutes Digit Calculations
+   console.log(
+     digitsElementsCalculation(dataObj.currentDate, dataObj.defaultEndingDate)
+   );
    * **/
-  console.log(
-    digitsElementsCalculation(dataObj.currentDate, dataObj.defaultEndingDate)
-  );
-  function digitsElementsCalculation(currentDateObj, endDateObj) {
+  function digitsElementsCalculation(
+    currentDateObjDigitsEleCalc,
+    endDateObjDigitsEleCalc
+  ) {
     // figure out days
     // figure out hours
     // figure out minutes
@@ -616,8 +673,8 @@
     // then we will assign those values to daysDigit,hoursDigit and minuteDigit
     // in our dataObj
     const arrOfDaysReadyForSumCalcFunc = handleDaysDigitCalculations(
-      currentDateObj,
-      endDateObj
+      currentDateObjDigitsEleCalc,
+      endDateObjDigitsEleCalc
     );
     // call sumCalculation func passing arrOfDaysReadyForSumCalcFunc
     const sumNumOfDaysForDigitElement = sumCalculation(
@@ -631,7 +688,10 @@
     // if user enter time for 12:59pm for end date
     // state date time is 0:01 total minute between state and end date is greater than 1440
     const objWithValueForHourAndMinuteDigitOrAddOneDayDigit =
-      handleHoursAndMinutesDigitCalculations(currentDateObj, endDateObj);
+      handleHoursAndMinutesDigitCalculations(
+        currentDateObjDigitsEleCalc,
+        endDateObjDigitsEleCalc
+      );
     // we can destructure the hr and minute value because func will always return an obj with those values
     const { hourDigit, minuteDigit } =
       objWithValueForHourAndMinuteDigitOrAddOneDayDigit;
@@ -664,14 +724,14 @@
   function handleDaysDigitCalculations(...rest) {
     // we want the year, month, and date
     // destructure both current and end obj
-    const [currentDateObj, endDateObj] = rest;
+    const [currentDateObjHandleDaysDigit, endDateObjHandleDaysDigit] = rest;
 
     const {
       year: currentYear,
       month: currentMonth,
       day: currentDay,
       time: { hours: currentHour, minutes: currentMinute },
-    } = currentDateObj;
+    } = currentDateObjHandleDaysDigit;
 
     const {
       year: endYear,
@@ -679,7 +739,7 @@
       day: endDay,
       hours: endHour,
       minutes: endMinute,
-    } = endDateObj;
+    } = endDateObjHandleDaysDigit;
 
     // create array of year between current and end
     const arrayOfYearBetweenCurrentAndEndDate =
@@ -698,8 +758,8 @@
       //
       return dayDigitsWorkingWithYear(
         arrayOfYearBetweenCurrentAndEndDate,
-        currentDateObj,
-        endDateObj
+        currentDateObjHandleDaysDigit,
+        endDateObjHandleDaysDigit
       );
     }
   }
@@ -743,14 +803,12 @@
             currentDay,
             currentMinute,
             endDay,
-
             endMinute
           );
         }
         // pass arrayOfYears to dayDigitsWorkingWithMonth
         //get first and last value of array returned by dayDigitsWorkingWithMonth
         return dayDigitsWorkingWithMonth(arrayOfYears, firstObj, secondObj);
-        break;
       case lengthOfArray == 2:
         // current year is one less than end year
         //arrayOfYears will have [start,end] pass it to dayDigitsWorkingWithMonth
@@ -870,9 +928,14 @@
       const firstMonthValue = valueAtFirstIndexOfArray(
         mergeArraysOfValuesStartingMonthYearAndEndingMonthYear
       );
-      const lastMonthValue = valueAtLastIndexOfArray(
-        mergeArraysOfValuesStartingMonthYearAndEndingMonthYear
-      );
+      /**
+       * might not need num of days for last month for end day calculation
+       * most endDate calc we want to take endDate day and subtract 0 from it
+       * because we want to know how many days have passed when working with endDate
+       const lastMonthValue = valueAtLastIndexOfArray(
+         mergeArraysOfValuesStartingMonthYearAndEndingMonthYear
+       );
+       * **/
       // get values between first and last values of mergeArraysOfValuesStartingMonthYearAndEndingMonthYear
       console.log(mergeArraysOfValuesStartingMonthYearAndEndingMonthYear);
       console.log(
@@ -892,12 +955,12 @@
        * we will return an array with the value returned from calling dayDigitsWorkingWithDaysInSingleMonth with firstMonthValue
        * then values of the array arrOfDaysOfMonthsBetweenStartingMonthAndEndingMonth
        * the value return from calling dayDigitsWorkingWithDaysInSingleMonth with lastMonthValue
+       console.log(
+         "firstmonth and lastmonth value",
+         firstMonthValue,
+         lastMonthValue
+       );
        * **/
-      console.log(
-        "firstmonth and lastmonth value",
-        firstMonthValue,
-        lastMonthValue
-      );
       /**
        * we want to know how many more days left of currentMonth. get current month number of days and subtract current day number
        * if current month minute is > :01 then we will add one to currentDate
@@ -953,7 +1016,13 @@
       const firstMonthDays = valueAtFirstIndexOfArray(
         arrayOfDaysInMonthSameYear
       );
-      const lastMonth = valueAtLastIndexOfArray(arrayOfDaysInMonthSameYear);
+      /** 
+       * might not need num of days for last month for end day calculation
+       * most endDate calc we want to take endDate day and subtract 0 from it
+       * because we want to know how many days have passed when working with endDate
+       const lastMonth = valueAtLastIndexOfArray(arrayOfDaysInMonthSameYear);
+       * **/
+
       const updatedCurrentMonthDays = dayDigitsWorkingWithDaysInSingleMonth(
         currentDay,
         currentMinute,
@@ -1006,7 +1075,10 @@
 
     console.log(startDay, currentDateMinutes, endDay, endDateMinutes);
     console.log("figureout func same month");
-    // another approach
+    /**
+     * another approach: might leave currentDate/startDay unchanged instead of adding 1 if
+     * startDay minute is greater than 0
+     * **/
     if (currentDateMinutes > 0) {
       startDay++;
     }
@@ -1450,9 +1522,9 @@
     console.log(arrOfObjs[0]);**/
     dataObj.defaultEndingDate = {
       title,
-      year: 2024,
-      month: "Feb",
-      day: 17,
+      year,
+      month,
+      day: 12,
       // day: Number(nextHolidayDate),
       hours: 8,
       minutes: 08,
