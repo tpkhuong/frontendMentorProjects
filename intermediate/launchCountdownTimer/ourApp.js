@@ -614,7 +614,7 @@
   //   arrayOfSubarrays,
   //   "current"
   // );
-
+  console.log("more tests");
   /**
    * initial app set up
    * **/
@@ -628,8 +628,8 @@
     const currentTimeObjInitial = getCurrentHourMinutes(dateObjInitial);
     // pass initialCurrentDateObj as first argument/value to digitsElementsCalculation
     const initialCurrentDateObj = {
-      year: currentDateObjInitial.currentYear,
-      month: currentDateObjInitial.currentMonth,
+      year: 2022,
+      month: "Jan",
       day: currentDateObjInitial.currentDay,
       time: {
         hours: currentTimeObjInitial.currentHour,
@@ -651,6 +651,8 @@
   /**
    * user submitted date/time inputs
    * **/
+
+  // function
 
   /**
    *
@@ -793,24 +795,28 @@
     } = secondObj;
     // console.log(endYear, endMonth, endDay, endHour, endMinute);
     console.log(arrayOfYears);
+    console.log(currentMonth, endMonth);
     // const [] = rest;
     switch (true) {
       case lengthOfArray == 1:
         console.log("1");
         // current year and end year are the same
         if (currentMonth == endMonth) {
-          return dayDigitsWorkingWithDaysInSingleMonth(
+          return calculateDaysWhenStartAndEndMonthAreSame(
             currentDay,
+            currentHour,
             currentMinute,
             endDay,
+            endHour,
             endMinute
           );
         }
+
         // pass arrayOfYears to dayDigitsWorkingWithMonth
         //get first and last value of array returned by dayDigitsWorkingWithMonth
         return dayDigitsWorkingWithMonth(arrayOfYears, firstObj, secondObj);
       case lengthOfArray == 2:
-        // current year is one less than end year
+        // current year is one less than end year. example [2022,2023]
         //arrayOfYears will have [start,end] pass it to dayDigitsWorkingWithMonth
         //get first and last value of array returned by dayDigitsWorkingWithMonth
         console.log("2");
@@ -872,6 +878,7 @@
       day: currentDay,
       time: { hours: currentHour, minutes: currentMinute },
     } = currentDataObj;
+
     // console.log(
     //   currentYear,
     //   currentMonth,
@@ -947,14 +954,14 @@
         valuesBetweenFirstAndLastValue(
           mergeArraysOfValuesStartingMonthYearAndEndingMonthYear
         );
-      // past firstMonthValue and lastMonthValue to dayDigitsWorkingWithDaysInSingleMonth
-      // we can run dayDigitsWorkingWithDaysInSingleMonth since we are working in single month
+      // past firstMonthValue and calculateStartingMonthDays
+      // we can run calculateStartingMonthDays and calculateEndingMonthDays since we are working in single month
       // startingDate num of days and endingDate num of days
       /**
-       * once we get the value from dayDigitsWorkingWithDaysInSingleMonth
-       * we will return an array with the value returned from calling dayDigitsWorkingWithDaysInSingleMonth with firstMonthValue
+       * once we get the value from calculateStartingMonthDays and calculateEndingMonthDays
+       * we will return an array with the value returned from calling calculateStartingMonthDays with firstMonthValue
        * then values of the array arrOfDaysOfMonthsBetweenStartingMonthAndEndingMonth
-       * the value return from calling dayDigitsWorkingWithDaysInSingleMonth with lastMonthValue
+       * the value return from calling calculateEndingMonthDays with lastMonthValue
        console.log(
          "firstmonth and lastmonth value",
          firstMonthValue,
@@ -962,26 +969,20 @@
        );
        * **/
       /**
-       * we want to know how many more days left of currentMonth. get current month number of days and subtract current day number
-       * if current month minute is > :01 then we will add one to currentDate
+       * we want to know how many more days left of currentMonth. get current month total number of minutes
+       * calculate the total minutes including days,hrs and minutes up to currentdate and time
        * **/
-      const updatedCurrentMonthNumOfDays =
-        dayDigitsWorkingWithDaysInSingleMonth(
-          currentDay,
-          currentMinute,
-          firstMonthValue,
-          0
-        );
-      /**
-       * end month we want to know how many days into the month are we. so we take endDay subtract 0 from it
-       * if endMonth minute is > :01 we will subtract 1 from endDate
-       * **/
-      const updatedEndingMonthNumOfDays = dayDigitsWorkingWithDaysInSingleMonth(
-        0,
-        0,
-        endDay,
-        endMinute
+      const updatedCurrentMonthNumOfDays = calculateStartingMonthDays(
+        firstMonthValue,
+        currentDay,
+        currentHour,
+        currentMinute
       );
+      /**
+       * end month we want to know how many days into the month are we. at 0:00 of endDate
+       * number of days will be endDate - 1.
+       * **/
+      const updatedEndingMonthNumOfDays = calculateEndingMonthDays(endDay);
       console.log(
         "updated dates",
         updatedCurrentMonthNumOfDays,
@@ -997,8 +998,8 @@
       // array will have one value [2022] etc
       // call arrayOfDaysInMonthUsingTwoIndices(startMonthIndex, endingMonthIndex + 1,[["Jan", 31]], "current" )
       // get first and last value of the array returned
-      // past first and last to dayDigitsWorkingWithDaysInSingleMonth
-      // we can run dayDigitsWorkingWithDaysInSingleMonth since we are working in single month
+      // past first to calculateStartingMonthDays
+      // we can run calculateStartingMonthDays and calculateEndingMonthDays since we are working in single month
       // startingDate num of days and endingDate num of days
       const arrayOfDaysInMonthSameYear = arrayOfDaysInMonthUsingTwoIndices(
         startMonthIndex,
@@ -1023,18 +1024,13 @@
        const lastMonth = valueAtLastIndexOfArray(arrayOfDaysInMonthSameYear);
        * **/
 
-      const updatedCurrentMonthDays = dayDigitsWorkingWithDaysInSingleMonth(
-        currentDay,
-        currentMinute,
+      const updatedCurrentMonthDays = calculateStartingMonthDays(
         firstMonthDays,
-        0
+        currentDay,
+        currentHour,
+        currentMinute
       );
-      const updatedEndingMonthDays = dayDigitsWorkingWithDaysInSingleMonth(
-        0,
-        0,
-        endDay,
-        endMinute
-      );
+      const updatedEndingMonthDays = calculateEndingMonthDays(endDay);
       const arrOfUpdatedStartAndEndDaysWithDaysOfMonthBetweenStartAndEndMonth =
         [
           updatedCurrentMonthDays,
@@ -1056,14 +1052,17 @@
      * **/
     // we want to return an array of num of day for each month
     // where we call this func we will want to get first value and last value of that array
-    // use those values in our dayDigitsWorkingWithDaysInSingleMonth
+    // pass first value to calculateStartingMonthDays
   }
 
   /**
    * figure out days
+   * *** retiring dayDigitsWorkingWithDaysInSingleMonth func  ***
+   * we will use calculateStartingMonthDays and calculateEndingMonthDays
+   * to get updated days for starting and ending month
    * **/
 
-  function dayDigitsWorkingWithDaysInSingleMonth(...rest) {
+  function dayDigitsWorkingWithDaysInSingleMonth(currentOrEndStr, ...rest) {
     // when year and month are the same, pass startDate and currentDateMinute
     // endDate and endDateMinutes
     // when array of years is >= 2 we will call this func twice
@@ -1071,7 +1070,14 @@
     // currentDateMonth num of days endDateMinutes willbe 0
     // twice with startingDate will be endingDateMonth num of days endDateMinutes will be 0
     // endingDate and endDateMinutes
-    let [startDay, currentDateMinutes, endDay, endDateMinutes] = rest;
+    let [
+      startMonth,
+      startDay,
+      startDayHour,
+      startDayMinutes,
+      endDay,
+      endDateMinutes,
+    ] = rest;
 
     console.log(startDay, currentDateMinutes, endDay, endDateMinutes);
     console.log("figureout func same month");
@@ -1079,11 +1085,11 @@
      * another approach: might leave currentDate/startDay unchanged instead of adding 1 if
      * startDay minute is greater than 0
      * **/
-    if (currentDateMinutes > 0) {
-      startDay++;
-    }
-    if (endDateMinutes > 0) {
-      endDay--;
+    switch (currentOrEndStr) {
+      case "current":
+        break;
+      case "end":
+        return endDate - 1;
     }
     console.log(startDay, endDay);
     return subtraction(endDay, startDay);
@@ -1100,8 +1106,128 @@
   }
 
   /**
-   *
+   * calc days digit same month
    * **/
+
+  function calculateDaysWhenStartAndEndMonthAreSame(...rest) {
+    const totalMinInDay = 1440;
+    const [
+      startDay,
+      startDateHour,
+      startDateMinutes,
+      endDay,
+      endDateHour,
+      endDateMinutes,
+    ] = rest;
+    // total minutes of state date including hr and min
+    const startDateTotalMinutes = figureOutTotalMinutesUpToDate(
+      startDay,
+      startDateHour,
+      startDateMinutes
+    );
+    // total minutes of end date including hr and min
+    const endDateTotalMinutes = figureOutTotalMinutesUpToDate(
+      endDay,
+      endDateHour,
+      endDateMinutes
+    );
+    // take endDate total - startDate total
+    const differenceBetweenEndAndStateDate = subtraction(
+      endDateTotalMinutes,
+      startDateTotalMinutes
+    );
+    // divide above value by 1440 to get number of day(s)
+    const numOfDaysWithDecimal = division(
+      differenceBetweenEndAndStateDate,
+      totalMinInDay
+    );
+    // use Math.floor to get value without decimal
+    console.log("Math.floor of days", Math.floor(numOfDaysWithDecimal));
+    return Math.floor(numOfDaysWithDecimal);
+  }
+
+  /**
+   * another approach: figure out days using minutes
+   * **/
+
+  function figureOutTotalMinutesUpToDate(dateValue, hourValue, minuteValue) {
+    // take dateValue subtract one from it
+    const daysPassedUpToDateValue = dateValue - 1;
+    console.log(daysPassedUpToDateValue);
+    // take dateValue with one subtracted from it multiply it by 1440(total min in a day)
+    const minutesTotalForDaysPassedMinuteOne = calcTotalMinutesForDaysOrMonth(
+      daysPassedUpToDateValue
+    );
+    // take hourValue multiply by 60(min)
+    const minutesInHoursForDate = multiply(hourValue);
+    // add dateVaue - 1 (1440) + hourValue (60) + minuteVaue
+    return (
+      minutesTotalForDaysPassedMinuteOne + minutesInHoursForDate + minuteValue
+    );
+  }
+
+  /**
+   * calculate start month days
+   * **/
+
+  function calculateStartingMonthDays(...rest) {
+    const totalMinutesInOneDay = 1440;
+    // destructuring
+    // we want to pass in startMonth/currentMonth number of days
+    const [
+      startMonthNumOfDays,
+      startDateDay,
+      startDateHours,
+      startDateMinutes,
+    ] = rest;
+    console.log(startDateDay, startDateHours, startDateMinutes);
+    // get total minute of start month
+    const totalMinuteOfStartMonth =
+      calcTotalMinutesForDaysOrMonth(startMonthNumOfDays);
+    // get total minute up to startDate and time
+    const totalMinsUpToStartingDateAndTIme = figureOutTotalMinutesUpToDate(
+      startDateDay,
+      startDateHours,
+      startDateMinutes
+    );
+    // subtract total minute up to startDate from total minute of start month
+    const minutesLeftInStartingMonth = subtraction(
+      totalMinuteOfStartMonth,
+      totalMinsUpToStartingDateAndTIme
+    );
+    // get value from subtracting startDate total minute from start month total minute
+    // divide that number by total minutes in a day (1440) to get days
+    const numOfDaysLeftInStartMonth = division(
+      minutesLeftInStartingMonth,
+      totalMinutesInOneDay
+    );
+    console.log(numOfDaysLeftInStartMonth);
+    return Math.floor(numOfDaysLeftInStartMonth);
+  }
+
+  /**
+   * calculate end month days
+   * **/
+
+  function calculateEndingMonthDays(endDay) {
+    /**
+     * not checking minutes of endDay because we will always subtract 1 from endDay
+     * reason: endDay is Feb 2
+     * one full day is when endDay is Feb 2 and time is 0:00
+     * it wont be two days until endDay is Feb 3 and time is 0:00
+     * if date is Feb 2 and time is 15:30. day will still be 1 full day
+     * **/
+    return endDay - 1;
+  }
+
+  /**
+   * total minute for month
+   * **/
+
+  function calcTotalMinutesForDaysOrMonth(numOfDays) {
+    const minutesInDay = 1440;
+    return numOfDays * minutesInDay;
+  }
 
   /**
    * makeArrayOfYearsFromCurrentToEnd(startingYear, endingYear + 1);
@@ -1522,9 +1648,9 @@
     console.log(arrOfObjs[0]);**/
     dataObj.defaultEndingDate = {
       title,
-      year,
-      month,
-      day: 12,
+      year: 2022,
+      month: "Jan",
+      day: 14,
       // day: Number(nextHolidayDate),
       hours: 8,
       minutes: 08,
@@ -1629,13 +1755,13 @@
       },
       {});
     console.log(dataObj);
+    // update userDateInput hour to 24hr format
     const hourConvertedToTwentyFourFormat =
       convertTwelveToTwentyFourHourFormat.call(userInputObj);
     console.log(
       "hourConvertedToTwentyFourFormat",
       hourConvertedToTwentyFourFormat
     );
-    // update userDateInput hour to 24hr format
     dataObj.userDateInput = {
       year: Number(userInputObj.year),
       month: userInputObj.month,
