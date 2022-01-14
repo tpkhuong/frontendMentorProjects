@@ -37,7 +37,7 @@
    * **/
   // execute/call/invoke our data obj func
   const accessOurData = scopeOurData();
-  const dataObj = accessOurData(12, 0, 0);
+  const dataObj = accessOurData();
   console.log(dataObj);
   // declare/define our days, hours, and minutes func
   // const handleDaysChange = daysHoursMinutesHelper();
@@ -45,6 +45,7 @@
   const handleMinutesChange = daysHoursMinutesHelper();
   // declare/define our updateDays, updateHours, updateMinutes, updateSeconds
   // call using .call() method
+  // func takes in an array and digitString
   const updateDaysElements = updateElementFactoryFunc();
   const updateHoursElements = updateElementFactoryFunc();
   const updateMinutesElements = updateElementFactoryFunc();
@@ -65,6 +66,7 @@
   const addFlipClassToDaysBottomElement = addClass();
   const addFlipClassToHoursBottomElement = addClass();
   const addFlipClassToMinutesBottomElement = addClass();
+  const addFlipAnimationClassToSecondBottomElement = addClass();
   /**
    * declare/define removing flip css to days, hours or minute digit element
    * call using .call() method
@@ -138,13 +140,24 @@
    * add 33 to make it 12:00
    * 12 hours to reach Dec 29
    **/
-  // countDown();
-  // dataObj.stopTimer = countDown();
-  function countDown() {
+  // const firstTime = new Date().getSeconds();
+  // console.log(firstTime);
+  // function timer() {
+  // const firstTime = new Date().getSeconds();
+  // console.log(firstTime);
+  //   return setInterval(() => {
+  //     const secondTime = new Date().getSeconds();
+  //     console.log(secondTime);
+  //   }, 1000);
+  // }
+  // const stop = timer();
+  // countDownTimer();
+  // dataObj.stopTimer = countDownTimer();
+  function countDownTimer() {
     /**
      * seconds element will update outside switch statement
      * **/
-    return setInterval(() => {
+    return setInterval(function callbackPassedToSetInterval() {
       const currentDate = new Date();
       let currentSecond = 60 - currentDate.getSeconds();
       // call our handleDays, handleHours, handleMinutesChange func
@@ -192,7 +205,7 @@
           // console.log("hours", hours);
           // console.log("minutes", minutes);
           if (days === 0 && hours === 0 && minutes === 0) {
-            // call countDown assign the return value of setInterval which will be
+            // call countDownTimer assign the return value of setInterval which will be
             // the value to stop setInterval to the identifer something stopTimer,etc
             // we will use that value assign to stopTimer as an argument to clearInterval(stopTimer)
             clearInterval(happyHoliday);
@@ -238,6 +251,31 @@
 
       console.log(currentSecond);
     }, 1000);
+  }
+
+  /**
+   * func below will add flip-animation to digit-bottom seconds element
+   * get initial seconds for new Date(). we want to class new Date() get seconds because
+   * in our setinterval there is a 1000ms delay which means setinterval will run code
+   * in the callback passed into setinterval every second but the first time
+   * the func that calls setInterval there will be a 1 sec delay
+   * **/
+
+  function setUpValuesForSecondsDigitElementAndExecuteTimerFunc() {
+    // add class flip-animation to digit-bottom of second element
+    addFlipAnimationClassToSecondBottomElement.call(
+      secondDigitBottom,
+      "flip-animation"
+    );
+    // call new Date() get seconds
+    const secondValForInitialLoad = new Date().getSeconds();
+    // call updateSecondsElement passing in arrayofSecDev and value from calling Date().getSeconds
+    updateSecondElements(
+      arrayOfSecondsDivElement,
+      `${secondValForInitialLoad}`
+    );
+    // call timer and assigned clearInterval value to a stopTimer property in dataObj
+    dataObj.stopTimerID = countDownTimer;
   }
 
   /**
@@ -357,7 +395,7 @@
 
   function scopeOurData() {
     const innerDataObj = {
-      stopTimer: null,
+      stopTimerID: null,
       minutesDigit: 1,
       hoursDigit: 1,
       daysDigit: 8,
@@ -526,10 +564,14 @@
     };
 
     return function closureOverOurVariables(days, hours, minutes) {
-      // testing only
-      innerDataObj["daysDigit"] = days;
-      innerDataObj["hoursDigit"] = hours;
-      innerDataObj["minutesDigit"] = minutes;
+      /** 
+       * testing only
+       innerDataObj["daysDigit"] = days;
+       innerDataObj["hoursDigit"] = hours;
+       innerDataObj["minutesDigit"] = minutes;
+       we can test out timer by assigning values in our 
+       assignValueToDaysHoursMinutesDigitInDataObj func
+       * **/
       return innerDataObj;
     };
   }
@@ -614,7 +656,7 @@
   //   arrayOfSubarrays,
   //   "current"
   // );
-  console.log("more tests");
+
   /**
    * initial app set up
    * **/
@@ -623,39 +665,45 @@
     // we will get those date values and call new Date() when we work with currentDate
     // times we work with current date. when app loads, when user submit their personal
     // date/time inputs. when we want to resume a timer(nextHoliday or current user date inputs)
+    /**
+     * we are calling currentTimeObjInitial in currentDateObjForDigitElementCalc
+     const currentTimeObjInitial = getCurrentHourMinutes(dateObjInitial);
+     * **/
     const dateObjInitial = new Date();
     const currentDateObjInitial = getCurrentYearMonthDate(dateObjInitial);
-    const currentTimeObjInitial = getCurrentHourMinutes(dateObjInitial);
     // pass initialCurrentDateObj as first argument/value to digitsElementsCalculation
-    const initialCurrentDateObj = {
-      year: 2022,
-      month: "Jan",
-      day: currentDateObjInitial.currentDay,
-      time: {
-        hours: currentTimeObjInitial.currentHour,
-        minutes: currentTimeObjInitial.currentMinute,
-      },
-    };
+    const initialCurrentDateObj = currentDateObjForDigitElementCalc();
+    console.log(dataObj);
     // calling func to get next holiday obj
     getNextUpcomingHolidayValues.call(currentDateObjInitial);
     // call digitsElementCalculation
-    console.log("calling digitsElementsCalc func inside initialApp Func");
-    console.log(
+    const { dayDigitForElement, hourDigit, minuteDigit } =
       digitsElementsCalculation(
         initialCurrentDateObj,
         dataObj.defaultEndingDate
-      )
+      );
+
+    // console.log(objOfValuesForDigitElement);
+    // assign values to dayDigit,hourDigit,minuteDigit in dataObj for timer func
+    assignValueToDaysHoursMinutesDigitInDataObj(
+      dayDigitForElement,
+      hourDigit,
+      minuteDigit
     );
+    // changing value of day,hour,minute digits element
+    assignValuesToDigitELementsForInitialAppFunc(dataObj);
+    /**
+     * console.log("calling digitsElementsCalc func inside initialApp Func");
+    console.log(
+    );**/
   }
 
   /**
    * user submitted date/time inputs
    * **/
 
-  // function
-
   /**
-   *
+   * pause/resume
    * **/
 
   /**
@@ -1001,11 +1049,21 @@
       // past first to calculateStartingMonthDays
       // we can run calculateStartingMonthDays and calculateEndingMonthDays since we are working in single month
       // startingDate num of days and endingDate num of days
+
       const arrayOfDaysInMonthSameYear = arrayOfDaysInMonthUsingTwoIndices(
         startMonthIndex,
         endingMonthIndex + 1,
         arrayOfSubarrays,
         "current"
+        /**
+         * either calling this func with string "current" or "end" will work
+         * pass in string "end" and endYear will add one to month Feb for leap year
+         * when current year values: year,month,day,hour,minute is entered by user
+         * make more sense to use "current" because when startDate and endDate
+         * are in the same year they are both in the current year not
+         * current and end year
+         * **/
+        // endYear
       );
       // get values between first and last value in array
       const daysOfMonthBetweenStartingAndEndingMonth =
@@ -1405,6 +1463,26 @@
    * helper funcs
    * **/
 
+  function assignValuesToDigitELementsForInitialAppFunc(dataInput) {
+    // pass in daysDigit,hoursDigit and minutesDigit after
+    // calling calculation func
+    // destructure
+    // need to add 0 to digits
+    // const [daysDigit, hoursDigit, minutesDigit] = rest;
+    // pass in dataInput into prepDigitValueForUpdate
+    const { daysStrForm, hoursStrForm, minutesStrForm } =
+      prepDigitValueForUpdate(dataInput);
+    // prepDigitValueForUpdate will return an object with our digit in string format
+    // dont need to use template literials when calling updateDaysElement
+    // destructure that obj getting day,hour,minute values
+    // assign digit value to days element
+    updateDaysElements(arrayOfDaysDivElement, daysStrForm);
+    // assign digit value to hours element
+    updateHoursElements(arrayOfHoursDivElement, hoursStrForm);
+    // assign digit value to minutes element
+    updateMinutesElements(arrayOfMinutesDivElement, minutesStrForm);
+  }
+
   /**
    * call our update element func
    * **/
@@ -1480,18 +1558,21 @@
   }
 
   /**
-   * add/remove class factory func
+   * assign values to daysDigit,hoursDigit and minutesDigit after
+   * calling calculation func
    * **/
 
-  // const firstTime = new Date().getSeconds();
-  // console.log(firstTime);
-  // function timer() {
-  //   return setInterval(() => {
-  //     const secondTime = new Date().getSeconds();
-  //     console.log(secondTime);
-  //   }, 1000);
-  // }
-  // const stop = timer();
+  function assignValueToDaysHoursMinutesDigitInDataObj(...rest) {
+    const [days, hours, minutes] = rest;
+    // assign these value to our properties in dataObj
+    dataObj.daysDigit = days;
+    dataObj.hoursDigit = hours;
+    dataObj.minutesDigit = minutes;
+  }
+
+  /**
+   * add/remove class factory func
+   * **/
 
   function addOrRemoveFlipClassToDigitBottomElement(addOrRemoveStr) {
     const { daysDigitBottom, hoursDigitBottom, minutesDigitBottom } =
@@ -1649,7 +1730,7 @@
     dataObj.defaultEndingDate = {
       title,
       year: 2022,
-      month: "Jan",
+      month: "Feb",
       day: 14,
       // day: Number(nextHolidayDate),
       hours: 8,
@@ -1720,6 +1801,30 @@
   }
 
   /**
+   * func below will return obj of current date values
+   * we will call this func everytime we want to pass in the currentDate obj
+   * into digitElementCalculation
+   * **/
+
+  function currentDateObjForDigitElementCalc() {
+    const dateObjInitial = new Date();
+    const currentDateObjInitial = getCurrentYearMonthDate(dateObjInitial);
+    const currentTimeObjInitial = getCurrentHourMinutes(dateObjInitial);
+    /**
+     * for testing purposes change the values in the obj we return from executing this func
+     * **/
+    return {
+      year: currentDateObjInitial.currentYear,
+      month: currentDateObjInitial.currentMonth,
+      day: currentDateObjInitial.currentDay,
+      time: {
+        hours: currentTimeObjInitial.currentHour,
+        minutes: currentTimeObjInitial.currentMinute,
+      },
+    };
+  }
+
+  /**
    * callback to event listeners
    * **/
 
@@ -1770,6 +1875,14 @@
       minutes: Number(userInputObj.minutes),
       meridiem: userInputObj.meridiem,
     };
+    // get currentDate obj for used with userInput date obj
+    const currentDateObjForUsedWithUserInput =
+      currentDateObjForDigitElementCalc();
+    console.log(currentDateObjForUsedWithUserInput);
+    digitsElementsCalculation(
+      currentDateObjForUsedWithUserInput,
+      dataObj.userDateInput
+    );
     console.log(dataObj);
     // this.reset();
   }
