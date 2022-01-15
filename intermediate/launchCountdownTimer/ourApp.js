@@ -2,6 +2,7 @@
   //   declare selector at top of func
 
   const {
+    startingDateButton,
     monthSelectElement,
     userInputModalDiv,
     formElement,
@@ -124,12 +125,18 @@
     "submit",
     getUserDateFromInputsAndAssignValuesToDataObj
   );
+  // clicking on starting date button
+  addEventListener.call(startingDateButton, "click", function TODO(event) {
+    dataObj.stopTimerID = countDownTimer();
+  });
 
   /**
    * call our initialAppSetUp here
    * **/
   console.log("calling initialApp func");
-  initialAppSetUp();
+  // initialAppSetUp();
+  // call timer and assigned clearInterval value to a stopTimer property in dataObj
+  // dataObj.stopTimerID = countDownTimer();
 
   // new Date("January 18, 2022, 0:00"); 12am
   // 23:00 is 11pm
@@ -154,12 +161,41 @@
   // countDownTimer();
   // dataObj.stopTimer = countDownTimer();
   function countDownTimer() {
+    let counter = 0;
+    /**
+     * setup initial second value and element here
+     * initial second and when setInterval func is called seconds are different
+     * ***** setup initial second and value inside setInterval callback  
+     * the Date() obj for days,hours,minutes and second have to be the same
+     * *****
+     // add class flip-animation to digit-bottom of second element
+     addFlipAnimationClassToSecondBottomElement.call(
+       secondDigitBottom,
+       "flip-animation"
+     );
+     // call new Date() get seconds
+     const secondValForInitialLoad = new Date().getSeconds();
+     console.log("secondValForInitialLoad", secondValForInitialLoad);
+     // call updateSecondsElement passing in arrayofSecDev and value from calling Date().getSeconds
+     updateSecondElements(
+       arrayOfSecondsDivElement,
+       `${secondValForInitialLoad}`
+     );
+     * */
     /**
      * seconds element will update outside switch statement
      * **/
     return setInterval(function callbackPassedToSetInterval() {
       const currentDate = new Date();
       let currentSecond = 60 - currentDate.getSeconds();
+      if (counter === 0) {
+        initialAppSetUp(currentDate);
+        addFlipAnimationClassToSecondBottomElement.call(
+          secondDigitBottom,
+          "flip-animation"
+        );
+        counter++;
+      }
       // call our handleDays, handleHours, handleMinutesChange func
       // when currentSecound is 59
       // if (currentSecond == 60) {
@@ -217,6 +253,11 @@
           // console.log(dataObj);
           break;
       }
+      /**
+       * if daysFlip, hoursFlip and minutesFlip is true add class flip-bottom-transition
+       * **/
+
+      addFlipClassToDigitElement(dataObj.flipDigitObj);
       /** 
       // if we call our func that will update digit element here
       // with the variables/identifiers we declared using destructuring
@@ -242,13 +283,16 @@
        * ** thinking it will be better to call func outside of handle Funcs **
        * **/
 
-      invokeOurUpdateElementFuncs(updateData);
       /**
-       * if daysFlip, hoursFlip and minutesFlip is true add class flip-bottom-transition
+       * if daysFlip, hoursFlip and minutesFlip is true run
+       * func to change text content of element
        * **/
 
-      addFlipClassToDigitElement(dataObj.flipDigitObj);
-
+      invokeOurUpdateElementFuncs(updateData);
+      // check length of seconds, convert to str
+      const currSecStrForm = handlePrependExtraZeroOrNot(currentSecond);
+      // update second digit element
+      updateSecondElements(arrayOfSecondsDivElement, currSecStrForm);
       console.log(currentSecond);
     }, 1000);
   }
@@ -259,23 +303,22 @@
    * in our setinterval there is a 1000ms delay which means setinterval will run code
    * in the callback passed into setinterval every second but the first time
    * the func that calls setInterval there will be a 1 sec delay
+   * ***** setup seconds element and value in countdown timer func *****
    * **/
 
-  function setUpValuesForSecondsDigitElementAndExecuteTimerFunc() {
+  function setUpValuesForSecondsDigitElementAndExecuteTimerFunc(
+    digitBottom,
+    arrayOfElements
+  ) {
     // add class flip-animation to digit-bottom of second element
     addFlipAnimationClassToSecondBottomElement.call(
-      secondDigitBottom,
+      digitBottom,
       "flip-animation"
     );
     // call new Date() get seconds
     const secondValForInitialLoad = new Date().getSeconds();
     // call updateSecondsElement passing in arrayofSecDev and value from calling Date().getSeconds
-    updateSecondElements(
-      arrayOfSecondsDivElement,
-      `${secondValForInitialLoad}`
-    );
-    // call timer and assigned clearInterval value to a stopTimer property in dataObj
-    dataObj.stopTimerID = countDownTimer;
+    updateSecondElements(arrayOfElements, `${secondValForInitialLoad}`);
   }
 
   /**
@@ -660,7 +703,7 @@
   /**
    * initial app set up
    * **/
-  function initialAppSetUp() {
+  function initialAppSetUp(dateObj) {
     // instead of calling new Date() getting year,month,day,hr,min at top of app
     // we will get those date values and call new Date() when we work with currentDate
     // times we work with current date. when app loads, when user submit their personal
@@ -669,8 +712,9 @@
      * we are calling currentTimeObjInitial in currentDateObjForDigitElementCalc
      const currentTimeObjInitial = getCurrentHourMinutes(dateObjInitial);
      * **/
-    const dateObjInitial = new Date();
-    const currentDateObjInitial = getCurrentYearMonthDate(dateObjInitial);
+    // const dateObjInitial = new Date();
+    console.log(dateObj.getSeconds());
+    const currentDateObjInitial = getCurrentYearMonthDate(dateObj);
     // pass initialCurrentDateObj as first argument/value to digitsElementsCalculation
     const initialCurrentDateObj = currentDateObjForDigitElementCalc();
     console.log(dataObj);
@@ -692,6 +736,14 @@
     );
     // changing value of day,hour,minute digits element
     assignValuesToDigitELementsForInitialAppFunc(dataObj);
+    // calling/executing/invoking our func that will add flip-animation to secondDigitBottom
+    // get initial second because we have a 1000ms delay on setInterval algorithm
+    // first time setInterval is called
+    // setUpValuesForSecondsDigitElementAndExecuteTimerFunc(
+    //   secondDigitBottom,
+    //   arrayOfSecondsDivElement
+    // );
+    // dataObj.stopTimerID = countDownTimer();
     /**
      * console.log("calling digitsElementsCalc func inside initialApp Func");
     console.log(
@@ -1496,11 +1548,14 @@
     const {
       flipDigitObj: { daysFlip, hoursFlip, minutesFlip },
     } = dataObj;
-    console.log(daysStrForm, hoursStrForm, minutesStrForm, secondsStrForm);
-    console.log(daysFlip, hoursFlip, minutesFlip);
+    // console.log(daysStrForm, hoursStrForm, minutesStrForm, secondsStrForm);
+    // console.log(daysFlip, hoursFlip, minutesFlip);
     // update days
+    updateDaysElements(arrayOfDaysDivElement, daysStrForm);
     // update hours
+    updateHoursElements(arrayOfHoursDivElement, hoursStrForm);
     // update minutes
+    updateMinutesElements(arrayOfMinutesDivElement, minutesStrForm);
   }
 
   /**
@@ -1635,7 +1690,7 @@
         // console.log("add");
         return function innerFunc({ daysFlip, hoursFlip, minutesFlip }) {
           // check days
-          console.log(daysFlip, hoursFlip, minutesFlip);
+          // console.log(daysFlip, hoursFlip, minutesFlip);
           if (daysFlip) {
             addFlipClassToDaysBottomElement.call(
               daysDigitBottom,
@@ -1663,7 +1718,7 @@
         console.log("remove");
         return function innerFunc({ daysFlip, hoursFlip, minutesFlip }) {
           // check days
-          console.log(daysFlip, hoursFlip, minutesFlip);
+          // console.log(daysFlip, hoursFlip, minutesFlip);
           if (!daysFlip) {
             removeFlipClassToDaysBottomElement.call(
               daysDigitBottom,
@@ -2280,6 +2335,8 @@
    * **/
 
   function ourSelectors() {
+    // starting date button
+    const startingDateButton = document.querySelector(".modal-launcher-back");
     const monthSelectElement = document.querySelector("select[id='month']");
     // form
     const formElement = document.querySelector("form");
@@ -2313,6 +2370,7 @@
     // const effortTwo = document.querySelector("digit-style-wrapper-two");
 
     return {
+      startingDateButton,
       monthSelectElement,
       formElement,
       userInputModalDiv,
