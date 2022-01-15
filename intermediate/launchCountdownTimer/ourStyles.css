@@ -431,6 +431,12 @@ a:hover {
 
 /* hide h2 which are title for our section element */
 
+/* min-width for hours and seconds digit elements */
+
+.min-width-digit-element {
+  min-width: 81.2px;
+}
+
 /* general styles */
 
 main[role="main"] {
@@ -611,11 +617,11 @@ main[role="main"] {
 .flip-bottom-transition {
   transform: rotateX(0deg);
   opacity: 1;
-  transition: transform 1000ms ease-out, opacity 1000ms ease-out;
+  transition: transform 700ms ease-out, opacity 700ms ease-out;
 }
 
 .flip-animation {
-  animation: flipDigitBottom 1000ms ease-out infinite forwards;
+  animation: flipDigitBottom 970ms ease-out infinite forwards;
   /* animation-delay: ; */
 }
 
