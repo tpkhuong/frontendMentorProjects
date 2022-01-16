@@ -394,6 +394,9 @@
           //   dataObj[daysHoursOrMin]--
           // }
           // ternary operator
+          // when days,hours, minutes are 0
+          // our seconds will still be running. once seconds is 0 it will check to see if
+          // days,hours,minutes are 0 if it is timer stops
           minutes === 0
             ? ((dataObj[daysHoursOrMin] = 59),
               changeMinutesFlipProperty.call(flipDigitObj, "minutesFlip", true))
@@ -1550,12 +1553,22 @@
     } = dataObj;
     // console.log(daysStrForm, hoursStrForm, minutesStrForm, secondsStrForm);
     // console.log(daysFlip, hoursFlip, minutesFlip);
-    // update days
-    updateDaysElements(arrayOfDaysDivElement, daysStrForm);
-    // update hours
-    updateHoursElements(arrayOfHoursDivElement, hoursStrForm);
-    // update minutes
-    updateMinutesElements(arrayOfMinutesDivElement, minutesStrForm);
+    // check to see if daysFlip,hoursFlip,or minutesFlip is true then we update element
+    if (daysFlip) {
+      // update days
+      updateDaysElements(arrayOfDaysDivElement, daysStrForm);
+    }
+    if (hoursFlip) {
+      // update hours
+      updateHoursElements(arrayOfHoursDivElement, hoursStrForm);
+    }
+    if (minutesFlip) {
+      // update minutes
+      updateMinutesElements(arrayOfMinutesDivElement, minutesStrForm);
+      // const testElement = document.querySelector("[role='timer']");
+      // testElement.setAttribute("aria-atomic", "true");
+      // testElement.setAttribute("aria-live", "assertive");
+    }
   }
 
   /**
