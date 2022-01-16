@@ -32,14 +32,43 @@
           <!-- title -->
           <h1 id="app-title">Countdown To Next Holiday</h1>
           <!-- digits containers -->
-          <div class="countdown-digits-container">
+          <!-- we had role="timer" and aria-atomic="true" on element below -->
+          <!-- role="timer" turn that container/element into a live region
+          screen reader read out days,hours,minutes three times when timer started
+          because the days,hours,minutes element changed.
+          when we used aria-hidden on second element, everytime second element changed
+          screen reader did not announce
+          -->
+          <div
+            class="countdown-digits-container"
+            role="timer"
+            aria-atomic="true"
+            aria-live="assertive"
+          >
+            <!-- aria-atomic true on container of our days,hours,minutes,second element
+          does not announce anything.
+          if we add aria-live="assertive" on any of the descendants, screen reader will 
+          announce days,hours,minutes and second everytime one of the descendants update
+          its content even if we use aria-hidden on that element
+          aria-atomic will check to see if any of its children content updated
+          we could add a container around days,hours,minutes element
+          have role,aria-atomic attributes on that container
+          so screen reader does not announce everytime second element updates
+        aria-atomic="true"
+              aria-live="assertive"  
+        -->
+            <!-- with aria-hidden="true" on seconds element we can have attributes 
+              role="time" aria-atomic="true" aria-live="assertive" on element that is the container
+            for our days,hours,minutes and seconds digit elements
+            we didnt have to separate the second digit elements from the days,hours,minutes digit elements
+            -->
             <div class="digit-text-wrapper">
               <div class="countdown-digit-black-bg">
                 <!-- days -->
                 <div id="days" class="countdown-digit-container">
-                  <div class="digit-back">08</div>
-                  <div class="digit-top">08</div>
-                  <div class="digit-bottom">08</div>
+                  <div class="digit-back" aria-label="08 days">08</div>
+                  <div aria-hidden="true" class="digit-top">08</div>
+                  <div aria-hidden="true" class="digit-bottom">08</div>
                 </div>
               </div>
               <span class="date-time-text">DAYS</span>
@@ -48,9 +77,9 @@
               <div class="countdown-digit-black-bg">
                 <!-- hours -->
                 <div id="hours" class="countdown-digit-container">
-                  <div class="digit-back">08</div>
-                  <div class="digit-top">08</div>
-                  <div class="digit-bottom">08</div>
+                  <div class="digit-back" aria-label="08 hours">08</div>
+                  <div aria-hidden="true" class="digit-top">08</div>
+                  <div aria-hidden="true" class="digit-bottom">08</div>
                 </div>
               </div>
               <span class="date-time-text">HOURS</span>
@@ -59,23 +88,34 @@
               <div class="countdown-digit-black-bg">
                 <!-- minutes -->
                 <div id="minutes" class="countdown-digit-container">
-                  <div class="digit-back">08</div>
-                  <div class="digit-top">08</div>
-                  <div class="digit-bottom">08</div>
+                  <div class="digit-back" aria-label="08 minutes">08</div>
+                  <div aria-hidden="true" class="digit-top">08</div>
+                  <div aria-hidden="true" class="digit-bottom">08</div>
                 </div>
               </div>
               <span class="date-time-text">MINUTES</span>
             </div>
+
+            <!-- above are days,hours,minutes -->
+            <!-- when we didnt have aria-hidden on digit-back,top,bottom or seconds text element
+            screen reader would announce everytime second element updated
+            -->
             <div class="digit-text-wrapper min-width-digit-element">
               <div class="countdown-digit-black-bg">
                 <!-- seconds -->
                 <div id="seconds" class="countdown-digit-container">
-                  <div class="digit-back">08</div>
-                  <div class="digit-top">08</div>
-                  <div class="digit-bottom">08</div>
+                  <div
+                    aria-hidden="true"
+                    class="digit-back"
+                    aria-label="08 second"
+                  >
+                    08
+                  </div>
+                  <div aria-hidden="true" class="digit-top">08</div>
+                  <div aria-hidden="true" class="digit-bottom">08</div>
                 </div>
               </div>
-              <span class="date-time-text">SECONDS</span>
+              <span aria-hidden="true" class="date-time-text">SECONDS</span>
             </div>
           </div>
           <!-- button -->
