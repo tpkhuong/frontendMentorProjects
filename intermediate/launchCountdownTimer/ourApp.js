@@ -394,7 +394,7 @@
           //   dataObj[daysHoursOrMin]--
           // }
           // ternary operator
-          // when days,hours, minutes are 0
+          // when days,hours, are 0 and minutes goes from 1 to 0
           // our seconds will still be running. once seconds is 0 it will check to see if
           // days,hours,minutes are 0 if it is timer stops
           minutes === 0
