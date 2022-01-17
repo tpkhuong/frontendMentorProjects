@@ -39,12 +39,7 @@
           when we used aria-hidden on second element, everytime second element changed
           screen reader did not announce
           -->
-          <div
-            class="countdown-digits-container"
-            role="timer"
-            aria-atomic="true"
-            aria-live="assertive"
-          >
+          <div class="countdown-digits-container" aria-atomic="true">
             <!-- aria-atomic true on container of our days,hours,minutes,second element
           does not announce anything.
           if we add aria-live="assertive" on any of the descendants, screen reader will 
@@ -62,8 +57,29 @@
             for our days,hours,minutes and seconds digit elements
             we didnt have to separate the second digit elements from the days,hours,minutes digit elements
             -->
+            <!-- ******* -->
+            <!-- we will have attributes role="timer" aria-atomic="true" aria-live="assertive" 
+            on element that is container of our days,hours,minutes,seconds elements. reason we have those attributes
+            on element with class="countdown-digits-container" we want screen reader to announce
+            days,hours,minutes when either days,hours,minutes update
+            ********
+            in our js file we will have an algorithm that will add attributes of
+            aria-hidden="true" when our app have more than 1 digit element update
+            this way screen reader will announce the changes once instead of annoucing
+            days,hours,minutes update multiple times.
+            ******* good effort but screen reader will not announce element that has aria-hidden="true"
+            WE WILL FIND A WAY!!!!!
+            -->
+            <!-- ******* -->
             <div class="digit-text-wrapper">
-              <div class="countdown-digit-black-bg">
+              <!-- have aria-live="assertive on this container while having 
+                aria-hidden="true" on element that holds digit element NOT the container
+                that holds digit element container and span with test of hours,minutes
+                screen reader announce days,hours and minutes ONCE
+                ALSO or digit element has 3 element with digit as the content
+                back,top and bottom we applied aria-hidden="true" to two of the three
+                " -->
+              <div class="countdown-digit-black-bg" aria-live="assertive">
                 <!-- days -->
                 <div id="days" class="countdown-digit-container">
                   <div class="digit-back" aria-label="08 days">08</div>
@@ -73,8 +89,20 @@
               </div>
               <span class="date-time-text">DAYS</span>
             </div>
+            <!-- ***** -->
+            <!-- when had role="timer" aria-atomic="true" and aria-live="assertive" on 
+            one of the children of the container that have the days,hours,minutes element nested in it
+            screen reader only announce days,hours,minutes once
+            -->
+            <!-- ***** -->
             <div class="digit-text-wrapper">
-              <div class="countdown-digit-black-bg">
+              <!-- aria-hidden="true" on this container element parent element of digit and hours text
+              screen reader announce the digit but not the text
+              -->
+              <div class="countdown-digit-black-bg" aria-hidden="true">
+                <!-- aria-hidden="true" on this element while aria-live="assertive" parent element of
+                days digit element screen reader will announce days,hours,minutes digit and text
+                -->
                 <!-- hours -->
                 <div id="hours" class="countdown-digit-container">
                   <div class="digit-back" aria-label="08 hours">08</div>
@@ -84,8 +112,14 @@
               </div>
               <span class="date-time-text">HOURS</span>
             </div>
+            <!-- when we had aria-live="assertive" on minutes element and aria-atomic on class="countdown-digits-container"
+            screen reader announced days,hours,minutes when minute element updates
+            -->
             <div class="digit-text-wrapper min-width-digit-element">
-              <div class="countdown-digit-black-bg">
+              <div class="countdown-digit-black-bg" aria-hidden="true">
+                <!-- aria-hidden="true" on this element while aria-live="assertive" parent element of
+                days digit element screen reader will announce days,hours,minutes digit and text
+                -->
                 <!-- minutes -->
                 <div id="minutes" class="countdown-digit-container">
                   <div class="digit-back" aria-label="08 minutes">08</div>
