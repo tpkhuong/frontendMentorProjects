@@ -2,6 +2,9 @@
   //   declare selector at top of func
 
   const {
+    daysDigitContainerParent,
+    hoursDigitContainerParent,
+    minutesDigitContainerParent,
     startingDateButton,
     monthSelectElement,
     userInputModalDiv,
@@ -128,6 +131,16 @@
   // clicking on starting date button
   addEventListener.call(startingDateButton, "click", function TODO(event) {
     dataObj.stopTimerID = countDownTimer();
+    setTimeout(() => {
+      const daysBackElement = document.querySelector("[id=days] .digit-back");
+      // const hourBackElement = document.querySelector("[id=hours] .digit-back");
+      const minutesBackElement = document.querySelector(
+        "[id=minutes] .digit-back"
+      );
+      updateDaysElements([daysBackElement], "17");
+      // updateHoursElements([hourBackElement], "26");
+      updateMinutesElements([minutesBackElement], "35");
+    }, 15000);
   });
 
   /**
@@ -253,6 +266,14 @@
           // console.log(dataObj);
           break;
       }
+      /**
+       * run/call/invoke/execute func that will check which property in flipDigitObj has the
+       * value true put them in an array.
+       * get first element/value of that array
+       * add aria-live="assertive" to that element. save this element to a reference in our
+       * stateObj so we can pass that element into func that will remove aria-live="assertive"
+       * have the func that will remove aria-live attribute in our stateObj
+       * **/
       /**
        * if daysFlip, hoursFlip and minutesFlip is true add class flip-bottom-transition
        * **/
@@ -445,6 +466,12 @@
       minutesDigit: 1,
       hoursDigit: 1,
       daysDigit: 8,
+      elementHasAriaLive: null,
+      arrOfDigitContainerParents: [
+        daysDigitContainerParent,
+        hoursDigitContainerParent,
+        minutesDigitContainerParent,
+      ],
       flipDigitObj: {
         daysFlip: false,
         hoursFlip: false,
@@ -597,6 +624,7 @@
           },
         },
       },
+      removeAriaLive() {},
       arrOfDays: [3, 5, 9],
       sumOfValuesInArray() {
         return this.arrOfDays.reduce((buildingUp, currentValue) => {
@@ -1757,6 +1785,10 @@
   }
 
   /**
+   * algorithm to handle screen readers adding/removing aria-live="assertive"
+   * **/
+
+  /**
    * TODO
    function defaultTimerDaysHoursMinutesSecondsDigit() {
      //
@@ -1781,6 +1813,9 @@
     const objOfMonthHolidayDates = dataObj.datesOfHoliday[`${year}`][month];
     // using filter
     const arrOfHolidayDates = Object.keys(objOfMonthHolidayDates);
+    // nextHolidayDate will be the date we want to assign to day property of dafauleEndingDate
+    // not the current day which we did before using destructuring of current
+    // date obj passed in to this func call
     const [nextHolidayDate] = findDatesGreaterThanCurrentDateUsingFilter(
       arrOfHolidayDates,
       day
@@ -1797,7 +1832,7 @@
     console.log(arrOfObjs[0]);**/
     dataObj.defaultEndingDate = {
       title,
-      year: 2022,
+      year,
       month: "Feb",
       day: 14,
       // day: Number(nextHolidayDate),
@@ -2348,6 +2383,16 @@
    * **/
 
   function ourSelectors() {
+    // digit container parent
+    const daysDigitContainerParent = document.querySelector(
+      "[id='days-digit-container-parent']"
+    );
+    const hoursDigitContainerParent = document.querySelector(
+      "[id='hours-digit-container-parent']"
+    );
+    const minutesDigitContainerParent = document.querySelector(
+      "[id='minutes-digit-container-parent']"
+    );
     // starting date button
     const startingDateButton = document.querySelector(".modal-launcher-back");
     const monthSelectElement = document.querySelector("select[id='month']");
@@ -2383,6 +2428,9 @@
     // const effortTwo = document.querySelector("digit-style-wrapper-two");
 
     return {
+      daysDigitContainerParent,
+      hoursDigitContainerParent,
+      minutesDigitContainerParent,
       startingDateButton,
       monthSelectElement,
       formElement,

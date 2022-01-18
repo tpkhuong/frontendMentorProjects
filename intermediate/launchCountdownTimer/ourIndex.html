@@ -79,10 +79,30 @@
                 ALSO or digit element has 3 element with digit as the content
                 back,top and bottom we applied aria-hidden="true" to two of the three
                 " -->
-              <div class="countdown-digit-black-bg" aria-live="assertive">
+              <div
+                class="countdown-digit-black-bg"
+                id="days-digit-container-parent"
+              >
+                <!-- when we had aria-hidden="true" on this element and aria-hidden="true"
+                on hours digit element but aria-live="assertive" on minute digit element
+                screen reader announce days, number of hours / hours and number of minutes / minutes
+                -->
+                <!-- ***** -->
+                <!-- the digit that gets updated have to have aria-live="assertive" add to this element -->
+                <!-- ***** -->
+                <!-- ***** -->
+                <!-- days CANNOT have aria-hidden="true" added to this element because when hours or
+                minutes update screen reader will announce days without the digit then announce
+                hours then minutes
+                -->
+                <!-- ***** -->
+                <!-- ***** -->
+                <!-- the other two element eiter hours or minutes container of digit element
+                does not have to have aria-hidden="true"-->
+                <!-- ***** -->
                 <!-- days -->
                 <div id="days" class="countdown-digit-container">
-                  <div class="digit-back" aria-label="08 days">08</div>
+                  <div class="digit-back">08</div>
                   <div aria-hidden="true" class="digit-top">08</div>
                   <div aria-hidden="true" class="digit-bottom">08</div>
                 </div>
@@ -99,13 +119,23 @@
               <!-- aria-hidden="true" on this container element parent element of digit and hours text
               screen reader announce the digit but not the text
               -->
-              <div class="countdown-digit-black-bg" aria-hidden="true">
+              <div
+                class="countdown-digit-black-bg"
+                id="hours-digit-container-parent"
+              >
                 <!-- aria-hidden="true" on this element while aria-live="assertive" parent element of
                 days digit element screen reader will announce days,hours,minutes digit and text
                 -->
+                <!-- ***** -->
+                <!-- the digit that gets updated have to have aria-live="assertive" add to this element -->
+                <!-- ***** -->
+                <!-- ***** -->
+                <!-- the other two element eiter days or minutes container of digit element
+                does not have to have aria-hidden="true"-->
+                <!-- ***** -->
                 <!-- hours -->
                 <div id="hours" class="countdown-digit-container">
-                  <div class="digit-back" aria-label="08 hours">08</div>
+                  <div class="digit-back">08</div>
                   <div aria-hidden="true" class="digit-top">08</div>
                   <div aria-hidden="true" class="digit-bottom">08</div>
                 </div>
@@ -115,14 +145,26 @@
             <!-- when we had aria-live="assertive" on minutes element and aria-atomic on class="countdown-digits-container"
             screen reader announced days,hours,minutes when minute element updates
             -->
-            <div class="digit-text-wrapper min-width-digit-element">
-              <div class="countdown-digit-black-bg" aria-hidden="true">
+            <div
+              class="digit-text-wrapper min-width-digit-element"
+              id="minutes-digit-container-parent"
+            >
+              <div class="countdown-digit-black-bg" aria-live="assertive">
                 <!-- aria-hidden="true" on this element while aria-live="assertive" parent element of
                 days digit element screen reader will announce days,hours,minutes digit and text
+                on first time we ran func that changed days element or when days digit element updated
+                BUT NOT WHEN MINUTES OR HOURS DIGIT ELEMENT UPDATED
                 -->
+                <!-- ***** -->
+                <!-- the digit that gets updated have to have aria-live="assertive" add to this element -->
+                <!-- ***** -->
+                <!-- ***** -->
+                <!-- the other two element eiter days or hours container of digit element
+                does not have to have aria-hidden="true"-->
+                <!-- ***** -->
                 <!-- minutes -->
                 <div id="minutes" class="countdown-digit-container">
-                  <div class="digit-back" aria-label="08 minutes">08</div>
+                  <div class="digit-back">08</div>
                   <div aria-hidden="true" class="digit-top">08</div>
                   <div aria-hidden="true" class="digit-bottom">08</div>
                 </div>
@@ -151,6 +193,16 @@
               </div>
               <span aria-hidden="true" class="date-time-text">SECONDS</span>
             </div>
+            <!-- ****** -->
+            <!-- GREAT EFFORT = GREAT RESULT -->
+            <!-- having aria-live="assertive" on element with class="countdown-digit-black-bg" of minutes
+            aria-hidden="true" class="countdown-digit-black-bg" of hours but nothing
+            on element with class="countdown-digit-black-bg" of days
+            when days,hours and minutes update screen reader announced days,hours and minutes digit and text
+            when only minute digit element updates screen reader announce days,hours,minutes
+            when only days digit element updates screen reader announces nothing
+          -->
+            <!-- ****** -->
           </div>
           <!-- button -->
           <button
