@@ -116,6 +116,24 @@
   const multiply = arithmeticFactoryFunc("multiply");
   const division = arithmeticFactoryFunc("divide");
 
+  /**
+   * declare/define funcs that will change numForm of days,hours,minutes in dataObj
+   * to string and pass those values to func that will update elements
+   * **/
+
+  /**
+   * initial
+   * **/
+
+  const assignValuesToDigitELementsForInitialAppFunc =
+    factoryFuncForUpdatingDigitElements();
+
+  /**
+   * user inputs
+   * **/
+  const updateDigitElementsValuesForUserInputs =
+    factoryFuncForUpdatingDigitElements();
+
   // add event listeners
   addEventListener.call(userInputModalDiv, "change", function TODO(event) {
     if (event.target.value == "Mar") {
@@ -131,16 +149,16 @@
   // clicking on starting date button
   addEventListener.call(startingDateButton, "click", function TODO(event) {
     dataObj.stopTimerID = countDownTimer();
-    setTimeout(() => {
-      const daysBackElement = document.querySelector("[id=days] .digit-back");
-      // const hourBackElement = document.querySelector("[id=hours] .digit-back");
-      const minutesBackElement = document.querySelector(
-        "[id=minutes] .digit-back"
-      );
-      updateDaysElements([daysBackElement], "17");
-      // updateHoursElements([hourBackElement], "26");
-      updateMinutesElements([minutesBackElement], "35");
-    }, 15000);
+    // setTimeout(() => {
+    //   const daysBackElement = document.querySelector("[id=days] .digit-back");
+    //   // const hourBackElement = document.querySelector("[id=hours] .digit-back");
+    //   const minutesBackElement = document.querySelector(
+    //     "[id=minutes] .digit-back"
+    //   );
+    //   updateDaysElements([daysBackElement], "17");
+    //   // updateHoursElements([hourBackElement], "26");
+    //   updateMinutesElements([minutesBackElement], "35");
+    // }, 15000);
   });
 
   /**
@@ -223,26 +241,23 @@
       // // daysDigit
       //   currentSecond = 0;
       // }
-      const {
-        daysDigit: days,
-        hoursDigit: hours,
-        minutesDigit: minutes,
-        stopTimer: happyHoliday,
-        flipDigitObj,
-      } = dataObj;
+      if (dataObj.daysHoursOrMinutesChanged) {
+        /**
+         * check if daysFlip, hoursFlip and minutesFlip are true
+         * assign value false if daysFlip, hoursFlip and minutesFlip are true
+         * **/
 
-      /**
-       * check if daysFlip, hoursFlip and minutesFlip are true
-       * assign value false if daysFlip, hoursFlip and minutesFlip are true
-       * **/
+        changeDaysFlipHoursFlipMinutesFlipPropToFalse(dataObj.flipDigitObj);
 
-      changeDaysFlipHoursFlipMinutesFlipPropToFalse(flipDigitObj);
+        /**
+         * if daysFlip, hoursFlip and minutesFlip is false remove class flip-bottom-transition
+         * **/
 
-      /**
-       * if daysFlip, hoursFlip and minutesFlip is false remove class flip-bottom-transition
-       * **/
-
-      removeFlipClassToDigitElement(dataObj.flipDigitObj);
+        removeFlipClassToDigitElement(dataObj.flipDigitObj);
+        dataObj.removeAriaLive();
+        setValueToDefaultValue.call(dataObj, "elementHasAriaLive");
+        dataObj.daysHoursOrMinutesChanged = false;
+      }
 
       switch (currentSecond) {
         case 60:
@@ -253,6 +268,13 @@
           // console.log("days", days);
           // console.log("hours", hours);
           // console.log("minutes", minutes);
+          const {
+            daysDigit: days,
+            hoursDigit: hours,
+            minutesDigit: minutes,
+            stopTimer: happyHoliday,
+            flipDigitObj,
+          } = dataObj;
           if (days === 0 && hours === 0 && minutes === 0) {
             // call countDownTimer assign the return value of setInterval which will be
             // the value to stop setInterval to the identifer something stopTimer,etc
@@ -264,22 +286,54 @@
           handleMinutesChange("minutesDigit");
           handleHoursChange("hoursDigit");
           // console.log(dataObj);
+          /**
+           * run/call/invoke/execute func that will check which property in flipDigitObj has the
+           * value true put them in an array.
+           * get first element/value of that array
+           * add aria-live="assertive" to that element. save this element to a reference in our
+           * stateObj so we can pass that element into func that will remove aria-live="assertive"
+           * have the func that will remove aria-live attribute in our stateObj
+           * **/
+          // return array [["daysFlip", false],["hoursFlip", false],["minutesFlip", false]]
+          const arrayOfKeyAndValues = convertObjIntoArrOfKeyAndValuesSubarray(
+            dataObj.flipDigitObj
+          );
+          // return array [["daysFlip", "hoursFlip"]]
+          const propertiesWithValueOfTrue =
+            findPropertyWithValueOfTrue(arrayOfKeyAndValues);
+          // returns "daysFlip"
+          const firstStringPropertyOfArray = firstValueOfArray(
+            propertiesWithValueOfTrue
+          );
+          // returns ["days" "lip"]
+          const splitStringToGetDayHourOrMinuteStr = splitStringAtValue(
+            firstStringPropertyOfArray,
+            "F"
+          );
+          // returns "days"
+          const stringWeUseToGetElement = firstValueOfArray(
+            splitStringToGetDayHourOrMinuteStr
+          );
+          const addAriaLiveToElement = elementWeWillAddAriaLive(
+            stringWeUseToGetElement,
+            dataObj.arrOfDigitContainerParents
+          );
+          addAttribute(addAriaLiveToElement, "aria-live", "assertive");
+          assignValueToProperty(
+            dataObj,
+            "elementHasAriaLive",
+            addAriaLiveToElement
+          );
+          console.log(dataObj);
           break;
       }
-      /**
-       * run/call/invoke/execute func that will check which property in flipDigitObj has the
-       * value true put them in an array.
-       * get first element/value of that array
-       * add aria-live="assertive" to that element. save this element to a reference in our
-       * stateObj so we can pass that element into func that will remove aria-live="assertive"
-       * have the func that will remove aria-live attribute in our stateObj
-       * **/
-      /**
-       * if daysFlip, hoursFlip and minutesFlip is true add class flip-bottom-transition
-       * **/
+      if (dataObj.daysHoursOrMinutesChanged) {
+        /**
+         * if daysFlip, hoursFlip and minutesFlip is true add class flip-bottom-transition
+         * **/
 
-      addFlipClassToDigitElement(dataObj.flipDigitObj);
-      /** 
+        addFlipClassToDigitElement(dataObj.flipDigitObj);
+        /** 
       // if we call our func that will update digit element here
       // with the variables/identifiers we declared using destructuring
       // before the switch, the values of the variables
@@ -287,34 +341,36 @@
       console.log("days", days);
       console.log("hours", hours);
       console.log("minutes", minutes); **/
-      // console.log(dataObj);
-      const updateData = prepDigitValueForUpdate(dataObj, currentSecond);
-      // const { daysStrForm, hoursStrForm, minutesStrForm, secondsStrForm } =
-      //   updateData;
-      // console.log(updateData);
-      /**
-       * use switch to see which updateElementFunc will run
-       * we dont want to execute/call/invoke all four updateElementFunc
-       * minDigit: update when second is 59
-       * hourDigit: update when minute is 59
-       * dayDigit: update when hour is 23
-       * ** come up with better approach to updating digit element ***
-       * thinking about calling func that will update digit element and add flip class
-       * in handleDaysChange,handleHoursChange,handleMinuteChange
-       * ** thinking it will be better to call func outside of handle Funcs **
-       * **/
+        // console.log(dataObj);
+        const updateData = prepDigitValueForUpdate(dataObj, currentSecond);
+        // const { daysStrForm, hoursStrForm, minutesStrForm, secondsStrForm } =
+        //   updateData;
+        // console.log(updateData);
+        /**
+         * use switch to see which updateElementFunc will run
+         * we dont want to execute/call/invoke all four updateElementFunc
+         * minDigit: update when second is 59
+         * hourDigit: update when minute is 59
+         * dayDigit: update when hour is 23
+         * ** come up with better approach to updating digit element ***
+         * thinking about calling func that will update digit element and add flip class
+         * in handleDaysChange,handleHoursChange,handleMinuteChange
+         * ** thinking it will be better to call func outside of handle Funcs **
+         * **/
 
-      /**
-       * if daysFlip, hoursFlip and minutesFlip is true run
-       * func to change text content of element
-       * **/
+        /**
+         * if daysFlip, hoursFlip and minutesFlip is true run
+         * func to change text content of element
+         * **/
 
-      invokeOurUpdateElementFuncs(updateData);
+        invokeOurUpdateElementFuncs(updateData);
+      }
       // check length of seconds, convert to str
       const currSecStrForm = handlePrependExtraZeroOrNot(currentSecond);
       // update second digit element
       updateSecondElements(arrayOfSecondsDivElement, currSecStrForm);
       console.log(currentSecond);
+      console.log(dataObj);
     }, 1000);
   }
 
@@ -357,7 +413,6 @@
         daysDigit: days,
         hoursDigit: hours,
         minutesDigit: minutes,
-        flipDigitObj,
       } = dataObj;
       // use switch
       switch (daysHoursOrMin) {
@@ -398,10 +453,20 @@
               ? null
               : hours === 0
               ? ((dataObj[daysHoursOrMin] = 23),
-                changeHoursFlipProperty.call(flipDigitObj, "hoursFlip", true),
-                handleDays())
+                changeHoursFlipProperty.call(
+                  dataObj.flipDigitObj,
+                  "hoursFlip",
+                  true
+                ),
+                handleDays(),
+                (dataObj.daysHoursOrMinutesChanged = true))
               : (dataObj[daysHoursOrMin]--,
-                changeHoursFlipProperty.call(flipDigitObj, "hoursFlip", true))
+                changeHoursFlipProperty.call(
+                  dataObj.flipDigitObj,
+                  "hoursFlip",
+                  true
+                ),
+                (dataObj.daysHoursOrMinutesChanged = true))
             : null;
           break;
         case "minutesDigit":
@@ -420,13 +485,19 @@
           // days,hours,minutes are 0 if it is timer stops
           minutes === 0
             ? ((dataObj[daysHoursOrMin] = 59),
-              changeMinutesFlipProperty.call(flipDigitObj, "minutesFlip", true))
-            : (dataObj[daysHoursOrMin]--,
               changeMinutesFlipProperty.call(
-                flipDigitObj,
+                dataObj.flipDigitObj,
                 "minutesFlip",
                 true
-              ));
+              ),
+              (dataObj.daysHoursOrMinutesChanged = true))
+            : (dataObj[daysHoursOrMin]--,
+              changeMinutesFlipProperty.call(
+                dataObj.flipDigitObj,
+                "minutesFlip",
+                true
+              ),
+              (dataObj.daysHoursOrMinutesChanged = true));
           break;
       }
       console.log("here", dataObj[daysHoursOrMin]);
@@ -439,7 +510,7 @@
 
   function handleDays() {
     // access daysDigit value in dataObj
-    const { daysDigit: days, flipDigitObj } = dataObj;
+    const { daysDigit: days } = dataObj;
     // minuteDigit will be the value 23
     // we are calling this func inside of a switch statement when
     // string passed in is "hoursDigit"
@@ -452,7 +523,8 @@
     // using ternary operator
     days > 0
       ? (dataObj["daysDigit"]--,
-        changeDaysFlipProperty.call(flipDigitObj, "daysFlip", true))
+        changeDaysFlipProperty.call(dataObj.flipDigitObj, "daysFlip", true),
+        (dataObj.daysHoursOrMinutesChanged = true))
       : null;
   }
 
@@ -466,6 +538,7 @@
       minutesDigit: 1,
       hoursDigit: 1,
       daysDigit: 8,
+      daysHoursOrMinutesChanged: false,
       elementHasAriaLive: null,
       arrOfDigitContainerParents: [
         daysDigitContainerParent,
@@ -624,7 +697,9 @@
           },
         },
       },
-      removeAriaLive() {},
+      removeAriaLive() {
+        this.elementHasAriaLive.removeAttribute("aria-live");
+      },
       arrOfDays: [3, 5, 9],
       sumOfValuesInArray() {
         return this.arrOfDays.reduce((buildingUp, currentValue) => {
@@ -744,7 +819,7 @@
      const currentTimeObjInitial = getCurrentHourMinutes(dateObjInitial);
      * **/
     // const dateObjInitial = new Date();
-    console.log(dateObj.getSeconds());
+    // console.log(dateObj.getSeconds());
     const currentDateObjInitial = getCurrentYearMonthDate(dateObj);
     // pass initialCurrentDateObj as first argument/value to digitsElementsCalculation
     const initialCurrentDateObj = currentDateObjForDigitElementCalc();
@@ -765,6 +840,7 @@
       hourDigit,
       minuteDigit
     );
+
     // changing value of day,hour,minute digits element
     assignValuesToDigitELementsForInitialAppFunc(dataObj);
     // calling/executing/invoking our func that will add flip-animation to secondDigitBottom
@@ -784,6 +860,26 @@
   /**
    * user submitted date/time inputs
    * **/
+
+  function startCountdownTimerForUserInputs() {
+    // get currentDate obj for used with userInput date obj
+    const currentDateObjForUsedWithUserInput =
+      currentDateObjForDigitElementCalc();
+    // console.log(currentDateObjForUsedWithUserInput);
+    const { dayDigitForElement, hourDigit, minuteDigit } =
+      digitsElementsCalculation(
+        currentDateObjForUsedWithUserInput,
+        dataObj.userDateInput
+      );
+    // assign values to dayDigit,hourDigit,minuteDigit in dataObj for timer func
+    assignValueToDaysHoursMinutesDigitInDataObj(
+      dayDigitForElement,
+      hourDigit,
+      minuteDigit
+    );
+    // changing value of day,hour,minute digits element
+    updateDigitElementsValuesForUserInputs(dataObj);
+  }
 
   /**
    * pause/resume
@@ -1546,24 +1642,73 @@
    * helper funcs
    * **/
 
-  function assignValuesToDigitELementsForInitialAppFunc(dataInput) {
-    // pass in daysDigit,hoursDigit and minutesDigit after
-    // calling calculation func
-    // destructure
-    // need to add 0 to digits
-    // const [daysDigit, hoursDigit, minutesDigit] = rest;
-    // pass in dataInput into prepDigitValueForUpdate
-    const { daysStrForm, hoursStrForm, minutesStrForm } =
-      prepDigitValueForUpdate(dataInput);
-    // prepDigitValueForUpdate will return an object with our digit in string format
-    // dont need to use template literials when calling updateDaysElement
-    // destructure that obj getting day,hour,minute values
-    // assign digit value to days element
-    updateDaysElements(arrayOfDaysDivElement, daysStrForm);
-    // assign digit value to hours element
-    updateHoursElements(arrayOfHoursDivElement, hoursStrForm);
-    // assign digit value to minutes element
-    updateMinutesElements(arrayOfMinutesDivElement, minutesStrForm);
+  /**
+   * update days, hours minutes for initial start up
+   * **/
+
+  // function assignValuesToDigitELementsForInitialAppFunc(dataInput) {
+  //   // pass in daysDigit,hoursDigit and minutesDigit after
+  //   // calling calculation func
+  //   // destructure
+  //   // need to add 0 to digits
+  //   // const [daysDigit, hoursDigit, minutesDigit] = rest;
+  //   // pass in dataInput into prepDigitValueForUpdate
+  //   const { daysStrForm, hoursStrForm, minutesStrForm } =
+  //     prepDigitValueForUpdate(dataInput);
+  //   // prepDigitValueForUpdate will return an object with our digit in string format
+  //   // dont need to use template literials when calling updateDaysElement
+  //   // destructure that obj getting day,hour,minute values
+  //   // assign digit value to days element
+  //   updateDaysElements(arrayOfDaysDivElement, daysStrForm);
+  //   // assign digit value to hours element
+  //   updateHoursElements(arrayOfHoursDivElement, hoursStrForm);
+  //   // assign digit value to minutes element
+  //   updateMinutesElements(arrayOfMinutesDivElement, minutesStrForm);
+  // }
+
+  /**
+   * update days,hours minutes for user inputs
+   * **/
+
+  // function updateDigitElementsValuesForUserInputs(stateObj) {
+  //   // pass in dataInput into prepDigitValueForUpdate
+  //   const { daysStrForm, hoursStrForm, minutesStrForm } =
+  //     prepDigitValueForUpdate(stateObj);
+  //   // prepDigitValueForUpdate will return an object with our digit in string format
+  //   // dont need to use template literials when calling updateDaysElement
+  //   // destructure that obj getting day,hour,minute values
+  //   // assign digit value to days element
+  //   updateDaysElements(arrayOfDaysDivElement, daysStrForm);
+  //   // assign digit value to hours element
+  //   updateHoursElements(arrayOfHoursDivElement, hoursStrForm);
+  //   // assign digit value to minutes element
+  //   updateMinutesElements(arrayOfMinutesDivElement, minutesStrForm);
+  // }
+
+  /**
+   * update days,hours, minutes digit element factory func
+   * **/
+
+  function factoryFuncForUpdatingDigitElements() {
+    return function innerFunc(stateObj) {
+      // pass in daysDigit,hoursDigit and minutesDigit after
+      // calling calculation func
+      // destructure
+      // need to add 0 to digits
+      // const [daysDigit, hoursDigit, minutesDigit] = rest;
+      // pass in dataInput into prepDigitValueForUpdate
+      const { daysStrForm, hoursStrForm, minutesStrForm } =
+        prepDigitValueForUpdate(stateObj);
+      // prepDigitValueForUpdate will return an object with our digit in string format
+      // dont need to use template literials when calling updateDaysElement
+      // destructure that obj getting day,hour,minute values
+      // assign digit value to days element
+      updateDaysElements(arrayOfDaysDivElement, daysStrForm);
+      // assign digit value to hours element
+      updateHoursElements(arrayOfHoursDivElement, hoursStrForm);
+      // assign digit value to minutes element
+      updateMinutesElements(arrayOfMinutesDivElement, minutesStrForm);
+    };
   }
 
   /**
@@ -1731,6 +1876,7 @@
         // console.log("add");
         return function innerFunc({ daysFlip, hoursFlip, minutesFlip }) {
           // check days
+          // console.log(dataObj.flipDigitObj);
           // console.log(daysFlip, hoursFlip, minutesFlip);
           if (daysFlip) {
             addFlipClassToDaysBottomElement.call(
@@ -1787,6 +1933,98 @@
   /**
    * algorithm to handle screen readers adding/removing aria-live="assertive"
    * **/
+
+  function convertObjIntoArrOfKeyAndValuesSubarray(objInput) {
+    return Object.entries(objInput);
+  }
+
+  /**
+   * take array return from convertObjIntoArrOfKeyAndValuesSubarray
+   * loop through array to find property that has value of true
+   * **/
+
+  function findPropertyWithValueOfTrue(array) {
+    const copyOfArray = [].concat(array);
+    return copyOfArray.reduce(function findTruthy(buildingUp, currentValue) {
+      const [key, value] = currentValue;
+      if (value) buildingUp.push(key);
+      return buildingUp;
+    }, []);
+  }
+
+  /**
+   * get first value of array with string form of our properties
+   * in flipDigitObj in dataObj
+   * **/
+
+  /**
+   * split at F get first value of array. split returns an array
+   * **/
+
+  /**
+   * pass that string value and array of digit container parent
+   * filter out the element that matches the string
+   * **/
+
+  function elementWeWillAddAriaLive(string, array) {
+    const copyOfArray = [...array];
+    return copyOfArray.filter(function findElement(element) {
+      return element.getAttribute("id").includes(string);
+    })[0];
+  }
+
+  /**
+   * add aria-live="assertive" to that element
+   * **/
+
+  function addAttribute(element, attrInput, attrValue) {
+    element.setAttribute(attrInput, attrValue);
+  }
+
+  /**
+   * assign that element as a value to the property elementHasAriaLive in our dataObj
+   * might not need a reference to this element
+   * where we call removeAttribute will have the element we want to remove
+   * aria-live from assigned to a variable
+   * **/
+
+  function assignValueToProperty(objInput, property, element) {
+    objInput[property] = element;
+  }
+
+  /**
+   * once element update remove aria-live
+   * **/
+
+  function removeAttribute(element, attrInput) {
+    element.removeAttribute(attrInput);
+  }
+
+  /**
+   * split string
+   * **/
+
+  function splitStringAtValue(stringValue, splitValue) {
+    return stringValue.split(splitValue);
+  }
+
+  /**
+   * first value of array
+   * **/
+
+  function firstValueOfArray(arrInput) {
+    const copyOfArray = [...arrInput];
+    // const copyOfArray = [].concat(arrInput);
+    return arrInput[0];
+  }
+
+  /**
+   * set value in obj to default value
+   * **/
+
+  function setValueToDefaultValue(property) {
+    this[property] = defaultValue;
+  }
 
   /**
    * TODO
@@ -1978,14 +2216,7 @@
       minutes: Number(userInputObj.minutes),
       meridiem: userInputObj.meridiem,
     };
-    // get currentDate obj for used with userInput date obj
-    const currentDateObjForUsedWithUserInput =
-      currentDateObjForDigitElementCalc();
-    console.log(currentDateObjForUsedWithUserInput);
-    digitsElementsCalculation(
-      currentDateObjForUsedWithUserInput,
-      dataObj.userDateInput
-    );
+
     console.log(dataObj);
     // this.reset();
   }
