@@ -148,7 +148,7 @@
   );
   // clicking on starting date button
   addEventListener.call(startingDateButton, "click", function TODO(event) {
-    dataObj.stopTimerID = countDownTimer();
+    dataObj.stopTimerID = countDownTimer(initialAppSetUp);
     // setTimeout(() => {
     //   const daysBackElement = document.querySelector("[id=days] .digit-back");
     //   // const hourBackElement = document.querySelector("[id=hours] .digit-back");
@@ -191,7 +191,7 @@
   // const stop = timer();
   // countDownTimer();
   // dataObj.stopTimer = countDownTimer();
-  function countDownTimer() {
+  function countDownTimer(callback) {
     let counter = 0;
     /**
      * setup initial second value and element here
@@ -220,7 +220,7 @@
       const currentDate = new Date();
       let currentSecond = 60 - currentDate.getSeconds();
       if (counter === 0) {
-        initialAppSetUp(currentDate);
+        callback(currentDate);
         addFlipAnimationClassToSecondBottomElement.call(
           secondDigitBottom,
           "flip-animation"
@@ -901,47 +901,66 @@
     // get values from our calculation helper to this func
     // then we will assign those values to daysDigit,hoursDigit and minuteDigit
     // in our dataObj
-    const arrOfDaysReadyForSumCalcFunc = handleDaysDigitCalculations(
-      currentDateObjDigitsEleCalc,
-      endDateObjDigitsEleCalc
-    );
-    // call sumCalculation func passing arrOfDaysReadyForSumCalcFunc
-    const sumNumOfDaysForDigitElement = sumCalculation(
-      arrOfDaysReadyForSumCalcFunc
-    );
-    console.log("sumNumOfDaysForDigitElement", sumNumOfDaysForDigitElement);
-    // calculating hrs, minute from state date and end date time values
-    // max total minute between state date and end date time will be
-    // 2880 because 1440 is total min in one day.
-    // possible total minute for state date and end date is 1440
-    // if user enter time for 12:59pm for end date
-    // state date time is 0:01 total minute between state and end date is greater than 1440
-    const objWithValueForHourAndMinuteDigitOrAddOneDayDigit =
-      handleHoursAndMinutesDigitCalculations(
+    const arrOfDaysForSumCalcFuncOrObjWithValuesForDataObj =
+      handleDaysOrDaysHoursMinsDigitCalculations(
         currentDateObjDigitsEleCalc,
         endDateObjDigitsEleCalc
       );
-    // we can destructure the hr and minute value because func will always return an obj with those values
-    const { hourDigit, minuteDigit } =
-      objWithValueForHourAndMinuteDigitOrAddOneDayDigit;
-    // value assigned to identifier will be based on a conditional check using ternary operator
-    const addingValueToSumNumOfDaysBasedOnPropertyOfObjReturnedFromHandleHourFunc =
-      objWithValueForHourAndMinuteDigitOrAddOneDayDigit.hasOwnProperty(
-        "addOneDayDigit"
-      )
-        ? sumNumOfDaysForDigitElement +
-          objWithValueForHourAndMinuteDigitOrAddOneDayDigit.addOneDayDigit
-        : null;
-    // return an obj with days, hr, and minute value for digit element
-    return {
-      dayDigitForElement:
-        addingValueToSumNumOfDaysBasedOnPropertyOfObjReturnedFromHandleHourFunc ==
-        null
-          ? sumNumOfDaysForDigitElement
-          : addingValueToSumNumOfDaysBasedOnPropertyOfObjReturnedFromHandleHourFunc,
-      hourDigit,
-      minuteDigit,
-    };
+    /**
+     * run algorithm based on value return from arrOfDaysForSumCalcFuncOrObjWithValuesForDataObj
+     * if obj return obj if array run algorithm
+     * **/
+    if (
+      typeof arrOfDaysForSumCalcFuncOrObjWithValuesForDataObj == "object" &&
+      !Array.isArray(arrOfDaysForSumCalcFuncOrObjWithValuesForDataObj)
+    ) {
+      // if we get to this if statement arrOfDaysForSumCalcFuncOrObjWithValuesForDataObj
+      // will be an object with properties
+      // {dayDigitForElement,
+      // hourDigit,
+      // minuteDigit}
+      return arrOfDaysForSumCalcFuncOrObjWithValuesForDataObj;
+    } else {
+      // if our algorithm enters this else statement
+      // arrOfDaysForSumCalcFuncOrObjWithValuesForDataObj will be an array
+      // call sumCalculation func passing arrOfDaysForSumCalcFuncOrObjWithValuesForDataObj
+      const sumNumOfDaysForDigitElement = sumCalculation(
+        arrOfDaysForSumCalcFuncOrObjWithValuesForDataObj
+      );
+      console.log("sumNumOfDaysForDigitElement", sumNumOfDaysForDigitElement);
+      // calculating hrs, minute from state date and end date time values
+      // max total minute between state date and end date time will be
+      // 2880 because 1440 is total min in one day.
+      // possible total minute for state date and end date is 1440
+      // if user enter time for 12:59pm for end date
+      // state date time is 0:01 total minute between state and end date is greater than 1440
+      const objWithValueForHourAndMinuteDigitOrAddOneDayDigit =
+        handleHoursAndMinutesDigitCalculations(
+          currentDateObjDigitsEleCalc,
+          endDateObjDigitsEleCalc
+        );
+      // we can destructure the hr and minute value because func will always return an obj with those values
+      const { hourDigit, minuteDigit } =
+        objWithValueForHourAndMinuteDigitOrAddOneDayDigit;
+      // value assigned to identifier will be based on a conditional check using ternary operator
+      const addingValueToSumNumOfDaysBasedOnPropertyOfObjReturnedFromHandleHourFunc =
+        objWithValueForHourAndMinuteDigitOrAddOneDayDigit.hasOwnProperty(
+          "addOneDayDigit"
+        )
+          ? sumNumOfDaysForDigitElement +
+            objWithValueForHourAndMinuteDigitOrAddOneDayDigit.addOneDayDigit
+          : null;
+      // return an obj with days, hr, and minute value for digit element
+      return {
+        dayDigitForElement:
+          addingValueToSumNumOfDaysBasedOnPropertyOfObjReturnedFromHandleHourFunc ==
+          null
+            ? sumNumOfDaysForDigitElement
+            : addingValueToSumNumOfDaysBasedOnPropertyOfObjReturnedFromHandleHourFunc,
+        hourDigit,
+        minuteDigit,
+      };
+    }
   }
 
   /**
@@ -949,8 +968,8 @@
    * *** previous efforts notes are in notes func at bottom of app ***
    * **/
   // go to getNextUpcomingHolidayValues func to test our algorithm
-  // handleDaysDigitCalculations(dataObj.currentDate, dataObj.defaultEndingDate);
-  function handleDaysDigitCalculations(...rest) {
+  // handleDaysOrDaysHoursMinsDigitCalculations(dataObj.currentDate, dataObj.defaultEndingDate);
+  function handleDaysOrDaysHoursMinsDigitCalculations(...rest) {
     // we want the year, month, and date
     // destructure both current and end obj
     const [currentDateObjHandleDaysDigit, endDateObjHandleDaysDigit] = rest;
@@ -1029,7 +1048,7 @@
         console.log("1");
         // current year and end year are the same
         if (currentMonth == endMonth) {
-          return calculateDaysWhenStartAndEndMonthAreSame(
+          return calculateDaysHrsMinsWhenStartAndEndMonthAreSame(
             currentDay,
             currentHour,
             currentMinute,
@@ -1346,7 +1365,7 @@
    * calc days digit same month
    * **/
 
-  function calculateDaysWhenStartAndEndMonthAreSame(...rest) {
+  function calculateDaysHrsMinsWhenStartAndEndMonthAreSame(...rest) {
     const totalMinInDay = 1440;
     const [
       startDay,
@@ -1356,6 +1375,7 @@
       endDateHour,
       endDateMinutes,
     ] = rest;
+    debugger;
     // total minutes of state date including hr and min
     const startDateTotalMinutes = figureOutTotalMinutesUpToDate(
       startDay,
@@ -1373,16 +1393,91 @@
       endDateTotalMinutes,
       startDateTotalMinutes
     );
-    // divide above value by 1440 to get number of day(s)
-    const numOfDaysWithDecimal = division(
-      differenceBetweenEndAndStateDate,
-      totalMinInDay
-    );
-    // use Math.floor to get value without decimal
-    console.log("Math.floor of days", Math.floor(numOfDaysWithDecimal));
-    return Math.floor(numOfDaysWithDecimal);
+    /**
+     * another approach this func will return an object of days,hours,minutes
+     * that we will use to assign values to daysDigit,hoursDigit,minuteDigit
+     * in dataObj
+     **/
+    switch (true) {
+      case differenceBetweenEndAndStateDate >= 1440:
+        // calc days,hours and minutes
+        const { numOfDays, numOfHours, numOfMinutes } =
+          minutesGreaterThanTotalMinutesInDay(differenceBetweenEndAndStateDate);
+        return {
+          dayDigitForElement: numOfDays,
+          hourDigit: numOfHours,
+          minuteDigit: numOfMinutes,
+        };
+      case differenceBetweenEndAndStateDate > 60 &&
+        differenceBetweenEndAndStateDate < 1440:
+        // days will be 0. we want to calculate hrs and minutes
+        const { daysForDigit, hoursForDigit, minutesForDigit } =
+          minutesGreaterThanMinsInHrLessThanTotalMinsInDay(
+            differenceBetweenEndAndStateDate
+          );
+        return {
+          dayDigitForElement: daysForDigit,
+          hourDigit: hoursForDigit,
+          minuteDigit: minutesForDigit,
+        };
+      case differenceBetweenEndAndStateDate < 60:
+        // days and hours will be 0
+        return {
+          dayDigitForElement: 0,
+          hourDigit: 0,
+          minuteDigit: differenceBetweenEndAndStateDate,
+        };
+    }
   }
 
+  /**
+   * minsGreaterThanTotalMinsInDay
+   * **/
+
+  function minutesGreaterThanTotalMinutesInDay(difference) {
+    // get remaining minutes in day using modulo 1440
+    const remainingMinutesInDay = useModuloToGetMinutesOrHoursForDigitElement(
+      difference,
+      1440
+    );
+    // subtract remaining minutes from difference(endDayTotalMins - startDayTotalMins)
+    const valueUseToGetNumsOfDays = subtraction(
+      difference,
+      remainingMinutesInDay
+    );
+    // divide value by 1440 to get days
+    const numOfDays = division(valueUseToGetNumsOfDays, 1440);
+    // get remaining minutes in hr using modulo 60
+    const numOfMinutes = useModuloToGetMinutesOrHoursForDigitElement(
+      remainingMinutesInDay,
+      60
+    );
+    // subtract that value from remaining minutes in day
+    const valueUseToGetHours = subtraction(remainingMinutesInDay, numOfMinutes);
+    // divide that value by 60min(hr) to get hrs
+    // second argument of division if left blank is 60 using default parameters
+    const numOfHours = division(valueUseToGetHours);
+    return { numOfDays, numOfHours, numOfMinutes };
+  }
+
+  /**
+   * minsGreaterThanMinInHrLessThanTotalMinsInDay
+   * **/
+
+  function minutesGreaterThanMinsInHrLessThanTotalMinsInDay(difference) {
+    // days will be 0
+    // get minutes using modulo 60
+    const numOfMinutes = useModuloToGetMinutesOrHoursForDigitElement(
+      difference,
+      60
+    );
+    // subtract that value from difference
+    const useToGetHoursDigit = subtraction(difference, numOfMinutes);
+    // divide that value by 60min(hr) to get hr
+    // second argument of division if left blank is 60 using default parameters
+    const numOfHours = division(useToGetHoursDigit);
+    return [0, numOfHours, numOfMinutes];
+  }
   /**
    * another approach: figure out days using minutes
    * **/
@@ -1575,6 +1670,7 @@
       minuteDigit
     );
     console.log(minuteUsedToCalcHours);
+    // taking minuteUsedToCalcHours dividing by 60
     const valueForHourDigit = division(minuteUsedToCalcHours);
     /**
      * when valueForHourDigit >= 24 we want to take valueForHourDigit - 24 from it
@@ -2071,10 +2167,10 @@
     dataObj.defaultEndingDate = {
       title,
       year,
-      month: "Feb",
-      day: 14,
+      month: "Jan",
+      day: 20,
       // day: Number(nextHolidayDate),
-      hours: 8,
+      hours: 18,
       minutes: 08,
     };
     // dataObj.defaultEndingDate.title = title;
@@ -2202,6 +2298,7 @@
       {});
     console.log(dataObj);
     // update userDateInput hour to 24hr format
+    // typeof hourConvertedToTwentyFourFormat will be string
     const hourConvertedToTwentyFourFormat =
       convertTwelveToTwentyFourHourFormat.call(userInputObj);
     console.log(
@@ -2212,11 +2309,13 @@
       year: Number(userInputObj.year),
       month: userInputObj.month,
       day: Number(userInputObj.day),
-      hours: Number(userInputObj.hours),
+      hours: Number(hourConvertedToTwentyFourFormat),
       minutes: Number(userInputObj.minutes),
       meridiem: userInputObj.meridiem,
     };
 
+    // call countdownTimer passing in startCountdownTimerForUserInputs when user click submit
+    // dataObj.stopTimerID = countDownTimer(startCountdownTimerForUserInputs);
     console.log(dataObj);
     // this.reset();
   }
@@ -2258,6 +2357,7 @@
    * **/
 
   function convertTwelveToTwentyFourHourFormat(userDateInput) {
+    // type of hours,minutes and meridiem will be string
     const { hours, minutes, meridiem } = this;
     // if hour is 12 and meridiem is AM subtract 12 from 12 to get 0 by return String(0)
     // if hour is 12 and meridiem is PM return hrInput because we want the value to be 12
@@ -2302,7 +2402,7 @@
     if (hourNumForm == 12) {
       return hrInput;
     } else {
-      // when user input is 1 to 11
+      // when user input is 1 to 11 and select PM
       // take hrInput add 12
       const hrConvertedToTwentyFourFormat = hourNumForm + 12;
       return String(hrConvertedToTwentyFourFormat);
@@ -2700,7 +2800,7 @@
    * if times is 0:26 call .getMinutes() to get 26 min
    * take 26 subtract it from 60 which will give us 34
    * we can use modulo operator
-   * total min % 60 will give us the reminding mins
+   * total min % 60 will give us the remaining mins
    * take that value subtract it from total min
    * then take value of subtracting reminder from total min divide by 60
    * to give us hrs
@@ -2901,7 +3001,10 @@ console.log(data);
      * handle days calculations
      * **/
 
-    function handleDaysDigitCalculations(currentDateObj, endDateObj) {
+    function handleDaysOrDaysHoursMinsDigitCalculations(
+      currentDateObj,
+      endDateObj
+    ) {
       // we will be working with hr and min
       // get hr from currentDateObj and minute by calling new Date()
       // then using method .getMinutes()
