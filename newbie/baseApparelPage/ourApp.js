@@ -8,6 +8,8 @@ function ourSelectors() {
   };
 }
 
+// we used css to handle invalid
+
 activeState();
 
 function activeState({ formElement, emailInputElement } = ourSelectors()) {

@@ -328,12 +328,24 @@ input[type="email"]:valid ~ .invalid-message{
     position: absolute;
     display: inline-block;
     margin: .5rem 0 0 2em;
+    left: 0;
+    bottom: -30px;
 }
+
+
 
 .error-img-container {
     position: absolute;
-    transform: translate(17em, -2.6em)
+    bottom: -28px;
 }
+
+@media screen and (min-width: 75rem){
+  .error-img-container {
+      transform: translate(17em, -2.9em)
+  }
+}
+
+
 
 /* invalid and valid state */
 
