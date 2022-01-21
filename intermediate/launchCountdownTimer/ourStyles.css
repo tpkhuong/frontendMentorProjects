@@ -689,6 +689,10 @@ label[for="meridiem"] {
 
 /* select element */
 
+select[id="month"]:invalid {
+  border-color: red;
+}
+
 select[id="month"] {
   grid-area: select-month;
 }

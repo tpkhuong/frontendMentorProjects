@@ -2,6 +2,8 @@
   //   declare selector at top of func
 
   const {
+    linkSelectMonth,
+    selectMonthInput,
     daysDigitContainerParent,
     hoursDigitContainerParent,
     minutesDigitContainerParent,
@@ -81,6 +83,7 @@
   const removeFlipClassToDaysBottomElement = removeClass();
   const removeFlipClassToHoursBottomElement = removeClass();
   const removeFlipClassToMinutesBottomElement = removeClass();
+  const removeFlipAnimationClassToSecondBottomElement = removeClass();
 
   /**
    * declare/define funcs that will return beginning, between or ending values of array
@@ -135,19 +138,19 @@
     factoryFuncForUpdatingDigitElements();
 
   // add event listeners
-  addEventListener.call(userInputModalDiv, "change", function TODO(event) {
+  addListener.call(userInputModalDiv, "change", function TODO(event) {
     if (event.target.value == "Mar") {
       console.log("Hello");
     }
   });
   // get user input
-  addEventListener.call(
+  addListener.call(
     formElement,
     "submit",
     getUserDateFromInputsAndAssignValuesToDataObj
   );
   // clicking on starting date button
-  addEventListener.call(startingDateButton, "click", function TODO(event) {
+  addListener.call(startingDateButton, "click", function TODO(event) {
     dataObj.stopTimerID = countDownTimer(initialAppSetUp);
     // setTimeout(() => {
     //   const daysBackElement = document.querySelector("[id=days] .digit-back");
@@ -159,6 +162,12 @@
     //   // updateHoursElements([hourBackElement], "26");
     //   updateMinutesElements([minutesBackElement], "35");
     // }, 15000);
+  });
+
+  linkSelectMonth.addEventListener("click", (event) => {
+    event.preventDefault();
+    selectMonthInput.focus();
+    console.log(selectMonthInput);
   });
 
   /**
@@ -193,6 +202,12 @@
   // dataObj.stopTimer = countDownTimer();
   function countDownTimer(callback) {
     let counter = 0;
+    setTimeout(function removeInitialAriaLive() {
+      console.log("settimeout");
+      if (daysDigitContainerParent.hasAttribute("aria-live")) {
+        removeAttribute(daysDigitContainerParent, "aria-live");
+      }
+    }, 5000);
     /**
      * setup initial second value and element here
      * initial second and when setInterval func is called seconds are different
@@ -272,13 +287,18 @@
             daysDigit: days,
             hoursDigit: hours,
             minutesDigit: minutes,
-            stopTimer: happyHoliday,
+            stopTimerID: happyHoliday,
             flipDigitObj,
           } = dataObj;
           if (days === 0 && hours === 0 && minutes === 0) {
             // call countDownTimer assign the return value of setInterval which will be
             // the value to stop setInterval to the identifer something stopTimer,etc
             // we will use that value assign to stopTimer as an argument to clearInterval(stopTimer)
+            // remove flip-animation on second digit bottom
+            removeFlipAnimationClassToSecondBottomElement.call(
+              secondDigitBottom,
+              "flip-animation"
+            );
             clearInterval(happyHoliday);
           }
           break;
@@ -867,8 +887,13 @@
       currentDateObjForDigitElementCalc();
     // console.log(currentDateObjForUsedWithUserInput);
     const { dayDigitForElement, hourDigit, minuteDigit } =
+      /**
+       * pass in obj with these properties: {year,month,day,time:{hours,minutes}}
+       * as first argument/value to digitsElementsCalculation to test timer
+       * **/
       digitsElementsCalculation(
-        currentDateObjForUsedWithUserInput,
+        // currentDateObjForUsedWithUserInput,
+        { year: 2022, month: "Jan", day: 20, time: { hours: 10, minutes: 59 } },
         dataObj.userDateInput
       );
     // assign values to dayDigit,hourDigit,minuteDigit in dataObj for timer func
@@ -1001,7 +1026,11 @@
       currentMonth === endMonth &&
       currentDay === endDay
     ) {
-      return 0;
+      // calculate hr and minute
+      return calculateHrAndMinutesWhenYearMonthDaySame(
+        { currentHour, currentMinute },
+        { endHour, endMinute }
+      );
     } else {
       //
       return dayDigitsWorkingWithYear(
@@ -1375,7 +1404,7 @@
       endDateHour,
       endDateMinutes,
     ] = rest;
-    debugger;
+
     // total minutes of state date including hr and min
     const startDateTotalMinutes = figureOutTotalMinutesUpToDate(
       startDay,
@@ -1411,7 +1440,7 @@
       case differenceBetweenEndAndStateDate > 60 &&
         differenceBetweenEndAndStateDate < 1440:
         // days will be 0. we want to calculate hrs and minutes
-        const { daysForDigit, hoursForDigit, minutesForDigit } =
+        const [daysForDigit, hoursForDigit, minutesForDigit] =
           minutesGreaterThanMinsInHrLessThanTotalMinsInDay(
             differenceBetweenEndAndStateDate
           );
@@ -1478,6 +1507,44 @@
     const numOfHours = division(useToGetHoursDigit);
     return [0, numOfHours, numOfMinutes];
   }
+
+  /**
+   * calculate hrs and minutes when year,month,day same
+   * **/
+
+  function calculateHrAndMinutesWhenYearMonthDaySame(
+    currentTimeData,
+    endTimeData
+  ) {
+    const { currentHour, currentMinute } = currentTimeData;
+    const { endHour, endMinute } = endTimeData;
+    // get end total minuts and subtract current total minutes
+    const totalMinOfStartHrAndMin = multiply(currentHour) + currentMinute;
+    const totalMinOfEndHrAndMin = multiply(endHour) + endMinute;
+    const differenceBetweenStartAndEndHrMins = subtraction(
+      totalMinOfEndHrAndMin,
+      totalMinOfStartHrAndMin
+    );
+
+    if (differenceBetweenStartAndEndHrMins < 60) {
+      return {
+        dayDigitForElement: 0,
+        hourDigit: 0,
+        minuteDigit: differenceBetweenStartAndEndHrMins,
+      };
+    } else {
+      const [dayDigit, hourDigit, minuteDigit] =
+        minutesGreaterThanMinsInHrLessThanTotalMinsInDay(
+          differenceBetweenStartAndEndHrMins
+        );
+      return {
+        dayDigitForElement: dayDigit,
+        hourDigit: hourDigit,
+        minuteDigit: minuteDigit,
+      };
+    }
+  }
+
   /**
    * another approach: figure out days using minutes
    * **/
@@ -2119,7 +2186,7 @@
    * **/
 
   function setValueToDefaultValue(property) {
-    this[property] = defaultValue;
+    this[property] = false;
   }
 
   /**
@@ -2168,7 +2235,7 @@
       title,
       year,
       month: "Jan",
-      day: 20,
+      day: 21,
       // day: Number(nextHolidayDate),
       hours: 18,
       minutes: 08,
@@ -2280,6 +2347,7 @@
      * event.preventDefault() will keep our form with user input element
      * on screen when submit button is clicked
      * **/
+    console.log(selectMonthInput);
     // event.preventDefault();
     console.log(monthSelectElement.value);
     const userInputObj = Array.prototype.slice
@@ -2567,8 +2635,8 @@
    * **/
 
   /**
-   * how to use addEventListener below
-   * addEventListener.call(effortTwo, "keydown", testingCallback);
+   * how to use addListener below
+   * addListener.call(effortTwo, "keydown", testingCallback);
    * **/
 
   // consoleElement(
@@ -2582,7 +2650,7 @@
   //   console.log(element);
   // }
 
-  function addEventListener(eventStr, eventCallback) {
+  function addListener(eventStr, eventCallback) {
     this.addEventListener(eventStr, eventCallback);
     // console.log(eventStr);
     // console.log(eventCallback);
@@ -2714,6 +2782,10 @@
    * **/
 
   function ourSelectors() {
+    // test link to month select input
+    const linkSelectMonth = document.querySelector("[href='#month']");
+    // select month
+    const selectMonthInput = document.getElementById("month");
     // digit container parent
     const daysDigitContainerParent = document.querySelector(
       "[id='days-digit-container-parent']"
@@ -2759,6 +2831,8 @@
     // const effortTwo = document.querySelector("digit-style-wrapper-two");
 
     return {
+      linkSelectMonth,
+      selectMonthInput,
       daysDigitContainerParent,
       hoursDigitContainerParent,
       minutesDigitContainerParent,
