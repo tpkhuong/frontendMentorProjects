@@ -4,9 +4,8 @@ function ourSelectors() {
   var emailInput = document.querySelector("[id='email']");
   var passwordInput = document.querySelector("[id='password']");
   var formElement = document.querySelector(".form");
-  var arrInputElementsWithRequiredAttr = document.querySelectorAll(
-    "input[required]"
-  );
+  var arrInputElementsWithRequiredAttr =
+    document.querySelectorAll("input[required]");
   var bodyElement = document.querySelector("body");
 
   return {
@@ -38,8 +37,8 @@ function customeValidMessage(
   let imgContainerWithErrorImg;
   var testStr;
   formElement.addEventListener("submit", function showInvalidMessage(event) {
-    event.preventDefault();
-
+    // event.preventDefault();
+    console.log(event);
     /***** loop through the input elements *****/
     arrInputElementsWithRequiredAttr.forEach(function printStuff(eachInput) {
       if (!eachInput.validity.valid) {

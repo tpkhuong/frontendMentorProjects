@@ -392,7 +392,9 @@ label[for] {
 
 .error-img-container {
   position: absolute;
-  transform: translate(15em, 1em);
+  right: 18px;
+  top: 18px;
+  /* transform: translate(15em, 1em); */
 }
 
 input.invalid-message-border {
@@ -405,7 +407,7 @@ input.invalid-message-border {
 
 @media screen and (min-width: 84.375em) {
   .error-img-container {
-    transform: translate(21em, 1.2em);
+    /* transform: translate(21em, 1.2em); */
   }
 }
 
