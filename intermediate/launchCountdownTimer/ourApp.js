@@ -2,12 +2,13 @@
   //   declare selector at top of func
 
   const {
+    startDefaultCountdownBtn,
     linkSelectMonth,
     selectMonthInput,
     daysDigitContainerParent,
     hoursDigitContainerParent,
     minutesDigitContainerParent,
-    startingDateButton,
+    customDateButton,
     monthSelectElement,
     userInputModalDiv,
     formElement,
@@ -149,8 +150,34 @@
     "submit",
     getUserDateFromInputsAndAssignValuesToDataObj
   );
-  // clicking on starting date button
-  addListener.call(startingDateButton, "click", function TODO(event) {
+  // start next holiday countdown
+  addListener.call(startDefaultCountdownBtn, "click", function TODO(event) {
+    /**
+     * this element the back-of-start-timer button has a transition of opacity 0
+     * that takes 500ms to complete (half a second)
+     * **/
+    this.attributes["button-pressed"].value = "true";
+
+    /**
+     * setTimeout func will add class to this element of hide which will declare
+     * display: none to the element just as its opactity reaches 0
+     * giving it a fade effect
+     * *******
+     * also at the same time adding class display-revert to
+     * next sibling element of start button which will declare
+     * display: block because the element we add class display-revert is a block element
+     * initially we have display: none on style-wrapper element
+     * we are approaching this way because we dont want the scrollbar to appear
+     * as the button opacity is approaching 0
+     * **/
+    setTimeout(() => {
+      this.classList.add("hide");
+      this.nextElementSibling.classList.add("display-revert");
+    }, 495);
+    // dataObj.stopTimerID = countDownTimer(initialAppSetUp);
+  });
+  // clicking on custom date button
+  addListener.call(customDateButton, "click", function TODO(event) {
     dataObj.stopTimerID = countDownTimer(initialAppSetUp);
     // setTimeout(() => {
     //   const daysBackElement = document.querySelector("[id=days] .digit-back");
@@ -164,11 +191,11 @@
     // }, 15000);
   });
 
-  linkSelectMonth.addEventListener("click", (event) => {
-    event.preventDefault();
-    selectMonthInput.focus();
-    console.log(selectMonthInput);
-  });
+  // linkSelectMonth.addEventListener("click", (event) => {
+  //   event.preventDefault();
+  //   selectMonthInput.focus();
+  //   console.log(selectMonthInput);
+  // });
 
   /**
    * call our initialAppSetUp here
@@ -2782,6 +2809,10 @@
    * **/
 
   function ourSelectors() {
+    // start next countdown timer button
+    const startDefaultCountdownBtn = document.querySelector(
+      ".back-of-start-timer"
+    );
     // test link to month select input
     const linkSelectMonth = document.querySelector("[href='#month']");
     // select month
@@ -2797,7 +2828,7 @@
       "[id='minutes-digit-container-parent']"
     );
     // starting date button
-    const startingDateButton = document.querySelector(".modal-launcher-back");
+    const customDateButton = document.querySelector(".modal-launcher-back");
     const monthSelectElement = document.querySelector("select[id='month']");
     // form
     const formElement = document.querySelector("form");
@@ -2831,12 +2862,13 @@
     // const effortTwo = document.querySelector("digit-style-wrapper-two");
 
     return {
+      startDefaultCountdownBtn,
       linkSelectMonth,
       selectMonthInput,
       daysDigitContainerParent,
       hoursDigitContainerParent,
       minutesDigitContainerParent,
-      startingDateButton,
+      customDateButton,
       monthSelectElement,
       formElement,
       userInputModalDiv,
