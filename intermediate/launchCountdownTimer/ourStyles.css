@@ -438,6 +438,10 @@ a:hover {
 }
 
 /* general styles */
+[role="button"] {
+  background-color: var(--btn-bg, var(--col-neutral-white));
+  color: var(--btn-fg, var(--col-primary-soft-red-bottom));
+}
 
 main[role="main"] {
   height: 100%;
@@ -484,6 +488,103 @@ main[role="main"] {
   max-width: 23ch;
   text-align: center;
   margin-inline: auto;
+}
+
+/* button to start default holiday countdown */
+
+.back-of-start-timer,
+.front-of-start-timer {
+  border-radius: 8px;
+}
+
+.back-of-start-timer {
+  padding: 0;
+  --btn-bg: var(--col-neutral-dark-blue-bottom);
+  margin-block: 180px;
+  margin-block-end: 314px;
+  opacity: 1;
+  transition: opacity 500ms ease-out;
+}
+
+/* when user click on button change attribute button-pressed="true"
+apply display: none to that element
+*/
+
+.front-of-start-timer {
+  /* this element is a span which is an inline element
+  its width will be intrinsic to the content
+  we declared display: block;
+  to make its width the size of its parent the button which is the background
+  */
+  /* --btn-bg: red; */
+  /***  
+  we declared --btn-bg and --btn-fg on this element parent which is
+  .back-of-start-timer with this selector [role="button"] with these declarations
+  
+  background-color: var(--btn-bg, var(--col-neutral-white));
+  color: var(--btn-fg, var(--col-primary-soft-red-bottom));
+
+  if we declare these code
+  --btn-bg: red;
+  --btn-fg: white; on .back-of-start-timer
+  and we didnt declare any background-color or color on this element then
+  this element will inherit background-color and color from its parent which is
+  element with class .back-of-start-timer
+
+  any element with attribute role="button" can use custom variables --btn-bg and --btn-fg
+  however declarations below will not make bg of element with this class red and color
+  var(--col-primary-soft-red-bottom) because we didn't tell the browser which property we
+  want to assign property value --btn-bg and --btn-fg to
+  --btn-bg: red;
+  --btn-fg: var(--col-primary-soft-red-bottom);
+  if we want code above to work we have to use these code
+  background-color: var(--btn-bg);
+  color: var(--btn-fg)
+  
+  ***/
+  display: block;
+  font-size: 1.7rem;
+  padding: 16px;
+  background-color: var(--col-neutral-white);
+  color: var(--col-primary-soft-red-bottom);
+  transform: translateY(-8px);
+  transition: transform 500ms ease-in;
+}
+
+.back-of-start-timer:hover .front-of-start-timer {
+  transform: translateY(-12px);
+  transition: transform 500ms ease-in;
+}
+
+/* .back-of-start-timer:focus .front-of-start-timer {
+  transform: translateY(-12px);
+  transition: transform 500ms ease-in;
+} */
+
+.back-of-start-timer:active .front-of-start-timer {
+  transform: translateY(-2px);
+  transition: transform 500ms ease-out;
+}
+
+/* .back-of-start-timer:not(:active) .front-of-start-timer {
+  transform: translateY(-10px);
+  transition: transform 500ms ease-out;
+} */
+
+.back-of-start-timer[button-pressed="true"] {
+  opacity: 0;
+  transition: opacity 500ms ease-in;
+}
+
+.style-wrapper {
+  display: none;
+}
+
+/* .back-of-start-timer[button-pressed="false"] + .style-wrapper {
+  display: none;
+} */
+
+.back-of-start-timer[button-pressed="true"] + .style-wrapper {
 }
 
 /* digits */
@@ -720,7 +821,7 @@ button[type="submit"] {
   margin-block: 10px;
 } */
 
-/* button */
+/* button launch ending date modal */
 
 [class="modal-launcher-back"]:focus [class="modal-launcher-front"],
 [class="modal-launcher-back"]:hover [class="modal-launcher-front"] {
@@ -810,3 +911,13 @@ button[type="submit"] {
 [class="social-media-icons"] svg path {
   fill: var(--col-primary-grayish-blue);
 }
+
+.hide {
+  display: none;
+}
+
+.display-revert {
+  display: revert;
+}
+
+/* add display: none to the parent of the element we want to transition on to the page */
