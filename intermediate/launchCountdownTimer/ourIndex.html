@@ -20,7 +20,7 @@
     <title>Launch Countdown Timer</title>
   </head>
   <body>
-    <a href="#month">Go to Select Month</a>
+    <!-- <a onclick="" href="#month">Go to Select Month</a> -->
     <!-- keep track of days, hours, mins, seconds -->
     <!-- when either days, hours, mins, seconds reaches 0 apply display none -->
     <main role="main">
@@ -40,7 +40,15 @@
           when we used aria-hidden on second element, everytime second element changed
           screen reader did not announce
           -->
-          <div class="test-wrapper">
+          <button
+            role="button"
+            aria-label="start countdown for next holiday"
+            button-pressed="false"
+            class="back-of-start-timer"
+          >
+            <span class="front-of-start-timer"> Start Countdown </span>
+          </button>
+          <div class="style-wrapper">
             <div class="countdown-digits-container" aria-atomic="true">
               <!-- aria-atomic true on container of our days,hours,minutes,second element
             does not announce anything.
@@ -216,10 +224,10 @@
             <button
               role="button"
               class="modal-launcher-back"
-              aria-label="enter starting date"
+              aria-label="launch ending date modal"
               user-clicked="false"
             >
-              <span class="modal-launcher-front">Starting Date </span>
+              <span class="modal-launcher-front">Custom Ending Date </span>
             </button>
             <!-- user input -->
             <!-- enter unique countdown date -->
@@ -390,7 +398,7 @@
                     <option value="PM">PM</option>
                   </select>
                 </div>
-                <button type="submit">Submit Date</button>
+                <button role="button" type="submit">Submit Date</button>
               </form>
             </div>
           </div>
