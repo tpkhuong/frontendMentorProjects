@@ -490,6 +490,10 @@ main[role="main"] {
   margin-inline: auto;
 }
 
+.next-holiday-text {
+  color: var(--col-primary-soft-red-top);
+}
+
 /* button to start default holiday countdown */
 
 .back-of-start-timer,
