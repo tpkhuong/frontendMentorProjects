@@ -2,6 +2,7 @@
   //   declare selector at top of func
 
   const {
+    nextHolidayTextElement,
     startDefaultCountdownBtn,
     linkSelectMonth,
     selectMonthInput,
@@ -151,31 +152,11 @@
     getUserDateFromInputsAndAssignValuesToDataObj
   );
   // start next holiday countdown
-  addListener.call(startDefaultCountdownBtn, "click", function TODO(event) {
-    /**
-     * this element the back-of-start-timer button has a transition of opacity 0
-     * that takes 500ms to complete (half a second)
-     * **/
-    this.attributes["button-pressed"].value = "true";
-
-    /**
-     * setTimeout func will add class to this element of hide which will declare
-     * display: none to the element just as its opactity reaches 0
-     * giving it a fade effect
-     * *******
-     * also at the same time adding class display-revert to
-     * next sibling element of start button which will declare
-     * display: block because the element we add class display-revert is a block element
-     * initially we have display: none on style-wrapper element
-     * we are approaching this way because we dont want the scrollbar to appear
-     * as the button opacity is approaching 0
-     * **/
-    setTimeout(() => {
-      this.classList.add("hide");
-      this.nextElementSibling.classList.add("display-revert");
-    }, 495);
-    // dataObj.stopTimerID = countDownTimer(initialAppSetUp);
-  });
+  addListener.call(
+    startDefaultCountdownBtn,
+    "click",
+    fadeStartCountdownBtnShowDigitElements
+  );
   // clicking on custom date button
   addListener.call(customDateButton, "click", function TODO(event) {
     dataObj.stopTimerID = countDownTimer(initialAppSetUp);
@@ -663,16 +644,16 @@
               hours: 0,
               minutes: 00,
             },
-            20: {
-              title: "Happy Day!!!",
-              hours: 0,
-              minutes: 00,
-            },
-            26: {
-              title: "Happy Day Number Two",
-              hours: 0,
-              minutes: 00,
-            },
+            // 20: {
+            //   title: "Happy Day!!!",
+            //   hours: 0,
+            //   minutes: 00,
+            // },
+            // 26: {
+            //   title: "Happy Day Number Two",
+            //   hours: 0,
+            //   minutes: 00,
+            // },
           },
           Feb: {
             1: {
@@ -880,6 +861,7 @@
         dataObj.defaultEndingDate
       );
 
+    console.log(dataObj);
     // console.log(objOfValuesForDigitElement);
     // assign values to dayDigit,hourDigit,minuteDigit in dataObj for timer func
     assignValueToDaysHoursMinutesDigitInDataObj(
@@ -897,6 +879,11 @@
     //   secondDigitBottom,
     //   arrayOfSecondsDivElement
     // );
+    /**
+     * change title to match next holiday
+     * **/
+
+    changeTitleToMatchNextHoliday(dataObj.defaultEndingDate.title);
     // dataObj.stopTimerID = countDownTimer();
     /**
      * console.log("calling digitsElementsCalc func inside initialApp Func");
@@ -906,6 +893,7 @@
 
   /**
    * user submitted date/time inputs
+   * func below is called in getUserDateFromInputsAndAssignValuesToDataObj
    * **/
 
   function startCountdownTimerForUserInputs() {
@@ -2248,8 +2236,31 @@
       arrOfHolidayDates,
       day
     );
-    const { title, hours, minutes } =
-      dataObj.datesOfHoliday[`${year}`][month][nextHolidayDate];
+    /**
+     * handle the edge case of when the next holiday date is in a month greater than
+     * current month
+     * ex: holiday in Jan is Jan 17 when current date is Jan 17 or greater
+     * the array return from findDatesGreaterThanCurrentDateUsingFilter will be empty
+     * nextHolidayDate will be undefined falsy value
+     * **/
+    if (nextHolidayDate) {
+      const { title, hours, minutes } =
+        dataObj.datesOfHoliday[`${year}`][month][nextHolidayDate];
+      dataObj.defaultEndingDate = {
+        title,
+        year,
+        month,
+        // day: 23,
+        day: Number(nextHolidayDate),
+        hours,
+        minutes,
+      };
+    } else {
+      dataObj.defaultEndingDate = currentMonthHasZeroHolidayDatesLeft(
+        year,
+        month
+      );
+    }
     // console.log(dataObj.datesOfHoliday[`${year}`][month][nextHolidayDate]);
     // using reduce
     /**const arrWithArrayOfDatesAndObj = Object.entries(objOfMonthHolidayDates);
@@ -2258,21 +2269,58 @@
       day
     );
     console.log(arrOfObjs[0]);**/
-    dataObj.defaultEndingDate = {
-      title,
-      year,
-      month: "Jan",
-      day: 21,
-      // day: Number(nextHolidayDate),
-      hours: 18,
-      minutes: 08,
-    };
+
     // dataObj.defaultEndingDate.title = title;
     // dataObj.defaultEndingDate.year = year;
     // dataObj.defaultEndingDate.month = month;
     // dataObj.defaultEndingDate.day = day;
     // dataObj.defaultEndingDate.hours = hours;
     // dataObj.defaultEndingDate.minutes = minutes;
+  }
+
+  /**
+   * func will find next holiday date when there is no more holiday day dates
+   * for current month
+   * **/
+
+  function currentMonthHasZeroHolidayDatesLeft(currentYear, currentMonth) {
+    /**
+     * currentYear passed in will be a typeof "number"
+     * **/
+    // this func will return an object we will assign to dataObj.defaultEndingDate
+    // use Object.keys on dataObj[currentYear] to get an array of month that has holiday date
+    const arrOfMonthsWithHolidayDates = Object.keys(
+      dataObj.datesOfHoliday[`${currentYear}`]
+    );
+    // if a month does not have any holiday dates it will not be in the array return from
+    // calling Object.keys
+    // we will get the index of currentMonth in array return from Object.keys(dataObj[currentYear])
+    const indexOfCurrentMonth =
+      arrOfMonthsWithHolidayDates.indexOf(currentMonth);
+    // add 1 to that index to get next month string
+    const nextMonthThatHasHolidayDates =
+      arrOfMonthsWithHolidayDates[indexOfCurrentMonth + 1];
+    // use the month string to get holiday dates of that month
+    const nextMonthDatesOfHoliday =
+      dataObj.datesOfHoliday[`${currentYear}`][nextMonthThatHasHolidayDates];
+    const arrOfNextMonthWithHolidayDates = Object.keys(nextMonthDatesOfHoliday);
+    const [holidayDate] = findDatesGreaterThanCurrentDateUsingFilter(
+      arrOfNextMonthWithHolidayDates,
+      0
+    );
+    const { title, hours, minutes } =
+      dataObj.datesOfHoliday[`${currentYear}`][nextMonthThatHasHolidayDates][
+        holidayDate
+      ];
+    return {
+      title,
+      year: currentYear,
+      month: nextMonthThatHasHolidayDates,
+      day: Number(holidayDate),
+      // day: Number(nextHolidayDate),
+      hours,
+      minutes,
+    };
   }
 
   /**
@@ -2391,6 +2439,7 @@
         return buildingUp;
       },
       {});
+    console.log(userInputObj);
     console.log(dataObj);
     // update userDateInput hour to 24hr format
     // typeof hourConvertedToTwentyFourFormat will be string
@@ -2400,6 +2449,9 @@
       "hourConvertedToTwentyFourFormat",
       hourConvertedToTwentyFourFormat
     );
+    /**
+     * we can check our input validations here
+     * **/
     dataObj.userDateInput = {
       year: Number(userInputObj.year),
       month: userInputObj.month,
@@ -2413,6 +2465,37 @@
     // dataObj.stopTimerID = countDownTimer(startCountdownTimerForUserInputs);
     console.log(dataObj);
     // this.reset();
+  }
+
+  /**
+   * callback pass as an argument to start countdown btn click listener
+   * **/
+
+  function fadeStartCountdownBtnShowDigitElements(event) {
+    /**
+     * this element the back-of-start-timer button has a transition of opacity 0
+     * that takes 500ms to complete (half a second)
+     * **/
+
+    this.attributes["button-pressed"].value = "true";
+
+    /**
+     * setTimeout func will add class to this element of hide which will declare
+     * display: none to the element just as its opactity reaches 0
+     * giving it a fade effect
+     * *******
+     * also at the same time adding class display-revert to
+     * next sibling element of start button which will declare
+     * display: block because the element we add class display-revert is a block element
+     * initially we have display: none on style-wrapper element
+     * we are approaching this way because we dont want the scrollbar to appear
+     * as the button opacity is approaching 0
+     * **/
+    setTimeout(() => {
+      this.classList.add("hide");
+      this.nextElementSibling.classList.add("display-revert");
+    }, 495);
+    dataObj.stopTimerID = countDownTimer(initialAppSetUp);
   }
 
   /**
@@ -2805,10 +2888,20 @@
   }
 
   /**
+   * change title to match next holiday title
+   * **/
+
+  function changeTitleToMatchNextHoliday(holidayTitle) {
+    nextHolidayTextElement.textContent = holidayTitle;
+  }
+
+  /**
    * selecting our elements
    * **/
 
   function ourSelectors() {
+    // next holiday container
+    const nextHolidayTextElement = document.querySelector(".next-holiday-text");
     // start next countdown timer button
     const startDefaultCountdownBtn = document.querySelector(
       ".back-of-start-timer"
@@ -2862,6 +2955,7 @@
     // const effortTwo = document.querySelector("digit-style-wrapper-two");
 
     return {
+      nextHolidayTextElement,
       startDefaultCountdownBtn,
       linkSelectMonth,
       selectMonthInput,
