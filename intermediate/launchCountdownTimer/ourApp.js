@@ -5,13 +5,15 @@
     nextHolidayTextElement,
     startDefaultCountdownBtn,
     linkSelectMonth,
-    selectMonthInput,
     daysDigitContainerParent,
     hoursDigitContainerParent,
     minutesDigitContainerParent,
     customDateButton,
     monthSelectElement,
     userInputModalDiv,
+    arrayOfDaysSelectOptionElements,
+    selectMonthInput,
+    selectYearInput,
     formElement,
     daysDigitBottom,
     hoursDigitBottom,
@@ -141,11 +143,53 @@
 
   // add event listeners
   addListener.call(userInputModalDiv, "change", function TODO(event) {
-    if (event.target.value == "Mar") {
-      console.log("Hello");
+    console.log(arrayOfDaysSelectOptionElements);
+    const targetInputID = event.target.getAttribute("id");
+    const targetValue = event.target.value;
+    if (targetInputID == "month") {
+      switch (targetValue) {
+        case "Feb":
+          break;
+        case "Apr":
+        case "Jun":
+        case "Sep":
+        case "Nov":
+          console.log("30 days");
+          break;
+        default:
+          console.log("31 days");
+      }
     }
+    if (targetInputID == "year" && selectMonthInput.value == "Feb") {
+      const currentSelectYearModulo = targetValue % 4;
+      console.log(dataObj.previousSelectedYearInputModuloValue);
+      console.log(currentSelectYearModulo);
+      if (!dataObj.previousSelectedYearInputModuloValue) {
+        // first time dataObj.previousSelectedYearInputModuloValue will be null
+        console.log("previous is null");
+        daysForFebYearInputSelected(targetValue);
+      } else {
+        if (
+          currentSelectYearModulo !==
+          dataObj.previousSelectedYearInputModuloValue
+        ) {
+          // conditional check of previousSelectedYearInputModuloValue with
+          // currentSelected year modulo value when they do not equal to each other
+          // we will run func daysForFebYearInputSelected
+          daysForFebYearInputSelected(targetValue);
+        }
+      }
+    }
+    // if (event.target.value == "Mar") {
+    //   console.log("Hello");
+    // }
   });
   // get user input
+  /*
+  when user select a value for the inputs event will fire
+  addListener.call(formElement, "change", (event) => {
+    console.log(event);
+  });*/
   addListener.call(
     formElement,
     "submit",
@@ -159,7 +203,11 @@
   );
   // clicking on custom date button
   addListener.call(customDateButton, "click", function TODO(event) {
-    dataObj.stopTimerID = countDownTimer(initialAppSetUp);
+    this.attributes["user-clicked"].value = "true";
+    setTimeout(function focusFirstInput() {
+      selectMonthInput.focus();
+    }, 500);
+    // dataObj.stopTimerID = countDownTimer(initialAppSetUp);
     // setTimeout(() => {
     //   const daysBackElement = document.querySelector("[id=days] .digit-back");
     //   // const hourBackElement = document.querySelector("[id=hours] .digit-back");
@@ -617,6 +665,21 @@
         Nov: 30,
         Dec: 31,
       },
+      arrOfMonthStringsWorkingWithIndex: [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ],
+      previousSelectedYearInputModuloValue: null,
       /**
        * idea: since we will be working with the method .toDateString() on the Date obj
        * calling .split(" ") on that string which will return an array of day month date year
@@ -724,6 +787,9 @@
             },
           },
         },
+      },
+      findIndexOfMonthString(month) {
+        return this.arrOfMonthStringsWorkingWithIndex.indexOf(month);
       },
       removeAriaLive() {
         this.elementHasAriaLive.removeAttribute("aria-live");
@@ -1821,6 +1887,49 @@
    * **/
 
   /**
+   * input validation funcs
+   * **/
+
+  function inputValidation() {
+    //
+  }
+
+  // check year
+  function validationYearInput(startYear, endYear) {
+    // assume user want current year if year input is empty ""
+  }
+  // check month
+  function validationMonthInput(startMonth, endMonth) {}
+  // check day
+  function validationDayInput(startDay, endDay) {}
+  // check hours
+  function validationHoursInput(startHour, endHour) {}
+  // check minutes
+  function validationMinutesInput(startMinute, endMinute) {}
+
+  /**
+   * days option based on month selected
+   * **/
+
+  function daysOptionFebSelected() {}
+  function thirtyDaysOptionSelected() {}
+  function thirtyOneDaysOptionSelected() {}
+
+  // days for feb year input selected
+
+  function daysForFebYearInputSelected(selectedYear) {
+    // if user select option select year which is an empty string
+    // assign value null to previousSelectedYearInputModuloValue
+    if (selectedYear === "") {
+      dataObj.previousSelectedYearInputModuloValue = null;
+    } else {
+      // keep track of previous selected year modulo value so we dont run our algorithm
+      // to add hidden attr to days select option everytime year select option changes
+      dataObj.previousSelectedYearInputModuloValue = selectedYear % 4;
+    }
+  }
+
+  /**
    * update days, hours minutes for initial start up
    * **/
 
@@ -2439,8 +2548,7 @@
         return buildingUp;
       },
       {});
-    console.log(userInputObj);
-    console.log(dataObj);
+    console.log(Object.entries(userInputObj));
     // update userDateInput hour to 24hr format
     // typeof hourConvertedToTwentyFourFormat will be string
     const hourConvertedToTwentyFourFormat =
@@ -2495,7 +2603,10 @@
       this.classList.add("hide");
       this.nextElementSibling.classList.add("display-revert");
     }, 495);
-    dataObj.stopTimerID = countDownTimer(initialAppSetUp);
+    /**
+     * uncomment code below for production
+     * **/
+    // dataObj.stopTimerID = countDownTimer(initialAppSetUp);
   }
 
   /**
@@ -2908,8 +3019,7 @@
     );
     // test link to month select input
     const linkSelectMonth = document.querySelector("[href='#month']");
-    // select month
-    const selectMonthInput = document.getElementById("month");
+
     // digit container parent
     const daysDigitContainerParent = document.querySelector(
       "[id='days-digit-container-parent']"
@@ -2925,7 +3035,16 @@
     const monthSelectElement = document.querySelector("select[id='month']");
     // form
     const formElement = document.querySelector("form");
+    // modal
     const userInputModalDiv = document.getElementById("modal-one");
+    // days select option elements
+    const arrayOfDaysSelectOptionElements = Array.from(
+      document.querySelectorAll("select[id='day'] option")
+    ).slice(1);
+    // select month
+    const selectMonthInput = document.getElementById("month");
+    // select year
+    const selectYearInput = document.getElementById("year");
     // days, hours, minutes, seconds digit-bottom
     const daysDigitBottom = document.querySelector(
       "div[id='days'] .digit-bottom"
@@ -2958,7 +3077,6 @@
       nextHolidayTextElement,
       startDefaultCountdownBtn,
       linkSelectMonth,
-      selectMonthInput,
       daysDigitContainerParent,
       hoursDigitContainerParent,
       minutesDigitContainerParent,
@@ -2966,6 +3084,9 @@
       monthSelectElement,
       formElement,
       userInputModalDiv,
+      arrayOfDaysSelectOptionElements,
+      selectMonthInput,
+      selectYearInput,
       daysDigitBottom,
       hoursDigitBottom,
       minutesDigitBottom,
