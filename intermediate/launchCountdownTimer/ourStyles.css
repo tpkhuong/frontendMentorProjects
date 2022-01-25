@@ -438,6 +438,11 @@ a:hover {
 }
 
 /* general styles */
+
+.soft-red-color {
+  color: var(--col-primary-soft-red-top);
+}
+
 [role="button"] {
   background-color: var(--btn-bg, var(--col-neutral-white));
   color: var(--btn-fg, var(--col-primary-soft-red-bottom));
@@ -782,10 +787,10 @@ label[for="day"] {
 label[for="year"] {
   grid-area: label-year;
 }
-label[for="hour"] {
+label[for="hours"] {
   grid-area: label-hour;
 }
-label[for="minute"] {
+label[for="minutes"] {
   grid-area: label-minute;
 }
 label[for="meridiem"] {
@@ -807,10 +812,10 @@ select[id="day"] {
 select[id="year"] {
   grid-area: select-year;
 }
-select[id="hour"] {
+select[id="hours"] {
   grid-area: select-hour;
 }
-select[id="minute"] {
+select[id="minutes"] {
   grid-area: select-minute;
 }
 select[id="meridiem"] {
