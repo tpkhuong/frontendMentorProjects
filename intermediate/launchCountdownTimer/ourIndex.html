@@ -116,7 +116,7 @@
                   does not have to have aria-hidden="true"-->
                   <!-- ***** -->
                   <!-- days -->
-                  <div id="days" class="countdown-digit-container">
+                  <div id="days-digits" class="countdown-digit-container">
                     <div class="digit-back">08</div>
                     <div aria-hidden="true" class="digit-top">08</div>
                     <div aria-hidden="true" class="digit-bottom">08</div>
@@ -151,7 +151,7 @@
                   does not have to have aria-hidden="true"-->
                   <!-- ***** -->
                   <!-- hours -->
-                  <div id="hours" class="countdown-digit-container">
+                  <div id="hours-digits" class="countdown-digit-container">
                     <div class="digit-back">08</div>
                     <div aria-hidden="true" class="digit-top">08</div>
                     <div aria-hidden="true" class="digit-bottom">08</div>
@@ -182,7 +182,7 @@
                   does not have to have aria-hidden="true"-->
                   <!-- ***** -->
                   <!-- minutes -->
-                  <div id="minutes" class="countdown-digit-container">
+                  <div id="minutes-digits" class="countdown-digit-container">
                     <div class="digit-back">08</div>
                     <div aria-hidden="true" class="digit-top">08</div>
                     <div aria-hidden="true" class="digit-bottom">08</div>
@@ -197,7 +197,7 @@
               <div class="digit-text-wrapper min-width-digit-element">
                 <div class="countdown-digit-black-bg">
                   <!-- seconds -->
-                  <div id="seconds" class="countdown-digit-container">
+                  <div id="seconds-digits" class="countdown-digit-container">
                     <div
                       aria-hidden="true"
                       class="digit-back"
@@ -237,16 +237,23 @@
               id="modal-one"
               role="dialog"
               aria-modal="true"
-              aria-labelledby="modal-one-title"
+              aria-labelledby="modal-one-title modal-one-title-two"
             >
               <form novalidate action="#">
                 <h2 id="modal-one-title" class="visually-hidden">
-                  Enter Countdown Date
+                  Enter Custom Countdown Date and Time
                 </h2>
+                <p id="modal-one-title-two">
+                  User Custom Date and Time has to be<span
+                    class="soft-red-color"
+                  >
+                    later than current time.
+                  </span>
+                </p>
                 <div class="date-input-wrapper">
                   <!-- date: month, day, year -->
                   <label for="month">Month</label>
-                  <select name="" tabindex="-1" id="month" required>
+                  <select name="" id="month" required>
                     <option value="">Select Month</option>
                     <option value="Jan">January</option>
                     <option value="Feb">February</option>
@@ -300,7 +307,6 @@
                   <label for="year">Year</label>
                   <select name="" id="year">
                     <option value="">Select Year</option>
-                    <option value="2021">2021</option>
                     <option value="2022">2022</option>
                     <option value="2023">2023</option>
                     <option value="2024">2024</option>
@@ -313,7 +319,7 @@
                   </select>
                   <!-- time: hr, min, am/pm -->
                   <label for="hours">Hour</label>
-                  <select name="" id="hours">
+                  <select id="hours">
                     <option value="">Select Hour</option>
                     <option value="1">01</option>
                     <option value="2">02</option>
@@ -329,7 +335,7 @@
                     <option value="12">12</option>
                   </select>
                   <label for="minutes">Minute</label>
-                  <select name="" id="minutes">
+                  <select id="minutes">
                     <option value="">Select Minute</option>
                     <option value="0">00</option>
                     <option value="1">01</option>
@@ -394,7 +400,7 @@
                     <option value="60">60</option>
                   </select>
                   <label for="meridiem">AM/PM</label>
-                  <select name="" id="meridiem">
+                  <select id="meridiem">
                     <option value="">Select AM/PM</option>
                     <option value="AM">AM</option>
                     <option value="PM">PM</option>
