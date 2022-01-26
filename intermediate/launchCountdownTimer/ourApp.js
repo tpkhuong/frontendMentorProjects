@@ -143,37 +143,75 @@
 
   // add event listeners
   addListener.call(userInputModalDiv, "change", function TODO(event) {
-    console.log(arrayOfDaysSelectOptionElements);
+    const checkingForLeapYear =
+      Number(selectYearInput.value) % 4 === 0 ? true : false;
+    const arrayOfLastThreeOptionDayElement =
+      arrayOfDaysSelectOptionElements.slice(28);
     const targetInputID = event.target.getAttribute("id");
     const targetValue = event.target.value;
     if (targetInputID == "month") {
       switch (targetValue) {
         case "Feb":
+          daysOptionFebSelected(
+            arrayOfLastThreeOptionDayElement,
+            checkingForLeapYear
+          );
           break;
         case "Apr":
         case "Jun":
         case "Sep":
         case "Nov":
+          thirtyDaysOptionSelected(
+            arrayOfLastThreeOptionDayElement,
+            checkingForLeapYear
+          );
           console.log("30 days");
           break;
         default:
+          thirtyOneDaysOptionSelected(arrayOfLastThreeOptionDayElement);
           console.log("31 days");
       }
     }
+
     if (targetInputID == "year" && selectMonthInput.value == "Feb") {
-      const currentSelectYearModulo = targetValue % 4;
-      console.log(dataObj.previousSelectedYearInputModuloValue);
+      // if month is feb and year option is selected add hidden attr to day 30 and 31
+      const arrayOfLastTwoOptionsElement =
+        arrayOfDaysSelectOptionElements.slice(29);
+      for (let element of arrayOfLastTwoOptionsElement) {
+        if (!element.getAttribute("hidden")) {
+          element.setAttribute("hidden", "");
+        }
+      }
+      if (targetValue === "") {
+        console.log("empty string");
+        daysForFebYearInputSelected(targetValue);
+        return;
+      }
+      // we want to check if current Selected year and previous selected
+      // is a leap year or not. if both are not or both are leap year
+      // we dont want to run algorithm that add hidden attr to options
+      // we want to do nothing because if current selected and previous are the same
+      // the days we want to allow user to select will not change
+      // it will change if user select a year that is not leap year (28days)
+      // then select a year that is leap year (29days).
+      // when user select "select year" targetValue will be empty string
+      // "" % 4 = 0
+
+      const currentSelectYearModulo = Number(targetValue) % 4 === 0 ? 0 : 1;
+      console.log(dataObj.yearSelectedIsLeapYearOrNot);
       console.log(currentSelectYearModulo);
-      if (!dataObj.previousSelectedYearInputModuloValue) {
-        // first time dataObj.previousSelectedYearInputModuloValue will be null
+      // have to check if dataObj.yearSelectedIsLeapYearOrNot is 0 because 0 is a falsy value
+      // our conditional statement is negating falsy values !0 which is true so we enter the if statement
+      // we will just check if yearSelectedIsLeapYearOrNot is null
+      // because we user select "select year" we assign null value to yearSelectedIsLeapYearOrNot
+      if (dataObj.yearSelectedIsLeapYearOrNot == null) {
+        // first time dataObj.yearSelectedIsLeapYearOrNot will be null
         console.log("previous is null");
         daysForFebYearInputSelected(targetValue);
       } else {
-        if (
-          currentSelectYearModulo !==
-          dataObj.previousSelectedYearInputModuloValue
-        ) {
-          // conditional check of previousSelectedYearInputModuloValue with
+        if (currentSelectYearModulo !== dataObj.yearSelectedIsLeapYearOrNot) {
+          console.log("current and previous not equal");
+          // conditional check of yearSelectedIsLeapYearOrNot with
           // currentSelected year modulo value when they do not equal to each other
           // we will run func daysForFebYearInputSelected
           daysForFebYearInputSelected(targetValue);
@@ -679,7 +717,8 @@
         "Nov",
         "Dec",
       ],
-      previousSelectedYearInputModuloValue: null,
+      yearSelectedIsLeapYearOrNot: null,
+
       /**
        * idea: since we will be working with the method .toDateString() on the Date obj
        * calling .split(" ") on that string which will return an array of day month date year
@@ -1911,22 +1950,124 @@
    * days option based on month selected
    * **/
 
-  function daysOptionFebSelected() {}
-  function thirtyDaysOptionSelected() {}
-  function thirtyOneDaysOptionSelected() {}
+  function daysOptionFebSelected(lastOptionElements, leapYearOrNot) {
+    const copyOfArray = [...lastOptionElements];
+    const [twentyNinth, thirtieth, thirtyFirst] = copyOfArray;
+    // user selected Feb we will check if year is leap or not
+    // checking option day "30"
+    checkForHiddenAttr(thirtieth) === null
+      ? thirtieth.setAttribute("hidden", "")
+      : null;
+    // checking option day "31"
+    checkForHiddenAttr(thirtyFirst) === null
+      ? thirtyFirst.setAttribute("hidden", "")
+      : null;
+    // leapYearOrNot truthy leap else not
+    // if (leapYearOrNot) {
+    // if its leap year going from 30days or 31days to Feb
+    // 29th day option element will not have hidden on it
+    // we might not have to check hidden attr on 29th day option element
+    // } else {
+    // not leap year
+    // Feb will have 28 days. 30th and 31st is handled at top of func
+    // will check if 29th day has hidden attr
+    // }
+    // not leap year
+    if (!leapYearOrNot) {
+      checkForHiddenAttr(twentyNinth) === null
+        ? twentyNinth.setAttribute("hidden", "")
+        : null;
+    }
+  }
+  function thirtyDaysOptionSelected(lastOptionElements, leapYearOrNot) {
+    const copyOfArray = [].concat(lastOptionElements);
+    const [twentyNinth, thirtieth, thirtyFirst] = copyOfArray;
+    // option element with value 31 will have hidden attr
+    // if element does not have hidden attr checkForHiddenAttr func will return null
+    // if it does checkForHiddenAttr func will return empty string ""
+    checkForHiddenAttr(thirtyFirst) === null
+      ? thirtyFirst.setAttribute("hidden", "")
+      : null;
+    if (leapYearOrNot) {
+      // leap year
+      // 29th day should not have hidden
+      // 30th day will have hidden
+      // check need to check 30th if it has hidden checkForHiddenAttr will return empty ""
+      checkForHiddenAttr(thirtieth) !== null
+        ? thirtieth.removeAttribute("hidden")
+        : null;
+    } else {
+      // not leap year
+      // both 29th and 30th day will have hidden if Feb was selected before
+      // need to check 29th and 30th if it has hidden checkForHiddenAttr will return empty ""
+      checkForHiddenAttr(twentyNinth) !== null
+        ? thirtieth.removeAttribute("hidden")
+        : null;
+      checkForHiddenAttr(thirtieth) !== null
+        ? thirtieth.removeAttribute("hidden")
+        : null;
+    }
+  }
+  function thirtyOneDaysOptionSelected(lastOptionElements) {
+    const copyOfArr = lastOptionElements.slice();
+    // if month has 31 days check if option element has hidden attr
+    // if it does remove it
+    for (let optionElement of copyOfArr) {
+      const checkForHiddenAttr = optionElement.getAttribute("hidden");
+      // if element has hidden attr .getAttribute("hidden") will return empty string
+      // if it doesnt .getAttribute("hidden") will return null
+      // if statement both null and empty ""
+      // check if .getAttribute returns empty string or not equal null
+      if (checkForHiddenAttr !== null) {
+        optionElement.removeAttribute("hidden");
+      }
+    }
+  }
 
   // days for feb year input selected
 
   function daysForFebYearInputSelected(selectedYear) {
     // if user select option select year which is an empty string
-    // assign value null to previousSelectedYearInputModuloValue
+    // assign value null to yearSelectedIsLeapYearOrNot
     if (selectedYear === "") {
-      dataObj.previousSelectedYearInputModuloValue = null;
+      dataObj.yearSelectedIsLeapYearOrNot = null;
     } else {
+      console.log("not empty string");
       // keep track of previous selected year modulo value so we dont run our algorithm
       // to add hidden attr to days select option everytime year select option changes
-      dataObj.previousSelectedYearInputModuloValue = selectedYear % 4;
+      const getSelectedYearModuloValue = Number(selectedYear) % 4;
+      // add attr hidden to option element
+      const optionElementAddOrRemoveHidden =
+        arrayOfDaysSelectOptionElements[28];
+      // difference is we are adding hidden to day 29 or we dont
+      // if year is modulo do nothing else add hidden
+      getSelectedYearModuloValue !== 0
+        ? // not == 0 means it is not leap year
+          // check if option element doesnt have hidden attr.
+          // if it doesnt it means getAttribute("hidden") will return null
+          // we add hidden attr to option element so it doesnt show
+          optionElementAddOrRemoveHidden.getAttribute("hidden") === null
+          ? optionElementAddOrRemoveHidden.setAttribute("hidden", "")
+          : null
+        : // we get here means it is leap year. we want to check if its has hidden attr
+        // which means getAttribute("hidden") will not return null.
+        // we will check if it not equal to null
+        // if it does have hidden attr we want to remove hidden attr we want this element to show
+        optionElementAddOrRemoveHidden.getAttribute("hidden") !== null
+        ? optionElementAddOrRemoveHidden.removeAttribute("hidden")
+        : null;
+      console.log(optionElementAddOrRemoveHidden);
+      dataObj.yearSelectedIsLeapYearOrNot =
+        getSelectedYearModuloValue === 0 ? 0 : 1;
     }
+  }
+
+  /**
+   * check for hidden attr helper func
+   * **/
+
+  function checkForHiddenAttr(element) {
+    return element.getAttribute("hidden");
   }
 
   /**
