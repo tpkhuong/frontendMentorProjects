@@ -143,8 +143,16 @@
 
   // add event listeners
   addListener.call(userInputModalDiv, "change", function TODO(event) {
+    // if selectYearInput.value is an empty string we will assume it is not leap year
+    // we will assign boolean value of false to checkingForLeapYear
+    // feb will have 28 days
+    const yearInput = selectYearInput.value;
     const checkingForLeapYear =
-      Number(selectYearInput.value) % 4 === 0 ? true : false;
+      yearInput === ""
+        ? false
+        : Number(selectYearInput.value) % 4 === 0
+        ? true
+        : false;
     const arrayOfLastThreeOptionDayElement =
       arrayOfDaysSelectOptionElements.slice(28);
     const targetInputID = event.target.getAttribute("id");
@@ -1979,6 +1987,7 @@
         : null;
     }
   }
+
   function thirtyDaysOptionSelected(lastOptionElements, leapYearOrNot) {
     const copyOfArray = [].concat(lastOptionElements);
     const [twentyNinth, thirtieth, thirtyFirst] = copyOfArray;
@@ -2690,6 +2699,49 @@
       },
       {});
     console.log(Object.entries(userInputObj));
+    /**
+     * have two arrays one for year,month and days and one for hr,min,am/om
+     * thinking about using this for checking if user date/time is earlier than current time
+     * **/
+    const [dateData, timeData] = Object.entries(userInputObj).reduce(
+      function makeTwoArrays(buildingUp, currentValue) {
+        // buildingUp will be array with two subarrays
+        const [key, value] = currentValue;
+        const [dateArray, timeArray] = buildingUp;
+        switch (true) {
+          case key == "hours":
+          case key == "minutes":
+          case key == "meridiem":
+            timeArray.push(currentValue);
+            break;
+          default:
+            dateArray.push(currentValue);
+        }
+        return buildingUp;
+      },
+      [[], []]
+    );
+
+    /**
+     * obj of input with value of empty string
+     * **/
+
+    const objOfInputWithEmptyString = Object.entries(userInputObj).reduce(
+      function makingObjOfInputWithEmptyString(buildingUp, currentValue) {
+        const [key, value] = currentValue;
+        if (value === "") {
+          buildingUp[key] = true;
+        }
+        return buildingUp;
+      },
+      {}
+    );
+
+    console.log(objOfInputWithEmptyString);
+
+    /**
+     * we can check our input validations here
+     * **/
     // update userDateInput hour to 24hr format
     // typeof hourConvertedToTwentyFourFormat will be string
     const hourConvertedToTwentyFourFormat =
@@ -2698,9 +2750,7 @@
       "hourConvertedToTwentyFourFormat",
       hourConvertedToTwentyFourFormat
     );
-    /**
-     * we can check our input validations here
-     * **/
+
     dataObj.userDateInput = {
       year: Number(userInputObj.year),
       month: userInputObj.month,
