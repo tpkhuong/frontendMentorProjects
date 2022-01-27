@@ -440,7 +440,7 @@ a:hover {
 /* general styles */
 
 .soft-red-color {
-  color: var(--col-primary-soft-red-top);
+  color: var(--col-primary-soft-red-bottom);
 }
 
 [role="button"] {
@@ -748,7 +748,12 @@ apply display: none to that element
 
 /* modal */
 
-div[role="dialog"] {
+[id="modal-one-title"] {
+  font-size: 1rem;
+  margin-block-end: 8px;
+}
+
+div[id="modal-one"] {
   /* margin-block-start: 145px; */
   position: absolute;
   top: 50%;
@@ -761,6 +766,35 @@ div[role="dialog"] {
   opacity: 0;
   transition: opacity 500ms ease-out;
 }
+
+/* empty input modal */
+
+.require-inputs-modal-bg-wrapper {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: hsla(0, 0%, 0%, 0.7);
+}
+
+.list-empty-inputs {
+  padding: 0;
+  list-style: none;
+  color: var(--col-primary-soft-red-bottom);
+}
+
+[id="modal-two"] {
+  max-width: 275px;
+  height: min-content;
+  inset: 0;
+  position: absolute;
+  margin: auto;
+  background: var(--col-neutral-dark-blue-top);
+  color: var(--col-neutral-white);
+  border-radius: 8px;
+  padding-inline: 6px;
+}
+
+/* date and time incorrect modal */
 
 /* using grid area */
 
