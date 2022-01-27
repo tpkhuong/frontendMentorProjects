@@ -226,7 +226,7 @@
             <button
               role="button"
               class="modal-launcher-back"
-              aria-label="launch ending date modal"
+              aria-label="launch custom date and time inputs modal"
               user-clicked="false"
             >
               <span class="modal-launcher-front">Custom Ending Date </span>
@@ -237,19 +237,17 @@
               id="modal-one"
               role="dialog"
               aria-modal="true"
-              aria-labelledby="modal-one-title modal-one-title-two"
+              aria-describedby="modal-one-title"
             >
               <form novalidate action="#">
-                <h2 id="modal-one-title" class="visually-hidden">
-                  Enter Custom Countdown Date and Time
-                </h2>
-                <p id="modal-one-title-two">
+                <h2 id="modal-one-title">
                   User Custom Date and Time has to be<span
                     class="soft-red-color"
                   >
                     later than current time.
                   </span>
-                </p>
+                </h2>
+
                 <div class="date-input-wrapper">
                   <!-- date: month, day, year -->
                   <label for="month">Month</label>
@@ -410,7 +408,35 @@
               </form>
             </div>
           </div>
+          <!-- require inputs modal -->
+          <div class="require-inputs-modal-bg-wrapper">
+            <div class="inputs-modal" aria-describedby="modal-two-title" id="modal-two" role="dialog" aria-modal="true">
+<p id="modal-two-title">
+                The following items need your attention. These items require a
+                value
+              </p>
+              <ul class="list-empty-inputs">
+                <li class="empty-input" data-input-id="month">month input</li>
+                <li class="empty-input" data-input-id="day">day input</li>
+                <li class="empty-input" data-input-id="year">year input</li>
+                <li class="empty-input" data-input-id="hours">hour input</li>
+                <li class="empty-input" data-input-id="minutes">
+                  minute input
+                </li>
+                <li class="empty-input" data-input-id="meridiem">
+                  AM/PM input
+                </li>
+              </ul>
+              <p>Press <span class="soft-red-color">Escape</span> key to go to Custom date and time modal</p>
+            </div>
+          </div>
+          <!-- user time is earlier than current time modal -->
+          <!-- COME BACK AFTER INPUT EMPTY ALGORITHM COMPLETE -->
+          <!-- <div class="incorrect-user-date-time-modal-bg-wrapper">
+            <div class="incorrect-modal" role="dialog" aria-modal="true" aria-describedby="modal-three-title">
 
+            </div>
+          </div> -->
           <!-- social media icons/links -->
         </div>
         <div class="social-media-icons">
@@ -556,3 +582,34 @@
     </div>
   </div>
 </div> -->
+
+  <!-- require inputs modal -->
+          <!-- <div class="require-inputs-modal-bg-wrapper">
+            <div
+              class="inputs-modal"
+              aria-describedby="modal-two-title"
+              id="modal-two"
+              role="dialog"
+              aria-modal="true"
+            >
+              <p id="modal-two-title">
+                The following items need your attention. These items require a
+                value
+              </p>
+              <ul class="list-empty-inputs">
+                <li class="empty-input" data-input-id="month">month input</li>
+                <li class="empty-input" data-input-id="day">day input</li>
+                <li class="empty-input" data-input-id="year">year input</li>
+                <li class="empty-input" data-input-id="hours">hour input</li>
+                <li class="empty-input" data-input-id="minutes">
+                  minute input
+                </li>
+                <li class="empty-input" data-input-id="meridiem">
+                  AM/PM input
+                </li>
+              </ul>
+              <p>Press Escape key to go to Custom date and time modal</p>
+            </div>
+          </div> -->
+          <!-- user time is earlier than current time modal -->
+          <!-- <div class="incorrect-user-date-time-modal-bg-wrapper">
