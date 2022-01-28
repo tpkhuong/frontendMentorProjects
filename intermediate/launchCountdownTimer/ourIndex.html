@@ -410,35 +410,41 @@
           </div>
           <!-- require inputs modal -->
           <div class="require-inputs-modal-bg-wrapper">
-            <div class="inputs-modal" aria-describedby="modal-two-title" id="modal-two" role="dialog" aria-modal="true">
-<p id="modal-two-title">
-                The following items need your attention. These items require a
-                value
-              </p>
+            <div class="inputs-modal" aria-describedby="modal-two-title" id="modal-two" role="dialog" aria-modal="true" tabindex="-1">
+            <p id="modal-two-title">
+              The following items need your attention. These items require a value.
+            </p>
               <ul class="list-empty-inputs">
-                <li class="empty-input" data-input-id="month">month input</li>
-                <li class="empty-input" data-input-id="day">day input</li>
-                <li class="empty-input" data-input-id="year">year input</li>
-                <li class="empty-input" data-input-id="hours">hour input</li>
+                <li class="empty-input" data-input-id="month">Month Input</li>
+                <li class="empty-input" data-input-id="day">Day Input</li>
+                <li class="empty-input" data-input-id="year">Year Input</li>
+                <li class="empty-input" data-input-id="hours">Hour Input</li>
                 <li class="empty-input" data-input-id="minutes">
-                  minute input
+                  minute Input
                 </li>
                 <li class="empty-input" data-input-id="meridiem">
-                  AM/PM input
+                  AM/PM Input
                 </li>
               </ul>
-              <p>Press <span class="soft-red-color">Escape</span> key to go to Custom date and time modal</p>
+              <p>Pressing <span class="soft-red-color">Escape</span> key will take you to Custom Date and Time Modal.</p>
             </div>
           </div>
           <!-- user time is earlier than current time modal -->
-          <!-- COME BACK AFTER INPUT EMPTY ALGORITHM COMPLETE -->
-          <!-- <div class="incorrect-user-date-time-modal-bg-wrapper">
+          
+          <div class="incorrect-user-date-time-modal-bg-wrapper">
             <div class="incorrect-modal" role="dialog" aria-modal="true" aria-describedby="modal-three-title">
-
+              <!-- we will work from top: year to month to day to hr to min -->
+              <!-- if month or day or hr or min is less than current let user know at each level -->
+              <!-- only check input closer to min if the input greater than min equal to each other: -->
+              <!-- year == year, month == month, day == day, hr == hr -->
+              <p id="modal-three-title">
+                The following <span class="incorrect-date-time"></span> value is less than current <span class="incorrect-date-time"></span>.
+              </p>
+              <p>Pressing <span class="soft-red-color">Escape</span> key will take you to <span class="incorrect-date-time"></span> select input of Custom Date and Time Modal.</p>
             </div>
-          </div> -->
+          </div>
           <!-- social media icons/links -->
-        </div>
+        </div> 
         <div class="social-media-icons">
           <a href="">
             <!-- github -->

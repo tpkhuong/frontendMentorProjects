@@ -11,6 +11,9 @@
     customDateButton,
     monthSelectElement,
     userInputModalDiv,
+    emptyModalWrapper,
+    emptyInputModal,
+    arrayOfListItemsForEmptyInputs,
     arrayOfDaysSelectOptionElements,
     selectMonthInput,
     selectYearInput,
@@ -726,7 +729,8 @@
         "Dec",
       ],
       yearSelectedIsLeapYearOrNot: null,
-
+      selectInputToFocusString: null,
+      correctUserDateAndTime: false,
       /**
        * idea: since we will be working with the method .toDateString() on the Date obj
        * calling .split(" ") on that string which will return an array of day month date year
@@ -1937,20 +1941,23 @@
    * input validation funcs
    * **/
 
-  function inputValidation() {
+  function correctTimeInputValidation() {
     //
   }
 
   // check year
   function validationYearInput(startYear, endYear) {
-    // assume user want current year if year input is empty ""
+    // if user year is greater than current
   }
   // check month
   function validationMonthInput(startMonth, endMonth) {}
   // check day
   function validationDayInput(startDay, endDay) {}
   // check hours
-  function validationHoursInput(startHour, endHour) {}
+  function validationHoursInput(startHour, endHour, userDataInput) {
+    // use hourConvertedToTwentyFourFormat to get user hr input in 24 hr format
+    // get current date hr then check conditional
+  }
   // check minutes
   function validationMinutesInput(startMinute, endMinute) {}
 
@@ -2078,6 +2085,62 @@
   function checkForHiddenAttr(element) {
     return element.getAttribute("hidden");
   }
+
+  /**
+   * algorithm for empty input modal
+   * **/
+
+  function showModalWhichInputNeedsAttention(
+    objOfEmptyInput,
+    arrayOfListItems,
+    modalElement
+  ) {
+    // array of li element with class empty inputs
+    const copyOfArray = [...arrayOfListItems];
+    // obj of user inputs that are empty string. key will be string of input with value of true
+    const copyOfObject = { ...objOfEmptyInput };
+    copyOfArray.forEach(function removeHiddenAttr(listItemElement) {
+      // getting each list item data-input-id value
+      const elementDataID = listItemElement.attributes["data-input-id"].value;
+      const hasHiddenAttrOrNot = listItemElement.getAttribute("hidden"); //will return null or empty string
+
+      // if hasHiddenAttrOrNot returns empty string, we want to remove hidden
+      if (copyOfObject[elementDataID]) {
+        // if listItem attr data-input-id value is true in obj of empty input
+        // we want the listitem to show remove hidden attr if it has it
+        // hasHiddenAttrOrNot will be null or empty string
+        // if element has hidden remove it else do nothing
+        hasHiddenAttrOrNot !== null
+          ? listItemElement.removeAttribute("hidden")
+          : null;
+      } else {
+        // we want to add hidden attr to the element
+        // hasHiddenAttrOrNot will be null or empty string
+        // if element does not have hidden attr add it else leave it alone
+        hasHiddenAttrOrNot === null
+          ? listItemElement.setAttribute("hidden", "")
+          : null;
+      }
+    });
+    const [firstItemHasHiddenAttr] = copyOfArray.filter(
+      function arrayOfElementWithoutHiddenAttr(listItem) {
+        const lookForHiddenAttr = listItem.getAttribute("hidden");
+        return lookForHiddenAttr === null;
+      }
+    );
+    // assign id string to selectInputToFocusString key/property in dataObj
+    dataObj.selectInputToFocusString =
+      firstItemHasHiddenAttr.getAttribute("data-input-id");
+    // add class display-revert to remove display: none declaration
+    modalElement.classList.add("display-revert");
+    setTimeout(() => {
+      emptyInputModal.focus();
+    }, 350);
+  }
+
+  /**
+   * algorithm for incorrect date and time modal
+   * **/
 
   /**
    * update days, hours minutes for initial start up
@@ -2737,11 +2800,35 @@
       {}
     );
 
-    console.log(objOfInputWithEmptyString);
+    const convertObjToArrayCheckLength = Object.keys(
+      objOfInputWithEmptyString
+    ).length;
 
     /**
-     * we can check our input validations here
+     * check for empty obj. if obj is empty dont run showModalWhichInputNeedsAttention func
+     * run func to check empty inputs and show modal
      * **/
+    if (convertObjToArrayCheckLength >= 1) {
+      // add event listener to modal
+      addListener.call(
+        emptyInputModal,
+        "keydown",
+        hideModalTwoAndRemoveKeydown
+      );
+      showModalWhichInputNeedsAttention(
+        objOfInputWithEmptyString,
+        arrayOfListItemsForEmptyInputs,
+        emptyModalWrapper
+      );
+    } else {
+      /**
+       * we can check our input validations here
+       * **/
+      // when convertObjToArrayCheckLength is 0 we enter this else statement
+      // it means user has selected a value for each inputs
+      // we want to check if user date and time is a later time than current
+    }
+
     // update userDateInput hour to 24hr format
     // typeof hourConvertedToTwentyFourFormat will be string
     const hourConvertedToTwentyFourFormat =
@@ -2798,6 +2885,30 @@
      * uncomment code below for production
      * **/
     // dataObj.stopTimerID = countDownTimer(initialAppSetUp);
+  }
+
+  /**
+   * adding keydown listener to modal two
+   * **/
+
+  function hideModalTwoAndRemoveKeydown(event) {
+    const { targetKeyCodeStr } = propertiesOfEventObj.call(event);
+    if (targetKeyCodeStr == "Escape") {
+      // remove class display revert
+      emptyModalWrapper.classList.remove("display-revert");
+      // focus on select element of custom user input
+      const focusSelectElement = dataObj.selectInputToFocusString;
+      if (focusSelectElement !== null) {
+        setTimeout(() => {
+          document.querySelector(`select[id=${focusSelectElement}]`).focus();
+        }, 350);
+      }
+      // remove keydown event
+      emptyInputModal.removeEventListener(
+        "keydown",
+        hideModalTwoAndRemoveKeydown
+      );
+    }
   }
 
   /**
@@ -3226,8 +3337,19 @@
     const monthSelectElement = document.querySelector("select[id='month']");
     // form
     const formElement = document.querySelector("form");
-    // modal
+    // custom input modal
     const userInputModalDiv = document.getElementById("modal-one");
+    // empty input modal wrapper
+    const emptyModalWrapper = document.querySelector(
+      ".require-inputs-modal-bg-wrapper"
+    );
+    // empty input modal
+    const emptyInputModal = document.querySelector("[id='modal-two']");
+    // array of list items for input text
+    const arrayOfListItemsForEmptyInputs = Array.prototype.slice.call(
+      document.querySelectorAll(".empty-input")
+    );
+    // incorrect date and time modal
     // days select option elements
     const arrayOfDaysSelectOptionElements = Array.from(
       document.querySelectorAll("select[id='day'] option")
@@ -3275,6 +3397,9 @@
       monthSelectElement,
       formElement,
       userInputModalDiv,
+      emptyModalWrapper,
+      emptyInputModal,
+      arrayOfListItemsForEmptyInputs,
       arrayOfDaysSelectOptionElements,
       selectMonthInput,
       selectYearInput,
