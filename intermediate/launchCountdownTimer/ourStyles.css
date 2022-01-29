@@ -769,7 +769,8 @@ div[id="modal-one"] {
 
 /* empty input modal */
 
-.require-inputs-modal-bg-wrapper {
+.require-inputs-modal-bg-wrapper,
+.incorrect-user-date-time-modal-bg-wrapper {
   display: none;
   position: fixed;
   inset: 0;
@@ -782,7 +783,8 @@ div[id="modal-one"] {
   color: var(--col-primary-soft-red-bottom);
 }
 
-[id="modal-two"] {
+[id="modal-two"],
+[id="modal-three"] {
   max-width: 275px;
   height: min-content;
   inset: 0;
@@ -795,6 +797,10 @@ div[id="modal-one"] {
 }
 
 /* date and time incorrect modal */
+
+.minute-input-incorrect {
+  display: none;
+}
 
 /* using grid area */
 
