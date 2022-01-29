@@ -14,6 +14,10 @@
     emptyModalWrapper,
     emptyInputModal,
     arrayOfListItemsForEmptyInputs,
+    incorrectModalWrapper,
+    incorrectDateTimeModal,
+    textElementForMinuteIncorrectModal,
+    incorrectTextElementsForMessage,
     arrayOfDaysSelectOptionElements,
     selectMonthInput,
     selectYearInput,
@@ -731,6 +735,7 @@
       yearSelectedIsLeapYearOrNot: null,
       selectInputToFocusString: null,
       correctUserDateAndTime: false,
+      focusStringForIncorrectModal: null,
       /**
        * idea: since we will be working with the method .toDateString() on the Date obj
        * calling .split(" ") on that string which will return an array of day month date year
@@ -1941,25 +1946,179 @@
    * input validation funcs
    * **/
 
-  function correctTimeInputValidation() {
-    //
+  function correctTimeInputValidation(userInputData) {
+    const dateObj = new Date();
+    //copy inputData obj
+    const copyOfObj = { ...userInputData };
+    // current date and time
+    const { currentYear, currentMonth, currentDay } =
+      getCurrentYearMonthDate(dataObj);
+    const { currentHour, currentMinute } = getCurrentHourMinutes();
+    const currDateObj = {
+      currentYear,
+      currentMonth,
+      currentDay,
+      currentHour,
+      currentMinute,
+    };
+    // year
+    // month
+    // day
+    // hr
+    // minutes
   }
 
   // check year
-  function validationYearInput(startYear, endYear) {
-    // if user year is greater than current
+  function validationYearInput(startDateObj, userDateObj) {
+    const currYear = Number(startDateObj.currentYear);
+    const endYear = Number(userDateObj.year);
+    return {
+      selectInput: "year",
+      yearInputGreaterThanCurrent: endYear > currYear,
+      yearInputLesserThanCurrent: endYear < currYear,
+      yearInputEqualToCurrent: endYear == currYear,
+    };
   }
   // check month
-  function validationMonthInput(startMonth, endMonth) {}
+  function validationMonthInput(startDateObj, userDateObj) {
+    const currMonth = Number(startDateObj.currentMonth);
+    const endMonth = Number(userDateObj.month);
+    return {
+      selectInput: "month",
+      monthInputGreaterThanCurrent: endMonth > currMonth,
+      monthInputLesserThanCurrent: endMonth < currMonth,
+      monthInputEqualToCurrent: endMonth == currMonth,
+    };
+  }
   // check day
-  function validationDayInput(startDay, endDay) {}
+  function validationDayInput(startDateObj, userDateObj) {
+    const currDay = Number(startDateObj.currentDay);
+    const endDay = Number(userDateObj.day);
+    return {
+      selectInput: "day",
+      dayInputGreaterThanCurrent: endDay > currDay,
+      dayInputLesserThanCurrent: endDay < currDay,
+      dayInputEqualToCurrent: endDay == currDay,
+    };
+  }
   // check hours
-  function validationHoursInput(startHour, endHour, userDataInput) {
-    // use hourConvertedToTwentyFourFormat to get user hr input in 24 hr format
+  function validationHoursInput(startDateObj, userDateObj) {
+    // use convertTwelveToTwentyFourHourFormat to get user hr input in 24 hr format
     // get current date hr then check conditional
+    const convertedHrToTwentyFourHrFormat =
+      convertTwelveToTwentyFourHourFormat.call(userDateObj);
+    const currHours = Number(startDateObj.currentHours);
+    const endHours = Number(convertedHrToTwentyFourHrFormat);
+    return {
+      selectInput: "hours",
+      hoursInputGreaterThanCurrent: endHours > currHours,
+      hoursInputLesserThanCurrent: endHours < currHours,
+      hoursInputEqualToCurrent: endHours == currHours,
+    };
   }
   // check minutes
-  function validationMinutesInput(startMinute, endMinute) {}
+  function validationMinutesInput(startDateObj, userDateObj) {
+    const currMinute = Number(startDateObj.minutes);
+    const endMinute = Number(userDateObj.minutes);
+    // if user year, month and hr == current year,month and hr
+    // user minutes cant equal or be less than current minute
+    if (endMinute < currMinute || endMinute === currMinute) {
+    } else {
+      showIncorrectModal("minutes");
+    }
+  }
+
+  /**
+   * run func based on inputs validations
+   * **/
+
+  function runFuncBasedOnUserInputsValidations(...rest) {
+    // we want the validationInputObj, startDateObj,userDateObj
+    const [strAndConditionalObj, startObj, endDateObj, validationFunc] = rest;
+    // pass in the validation funcs as a value
+    // inputValidation will be equal, less than or greater than
+    // get selectInput of strAndConditionalObj use it to get value of strAndConditionalObj
+  }
+
+  /**
+   * user input is greater than current assign user input to userDateInput obj
+   * **/
+
+  function userInputIsValidRunFunc(userDataObj) {
+    // update userDateInput hour to 24hr format
+    // typeof hourConvertedToTwentyFourFormat will be string
+    const hourConvertedToTwentyFourFormat =
+      convertTwelveToTwentyFourHourFormat.call(userDataObj);
+    console.log(
+      "hourConvertedToTwentyFourFormat",
+      hourConvertedToTwentyFourFormat
+    );
+
+    dataObj.userDateInput = {
+      year: Number(userDataObj.year),
+      month: userDataObj.month,
+      day: Number(userDataObj.day),
+      hours: Number(hourConvertedToTwentyFourFormat),
+      minutes: Number(userDataObj.minutes),
+      meridiem: userDataObj.meridiem,
+    };
+
+    // call countdownTimer passing in startCountdownTimerForUserInputs when user click submit
+    // dataObj.stopTimerID = countDownTimer(startCountdownTimerForUserInputs);
+    console.log(dataObj);
+  }
+
+  /**
+   * user input is less than current show incorrect modal
+   * **/
+
+  function showIncorrectModal(inputString) {
+    /*
+    incorrectModalWrapper,
+    incorrectDateTimeModal,
+    incorrectTextElementsForMessage,
+    */
+    // assign inputString to property focusStringForIncorrectModal in dataObj
+    dataObj.focusStringForIncorrectModal = inputString;
+    // add text to span elements
+    /**
+     * if inputString is minutes we want to add class display-revert to
+     * element with class minute-input-incorrect
+     * **/
+    if (inputString == "minutes") {
+      // if textElementForMinuteIncorrectModal doesnt have class display-revert
+      // add it
+
+      const checkingIfElementHasClassDisplayRevert =
+        textElementForMinuteIncorrectModal
+          .getAttribute("class")
+          .includes("display-revert");
+      !checkingIfElementHasClassDisplayRevert
+        ? textElementForMinuteIncorrectModal.classList.add("display-revert")
+        : null;
+    } else {
+      // if textElementForMinuteIncorrectModal has class display-revert
+      // remove it we dont want text to show for other select inputs that isnt minute input
+      textElementForMinuteIncorrectModal
+        .getAttribute("class")
+        .includes("display-revert")
+        ? textElementForMinuteIncorrectModal.classList.remove("display-revert")
+        : null;
+    }
+    incorrectTextElementsForMessage.forEach(function addTextToSpanElements(
+      spanElement
+    ) {
+      spanElement.textContent = inputString;
+    });
+    // add class display-revert to modal-three wrapper
+    incorrect.classList.add("display-revert");
+    // add keydown listener to incorrect modal
+    addListener.call(
+      incorrectDateTimeModal,
+      "keydown",
+      removeKeydownHideModalThree
+    );
+  }
 
   /**
    * days option based on month selected
@@ -2912,6 +3071,30 @@
   }
 
   /**
+   * adding keydown listener to modal three
+   * **/
+
+  function removeKeydownHideModalThree(event) {
+    const { targetKeyCodeStr } = propertiesOfEventObj.call(event);
+    if (targetKeyCodeStr == "Escape") {
+      // remove class display revert
+      incorrectModalWrapper.classList.remove("display-revert");
+      // focus on select element of custom user input
+      const focusSelectElement = dataObj.focusStringForIncorrectModal;
+      if (focusSelectElement !== null) {
+        setTimeout(() => {
+          document.querySelector(`select[id=${focusSelectElement}]`).focus();
+        }, 350);
+      }
+      // remove keydown event
+      incorrectDateTimeModal.removeEventListener(
+        "keydown",
+        removeKeydownHideModalThree
+      );
+    }
+  }
+
+  /**
    * handle feb number of days when its leap year
    * Feb index is 1 when we call method .getMonth() on Date() obj
    * **/
@@ -3349,7 +3532,21 @@
     const arrayOfListItemsForEmptyInputs = Array.prototype.slice.call(
       document.querySelectorAll(".empty-input")
     );
+    // incorrect date and time modal wrapper
+    const incorrectModalWrapper = document.querySelector(
+      ".incorrect-user-date-time-modal-bg-wrapper"
+    );
     // incorrect date and time modal
+    const incorrectDateTimeModal = document.querySelector(".incorrect-modal");
+    // element with text for minute incorrect modal
+    const textElementForMinuteIncorrectModal = document.querySelector(
+      ".minute-input-incorrect"
+    );
+    // array of span element to update text. let user know which input is less than current
+    const incorrectTextElementsForMessage = Array.prototype.slice.call(
+      document.querySelector(".incorrect-date-time")
+    );
+
     // days select option elements
     const arrayOfDaysSelectOptionElements = Array.from(
       document.querySelectorAll("select[id='day'] option")
@@ -3400,6 +3597,10 @@
       emptyModalWrapper,
       emptyInputModal,
       arrayOfListItemsForEmptyInputs,
+      incorrectModalWrapper,
+      incorrectDateTimeModal,
+      textElementForMinuteIncorrectModal,
+      incorrectTextElementsForMessage,
       arrayOfDaysSelectOptionElements,
       selectMonthInput,
       selectYearInput,
