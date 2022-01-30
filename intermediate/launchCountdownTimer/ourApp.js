@@ -1961,11 +1961,48 @@
       currentHour,
       currentMinute,
     };
+    /**
+     * put obj return from validations func in an array
+     * **/
     // year
+    const checkingYearInputs = validationYearInput(currDateObj, userInputData);
     // month
+    const checkingMonthInputs = validationMonthInput(
+      currDateObj,
+      userInputData
+    );
     // day
+    const checkingDayInputs = validationDayInput(currDateObj, userInputData);
     // hr
-    // minutes
+    const checkingHrInputs = validationHoursInput(currDateObj, userInputData);
+    const arrayOfValidationObj = [
+      checkingYearInputs,
+      checkingMonthInputs,
+      checkingDayInputs,
+      checkingHrInputs,
+    ];
+    /**
+     * use filter method and loop through array get obj condition/value dont equal each other
+     * if array below is empty it means, user year,month,day,hr equal to current year,
+     * month,day, hr then check minutes
+     * else get first obj of array
+     * **/
+    const arrayOfInputNotEqualEachOther = arrayOfValidationObj.filter(
+      function findObjValueNotEqualEachOther(validationObj) {
+        const { selectInputString } = dataObj;
+        const checkValue = dataObj[`${selectInputString}InputEqualToCurrent`];
+        return !checkValue;
+      }
+    );
+    // if array length is greater than or equal to 1
+    if (arrayOfInputNotEqualEachOther.length >= 1) {
+      // get first obj of array
+      const [firstValidationObj] = arrayOfInputNotEqualEachOther;
+      runFuncBasedOnUserInputsValidations(firstValidationObj);
+    } else {
+      // check minutes
+      validationMinutesInput(currDateObj, userInputData);
+    }
   }
 
   // check year
@@ -1973,7 +2010,7 @@
     const currYear = Number(startDateObj.currentYear);
     const endYear = Number(userDateObj.year);
     return {
-      selectInput: "year",
+      selectInputString: "year",
       yearInputGreaterThanCurrent: endYear > currYear,
       yearInputLesserThanCurrent: endYear < currYear,
       yearInputEqualToCurrent: endYear == currYear,
@@ -1981,10 +2018,15 @@
   }
   // check month
   function validationMonthInput(startDateObj, userDateObj) {
-    const currMonth = Number(startDateObj.currentMonth);
-    const endMonth = Number(userDateObj.month);
+    // find index of month in arrOfMonthStringsWorkingWithIndex
+    const currMonth = dataObj.arrOfMonthStringsWorkingWithIndex.indexOf(
+      startDateObj.currentMonth
+    );
+    const endMonth = dataObj.arrOfMonthStringsWorkingWithIndex.indexOf(
+      userDateObj.month
+    );
     return {
-      selectInput: "month",
+      selectInputString: "month",
       monthInputGreaterThanCurrent: endMonth > currMonth,
       monthInputLesserThanCurrent: endMonth < currMonth,
       monthInputEqualToCurrent: endMonth == currMonth,
@@ -1995,7 +2037,7 @@
     const currDay = Number(startDateObj.currentDay);
     const endDay = Number(userDateObj.day);
     return {
-      selectInput: "day",
+      selectInputString: "day",
       dayInputGreaterThanCurrent: endDay > currDay,
       dayInputLesserThanCurrent: endDay < currDay,
       dayInputEqualToCurrent: endDay == currDay,
@@ -2010,7 +2052,7 @@
     const currHours = Number(startDateObj.currentHours);
     const endHours = Number(convertedHrToTwentyFourHrFormat);
     return {
-      selectInput: "hours",
+      selectInputString: "hours",
       hoursInputGreaterThanCurrent: endHours > currHours,
       hoursInputLesserThanCurrent: endHours < currHours,
       hoursInputEqualToCurrent: endHours == currHours,
@@ -2023,8 +2065,9 @@
     // if user year, month and hr == current year,month and hr
     // user minutes cant equal or be less than current minute
     if (endMinute < currMinute || endMinute === currMinute) {
-    } else {
       showIncorrectModal("minutes");
+    } else {
+      userInputIsValidRunFunc(userDateObj);
     }
   }
 
@@ -2032,12 +2075,26 @@
    * run func based on inputs validations
    * **/
 
-  function runFuncBasedOnUserInputsValidations(...rest) {
-    // we want the validationInputObj, startDateObj,userDateObj
-    const [strAndConditionalObj, startObj, endDateObj, validationFunc] = rest;
+  function runFuncBasedOnUserInputsValidations(strAndConditionalObj) {
     // pass in the validation funcs as a value
     // inputValidation will be equal, less than or greater than
-    // get selectInput of strAndConditionalObj use it to get value of strAndConditionalObj
+    // get selectInputString of strAndConditionalObj use it to get value of strAndConditionalObj
+    const inputString = strAndConditionalObj.selectInputString;
+    /**
+     * only one of the following if statement will run
+     * **/
+    // greater than
+    if (strAndConditionalObj[`${inputString}InputGreaterThanCurrent`]) {
+      userInputIsValidRunFunc(userDateObj);
+      //
+      return;
+    }
+    // less than
+    if (strAndConditionalObj[`${inputString}InputLesserThanCurrent`]) {
+      showIncorrectModal(inputString);
+      //
+      return;
+    }
   }
 
   /**
@@ -2072,20 +2129,19 @@
    * user input is less than current show incorrect modal
    * **/
 
-  function showIncorrectModal(inputString) {
+  function showIncorrectModal(validationInputString) {
     /*
     incorrectModalWrapper,
     incorrectDateTimeModal,
     incorrectTextElementsForMessage,
     */
-    // assign inputString to property focusStringForIncorrectModal in dataObj
-    dataObj.focusStringForIncorrectModal = inputString;
-    // add text to span elements
+    // assign validationInputString to property focusStringForIncorrectModal in dataObj
+    dataObj.focusStringForIncorrectModal = validationInputString;
     /**
-     * if inputString is minutes we want to add class display-revert to
+     * if validationInputString is minutes we want to add class display-revert to
      * element with class minute-input-incorrect
      * **/
-    if (inputString == "minutes") {
+    if (validationInputString == "minutes") {
       // if textElementForMinuteIncorrectModal doesnt have class display-revert
       // add it
 
@@ -2105,19 +2161,24 @@
         ? textElementForMinuteIncorrectModal.classList.remove("display-revert")
         : null;
     }
+    // add text to span elements
     incorrectTextElementsForMessage.forEach(function addTextToSpanElements(
       spanElement
     ) {
-      spanElement.textContent = inputString;
+      spanElement.textContent = validationInputString;
     });
-    // add class display-revert to modal-three wrapper
-    incorrect.classList.add("display-revert");
     // add keydown listener to incorrect modal
     addListener.call(
       incorrectDateTimeModal,
       "keydown",
       removeKeydownHideModalThree
     );
+    // add class display-revert to modal-three wrapper
+    incorrectModalWrapper.classList.add("display-revert");
+    // apply focus to incorrect modal for escape key functionality
+    setTimeout(() => {
+      incorrectDateTimeModal.focus();
+    }, 350);
   }
 
   /**
@@ -2292,6 +2353,7 @@
       firstItemHasHiddenAttr.getAttribute("data-input-id");
     // add class display-revert to remove display: none declaration
     modalElement.classList.add("display-revert");
+    // apply focus to empty modal for escape key functionality
     setTimeout(() => {
       emptyInputModal.focus();
     }, 350);
