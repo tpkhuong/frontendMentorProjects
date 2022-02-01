@@ -432,15 +432,15 @@
           <!-- user time is earlier than current time modal -->
           
           <div class="incorrect-user-date-time-modal-bg-wrapper">
-            <div id="modal-three" class="incorrect-modal" role="dialog" aria-modal="true" aria-describedby="modal-three-title">
+            <div tabindex="-1" id="modal-three" class="incorrect-modal" role="dialog" aria-modal="true" aria-describedby="modal-three-title">
               <!-- we will work from top: year to month to day to hr to min -->
               <!-- if month or day or hr or min is less than current let user know at each level -->
               <!-- only check input closer to min if the input greater than min equal to each other: -->
               <!-- year == year, month == month, day == day, hr == hr -->
               <p id="modal-three-title">
-                The following <span class="incorrect-date-time"></span> value is less than <span class="minute-input-incorrect">or equal to</span> current <span class="incorrect-date-time"></span>.
+                The <span class="soft-red-color">Custom <span class="incorrect-date-time"></span> Value</span> is less than <span class="minute-input-incorrect">or equal to</span> <span class="soft-red-color">Current <span class="incorrect-date-time"></span>.</span>
               </p>
-              <p>Pressing <span class="soft-red-color">Escape</span> key will take you to <span class="incorrect-date-time"></span> select input of Custom Date and Time Modal.</p>
+              <p>Pressing <span class="soft-red-color">Escape</span> key will take you to <span class="soft-red-color"><span class="incorrect-date-time"></span> Select Input</span> of Custom Date and Time Modal.</p>
             </div>
           </div>
           <!-- social media icons/links -->
