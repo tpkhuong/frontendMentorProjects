@@ -802,6 +802,18 @@ div[id="modal-one"] {
   display: none;
 }
 
+.incorrect-date-time {
+  /*  ::first-letter pseudo-element selector works on block level element
+  also works on inline-block*/
+  /* display: inline-block declaration is causing firefox to
+add inline spacing on the incorrect date time element 
+might have to use JS to capitalize our first letter
+*/
+  /* display: inline-block; */
+}
+.incorrect-date-time::first-letter {
+  text-transform: uppercase;
+}
 /* using grid area */
 
 .date-input-wrapper {
