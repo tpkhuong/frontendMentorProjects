@@ -1952,7 +1952,7 @@
     const copyOfObj = { ...userInputData };
     // current date and time
     const { currentYear, currentMonth, currentDay } =
-      getCurrentYearMonthDate(dataObj);
+      getCurrentYearMonthDate(dateObj);
     const { currentHour, currentMinute } = getCurrentHourMinutes();
     const currDateObj = {
       currentYear,
@@ -1965,16 +1965,14 @@
      * put obj return from validations func in an array
      * **/
     // year
-    const checkingYearInputs = validationYearInput(currDateObj, userInputData);
+    const checkingYearInputs = validationYearInput(currDateObj, copyOfObj);
     // month
-    const checkingMonthInputs = validationMonthInput(
-      currDateObj,
-      userInputData
-    );
+    const checkingMonthInputs = validationMonthInput(currDateObj, copyOfObj);
     // day
-    const checkingDayInputs = validationDayInput(currDateObj, userInputData);
+    const checkingDayInputs = validationDayInput(currDateObj, copyOfObj);
     // hr
-    const checkingHrInputs = validationHoursInput(currDateObj, userInputData);
+
+    const checkingHrInputs = validationHoursInput(currDateObj, copyOfObj);
     const arrayOfValidationObj = [
       checkingYearInputs,
       checkingMonthInputs,
@@ -1989,19 +1987,30 @@
      * **/
     const arrayOfInputNotEqualEachOther = arrayOfValidationObj.filter(
       function findObjValueNotEqualEachOther(validationObj) {
-        const { selectInputString } = dataObj;
-        const checkValue = dataObj[`${selectInputString}InputEqualToCurrent`];
+        const { selectInputString } = validationObj;
+        const checkValue =
+          validationObj[`${selectInputString}InputEqualToCurrent`];
         return !checkValue;
       }
     );
+
     // if array length is greater than or equal to 1
     if (arrayOfInputNotEqualEachOther.length >= 1) {
+      console.log("checking year,month,day,hr");
+
       // get first obj of array
+      /**
+       * we check year > month > day > hr > min
+       * when there are multiple user input less than current date values
+       * we want to alert/take user to that user input
+       * which will be the first obj in arrayOfInputNotEqualEachOther
+       * **/
       const [firstValidationObj] = arrayOfInputNotEqualEachOther;
       runFuncBasedOnUserInputsValidations(firstValidationObj);
     } else {
+      console.log("checking minutes");
       // check minutes
-      validationMinutesInput(currDateObj, userInputData);
+      validationMinutesInput(currDateObj, copyOfObj);
     }
   }
 
@@ -2047,9 +2056,10 @@
   function validationHoursInput(startDateObj, userDateObj) {
     // use convertTwelveToTwentyFourHourFormat to get user hr input in 24 hr format
     // get current date hr then check conditional
+    // convertTwelveToTwentyFourHourFormat; returns a string
     const convertedHrToTwentyFourHrFormat =
       convertTwelveToTwentyFourHourFormat.call(userDateObj);
-    const currHours = Number(startDateObj.currentHours);
+    const currHours = Number(startDateObj.currentHour);
     const endHours = Number(convertedHrToTwentyFourHrFormat);
     return {
       selectInputString: "hours",
@@ -2060,7 +2070,7 @@
   }
   // check minutes
   function validationMinutesInput(startDateObj, userDateObj) {
-    const currMinute = Number(startDateObj.minutes);
+    const currMinute = Number(startDateObj.currentMinute);
     const endMinute = Number(userDateObj.minutes);
     // if user year, month and hr == current year,month and hr
     // user minutes cant equal or be less than current minute
@@ -2086,14 +2096,10 @@
     // greater than
     if (strAndConditionalObj[`${inputString}InputGreaterThanCurrent`]) {
       userInputIsValidRunFunc(userDateObj);
-      //
-      return;
     }
     // less than
     if (strAndConditionalObj[`${inputString}InputLesserThanCurrent`]) {
       showIncorrectModal(inputString);
-      //
-      return;
     }
   }
 
@@ -2161,6 +2167,21 @@
         ? textElementForMinuteIncorrectModal.classList.remove("display-revert")
         : null;
     }
+    /**
+     * if we didnt use css to capitalize first letter of user input
+     * year,month,day,minutes
+     * **/
+    // get first letter
+    // get rest of word
+    // call .toUpperCase() on first letter
+    // concat capitalized first letter with rest of word
+    /* great effort starting the algorithm below
+    const firstLetter = validationInputString.slice(0, 1);
+    const restOfWord = validationInputString.slice(1);
+    const capitalizedFirstLetter = firstLetter.toUpperCase();
+    const uppercasedFirstLetterOfUserInput = `${capitalizedFirstLetter}${restOfWord}`;*/
+    // const uppercasedFirstLetterOfUserInput =
+    //   capitalizedFirstLetter + restOfWord;
     // add text to span elements
     incorrectTextElementsForMessage.forEach(function addTextToSpanElements(
       spanElement
@@ -2168,6 +2189,7 @@
       spanElement.textContent = validationInputString;
     });
     // add keydown listener to incorrect modal
+
     addListener.call(
       incorrectDateTimeModal,
       "keydown",
@@ -2176,6 +2198,10 @@
     // add class display-revert to modal-three wrapper
     incorrectModalWrapper.classList.add("display-revert");
     // apply focus to incorrect modal for escape key functionality
+    /**
+     * element needs tabindex="-1" if we want to use DOM element method .focus()
+     * to have that element focus
+     * **/
     setTimeout(() => {
       incorrectDateTimeModal.focus();
     }, 350);
@@ -3048,10 +3074,12 @@
       // when convertObjToArrayCheckLength is 0 we enter this else statement
       // it means user has selected a value for each inputs
       // we want to check if user date and time is a later time than current
+      correctTimeInputValidation(userInputObj);
     }
 
     // update userDateInput hour to 24hr format
     // typeof hourConvertedToTwentyFourFormat will be string
+    /*
     const hourConvertedToTwentyFourFormat =
       convertTwelveToTwentyFourHourFormat.call(userInputObj);
     console.log(
@@ -3067,7 +3095,7 @@
       minutes: Number(userInputObj.minutes),
       meridiem: userInputObj.meridiem,
     };
-
+*/
     // call countdownTimer passing in startCountdownTimerForUserInputs when user click submit
     // dataObj.stopTimerID = countDownTimer(startCountdownTimerForUserInputs);
     console.log(dataObj);
@@ -3137,6 +3165,7 @@
    * **/
 
   function removeKeydownHideModalThree(event) {
+    console.log(event);
     const { targetKeyCodeStr } = propertiesOfEventObj.call(event);
     if (targetKeyCodeStr == "Escape") {
       // remove class display revert
@@ -3599,14 +3628,14 @@
       ".incorrect-user-date-time-modal-bg-wrapper"
     );
     // incorrect date and time modal
-    const incorrectDateTimeModal = document.querySelector(".incorrect-modal");
+    const incorrectDateTimeModal = document.querySelector("#modal-three");
     // element with text for minute incorrect modal
     const textElementForMinuteIncorrectModal = document.querySelector(
       ".minute-input-incorrect"
     );
     // array of span element to update text. let user know which input is less than current
     const incorrectTextElementsForMessage = Array.prototype.slice.call(
-      document.querySelector(".incorrect-date-time")
+      document.querySelectorAll(".incorrect-date-time")
     );
 
     // days select option elements
