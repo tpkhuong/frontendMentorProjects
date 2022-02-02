@@ -2,6 +2,7 @@
   //   declare selector at top of func
 
   const {
+    appWrapperSectionElement,
     nextHolidayTextElement,
     startDefaultCountdownBtn,
     linkSelectMonth,
@@ -11,6 +12,7 @@
     customDateButton,
     monthSelectElement,
     userInputModalDiv,
+    modalOneTitle,
     emptyModalWrapper,
     emptyInputModal,
     arrayOfListItemsForEmptyInputs,
@@ -141,6 +143,12 @@
 
   const assignValuesToDigitELementsForInitialAppFunc =
     factoryFuncForUpdatingDigitElements();
+
+  /**
+   * gettting next holiday data and title text
+   * **/
+
+  initialTitleNextHolidayData();
 
   /**
    * user inputs
@@ -320,10 +328,9 @@
     /**
      * setup initial second value and element here
      * initial second and when setInterval func is called seconds are different
-     * ***** setup initial second and value inside setInterval callback  
+     * ***** setup initial second and value inside setInterval callback
      * the Date() obj for days,hours,minutes and second have to be the same
      * *****
-     // add class flip-animation to digit-bottom of second element
      addFlipAnimationClassToSecondBottomElement.call(
        secondDigitBottom,
        "flip-animation"
@@ -337,6 +344,7 @@
        `${secondValForInitialLoad}`
      );
      * */
+    // add class flip-animation to digit-bottom of second element
     /**
      * seconds element will update outside switch statement
      * **/
@@ -970,12 +978,11 @@
      * **/
     // const dateObjInitial = new Date();
     // console.log(dateObj.getSeconds());
-    const currentDateObjInitial = getCurrentYearMonthDate(dateObj);
     // pass initialCurrentDateObj as first argument/value to digitsElementsCalculation
     const initialCurrentDateObj = currentDateObjForDigitElementCalc();
     console.log(dataObj);
-    // calling func to get next holiday obj
-    getNextUpcomingHolidayValues.call(currentDateObjInitial);
+    // calling func to get next holiday obj in initialTitleNextHolidayData
+    // getNextUpcomingHolidayValues.call(currentDateObjInitial);
     // call digitsElementCalculation
     const { dayDigitForElement, hourDigit, minuteDigit } =
       digitsElementsCalculation(
@@ -1001,16 +1008,27 @@
     //   secondDigitBottom,
     //   arrayOfSecondsDivElement
     // );
-    /**
-     * change title to match next holiday
-     * **/
-
-    changeTitleToMatchNextHoliday(dataObj.defaultEndingDate.title);
     // dataObj.stopTimerID = countDownTimer();
     /**
      * console.log("calling digitsElementsCalc func inside initialApp Func");
     console.log(
     );**/
+  }
+
+  /**
+   * initial title text for next holiday
+   * **/
+
+  function initialTitleNextHolidayData() {
+    const dateData = new Date();
+    // current year,month, day
+    const currentDateObjInitial = getCurrentYearMonthDate(dateData);
+    // calling func to get next holiday obj
+    getNextUpcomingHolidayValues.call(currentDateObjInitial);
+    /**
+     * change title to match next holiday
+     * **/
+    changeTitleToMatchNextHoliday(dataObj.defaultEndingDate.title);
   }
 
   /**
@@ -1029,8 +1047,8 @@
        * as first argument/value to digitsElementsCalculation to test timer
        * **/
       digitsElementsCalculation(
-        // currentDateObjForUsedWithUserInput,
-        { year: 2022, month: "Jan", day: 20, time: { hours: 10, minutes: 59 } },
+        currentDateObjForUsedWithUserInput,
+        // { year: 2022, month: "Jan", day: 20, time: { hours: 10, minutes: 59 } },
         dataObj.userDateInput
       );
     // assign values to dayDigit,hourDigit,minuteDigit in dataObj for timer func
@@ -2006,7 +2024,7 @@
        * which will be the first obj in arrayOfInputNotEqualEachOther
        * **/
       const [firstValidationObj] = arrayOfInputNotEqualEachOther;
-      runFuncBasedOnUserInputsValidations(firstValidationObj);
+      runFuncBasedOnUserInputsValidations(firstValidationObj, copyOfObj);
     } else {
       console.log("checking minutes");
       // check minutes
@@ -2085,7 +2103,10 @@
    * run func based on inputs validations
    * **/
 
-  function runFuncBasedOnUserInputsValidations(strAndConditionalObj) {
+  function runFuncBasedOnUserInputsValidations(
+    strAndConditionalObj,
+    useInputObj
+  ) {
     // pass in the validation funcs as a value
     // inputValidation will be equal, less than or greater than
     // get selectInputString of strAndConditionalObj use it to get value of strAndConditionalObj
@@ -2095,7 +2116,7 @@
      * **/
     // greater than
     if (strAndConditionalObj[`${inputString}InputGreaterThanCurrent`]) {
-      userInputIsValidRunFunc(userDateObj);
+      userInputIsValidRunFunc(useInputObj);
     }
     // less than
     if (strAndConditionalObj[`${inputString}InputLesserThanCurrent`]) {
@@ -2127,7 +2148,7 @@
     };
 
     // call countdownTimer passing in startCountdownTimerForUserInputs when user click submit
-    // dataObj.stopTimerID = countDownTimer(startCountdownTimerForUserInputs);
+    dataObj.stopTimerID = countDownTimer(startCountdownTimerForUserInputs);
     console.log(dataObj);
   }
 
@@ -2175,18 +2196,23 @@
     // get rest of word
     // call .toUpperCase() on first letter
     // concat capitalized first letter with rest of word
-    /* great effort starting the algorithm below
+    /**
+     * using algorithm below because declaration of display: inline-block on span element
+     * with class incorrect-date-time add horizontal space to text(content box) on
+     * words with many characters
+     * **/
+    /* great effort starting the algorithm below*/
     const firstLetter = validationInputString.slice(0, 1);
     const restOfWord = validationInputString.slice(1);
     const capitalizedFirstLetter = firstLetter.toUpperCase();
-    const uppercasedFirstLetterOfUserInput = `${capitalizedFirstLetter}${restOfWord}`;*/
+    const uppercasedFirstLetterOfUserInput = `${capitalizedFirstLetter}${restOfWord}`;
     // const uppercasedFirstLetterOfUserInput =
     //   capitalizedFirstLetter + restOfWord;
     // add text to span elements
     incorrectTextElementsForMessage.forEach(function addTextToSpanElements(
       spanElement
     ) {
-      spanElement.textContent = validationInputString;
+      spanElement.textContent = uppercasedFirstLetterOfUserInput;
     });
     // add keydown listener to incorrect modal
 
@@ -3129,11 +3155,17 @@
     setTimeout(() => {
       this.classList.add("hide");
       this.nextElementSibling.classList.add("display-revert");
-    }, 495);
+    }, 900);
+    /**
+     * element can't have hidden or display none if we want to use .focus() on it
+     * **/
+    setTimeout(() => {
+      customDateButton.focus();
+    }, 950);
     /**
      * uncomment code below for production
      * **/
-    // dataObj.stopTimerID = countDownTimer(initialAppSetUp);
+    dataObj.stopTimerID = countDownTimer(initialAppSetUp);
   }
 
   /**
@@ -3145,6 +3177,17 @@
     if (targetKeyCodeStr == "Escape") {
       // remove class display revert
       emptyModalWrapper.classList.remove("display-revert");
+      // remove attr aria-describedby on modal one element when user press escape key
+      // remove attr aria-labelledby on appWrapper element when user press escape key
+      // screen reader NVDA will announce dialog once JS focus on select input element
+      userInputModalDiv.removeAttribute("aria-describedby");
+      appWrapperSectionElement.removeAttribute("aria-labelledby");
+      // to remove class display revert on modal
+      // once JS focus on select input we want to add aria-describeby back to modal one
+      setTimeout(() => {
+        userInputModalDiv.setAttribute("aria-describedby", "modal-one-title");
+        appWrapperSectionElement.setAttribute("aria-labelledby", "app-title");
+      }, 530);
       // focus on select element of custom user input
       const focusSelectElement = dataObj.selectInputToFocusString;
       if (focusSelectElement !== null) {
@@ -3170,6 +3213,17 @@
     if (targetKeyCodeStr == "Escape") {
       // remove class display revert
       incorrectModalWrapper.classList.remove("display-revert");
+      // remove attr aria-describedby on modal one element when user press escape key
+      // remove attr aria-labelledby on appWrapper element when user press escape key
+      // screen reader NVDA will announce dialog once JS focus on select input element
+      userInputModalDiv.removeAttribute("aria-describedby");
+      appWrapperSectionElement.removeAttribute("aria-labelledby");
+      // to remove class display revert on modal
+      // once JS focus on select input we want to add aria-describeby back to modal one
+      setTimeout(() => {
+        userInputModalDiv.setAttribute("aria-describedby", "modal-one-title");
+        appWrapperSectionElement.setAttribute("aria-labelledby", "app-title");
+      }, 530);
       // focus on select element of custom user input
       const focusSelectElement = dataObj.focusStringForIncorrectModal;
       if (focusSelectElement !== null) {
@@ -3587,6 +3641,10 @@
    * **/
 
   function ourSelectors() {
+    // app wrapper
+    const appWrapperSectionElement = document.querySelector(
+      ".countdown-background-style-wrapper"
+    );
     // next holiday container
     const nextHolidayTextElement = document.querySelector(".next-holiday-text");
     // start next countdown timer button
@@ -3613,6 +3671,8 @@
     const formElement = document.querySelector("form");
     // custom input modal
     const userInputModalDiv = document.getElementById("modal-one");
+    // modal one title
+    const modalOneTitle = document.querySelector("#modal-one-title");
     // empty input modal wrapper
     const emptyModalWrapper = document.querySelector(
       ".require-inputs-modal-bg-wrapper"
@@ -3648,33 +3708,34 @@
     const selectYearInput = document.getElementById("year");
     // days, hours, minutes, seconds digit-bottom
     const daysDigitBottom = document.querySelector(
-      "div[id='days'] .digit-bottom"
+      "div[id='days-digits'] .digit-bottom"
     );
     const hoursDigitBottom = document.querySelector(
-      "div[id='hours'] .digit-bottom"
+      "div[id='hours-digits'] .digit-bottom"
     );
     const minutesDigitBottom = document.querySelector(
-      "div[id='minutes'] .digit-bottom"
+      "div[id='minutes-digits'] .digit-bottom"
     );
     const secondDigitBottom = document.querySelector(
-      "div[id='seconds'] .digit-bottom"
+      "div[id='seconds-digits'] .digit-bottom"
     );
     // array of back, top, bottom elements for days, hours, minutes, seconds
     const arrayOfDaysDivElement = Array.from(
-      document.querySelectorAll("div[id='days'] > div")
+      document.querySelectorAll("div[id='days-digits'] > div")
     );
     const arrayOfHoursDivElement = Array.prototype.slice.call(
-      document.querySelectorAll("div[id='hours'] > div")
+      document.querySelectorAll("div[id='hours-digits'] > div")
     );
     const arrayOfMinutesDivElement = Array.from(
-      document.querySelectorAll("div[id='minutes'] > div")
+      document.querySelectorAll("div[id='minutes-digits'] > div")
     );
     const arrayOfSecondsDivElement = Array.prototype.slice.call(
-      document.querySelectorAll("div[id='seconds'] > div")
+      document.querySelectorAll("div[id='seconds-digits'] > div")
     );
     // const effortTwo = document.querySelector("digit-style-wrapper-two");
 
     return {
+      appWrapperSectionElement,
       nextHolidayTextElement,
       startDefaultCountdownBtn,
       linkSelectMonth,
@@ -3685,6 +3746,7 @@
       monthSelectElement,
       formElement,
       userInputModalDiv,
+      modalOneTitle,
       emptyModalWrapper,
       emptyInputModal,
       arrayOfListItemsForEmptyInputs,
