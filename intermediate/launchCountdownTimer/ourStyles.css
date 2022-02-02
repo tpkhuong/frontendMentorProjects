@@ -11,6 +11,7 @@
   --col-neutral-dark-blue-bottom: hsl(236, 21%, 26%);
   --col-neutral-black-blue-bg: hsl(234, 17%, 12%);
   --col-neutral-vary-dark-blue: hsl(235, 16%, 14%);
+  --col-neutral-dark-purple-bg: hsl(266, 19%, 14%);
   /* white and black */
   --col-neutral-white: hsl(0, 100%, 100%);
   --col-neutral-black: hsl(0, 0%, 0%);
@@ -450,6 +451,7 @@ a:hover {
 
 main[role="main"] {
   height: 100%;
+  background: var(--col-neutral-dark-purple-bg);
 }
 
 .app-style-wrapper {
@@ -459,6 +461,9 @@ main[role="main"] {
   border: .1px solid transparent; 
   will cause margin to not collapse
   */
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
   max-width: 750px;
   margin-inline: auto;
   position: relative;
@@ -469,7 +474,8 @@ main[role="main"] {
 /* background images section */
 
 .countdown-background-style-wrapper {
-  min-height: 100%;
+  max-width: 1440px;
+  height: 100%;
   padding-block-start: 148px;
   /* padding-block-end: 48px; */
   background-image: url("./images/bg-stars.svg"),
@@ -488,15 +494,28 @@ main[role="main"] {
 [id="app-title"] {
   color: var(--col-neutral-white);
   text-transform: uppercase;
-  font-size: 1.1rem;
+  font-size: clamp(1.3rem, 5vw, 1.7rem);
   letter-spacing: 3px;
   max-width: 23ch;
   text-align: center;
   margin-inline: auto;
 }
 
+@media screen and (min-width: 40.625rem) {
+  [id="app-title"] {
+    max-width: revert;
+  }
+}
+
 .next-holiday-text {
   color: var(--col-primary-soft-red-top);
+}
+
+@media screen and (min-width: 23.75rem) {
+  .countdown-background-style-wrapper {
+    background-size: auto, auto, auto;
+    margin-inline: auto;
+  }
 }
 
 /* button to start default holiday countdown */
@@ -509,8 +528,11 @@ main[role="main"] {
 .back-of-start-timer {
   padding: 0;
   --btn-bg: var(--col-neutral-dark-blue-bottom);
-  margin-block: 180px;
-  margin-block-end: 314px;
+  margin-block: auto;
+  align-self: center;
+  /* using display: flex; and margin-block: auto to center button vertically */
+  /* margin-block: 180px;
+  margin-block-end: 314px; */
   opacity: 1;
   transition: opacity 500ms ease-out;
 }
@@ -643,6 +665,7 @@ apply display: none to that element
 
 .digit-text-wrapper div[id] {
   font-size: 2.5rem;
+  /* desktop 3.9rem */
 }
 
 .digit-text-wrapper {
@@ -765,6 +788,13 @@ div[id="modal-one"] {
   padding-inline: 11px;
   opacity: 0;
   transition: opacity 500ms ease-out;
+  /* when custom ending date button is not pressed this element goes behind button element
+  so user can click on button.
+  then when we assign value "true" to user-clicked attr of button with 
+  class modal-launcher-back we will declare z-index: revert to show
+  modal with select inputs
+  */
+  z-index: -1;
 }
 
 /* empty input modal */
@@ -805,14 +835,19 @@ div[id="modal-one"] {
 .incorrect-date-time {
   /*  ::first-letter pseudo-element selector works on block level element
   also works on inline-block*/
-  /* display: inline-block declaration is causing firefox to
+  /* display inline-block declaration is causing firefox to
 add inline spacing on the incorrect date time element 
 might have to use JS to capitalize our first letter
-*/
-  /* display: inline-block; */
-}
+
 .incorrect-date-time::first-letter {
   text-transform: uppercase;
+}
+
+we will use JS to capitalize first letter of
+span element with class incorrect-date-time
+
+*/
+  /* display: inline-block; */
 }
 /* using grid area */
 
@@ -917,9 +952,14 @@ button[type="submit"] {
 
 /* opacity effect on modal */
 
+[class="modal-launcher-back"][user-clicked="true"] {
+  display: none;
+}
+
 [class="modal-launcher-back"][user-clicked="true"] + div[id="modal-one"] {
   opacity: 1;
   transition: opacity 1000ms ease-in;
+  z-index: revert;
 }
 
 /* opacity effect on starting date button */
@@ -936,6 +976,8 @@ button[type="submit"] {
 /* social media icons */
 
 .social-media-icons {
+  margin-block: 30px;
+  margin-block-start: 90px;
   /* we had border around app-style-wrapper
   which did not allow for margin-collapse with starting date button
   and container for social media icon
@@ -971,6 +1013,16 @@ button[type="submit"] {
 
 [class="social-media-icons"] svg path {
   fill: var(--col-primary-grayish-blue);
+}
+
+@media screen and (min-width: 40.625rem) {
+  [class="social-media-icons"] > * + * {
+    margin-inline-start: 14px;
+    margin-block: 48px;
+  }
+  [class="social-media-icons"] svg {
+    width: 30px;
+  }
 }
 
 .hide {
