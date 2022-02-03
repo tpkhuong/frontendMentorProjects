@@ -157,94 +157,11 @@
     factoryFuncForUpdatingDigitElements();
 
   // add event listeners
-  addListener.call(userInputModalDiv, "change", function TODO(event) {
-    // if selectYearInput.value is an empty string we will assume it is not leap year
-    // we will assign boolean value of false to checkingForLeapYear
-    // feb will have 28 days
-    const yearInput = selectYearInput.value;
-    const checkingForLeapYear =
-      yearInput === ""
-        ? false
-        : Number(selectYearInput.value) % 4 === 0
-        ? true
-        : false;
-    const arrayOfLastThreeOptionDayElement =
-      arrayOfDaysSelectOptionElements.slice(28);
-    const targetInputID = event.target.getAttribute("id");
-    const targetValue = event.target.value;
-    if (targetInputID == "month") {
-      switch (targetValue) {
-        case "Feb":
-          daysOptionFebSelected(
-            arrayOfLastThreeOptionDayElement,
-            checkingForLeapYear
-          );
-          break;
-        case "Apr":
-        case "Jun":
-        case "Sep":
-        case "Nov":
-          thirtyDaysOptionSelected(
-            arrayOfLastThreeOptionDayElement,
-            checkingForLeapYear
-          );
-          console.log("30 days");
-          break;
-        default:
-          thirtyOneDaysOptionSelected(arrayOfLastThreeOptionDayElement);
-          console.log("31 days");
-      }
-    }
-
-    if (targetInputID == "year" && selectMonthInput.value == "Feb") {
-      // if month is feb and year option is selected add hidden attr to day 30 and 31
-      const arrayOfLastTwoOptionsElement =
-        arrayOfDaysSelectOptionElements.slice(29);
-      for (let element of arrayOfLastTwoOptionsElement) {
-        if (!element.getAttribute("hidden")) {
-          element.setAttribute("hidden", "");
-        }
-      }
-      if (targetValue === "") {
-        console.log("empty string");
-        daysForFebYearInputSelected(targetValue);
-        return;
-      }
-      // we want to check if current Selected year and previous selected
-      // is a leap year or not. if both are not or both are leap year
-      // we dont want to run algorithm that add hidden attr to options
-      // we want to do nothing because if current selected and previous are the same
-      // the days we want to allow user to select will not change
-      // it will change if user select a year that is not leap year (28days)
-      // then select a year that is leap year (29days).
-      // when user select "select year" targetValue will be empty string
-      // "" % 4 = 0
-
-      const currentSelectYearModulo = Number(targetValue) % 4 === 0 ? 0 : 1;
-      console.log(dataObj.yearSelectedIsLeapYearOrNot);
-      console.log(currentSelectYearModulo);
-      // have to check if dataObj.yearSelectedIsLeapYearOrNot is 0 because 0 is a falsy value
-      // our conditional statement is negating falsy values !0 which is true so we enter the if statement
-      // we will just check if yearSelectedIsLeapYearOrNot is null
-      // because we user select "select year" we assign null value to yearSelectedIsLeapYearOrNot
-      if (dataObj.yearSelectedIsLeapYearOrNot == null) {
-        // first time dataObj.yearSelectedIsLeapYearOrNot will be null
-        console.log("previous is null");
-        daysForFebYearInputSelected(targetValue);
-      } else {
-        if (currentSelectYearModulo !== dataObj.yearSelectedIsLeapYearOrNot) {
-          console.log("current and previous not equal");
-          // conditional check of yearSelectedIsLeapYearOrNot with
-          // currentSelected year modulo value when they do not equal to each other
-          // we will run func daysForFebYearInputSelected
-          daysForFebYearInputSelected(targetValue);
-        }
-      }
-    }
-    // if (event.target.value == "Mar") {
-    //   console.log("Hello");
-    // }
-  });
+  addListener.call(
+    userInputModalDiv,
+    "change",
+    numberOfDaysBasedOnYearAndMonthSelected
+  );
   // get user input
   /*
   when user select a value for the inputs event will fire
@@ -263,23 +180,11 @@
     fadeStartCountdownBtnShowDigitElements
   );
   // clicking on custom date button
-  addListener.call(customDateButton, "click", function TODO(event) {
-    this.attributes["user-clicked"].value = "true";
-    setTimeout(function focusFirstInput() {
-      selectMonthInput.focus();
-    }, 500);
-    // dataObj.stopTimerID = countDownTimer(initialAppSetUp);
-    // setTimeout(() => {
-    //   const daysBackElement = document.querySelector("[id=days] .digit-back");
-    //   // const hourBackElement = document.querySelector("[id=hours] .digit-back");
-    //   const minutesBackElement = document.querySelector(
-    //     "[id=minutes] .digit-back"
-    //   );
-    //   updateDaysElements([daysBackElement], "17");
-    //   // updateHoursElements([hourBackElement], "26");
-    //   updateMinutesElements([minutesBackElement], "35");
-    // }, 15000);
-  });
+  addListener.call(
+    customDateButton,
+    "click",
+    customButtonFadeOutModalOneFadeIn
+  );
 
   // linkSelectMonth.addEventListener("click", (event) => {
   //   event.preventDefault();
@@ -3129,6 +3034,99 @@
   }
 
   /**
+   * number of days based on year and month selected
+   * **/
+
+  function numberOfDaysBasedOnYearAndMonthSelected(event) {
+    // if selectYearInput.value is an empty string we will assume it is not leap year
+    // we will assign boolean value of false to checkingForLeapYear
+    // feb will have 28 days
+    const yearInput = selectYearInput.value;
+    const checkingForLeapYear =
+      yearInput === ""
+        ? false
+        : Number(selectYearInput.value) % 4 === 0
+        ? true
+        : false;
+    const arrayOfLastThreeOptionDayElement =
+      arrayOfDaysSelectOptionElements.slice(28);
+    const targetInputID = event.target.getAttribute("id");
+    const targetValue = event.target.value;
+    if (targetInputID == "month") {
+      switch (targetValue) {
+        case "Feb":
+          daysOptionFebSelected(
+            arrayOfLastThreeOptionDayElement,
+            checkingForLeapYear
+          );
+          break;
+        case "Apr":
+        case "Jun":
+        case "Sep":
+        case "Nov":
+          thirtyDaysOptionSelected(
+            arrayOfLastThreeOptionDayElement,
+            checkingForLeapYear
+          );
+          console.log("30 days");
+          break;
+        default:
+          thirtyOneDaysOptionSelected(arrayOfLastThreeOptionDayElement);
+          console.log("31 days");
+      }
+    }
+
+    if (targetInputID == "year" && selectMonthInput.value == "Feb") {
+      // if month is feb and year option is selected add hidden attr to day 30 and 31
+      const arrayOfLastTwoOptionsElement =
+        arrayOfDaysSelectOptionElements.slice(29);
+      for (let element of arrayOfLastTwoOptionsElement) {
+        if (!element.getAttribute("hidden")) {
+          element.setAttribute("hidden", "");
+        }
+      }
+      if (targetValue === "") {
+        console.log("empty string");
+        daysForFebYearInputSelected(targetValue);
+        return;
+      }
+      // we want to check if current Selected year and previous selected
+      // is a leap year or not. if both are not or both are leap year
+      // we dont want to run algorithm that add hidden attr to options
+      // we want to do nothing because if current selected and previous are the same
+      // the days we want to allow user to select will not change
+      // it will change if user select a year that is not leap year (28days)
+      // then select a year that is leap year (29days).
+      // when user select "select year" targetValue will be empty string
+      // "" % 4 = 0
+
+      const currentSelectYearModulo = Number(targetValue) % 4 === 0 ? 0 : 1;
+      console.log(dataObj.yearSelectedIsLeapYearOrNot);
+      console.log(currentSelectYearModulo);
+      // have to check if dataObj.yearSelectedIsLeapYearOrNot is 0 because 0 is a falsy value
+      // our conditional statement is negating falsy values !0 which is true so we enter the if statement
+      // we will just check if yearSelectedIsLeapYearOrNot is null
+      // because we user select "select year" we assign null value to yearSelectedIsLeapYearOrNot
+      if (dataObj.yearSelectedIsLeapYearOrNot == null) {
+        // first time dataObj.yearSelectedIsLeapYearOrNot will be null
+        console.log("previous is null");
+        daysForFebYearInputSelected(targetValue);
+      } else {
+        if (currentSelectYearModulo !== dataObj.yearSelectedIsLeapYearOrNot) {
+          console.log("current and previous not equal");
+          // conditional check of yearSelectedIsLeapYearOrNot with
+          // currentSelected year modulo value when they do not equal to each other
+          // we will run func daysForFebYearInputSelected
+          daysForFebYearInputSelected(targetValue);
+        }
+      }
+    }
+    // if (event.target.value == "Mar") {
+    //   console.log("Hello");
+    // }
+  }
+
+  /**
    * callback pass as an argument to start countdown btn click listener
    * **/
 
@@ -3237,6 +3235,32 @@
         removeKeydownHideModalThree
       );
     }
+  }
+
+  /**
+   * adding click listener to customDateButton
+   * **/
+
+  function customButtonFadeOutModalOneFadeIn(event) {
+    this.attributes["user-clicked"].value = "true";
+    setTimeout(function focusFirstInput() {
+      selectMonthInput.focus();
+    }, 500);
+    console.log(this);
+    setTimeout(() => {
+      this.classList.add("hide");
+    }, 530);
+    // dataObj.stopTimerID = countDownTimer(initialAppSetUp);
+    // setTimeout(() => {
+    //   const daysBackElement = document.querySelector("[id=days] .digit-back");
+    //   // const hourBackElement = document.querySelector("[id=hours] .digit-back");
+    //   const minutesBackElement = document.querySelector(
+    //     "[id=minutes] .digit-back"
+    //   );
+    //   updateDaysElements([daysBackElement], "17");
+    //   // updateHoursElements([hourBackElement], "26");
+    //   updateMinutesElements([minutesBackElement], "35");
+    // }, 15000);
   }
 
   /**
