@@ -501,7 +501,7 @@ main[role="main"] {
   margin-inline: auto;
 }
 
-@media screen and (min-width: 40.625rem) {
+@media screen and (min-width: 43.75rem) {
   [id="app-title"] {
     max-width: revert;
   }
@@ -511,7 +511,7 @@ main[role="main"] {
   color: var(--col-primary-soft-red-top);
 }
 
-@media screen and (min-width: 23.75rem) {
+@media screen and (min-width: 43.75rem) {
   .countdown-background-style-wrapper {
     background-size: auto, auto, auto;
     margin-inline: auto;
@@ -662,7 +662,6 @@ apply display: none to that element
   padding: 14px;
   padding-block: 10px;
 }
-
 .digit-text-wrapper div[id] {
   font-size: 2.5rem;
   /* desktop 3.9rem */
@@ -777,9 +776,10 @@ apply display: none to that element
 }
 
 div[id="modal-one"] {
+  max-width: 550px;
   /* margin-block-start: 145px; */
   position: absolute;
-  top: 50%;
+  top: 38%;
   left: 0;
   right: 0;
   /* width: max-content; */
@@ -795,6 +795,23 @@ div[id="modal-one"] {
   modal with select inputs
   */
   z-index: -1;
+}
+
+@media screen and (min-width: 43.75rem) {
+  .digit-text-wrapper div[id] {
+    font-size: 4rem;
+  }
+  .date-time-text {
+    font-size: 0.8rem;
+  }
+  [id="modal-one-title"] {
+    font-size: 1.1rem;
+    margin-block-end: 16px;
+  }
+  div[id="modal-one"] {
+    top: 35%;
+    font-size: 1rem;
+  }
 }
 
 /* empty input modal */
@@ -919,16 +936,16 @@ button[type="submit"] {
 
 /* button launch ending date modal */
 
-[class="modal-launcher-back"]:focus [class="modal-launcher-front"],
-[class="modal-launcher-back"]:hover [class="modal-launcher-front"] {
+[class~="modal-launcher-back"]:focus [class="modal-launcher-front"],
+[class~="modal-launcher-back"]:hover [class="modal-launcher-front"] {
   transform: translate(0px);
   transition: transform 500ms ease-out;
 }
 
-[class="modal-launcher-back"] {
+[class~="modal-launcher-back"] {
   margin-block-start: 240px;
   /* margin-block-end: 72px; */
-  margin-block-end: 125px;
+  /* margin-block-end: 125px; */
   background-color: var(--col-neutral-dark-blue-bottom);
   border-radius: 5px;
   padding: 0;
@@ -952,11 +969,11 @@ button[type="submit"] {
 
 /* opacity effect on modal */
 
-[class="modal-launcher-back"][user-clicked="true"] {
+/* [class="modal-launcher-back"][user-clicked="true"] {
   display: none;
-}
+} */
 
-[class="modal-launcher-back"][user-clicked="true"] + div[id="modal-one"] {
+[class~="modal-launcher-back"][user-clicked="true"] + div[id="modal-one"] {
   opacity: 1;
   transition: opacity 1000ms ease-in;
   z-index: revert;
@@ -964,20 +981,26 @@ button[type="submit"] {
 
 /* opacity effect on starting date button */
 
-[class="modal-launcher-back"][user-clicked="false"] {
+[class~="modal-launcher-back"][user-clicked="false"] {
   opacity: 1;
   transition: opacity 1000ms ease-in;
 }
-[class="modal-launcher-back"][user-clicked="true"] {
+[class~="modal-launcher-back"][user-clicked="true"] {
   opacity: 0;
   transition: opacity 500ms ease-out;
+}
+
+@media screen and (min-width: 43.75rem) {
+  [class~="modal-launcher-back"] {
+    font-size: 1.5rem;
+  }
 }
 
 /* social media icons */
 
 .social-media-icons {
   margin-block: 30px;
-  margin-block-start: 90px;
+  margin-block-start: auto;
   /* we had border around app-style-wrapper
   which did not allow for margin-collapse with starting date button
   and container for social media icon
@@ -1015,13 +1038,19 @@ button[type="submit"] {
   fill: var(--col-primary-grayish-blue);
 }
 
-@media screen and (min-width: 40.625rem) {
-  [class="social-media-icons"] > * + * {
-    margin-inline-start: 14px;
-    margin-block: 48px;
-  }
+@media screen and (min-width: 37.5rem) {
   [class="social-media-icons"] svg {
     width: 30px;
+  }
+}
+
+@media screen and (min-width: 43.75rem) {
+  .social-media-icons {
+    margin-block-end: 0px;
+  }
+  [class="social-media-icons"] > * + * {
+    margin-inline-start: 28px;
+    margin-block: 48px;
   }
 }
 
