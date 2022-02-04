@@ -786,31 +786,54 @@ div[id="modal-one"] {
   margin-inline: auto;
   font-size: 0.8rem;
   padding-inline: 11px;
-  opacity: 0;
-  transition: opacity 500ms ease-out;
   /* when custom ending date button is not pressed this element goes behind button element
   so user can click on button.
   then when we assign value "true" to user-clicked attr of button with 
   class modal-launcher-back we will declare z-index: revert to show
   modal with select inputs
   */
-  z-index: -1;
 }
 
 @media screen and (min-width: 43.75rem) {
+  [class="countdown-digits-container"] {
+    margin-block-start: 42px;
+    gap: 18px;
+  }
   .digit-text-wrapper div[id] {
-    font-size: 4rem;
+    font-size: 7.1rem;
+  }
+  .countdown-digit-black-bg {
+    border-radius: 8px;
+  }
+  .countdown-digit-container {
+    transform: translateY(-10px);
+    border-radius: 8px;
+  }
+  .countdown-digit-container::before,
+  .countdown-digit-container::after {
+    width: 16pxpx;
+    height: 16pxpx;
+    top: calc(50% - 10px);
+  }
+  .countdown-digit-container::before {
+    left: -8px;
+  }
+  .countdown-digit-container::after {
+    right: -8px;
   }
   .date-time-text {
-    font-size: 0.8rem;
+    font-size: 1rem;
+    letter-spacing: 5px;
+  }
+  [id="modal-one-title"],
+  div[id="modal-one"] {
+    font-size: 1.4rem;
   }
   [id="modal-one-title"] {
-    font-size: 1.1rem;
-    margin-block-end: 16px;
+    margin-block-end: 20px;
   }
   div[id="modal-one"] {
-    top: 35%;
-    font-size: 1rem;
+    top: 32%;
   }
 }
 
@@ -832,7 +855,8 @@ div[id="modal-one"] {
 
 [id="modal-two"],
 [id="modal-three"] {
-  max-width: 275px;
+  font-size: 1.2rem;
+  max-width: 500px;
   height: min-content;
   inset: 0;
   position: absolute;
@@ -840,7 +864,16 @@ div[id="modal-one"] {
   background: var(--col-neutral-dark-blue-top);
   color: var(--col-neutral-white);
   border-radius: 8px;
-  padding-inline: 6px;
+  padding-inline: 16px;
+  left: 35px;
+  right: 35px;
+}
+
+@media screen and (min-width: 43.75rem) {
+  [id="modal-two"],
+  [id="modal-three"] {
+    font-size: 1.4rem;
+  }
 }
 
 /* date and time incorrect modal */
@@ -979,6 +1012,15 @@ button[type="submit"] {
   z-index: revert;
 }
 
+[class~="modal-launcher-back"][user-clicked="false"] + div[id="modal-one"] {
+  opacity: 0;
+  transition: opacity 900ms ease-out;
+  /* z-index: -1 was making the modal with select inputs
+  to fade quicker than we wanted
+  */
+  z-index: -1;
+}
+
 /* opacity effect on starting date button */
 
 [class~="modal-launcher-back"][user-clicked="false"] {
@@ -987,12 +1029,15 @@ button[type="submit"] {
 }
 [class~="modal-launcher-back"][user-clicked="true"] {
   opacity: 0;
-  transition: opacity 500ms ease-out;
+  transition: opacity 350ms ease-out;
 }
 
 @media screen and (min-width: 43.75rem) {
   [class~="modal-launcher-back"] {
     font-size: 1.5rem;
+  }
+  .date-input-wrapper {
+    gap: 10px;
   }
 }
 
