@@ -620,7 +620,7 @@ apply display: none to that element
 
 /* digits */
 
-[class="countdown-digits-container"] {
+[class~="countdown-digits-container"] {
   margin-block-start: 72px;
   display: flex;
   gap: 8px;
@@ -631,15 +631,15 @@ apply display: none to that element
   margin-inline: auto;
 }
 
-/* [class="countdown-digits-container"] > * + * {
+/* [class~="countdown-digits-container"] > * + * {
   margin-inline-start: 8px;
 } */
 
-/* [class="countdown-digits-container"] .digit-text-wrapper:not(:last-child) {
+/* [class~="countdown-digits-container"] .digit-text-wrapper:not(:last-child) {
   margin-inline-end: 8px;
 } */
 
-/* [class="countdown-digits-container"] .digit-text-wrapper:not(:first-child) {
+/* [class~="countdown-digits-container"] .digit-text-wrapper:not(:first-child) {
   margin-inline-start: 8px;
 } */
 
@@ -776,7 +776,7 @@ apply display: none to that element
 }
 
 div[id="modal-one"] {
-  max-width: 550px;
+  max-width: 600px;
   /* margin-block-start: 145px; */
   position: absolute;
   top: 38%;
@@ -795,7 +795,7 @@ div[id="modal-one"] {
 }
 
 @media screen and (min-width: 43.75rem) {
-  [class="countdown-digits-container"] {
+  [class~="countdown-digits-container"] {
     margin-block-start: 42px;
     gap: 18px;
   }
@@ -976,7 +976,7 @@ button[type="submit"] {
 }
 
 [class~="modal-launcher-back"] {
-  margin-block-start: 240px;
+  margin-block-start: 100px;
   /* margin-block-end: 72px; */
   /* margin-block-end: 125px; */
   background-color: var(--col-neutral-dark-blue-bottom);
@@ -1009,7 +1009,7 @@ button[type="submit"] {
 [class~="modal-launcher-back"][user-clicked="true"] + div[id="modal-one"] {
   opacity: 1;
   transition: opacity 1000ms ease-in;
-  z-index: revert;
+  /* z-index: revert; */
 }
 
 [class~="modal-launcher-back"][user-clicked="false"] + div[id="modal-one"] {
@@ -1018,7 +1018,7 @@ button[type="submit"] {
   /* z-index: -1 was making the modal with select inputs
   to fade quicker than we wanted
   */
-  z-index: -1;
+  /* z-index: -1; */
 }
 
 /* opacity effect on starting date button */
@@ -1029,7 +1029,7 @@ button[type="submit"] {
 }
 [class~="modal-launcher-back"][user-clicked="true"] {
   opacity: 0;
-  transition: opacity 350ms ease-out;
+  transition: opacity 260ms ease-out;
 }
 
 @media screen and (min-width: 43.75rem) {
@@ -1038,6 +1038,11 @@ button[type="submit"] {
   }
   .date-input-wrapper {
     gap: 10px;
+  }
+  /* different animation/transition at desktop for modal one */
+  .countdown-digits-container.fade {
+    opacity: 0;
+    transition: opacity 350ms ease-out;
   }
 }
 
