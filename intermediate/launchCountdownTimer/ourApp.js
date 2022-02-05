@@ -6,6 +6,7 @@
     nextHolidayTextElement,
     startDefaultCountdownBtn,
     linkSelectMonth,
+    digitsContainerWrapper,
     daysDigitContainerParent,
     hoursDigitContainerParent,
     minutesDigitContainerParent,
@@ -3242,7 +3243,14 @@
    * **/
 
   function customButtonFadeOutModalOneFadeIn(event) {
-    this.attributes["user-clicked"].value = "true";
+    // add fade class to digits container wrapper
+    digitsContainerWrapper.classList.add("fade");
+    // remove class hide from modal-one
+    userInputModalDiv.classList.remove("hide");
+    // assign value "true" to attr user-clicked on custom button
+    setTimeout(() => {
+      this.attributes["user-clicked"].value = "true";
+    }, 80);
     setTimeout(function focusFirstInput() {
       selectMonthInput.focus();
     }, 500);
@@ -3677,7 +3685,10 @@
     );
     // test link to month select input
     const linkSelectMonth = document.querySelector("[href='#month']");
-
+    // digits container wrapper
+    const digitsContainerWrapper = document.querySelector(
+      ".countdown-digits-container"
+    );
     // digit container parent
     const daysDigitContainerParent = document.querySelector(
       "[id='days-digit-container-parent']"
@@ -3763,6 +3774,7 @@
       nextHolidayTextElement,
       startDefaultCountdownBtn,
       linkSelectMonth,
+      digitsContainerWrapper,
       daysDigitContainerParent,
       hoursDigitContainerParent,
       minutesDigitContainerParent,
