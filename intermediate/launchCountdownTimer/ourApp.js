@@ -7,6 +7,7 @@
     startDefaultCountdownBtn,
     linkSelectMonth,
     digitsContainerWrapper,
+    timerControlBtns,
     daysDigitContainerParent,
     hoursDigitContainerParent,
     minutesDigitContainerParent,
@@ -186,6 +187,12 @@
     "click",
     customButtonFadeOutModalOneFadeIn
   );
+
+  // clicking on resume button
+
+  addListener.call();
+
+  // clicking on pause button
 
   // linkSelectMonth.addEventListener("click", (event) => {
   //   event.preventDefault();
@@ -577,6 +584,10 @@
 
   function scopeOurData() {
     const innerDataObj = {
+      timerInitialized: {
+        defaultTimer: null,
+        userCustomTimer: null,
+      },
       stopTimerID: null,
       minutesDigit: 1,
       hoursDigit: 1,
@@ -3243,8 +3254,15 @@
    * **/
 
   function customButtonFadeOutModalOneFadeIn(event) {
-    // add fade class to digits container wrapper
+    // add fade class to digits container wrapper and timer control button wrapper
     digitsContainerWrapper.classList.add("fade");
+    timerControlBtns.classList.add("fade");
+    // add hide class to digits container wrapper in a setTimeout()
+    // and timer control button wrapper
+    setTimeout(() => {
+      digitsContainerWrapper.classList.add("hide");
+      timerControlBtns.classList.add("hide");
+    }, 360);
     // remove class hide from modal-one
     userInputModalDiv.classList.remove("hide");
     // assign value "true" to attr user-clicked on custom button
@@ -3270,6 +3288,18 @@
     //   updateMinutesElements([minutesBackElement], "35");
     // }, 15000);
   }
+
+  /**
+   * add click listener to resume button
+   * **/
+
+  function resumeTimer(event) {}
+
+  /**
+   * add click listener to pause button
+   * **/
+
+  function pauseTimer(event) {}
 
   /**
    * handle feb number of days when its leap year
@@ -3689,6 +3719,8 @@
     const digitsContainerWrapper = document.querySelector(
       ".countdown-digits-container"
     );
+    // timer control buttons
+    const timerControlBtns = document.querySelector(".timer-controls-buttons");
     // digit container parent
     const daysDigitContainerParent = document.querySelector(
       "[id='days-digit-container-parent']"
@@ -3775,6 +3807,7 @@
       startDefaultCountdownBtn,
       linkSelectMonth,
       digitsContainerWrapper,
+      timerControlBtns,
       daysDigitContainerParent,
       hoursDigitContainerParent,
       minutesDigitContainerParent,
