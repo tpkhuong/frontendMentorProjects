@@ -463,6 +463,7 @@ main[role="main"] {
   */
   min-height: 100%;
   display: flex;
+  justify-content: center;
   flex-direction: column;
   max-width: 750px;
   margin-inline: auto;
@@ -631,6 +632,12 @@ apply display: none to that element
   margin-inline: auto;
 }
 
+.countdown-digits-container.fade,
+.timer-controls-buttons.fade {
+  opacity: 0;
+  transition: opacity 350ms ease-out;
+}
+
 /* [class~="countdown-digits-container"] > * + * {
   margin-inline-start: 8px;
 } */
@@ -768,6 +775,17 @@ apply display: none to that element
   }
 }
 
+/* timer control buttons */
+
+.timer-controls-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 80px);
+  width: max-content;
+  margin-inline: auto;
+  gap: 8px;
+  margin-block-start: 32px;
+}
+
 /* modal */
 
 [id="modal-one-title"] {
@@ -779,7 +797,7 @@ div[id="modal-one"] {
   max-width: 600px;
   /* margin-block-start: 145px; */
   position: absolute;
-  top: 38%;
+  top: 20%;
   left: 0;
   right: 0;
   /* width: max-content; */
@@ -833,7 +851,7 @@ div[id="modal-one"] {
     margin-block-end: 20px;
   }
   div[id="modal-one"] {
-    top: 32%;
+    top: 18%;
   }
 }
 
@@ -976,7 +994,7 @@ button[type="submit"] {
 }
 
 [class~="modal-launcher-back"] {
-  margin-block-start: 100px;
+  margin-block-start: 72px;
   /* margin-block-end: 72px; */
   /* margin-block-end: 125px; */
   background-color: var(--col-neutral-dark-blue-bottom);
@@ -987,7 +1005,8 @@ button[type="submit"] {
 }
 
 [class="modal-launcher-front"],
-button[type="submit"] {
+button[type="submit"],
+.timer-control-btn {
   padding: 8px;
   color: var(--col-primary-soft-red-bottom);
   background-color: var(--col-neutral-white);
@@ -1039,11 +1058,23 @@ button[type="submit"] {
   .date-input-wrapper {
     gap: 10px;
   }
-  /* different animation/transition at desktop for modal one */
-  .countdown-digits-container.fade {
+  /* different animation/transition at desktop for modal one. this will be standard for all screen sizes */
+  /* .countdown-digits-container.fade {
     opacity: 0;
     transition: opacity 350ms ease-out;
+  } */
+  /*  this works but might not be best for accessibility
+
+  [class~="modal-launcher-back"][user-clicked="false"] + div[id="modal-one"] {
+    transform: translateY(0);
+    
   }
+
+  [class~="modal-launcher-back"][user-clicked="true"] + div[id="modal-one"] {
+    transform: translateY(-180px);
+    transition: transform 800ms linear 390ms;
+    
+  }*/
 }
 
 /* social media icons */
