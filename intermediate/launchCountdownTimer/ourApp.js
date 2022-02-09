@@ -8,6 +8,8 @@
     linkSelectMonth,
     digitsContainerWrapper,
     timerControlBtns,
+    resumeBtn,
+    pauseBtn,
     daysDigitContainerParent,
     hoursDigitContainerParent,
     minutesDigitContainerParent,
@@ -25,6 +27,7 @@
     arrayOfDaysSelectOptionElements,
     selectMonthInput,
     selectYearInput,
+    closeModalBtn,
     formElement,
     daysDigitBottom,
     hoursDigitBottom,
@@ -190,10 +193,13 @@
 
   // clicking on resume button
 
-  addListener.call();
+  addListener.call(resumeBtn, "click", resumeTimer);
 
   // clicking on pause button
+  addListener.call(pauseBtn, "click", pauseTimer);
 
+  // close modal btn
+  addListener.call(closeModalBtn, "click", closeModalOneBtn);
   // linkSelectMonth.addEventListener("click", (event) => {
   //   event.preventDefault();
   //   selectMonthInput.focus();
@@ -2066,6 +2072,13 @@
 
     // call countdownTimer passing in startCountdownTimerForUserInputs when user click submit
     dataObj.stopTimerID = countDownTimer(startCountdownTimerForUserInputs);
+    // assign value true to dataObj.timerInitialized.userCustomTimer
+    dataObj.timerInitialized.userCustomTimer = true;
+    // assign value false to dataObj.timerInitialized.defaultTimer if its true
+    // eiter defaultTimer or userCustomTimer should be true at one time never both
+    dataObj.timerInitialized.defaultTimer
+      ? (dataObj.timerInitialized.userCustomTimer = false)
+      : null;
     console.log(dataObj);
   }
 
@@ -3176,6 +3189,11 @@
      * uncomment code below for production
      * **/
     dataObj.stopTimerID = countDownTimer(initialAppSetUp);
+    // assign value true to dataObj.timerInitialized.defaultTimer = true
+    dataObj.timerInitialized.defaultTimer = true;
+    dataObj.timerInitialized.userCustomTimer
+      ? (dataObj.timerInitialized.userCustomTimer = false)
+      : null;
   }
 
   /**
@@ -3254,6 +3272,7 @@
    * **/
 
   function customButtonFadeOutModalOneFadeIn(event) {
+    appWrapperSectionElement;
     // add fade class to digits container wrapper and timer control button wrapper
     digitsContainerWrapper.classList.add("fade");
     timerControlBtns.classList.add("fade");
@@ -3293,13 +3312,66 @@
    * add click listener to resume button
    * **/
 
-  function resumeTimer(event) {}
+  function resumeTimer(event) {
+    // when user click on resume btn, we want to check which timer default or user
+    // was running.
+  }
 
   /**
    * add click listener to pause button
    * **/
 
-  function pauseTimer(event) {}
+  function pauseTimer(event) {
+    // call clearInterval and resmove flip-animation on second digit bottom element
+  }
+
+  /**
+   * close modal btn
+   * **/
+
+  function closeModalOneBtn(event) {
+    digitsContainerWrapper.setAttribute("aria-hidden", "true");
+    // social-media-icons element add aria-hidden true
+    document
+      .querySelector(".social-media-icons")
+      .setAttribute("aria-hidden", "true");
+    // add aria-hidden true to custom date button
+    timerControlBtns.setAttribute("aria-hidden", "true");
+    customDateButton.setAttribute("aria-hidden", "true");
+    pauseBtn.setAttribute("aria-hidden", "true");
+    // remove hide class from digitsContainerWrapper and timerControlBtns
+    // custom date btn
+    digitsContainerWrapper.classList.remove("hide");
+    timerControlBtns.classList.remove("hide");
+    customDateButton.classList.remove("hide");
+    // assign value false to user-click attr of custom date btn in a setTimeout
+    setTimeout(() => {
+      customDateButton.attributes["user-clicked"].value = "false";
+    }, 53);
+    // remove fade class from digitsContainerWrapper and timerControlBtns in a settimeout
+    setTimeout(() => {
+      digitsContainerWrapper.className = "countdown-digits-container";
+      timerControlBtns.className = "timer-controls-buttons";
+    }, 650);
+    // add hide to userInputModal in a settimeout
+    setTimeout(() => {
+      userInputModalDiv.classList.add("hide");
+    }, 600);
+    // focus resume btn
+    setTimeout(() => {
+      resumeBtn.focus();
+    }, 1000);
+    // remove aria-hidden from social media icons element and custom date btn
+    setTimeout(() => {
+      digitsContainerWrapper.removeAttribute("aria-hidden");
+      document
+        .querySelector(".social-media-icons")
+        .removeAttribute("aria-hidden");
+      timerControlBtns.removeAttribute("aria-hidden");
+      customDateButton.removeAttribute("aria-hidden");
+      pauseBtn.removeAttribute("aria-hidden");
+    }, 1050);
+  }
 
   /**
    * handle feb number of days when its leap year
@@ -3721,6 +3793,10 @@
     );
     // timer control buttons
     const timerControlBtns = document.querySelector(".timer-controls-buttons");
+    // resume btn
+    const resumeBtn = document.getElementById("resume-button");
+    const pauseBtn = document.getElementById("pause-button");
+    // pause btn
     // digit container parent
     const daysDigitContainerParent = document.querySelector(
       "[id='days-digit-container-parent']"
@@ -3734,6 +3810,8 @@
     // starting date button
     const customDateButton = document.querySelector(".modal-launcher-back");
     const monthSelectElement = document.querySelector("select[id='month']");
+    // close modal btn
+    const closeModalBtn = document.querySelector(".close-modal-btn");
     // form
     const formElement = document.querySelector("form");
     // custom input modal
@@ -3808,11 +3886,14 @@
       linkSelectMonth,
       digitsContainerWrapper,
       timerControlBtns,
+      resumeBtn,
+      pauseBtn,
       daysDigitContainerParent,
       hoursDigitContainerParent,
       minutesDigitContainerParent,
       customDateButton,
       monthSelectElement,
+      closeModalBtn,
       formElement,
       userInputModalDiv,
       modalOneTitle,
