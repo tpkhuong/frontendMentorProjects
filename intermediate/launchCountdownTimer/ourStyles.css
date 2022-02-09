@@ -979,6 +979,7 @@ select[id="meridiem"] {
 
 button[type="submit"] {
   margin-block-start: 20px;
+  font-size: 1.2rem;
 }
 
 /* .date-time-wrapper {
@@ -1033,7 +1034,7 @@ button[type="submit"],
 
 [class~="modal-launcher-back"][user-clicked="false"] + div[id="modal-one"] {
   opacity: 0;
-  transition: opacity 900ms ease-out;
+  transition: opacity 500ms ease-out;
   /* z-index: -1 was making the modal with select inputs
   to fade quicker than we wanted
   */
@@ -1049,6 +1050,22 @@ button[type="submit"],
 [class~="modal-launcher-back"][user-clicked="true"] {
   opacity: 0;
   transition: opacity 260ms ease-out;
+}
+
+.close-modal-btn {
+  display: flex;
+  margin-block-end: 16px;
+  margin-inline-start: auto;
+  background: transparent;
+}
+
+.close-modal-btn svg {
+  width: 32px;
+  height: 32px;
+}
+
+.close-modal-btn svg path {
+  fill: var(--col-primary-soft-red-bottom);
 }
 
 @media screen and (min-width: 43.75rem) {
