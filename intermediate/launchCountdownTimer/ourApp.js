@@ -3,6 +3,7 @@
 
   const {
     appWrapperSectionElement,
+    mainAppTitle,
     nextHolidayTextElement,
     startDefaultCountdownBtn,
     linkSelectMonth,
@@ -2052,6 +2053,8 @@
    * **/
 
   function userInputIsValidRunFunc(userDataObj) {
+    // code below will clear either default timer or userInput timer
+    clearInterval(dataObj.stopTimerID);
     // update userDateInput hour to 24hr format
     // typeof hourConvertedToTwentyFourFormat will be string
     const hourConvertedToTwentyFourFormat =
@@ -2069,15 +2072,21 @@
       minutes: Number(userDataObj.minutes),
       meridiem: userDataObj.meridiem,
     };
-
+    // func below will add class to show digit elements and custom date btn
+    // fade out modal one (user inputs)
+    modalOneFadeOutDigitAndCustomDataBtnFadeIn(event);
     // call countdownTimer passing in startCountdownTimerForUserInputs when user click submit
     dataObj.stopTimerID = countDownTimer(startCountdownTimerForUserInputs);
     // assign value true to dataObj.timerInitialized.userCustomTimer
     dataObj.timerInitialized.userCustomTimer = true;
+    // change app title to match user custom
+    setTimeout(() => {
+      nextHolidayTextElement.textContent = "Custom Timer";
+    }, 900);
     // assign value false to dataObj.timerInitialized.defaultTimer if its true
     // eiter defaultTimer or userCustomTimer should be true at one time never both
     dataObj.timerInitialized.defaultTimer
-      ? (dataObj.timerInitialized.userCustomTimer = false)
+      ? (dataObj.timerInitialized.defaultTimer = false)
       : null;
     console.log(dataObj);
   }
@@ -3315,6 +3324,19 @@
   function resumeTimer(event) {
     // when user click on resume btn, we want to check which timer default or user
     // was running.
+    /**
+     * we dont change the value of dataObj.timerInitialized in our dataObj
+     * **/
+    // if dataObj.timerInitialized.defaultTimer is truthy run
+    // dataObj.stopTimerID = countDownTimer(initialAppSetUp);
+    if (dataObj.timerInitialized.defaultTimer) {
+      dataObj.stopTimerID = countDownTimer(initialAppSetUp);
+    }
+    // if dataObj.timerInitialized.userCustomTimer is truthy run
+    // dataObj.stopTimerID = countDownTimer(startCountdownTimerForUserInputs);
+    if (dataObj.timerInitialized.userCustomTimer) {
+      dataObj.stopTimerID = countDownTimer(startCountdownTimerForUserInputs);
+    }
   }
 
   /**
@@ -3322,7 +3344,15 @@
    * **/
 
   function pauseTimer(event) {
-    // call clearInterval and resmove flip-animation on second digit bottom element
+    // call clearInterval and remove flip-animation on second digit bottom element
+    // we either countDownTimer(initialAppSetUp) or
+    // countDownTimer(startCountdownTimerForUserInputs) is called
+    // we will assign the clearInterval value to dataObj.stopTimerID property
+    clearInterval(dataObj.stopTimerID);
+    removeFlipAnimationClassToSecondBottomElement.call(
+      secondDigitBottom,
+      "flip-animation"
+    );
   }
 
   /**
@@ -3330,6 +3360,14 @@
    * **/
 
   function closeModalOneBtn(event) {
+    modalOneFadeOutDigitAndCustomDataBtnFadeIn(event);
+  }
+
+  /**
+   * modalOneFadeOutDigitAndCustomDataBtnFadeIn
+   * **/
+
+  function modalOneFadeOutDigitAndCustomDataBtnFadeIn(eventInput) {
     digitsContainerWrapper.setAttribute("aria-hidden", "true");
     // social-media-icons element add aria-hidden true
     document
@@ -3779,6 +3817,8 @@
     const appWrapperSectionElement = document.querySelector(
       ".countdown-background-style-wrapper"
     );
+    // app title
+    const mainAppTitle = document.getElementById("app-title");
     // next holiday container
     const nextHolidayTextElement = document.querySelector(".next-holiday-text");
     // start next countdown timer button
@@ -3881,6 +3921,7 @@
 
     return {
       appWrapperSectionElement,
+      mainAppTitle,
       nextHolidayTextElement,
       startDefaultCountdownBtn,
       linkSelectMonth,
