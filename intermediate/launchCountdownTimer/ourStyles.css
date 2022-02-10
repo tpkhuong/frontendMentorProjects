@@ -779,7 +779,7 @@ apply display: none to that element
 
 .timer-controls-buttons {
   display: grid;
-  grid-template-columns: repeat(2, 80px);
+  grid-template-columns: repeat(2, 110px);
   width: max-content;
   margin-inline: auto;
   gap: 8px;
@@ -829,8 +829,8 @@ div[id="modal-one"] {
   }
   .countdown-digit-container::before,
   .countdown-digit-container::after {
-    width: 16pxpx;
-    height: 16pxpx;
+    width: 16px;
+    height: 16px;
     top: calc(50% - 10px);
   }
   .countdown-digit-container::before {
@@ -979,7 +979,6 @@ select[id="meridiem"] {
 
 button[type="submit"] {
   margin-block-start: 20px;
-  font-size: 1.2rem;
 }
 
 /* .date-time-wrapper {
@@ -1012,6 +1011,7 @@ button[type="submit"],
   color: var(--col-primary-soft-red-bottom);
   background-color: var(--col-neutral-white);
   border-radius: 5px;
+  font-size: 1.4rem;
 }
 
 [class="modal-launcher-front"] {
