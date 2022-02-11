@@ -11,6 +11,9 @@
     timerControlBtns,
     resumeBtn,
     pauseBtn,
+    moreBtnModalLauncher,
+    controlsModal,
+    closeControlModalBtn,
     daysDigitContainerParent,
     hoursDigitContainerParent,
     minutesDigitContainerParent,
@@ -185,11 +188,28 @@
     "click",
     fadeStartCountdownBtnShowDigitElements
   );
+
+  // user options button
+
+  addListener.call(
+    moreBtnModalLauncher,
+    "click",
+    userOptionsBtnScaleDownModalSlideIn
+  );
+
   // clicking on custom date button
   addListener.call(
     customDateButton,
     "click",
     customButtonFadeOutModalOneFadeIn
+  );
+
+  // close control modal btn
+
+  addListener.call(
+    closeControlModalBtn,
+    "click",
+    closeControlModalDisplayTimer
   );
 
   // clicking on resume button
@@ -3277,26 +3297,49 @@
   }
 
   /**
+   * button to launch additional control buttons modal
+   * **/
+
+  function userOptionsBtnScaleDownModalSlideIn(event) {
+    this.attributes["show-button-modal"].value = true;
+    setTimeout(() => {
+      controlsModal.classList.remove("hide");
+    }, 810);
+  }
+
+  /**
+   * close btn for controls modal
+   * **/
+
+  function closeControlModalDisplayTimer(event) {
+    //
+    console.log(event);
+  }
+
+  /**
    * adding click listener to customDateButton
    * **/
 
   function customButtonFadeOutModalOneFadeIn(event) {
-    appWrapperSectionElement;
+    setTimeout(() => {
+      // add class to fade-in-user-inputs to modal-one
+      userInputModalDiv.classList.add("fade-in-user-inputs");
+    }, 53);
+    // remove class hide from modal-one
+    userInputModalDiv.classList.remove("hide");
     // add fade class to digits container wrapper and timer control button wrapper
     digitsContainerWrapper.classList.add("fade");
     timerControlBtns.classList.add("fade");
+    // assign value "true" to attr user-clicked on custom button
+    this.attributes["user-clicked"].value = "true";
     // add hide class to digits container wrapper in a setTimeout()
     // and timer control button wrapper
     setTimeout(() => {
       digitsContainerWrapper.classList.add("hide");
       timerControlBtns.classList.add("hide");
     }, 360);
-    // remove class hide from modal-one
-    userInputModalDiv.classList.remove("hide");
-    // assign value "true" to attr user-clicked on custom button
-    setTimeout(() => {
-      this.attributes["user-clicked"].value = "true";
-    }, 80);
+    // setTimeout(() => {
+    // }, 80);
     setTimeout(function focusFirstInput() {
       selectMonthInput.focus();
     }, 500);
@@ -3382,6 +3425,8 @@
     digitsContainerWrapper.classList.remove("hide");
     timerControlBtns.classList.remove("hide");
     customDateButton.classList.remove("hide");
+    // remove class fade-in-user-inputs from modal-one
+    userInputModalDiv.classList.remove("fade-in-user-inputs");
     // assign value false to user-click attr of custom date btn in a setTimeout
     setTimeout(() => {
       customDateButton.attributes["user-clicked"].value = "false";
@@ -3390,11 +3435,11 @@
     setTimeout(() => {
       digitsContainerWrapper.className = "countdown-digits-container";
       timerControlBtns.className = "timer-controls-buttons";
-    }, 650);
+    }, 260);
     // add hide to userInputModal in a settimeout
     setTimeout(() => {
       userInputModalDiv.classList.add("hide");
-    }, 600);
+    }, 1100);
     // focus resume btn
     setTimeout(() => {
       resumeBtn.focus();
@@ -3835,8 +3880,16 @@
     const timerControlBtns = document.querySelector(".timer-controls-buttons");
     // resume btn
     const resumeBtn = document.getElementById("resume-button");
-    const pauseBtn = document.getElementById("pause-button");
     // pause btn
+    const pauseBtn = document.getElementById("pause-button");
+    // button modal
+    const moreBtnModalLauncher = document.querySelector(".buttons-modal-back");
+    // controls modal
+    const controlsModal = document.querySelector(".additional-controls-modal");
+    // close btn controls modal
+    const closeControlModalBtn = document.querySelector(
+      ".close-controls-modal"
+    );
     // digit container parent
     const daysDigitContainerParent = document.querySelector(
       "[id='days-digit-container-parent']"
@@ -3929,6 +3982,9 @@
       timerControlBtns,
       resumeBtn,
       pauseBtn,
+      moreBtnModalLauncher,
+      controlsModal,
+      closeControlModalBtn,
       daysDigitContainerParent,
       hoursDigitContainerParent,
       minutesDigitContainerParent,
