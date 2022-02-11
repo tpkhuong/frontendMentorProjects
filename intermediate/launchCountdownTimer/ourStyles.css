@@ -477,7 +477,7 @@ main[role="main"] {
 .countdown-background-style-wrapper {
   max-width: 1440px;
   height: 100%;
-  padding-block-start: 148px;
+  padding-block-start: 72px;
   /* padding-block-end: 48px; */
   background-image: url("./images/bg-stars.svg"),
     url("./images/pattern-hills.svg"),
@@ -505,6 +505,9 @@ main[role="main"] {
 @media screen and (min-width: 43.75rem) {
   [id="app-title"] {
     max-width: revert;
+  }
+  .min-width-digit-element {
+    min-width: 179px;
   }
 }
 
@@ -622,14 +625,16 @@ apply display: none to that element
 /* digits */
 
 [class~="countdown-digits-container"] {
-  margin-block-start: 72px;
+  margin-block-start: 60px;
   display: flex;
   gap: 8px;
   /* display: grid;
   grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
   justify-items: center; */
-  width: min-content;
+  /* width: min-content; */
   margin-inline: auto;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .countdown-digits-container.fade,
@@ -670,7 +675,7 @@ apply display: none to that element
   padding-block: 10px;
 }
 .digit-text-wrapper div[id] {
-  font-size: 2.5rem;
+  font-size: 5rem;
   /* desktop 3.9rem */
 }
 
@@ -739,7 +744,7 @@ apply display: none to that element
 }
 
 .date-time-text {
-  font-size: 0.5rem;
+  font-size: 0.6rem;
   display: inline-block;
   font-weight: normal;
   letter-spacing: 2px;
@@ -810,6 +815,8 @@ div[id="modal-one"] {
   class modal-launcher-back we will declare z-index: revert to show
   modal with select inputs
   */
+  opacity: 0;
+  transition: opacity 500ms ease-out;
 }
 
 @media screen and (min-width: 43.75rem) {
@@ -985,6 +992,71 @@ button[type="submit"] {
   margin-block: 10px;
 } */
 
+/* user options button */
+
+.buttons-modal-back[show-button-modal="true"] {
+  transform: scale(0);
+  transition: transform 800ms ease-in;
+}
+
+.buttons-modal-back[show-button-modal="false"] {
+  transform: scale(1);
+  transition: transform 800ms ease-out 799ms;
+}
+
+/* control buttons modal */
+
+.additional-controls-modal {
+  /*! display: none; */
+  transform: translateX(0px);
+  transition: transform 800ms ease-out 799ms;
+  position: fixed;
+  inset: 0;
+  background: hsla(0, 0%, 0%, 0.7);
+  /*! left: 48px; */ /*! top: 25%; */ /*! bottom: 25%; */
+}
+
+/* additional controls */
+
+.additional-controls {
+  position: absolute;
+  inset: 0;
+  background: var(--col-neutral-dark-blue-bottom);
+  left: 48px;
+  /*! height: 100%; */
+  display: flex;
+  top: 20.5%;
+  bottom: 25%;
+  right: 48px;
+  flex-direction: column;
+  padding: 24px;
+  border-radius: 16px;
+}
+
+/* close controls modal btn */
+
+.close-controls-modal {
+  align-self: flex-end;
+  display: flex;
+  padding: 0;
+  background: transparent;
+}
+
+.close-controls-modal svg path {
+  fill: var(--col-neutral-white);
+}
+
+/* show default timer */
+
+[class~="modal-launcher-back"] {
+  margin-block-start: auto;
+}
+
+.show-default-timer-back {
+  margin-block-end: auto;
+  margin-block-start: 64px;
+}
+
 /* button launch ending date modal */
 
 [class~="modal-launcher-back"]:focus [class="modal-launcher-front"],
@@ -993,8 +1065,9 @@ button[type="submit"] {
   transition: transform 500ms ease-out;
 }
 
-[class~="modal-launcher-back"] {
-  margin-block-start: 72px;
+[class~="modal-launcher-back"],
+.buttons-modal-back,
+.show-default-timer-back {
   /* margin-block-end: 72px; */
   /* margin-block-end: 125px; */
   background-color: var(--col-neutral-dark-blue-bottom);
@@ -1004,9 +1077,15 @@ button[type="submit"] {
   margin-inline: auto;
 }
 
+.buttons-modal-back {
+  margin-block-start: 72px;
+}
+
 [class="modal-launcher-front"],
 button[type="submit"],
-.timer-control-btn {
+.timer-control-btn,
+.button-modal-front,
+.show-default-timer-front {
   padding: 8px;
   color: var(--col-primary-soft-red-bottom);
   background-color: var(--col-neutral-white);
@@ -1014,7 +1093,21 @@ button[type="submit"],
   font-size: 1.4rem;
 }
 
-[class="modal-launcher-front"] {
+.button-modal-front {
+  color: var(--col-neutral-white);
+  background-color: var(--col-primary-soft-red-top);
+}
+
+[class="modal-launcher-front"],
+.show-default-timer-front {
+  font-size: 1.5rem;
+  padding-block: 26px;
+  margin-inline: revert;
+}
+
+[class="modal-launcher-front"],
+.button-modal-front,
+.show-default-timer-front {
   display: block;
   transform: translate(4px, -6px);
   transition: transform 500ms ease-in;
@@ -1026,30 +1119,52 @@ button[type="submit"],
   display: none;
 } */
 
+/* ******** */
+
+/* below we animate opacity on modal one user inputs when we changed
+attr of user-clicked true or false on custom date btn
+*/
+
+/* ******** */
+
+/*
 [class~="modal-launcher-back"][user-clicked="true"] + div[id="modal-one"] {
   opacity: 1;
   transition: opacity 1000ms ease-in;
-  /* z-index: revert; */
+  
+   z-index: revert; 
 }
+*/
 
-[class~="modal-launcher-back"][user-clicked="false"] + div[id="modal-one"] {
+/*[class~="modal-launcher-back"][user-clicked="false"] + div[id="modal-one"] {
   opacity: 0;
   transition: opacity 500ms ease-out;
-  /* z-index: -1 was making the modal with select inputs
+  z-index: -1 was making the modal with select inputs
   to fade quicker than we wanted
-  */
-  /* z-index: -1; */
+
+   z-index: -1; 
+}
+*/
+/* ******** */
+
+/* below we will add class of fade-in-user-inputs */
+
+/* ******** */
+
+div[id="modal-one"].fade-in-user-inputs {
+  opacity: 1;
+  transition: opacity 1500ms ease-in;
 }
 
 /* opacity effect on starting date button */
 
 [class~="modal-launcher-back"][user-clicked="false"] {
   opacity: 1;
-  transition: opacity 1000ms ease-in;
+  transition: opacity 350ms ease-in;
 }
 [class~="modal-launcher-back"][user-clicked="true"] {
   opacity: 0;
-  transition: opacity 260ms ease-out;
+  transition: opacity 350ms ease-out;
 }
 
 .close-modal-btn {
