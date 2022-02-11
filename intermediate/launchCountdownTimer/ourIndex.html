@@ -20,10 +20,22 @@
     <title>Launch Countdown Timer</title>
   </head>
   <body>
+    <!-- ******** -->
+    <!-- when there is a reference text for navigation use aria-labelledby -->
+    <!-- ******** -->
+    <!-- <nav role="navigation" aria-labelledby="main-nav"></nav>
+    <h2 id="main-nav">Main Navigation</h2>
+    <nav role="navigation" aria-labelledby="secondary-nav"></nav>
+    <h2 id="secondary-nav">Secondary Navigation</h2> -->
+    <!-- ******** -->
+    <!-- when there is no reference text for navigation use aria-label -->
+    <!-- ******** -->
+    <!-- <nav role="navigation" aria-label="Primary"></nav>
+    <nav role="navigation" aria-label="Secondary"></nav> -->
     <!-- <a onclick="" href="#month">Go to Select Month</a> -->
     <!-- keep track of days, hours, mins, seconds -->
     <!-- when either days, hours, mins, seconds reaches 0 apply display none -->
-    <main role="main">
+    <main role="main" aria-label="Timer App">
       <section
         class="countdown-background-style-wrapper"
         aria-labelledby="app-title"
@@ -229,13 +241,38 @@
             </div>
             <!-- button -->
             <button
-              role="button"
-              class="modal-launcher-back"
-              aria-label="launch custom date and time inputs modal"
-              user-clicked="false"
-            >
-              <span class="modal-launcher-front">Custom Date </span>
+                  role="button"
+                  class="buttons-modal-back"
+                  aria-label="launch custom date and default button modal"
+                  show-button-modal="false"
+                >
+                  <span class="button-modal-front">User Options </span>
+                </button>
+            <!-- control buttons modal -->
+            <div class="additional-controls-modal hide" role="dialog" aria-modal="true" aria-describedby="controls-modal-title">
+              <div class="additional-controls">
+                <h2 class="visually-hidden" id="controls-modal-title">Additional Control Buttons</h2>
+                <button role="button" class="close-controls-modal" aria-label="display timer">
+              <svg viewbox="0 0 14 16" width="26" height="24" xmlns="http://www.w3.org/2000/svg"><path d="m11.596.782 2.122 2.122L9.12 7.499l4.597 4.597-2.122 2.122L7 9.62l-4.595 4.597-2.122-2.122L4.878 7.5.282 2.904 2.404.782l4.595 4.596L11.596.782Z" fill="#69707D" fill-rule="evenodd"/></svg>
             </button>
+                <button
+                  role="button"
+                  class="modal-launcher-back"
+                  aria-label="launch custom date and time inputs modal"
+                  user-clicked="false"
+                >
+                  <span class="modal-launcher-front">Custom Date </span>
+                </button>
+                <button
+                  role="button"
+                  class="show-default-timer-back"
+                  aria-label="Go back to timer display"
+                  user-clicked="false"
+                >
+                  <span class="show-default-timer-front">Show Default </span>
+                </button>
+              </div>
+            </div>
             <!-- user input -->
             <!-- enter unique countdown date -->
             <div
