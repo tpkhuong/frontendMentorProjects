@@ -250,7 +250,7 @@
                 </button>
             <!-- control buttons modal -->
             <div class="additional-controls-modal hide" role="dialog" aria-modal="true" aria-describedby="controls-modal-title">
-              <div class="additional-controls">
+              <div class="additional-controls" close-button-clicked="false">
                 <h2 class="visually-hidden" id="controls-modal-title">Additional Control Buttons</h2>
                 <button role="button" class="close-controls-modal" aria-label="display timer">
               <svg viewbox="0 0 14 16" width="26" height="24" xmlns="http://www.w3.org/2000/svg"><path d="m11.596.782 2.122 2.122L9.12 7.499l4.597 4.597-2.122 2.122L7 9.62l-4.595 4.597-2.122-2.122L4.878 7.5.282 2.904 2.404.782l4.595 4.596L11.596.782Z" fill="#69707D" fill-rule="evenodd"/></svg>
@@ -285,7 +285,7 @@
             <button role="button" class="close-modal-btn" aria-label="close modal and display default timer">
               <svg viewbox="0 0 14 16" width="26" height="24" xmlns="http://www.w3.org/2000/svg"><path d="m11.596.782 2.122 2.122L9.12 7.499l4.597 4.597-2.122 2.122L7 9.62l-4.595 4.597-2.122-2.122L4.878 7.5.282 2.904 2.404.782l4.595 4.596L11.596.782Z" fill="#69707D" fill-rule="evenodd"/></svg>
             </button>
-              <form novalidate action="#">
+              <form method="dialog" novalidate action="#">
                 <h2 id="modal-one-title">
                   User Custom Date and Time has to be<span
                     class="soft-red-color"
@@ -297,7 +297,7 @@
                 <div class="date-input-wrapper">
                   <!-- date: month, day, year -->
                   <label for="month">Month</label>
-                  <select name="" id="month" required>
+                  <select name="month" id="month" required>
                     <option value="">Select Month</option>
                     <option value="Jan">January</option>
                     <option value="Feb">February</option>
@@ -313,7 +313,7 @@
                     <option value="Dec">December</option>
                   </select>
                   <label for="day">Day</label>
-                  <select name="" id="day">
+                  <select name="day" id="day">
                     <option value="">Select Day</option>
                     <!-- option[value="$"]{$}*31 -->
                     <option value="1">01</option>
@@ -349,7 +349,7 @@
                     <option value="31">31</option>
                   </select>
                   <label for="year">Year</label>
-                  <select name="" id="year">
+                  <select name="year" id="year">
                     <option value="">Select Year</option>
                     <option value="2022">2022</option>
                     <option value="2023">2023</option>
@@ -363,7 +363,7 @@
                   </select>
                   <!-- time: hr, min, am/pm -->
                   <label for="hours">Hour</label>
-                  <select id="hours">
+                  <select name="hours" id="hours">
                     <option value="">Select Hour</option>
                     <option value="1">01</option>
                     <option value="2">02</option>
@@ -379,7 +379,7 @@
                     <option value="12">12</option>
                   </select>
                   <label for="minutes">Minute</label>
-                  <select id="minutes">
+                  <select name="minutes" id="minutes">
                     <option value="">Select Minute</option>
                     <option value="0">00</option>
                     <option value="1">01</option>
@@ -444,7 +444,7 @@
                     <option value="60">60</option>
                   </select>
                   <label for="meridiem">AM/PM</label>
-                  <select id="meridiem">
+                  <select name="meridiem" id="meridiem">
                     <option value="">Select AM/PM</option>
                     <option value="AM">AM</option>
                     <option value="PM">PM</option>
