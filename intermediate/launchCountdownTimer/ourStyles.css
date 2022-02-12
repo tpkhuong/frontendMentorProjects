@@ -681,6 +681,7 @@ apply display: none to that element
 
 .digit-text-wrapper {
   text-align: center;
+  min-width: 135px;
   /* border: 1px solid antiquewhite; */
 }
 
@@ -815,8 +816,8 @@ div[id="modal-one"] {
   class modal-launcher-back we will declare z-index: revert to show
   modal with select inputs
   */
-  opacity: 0;
-  transition: opacity 500ms ease-out;
+  /* opacity: 0;
+  transition: opacity 500ms ease-out; */
 }
 
 @media screen and (min-width: 43.75rem) {
@@ -1033,6 +1034,11 @@ button[type="submit"] {
   border-radius: 16px;
 }
 
+.additional-controls[close-button-clicked="true"] {
+  transform: scale(0);
+  transition: transform 900ms ease-out;
+}
+
 /* close controls modal btn */
 
 .close-controls-modal {
@@ -1060,7 +1066,9 @@ button[type="submit"] {
 /* button launch ending date modal */
 
 [class~="modal-launcher-back"]:focus [class="modal-launcher-front"],
-[class~="modal-launcher-back"]:hover [class="modal-launcher-front"] {
+[class~="modal-launcher-back"]:hover [class="modal-launcher-front"],
+.show-default-timer-back:focus .show-default-timer-front,
+.show-default-timer-back:hover .show-default-timer-front {
   transform: translate(0px);
   transition: transform 500ms ease-out;
 }
@@ -1070,11 +1078,19 @@ button[type="submit"] {
 .show-default-timer-back {
   /* margin-block-end: 72px; */
   /* margin-block-end: 125px; */
-  background-color: var(--col-neutral-dark-blue-bottom);
   border-radius: 5px;
   padding: 0;
   display: block;
   margin-inline: auto;
+}
+
+.buttons-modal-back {
+  background-color: var(--col-neutral-white);
+}
+
+[class~="modal-launcher-back"],
+.show-default-timer-back {
+  background-color: var(--col-primary-soft-red-bottom);
 }
 
 .buttons-modal-back {
@@ -1106,7 +1122,6 @@ button[type="submit"],
 }
 
 [class="modal-launcher-front"],
-.button-modal-front,
 .show-default-timer-front {
   display: block;
   transform: translate(4px, -6px);
@@ -1265,6 +1280,11 @@ div[id="modal-one"].fade-in-user-inputs {
     margin-inline-start: 28px;
     margin-block: 48px;
   }
+}
+
+.scale-to-zero {
+  transform: scale(0);
+  transition: transform 900ms ease-out;
 }
 
 .hide {
