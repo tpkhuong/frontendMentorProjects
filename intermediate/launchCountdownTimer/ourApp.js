@@ -13,11 +13,13 @@
     pauseBtn,
     moreBtnModalLauncher,
     controlsModal,
+    controlsBtnDisplay,
     closeControlModalBtn,
     daysDigitContainerParent,
     hoursDigitContainerParent,
     minutesDigitContainerParent,
     customDateButton,
+    showDefaultTimerBtn,
     monthSelectElement,
     userInputModalDiv,
     modalOneTitle,
@@ -211,6 +213,10 @@
     "click",
     closeControlModalDisplayTimer
   );
+
+  // show default timer btn
+
+  addListener.call(showDefaultTimerBtn, "click", showDefaultTimerDisplay);
 
   // clicking on resume button
 
@@ -3301,10 +3307,25 @@
    * **/
 
   function userOptionsBtnScaleDownModalSlideIn(event) {
-    this.attributes["show-button-modal"].value = true;
+    this.attributes["show-button-modal"].value = "true";
+    // add scale to zero to digit container and timer controls btns
+    digitsContainerWrapper.classList.add("scale-to-zero");
+    timerControlBtns.classList.add("scale-to-zero");
     setTimeout(() => {
       controlsModal.classList.remove("hide");
     }, 810);
+    setTimeout(() => {
+      this.classList.add("hide");
+      this.attributes["show-button-modal"].value = "false";
+    }, 900);
+    // hide digit container and timer controls btn
+    setTimeout(() => {
+      digitsContainerWrapper.classList.add("hide");
+      timerControlBtns.classList.add("hide");
+      // remove class scale to zero once digit container and timer control btns are not on screen
+      digitsContainerWrapper.classList.remove("scale-to-zero");
+      timerControlBtns.classList.remove("scale-to-zero");
+    }, 920);
   }
 
   /**
@@ -3313,7 +3334,39 @@
 
   function closeControlModalDisplayTimer(event) {
     //
-    console.log(event);
+    userInterfaceToShowDefaultTimer(event);
+  }
+
+  /**
+   * show default timer
+   * **/
+
+  function showDefaultTimerDisplay(event) {
+    userInterfaceToShowDefaultTimer(event);
+    // work on more algorithm for show default display btn
+  }
+
+  /**
+   * userInterfaceForDefaultTimerDisplay
+   * **/
+
+  function userInterfaceToShowDefaultTimer(event) {
+    // add scale to zero class to controlsModal
+    controlsBtnDisplay.attributes["close-button-clicked"].value = "true";
+    // after 900ms add hide class to controlsModal
+    setTimeout(() => {
+      controlsModal.classList.add("hide");
+    }, 920);
+    // we will remove hide class from user options btn, digit container and timer control btns
+    setTimeout(() => {
+      moreBtnModalLauncher.classList.remove("hide");
+      digitsContainerWrapper.classList.remove("hide");
+      timerControlBtns.classList.remove("hide");
+    }, 910);
+    // remove class scale to zero
+    setTimeout(() => {
+      controlsBtnDisplay.attributes["close-button-clicked"].value = "false";
+    }, 1000);
   }
 
   /**
@@ -3321,6 +3374,18 @@
    * **/
 
   function customButtonFadeOutModalOneFadeIn(event) {
+    /**
+     * first attempt:custom date btn fade out. digit element fade out
+     * user input fade in
+     * **/
+    // hide digit container and timer controls
+    digitsContainerWrapper.classList.add("hide");
+    timerControlBtns.classList.add("hide");
+    // add hide class to controls modal
+    controlsModal.classList.add("hide");
+    // remove hide class from modal one
+    userInputModalDiv.classList.remove("hide");
+    /*****
     setTimeout(() => {
       // add class to fade-in-user-inputs to modal-one
       userInputModalDiv.classList.add("fade-in-user-inputs");
@@ -3347,6 +3412,7 @@
     setTimeout(() => {
       this.classList.add("hide");
     }, 530);
+    *****/
     // dataObj.stopTimerID = countDownTimer(initialAppSetUp);
     // setTimeout(() => {
     //   const daysBackElement = document.querySelector("[id=days] .digit-back");
@@ -3411,6 +3477,26 @@
    * **/
 
   function modalOneFadeOutDigitAndCustomDataBtnFadeIn(eventInput) {
+    // hide modal one
+    userInputModalDiv.classList.add("scale-to-zero");
+    setTimeout(() => {
+      userInputModalDiv.classList.add("hide");
+    }, 920);
+    // show digit elements and timer controls
+    setTimeout(() => {
+      digitsContainerWrapper.classList.remove("hide");
+      timerControlBtns.classList.remove("hide");
+      moreBtnModalLauncher.classList.remove("hide");
+    }, 950);
+    // remove scale to zero class from modal one after it scale to 0
+    setTimeout(() => {
+      userInputModalDiv.classList.remove("scale-to-zero");
+    }, 1000);
+    /**
+     * first attempt
+     * **/
+
+    /*****
     digitsContainerWrapper.setAttribute("aria-hidden", "true");
     // social-media-icons element add aria-hidden true
     document
@@ -3454,6 +3540,7 @@
       customDateButton.removeAttribute("aria-hidden");
       pauseBtn.removeAttribute("aria-hidden");
     }, 1050);
+    *****/
   }
 
   /**
@@ -3886,6 +3973,8 @@
     const moreBtnModalLauncher = document.querySelector(".buttons-modal-back");
     // controls modal
     const controlsModal = document.querySelector(".additional-controls-modal");
+    // control btn element
+    const controlsBtnDisplay = document.querySelector(".additional-controls");
     // close btn controls modal
     const closeControlModalBtn = document.querySelector(
       ".close-controls-modal"
@@ -3902,6 +3991,10 @@
     );
     // starting date button
     const customDateButton = document.querySelector(".modal-launcher-back");
+    // show default button
+    const showDefaultTimerBtn = document.querySelector(
+      ".show-default-timer-back"
+    );
     const monthSelectElement = document.querySelector("select[id='month']");
     // close modal btn
     const closeModalBtn = document.querySelector(".close-modal-btn");
@@ -3984,11 +4077,13 @@
       pauseBtn,
       moreBtnModalLauncher,
       controlsModal,
+      controlsBtnDisplay,
       closeControlModalBtn,
       daysDigitContainerParent,
       hoursDigitContainerParent,
       minutesDigitContainerParent,
       customDateButton,
+      showDefaultTimerBtn,
       monthSelectElement,
       closeModalBtn,
       formElement,
