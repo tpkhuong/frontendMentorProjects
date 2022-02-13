@@ -979,6 +979,15 @@
      * change title to match next holiday
      * **/
     changeTitleToMatchNextHoliday(dataObj.defaultEndingDate.title);
+    /**
+     * assign next holiday to default timer btn aria-label
+     * **/
+
+    const currentAriaLabelOfDefaultBtn =
+      showDefaultTimerBtn.attributes["aria-label"].value;
+    showDefaultTimerBtn.attributes[
+      "aria-label"
+    ].value = `${currentAriaLabelOfDefaultBtn} ${dataObj.defaultEndingDate.title}`;
   }
 
   /**
@@ -3305,8 +3314,17 @@
   /**
    * button to launch additional control buttons modal
    * **/
-
+  alert("add keydown event to modal one when user click on custom btn");
+  alert(
+    "add keydown event to additional controls modal when user click on user options btn"
+  );
+  alert("remove keydown listener when user click on close modal one btn");
+  alert(
+    "remove keydown listener when user click on close additional controls modal"
+  );
   function userOptionsBtnScaleDownModalSlideIn(event) {
+    // add keydown event listener to additional controls modal
+    // cycleFocusELementsControlsModal
     this.attributes["show-button-modal"].value = "true";
     // add scale to zero to digit container and timer controls btns
     digitsContainerWrapper.classList.add("scale-to-zero");
@@ -3333,7 +3351,9 @@
    * **/
 
   function closeControlModalDisplayTimer(event) {
-    //
+    /**
+     * remove keydown event listener on modal controls modal when close btn is clicked
+     * **/
     userInterfaceToShowDefaultTimer(event);
   }
 
@@ -3342,8 +3362,22 @@
    * **/
 
   function showDefaultTimerDisplay(event) {
-    userInterfaceToShowDefaultTimer(event);
     // work on more algorithm for show default display btn
+    // if current timer is defaultTimer just run userInterfaceToShowDefaultTimer(event);
+    if (dataObj.timerInitialized.defaultTimer) {
+      userInterfaceToShowDefaultTimer(event);
+    } else {
+      // if current timer is user custom input run dataObj.stopTimerID = countDownTimer(initialAppSetUp);
+      // assign value true to dataObj.timerInitialized.defaultTimer
+      dataObj.stopTimerID = countDownTimer(initialAppSetUp);
+      // assign value true to dataObj.timerInitialized.defaultTimer = true
+      dataObj.timerInitialized.defaultTimer = true;
+      dataObj.timerInitialized.userCustomTimer
+        ? (dataObj.timerInitialized.userCustomTimer = false)
+        : null;
+      // call func to change UI to display timer
+      userInterfaceToShowDefaultTimer(event);
+    }
   }
 
   /**
@@ -3374,6 +3408,8 @@
    * **/
 
   function customButtonFadeOutModalOneFadeIn(event) {
+    // add keydown event listener to modal one(user inputs)
+    // cycleFocusELementsModalOne
     /**
      * first attempt:custom date btn fade out. digit element fade out
      * user input fade in
@@ -3469,6 +3505,9 @@
    * **/
 
   function closeModalOneBtn(event) {
+    /**
+     * remove keydown event listener on modal one when close btn is clicked
+     * **/
     modalOneFadeOutDigitAndCustomDataBtnFadeIn(event);
   }
 
@@ -3541,6 +3580,32 @@
       pauseBtn.removeAttribute("aria-hidden");
     }, 1050);
     *****/
+  }
+
+  /**
+   * tabbing in a modal
+   * func will take a first element and last element
+   * propertiesOfEventObj
+   * **/
+
+  function tabbingThroughModal(firstElement, lastElement) {
+    //
+  }
+
+  /**
+   * cycle through focusable elements modal one
+   * **/
+
+  function cycleFocusELementsModalOne(event) {
+    //
+  }
+
+  /**
+   * cycle through focusable elements additional controls modal
+   * **/
+
+  function cycleFocusELementsControlsModal(event) {
+    //
   }
 
   /**
