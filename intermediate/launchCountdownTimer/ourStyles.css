@@ -1081,11 +1081,11 @@ button[type="submit"] {
   border-radius: 5px;
   padding: 0;
   display: block;
-  margin-inline: auto;
 }
 
 .buttons-modal-back {
   background-color: var(--col-neutral-white);
+  margin-inline: auto;
 }
 
 [class~="modal-launcher-back"],
@@ -1109,7 +1109,8 @@ button[type="submit"],
   font-size: 1.4rem;
 }
 
-.button-modal-front {
+.button-modal-front,
+button[type="submit"] {
   color: var(--col-neutral-white);
   background-color: var(--col-primary-soft-red-top);
 }
