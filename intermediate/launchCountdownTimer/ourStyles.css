@@ -1083,11 +1083,6 @@ button[type="submit"] {
   display: block;
 }
 
-.buttons-modal-back {
-  background-color: var(--col-neutral-white);
-  margin-inline: auto;
-}
-
 [class~="modal-launcher-back"],
 .show-default-timer-back {
   background-color: var(--col-primary-soft-red-bottom);
@@ -1095,6 +1090,11 @@ button[type="submit"] {
 
 .buttons-modal-back {
   margin-block-start: 72px;
+}
+
+.buttons-modal-back,
+button[type="submit"] {
+  margin-inline: auto;
 }
 
 [class="modal-launcher-front"],
@@ -1107,6 +1107,7 @@ button[type="submit"],
   background-color: var(--col-neutral-white);
   border-radius: 5px;
   font-size: 1.4rem;
+  display: block;
 }
 
 .button-modal-front,
