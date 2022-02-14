@@ -35,6 +35,7 @@
     selectYearInput,
     closeModalBtn,
     formElement,
+    formSubmitBtn,
     daysDigitBottom,
     hoursDigitBottom,
     minutesDigitBottom,
@@ -2090,6 +2091,12 @@
   function userInputIsValidRunFunc(userDataObj) {
     // code below will clear either default timer or userInput timer
     clearInterval(dataObj.stopTimerID);
+    // when we get here user select a value for each inputs
+    // and date/time is later than current time. we want to remove keydown from modal one
+    userInputModalDiv.removeEventListener(
+      "keydown",
+      cycleFocusELementsModalOne
+    );
     // update userDateInput hour to 24hr format
     // typeof hourConvertedToTwentyFourFormat will be string
     const hourConvertedToTwentyFourFormat =
@@ -3314,16 +3321,9 @@
   /**
    * button to launch additional control buttons modal
    * **/
-  alert("add keydown event to modal one when user click on custom btn");
-  alert(
-    "add keydown event to additional controls modal when user click on user options btn"
-  );
-  alert("remove keydown listener when user click on close modal one btn");
-  alert(
-    "remove keydown listener when user click on close additional controls modal"
-  );
   function userOptionsBtnScaleDownModalSlideIn(event) {
     // add keydown event listener to additional controls modal
+    addListener.call(controlsModal, "keydown", cycleFocusELementsControlsModal);
     // cycleFocusELementsControlsModal
     this.attributes["show-button-modal"].value = "true";
     // add scale to zero to digit container and timer controls btns
@@ -3354,6 +3354,10 @@
     /**
      * remove keydown event listener on modal controls modal when close btn is clicked
      * **/
+    controlsModal.removeEventListener(
+      "keydown",
+      cycleFocusELementsControlsModal
+    );
     userInterfaceToShowDefaultTimer(event);
   }
 
@@ -3409,6 +3413,7 @@
 
   function customButtonFadeOutModalOneFadeIn(event) {
     // add keydown event listener to modal one(user inputs)
+    addListener.call(userInputModalDiv, "keydown", cycleFocusELementsModalOne);
     // cycleFocusELementsModalOne
     /**
      * first attempt:custom date btn fade out. digit element fade out
@@ -3508,6 +3513,10 @@
     /**
      * remove keydown event listener on modal one when close btn is clicked
      * **/
+    userInputModalDiv.removeEventListener(
+      "keydown",
+      cycleFocusELementsModalOne
+    );
     modalOneFadeOutDigitAndCustomDataBtnFadeIn(event);
   }
 
@@ -3588,8 +3597,27 @@
    * propertiesOfEventObj
    * **/
 
-  function tabbingThroughModal(firstElement, lastElement) {
+  function tabbingThroughModal(eventInput, firstElement, lastElement) {
     //
+    const { targetElement, targetKeyCodeStr, booleanShiftKeyPressed } =
+      propertiesOfEventObj.call(eventInput);
+    // run preventDefault() if keycode is "Tab"
+    // check if shift key is pressed
+    if (booleanShiftKeyPressed) {
+      // user is holding down shift key
+      targetKeyCodeStr == "Tab" && targetElement == firstElement
+        ? (eventInput.preventDefault(), lastElement.focus())
+        : null;
+    } else {
+      console.log("here");
+      console.log(targetElement);
+      console.log(targetKeyCodeStr);
+      console.log(lastElement);
+      // user is pressing tab or another key without holding shift key
+      targetKeyCodeStr == "Tab" && targetElement == lastElement
+        ? (eventInput.preventDefault(), firstElement.focus())
+        : null;
+    }
   }
 
   /**
@@ -3597,7 +3625,9 @@
    * **/
 
   function cycleFocusELementsModalOne(event) {
-    //
+    // passing in closeModalBtn as firstElement
+    // passing in formSubmitBtn as lastElement
+    tabbingThroughModal(event, closeModalBtn, formSubmitBtn);
   }
 
   /**
@@ -3605,7 +3635,9 @@
    * **/
 
   function cycleFocusELementsControlsModal(event) {
-    //
+    // passing in closeControlModalBtn as firstElement
+    // passing in showDefaultTimerBtn as lastElement
+    tabbingThroughModal(event, closeControlModalBtn, showDefaultTimerBtn);
   }
 
   /**
@@ -4008,7 +4040,9 @@
   /**
    * selecting our elements
    * **/
-
+  alert(
+    "work on focus element when user click on close modal one and close additional controls modal"
+  );
   function ourSelectors() {
     // app wrapper
     const appWrapperSectionElement = document.querySelector(
@@ -4065,6 +4099,8 @@
     const closeModalBtn = document.querySelector(".close-modal-btn");
     // form
     const formElement = document.querySelector("form");
+    // submit btn in form element
+    const formSubmitBtn = document.querySelector("button[type='submit']");
     // custom input modal
     const userInputModalDiv = document.getElementById("modal-one");
     // modal one title
@@ -4152,6 +4188,7 @@
       monthSelectElement,
       closeModalBtn,
       formElement,
+      formSubmitBtn,
       userInputModalDiv,
       modalOneTitle,
       emptyModalWrapper,
