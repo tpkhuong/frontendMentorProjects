@@ -744,6 +744,11 @@
               hours: 0,
               minutes: 00,
             },
+            21: {
+              title: "President's Day",
+              hours: 0,
+              minutes: 00,
+            },
           },
           Mar: {
             17: {
@@ -980,6 +985,15 @@
      * change title to match next holiday
      * **/
     changeTitleToMatchNextHoliday(dataObj.defaultEndingDate.title);
+    /**
+     * assign next holiday to start countdown timer btn
+     * **/
+
+    const startCountdownCurrentAriaLabel =
+      startDefaultCountdownBtn.getAttribute("aria-label");
+    startDefaultCountdownBtn.attributes[
+      "aria-label"
+    ].value = `${startCountdownCurrentAriaLabel} ${dataObj.defaultEndingDate.title}`;
     /**
      * assign next holiday to default timer btn aria-label
      * **/
@@ -2114,6 +2128,7 @@
       minutes: Number(userDataObj.minutes),
       meridiem: userDataObj.meridiem,
     };
+
     // func below will add class to show digit elements and custom date btn
     // fade out modal one (user inputs)
     modalOneFadeOutDigitAndCustomDataBtnFadeIn(event);
@@ -2130,6 +2145,10 @@
     dataObj.timerInitialized.defaultTimer
       ? (dataObj.timerInitialized.defaultTimer = false)
       : null;
+    // focus resume btn when user submit a corrent time for custom timer
+    setTimeout(() => {
+      resumeBtn.focus();
+    }, 1100);
     console.log(dataObj);
   }
 
@@ -3245,6 +3264,12 @@
     dataObj.timerInitialized.userCustomTimer
       ? (dataObj.timerInitialized.userCustomTimer = false)
       : null;
+    /**
+     * focus resume btn when user click on start countdown btn
+     * **/
+    setTimeout(() => {
+      resumeBtn.focus();
+    }, 1000);
   }
 
   /**
@@ -3344,6 +3369,10 @@
       digitsContainerWrapper.classList.remove("scale-to-zero");
       timerControlBtns.classList.remove("scale-to-zero");
     }, 920);
+    // focus close additional control btn when user click on user options btn
+    setTimeout(() => {
+      closeControlModalBtn.focus();
+    }, 950);
   }
 
   /**
@@ -3358,6 +3387,10 @@
       "keydown",
       cycleFocusELementsControlsModal
     );
+    // focus moreBtnModalLauncher when user click on close control buttons modal
+    setTimeout(() => {
+      moreBtnModalLauncher.focus();
+    }, 1100);
     userInterfaceToShowDefaultTimer(event);
   }
 
@@ -3370,6 +3403,10 @@
     // if current timer is defaultTimer just run userInterfaceToShowDefaultTimer(event);
     if (dataObj.timerInitialized.defaultTimer) {
       userInterfaceToShowDefaultTimer(event);
+      // focus on moreBtnModalLauncher btn when user click on show default btn
+      setTimeout(() => {
+        moreBtnModalLauncher.focus();
+      }, 1100);
     } else {
       // if current timer is user custom input run dataObj.stopTimerID = countDownTimer(initialAppSetUp);
       // assign value true to dataObj.timerInitialized.defaultTimer
@@ -3381,6 +3418,12 @@
         : null;
       // call func to change UI to display timer
       userInterfaceToShowDefaultTimer(event);
+      // change title to default holiday title
+      changeTitleToMatchNextHoliday(dataObj.defaultEndingDate.title);
+      // focus on moreBtnModalLauncher btn when user click on show default btn
+      setTimeout(() => {
+        moreBtnModalLauncher.focus();
+      }, 1100);
     }
   }
 
@@ -3426,6 +3469,27 @@
     controlsModal.classList.add("hide");
     // remove hide class from modal one
     userInputModalDiv.classList.remove("hide");
+    // focus on close modal one btn when user click on custom date btn
+    setTimeout(() => {
+      closeModalBtn.focus();
+    }, 500);
+    // social-media-icons element add aria-hidden true
+    document
+      .querySelector(".social-media-icons")
+      .setAttribute("aria-hidden", "true");
+    // remove aria hidden from social media icons
+    setTimeout(() => {
+      document
+        .querySelector(".social-media-icons")
+        .removeAttribute("aria-hidden");
+    }, 1000);
+    /**
+     * remove keydown event listener to additional btn modal when uesr click on custom date btn
+     * **/
+    controlsModal.removeEventListener(
+      "keydown",
+      cycleFocusELementsControlsModal
+    );
     /*****
     setTimeout(() => {
       // add class to fade-in-user-inputs to modal-one
@@ -3517,7 +3581,41 @@
       "keydown",
       cycleFocusELementsModalOne
     );
+    /**
+     * we should keep the algorithm for close modal one btn consistent
+     * go back to additional btn modal and focus custom date btn
+     * **/
+    // if default timer is running when user click on close modal one btn
+    // go back to additional control btns modal
+    // add class hide to userInputModalDiv
+    // hide modal one
+    userInputModalDiv.classList.add("scale-to-zero");
+    setTimeout(() => {
+      userInputModalDiv.classList.add("hide");
+      userInputModalDiv.classList.remove("scale-to-zero");
+    }, 920);
+    // remove class hide from digitsContainerWrapper,timecontrols, and controlsModal in a settimeout
+    setTimeout(() => {
+      controlsModal.classList.remove("hide");
+    }, 1050);
+    // setTimeout(() => {
+    //   digitsContainerWrapper.classList.remove("hide");
+    //   timerControlBtns.classList.remove("hide");
+    //   controlsModal.classList.remove("hide");
+    // }, 1000);
+    // focus customBtn
+    setTimeout(() => {
+      customDateButton.focus();
+    }, 1100);
+    // focus resume btn when user click on close modal one btn
+    // add keydown event listener to controlsModal
+    addListener.call(controlsModal, "keydown", cycleFocusELementsControlsModal);
+    /** 
+    setTimeout(() => {
+      resumeBtn.focus();
+    }, 1100);
     modalOneFadeOutDigitAndCustomDataBtnFadeIn(event);
+    **/
   }
 
   /**
@@ -3609,10 +3707,6 @@
         ? (eventInput.preventDefault(), lastElement.focus())
         : null;
     } else {
-      console.log("here");
-      console.log(targetElement);
-      console.log(targetKeyCodeStr);
-      console.log(lastElement);
       // user is pressing tab or another key without holding shift key
       targetKeyCodeStr == "Tab" && targetElement == lastElement
         ? (eventInput.preventDefault(), firstElement.focus())
@@ -4040,9 +4134,6 @@
   /**
    * selecting our elements
    * **/
-  alert(
-    "work on focus element when user click on close modal one and close additional controls modal"
-  );
   function ourSelectors() {
     // app wrapper
     const appWrapperSectionElement = document.querySelector(
