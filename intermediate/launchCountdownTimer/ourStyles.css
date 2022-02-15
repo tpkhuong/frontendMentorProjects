@@ -824,6 +824,7 @@ div[id="modal-one"] {
   [class~="countdown-digits-container"] {
     margin-block-start: 42px;
     gap: 18px;
+    flex-wrap: nowrap;
   }
   .digit-text-wrapper div[id] {
     font-size: 7.1rem;
@@ -1032,6 +1033,8 @@ button[type="submit"] {
   flex-direction: column;
   padding: 24px;
   border-radius: 16px;
+  margin-inline: auto;
+  max-width: 550px;
 }
 
 .additional-controls[close-button-clicked="true"] {
@@ -1128,6 +1131,17 @@ button[type="submit"] {
   display: block;
   transform: translate(4px, -6px);
   transition: transform 500ms ease-in;
+}
+
+@media screen and (min-width: 43.75rem) {
+  .additional-controls {
+    padding: 80px;
+    padding-block: 38px;
+  }
+  [class="modal-launcher-front"],
+  .show-default-timer-front {
+    font-size: 2.5rem;
+  }
 }
 
 /* opacity effect on modal */
