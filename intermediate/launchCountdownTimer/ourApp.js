@@ -30,6 +30,7 @@
     incorrectDateTimeModal,
     textElementForMinuteIncorrectModal,
     incorrectTextElementsForMessage,
+    socialMediaIconsWrapper,
     arrayOfDaysSelectOptionElements,
     selectMonthInput,
     selectYearInput,
@@ -2149,6 +2150,12 @@
     setTimeout(() => {
       resumeBtn.focus();
     }, 1100);
+    // add aria hidden then remove aria hidden after 1500ms
+    ariaHiddenAddAndRemoveHelperFunc(
+      socialMediaIconsWrapper,
+      digitsContainerWrapper,
+      timerControlBtns
+    );
     console.log(dataObj);
   }
 
@@ -3387,10 +3394,16 @@
       "keydown",
       cycleFocusELementsControlsModal
     );
+    ariaHiddenAddAndRemoveHelperFunc(
+      socialMediaIconsWrapper,
+      digitsContainerWrapper,
+      timerControlBtns
+    );
     // focus moreBtnModalLauncher when user click on close control buttons modal
     setTimeout(() => {
       moreBtnModalLauncher.focus();
     }, 1100);
+
     userInterfaceToShowDefaultTimer(event);
   }
 
@@ -3399,6 +3412,32 @@
    * **/
 
   function showDefaultTimerDisplay(event) {
+    ariaHiddenAddAndRemoveHelperFunc(
+      socialMediaIconsWrapper,
+      digitsContainerWrapper,
+      timerControlBtns
+    );
+    // social-media-icons element add aria-hidden true
+    /* document
+      .querySelector(".social-media-icons")
+      .setAttribute("aria-hidden", "true");
+    digitsContainerWrapper.setAttribute("aria-hidden", "true");
+    timerControlBtns.setAttribute("aria-hidden", "true");
+    // remove aria hidden from social media icons
+    setTimeout(() => {
+      document
+        .querySelector(".social-media-icons")
+        .removeAttribute("aria-hidden");
+      digitsContainerWrapper.removeAttribute("aria-hidden");
+      timerControlBtns.removeAttribute("aria-hidden");
+    }, 1500);*/
+    /**
+     * with algorithm above screen reader NVDA will announce
+     * launch custom date and default timer modal button twice
+     * when user click on default timer button in additional control btn modal
+     * add these algorithm when user click on close additional controls btn modal
+     * and when user click on close modal one btn
+     * **/
     // work on more algorithm for show default display btn
     // if current timer is defaultTimer just run userInterfaceToShowDefaultTimer(event);
     if (dataObj.timerInitialized.defaultTimer) {
@@ -3420,6 +3459,7 @@
       userInterfaceToShowDefaultTimer(event);
       // change title to default holiday title
       changeTitleToMatchNextHoliday(dataObj.defaultEndingDate.title);
+
       // focus on moreBtnModalLauncher btn when user click on show default btn
       setTimeout(() => {
         moreBtnModalLauncher.focus();
@@ -3472,6 +3512,14 @@
     // focus on close modal one btn when user click on custom date btn
     setTimeout(() => {
       closeModalBtn.focus();
+      // remove hide then add scale-to-zero to control modal
+      /**
+       * remove class hide then adding scale-to-zero to additional control modal
+       * screen reader will announce additional control modal and not app h1 title element
+       * when user click on closeModalOne btn
+       * **/
+      controlsModal.classList.add("scale-to-zero");
+      controlsModal.classList.remove("hide");
     }, 500);
     // social-media-icons element add aria-hidden true
     document
@@ -3532,6 +3580,25 @@
   }
 
   /**
+   * timer display helper func
+   * we want screen reader to announce just the timer control buttons
+   * **/
+
+  function ariaHiddenAddAndRemoveHelperFunc(...rest) {
+    // const [] = rest;
+    // add aria hidden true
+    rest.forEach(function addAriaHidden(element) {
+      element.setAttribute("aria-hidden", "true");
+    });
+    setTimeout(() => {
+      // remove aria hidden
+      rest.forEach(function removeAriaHidden(element) {
+        element.removeAttribute("aria-hidden");
+      });
+    }, 1500);
+  }
+
+  /**
    * add click listener to resume button
    * **/
 
@@ -3568,7 +3635,7 @@
       "flip-animation"
     );
   }
-
+  alert("test screen read when user click on submit btn of form");
   /**
    * close modal btn
    * **/
@@ -3596,8 +3663,13 @@
     }, 920);
     // remove class hide from digitsContainerWrapper,timecontrols, and controlsModal in a settimeout
     setTimeout(() => {
-      controlsModal.classList.remove("hide");
-    }, 1050);
+      /**
+       * removing scale-to-zero instead of class hide
+       * screen reader will announce additional control modal and not app h1 title element
+       * when user click on closeModalOne btn
+       * **/
+      controlsModal.classList.remove("scale-to-zero");
+    }, 900);
     // setTimeout(() => {
     //   digitsContainerWrapper.classList.remove("hide");
     //   timerControlBtns.classList.remove("hide");
@@ -3606,7 +3678,9 @@
     // focus customBtn
     setTimeout(() => {
       customDateButton.focus();
-    }, 1100);
+    }, 1000);
+    // add aria hidden then remove aria hidden after 1500ms
+    ariaHiddenAddAndRemoveHelperFunc(socialMediaIconsWrapper);
     // focus resume btn when user click on close modal one btn
     // add keydown event listener to controlsModal
     addListener.call(controlsModal, "keydown", cycleFocusELementsControlsModal);
@@ -4220,7 +4294,10 @@
     const incorrectTextElementsForMessage = Array.prototype.slice.call(
       document.querySelectorAll(".incorrect-date-time")
     );
-
+    // social media icons wrapper
+    const socialMediaIconsWrapper = document.querySelector(
+      ".social-media-icons"
+    );
     // days select option elements
     const arrayOfDaysSelectOptionElements = Array.from(
       document.querySelectorAll("select[id='day'] option")
@@ -4289,6 +4366,7 @@
       incorrectDateTimeModal,
       textElementForMinuteIncorrectModal,
       incorrectTextElementsForMessage,
+      socialMediaIconsWrapper,
       arrayOfDaysSelectOptionElements,
       selectMonthInput,
       selectYearInput,
