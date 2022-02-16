@@ -249,7 +249,11 @@
                   <span class="button-modal-front">User Options </span>
                 </button>
             <!-- control buttons modal -->
-            <div class="additional-controls-modal hide" role="dialog" aria-modal="true" aria-describedby="controls-modal-title">
+            <!-- aria-labelledby="controls-modal-title" find id on h2 element -->
+            <!-- when we remove hide, display: none from an element
+            screen reader will announce that element.
+            -->
+            <div class="additional-controls-modal hide" role="dialog" aria-modal="true">
               <div class="additional-controls" close-button-clicked="false">
                 <h2 class="visually-hidden" id="controls-modal-title">Additional Control Buttons</h2>
                 <button role="button" class="close-controls-modal" aria-label="Go back to timer display">
@@ -276,12 +280,12 @@
             </div>
             <!-- user input -->
             <!-- enter unique countdown date -->
+            <!-- aria-labelledby="modal-one-title" find matching id on h2 element -->
             <div
-              id="modal-one"
-              role="dialog"
-              aria-modal="true"
-              aria-describedby="modal-one-title"
-              class="hide"
+            id="modal-one"
+            role="dialog"
+            aria-modal="true"
+            class="hide"
             >
             <button  role="button" class="close-modal-btn" aria-label="close custom date inputs modal">
               <svg viewbox="0 0 14 16" width="26" height="24" xmlns="http://www.w3.org/2000/svg"><path d="m11.596.782 2.122 2.122L9.12 7.499l4.597 4.597-2.122 2.122L7 9.62l-4.595 4.597-2.122-2.122L4.878 7.5.282 2.904 2.404.782l4.595 4.596L11.596.782Z" fill="#69707D" fill-rule="evenodd"/></svg>
