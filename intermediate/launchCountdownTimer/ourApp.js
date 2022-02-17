@@ -2150,12 +2150,25 @@
     setTimeout(() => {
       resumeBtn.focus();
     }, 1100);
+    // when user click on submit btn of form element and inputs are correct
+    // we want to add hide class to additional control modal and remove class scale-to-zero
+    controlsModal.classList.add("hide");
+    controlsModal.classList.remove("scale-to-zero");
     // add aria hidden then remove aria hidden after 1500ms
-    ariaHiddenAddAndRemoveHelperFunc(
-      socialMediaIconsWrapper,
-      digitsContainerWrapper,
-      timerControlBtns
-    );
+    // digitsContainerWrapper,
+    ariaHiddenAddAndRemoveHelperFunc(socialMediaIconsWrapper, timerControlBtns);
+    // remove aria hidden to id="seconds-digits" .digit-back
+    // setTimeout(() => {
+    //   document
+    //     .querySelector("div[id='seconds-digits'] .digit-back")
+    //     .removeAttribute("aria-hidden");
+    // }, 2000);
+    // // then add it back
+    // setTimeout(() => {
+    //   document
+    //     .querySelector("div[id='seconds-digits'] .digit-back")
+    //     .setAttribute("aria-hidden", "true");
+    // }, 2900);
     console.log(dataObj);
   }
 
@@ -3394,11 +3407,7 @@
       "keydown",
       cycleFocusELementsControlsModal
     );
-    ariaHiddenAddAndRemoveHelperFunc(
-      socialMediaIconsWrapper,
-      digitsContainerWrapper,
-      timerControlBtns
-    );
+    ariaHiddenAddAndRemoveHelperFunc(socialMediaIconsWrapper, timerControlBtns);
     // focus moreBtnModalLauncher when user click on close control buttons modal
     setTimeout(() => {
       moreBtnModalLauncher.focus();
@@ -3410,13 +3419,47 @@
   /**
    * show default timer
    * **/
-
   function showDefaultTimerDisplay(event) {
     ariaHiddenAddAndRemoveHelperFunc(
       socialMediaIconsWrapper,
       digitsContainerWrapper,
       timerControlBtns
     );
+    // remove aria hidden to id="seconds-digits" .digit-back
+    document
+      .querySelector("div[id='seconds-digits'] .digit-back")
+      .removeAttribute("aria-hidden");
+    document
+      .querySelector("div[id='seconds-digits'] .digit-back")
+      .setAttribute("aria-live", "assertive");
+    // remove the aria hidden on element with text content seconds
+    let testCounter = 0;
+    const stop = testTimer();
+    function testTimer() {
+      return setInterval(() => {
+        console.log(testCounter);
+        if (testCounter > 2) {
+          document
+            .querySelector("div[id='seconds-digits'] .digit-back")
+            .removeAttribute("aria-live");
+          document
+            .querySelector("div[id='seconds-digits'] .digit-back")
+            .setAttribute("aria-hidden", "true");
+          clearInterval(stop);
+        }
+        testCounter++;
+      }, 500);
+    }
+    // setTimeout(() => {
+    //   document
+    //     .querySelector("div[id='seconds-digits'] .digit-back")
+    //     .removeAttribute("aria-live");
+    //   digitsContainerWrapper.setAttribute("aria-hidden", "true");
+    //   document
+    //     .querySelector("div[id='seconds-digits'] .digit-back")
+    //     .setAttribute("aria-hidden", "true");
+    // }, 1800);
+
     // social-media-icons element add aria-hidden true
     /* document
       .querySelector(".social-media-icons")
@@ -3442,6 +3485,7 @@
     // if current timer is defaultTimer just run userInterfaceToShowDefaultTimer(event);
     if (dataObj.timerInitialized.defaultTimer) {
       userInterfaceToShowDefaultTimer(event);
+
       // focus on moreBtnModalLauncher btn when user click on show default btn
       setTimeout(() => {
         moreBtnModalLauncher.focus();
@@ -3490,11 +3534,43 @@
     }, 1000);
   }
 
+  // function userInterfaceToShowDefaultTimer(event) {
+  //   // add scale to zero class to controlsModal
+  //   controlsBtnDisplay.attributes["close-button-clicked"].value = "true";
+  //   // add class scale-to-zero to moreBtnModalLauncher,digitsContainerWrapper,timerControlBtns
+  //   // moreBtnModalLauncher.classList.add("scale-to-zero");
+  //   digitsContainerWrapper.classList.add("scale-to-zero");
+  //   // timerControlBtns.classList.add("scale-to-zero");
+  //   // // remove class hide
+  //   // moreBtnModalLauncher.classList.remove("hide");
+  //   digitsContainerWrapper.classList.remove("hide");
+  //   // timerControlBtns.classList.remove("hide");
+  //   // after 900ms add hide class to controlsModal
+  //   setTimeout(() => {
+  //     controlsModal.classList.add("hide");
+  //   }, 920);
+  //   // we will remove hide class from user options btn, digit container and timer control btns
+  //   setTimeout(() => {
+  //     moreBtnModalLauncher.classList.remove("hide");
+  //     // digitsContainerWrapper.classList.remove("hide");
+  //     timerControlBtns.classList.remove("hide");
+  //     // moreBtnModalLauncher.classList.remove("scale-to-zero");
+  //     digitsContainerWrapper.classList.remove("scale-to-zero");
+  //     // timerControlBtns.classList.remove("scale-to-zero");
+  //   }, 910);
+  //   // remove class scale to zero
+  //   setTimeout(() => {
+  //     controlsBtnDisplay.attributes["close-button-clicked"].value = "false";
+  //   }, 1000);
+  // }
+
   /**
    * adding click listener to customDateButton
    * **/
 
   function customButtonFadeOutModalOneFadeIn(event) {
+    // clear default timer when user click on custom button
+    clearInterval(dataObj.stopTimerID);
     // add keydown event listener to modal one(user inputs)
     addListener.call(userInputModalDiv, "keydown", cycleFocusELementsModalOne);
     // cycleFocusELementsModalOne
@@ -3635,7 +3711,6 @@
       "flip-animation"
     );
   }
-  alert("test screen read when user click on submit btn of form");
   /**
    * close modal btn
    * **/
@@ -3701,17 +3776,17 @@
     userInputModalDiv.classList.add("scale-to-zero");
     setTimeout(() => {
       userInputModalDiv.classList.add("hide");
-    }, 920);
+    }, 950);
     // show digit elements and timer controls
     setTimeout(() => {
       digitsContainerWrapper.classList.remove("hide");
       timerControlBtns.classList.remove("hide");
       moreBtnModalLauncher.classList.remove("hide");
-    }, 950);
+    }, 1000);
     // remove scale to zero class from modal one after it scale to 0
     setTimeout(() => {
       userInputModalDiv.classList.remove("scale-to-zero");
-    }, 1000);
+    }, 1500);
     /**
      * first attempt
      * **/
