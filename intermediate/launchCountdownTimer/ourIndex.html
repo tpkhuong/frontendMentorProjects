@@ -221,7 +221,7 @@
                     <div aria-hidden="true" class="digit-bottom">08</div>
                   </div>
                 </div>
-                <span aria-hidden="true" class="date-time-text">SECONDS</span>
+                <span aria-hidden="true" data-selector="seconds-text" class="date-time-text">SECONDS</span>
               </div>
               <!-- ****** -->
               <!-- GREAT EFFORT = GREAT RESULT -->
@@ -302,7 +302,7 @@
                 <div class="date-input-wrapper">
                   <!-- date: month, day, year -->
                   <label for="month">Month</label>
-                  <select name="month" id="month" required>
+                  <select autocomplete="on" name="month" id="month" required>
                     <option value="">Select Month</option>
                     <option value="Jan">January</option>
                     <option value="Feb">February</option>
@@ -318,7 +318,7 @@
                     <option value="Dec">December</option>
                   </select>
                   <label for="day">Day</label>
-                  <select name="day" id="day">
+                  <select autocomplete="on" name="day" id="day">
                     <option value="">Select Day</option>
                     <!-- option[value="$"]{$}*31 -->
                     <option value="1">01</option>
@@ -354,7 +354,7 @@
                     <option value="31">31</option>
                   </select>
                   <label for="year">Year</label>
-                  <select name="year" id="year">
+                  <select autocomplete="on" name="year" id="year">
                     <option value="">Select Year</option>
                     <option value="2022">2022</option>
                     <option value="2023">2023</option>
@@ -368,7 +368,7 @@
                   </select>
                   <!-- time: hr, min, am/pm -->
                   <label for="hours">Hour</label>
-                  <select name="hours" id="hours">
+                  <select autocomplete="on" name="hours" id="hours">
                     <option value="">Select Hour</option>
                     <option value="1">01</option>
                     <option value="2">02</option>
@@ -384,7 +384,7 @@
                     <option value="12">12</option>
                   </select>
                   <label for="minutes">Minute</label>
-                  <select name="minutes" id="minutes">
+                  <select autocomplete="on" name="minutes" id="minutes">
                     <option value="">Select Minute</option>
                     <option value="0">00</option>
                     <option value="1">01</option>
@@ -449,7 +449,7 @@
                     <option value="60">60</option>
                   </select>
                   <label for="meridiem">AM/PM</label>
-                  <select name="meridiem" id="meridiem">
+                  <select autocomplete="on" name="meridiem" id="meridiem">
                     <option value="">Select AM/PM</option>
                     <option value="AM">AM</option>
                     <option value="PM">PM</option>
