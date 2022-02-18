@@ -45,7 +45,10 @@
     arrayOfHoursDivElement,
     arrayOfMinutesDivElement,
     arrayOfSecondsDivElement,
+    secondsElementBack,
+    digitSecondsText,
   } = ourSelectors();
+
   /**
    * we will call these func when we are working with current date
    * **/
@@ -3400,6 +3403,12 @@
    * **/
 
   function closeControlModalDisplayTimer(event) {
+    // for accessibility screen reader will announce digit elements
+    algorithmToAnnounceDigitsElementWhenAdditionalModalScaleDown(
+      secondsElementBack,
+      digitSecondsText,
+      700
+    );
     /**
      * remove keydown event listener on modal controls modal when close btn is clicked
      * **/
@@ -3407,49 +3416,23 @@
       "keydown",
       cycleFocusELementsControlsModal
     );
-    ariaHiddenAddAndRemoveHelperFunc(socialMediaIconsWrapper, timerControlBtns);
+    ariaHiddenAddAndRemoveHelperFunc(
+      socialMediaIconsWrapper,
+      digitsContainerWrapper,
+      timerControlBtns
+    );
     // focus moreBtnModalLauncher when user click on close control buttons modal
     setTimeout(() => {
       moreBtnModalLauncher.focus();
     }, 1100);
 
-    userInterfaceToShowDefaultTimer(event);
+    userInterfaceToShowDefaultTimer(event, 950);
   }
 
   /**
    * show default timer
    * **/
   function showDefaultTimerDisplay(event) {
-    ariaHiddenAddAndRemoveHelperFunc(
-      socialMediaIconsWrapper,
-      digitsContainerWrapper,
-      timerControlBtns
-    );
-    // remove aria hidden to id="seconds-digits" .digit-back
-    document
-      .querySelector("div[id='seconds-digits'] .digit-back")
-      .removeAttribute("aria-hidden");
-    document
-      .querySelector("div[id='seconds-digits'] .digit-back")
-      .setAttribute("aria-live", "assertive");
-    // remove the aria hidden on element with text content seconds
-    let testCounter = 0;
-    const stop = testTimer();
-    function testTimer() {
-      return setInterval(() => {
-        console.log(testCounter);
-        if (testCounter > 2) {
-          document
-            .querySelector("div[id='seconds-digits'] .digit-back")
-            .removeAttribute("aria-live");
-          document
-            .querySelector("div[id='seconds-digits'] .digit-back")
-            .setAttribute("aria-hidden", "true");
-          clearInterval(stop);
-        }
-        testCounter++;
-      }, 500);
-    }
     // setTimeout(() => {
     //   document
     //     .querySelector("div[id='seconds-digits'] .digit-back")
@@ -3484,15 +3467,33 @@
     // work on more algorithm for show default display btn
     // if current timer is defaultTimer just run userInterfaceToShowDefaultTimer(event);
     if (dataObj.timerInitialized.defaultTimer) {
-      userInterfaceToShowDefaultTimer(event);
+      // for accessibility screen reader will announce digit elements
+      algorithmToAnnounceDigitsElementWhenAdditionalModalScaleDown(
+        secondsElementBack,
+        digitSecondsText,
+        800
+      );
+      ariaHiddenAddAndRemoveHelperFunc(
+        socialMediaIconsWrapper,
+        digitsContainerWrapper,
+        timerControlBtns
+      );
+      userInterfaceToShowDefaultTimer(event, 850);
 
       // focus on moreBtnModalLauncher btn when user click on show default btn
       setTimeout(() => {
         moreBtnModalLauncher.focus();
       }, 1100);
     } else {
+      // clearInterval(dataObj.stopTimerID);
+      ariaHiddenAddAndRemoveHelperFunc(
+        socialMediaIconsWrapper,
+        timerControlBtns
+      );
       // if current timer is user custom input run dataObj.stopTimerID = countDownTimer(initialAppSetUp);
       // assign value true to dataObj.timerInitialized.defaultTimer
+      // it takes 1000s for timer algorithm to run. there is a dalay
+      // based on the second agrument we pass into setInterval
       dataObj.stopTimerID = countDownTimer(initialAppSetUp);
       // assign value true to dataObj.timerInitialized.defaultTimer = true
       dataObj.timerInitialized.defaultTimer = true;
@@ -3500,9 +3501,11 @@
         ? (dataObj.timerInitialized.userCustomTimer = false)
         : null;
       // call func to change UI to display timer
-      userInterfaceToShowDefaultTimer(event);
-      // change title to default holiday title
-      changeTitleToMatchNextHoliday(dataObj.defaultEndingDate.title);
+      userInterfaceToShowDefaultTimer(event, 1000);
+      setTimeout(() => {
+        // change title to default holiday title
+        changeTitleToMatchNextHoliday(dataObj.defaultEndingDate.title);
+      }, 910);
 
       // focus on moreBtnModalLauncher btn when user click on show default btn
       setTimeout(() => {
@@ -3512,26 +3515,60 @@
   }
 
   /**
+   * accessibility algorithm for close modal btn and show default timer btn
+   * **/
+
+  function algorithmToAnnounceDigitsElementWhenAdditionalModalScaleDown(
+    elementBackContent,
+    elementTextContent,
+    secondsInput
+  ) {
+    //
+    // remove aria hidden to id="seconds-digits" .digit-back
+    elementBackContent.removeAttribute("aria-hidden");
+    // remove the aria hidden on element with text content seconds
+    elementTextContent.removeAttribute("aria-hidden");
+    // add aria live with value of assertive to second element back
+    elementBackContent.setAttribute("aria-live", "assertive");
+    let screenReaderCounter = 0;
+    const stop = screenReaderTimer();
+    function screenReaderTimer() {
+      return setInterval(() => {
+        console.log(screenReaderCounter);
+        if (screenReaderCounter == 2) {
+          elementBackContent.removeAttribute("aria-live");
+          elementBackContent.setAttribute("aria-hidden", "true");
+          elementTextContent.setAttribute("aria-hidden", "true");
+          clearInterval(stop);
+        }
+        screenReaderCounter++;
+      }, secondsInput);
+    }
+  }
+
+  /**
    * userInterfaceForDefaultTimerDisplay
    * **/
 
-  function userInterfaceToShowDefaultTimer(event) {
-    // add scale to zero class to controlsModal
-    controlsBtnDisplay.attributes["close-button-clicked"].value = "true";
-    // after 900ms add hide class to controlsModal
-    setTimeout(() => {
-      controlsModal.classList.add("hide");
-    }, 920);
-    // we will remove hide class from user options btn, digit container and timer control btns
-    setTimeout(() => {
-      moreBtnModalLauncher.classList.remove("hide");
-      digitsContainerWrapper.classList.remove("hide");
-      timerControlBtns.classList.remove("hide");
-    }, 910);
-    // remove class scale to zero
-    setTimeout(() => {
-      controlsBtnDisplay.attributes["close-button-clicked"].value = "false";
-    }, 1000);
+  function userInterfaceToShowDefaultTimer(event, milliseconds) {
+    alert("more test of algorithm below");
+    controlsModal.classList.add("scale-to-zero");
+    // // add scale to zero class to controlsModal
+    // controlsBtnDisplay.attributes["close-button-clicked"].value = "true";
+    // // after 900ms add hide class to controlsModal
+    // setTimeout(() => {
+    //   controlsModal.classList.add("hide");
+    // }, 920);
+    // // we will remove hide class from user options btn, digit container and timer control btns
+    // setTimeout(() => {
+    //   moreBtnModalLauncher.classList.remove("hide");
+    //   digitsContainerWrapper.classList.remove("hide");
+    //   timerControlBtns.classList.remove("hide");
+    // }, milliseconds);
+    // // remove class scale to zero
+    // setTimeout(() => {
+    //   controlsBtnDisplay.attributes["close-button-clicked"].value = "false";
+    // }, 1000);
   }
 
   // function userInterfaceToShowDefaultTimer(event) {
@@ -3738,13 +3775,13 @@
     }, 920);
     // remove class hide from digitsContainerWrapper,timecontrols, and controlsModal in a settimeout
     setTimeout(() => {
+      controlsModal.classList.remove("scale-to-zero");
       /**
        * removing scale-to-zero instead of class hide
        * screen reader will announce additional control modal and not app h1 title element
        * when user click on closeModalOne btn
        * **/
-      controlsModal.classList.remove("scale-to-zero");
-    }, 900);
+    }, 950);
     // setTimeout(() => {
     //   digitsContainerWrapper.classList.remove("hide");
     //   timerControlBtns.classList.remove("hide");
@@ -4407,6 +4444,14 @@
     const arrayOfSecondsDivElement = Array.prototype.slice.call(
       document.querySelectorAll("div[id='seconds-digits'] > div")
     );
+    // digit back seconds element
+    const secondsElementBack = document.querySelector(
+      "div[id='seconds-digits'] .digit-back"
+    );
+    // digit back seconds text
+    const digitSecondsText = document.querySelector(
+      "[data-selector='seconds-text']"
+    );
     // const effortTwo = document.querySelector("digit-style-wrapper-two");
 
     return {
@@ -4453,6 +4498,8 @@
       arrayOfHoursDivElement,
       arrayOfMinutesDivElement,
       arrayOfSecondsDivElement,
+      secondsElementBack,
+      digitSecondsText,
     };
   }
 
