@@ -2107,6 +2107,8 @@
    * **/
 
   function userInputIsValidRunFunc(userDataObj) {
+    // add aria-live polite to daysDigitContainerParent
+    daysDigitContainerParent.setAttribute("aria-live", "polite");
     // code below will clear either default timer or userInput timer
     clearInterval(dataObj.stopTimerID);
     // when we get here user select a value for each inputs
@@ -2132,12 +2134,6 @@
       minutes: Number(userDataObj.minutes),
       meridiem: userDataObj.meridiem,
     };
-
-    // func below will add class to show digit elements and custom date btn
-    // fade out modal one (user inputs)
-    modalOneFadeOutDigitAndCustomDataBtnFadeIn(event);
-    // call countdownTimer passing in startCountdownTimerForUserInputs when user click submit
-    dataObj.stopTimerID = countDownTimer(startCountdownTimerForUserInputs);
     // assign value true to dataObj.timerInitialized.userCustomTimer
     dataObj.timerInitialized.userCustomTimer = true;
     // change app title to match user custom
@@ -2159,7 +2155,17 @@
     controlsModal.classList.remove("scale-to-zero");
     // add aria hidden then remove aria hidden after 1500ms
     // digitsContainerWrapper,
-    ariaHiddenAddAndRemoveHelperFunc(socialMediaIconsWrapper, timerControlBtns);
+    // ariaHiddenAddAndRemoveHelperFunc(socialMediaIconsWrapper, timerControlBtns);
+
+    // func below will add class to show digit elements and custom date btn
+    // fade out modal one (user inputs)
+    modalOneFadeOutDigitAndCustomDataBtnFadeIn(event);
+    // call countdownTimer passing in startCountdownTimerForUserInputs when user click submit
+    dataObj.stopTimerID = countDownTimer(startCountdownTimerForUserInputs);
+    // remove aria live polite from daysDigitContainerParent
+    setTimeout(() => {
+      daysDigitContainerParent.removeAttribute("aria-live");
+    }, 1500);
     // remove aria hidden to id="seconds-digits" .digit-back
     // setTimeout(() => {
     //   document
@@ -3485,11 +3491,30 @@
         moreBtnModalLauncher.focus();
       }, 1100);
     } else {
+      // add aria-live polite to daysDigitContainerParent
+      daysDigitContainerParent.setAttribute("aria-live", "polite");
       // clearInterval(dataObj.stopTimerID);
       ariaHiddenAddAndRemoveHelperFunc(
         socialMediaIconsWrapper,
+        // digitsContainerWrapper,
         timerControlBtns
       );
+      // call func to change UI to display timer
+      userInterfaceToShowDefaultTimer(event, 910);
+      setTimeout(() => {
+        // change title to default holiday title
+        changeTitleToMatchNextHoliday(dataObj.defaultEndingDate.title);
+      }, 900);
+
+      // focus on moreBtnModalLauncher btn when user click on show default btn
+      setTimeout(() => {
+        moreBtnModalLauncher.focus();
+      }, 1100);
+      // remove aria live polite from daysDigitContainerParent
+      setTimeout(() => {
+        daysDigitContainerParent.removeAttribute("aria-live");
+      }, 1500);
+
       // if current timer is user custom input run dataObj.stopTimerID = countDownTimer(initialAppSetUp);
       // assign value true to dataObj.timerInitialized.defaultTimer
       // it takes 1000s for timer algorithm to run. there is a dalay
@@ -3500,17 +3525,6 @@
       dataObj.timerInitialized.userCustomTimer
         ? (dataObj.timerInitialized.userCustomTimer = false)
         : null;
-      // call func to change UI to display timer
-      userInterfaceToShowDefaultTimer(event, 1000);
-      setTimeout(() => {
-        // change title to default holiday title
-        changeTitleToMatchNextHoliday(dataObj.defaultEndingDate.title);
-      }, 910);
-
-      // focus on moreBtnModalLauncher btn when user click on show default btn
-      setTimeout(() => {
-        moreBtnModalLauncher.focus();
-      }, 1100);
     }
   }
 
@@ -3551,21 +3565,27 @@
    * **/
 
   function userInterfaceToShowDefaultTimer(event, milliseconds) {
-    alert("more test of algorithm below");
+    /**
+     * another approach
+     * **/
     controlsModal.classList.add("scale-to-zero");
-    // // add scale to zero class to controlsModal
+    setTimeout(() => {
+      controlsModal.classList.remove("scale-to-zero");
+      controlsModal.classList.add("hide");
+    }, 950);
+    // add scale to zero class to controlsModal
     // controlsBtnDisplay.attributes["close-button-clicked"].value = "true";
-    // // after 900ms add hide class to controlsModal
+    // after 900ms add hide class to controlsModal
     // setTimeout(() => {
     //   controlsModal.classList.add("hide");
     // }, 920);
-    // // we will remove hide class from user options btn, digit container and timer control btns
-    // setTimeout(() => {
-    //   moreBtnModalLauncher.classList.remove("hide");
-    //   digitsContainerWrapper.classList.remove("hide");
-    //   timerControlBtns.classList.remove("hide");
-    // }, milliseconds);
-    // // remove class scale to zero
+    // we will remove hide class from user options btn, digit container and timer control btns
+    setTimeout(() => {
+      moreBtnModalLauncher.classList.remove("hide");
+      digitsContainerWrapper.classList.remove("hide");
+      timerControlBtns.classList.remove("hide");
+    }, milliseconds);
+    // remove class scale to zero
     // setTimeout(() => {
     //   controlsBtnDisplay.attributes["close-button-clicked"].value = "false";
     // }, 1000);
@@ -3819,7 +3839,7 @@
       digitsContainerWrapper.classList.remove("hide");
       timerControlBtns.classList.remove("hide");
       moreBtnModalLauncher.classList.remove("hide");
-    }, 1000);
+    }, 910);
     // remove scale to zero class from modal one after it scale to 0
     setTimeout(() => {
       userInputModalDiv.classList.remove("scale-to-zero");
