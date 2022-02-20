@@ -2107,16 +2107,11 @@
    * **/
 
   function userInputIsValidRunFunc(userDataObj) {
-    // add aria-live polite to daysDigitContainerParent
-    daysDigitContainerParent.setAttribute("aria-live", "polite");
     // code below will clear either default timer or userInput timer
     clearInterval(dataObj.stopTimerID);
-    // when we get here user select a value for each inputs
-    // and date/time is later than current time. we want to remove keydown from modal one
-    userInputModalDiv.removeEventListener(
-      "keydown",
-      cycleFocusELementsModalOne
-    );
+    // add aria-live polite to daysDigitContainerParent
+    daysDigitContainerParent.setAttribute("aria-live", "polite");
+
     // update userDateInput hour to 24hr format
     // typeof hourConvertedToTwentyFourFormat will be string
     const hourConvertedToTwentyFourFormat =
@@ -2134,21 +2129,7 @@
       minutes: Number(userDataObj.minutes),
       meridiem: userDataObj.meridiem,
     };
-    // assign value true to dataObj.timerInitialized.userCustomTimer
-    dataObj.timerInitialized.userCustomTimer = true;
-    // change app title to match user custom
-    setTimeout(() => {
-      nextHolidayTextElement.textContent = "Custom Timer";
-    }, 900);
-    // assign value false to dataObj.timerInitialized.defaultTimer if its true
-    // eiter defaultTimer or userCustomTimer should be true at one time never both
-    dataObj.timerInitialized.defaultTimer
-      ? (dataObj.timerInitialized.defaultTimer = false)
-      : null;
-    // focus resume btn when user submit a corrent time for custom timer
-    setTimeout(() => {
-      resumeBtn.focus();
-    }, 1100);
+
     // when user click on submit btn of form element and inputs are correct
     // we want to add hide class to additional control modal and remove class scale-to-zero
     controlsModal.classList.add("hide");
@@ -2160,12 +2141,34 @@
     // func below will add class to show digit elements and custom date btn
     // fade out modal one (user inputs)
     modalOneFadeOutDigitAndCustomDataBtnFadeIn(event);
-    // call countdownTimer passing in startCountdownTimerForUserInputs when user click submit
-    dataObj.stopTimerID = countDownTimer(startCountdownTimerForUserInputs);
+
+    // change app title to match user custom
+    setTimeout(() => {
+      nextHolidayTextElement.textContent = "Custom Timer";
+    }, 950);
+    // focus resume btn when user submit a corrent time for custom timer
+    setTimeout(() => {
+      resumeBtn.focus();
+    }, 1100);
     // remove aria live polite from daysDigitContainerParent
     setTimeout(() => {
       daysDigitContainerParent.removeAttribute("aria-live");
     }, 1500);
+    // call countdownTimer passing in startCountdownTimerForUserInputs when user click submit
+    dataObj.stopTimerID = countDownTimer(startCountdownTimerForUserInputs);
+    // assign value true to dataObj.timerInitialized.userCustomTimer
+    dataObj.timerInitialized.userCustomTimer = true;
+    // assign value false to dataObj.timerInitialized.defaultTimer if its true
+    // eiter defaultTimer or userCustomTimer should be true at one time never both
+    dataObj.timerInitialized.defaultTimer
+      ? (dataObj.timerInitialized.defaultTimer = false)
+      : null;
+    // when we get here user select a value for each inputs
+    // and date/time is later than current time. we want to remove keydown from modal one
+    userInputModalDiv.removeEventListener(
+      "keydown",
+      cycleFocusELementsModalOne
+    );
     // remove aria hidden to id="seconds-digits" .digit-back
     // setTimeout(() => {
     //   document
@@ -3491,9 +3494,15 @@
         moreBtnModalLauncher.focus();
       }, 1100);
     } else {
+      // code below will clear either default timer or userInput timer
+      clearInterval(dataObj.stopTimerID);
+      // assign value of "00" to updateElements func for days,hours,minutes and seconds
+      updateDaysElements(arrayOfDaysDivElement, "00");
+      updateHoursElements(arrayOfHoursDivElement, "00");
+      updateMinutesElements(arrayOfMinutesDivElement, "00");
+      updateSecondElements(arrayOfSecondsDivElement, "00");
       // add aria-live polite to daysDigitContainerParent
       daysDigitContainerParent.setAttribute("aria-live", "polite");
-      // clearInterval(dataObj.stopTimerID);
       ariaHiddenAddAndRemoveHelperFunc(
         socialMediaIconsWrapper,
         // digitsContainerWrapper,
@@ -3568,17 +3577,17 @@
     /**
      * another approach
      * **/
-    controlsModal.classList.add("scale-to-zero");
-    setTimeout(() => {
-      controlsModal.classList.remove("scale-to-zero");
-      controlsModal.classList.add("hide");
-    }, 950);
-    // add scale to zero class to controlsModal
-    // controlsBtnDisplay.attributes["close-button-clicked"].value = "true";
-    // after 900ms add hide class to controlsModal
+    // controlsModal.classList.add("scale-to-zero");
     // setTimeout(() => {
+    //   controlsModal.classList.remove("scale-to-zero");
     //   controlsModal.classList.add("hide");
-    // }, 920);
+    // }, 950);
+    // add scale to zero class to controlsModal
+    controlsBtnDisplay.attributes["close-button-clicked"].value = "true";
+    // after 900ms add hide class to controlsModal
+    setTimeout(() => {
+      controlsModal.classList.add("hide");
+    }, 920);
     // we will remove hide class from user options btn, digit container and timer control btns
     setTimeout(() => {
       moreBtnModalLauncher.classList.remove("hide");
@@ -3586,9 +3595,9 @@
       timerControlBtns.classList.remove("hide");
     }, milliseconds);
     // remove class scale to zero
-    // setTimeout(() => {
-    //   controlsBtnDisplay.attributes["close-button-clicked"].value = "false";
-    // }, 1000);
+    setTimeout(() => {
+      controlsBtnDisplay.attributes["close-button-clicked"].value = "false";
+    }, 1000);
   }
 
   // function userInterfaceToShowDefaultTimer(event) {
@@ -3655,14 +3664,10 @@
       controlsModal.classList.remove("hide");
     }, 500);
     // social-media-icons element add aria-hidden true
-    document
-      .querySelector(".social-media-icons")
-      .setAttribute("aria-hidden", "true");
+    socialMediaIconsWrapper.setAttribute("aria-hidden", "true");
     // remove aria hidden from social media icons
     setTimeout(() => {
-      document
-        .querySelector(".social-media-icons")
-        .removeAttribute("aria-hidden");
+      socialMediaIconsWrapper.removeAttribute("aria-hidden");
     }, 1000);
     /**
      * remove keydown event listener to additional btn modal when uesr click on custom date btn
@@ -3843,7 +3848,7 @@
     // remove scale to zero class from modal one after it scale to 0
     setTimeout(() => {
       userInputModalDiv.classList.remove("scale-to-zero");
-    }, 1500);
+    }, 1000);
     /**
      * first attempt
      * **/
