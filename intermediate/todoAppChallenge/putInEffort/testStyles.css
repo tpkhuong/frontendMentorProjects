@@ -1,0 +1,18 @@
+[class~="drop-zone"] {
+  border-radius: 8px;
+  border: 1px solid lightblue;
+}
+
+[class~="drop-zone"] li {
+  display: block;
+  padding: 8px;
+  border: 1px solid rgb(114, 16, 53);
+}
+
+li[class~="drag-over"] {
+  border: 2px solid red;
+}
+
+/* button {
+  display: block;
+} */
