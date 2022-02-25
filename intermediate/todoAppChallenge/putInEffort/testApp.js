@@ -1,4 +1,7 @@
 (function scopeOurVariables() {
+  const accessData = scopeOurData();
+  const cachedData = accessData();
+
   // in order to get css style :focus to work with .focus() method
   // element's tabindex we want to apply focus style to needs to be "0"
 
@@ -15,7 +18,7 @@
      * **/
     // identify which item is the target of dragstart
     // other items will have dragenter event add to them. they will be valid drop zones
-    var dragSourceElement;
+
     Array.prototype.slice
       .call(document.querySelectorAll(".drop-zone ul li div[id]"))
       .forEach(function addDragStart(divItem) {
@@ -37,8 +40,10 @@
     function elementDragStart(event) {
       event.stopPropagation();
       console.log("dragstart");
-
-      dragSourceElement = event.target;
+      //another approach
+      cachedData.dragSourceElement = event.target.parentElement;
+      cachedData.grabbedItemDataIndex =
+        event.target.parentElement.getAttribute("data-index");
 
       // event.dataTransfer.effectAllowed = "copy";
       // event.dataTransfer.setData("text/plain", dragSourceElement);
@@ -56,20 +61,99 @@
       event.preventDefault();
       event.stopPropagation();
 
+      event.target.closest("li").classList.add("drag-over");
       // console.log(dragSourceElement);
     }
 
     function elementDragDrop(event) {
+      event.stopPropagation();
+      // listItems
+      const arrayOfOriginalListItems = Array.prototype.slice.call(
+        this.parentElement.children
+      );
+      const unorderedListElement = event.target.closest("li").parentElement;
+      // length of listItems;
+      const lengthOfListItems = arrayOfOriginalListItems.length;
+      // grabbed element
+      const grabbedListItem = cachedData.dragSourceElement;
+      // dropped element
+      const droppedListItem = event.target.closest("li");
       // update tabindex of sounce item parent and
       // drop zone item parent
-      event.stopPropagation();
-      console.log("hello");
-      event.target.classList.remove("drag-over");
-      console.log(event.target.parentElement);
-      let parent = event.target.parentElement;
-      while (parent.tagName != "LI") {
-        parent = parent.parentElement;
+      // convert data index to number
+      const droppedItemDataIndex = event.target
+        .closest("li")
+        .getAttribute("data-index");
+      event.target.closest("li").classList.remove("drag-over");
+      // .closest above algorithm is more readable for modern browsers
+      console.log(grabbedListItem);
+      const itemsAboveDroppedElement = itemsAboveDroppedAreaElement(
+        arrayOfOriginalListItems,
+        Number(droppedItemDataIndex)
+      );
+      const itemsBelowDroppedElement = itemsBelowDroppedAreaElement(
+        arrayOfOriginalListItems,
+        Number(droppedItemDataIndex)
+      );
+      // filter out grabbed element or original above/below array
+      const updateListItemsAboveDropped = filterOutGrabbedListItem(
+        itemsAboveDroppedElement,
+        cachedData.grabbedItemDataIndex
+      );
+      const updateListItemsBelowDropped = filterOutGrabbedListItem(
+        itemsBelowDroppedElement,
+        cachedData.grabbedItemDataIndex
+      );
+      // dropped element data-index less then < grabbed data index, grabbed element goes above dropped element
+      // createChildrenForUnorderedListAndUpdateDataIndex
+      if (droppedItemDataIndex < cachedData.grabbedItemDataIndex) {
+        const listitemsWithGrabbedAboveDropped = grabbedElementGoesAbove(
+          updateListItemsAboveDropped,
+          updateListItemsBelowDropped,
+          grabbedListItem,
+          droppedListItem
+        );
+        const updateGrabbedGoesAbove =
+          createChildrenForUnorderedListAndUpdateDataIndex(
+            listitemsWithGrabbedAboveDropped
+          );
+        // remove listitems
+        unorderedListElement.replaceChildren();
+        unorderedListElement.appendChild(updateGrabbedGoesAbove);
+      } else {
+        // dropped element data-index greater than > grabbed data index, grabbed element goes below dropped element
+        const listitemsWithGrabbedBelowDropped = grabbedElementGoesBelow(
+          updateListItemsAboveDropped,
+          updateListItemsBelowDropped,
+          grabbedListItem,
+          droppedListItem
+        );
+        const updateGrabbedGoesBelow =
+          createChildrenForUnorderedListAndUpdateDataIndex(
+            listitemsWithGrabbedBelowDropped
+          );
+        // remove listitems
+        unorderedListElement.replaceChildren();
+        unorderedListElement.appendChild(updateGrabbedGoesBelow);
       }
+      // below algorithm to support IE prior to IE 15-18
+      // var parent = null;
+      // if (event.target.tagName == "LI") {
+      //   event.target.classList.remove("drag-over");
+      // } else {
+      //   parent = event.target.parentElement;
+      //   while (parent.tagName != "LI") {
+      //     parent = parent.parentElement;
+      //   }
+      //   parent.classList.remove("drag-over");
+      // }
+
+      // console.log(event.target.parentElement);
+      // let parent = event.target.parentElement;
+      // while (parent.tagName != "LI") {
+      //   parent = parent.parentElement;
+      // }
+      // console.log(parent);
       // console.log(parent.firstElementChild);
       // let parent = event.target.closest("li");
       // source li
@@ -79,18 +163,31 @@
       // drop zone li
       // parent variable will be the li of the drop zone element
       // drop zone elements could be any descendant of drop zone li
-      const dropZoneItem = parent.firstElementChild; //div
-      const dragItemParent = dragSourceElement.parentElement; //li
-      console.log(dropZoneItem);
-      console.log(parent);
-      console.log(dragSourceElement);
-      console.log(dragItemParent);
-      dragItemParent.removeChild(dragSourceElement);
-      dragItemParent.append(dropZoneItem);
+      /**
+       * another approach
+       * **/
+
+      /**
+       * another approach
+       * **/
+      /**
+       * worked
+       * **/
+      // const dropZoneItem = parent.firstElementChild; //div
+      // const dragItemParent = dragSourceElement.parentElement; //li
+      // console.log(dropZoneItem);
+      // console.log(parent);
+      // console.log(dragSourceElement);
+      // console.log(dragItemParent);
+      // dragItemParent.removeChild(dragSourceElement);
+      // dragItemParent.append(dropZoneItem);
       /**
        * drop zone
        * **/
-      parent.append(dragSourceElement);
+      // parent.append(dragSourceElement);
+      /**
+       * worked
+       * **/
       // parent.remove(dropZoneItem);
       /**
        * original sounce of drag item
@@ -107,7 +204,52 @@
     }
   }
 
-  keyboardDragAndDrop();
+  // grabbed goes above dropped
+
+  function grabbedElementGoesAbove(
+    itemsAbove,
+    itemsBelow,
+    grabbedElement,
+    droppedElement
+  ) {
+    return [...itemsAbove, grabbedElement, droppedElement, ...itemsBelow];
+  }
+
+  // grabbed goes below dropped
+
+  function grabbedElementGoesBelow(
+    itemsAbove,
+    itemsBelow,
+    grabbedElement,
+    droppedElement
+  ) {
+    return [...itemsAbove, droppedElement, grabbedElement, ...itemsBelow];
+  }
+
+  // filter out grabbed element
+
+  function filterOutGrabbedListItem(array, dataIndex) {
+    // filter method will eiter return an array without listitem that matches dataIndex
+    // or original array;
+    return array.filter(function removeListItem(listItem) {
+      const elementDataIndex = listItem.getAttribute("data-index");
+      return elementDataIndex != dataIndex;
+    });
+  }
+
+  function itemsAboveDroppedAreaElement(array, droppedElementIndex) {
+    //
+    const copyOfArray = [...array];
+    return copyOfArray.slice(0, droppedElementIndex);
+  }
+
+  function itemsBelowDroppedAreaElement(array, droppedElementIndex) {
+    //
+    const copyOfArray = [...array];
+    return copyOfArray.slice(droppedElementIndex + 1);
+  }
+
+  // keyboardDragAndDrop();
 
   function keyboardDragAndDrop() {
     /**
@@ -141,6 +283,7 @@
               return;
             } else {
               // swap current listitem with nextSibling first child element
+              swapListItemsChildElement(document.activeElement, nextSibling);
             }
             // focus next sibling element
             changeTabindexAndFocusElement(document.activeElement, nextSibling);
@@ -160,6 +303,10 @@
               return;
             } else {
               // sway current listitem with previous sibling first child element
+              swapListItemsChildElement(
+                document.activeElement,
+                previousSibling
+              );
             }
             // focus previous sibling element
             changeTabindexAndFocusElement(
@@ -230,7 +377,18 @@
     // });
   }
 
-  function swapListItems(currentFocusElement, replacedElement) {}
+  function swapListItemsChildElement(currentFocusElement, replacedElement) {
+    // get current list item child
+    const currentListItemChild = currentFocusElement.firstElementChild;
+    // get replaceElement item child
+    const replaceElementItemChild = replacedElement.firstElementChild;
+    // remove current list item child
+    currentFocusElement.removeChild(currentListItemChild);
+    // append replaceELement item child to current list item element
+    currentFocusElement.append(replaceElementItemChild);
+    // append current list item child to replaceElement list item element
+    replacedElement.append(currentListItemChild);
+  }
 
   function createChildrenForUnorderedListAndUpdateDataIndex(list) {
     var fragment = new DocumentFragment();
@@ -247,7 +405,10 @@
    * **/
 
   function scopeOurData() {
-    const dataObj = {};
+    const dataObj = {
+      grabbedItemDataIndex: null,
+      dragSourceElement: null,
+    };
 
     return function closureOverCachedObj() {
       return dataObj;
