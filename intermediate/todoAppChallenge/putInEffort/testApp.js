@@ -6,8 +6,29 @@
   // element's tabindex we want to apply focus style to needs to be "0"
 
   // mouse drag and drop
-
+  mouseClick();
   mouseDragAndDrop();
+
+  function mouseClick() {
+    document
+      .querySelector(".drop-zone ul")
+      .addEventListener("click", function mouseAction(event) {
+        const [previousFocusedElement] = Array.prototype.slice
+          .call(event.target.closest("ul").children)
+          .filter(function findElementWithTabIndexZero(listitem) {
+            const elementTabindex = listitem.getAttribute("tabindex");
+            return elementTabindex === "0";
+          });
+        if (cachedData.draggedItemSelected) {
+          // previousFocusedElement will have tabindex "0" and drag-selected class
+        }
+        // when user click on list item, we want to assign value "0" to that list item
+        // and assign value of "-1" to the previous list item that had tabindex "0"
+        previousFocusedElement.setAttribute("tabindex", "-1");
+        event.target.closest("li").setAttribute("tabindex", "0");
+        event.target.closest("li").focus();
+      });
+  }
 
   function mouseDragAndDrop(fn) {
     /**
@@ -40,11 +61,40 @@
     function elementDragStart(event) {
       event.stopPropagation();
       console.log("dragstart");
+
       //another approach
       cachedData.dragSourceElement = event.target.parentElement;
       cachedData.grabbedItemDataIndex =
         event.target.parentElement.getAttribute("data-index");
-
+      // we want to assign the value "0" to tabindex on the li that is
+      // the parent of the event.target which is the dragged element
+      /**
+       * since mouse click will handle assigning the correct tabindex
+       * we dont need to handle tabindex algorithm in dragstart event
+       * **/
+      // event.target.parentElement.setAttribute("tabindex", "0");
+      // // then we want to make an array of listitems that is not the dragged element parent element
+      // // we can loop through and assign "-1" to attr tabindex
+      // // using reduce
+      // // const assignValueNegativeOne = Array.prototype.slice
+      // //   .call(event.target.closest("ul").children)
+      // //   .reduce(function notDraggedElement(buildingUp, currentValue) {
+      // //     if (currentValue != event.target.parentElement) {
+      // //       buildingUp.push(currentValue);
+      // //     }
+      // //     return buildingUp;
+      // //   }, []);
+      // // using filter
+      // // const assignValueNegativeOne = Array.prototype.slice.call(event.target.parentElement.parentElement.children)
+      // const assignValueNegativeOne = Array.prototype.slice
+      //   .call(event.target.closest("ul").children)
+      //   .filter(function elementNotDraggedElement(item) {
+      //     // we want to assign value -1 to listitem that is not the target of the drag event
+      //     return item != event.target.parentElement;
+      //   });
+      // assignValueNegativeOne.forEach(function updateTabIndex(element) {
+      //   element.setAttribute("tabindex", "-1");
+      // });
       // event.dataTransfer.effectAllowed = "copy";
       // event.dataTransfer.setData("text/plain", dragSourceElement);
     }
@@ -86,7 +136,7 @@
         .getAttribute("data-index");
       event.target.closest("li").classList.remove("drag-over");
       // .closest above algorithm is more readable for modern browsers
-      console.log(grabbedListItem);
+      // console.log(grabbedListItem);
       const itemsAboveDroppedElement = itemsAboveDroppedAreaElement(
         arrayOfOriginalListItems,
         Number(droppedItemDataIndex)
@@ -117,9 +167,13 @@
           createChildrenForUnorderedListAndUpdateDataIndex(
             listitemsWithGrabbedAboveDropped
           );
-        // remove listitems
-        unorderedListElement.replaceChildren();
-        unorderedListElement.appendChild(updateGrabbedGoesAbove);
+        // remove listitems and append new list
+        removeUnorderedChildrenAppendNewList(
+          unorderedListElement,
+          updateGrabbedGoesAbove
+        );
+        // unorderedListElement.replaceChildren();
+        // unorderedListElement.appendChild(updateGrabbedGoesAbove);
       } else {
         // dropped element data-index greater than > grabbed data index, grabbed element goes below dropped element
         const listitemsWithGrabbedBelowDropped = grabbedElementGoesBelow(
@@ -132,10 +186,15 @@
           createChildrenForUnorderedListAndUpdateDataIndex(
             listitemsWithGrabbedBelowDropped
           );
-        // remove listitems
-        unorderedListElement.replaceChildren();
-        unorderedListElement.appendChild(updateGrabbedGoesBelow);
+        // remove listitems and append new list
+        removeUnorderedChildrenAppendNewList(
+          unorderedListElement,
+          updateGrabbedGoesBelow
+        );
+        // unorderedListElement.replaceChildren();
+        // unorderedListElement.appendChild(updateGrabbedGoesBelow);
       }
+      grabbedListItem.focus();
       // below algorithm to support IE prior to IE 15-18
       // var parent = null;
       // if (event.target.tagName == "LI") {
@@ -204,6 +263,13 @@
     }
   }
 
+  // remove and append
+
+  function removeUnorderedChildrenAppendNewList(parentElement, listItems) {
+    parentElement.replaceChildren();
+    parentElement.appendChild(listItems);
+  }
+
   // grabbed goes above dropped
 
   function grabbedElementGoesAbove(
@@ -260,61 +326,83 @@
     // moving focus will be the default functionality of keydown of ArrowDown and ArrowUp
     // but when user select an item the up and down arrow key will also
     // change position of selected item
-    const [first, , , , last] = Array.prototype.slice.call(
-      document.querySelectorAll(".drop-zone ul li")
-    );
-    console.log(first);
-    console.log(last);
+    // const [first, , , , last] = Array.prototype.slice.call(
+    //   document.querySelectorAll(".drop-zone ul li")
+    // );
+    // console.log(first);
+    // console.log(last);
     // add keydown event
     document
       .querySelector(".drop-zone ul")
       .addEventListener("keydown", function accessibilityDragAndDrop(event) {
-        switch (event.code) {
-          case "ArrowDown":
-            // get next sibling
-            const nextSibling = document.activeElement.nextElementSibling;
-            // check data-index of current focus element
-            // check if its 5
-            if (getDataIndexAttr(document.activeElement) == "4") {
-              moveBottomItemToTopOfList(
-                document.activeElement.parentElement,
-                document.activeElement.parentElement.children
+        if (document.activeElement.tagName == "LI") {
+          switch (event.code) {
+            case "Space":
+            case "Enter":
+              if (!cachedData.draggedItemSelected) {
+                document.activeElement.classList.add("drag-selected");
+                cachedData.draggedItemSelected = true;
+              } else {
+                document.activeElement.classList.remove("drag-selected");
+                cachedData.draggedItemSelected = false;
+              }
+              break;
+            case "ArrowDown":
+              // get next sibling
+              const nextSibling = document.activeElement.nextElementSibling;
+              // check data-index of current focus element
+              // check if its 5
+              if (cachedData.draggedItemSelected) {
+                if (getDataIndexAttr(document.activeElement) == "4") {
+                  moveBottomItemToTopOfList(
+                    document.activeElement.parentElement,
+                    document.activeElement.parentElement.children
+                  );
+                  return;
+                } else {
+                  // swap current listitem with nextSibling first child element
+                  swapListItemsChildElement(
+                    document.activeElement,
+                    nextSibling
+                  );
+                }
+              }
+              // focus next sibling element
+              changeTabindexDraggedClassAndFocusElement(
+                document.activeElement,
+                nextSibling
               );
-              return;
-            } else {
-              // swap current listitem with nextSibling first child element
-              swapListItemsChildElement(document.activeElement, nextSibling);
-            }
-            // focus next sibling element
-            changeTabindexAndFocusElement(document.activeElement, nextSibling);
 
-            break;
-          case "ArrowUp":
-            // get previous sibling
-            const previousSibling =
-              document.activeElement.previousElementSibling;
-            // check data-index of current focus element
-            // check if its 1
-            if (getDataIndexAttr(document.activeElement) === "0") {
-              moveTopItemToBottomOfList(
-                document.activeElement.parentElement,
-                document.activeElement.parentElement.children
-              );
-              return;
-            } else {
-              // sway current listitem with previous sibling first child element
-              swapListItemsChildElement(
+              break;
+            case "ArrowUp":
+              // get previous sibling
+              const previousSibling =
+                document.activeElement.previousElementSibling;
+              // check data-index of current focus element
+              // check if its 1
+              if (cachedData.draggedItemSelected) {
+                if (getDataIndexAttr(document.activeElement) === "0") {
+                  moveTopItemToBottomOfList(
+                    document.activeElement.parentElement,
+                    document.activeElement.parentElement.children
+                  );
+                  return;
+                } else {
+                  // sway current listitem with previous sibling first child element
+                  swapListItemsChildElement(
+                    document.activeElement,
+                    previousSibling
+                  );
+                }
+              }
+              // focus previous sibling element
+              changeTabindexDraggedClassAndFocusElement(
                 document.activeElement,
                 previousSibling
               );
-            }
-            // focus previous sibling element
-            changeTabindexAndFocusElement(
-              document.activeElement,
-              previousSibling
-            );
 
-            break;
+              break;
+          }
         }
       });
 
@@ -331,7 +419,14 @@
     return element.attributes["data-index"].value;
   }
 
-  function changeTabindexAndFocusElement(currentElement, focusElement) {
+  function changeTabindexDraggedClassAndFocusElement(
+    currentElement,
+    focusElement
+  ) {
+    if (cachedData.draggedItemSelected) {
+      currentElement.classList.remove("drag-selected");
+      focusElement.classList.add("drag-selected");
+    }
     // current focus element. document.activeElement
     // change currentELement tabindex to "-1"
     currentElement.attributes["tabindex"].value = "-1";
@@ -352,6 +447,7 @@
     const listItemsReordered =
       createChildrenForUnorderedListAndUpdateDataIndex(reorderedListItems);
     // append list items to unorderlist
+    unorderedList.replaceChildren();
     unorderedList.appendChild(listItemsReordered);
     unorderedList.children[lengthOfUnorderedList - 1].focus();
     // update data-index
@@ -369,6 +465,7 @@
     // append li to DocumentFrangment
     const newListOrder =
       createChildrenForUnorderedListAndUpdateDataIndex(reorderedArray);
+    unorderedList.replaceChildren();
     unorderedList.appendChild(newListOrder);
     unorderedList.children[0].focus();
     // update data-index
@@ -408,6 +505,7 @@
     const dataObj = {
       grabbedItemDataIndex: null,
       dragSourceElement: null,
+      draggedItemSelected: false,
     };
 
     return function closureOverCachedObj() {
