@@ -21,6 +21,8 @@
           });
         if (cachedData.draggedItemSelected) {
           // previousFocusedElement will have tabindex "0" and drag-selected class
+          previousFocusedElement.classList.remove("drag-selected");
+          event.target.closest("li").classList.add("drag-selected");
         }
         // when user click on list item, we want to assign value "0" to that list item
         // and assign value of "-1" to the previous list item that had tabindex "0"
@@ -315,7 +317,7 @@
     return copyOfArray.slice(droppedElementIndex + 1);
   }
 
-  // keyboardDragAndDrop();
+  keyboardDragAndDrop();
 
   function keyboardDragAndDrop() {
     /**
