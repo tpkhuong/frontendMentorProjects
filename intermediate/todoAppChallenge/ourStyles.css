@@ -14,15 +14,15 @@ checked bg and unchecked circle border
 
 ### Light Theme
 
-- Very Light Gray: hsl(0, 0%, 98%)//
-- Very Light Grayish Blue: hsl(236, 33%, 92%)
+- Very Light Gray: hsl(0, 0%, 98%)//bg bottom TODO title color
+- Very Light Grayish Blue: hsl(236, 33%, 92%)//input and todo bg
 - Light Grayish Blue: hsl(233, 11%, 84%)//crossed out
 - Dark Grayish Blue: hsl(236, 9%, 61%)//todo input placeholder, clear completed,left. weight 700 for active and completed view btn 
 - Very Dark Grayish Blue: hsl(235, 19%, 35%)//drag and drop bottomsss
 
 ### Dark Theme
 
-
+ 
 - Very Dark Blue: hsl(235, 21%, 11%)// bg-bottom
 - Very Dark Desaturated Blue: hsl(235, 24%, 19%) //input and todo bg
 - Light Grayish Blue: hsl(234, 39%, 85%)//todo text
@@ -48,21 +48,28 @@ checked bg and unchecked circle border
   --color: hsl(233, 14%, 35%);
   --color: hsl(237, 14%, 26%);
   /* primary */
-  /* text and social media */
-  --col-primary-grayish-blue: hsl(237, 18%, 59%);
-  /* top text color */
-  --col-primary-soft-red-top: hsl(344, 61%, 57%);
-  /* bottom text color */
-  --col-primary-soft-red-bottom: hsl(345, 95%, 68%);
-  /* neutral */
-  --col-neutral-dark-blue-top: hsl(240, 21%, 22%);
-  --col-neutral-dark-blue-bottom: hsl(236, 21%, 26%);
-  --col-neutral-black-blue-bg: hsl(234, 17%, 12%);
-  --col-neutral-vary-dark-blue: hsl(235, 16%, 14%);
-  --col-neutral-dark-purple-bg: hsl(266, 19%, 14%);
+  --col-primary-bright-blue: hsl(220, 98%, 61%);
+  --col-primary-first-half: hsl(192, 100%, 67%);
+  --col-primary-second-half: hsl(280, 87%, 65%);
+  /* light theme */
+  /* todo inpute, btn views and clear similar shade */
+  /* crossed out and left item similar shade */
+  --col-lighttheme-very-light-gray: hsl(0, 0%, 98%);
+  --col-lighttheme-very-light-grayish-blue: hsl(236, 33%, 92%);
+  --col-lighttheme-light-grayish-blue: hsl(233, 11%, 84%);
+  --col-lighttheme-dark-grayish-blue: hsl(236, 9%, 61%);
+  --col-lighttheme-vary-dark-grayish-blue: hsl(235, 19%, 35%);
+  --col-lighttheme-text-below-todo-list: hsl(228, 3%, 64%);
+
+  /* dark theme */
   /* white and black */
-  --col-neutral-white: hsl(0, 100%, 100%);
-  --col-neutral-black: hsl(0, 0%, 0%);
+  --col-darktheme-bottom-bg: hsl(235, 21%, 11%);
+  --col-darktheme-todo-light-bg: hsl(235, 24%, 19%);
+  --col-darktheme-todo-text: hsl(234, 39%, 85%);
+  --col-darktheme-hover: hsl(236, 33%, 92%);
+  --col-darktheme-todo-input: hsl(234, 11%, 52%);
+  --col-darktheme-todo-list: hsl(233, 14%, 35%);
+  --col-darktheme-text-below-todo-list: hsl(237, 14%, 26%);
 
   --box-shadow: 0px 0.3px 0.7px rgba(0, 0, 0, 0.02),
     0px 0.7px 1.7px rgba(0, 0, 0, 0.028), 0px 1.4px 3.3px rgba(0, 0, 0, 0.035),
@@ -476,4 +483,79 @@ a:hover {
   .skip-link {
     display: inline-block;
   }
+}
+
+/* individual sections */
+main {
+  min-height: 100%;
+}
+
+/* social media icons */
+
+.social-media-icons {
+  margin-block: 30px;
+  margin-block-start: auto;
+  /* we had border around app-style-wrapper
+  which did not allow for margin-collapse with starting date button
+  and container for social media icon
+  had to use margin-block-start on this element
+  */
+  /* when we moved border on around app-style-wrapper
+  margin-top on this element margin-bottom on starting date button
+  collapsed. we can remove the declaration margin-top on this element
+  add more margin-bottom on starting date button
+  margin-block-start: 62px;
+  */
+}
+
+/* hover/focus effect */
+
+[class="social-media-icons"] a:hover path,
+[class="social-media-icons"] a:focus path {
+  fill: var(--col-primary-soft-red-bottom);
+}
+
+[class="social-media-icons"] a {
+  display: inline-block;
+}
+
+[class="social-media-icons"] > * + * {
+  margin-inline-start: 8px;
+}
+
+[class="social-media-icons"] svg {
+  display: inline-block;
+  width: 24px;
+}
+
+[class="social-media-icons"] svg path {
+  fill: var(--col-primary-grayish-blue);
+}
+
+@media screen and (min-width: 37.5rem) {
+  [class="social-media-icons"] svg {
+    width: 30px;
+  }
+}
+
+@media screen and (min-width: 43.75rem) {
+  .social-media-icons {
+    margin-block-end: 0px;
+  }
+  [class="social-media-icons"] > * + * {
+    margin-inline-start: 28px;
+    margin-block: 48px;
+  }
+}
+
+li button {
+  pointer-events: auto;
+}
+
+button img {
+  pointer-events: none;
+}
+
+li div {
+  pointer-events: none;
 }
