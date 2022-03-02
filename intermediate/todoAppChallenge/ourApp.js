@@ -1,3 +1,7 @@
 (function scopeOurVariables() {
-  console.log("hello");
+  document
+    .querySelector("ul[role='listbox']")
+    .addEventListener("click", function TODO(event) {
+      console.log(event.target);
+    });
 })();

@@ -2,7 +2,7 @@
 /* bright blue is the "All" view color */
 
 /* 
-
+*****Notes*****
 ### Primary
 
 bright blue is the "All" view color
@@ -20,6 +20,13 @@ checked bg and unchecked circle border
 - Dark Grayish Blue: hsl(236, 9%, 61%)//todo input placeholder, clear completed,left. weight 700 for active and completed view btn 
 - Very Dark Grayish Blue: hsl(235, 19%, 35%)//drag and drop bottomsss
 
+todo input 250,4,71
+crossed out 240 4 78
+todo list 240 5 65
+item left, clear 252 3 63
+active/completed 240 4 62
+drag 250 3 64
+
 ### Dark Theme
 
  
@@ -31,56 +38,98 @@ checked bg and unchecked circle border
 - Very Dark Grayish Blue: hsl(233, 14%, 35%) //todo input placeholder, clear completed,left. weight 700 for active and completed view btn
 - Very Dark Grayish Blue: hsl(237, 14%, 26%) //drag and drop bottom of UI
 
+todo input 235 10 44
+crossed out 235 14 35
+todo list 235 28 83
+item left, clear 236 14 37
+active/completed 238 14 42
+drag 236 8 38
+
 */
 
 :root {
-  --lightcolor: hsl(0, 0%, 98%);
-  --lightcolor: hsl(236, 33%, 92%);
-  --lightcolor: hsl(233, 11%, 84%);
-  --lightcolor: hsl(236, 9%, 61%);
-  --lightcolor: hsl(235, 19%, 35%);
-
-  --color: hsl(235, 21%, 11%);
-  --color: hsl(235, 24%, 19%);
-  --color: hsl(234, 39%, 85%);
-  --color: hsl(236, 33%, 92%);
-  --color: hsl(234, 11%, 52%);
-  --color: hsl(233, 14%, 35%);
-  --color: hsl(237, 14%, 26%);
   /* primary */
-  --col-primary-bright-blue: hsl(220, 98%, 61%);
-  --col-primary-first-half: hsl(192, 100%, 67%);
-  --col-primary-second-half: hsl(280, 87%, 65%);
+  --color-primary-bright-blue: hsl(220, 98%, 61%);
+  --color-primary-title: hsl(300, 100%, 99%);
+  --color-primary-first-half: hsl(192, 100%, 67%);
+  --color-primary-second-half: hsl(280, 87%, 65%);
   /* light theme */
   /* todo inpute, btn views and clear similar shade */
+  /* --color-lighttheme-very-light-grayish-blue: hsl(236, 33%, 92%); */
   /* crossed out and left item similar shade */
-  --col-lighttheme-very-light-gray: hsl(0, 0%, 98%);
-  --col-lighttheme-very-light-grayish-blue: hsl(236, 33%, 92%);
-  --col-lighttheme-light-grayish-blue: hsl(233, 11%, 84%);
-  --col-lighttheme-dark-grayish-blue: hsl(236, 9%, 61%);
-  --col-lighttheme-vary-dark-grayish-blue: hsl(235, 19%, 35%);
-  --col-lighttheme-text-below-todo-list: hsl(228, 3%, 64%);
-
+  --color-lighttheme-bottom-bg: hsl(0, 0%, 98%);
+  --color-lighttheme-todo-list-bg: hsl(0, 0%, 100%);
+  --color-lighttheme-checked-crossed-out: hsl(233, 11%, 84%);
+  --color-lighttheme-hover-todoitem: hsl(233, 9%, 35%);
+  --color-lighttheme-typing-input-hover-btns: hsl(240, 5%, 38%);
+  --color-lighttheme-todoinput-completed-btns-below: hsl(236, 9%, 61%);
+  --color-lighttheme-todo-listitem: blue;
+  /* --color-lighttheme-todo-listitem: hsl(235, 19%, 35%); */
   /* dark theme */
-  /* white and black */
-  --col-darktheme-bottom-bg: hsl(235, 21%, 11%);
-  --col-darktheme-todo-light-bg: hsl(235, 24%, 19%);
-  --col-darktheme-todo-text: hsl(234, 39%, 85%);
-  --col-darktheme-hover: hsl(236, 33%, 92%);
-  --col-darktheme-todo-input: hsl(234, 11%, 52%);
-  --col-darktheme-todo-list: hsl(233, 14%, 35%);
-  --col-darktheme-text-below-todo-list: hsl(237, 14%, 26%);
+  --color-darktheme-bottom-bg: hsl(235, 21%, 11%);
+  --color-darktheme-todo-list-bg: hsl(235, 24%, 19%);
+  --color-darktheme-todo-text-typing-btn-hover: hsl(234, 39%, 85%);
+  --color-darktheme-hover: hsl(236, 33%, 92%);
+  --color-darktheme-todo-input: hsl(234, 11%, 52%);
+  --color-darktheme-clear-active-complete-below: hsl(233, 14%, 35%);
+  --color-darktheme-checked-crossed-out: hsl(237, 14%, 26%);
+  /* below works */
+  --todo-input-foreground: var(
+    --color-lighttheme-todo-listitem,
+    var(--color-darktheme-todo-text-typing-btn-hover)
+  );
+  /* or */
+  /* --todo-input-foreground:var(--color-lighttheme-todo-listitem) */
 
   --box-shadow: 0px 0.3px 0.7px rgba(0, 0, 0, 0.02),
     0px 0.7px 1.7px rgba(0, 0, 0, 0.028), 0px 1.4px 3.3px rgba(0, 0, 0, 0.035),
     0px 2.5px 5.8px rgba(0, 0, 0, 0.042), 0px 4.6px 10.9px rgba(0, 0, 0, 0.05),
     0px 11px 26px rgba(0, 0, 0, 0.07);
 
+  /***** background *****/
+  /* bg-img top and bg-color-bottom */
+  /* todo input,todo listitem,items left/complete, views btns(mobile) */
+  /***** foreground *****/
+  /***** example for foreground: *****/
+  /* --todo-input-foreground: var(--color-lighttheme-todo-listitem, var(--color-darktheme-todo-text-typing-btn-hover) */
+  /* input placeholder, input typing, todo list text, items left, views btns(mobile)  
+  todo list crossed-out, todo list hover, views btns and clear btn hover, text below todo list
+  */
+
   /* headings */
   /* --font-family-poppins: "Poppins", sans-serif; */
   /* body, call-to-actions */
   --font-family-josefin: "Josefin Sans", sans-serif;
 }
+
+/* media query */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* background: black; */
+    /* dark theme */
+    --color-darktheme-bottom-bg: hsl(235, 21%, 11%);
+    --color-darktheme-todo-list-bg: hsl(235, 24%, 19%);
+    --color-darktheme-todo-text-typing-btn-hover: red;
+    /* --color-darktheme-todo-text-typing-btn-hover: hsl(234, 39%, 85%); */
+    --color-darktheme-hover: hsl(236, 33%, 92%);
+    --color-darktheme-todo-input: hsl(234, 11%, 52%);
+    --color-darktheme-clear-active-complete-below: hsl(233, 14%, 35%);
+    --color-darktheme-checked-crossed-out: hsl(237, 14%, 26%);
+
+    /* below works */
+    --todo-input-foreground: var(
+      --color-darktheme-todo-text-typing-btn-hover,
+      var(--color-lighttheme-todo-listitem)
+    );
+    /* or */
+    /* --todo-input-foreground: var(--color-darktheme-todo-text-typing-btn-hover) */
+  }
+}
+
+.darktheme {
+}
+
 /* 
 put opacity on the backgroung-color: hsla()
 not on the element
@@ -545,6 +594,17 @@ main {
   [class="social-media-icons"] > * + * {
     margin-inline-start: 28px;
     margin-block: 48px;
+  }
+}
+
+[role="main"] {
+  background: url("./images/bg-desktop-dark.jpg") var(--col-darktheme-bottom-bg);
+  background-repeat: no-repeat;
+  color: var(--todo-input-foreground);
+}
+
+@media screen and (min-width: 43.75rem) {
+  [role="main"] {
   }
 }
 
