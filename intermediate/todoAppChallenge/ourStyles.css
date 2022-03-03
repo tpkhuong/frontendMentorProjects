@@ -53,8 +53,12 @@ drag 236 8 38
   --color-primary-title: hsl(300, 100%, 99%);
   --color-primary-first-half: hsl(192, 100%, 67%);
   --color-primary-second-half: hsl(280, 87%, 65%);
+  --checked-button-gradient: linear-gradient(
+    var(--color-primary-first-half),
+    var(--color-primary-second-half)
+  );
   /* light theme */
-  /* todo inpute, btn views and clear similar shade */
+  /* todo input, btn views and clear similar shade */
   /* --color-lighttheme-very-light-grayish-blue: hsl(236, 33%, 92%); */
   /* crossed out and left item similar shade */
   --color-lighttheme-bottom-bg: hsl(0, 0%, 98%);
@@ -63,23 +67,58 @@ drag 236 8 38
   --color-lighttheme-hover-todoitem: hsl(233, 9%, 35%);
   --color-lighttheme-typing-input-hover-btns: hsl(240, 5%, 38%);
   --color-lighttheme-todoinput-completed-btns-below: hsl(236, 9%, 61%);
-  --color-lighttheme-todo-listitem: blue;
-  /* --color-lighttheme-todo-listitem: hsl(235, 19%, 35%); */
+  /* --color-lighttheme-todo-listitem: blue; */
+  --color-lighttheme-todo-listitem: hsl(235, 19%, 35%);
   /* dark theme */
   --color-darktheme-bottom-bg: hsl(235, 21%, 11%);
   --color-darktheme-todo-list-bg: hsl(235, 24%, 19%);
+  /* --color-darktheme-todo-text-typing-btn-hover: red; */
   --color-darktheme-todo-text-typing-btn-hover: hsl(234, 39%, 85%);
   --color-darktheme-hover: hsl(236, 33%, 92%);
   --color-darktheme-todo-input: hsl(234, 11%, 52%);
   --color-darktheme-clear-active-complete-below: hsl(233, 14%, 35%);
-  --color-darktheme-checked-crossed-out: hsl(237, 14%, 26%);
+  --color-darktheme-checked-crossed-out: hsl(235, 14%, 32%);
+  /* dark theme */
+  --darktheme-mobile-bg-img: url("./images/bg-mobile-dark.jpg");
+  --darktheme-desktop-bg-img: url("./images/bg-desktop-dark.jpg");
+  --dark-bg-color-bottom: var(--color-darktheme-bottom-bg);
+
+  /* light theme */
+  --lighttheme-mobile-bg-img: url("./images/bg-mobile-light.jpg");
+  --lighttheme-desktop-bg-img: url("./images/bg-desktop-light.jpg");
+  --light-bg-color-bottom: var(--color-lighttheme-bottom-bg);
   /* below works */
-  --todo-input-foreground: var(
+  /* --todo-input-foreground: var(
     --color-lighttheme-todo-listitem,
     var(--color-darktheme-todo-text-typing-btn-hover)
-  );
+  ); */
   /* or */
-  /* --todo-input-foreground:var(--color-lighttheme-todo-listitem) */
+
+  /***** background *****/
+  --mobile-img-top: var(--lighttheme-mobile-bg-img);
+  --desktop-img-top: var(--lighttheme-desktop-bg-img);
+  --bottom-bg-color: var(--light-bg-color-bottom);
+  --todoitems-views-btns-bg: var(--color-lighttheme-todo-list-bg);
+  /***** social media hover/background *****/
+  --social-media: var(--color-darktheme-bottom-bg);
+  --social-media-hover: var(--color-primary-bright-blue);
+  /***** foreground *****/
+  --input-placeholder-foreground: var(
+    --color-lighttheme-todoinput-completed-btns-below
+  );
+  --todo-input-foreground: var(--color-lighttheme-typing-input-hover-btns);
+  --todo-listitem-foreground: var(--color-lighttheme-todo-listitem);
+  --clear-views-btns-text-below: var(
+    --color-lighttheme-todoinput-completed-btns-below
+  );
+  --todo-completed-crossed-out: var(--color-lighttheme-checked-crossed-out);
+  /* foreground hover */
+  --todo-listitem-hover: var(--color-lighttheme-hover-todoitem);
+  --views-btns-hover: var(--color-lighttheme-typing-input-hover-btns);
+
+  /* --clear-btn-itemsleft-foreground: var(--color-lighttheme-todoinput-completed-btns-below);
+  --views-btns-foreground:var(--color-lighttheme-todoinput-completed-btns-below); 
+  --text-below-todo-foreground: var(--color-lighttheme-todoinput-completed-btns-below); */
 
   --box-shadow: 0px 0.3px 0.7px rgba(0, 0, 0, 0.02),
     0px 0.7px 1.7px rgba(0, 0, 0, 0.028), 0px 1.4px 3.3px rgba(0, 0, 0, 0.035),
@@ -106,24 +145,36 @@ drag 236 8 38
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* background: black; */
-    /* dark theme */
-    --color-darktheme-bottom-bg: hsl(235, 21%, 11%);
-    --color-darktheme-todo-list-bg: hsl(235, 24%, 19%);
-    --color-darktheme-todo-text-typing-btn-hover: red;
-    /* --color-darktheme-todo-text-typing-btn-hover: hsl(234, 39%, 85%); */
-    --color-darktheme-hover: hsl(236, 33%, 92%);
-    --color-darktheme-todo-input: hsl(234, 11%, 52%);
-    --color-darktheme-clear-active-complete-below: hsl(233, 14%, 35%);
-    --color-darktheme-checked-crossed-out: hsl(237, 14%, 26%);
-
     /* below works */
-    --todo-input-foreground: var(
+    /* --todo-input-foreground: var(
       --color-darktheme-todo-text-typing-btn-hover,
       var(--color-lighttheme-todo-listitem)
-    );
+    ); */
     /* or */
-    /* --todo-input-foreground: var(--color-darktheme-todo-text-typing-btn-hover) */
+    /***** background *****/
+    --mobile-img-top: var(--darktheme-mobile-bg-img);
+    --desktop-img-top: var(--darktheme-desktop-bg-img);
+    --bottom-bg-color: var(--dark-bg-color-bottom);
+    --todoitems-views-btns-bg: var(--color-darktheme-todo-list-bg);
+    /***** social media hover/background *****/
+    --social-media: var(--color-darktheme-todo-input);
+    --social-media-hover: var(--color-primary-first-half);
+    /***** foreground *****/
+    --input-placeholder-foreground: var(--color-darktheme-todo-input);
+    --todo-input-foreground: var(--color-darktheme-todo-text-typing-btn-hover);
+    --todo-listitem-foreground: var(
+      --color-darktheme-todo-text-typing-btn-hover
+    );
+    --clear-views-btns-text-below: var(
+      --color-darktheme-clear-active-complete-below
+    );
+    --todo-completed-crossed-out: var(--color-darktheme-checked-crossed-out);
+    /* foreground hover */
+    --todo-listitem-hover: var(--color-darktheme-hover);
+    --views-btns-hover: var(--color-darktheme-todo-text-typing-btn-hover);
+    /* --clear-btn-itemsleft-foreground: var(--color-darktheme-clear-active-complete-below);
+    --views-btns-foreground: var(--color-darktheme-clear-active-complete-below);
+    --text-below-todo-foreground: var(--color-darktheme-clear-active-complete-below); */
   }
 }
 
@@ -534,9 +585,251 @@ a:hover {
   }
 }
 
+/* general styles */
+
+li button {
+  pointer-events: auto;
+}
+
+button img {
+  pointer-events: none;
+}
+
+li div {
+  pointer-events: none;
+}
+
+.todo-input-instructions-container input,
+.list-style-wrapper p {
+  font-size: 0.8rem;
+}
+
 /* individual sections */
+
+/* main */
 main {
   min-height: 100%;
+}
+
+[role="main"] {
+  background: var(--mobile-img-top) var(--bottom-bg-color);
+  background-repeat: no-repeat;
+  color: var(--todo-input-foreground);
+  padding-inline: 20px;
+  padding-block-start: 45px;
+}
+
+@media screen and (min-width: 43.75rem) {
+  [role="main"] {
+    background: var(--desktop-img-top) var(--bottom-bg-color);
+    background-repeat: no-repeat;
+  }
+}
+
+/* app wrapper */
+
+[class~="app-wrapper"] {
+  max-width: 550px;
+  margin-inline: auto;
+}
+
+[class~="title-toggle-wrapper"] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* title */
+
+[id="section-title"] {
+  color: var(--color-primary-title);
+  font-size: 1.7rem;
+  transform: translateY(4px);
+}
+
+[id="section-title"] span {
+  letter-spacing: 8px;
+}
+
+/* toggle */
+
+.toggle-btn {
+  width: 20px;
+}
+
+/* app sections */
+
+.todo-input-instructions-container,
+.todo-list-views-container,
+.mobile-views-container {
+  background-color: var(--todoitems-views-btns-bg);
+  border-radius: 6px;
+  box-shadow: var(--box-shadow);
+}
+
+.todo-input-instructions-container {
+  padding: 20px;
+  padding-block: 14px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* circle for input */
+
+.circle {
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid var(--color-darktheme-checked-crossed-out);
+  border-radius: 100%;
+}
+
+/* todo input */
+
+.todo-input-instructions-container input::placeholder {
+  color: var(--input-placeholder-foreground);
+}
+
+.todo-input-instructions-container input {
+  padding: 0;
+  border: 0;
+  font-weight: 700;
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--todo-input-foreground);
+}
+
+/* todo listitems */
+
+.todo-list-views-container {
+  margin-block: 16px;
+}
+
+.list-style-wrapper ul > * + * {
+  border-top: 1px solid var(--clear-views-btns-text-below);
+}
+
+.list-style-wrapper li > div {
+  display: flex;
+  padding: 20px;
+  padding-block: 18px;
+  gap: 12px;
+}
+
+/* checked btn */
+
+.checked-btn {
+  width: 20px;
+  height: 20px;
+  border: 1px solid;
+  border-radius: 100%;
+  border: 1px solid white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.list-style-wrapper p {
+  margin-block: 0;
+  color: var(--todo-listitem-foreground);
+}
+
+/* todo completed */
+
+li[data-todoCompleted="true"] p {
+  position: relative;
+  width: max-content;
+  color: var(--todo-completed-crossed-out);
+}
+
+li[data-todoCompleted="true"] p::before {
+  content: "";
+  position: absolute;
+  display: block;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background-color: currentColor;
+}
+
+/* hover on li will show checked circle border and "X" btn */
+
+/* delete btn */
+
+.delete-btn {
+  width: 14px;
+  margin-inline-start: auto;
+}
+
+@media screen and (min-width: 43.75rem) {
+  li[role="option"] p + button {
+    clip-path: polygon(0px 0px, 0px 0px, 0px 0px, 0px 0px);
+  }
+
+  li[role="option"]:hover p + button {
+    clip-path: revert;
+  }
+}
+
+/* views btns */
+
+.views-container {
+  color: var(--clear-views-btns-text-below);
+  font-size: 0.8rem;
+  border-top: 1px solid;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.views-buttons {
+  display: none;
+}
+
+.mobile-btn-all,
+.desktop-btn-all {
+  color: var(--color-primary-bright-blue);
+}
+
+[id="button-hover-effect"]:hover {
+  color: var(--views-btns-hover);
+  font-weight: 700;
+}
+
+/* mobile views btns */
+
+.mobile-views-container {
+  color: var(--clear-views-btns-text-below);
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 16px;
+  display: flex;
+  gap: 20px;
+}
+
+.mobile-btn-all {
+  margin-inline-start: auto;
+}
+
+.mobile-btn-completed {
+  margin-inline-end: auto;
+}
+
+@media screen and (min-width: 43.75rem) {
+  .mobile-views-container {
+    display: none;
+  }
+}
+
+/* text above social */
+
+.social-media-bottom-text {
+  text-align: center;
+}
+
+.social-media-bottom-text span {
+  color: var(--clear-views-btns-text-below);
 }
 
 /* social media icons */
@@ -561,7 +854,7 @@ main {
 
 [class="social-media-icons"] a:hover path,
 [class="social-media-icons"] a:focus path {
-  fill: var(--col-primary-soft-red-bottom);
+  fill: var(--social-media-hover);
 }
 
 [class="social-media-icons"] a {
@@ -578,7 +871,7 @@ main {
 }
 
 [class="social-media-icons"] svg path {
-  fill: var(--col-primary-grayish-blue);
+  fill: var(--social-media);
 }
 
 @media screen and (min-width: 37.5rem) {
@@ -595,27 +888,4 @@ main {
     margin-inline-start: 28px;
     margin-block: 48px;
   }
-}
-
-[role="main"] {
-  background: url("./images/bg-desktop-dark.jpg") var(--col-darktheme-bottom-bg);
-  background-repeat: no-repeat;
-  color: var(--todo-input-foreground);
-}
-
-@media screen and (min-width: 43.75rem) {
-  [role="main"] {
-  }
-}
-
-li button {
-  pointer-events: auto;
-}
-
-button img {
-  pointer-events: none;
-}
-
-li div {
-  pointer-events: none;
 }
