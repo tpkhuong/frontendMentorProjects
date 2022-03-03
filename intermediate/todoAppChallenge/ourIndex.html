@@ -28,12 +28,10 @@
         <!-- title and toggle -->
         <div class="title-toggle-wrapper">
           <!-- title -->
-          <h2 id="section-title">
-            <span>TO</span>
-            <span>DO</span>
-          </h2>
+          <h2 id="section-title"><span>TO</span><span>DO</span></h2>
           <!-- toggle -->
           <button
+            class="toggle-btn"
             role="button"
             user-clicked="false"
             aria-label="dark theme or light theme toggle"
@@ -68,7 +66,7 @@
         </div>
         <div class="todo-list-views-container">
           <h2 class="visually-hidden">To Do List</h2>
-          <div>
+          <div class="visually-hidden">
             <div id="instructions">
               <!-- drag instructions -->
               Press space key or enter key to toggle drag drop mode, use arrow
@@ -82,16 +80,16 @@
               role="listbox"
               aria-describedby="instructions"
             >
-              <li role="option">
+              <li role="option" data-todoCompleted="false">
                 <div>
                   <!-- check/ed button -->
-                  <button>
+                  <button class="checked-btn">
                     <img src="./images/icon-check.svg" alt="" />
                   </button>
                   <!-- todo text -->
                   <p>Jog around the park 3x</p>
                   <!-- delete button -->
-                  <button>
+                  <button class="delete-btn">
                     <img src="./images/icon-cross.svg" alt="" />
                   </button>
                 </div>
@@ -99,13 +97,13 @@
               <li role="option">
                 <div>
                   <!-- check/ed button -->
-                  <button>
+                  <button class="checked-btn">
                     <img src="./images/icon-check.svg" alt="" />
                   </button>
                   <!-- todo text -->
                   <p>10 minutes meditation</p>
                   <!-- delete button -->
-                  <button>
+                  <button class="delete-btn">
                     <img src="./images/icon-cross.svg" alt="" />
                   </button>
                 </div>
@@ -113,13 +111,13 @@
               <li role="option">
                 <div>
                   <!-- check/ed button -->
-                  <button>
+                  <button class="checked-btn">
                     <img src="./images/icon-check.svg" alt="" />
                   </button>
                   <!-- todo text -->
                   <p>Read for 1 hour</p>
                   <!-- delete button -->
-                  <button>
+                  <button class="delete-btn">
                     <img src="./images/icon-cross.svg" alt="" />
                   </button>
                 </div>
@@ -127,13 +125,13 @@
               <li role="option">
                 <div>
                   <!-- check/ed button -->
-                  <button>
+                  <button class="checked-btn">
                     <img src="./images/icon-check.svg" alt="" />
                   </button>
                   <!-- todo text -->
                   <p>Pick up groceries</p>
                   <!-- delete button -->
-                  <button>
+                  <button class="delete-btn">
                     <img src="./images/icon-cross.svg" alt="" />
                   </button>
                 </div>
@@ -141,13 +139,13 @@
               <li role="option">
                 <div>
                   <!-- check/ed button -->
-                  <button>
+                  <button class="checked-btn">
                     <img src="./images/icon-check.svg" alt="" />
                   </button>
                   <!-- todo text -->
                   <p>Complete Frontend Menter</p>
                   <!-- delete button -->
-                  <button>
+                  <button class="delete-btn">
                     <img src="./images/icon-cross.svg" alt="" />
                   </button>
                 </div>
@@ -161,10 +159,16 @@
               <!-- display none for mobile layout -->
               <div class="views-buttons">
                 <button class="desktop-btn-all">All</button>
-                <button class="desktop-btn-active">Active</button>
-                <button class="desktop-btn-completed">Completed</button>
+                <button id="button-hover-effect" class="desktop-btn-active">
+                  Active
+                </button>
+                <button id="button-hover-effect" class="desktop-btn-completed">
+                  Completed
+                </button>
               </div>
-              <button id="clear-button">Clear Completed</button>
+              <button id="button-hover-effect" class="clear-btn">
+                Clear Completed
+              </button>
             </div>
           </div>
           <!-- TODO list -->
@@ -172,8 +176,12 @@
         <!-- mobile layout view btns container -->
         <div class="mobile-views-container">
           <button class="mobile-btn-all">All</button>
-          <button class="mobile-btn-active">Active</button>
-          <button class="mobile-btn-completed">Completed</button>
+          <button id="button-hover-effect" class="mobile-btn-active">
+            Active
+          </button>
+          <button id="button-hover-effect" class="mobile-btn-completed">
+            Completed
+          </button>
         </div>
         <!-- social media and small text -->
         <div class="social-media-bottom-text">
