@@ -28,7 +28,7 @@
         <!-- title and toggle -->
         <div class="title-toggle-wrapper">
           <!-- title -->
-          <h2 id="section-title"><span>TO</span><span>DO</span></h2>
+          <h2 id="section-title"><span>TO</span> <span>DO</span></h2>
           <!-- toggle -->
           <button
             class="toggle-btn"
@@ -80,16 +80,37 @@
               role="listbox"
               aria-describedby="instructions"
             >
-              <li role="option" data-todoCompleted="false">
+              <li
+                tabindex="0"
+                role="option"
+                data-todoCompleted="false"
+                data-allView-index="0"
+              >
                 <div>
                   <!-- check/ed button -->
-                  <button class="checked-btn">
-                    <img src="./images/icon-check.svg" alt="" />
-                  </button>
+                  <div
+                    user-focused-btn="false"
+                    data-checked="false"
+                    class="circle-testing"
+                  >
+                    <button
+                      role="checkbox"
+                      aria-labelledby="todo-item-1"
+                      aria-checked="false"
+                      class="checked-btn"
+                    >
+                      <img src="./images/icon-check.svg" alt="" />
+                    </button>
+                  </div>
                   <!-- todo text -->
-                  <p>Jog around the park 3x</p>
+                  <p id="todo-item-1">Jog around the park 3x</p>
                   <!-- delete button -->
-                  <button class="delete-btn">
+                  <button
+                    aria-labelledby="todo-delete-1 todo-item-1"
+                    aria-label="delete to do item"
+                    id="todo-delete-1"
+                    class="delete-btn"
+                  >
                     <img src="./images/icon-cross.svg" alt="" />
                   </button>
                 </div>
