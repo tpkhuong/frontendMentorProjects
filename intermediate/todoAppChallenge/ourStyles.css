@@ -99,6 +99,8 @@ drag 236 8 38
   --desktop-img-top: var(--lighttheme-desktop-bg-img);
   --bottom-bg-color: var(--light-bg-color-bottom);
   --todoitems-views-btns-bg: var(--color-lighttheme-todo-list-bg);
+  /***** checked button *****/
+  --circle-checked-btn: var(--color-lighttheme-todoinput-completed-btns-below);
   /***** social media hover/background *****/
   --social-media: var(--color-darktheme-bottom-bg);
   --social-media-hover: var(--color-primary-bright-blue);
@@ -115,7 +117,8 @@ drag 236 8 38
   /* foreground hover */
   --todo-listitem-hover: var(--color-lighttheme-hover-todoitem);
   --views-btns-hover: var(--color-lighttheme-typing-input-hover-btns);
-
+  /* li focus */
+  --todo-listitem-keyboard-focus: var(--color-darktheme-todo-list-bg);
   /* --clear-btn-itemsleft-foreground: var(--color-lighttheme-todoinput-completed-btns-below);
   --views-btns-foreground:var(--color-lighttheme-todoinput-completed-btns-below); 
   --text-below-todo-foreground: var(--color-lighttheme-todoinput-completed-btns-below); */
@@ -156,6 +159,8 @@ drag 236 8 38
     --desktop-img-top: var(--darktheme-desktop-bg-img);
     --bottom-bg-color: var(--dark-bg-color-bottom);
     --todoitems-views-btns-bg: var(--color-darktheme-todo-list-bg);
+    /***** checked button *****/
+    --circle-checked-btn: var(--clear-views-btns-text-below);
     /***** social media hover/background *****/
     --social-media: var(--color-darktheme-todo-input);
     --social-media-hover: var(--color-primary-first-half);
@@ -172,6 +177,8 @@ drag 236 8 38
     /* foreground hover */
     --todo-listitem-hover: var(--color-darktheme-hover);
     --views-btns-hover: var(--color-darktheme-todo-text-typing-btn-hover);
+    /* li focus */
+    --todo-listitem-keyboard-focus: var(--color-primary-bright-blue);
     /* --clear-btn-itemsleft-foreground: var(--color-darktheme-clear-active-complete-below);
     --views-btns-foreground: var(--color-darktheme-clear-active-complete-below);
     --text-below-todo-foreground: var(--color-darktheme-clear-active-complete-below); */
@@ -673,13 +680,14 @@ main {
   display: flex;
   gap: 12px;
   align-items: center;
+  margin-block-start: 48px;
 }
 
 /* circle for input */
 
 .circle {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 23px;
   border: 1.5px solid var(--color-darktheme-checked-crossed-out);
   border-radius: 100%;
 }
@@ -711,22 +719,65 @@ main {
 
 .list-style-wrapper li > div {
   display: flex;
+  align-items: center;
   padding: 20px;
   padding-block: 18px;
   gap: 12px;
 }
 
+.list-style-wrapper ul li:first-child {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
 /* checked btn */
 
-.checked-btn {
-  width: 20px;
-  height: 20px;
-  border: 1px solid;
-  border-radius: 100%;
-  border: 1px solid white;
+div[data-checked="true"] {
+  background-image: var(--checked-button-gradient);
+}
+
+.circle-testing {
+  pointer-events: none;
+  width: 23px;
+  height: 22px;
+  background-color: var(--clear-views-btns-text-below);
+  /* background-image: var(--checked-button-gradient); */
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.checked-btn {
+  width: 19px;
+  height: 20px;
+  border-radius: 100%;
+  /* found a way we dont have to use border-width,border-style,border-color */
+  /* border-width: 1.5px;
+  border-style: solid;
+  border-color: transparent; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* user checked todo */
+/* using JS we will change div with data-checked attr to true
+and button with aria-checked attr to true when user click on checked-btn
+*/
+
+.checked-btn[aria-checked="false"] {
+  background-color: var(--todoitems-views-btns-bg);
+}
+.checked-btn[aria-checked="true"] {
+  background-color: transparent;
+}
+
+.checked-btn[aria-checked="false"] img {
+  display: none;
+}
+.checked-btn[aria-checked="true"] img {
+  display: revert;
 }
 
 .list-style-wrapper p {
@@ -763,6 +814,26 @@ li[data-todoCompleted="true"] p::before {
 }
 
 @media screen and (min-width: 43.75rem) {
+  /* spacing */
+  .todo-input-instructions-container {
+  }
+  /* checked btn */
+  .checked-btn:focus {
+    outline: 1px solid transparent;
+  }
+  .list-style-wrapper li:focus {
+    outline: none;
+    /* dark */
+    box-shadow: inset 0 0 0 2px var(--color-primary-bright-blue);
+    /* light */
+    /* box-shadow: inset 0 0 0 2px var(--color-darktheme-todo-list-bg); */
+  }
+  /* using JS to get checked btn focus ring to match design */
+  .circle-testing:hover,
+  div[user-focused-btn="true"] {
+    background-image: var(--checked-button-gradient);
+  }
+  /* delete btn */
   li[role="option"] p + button {
     clip-path: polygon(0px 0px, 0px 0px, 0px 0px, 0px 0px);
   }
@@ -817,6 +888,21 @@ li[data-todoCompleted="true"] p::before {
 }
 
 @media screen and (min-width: 43.75rem) {
+  .views-container {
+    font-size: 0.9rem;
+  }
+
+  /* desktop views btns */
+  .views-buttons {
+    display: revert;
+    font-weight: 700;
+  }
+
+  .views-buttons > * + * {
+    margin-inline-start: 12px;
+  }
+
+  /* adding space between btns */
   .mobile-views-container {
     display: none;
   }
@@ -825,6 +911,7 @@ li[data-todoCompleted="true"] p::before {
 /* text above social */
 
 .social-media-bottom-text {
+  margin-block-start: 48px;
   text-align: center;
 }
 
@@ -835,8 +922,9 @@ li[data-todoCompleted="true"] p::before {
 /* social media icons */
 
 .social-media-icons {
-  margin-block: 30px;
-  margin-block-start: auto;
+  margin-block-start: 36px;
+  /* margin-block: 30px;
+  margin-block-start: auto; */
   /* we had border around app-style-wrapper
   which did not allow for margin-collapse with starting date button
   and container for social media icon
