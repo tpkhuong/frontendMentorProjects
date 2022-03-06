@@ -185,7 +185,58 @@ drag 236 8 38
   }
 }
 
-.darktheme {
+.light-theme {
+  /***** background *****/
+  --mobile-img-top: var(--lighttheme-mobile-bg-img);
+  --desktop-img-top: var(--lighttheme-desktop-bg-img);
+  --bottom-bg-color: var(--light-bg-color-bottom);
+  --todoitems-views-btns-bg: var(--color-lighttheme-todo-list-bg);
+  /***** checked button *****/
+  --circle-checked-btn: var(--color-lighttheme-todoinput-completed-btns-below);
+  /***** social media hover/background *****/
+  --social-media: var(--color-darktheme-bottom-bg);
+  --social-media-hover: var(--color-primary-bright-blue);
+  /***** foreground *****/
+  --input-placeholder-foreground: var(
+    --color-lighttheme-todoinput-completed-btns-below
+  );
+  --todo-input-foreground: var(--color-lighttheme-typing-input-hover-btns);
+  --todo-listitem-foreground: var(--color-lighttheme-todo-listitem);
+  --clear-views-btns-text-below: var(
+    --color-lighttheme-todoinput-completed-btns-below
+  );
+  --todo-completed-crossed-out: var(--color-lighttheme-checked-crossed-out);
+  /* foreground hover */
+  --todo-listitem-hover: var(--color-lighttheme-hover-todoitem);
+  --views-btns-hover: var(--color-lighttheme-typing-input-hover-btns);
+  /* li focus */
+  --todo-listitem-keyboard-focus: var(--color-darktheme-todo-list-bg);
+}
+
+.dark-theme {
+  /***** background *****/
+  --mobile-img-top: var(--darktheme-mobile-bg-img);
+  --desktop-img-top: var(--darktheme-desktop-bg-img);
+  --bottom-bg-color: var(--dark-bg-color-bottom);
+  --todoitems-views-btns-bg: var(--color-darktheme-todo-list-bg);
+  /***** checked button *****/
+  --circle-checked-btn: var(--clear-views-btns-text-below);
+  /***** social media hover/background *****/
+  --social-media: var(--color-darktheme-todo-input);
+  --social-media-hover: var(--color-primary-first-half);
+  /***** foreground *****/
+  --input-placeholder-foreground: var(--color-darktheme-todo-input);
+  --todo-input-foreground: var(--color-darktheme-todo-text-typing-btn-hover);
+  --todo-listitem-foreground: var(--color-darktheme-todo-text-typing-btn-hover);
+  --clear-views-btns-text-below: var(
+    --color-darktheme-clear-active-complete-below
+  );
+  --todo-completed-crossed-out: var(--color-darktheme-checked-crossed-out);
+  /* foreground hover */
+  --todo-listitem-hover: var(--color-darktheme-hover);
+  --views-btns-hover: var(--color-darktheme-todo-text-typing-btn-hover);
+  /* li focus */
+  --todo-listitem-keyboard-focus: var(--color-primary-bright-blue);
 }
 
 /* 
@@ -472,7 +523,9 @@ body {
 
 /* themes */
 
-[class*="-theme"] {
+/* comment out for this project */
+
+/* [class*="-theme"] {
   background-color: var(--theme-bg);
   color: var(--theme-fg);
 }
@@ -491,7 +544,7 @@ body {
 .accent-theme {
   background-color: var(--accent-bg);
   color: var(--accent-fg);
-}
+} */
 
 /* .light-theme {
   background-color: var(--light-theme-bg);
@@ -594,15 +647,22 @@ a:hover {
 
 /* general styles */
 
-li button {
+body {
+  background-color: var(--bottom-bg-color);
+}
+
+.list-style-wrapper li,
+li button,
+div[class~="views-container"] button,
+[class~="mobile-views-container"] button {
   pointer-events: auto;
 }
 
-button img {
-  pointer-events: none;
-}
-
-li div {
+button img,
+li div,
+div[class~="views-container"],
+.list-style-wrapper,
+[class~="mobile-views-container"] {
   pointer-events: none;
 }
 
@@ -619,9 +679,11 @@ main {
 }
 
 [role="main"] {
+  max-width: 1440px;
   background: var(--mobile-img-top) var(--bottom-bg-color);
   background-repeat: no-repeat;
   color: var(--todo-input-foreground);
+  margin-inline: auto;
   padding-inline: 20px;
   padding-block-start: 45px;
 }
