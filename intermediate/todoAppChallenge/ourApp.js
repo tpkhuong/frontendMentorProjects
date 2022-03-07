@@ -27,7 +27,9 @@
   checkedBtn.forEach(function addFocus(eachButton) {
     applyEventListener(eachButton, "focus", function buttonHasFocus(event) {
       // change attr on parent element of checked btn. div with attr we want to change
-      this.parentElement.attributes["user-focused-btn"].value = "true";
+      document.activeElement == event.target
+        ? (this.parentElement.attributes["user-focused-btn"].value = "true")
+        : null;
     });
     applyEventListener(eachButton, "blur", function buttonIsNotFocus(event) {
       // change attr on parent element of checked btn. div with attr we want to change
@@ -141,25 +143,25 @@
     const targetClass = event.target.getAttribute("class");
     switch (targetClass) {
       case "todo-item":
-        todoListitemClicked();
+        todoListitemClicked(event);
         break;
       case "checked-btn":
-        checkedBtnClicked();
+        checkedBtnClicked(event);
         break;
       case "delete-btn":
-        deleteBtnClicked();
+        deleteBtnClicked(event);
         break;
       case "desktop-btn-all":
-        allViewBtnClicked();
+        allViewBtnClicked(event);
         break;
       case "desktop-btn-active":
-        activeViewBtnClicked();
+        activeViewBtnClicked(event);
         break;
       case "desktop-btn-completed":
-        completedViewBtnClicked();
+        completedViewBtnClicked(event);
         break;
       case "clear-btn":
-        clearCompletedBtnClicked();
+        clearCompletedBtnClicked(event);
         break;
     }
   }
@@ -172,13 +174,13 @@
     const targetClass = event.target.getAttribute("class");
     switch (targetClass) {
       case "mobile-btn-all":
-        allViewBtnClicked();
+        allViewBtnClicked(event);
         break;
       case "mobile-btn-active":
-        activeViewBtnClicked();
+        activeViewBtnClicked(event);
         break;
       case "mobile-btn-completed":
-        completedViewBtnClicked();
+        completedViewBtnClicked(event);
         break;
     }
   }
@@ -196,12 +198,56 @@
   // checked btn
 
   function checkedBtnClicked(event) {
+    // if we want to always focus on todo listitem when user click on checked-btn
+    event.target.parentElement.parentElement.parentElement.focus();
+    // check if todo(Listitem) has "true" assigned to data-draggedSelected
+    // const todoListitemDraggedSelected =
+    //   event.target.parentElement.parentElement.parentElement.getAttribute(
+    //     "data-draggedSelected"
+    //   );
+    // if (todoListitemDraggedSelected == "true") {
+    //   event.target.parentElement.parentElement.parentElement.focus();
+    // }
+    // we will change div[data-checked], .checked-btn[aria-checked], and li[data-todoCompleted="true"]
+    // based on the current value of div[data-checked], .checked-btn[aria-checked] and li[data-todoCompleted="true"]
+    /**
+     * if one of the three div[data-checked], .checked-btn[aria-checked], and li[data-todoCompleted="true"]
+     * value is "false" or "true" then the other two will have the same value
+     * **/
+    /**
+     * algorithm below is for when user click on checked btn.
+     * click event on the checked btn will apply focus on the btn
+     * which will trigger our "focus" event listener that triggered event will
+     * assign "true" to user-focused-btn to parent of checked-btn
+     * **/
+    event.target.parentElement.getAttribute("user-focused-btn") == "true"
+      ? event.target.parentElement.setAttribute("user-focused-btn", "false")
+      : null;
+
+    const checkedBtnAriaChecked = event.target.getAttribute("aria-checked");
+
+    if (checkedBtnAriaChecked == "false") {
+      event.target.setAttribute("aria-checked", "true");
+      event.target.parentElement.setAttribute("data-checked", "true");
+      event.target.parentElement.parentElement.parentElement.setAttribute(
+        "data-todocompleted",
+        "true"
+      );
+    } else {
+      event.target.setAttribute("aria-checked", "false");
+      event.target.parentElement.setAttribute("data-checked", "false");
+      event.target.parentElement.parentElement.parentElement.setAttribute(
+        "data-todocompleted",
+        "false"
+      );
+    }
     console.log("checked");
   }
 
   // delete btn
 
   function deleteBtnClicked(event) {
+    console.log(event.target.parentElement.parentElement);
     console.log("delete");
   }
 
@@ -212,18 +258,57 @@
   // All view btn
 
   function allViewBtnClicked(event) {
+    // current event.target assign value true to data-currentView
+    const checkBooleanValueOfCurrentViewAttr =
+      event.target.getAttribute("data-currentView");
+    checkBooleanValueOfCurrentViewAttr == "false"
+      ? event.target.setAttribute("data-currentView", "true")
+      : null;
+    // get next sibling elements assign value "false" to data-currentView
+    event.target.nextElementSibling.setAttribute("data-currentView", "false");
+    event.target.nextElementSibling.nextElementSibling.setAttribute(
+      "data-currentView",
+      "false"
+    );
     cachedData.currentView != "All" ? (cachedData.currentView = "All") : null;
   }
 
   // Active view btn
 
   function activeViewBtnClicked(event) {
+    // current event.target assign value true to data-currentView
+    const checkBooleanValueOfCurrentViewAttr =
+      event.target.getAttribute("data-currentView");
+    checkBooleanValueOfCurrentViewAttr == "false"
+      ? event.target.setAttribute("data-currentView", "true")
+      : null;
+    // get previous and next sibling assign value "false" to data-currentView
+    event.target.previousElementSibling.setAttribute(
+      "data-currentView",
+      "false"
+    );
+    event.target.nextElementSibling.setAttribute("data-currentView", "false");
     cachedData.currentView = "Active";
   }
 
   // Completed view btn
 
   function completedViewBtnClicked(event) {
+    // current event.target assign value true to data-currentView
+    const checkBooleanValueOfCurrentViewAttr =
+      event.target.getAttribute("data-currentView");
+    checkBooleanValueOfCurrentViewAttr == "false"
+      ? event.target.setAttribute("data-currentView", "true")
+      : null;
+    // get previous sibling elements assign value "false" to data-currentView
+    event.target.previousElementSibling.setAttribute(
+      "data-currentView",
+      "false"
+    );
+    event.target.previousElementSibling.previousElementSibling.setAttribute(
+      "data-currentView",
+      "false"
+    );
     cachedData.currentView = "Completed";
   }
 
@@ -232,6 +317,10 @@
   function clearCompletedBtnClicked(event) {
     console.log("clear completed");
   }
+
+  /**
+   *
+   * **/
 
   /**
    * cached our data
