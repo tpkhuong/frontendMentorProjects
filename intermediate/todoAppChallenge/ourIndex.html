@@ -84,6 +84,7 @@
               <li
                 tabindex="0"
                 role="option"
+                data-draggedSelected="false"
                 data-todoCompleted="false"
                 data-allView-index="0"
                 data-grabDragIndex="0"
@@ -468,11 +469,13 @@
               </div>
               <!-- display none for mobile layout -->
               <div class="views-buttons">
-                <button class="desktop-btn-all">All</button>
-                <button id="button-hover-effect" class="desktop-btn-active">
+                <button data-currentView="true" class="desktop-btn-all">
+                  All
+                </button>
+                <button data-currentView="false" class="desktop-btn-active">
                   Active
                 </button>
-                <button id="button-hover-effect" class="desktop-btn-completed">
+                <button data-currentView="false" class="desktop-btn-completed">
                   Completed
                 </button>
               </div>
@@ -485,11 +488,11 @@
         </div>
         <!-- mobile layout view btns container -->
         <div class="mobile-views-container">
-          <button class="mobile-btn-all">All</button>
-          <button id="button-hover-effect" class="mobile-btn-active">
+          <button data-currentView="true" class="mobile-btn-all">All</button>
+          <button data-currentView="false" class="mobile-btn-active">
             Active
           </button>
-          <button id="button-hover-effect" class="mobile-btn-completed">
+          <button data-currentView="false" class="mobile-btn-completed">
             Completed
           </button>
         </div>
