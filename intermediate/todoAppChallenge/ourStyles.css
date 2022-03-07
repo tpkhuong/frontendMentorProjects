@@ -99,6 +99,7 @@ drag 236 8 38
   --desktop-img-top: var(--lighttheme-desktop-bg-img);
   --bottom-bg-color: var(--light-bg-color-bottom);
   --todoitems-views-btns-bg: var(--color-lighttheme-todo-list-bg);
+
   /***** checked button *****/
   --circle-checked-btn: var(--color-lighttheme-todoinput-completed-btns-below);
   /***** social media hover/background *****/
@@ -191,6 +192,7 @@ drag 236 8 38
   --desktop-img-top: var(--lighttheme-desktop-bg-img);
   --bottom-bg-color: var(--light-bg-color-bottom);
   --todoitems-views-btns-bg: var(--color-lighttheme-todo-list-bg);
+  --draggedTodoSelected: var(--color-darktheme-todo-list-bg);
   /***** checked button *****/
   --circle-checked-btn: var(--color-lighttheme-todoinput-completed-btns-below);
   /***** social media hover/background *****/
@@ -219,6 +221,7 @@ drag 236 8 38
   --desktop-img-top: var(--darktheme-desktop-bg-img);
   --bottom-bg-color: var(--dark-bg-color-bottom);
   --todoitems-views-btns-bg: var(--color-darktheme-todo-list-bg);
+  --draggedTodoSelected: var(--color-lighttheme-todo-list-bg);
   /***** checked button *****/
   --circle-checked-btn: var(--clear-views-btns-text-below);
   /***** social media hover/background *****/
@@ -849,6 +852,15 @@ and button with aria-checked attr to true when user click on checked-btn
 
 /* todo completed */
 
+/* [data-draggedSelected="true"] {
+  background-color: var(--draggedTodoSelected);
+} */
+
+[data-draggedSelected="true"] p {
+  /* color: var(--color-primary-bright-blue); */
+  font-weight: 700;
+}
+
 li[data-todoCompleted="true"] p {
   position: relative;
   width: max-content;
@@ -883,7 +895,14 @@ li[data-todoCompleted="true"] p::before {
   .checked-btn:focus {
     outline: 1px solid transparent;
   }
-  .list-style-wrapper li:focus {
+  [data-draggedSelected="true"]:focus {
+    outline: none;
+    /* dark */
+    box-shadow: inset 0 0 0 5px var(--color-primary-bright-blue);
+    /* light */
+    /* box-shadow: inset 0 0 0 2px var(--color-darktheme-todo-list-bg); */
+  }
+  [data-draggedSelected="false"]:focus {
     outline: none;
     /* dark */
     box-shadow: inset 0 0 0 2px var(--color-primary-bright-blue);
@@ -900,6 +919,7 @@ li[data-todoCompleted="true"] p::before {
     clip-path: polygon(0px 0px, 0px 0px, 0px 0px, 0px 0px);
   }
 
+  li[role="option"] p + button:focus,
   li[role="option"]:hover p + button {
     clip-path: revert;
   }
@@ -920,14 +940,12 @@ li[data-todoCompleted="true"] p::before {
   display: none;
 }
 
-.mobile-btn-all,
-.desktop-btn-all {
-  color: var(--color-primary-bright-blue);
-}
+/* btn that has data-currentView="true" will have color: var(--color-primary-bright-blue);
+btn with data-currentView="false" will color: var(--views-btns-hover);
+*/
 
-[id="button-hover-effect"]:hover {
-  color: var(--views-btns-hover);
-  font-weight: 700;
+[data-currentView="true"] {
+  color: var(--color-primary-bright-blue);
 }
 
 /* mobile views btns */
@@ -963,6 +981,15 @@ li[data-todoCompleted="true"] p::before {
   .views-buttons > * + * {
     margin-inline-start: 12px;
   }
+
+  [data-currentView="false"]:hover {
+    color: var(--views-btns-hover);
+  }
+
+  /* [id="button-hover-effect"]:hover {
+    color: var(--views-btns-hover);
+    font-weight: 700;
+  } */
 
   /* adding space between btns */
   .mobile-views-container {
