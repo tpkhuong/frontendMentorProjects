@@ -944,7 +944,13 @@ li[data-todoCompleted="true"] p::before {
 btn with data-currentView="false" will color: var(--views-btns-hover);
 */
 
-[data-currentView="true"] {
+/* [data-currentView="true"] {
+  color: var(--color-primary-bright-blue);
+} */
+
+/* another approach */
+
+button[data-currentView] {
   color: var(--color-primary-bright-blue);
 }
 
@@ -982,7 +988,19 @@ btn with data-currentView="false" will color: var(--views-btns-hover);
     margin-inline-start: 12px;
   }
 
-  [data-currentView="false"]:hover {
+  /* [data-currentView="false"]:hover,
+  [data-currentView="false"]:focus,
+  .clear-btn:hover,
+  .clear-btn:focus {
+    color: var(--views-btns-hover);
+  } */
+
+  /* another approach */
+
+  button:not([data-currentView]):focus,
+  button:not([data-currentView]):hover,
+  .clear-btn:hover,
+  .clear-btn:focus {
     color: var(--views-btns-hover);
   }
 
