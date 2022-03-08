@@ -255,39 +255,84 @@
    * views and clear btns
    * **/
 
+  const arrayOfFunc = [];
+
   // All view btn
 
   function allViewBtnClicked(event) {
     // current event.target assign value true to data-currentView
-    const checkBooleanValueOfCurrentViewAttr =
+    const checkForCurrentViewAttrOfElement =
       event.target.getAttribute("data-currentView");
-    checkBooleanValueOfCurrentViewAttr == "false"
-      ? event.target.setAttribute("data-currentView", "true")
+    // if element does not have data-currentView attr algorithm above will return null
+    // checkBooleanValueOfCurrentViewAttr == "false"
+    //   ? event.target.setAttribute("data-currentView", "true")
+    //   : null;
+    // // get next sibling elements assign value "false" to data-currentView
+    // event.target.nextElementSibling.setAttribute("data-currentView", "false");
+    // event.target.nextElementSibling.nextElementSibling.setAttribute(
+    //   "data-currentView",
+    //   "false"
+    // );
+    /**
+     * another approach
+     * **/
+    !checkForCurrentViewAttrOfElement
+      ? event.target.setAttribute("data-currentView", "")
       : null;
-    // get next sibling elements assign value "false" to data-currentView
-    event.target.nextElementSibling.setAttribute("data-currentView", "false");
-    event.target.nextElementSibling.nextElementSibling.setAttribute(
-      "data-currentView",
-      "false"
-    );
+    switch (cachedData.currentView) {
+      case "Active":
+        event.target.nextElementSibling.removeAttribute("data-currentView");
+        break;
+      case "Completed":
+        event.target.nextElementSibling.nextElementSibling.removeAttribute(
+          "data-currentView"
+        );
+        break;
+    }
+
     cachedData.currentView != "All" ? (cachedData.currentView = "All") : null;
+    arrayOfFunc.push(function Func(outerStr) {
+      return function innerFunc(fn, innerStr) {
+        return fn(outerStr, innerStr);
+      };
+    });
   }
 
   // Active view btn
 
   function activeViewBtnClicked(event) {
+    const firstFunc = arrayOfFunc[0]("Hello");
+
+    firstFunc(function sayhi(first, second) {
+      console.log(first, second);
+    }, " World");
     // current event.target assign value true to data-currentView
-    const checkBooleanValueOfCurrentViewAttr =
+    const checkForCurrentViewAttrOfElement =
       event.target.getAttribute("data-currentView");
-    checkBooleanValueOfCurrentViewAttr == "false"
-      ? event.target.setAttribute("data-currentView", "true")
+    // if element does not have data-currentView attr algorithm above will return null
+    // checkBooleanValueOfCurrentViewAttr == "false"
+    //   ? event.target.setAttribute("data-currentView", "true")
+    //   : null;
+    // // get previous and next sibling assign value "false" to data-currentView
+    // event.target.previousElementSibling.setAttribute(
+    //   "data-currentView",
+    //   "false"
+    // );
+    // event.target.nextElementSibling.setAttribute("data-currentView", "false");
+    /**
+     * another approach
+     * **/
+    !checkForCurrentViewAttrOfElement
+      ? event.target.setAttribute("data-currentView", "")
       : null;
-    // get previous and next sibling assign value "false" to data-currentView
-    event.target.previousElementSibling.setAttribute(
-      "data-currentView",
-      "false"
-    );
-    event.target.nextElementSibling.setAttribute("data-currentView", "false");
+    switch (cachedData.currentView) {
+      case "All":
+        event.target.previousElementSibling.removeAttribute("data-currentView");
+        break;
+      case "Completed":
+        event.target.nextElementSibling.removeAttribute("data-currentView");
+        break;
+    }
     cachedData.currentView = "Active";
   }
 
@@ -295,20 +340,37 @@
 
   function completedViewBtnClicked(event) {
     // current event.target assign value true to data-currentView
-    const checkBooleanValueOfCurrentViewAttr =
+    const checkForCurrentViewAttrOfElement =
       event.target.getAttribute("data-currentView");
-    checkBooleanValueOfCurrentViewAttr == "false"
-      ? event.target.setAttribute("data-currentView", "true")
+    // if element does not have data-currentView attr algorithm above will return null
+    // checkBooleanValueOfCurrentViewAttr == "false"
+    //   ? event.target.setAttribute("data-currentView", "true")
+    //   : null;
+    //   event.target.previousElementSibling.setAttribute(
+    //     "data-currentView",
+    //     "false"
+    //   );
+    //   event.target.previousElementSibling.previousElementSibling.setAttribute(
+    //     "data-currentView",
+    //     "false"
+    //   );
+    /**
+     * another approach
+     * **/
+    !checkForCurrentViewAttrOfElement
+      ? event.target.setAttribute("data-currentView", "")
       : null;
+    switch (cachedData.currentView) {
+      case "All":
+        event.target.previousElementSibling.previousElementSibling.removeAttribute(
+          "data-currentView"
+        );
+        break;
+      case "Active":
+        event.target.previousElementSibling.removeAttribute("data-currentView");
+        break;
+    }
     // get previous sibling elements assign value "false" to data-currentView
-    event.target.previousElementSibling.setAttribute(
-      "data-currentView",
-      "false"
-    );
-    event.target.previousElementSibling.previousElementSibling.setAttribute(
-      "data-currentView",
-      "false"
-    );
     cachedData.currentView = "Completed";
   }
 
