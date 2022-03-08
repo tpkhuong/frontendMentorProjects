@@ -469,15 +469,13 @@
               </div>
               <!-- display none for mobile layout -->
               <div class="views-buttons">
-                <button data-currentView="true" class="desktop-btn-all">
-                  All
-                </button>
-                <button data-currentView="false" class="desktop-btn-active">
-                  Active
-                </button>
-                <button data-currentView="false" class="desktop-btn-completed">
-                  Completed
-                </button>
+                <!-- have text that will let keyboard users know
+                click/keydown on space or enter key on "All", "Active" "Completed"
+                will change the view
+                -->
+                <button data-currentView class="desktop-btn-all">All</button>
+                <button class="desktop-btn-active">Active</button>
+                <button class="desktop-btn-completed">Completed</button>
               </div>
               <button id="button-hover-effect" class="clear-btn">
                 Clear Completed
@@ -488,13 +486,9 @@
         </div>
         <!-- mobile layout view btns container -->
         <div class="mobile-views-container">
-          <button data-currentView="true" class="mobile-btn-all">All</button>
-          <button data-currentView="false" class="mobile-btn-active">
-            Active
-          </button>
-          <button data-currentView="false" class="mobile-btn-completed">
-            Completed
-          </button>
+          <button data-currentView class="mobile-btn-all">All</button>
+          <button class="mobile-btn-active">Active</button>
+          <button class="mobile-btn-completed">Completed</button>
         </div>
         <!-- social media and small text -->
         <div class="social-media-bottom-text">
