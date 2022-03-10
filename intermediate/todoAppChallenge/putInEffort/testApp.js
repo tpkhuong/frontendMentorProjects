@@ -369,12 +369,21 @@
                   );
                 }
               }
-              // focus next sibling element
-              changeTabindexDraggedClassAndFocusElement(
-                document.activeElement,
-                nextSibling
-              );
-
+              if (document.activeElement.nextElementSibling == null) {
+                // focus first todo Li
+                const firstTodoItem =
+                  document.activeElement.parentElement.children[0];
+                changeTabindexDraggedClassAndFocusElement(
+                  document.activeElement,
+                  firstTodoItem
+                );
+              } else {
+                // focus next sibling element
+                changeTabindexDraggedClassAndFocusElement(
+                  document.activeElement,
+                  nextSibling
+                );
+              }
               break;
             case "ArrowUp":
               // get previous sibling
@@ -397,11 +406,24 @@
                   );
                 }
               }
-              // focus previous sibling element
-              changeTabindexDraggedClassAndFocusElement(
-                document.activeElement,
-                previousSibling
-              );
+              if (document.activeElement.previousElementSibling == null) {
+                const lengthOfUL =
+                  document.activeElement.parentElement.childElementCount;
+                // last todo item
+                const lastTodoItem =
+                  document.activeElement.parentElement.children[lengthOfUL - 1];
+                // focus last todo item
+                changeTabindexDraggedClassAndFocusElement(
+                  document.activeElement,
+                  lastTodoItem
+                );
+              } else {
+                // focus previous sibling element
+                changeTabindexDraggedClassAndFocusElement(
+                  document.activeElement,
+                  previousSibling
+                );
+              }
 
               break;
           }

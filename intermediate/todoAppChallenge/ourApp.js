@@ -16,6 +16,15 @@
     "click",
     todoListitemsWithAttachedViewsBtnsClick
   );
+
+  // value of todo input
+
+  applyEventListener(
+    document.querySelector(".todo-input-instructions-container input"),
+    "keydown",
+    valueOfTodoInput
+  );
+
   // mobile click
   applyEventListener(
     document.querySelector(".mobile-views-container"),
@@ -253,9 +262,8 @@
 
   /**
    * views and clear btns
+   * const arrayOfFunc = [];
    * **/
-
-  const arrayOfFunc = [];
 
   // All view btn
 
@@ -291,22 +299,29 @@
     }
 
     cachedData.currentView != "All" ? (cachedData.currentView = "All") : null;
-    arrayOfFunc.push(function Func(outerStr) {
-      return function innerFunc(fn, innerStr) {
-        return fn(outerStr, innerStr);
-      };
-    });
+    /**
+     * testing out algorithm
+     * **/
+    // arrayOfFunc.push(function Func(outerStr) {
+    //   return function innerFunc(fn, innerStr) {
+    //     return fn(outerStr, innerStr);
+    //   };
+    // });
   }
 
   // Active view btn
 
   function activeViewBtnClicked(event) {
-    const firstFunc = arrayOfFunc[0]("Hello");
+    /**
+     * testing out algorithm
+     * **/
+    // const firstFunc = arrayOfFunc[0]("Hello");
 
-    firstFunc(function sayhi(first, second) {
-      console.log(first, second);
-    }, " World");
+    // firstFunc(function sayhi(first, second) {
+    //   console.log(first, second);
+    // }, " World");
     // current event.target assign value true to data-currentView
+
     const checkForCurrentViewAttrOfElement =
       event.target.getAttribute("data-currentView");
     // if element does not have data-currentView attr algorithm above will return null
@@ -381,8 +396,159 @@
   }
 
   /**
-   *
+   * helper func
    * **/
+
+  /**
+   * build assistive text string
+   * **/
+
+  /**
+   * get grabbed element grabDragIndex
+   * **/
+
+  /**
+   * get UL number of children
+   * **/
+
+  /**
+   * get grabbed element TODO text
+   * **/
+
+  /**
+   * get value of input for todo list
+   * **/
+
+  /**
+   * working with arrays in cachedObj
+   * **/
+
+  /**
+   * all view
+   * **/
+
+  /**
+   * active view
+   * **/
+
+  /**
+   * completed view
+   * **/
+
+  /**
+   * make array for active view
+   * **/
+
+  function filterOutCompletedTodoItems(allViewList) {}
+
+  /**
+   * make array for completed view
+   * **/
+
+  function filterOutActiveTodoItems(allViewList) {}
+
+  /**
+   * building listitem element for todo item, checked btn, and delete btn
+   * when we run func to create listitem then append listitems (children to UL)
+   * we just want that func to create LI then append to UL
+   * updating attr will be handled by other helpers
+   * **/
+
+  // todo listitem
+  // div draggable element
+  // draggable element children
+  /* checked btn wrapper */
+  /** checked btn **/
+  /*** img element for checked btn ***/
+  /* paragraph text content of todo */
+  /* delete btn */
+  /** img element for delete btn **/
+
+  /**
+   * func to update todo listitem grabdragindex
+   * checked btn aria-labelledby
+   * delete btn aria-labelledby and id
+   * when user is on active and completed view
+   * when user is on all view update todo listitem allview index
+   * **/
+
+  /**
+   * algorithm below for when user drag and drop
+   * on views for "All", "Active" and "Completed" views
+   * **/
+
+  function updateAttrForTodoItemCheckedAndDeleteBtn(collection) {
+    // loop through array
+    collection.forEach(function updateValuesToAttr(listitem, index) {
+      // user is on "All" views
+      cachedData.currentView == "All"
+        ? (listitem.attributes["data-allViewIndex"].value = String(index))
+        : null;
+      // user is on "Active" or "Completed" view
+      listitem.attributes["grabbedItemDataIndex"].value = String(index);
+      // checked btn
+      listitem.firstElementChild.children[0].firstElementChild.attributes[
+        "aria-labelledby"
+      ] = `todo-item-${index}`;
+      // delete btn
+      listitem.firstElementChild.children[2].attributes[
+        "aria-labelledby"
+      ].value = `delete-todo-${index} todo-item-${index}`;
+      listitem.firstElementChild.children[2].attributes[
+        "id"
+      ].value = `delete-todo-${index}`;
+    });
+  }
+
+  /**
+   * assign allViewIndex to elements in "Active" or "Completed" array
+   * **/
+
+  /**
+   * algorithm below for when user drag and drop
+   * on views for "Active" and "Completed" views
+   * **/
+
+  function allViewIndexForReorderOfActiveOrCompletedArray(list) {
+    // data-allviewindex
+    // current view is active
+    if (cachedData.currentView == "Active") {
+      list.forEach(function allViewIndexForActive(todoItem, index) {
+        const indexActiveAllView =
+          cachedData.originalElementOrderInAllViewArray.activeViewOriginalOrder[
+            index
+          ];
+        todoItem.attributes["data-allViewIndex"].value =
+          String(indexActiveAllView);
+      });
+    }
+    // current view is completed
+    if (cachedData.currentView == "Completed") {
+      list.forEach(function allViewIndexForCompleted(todoItem, index) {
+        const indexCompletedAllView =
+          cachedData.originalElementOrderInAllViewArray
+            .completedViewOriginalOrder[index];
+        todoItem.attributes["data-allViewIndex"].value = String(
+          indexCompletedAllView
+        );
+      });
+    }
+  }
+
+  /**
+   * update allView array after user drag and drop in
+   * "Active" or "Completed" views
+   * **/
+
+  /**
+   * get value of todo input
+   * **/
+
+  function valueOfTodoInput(event) {
+    if (event.code == "Enter" || event.code == "NumpadEnter") {
+      console.log(event.target.value);
+    }
+  }
 
   /**
    * cached our data
@@ -390,6 +556,15 @@
 
   function scopeOurData() {
     const dataObj = {
+      arraysOfDifferentViews: {
+        allViewArray: [],
+        activeViewArray: [],
+        completedViewArray: [],
+      },
+      originalElementOrderInAllViewArray: {
+        activeViewOriginalOrder: [],
+        completedViewOriginalOrder: [],
+      },
       grabbedItemDataIndex: null,
       dragSourceElement: null,
       draggedItemSelected: false,
@@ -400,6 +575,7 @@
       return dataObj;
     };
   }
+
   /**
    * our selectors
    * **/
@@ -419,6 +595,37 @@
       checkedBtn,
     };
   }
+
+  /**
+
+functional Programming Curry
+
+function curry(fn, arity = fn.length) {
+  return (function nextCurried(prevArgs) {
+    return function curried(nextArg) {
+      var args = [...prevArgs, nextArg];
+
+      if (args.length >= arity) {
+        return fn(...args);
+      } else {
+        return nextCurried(args);
+      }
+    };
+  })([]);
+}
+
+// or the ES6 => arrow form
+var curry = (fn, arity = fn.length, nextCurried) =>
+  (nextCurried = (prevArgs) => (nextArg) => {
+    var args = [...prevArgs, nextArg];
+
+    if (args.length >= arity) {
+      return fn(...args);
+    } else {
+      return nextCurried(args);
+    }
+  })([]);
+ */
   /**
    * Notes
    * **/
