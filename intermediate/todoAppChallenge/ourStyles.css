@@ -662,9 +662,7 @@ div[class~="views-container"] button,
 }
 
 button img,
-li div,
 div[class~="views-container"],
-.list-style-wrapper,
 [class~="mobile-views-container"] {
   pointer-events: none;
 }
@@ -852,6 +850,23 @@ and button with aria-checked attr to true when user click on checked-btn
 
 /* todo completed */
 
+/* focus ring for both mobile and desktop */
+
+[data-draggedSelected="true"]:focus {
+  outline: none;
+  /* dark */
+  box-shadow: inset 0 0 0 5px var(--color-primary-bright-blue);
+  /* light */
+  /* box-shadow: inset 0 0 0 2px var(--color-darktheme-todo-list-bg); */
+}
+[data-draggedSelected="false"]:focus {
+  outline: none;
+  /* dark */
+  box-shadow: inset 0 0 0 2px var(--color-primary-bright-blue);
+  /* light */
+  /* box-shadow: inset 0 0 0 2px var(--color-darktheme-todo-list-bg); */
+}
+
 /* [data-draggedSelected="true"] {
   background-color: var(--draggedTodoSelected);
 } */
@@ -895,20 +910,7 @@ li[data-todoCompleted="true"] p::before {
   .checked-btn:focus {
     outline: 1px solid transparent;
   }
-  [data-draggedSelected="true"]:focus {
-    outline: none;
-    /* dark */
-    box-shadow: inset 0 0 0 5px var(--color-primary-bright-blue);
-    /* light */
-    /* box-shadow: inset 0 0 0 2px var(--color-darktheme-todo-list-bg); */
-  }
-  [data-draggedSelected="false"]:focus {
-    outline: none;
-    /* dark */
-    box-shadow: inset 0 0 0 2px var(--color-primary-bright-blue);
-    /* light */
-    /* box-shadow: inset 0 0 0 2px var(--color-darktheme-todo-list-bg); */
-  }
+
   /* using JS to get checked btn focus ring to match design */
   .circle-testing:hover,
   div[user-focused-btn="true"] {

@@ -353,7 +353,7 @@
               // get next sibling
               const nextSibling = document.activeElement.nextElementSibling;
               // check data-index of current focus element
-              // check if its 5
+              // check if its 4
               if (cachedData.draggedItemSelected) {
                 if (getDataIndexAttr(document.activeElement) == "4") {
                   moveBottomItemToTopOfList(
