@@ -1,6 +1,9 @@
 (function scopeOurVariables() {
+  // apply attr data-currentView
+  applyDataCurrentViewAttrToBtn();
   // declare our selectors
-  const { mainElement, toggleThemeBtn, checkedBtn } = ourSelectors();
+  const { mainElement, unorderedList, toggleThemeBtn, checkedBtn } =
+    ourSelectors();
   // call our cached func
   const accessData = scopeOurData();
   const cachedData = accessData();
@@ -253,23 +256,6 @@
       ? event.target.parentElement.setAttribute("user-focused-btn", "false")
       : null;
 
-    const checkedBtnAriaChecked = event.target.getAttribute("aria-checked");
-
-    if (checkedBtnAriaChecked == "false") {
-      event.target.setAttribute("aria-checked", "true");
-      event.target.parentElement.setAttribute("data-checked", "true");
-      event.target.parentElement.parentElement.parentElement.setAttribute(
-        "data-todocompleted",
-        "true"
-      );
-    } else {
-      event.target.setAttribute("aria-checked", "false");
-      event.target.parentElement.setAttribute("data-checked", "false");
-      event.target.parentElement.parentElement.parentElement.setAttribute(
-        "data-todocompleted",
-        "false"
-      );
-    }
     /**
      * check/uncheck will effect allView, active and completed array
      * in all active and completed views
@@ -288,15 +274,115 @@
     /**
      * user is on active view, one todo left
      * user click checked to change todoCompleted to true
-     * run switch algorithm in allViewBtnClick func
-     * run func to create Li elements in allView array in cachedObj
+     * we will check the length of the array
+     * create and append listitem for the active array
+     * assign "All" to cachedObj.currentView
      * **/
     /**
      * user is on completed view, one todo item left
      * user click on checked btn to change todoCompleted to false
-     * run switch algorithm in allViewBtnClick func
-     * run func to create Li elements in allView array in cachedObj
+     * we will check the length of the array
+     * create and append listitem for the completed array
      * **/
+
+    /***** get todo listitem for un/checked btn  *****/
+
+    const todoListitemForActiveAndCompletedView = event.target.closest("li");
+
+    const checkedBtnAriaChecked = event.target.getAttribute("aria-checked");
+
+    if (checkedBtnAriaChecked == "false") {
+      // algorithm/func below will change todoCompleted of todo listitem in allView array
+      changeTodoItemToCompleted(todoListitemForActiveAndCompletedView);
+      // change digit to items left text
+      increaseOrDecreaseItemsLeftCounter("minus");
+    } else {
+      // algorithm/func below will change todoCompleted of todo listitem in allView array
+      changeTodoItemToNotCompleted(todoListitemForActiveAndCompletedView);
+      // change digit to items left text
+      increaseOrDecreaseItemsLeftCounter("add");
+    }
+
+    /***** work with allview,active and completed here *****/
+
+    // dont have to do anything to allView array
+    // just filter out completed and not completed todo
+
+    // active
+    cachedData.arraysOfDifferentViews.activeViewArray =
+      filterOutActiveTodoItems(cachedData.arraysOfDifferentViews.allViewArray);
+    // completed
+    cachedData.arraysOfDifferentViews.completedViewArray =
+      filterOutCompletedTodoItems(
+        cachedData.arraysOfDifferentViews.allViewArray
+      );
+
+    /**
+     * based on which view user is on
+     * **/
+
+    switch (cachedData.currentView) {
+      case "All":
+        // update attr and create listitem
+        const allView = assignAttrToArrayAndCreateListitem(
+          cachedData.arraysOfDifferentViews.allViewArray,
+          updateAttrForTodoItemCheckedAndDeleteBtn,
+          createChildrenForUnorderedList
+        );
+        // remove current listitems of ul and append listitems in fragment
+        removeCurrentListitemsAppendFragmentElement(unorderedList, allView);
+        break;
+      case "Active":
+        // update attr and create listitem
+        const activeView = assignAttrToArrayAndCreateListitem(
+          cachedData.arraysOfDifferentViews.activeViewArray,
+          updateAttrForTodoItemCheckedAndDeleteBtn,
+          createChildrenForUnorderedList
+        );
+        // remove current listitems of ul and append listitems in fragment
+        removeCurrentListitemsAppendFragmentElement(unorderedList, activeView);
+        // check length of active array to see if we have to add top border to views container
+        if (cachedData.arraysOfDifferentViews.activeViewArray.length >= 1) {
+          // run func to create and append elements in active array
+          addOrRemoveTopBorderToViewsContainer("true");
+        } else {
+          // run func to create and append elements in allView array
+
+          addOrRemoveTopBorderToViewsContainer("false");
+          switch (cachedData.currentView) {
+            case "Active":
+              event.target.nextElementSibling.removeAttribute(
+                "data-currentView"
+              );
+              break;
+            case "Completed":
+              event.target.nextElementSibling.nextElementSibling.removeAttribute(
+                "data-currentView"
+              );
+              break;
+          }
+        }
+
+        break;
+      case "Completed":
+        // update attr and create listitem
+        const completedView = assignAttrToArrayAndCreateListitem(
+          cachedData.arraysOfDifferentViews.completedViewArray,
+          updateAttrForTodoItemCheckedAndDeleteBtn,
+          createChildrenForUnorderedList
+        );
+        // remove current listitems of ul and append listitems in fragment
+        removeCurrentListitemsAppendFragmentElement(
+          unorderedList,
+          completedView
+        );
+        // check length of completed array to see if we have to add top border to views container
+        cachedData.arraysOfDifferentViews.completedViewArray >= 1
+          ? addOrRemoveTopBorderToViewsContainer("true")
+          : addOrRemoveTopBorderToViewsContainer("false");
+        break;
+    }
+
     console.log("checked");
   }
 
@@ -564,6 +650,12 @@
         filterOutActiveTodoItems(buildingAllViewArray);
       const buildingCompletedArray =
         filterOutCompletedTodoItems(buildingAllViewArray);
+      // assign built arrays to array in cachedObj
+      // active
+      cachedData.arraysOfDifferentViews.activeViewArray = buildingActiveArray;
+      // completed
+      cachedData.arraysOfDifferentViews.completedViewArray =
+        buildingCompletedArray;
       // save original order of allViewIndex for active and completed
       // active view
       originalAllViewIndexForElementsInActiveOrCompletedArray(
@@ -577,11 +669,64 @@
       );
       // run func based on currentView
       switch (cachedData.currentView) {
+        /**
+         * doesnt matter which view user is on
+         * we will always work with allView,active and completed array
+         * and active and completed allViewIndex array in cachedObj
+         * **/
         case "All":
+          // call func that will add attr to elements based on length of array
+          // then run func to create element
+          const allViewListitems = assignAttrToArrayAndCreateListitem(
+            cachedData.arraysOfDifferentViews.allViewArray,
+            updateAttrForTodoItemCheckedAndDeleteBtn,
+            createChildrenForUnorderedList,
+            true
+          );
+          // remove children of UL
+          // append listitems in fragment to UL
+          removeCurrentListitemsAppendFragmentElement(
+            unorderedList,
+            allViewListitems
+          );
+          // change value of data-unorderedhasitems on views-container to true
+          addOrRemoveTopBorderToViewsContainer("true");
+          // add one to items left text
+          increaseOrDecreaseItemsLeftCounter("add");
           break;
         case "Active":
+          // call func that will add attr to elements based on length of array
+          // then run func to create element
+          const activeListitems = assignAttrToArrayAndCreateListitem(
+            cachedData.arraysOfDifferentViews.activeViewArray,
+            updateAttrForTodoItemCheckedAndDeleteBtn,
+            createChildrenForUnorderedList
+          );
+          // remove children of UL
+          // append listitems in fragment to UL
+          removeCurrentListitemsAppendFragmentElement(
+            unorderedList,
+            activeListitems
+          );
+          // change value of data-unorderedhasitems on views-container to true
+          addOrRemoveTopBorderToViewsContainer("true");
+          // add one to items left text
+          increaseOrDecreaseItemsLeftCounter("add");
           break;
         case "Completed":
+          // call func that will add attr to elements based on length of array
+          // then run func to create element
+          const completedViewListitems = assignAttrToArrayAndCreateListitem(
+            cachedData.arraysOfDifferentViews.completedViewArray,
+            updateAttrForTodoItemCheckedAndDeleteBtn,
+            createChildrenForUnorderedList
+          );
+          // remove children of UL
+          // append listitems in fragment to UL
+          removeCurrentListitemsAppendFragmentElement(
+            unorderedList,
+            completedViewListitems
+          );
           break;
       }
       console.log(cachedData);
@@ -610,7 +755,7 @@
         todoItem,
         ...copiedAllViewArr,
       ];
-      assignAllViewIndexAndGrabDragIndexToElementsInAllViewArr(
+      assignAllViewIndexElementsInAllViewArr(
         cachedData.arraysOfDifferentViews.allViewArray
       );
       return cachedData.arraysOfDifferentViews.allViewArray;
@@ -831,15 +976,28 @@
    * call this func before we run func to create element and append to fragment element
    * **/
 
-  function updateAttrForTodoItemCheckedAndDeleteBtn(collection) {
+  function updateAttrForTodoItemCheckedAndDeleteBtn(
+    collection,
+    updateAllViewIndex
+  ) {
     // loop through array
     collection.forEach(function updateValuesToAttr(listitem, index) {
-      // user is on "All" views
-      cachedData.currentView == "All"
+      // user is on "All" views and we want to update allViewIndex
+      // updateAllViewIndex will be boolean value true or undefined
+      // if (updateAllViewIndex) {
+      //   cachedData.currentView == "All"
+      //     ? (listitem.attributes["data-allViewIndex"].value = String(index))
+      //     : null;
+      // }
+      /*** we want to update allViewIndex
+       * instead of checking views we will let this algorithm know if we want to
+       * update allViewIndex
+       * ***/
+      updateAllViewIndex
         ? (listitem.attributes["data-allViewIndex"].value = String(index))
         : null;
       // user is on "Active" or "Completed" view
-      listitem.attributes["grabbedItemDataIndex"].value = String(index);
+      listitem.attributes["data-grabDragIndex"].value = String(index);
       // checked btn
       listitem.firstElementChild.children[0].firstElementChild.attributes[
         "aria-labelledby"
@@ -863,10 +1021,10 @@
    * when we create a todo item
    * **/
 
-  function assignAllViewIndexAndGrabDragIndexToElementsInAllViewArr(list) {
+  function assignAllViewIndexElementsInAllViewArr(list) {
     list.forEach(function assignValueToAttr(listitem, index) {
       listitem.setAttribute("data-allviewindex", String(index));
-      listitem.setAttribute("data-grabdragindex", String(index));
+      // listitem.setAttribute("data-grabdragindex", String(index));
     });
   }
 
@@ -958,11 +1116,164 @@
   function createChildrenForUnorderedList(list) {
     var fragment = new DocumentFragment();
     // append listitems to fragment;
-    list.forEach(function appendItems(element, index) {
+    list.forEach(function appendItems(element) {
       fragment.appendChild(element);
       // element.attributes["data-index"].value = String(index);
     });
     return fragment;
+  }
+
+  /**
+   * assignAttrToArrayAndCreateListitem
+   * **/
+
+  function assignAttrToArrayAndCreateListitem(
+    array,
+    firstFunc,
+    secondFunc,
+    ...rest
+  ) {
+    const copiedArray = [...array];
+    // assign attr
+    firstFunc(copiedArray, ...rest);
+    console.log(rest);
+    // create listitem element
+    // algorithm below returns a fragment element with listitem as children
+    return secondFunc(copiedArray);
+  }
+
+  /**
+   * removeCurrentListitemsAppendFragmentElement
+   * **/
+
+  function removeCurrentListitemsAppendFragmentElement(element, array) {
+    // remove children
+    element.replaceChildren();
+    // append fragment
+    element.append(array);
+  }
+
+  /**
+   * change items left
+   * **/
+
+  function increaseOrDecreaseItemsLeftCounter(strInput) {
+    const digitElementForItemsLeft = document.querySelector(".views-counter");
+    const counterTextContent = digitElementForItemsLeft.innerText;
+    var convertToNumber = Number(counterTextContent);
+    switch (strInput) {
+      case "add":
+        convertToNumber++;
+        break;
+      case "minus":
+        counterTextContent === "" || counterTextContent === "0"
+          ? (counterTextContent.innerText = "0")
+          : convertToNumber--;
+        break;
+    }
+    // assign value to item left element
+    digitElementForItemsLeft.innerText = String(convertToNumber);
+  }
+
+  /**
+   * add or remove top border
+   * **/
+
+  function addOrRemoveTopBorderToViewsContainer(strInput) {
+    document
+      .querySelector("views-container")
+      .setAttribute("data-unorderedhasitems", strInput);
+  }
+
+  /**
+   * change attr to show todo is completed
+   * checked btn aria-checked to true
+   * div with class circle-testing to true
+   * li todo item data-todocompleted to true
+   * **/
+
+  function changeTodoItemToCompleted(todoListItem) {
+    // get todo Li element allViewIndex
+    const todoOfClickedCheckedBtnAllViewIndexInActiveView = Number(
+      todoListItem.getAttribute("data-allViewIndex")
+    );
+    // change attr to make it completed for that todo in the allView array
+    const matchingAllViewIndexItemInAllViewArray =
+      cachedData.arraysOfDifferentViews.allViewArray[
+        todoOfClickedCheckedBtnAllViewIndexInActiveView
+      ];
+    // todo item with todoCompleted
+    matchingAllViewIndexItemInAllViewArray.setAttribute(
+      "data-todocompleted",
+      "true"
+    );
+    // div with circle-testing
+    matchingAllViewIndexItemInAllViewArray.firstElementChild.setAttribute(
+      "data-checked",
+      "true"
+    );
+    // checked btn
+    matchingAllViewIndexItemInAllViewArray.firstElementChild.children[0].setAttribute(
+      "aria-checked",
+      "true"
+    );
+  }
+
+  /**
+   * change attr to show todo is not completed
+   * checked btn aria-checked to false
+   * div with class circle-testing to false
+   * li todo item data-todocompleted to false
+   * **/
+
+  function changeTodoItemToNotCompleted(todoListItem) {
+    // get todo Li element allViewIndex
+    const todoOfClickedCheckedBtnAllViewIndexInActiveView = Number(
+      todoListItem.getAttribute("data-allViewIndex")
+    );
+    // change attr to make it completed for that todo in the allView array
+    const matchingAllViewIndexItemInAllViewArray =
+      cachedData.arraysOfDifferentViews.allViewArray[
+        todoOfClickedCheckedBtnAllViewIndexInActiveView
+      ];
+    // todo item with todoCompleted
+    matchingAllViewIndexItemInAllViewArray.setAttribute(
+      "data-todocompleted",
+      "false"
+    );
+    // div with circle-testing
+    matchingAllViewIndexItemInAllViewArray.firstElementChild.setAttribute(
+      "data-checked",
+      "false"
+    );
+    // checked btn
+    matchingAllViewIndexItemInAllViewArray.firstElementChild.children[0].setAttribute(
+      "aria-checked",
+      "false"
+    );
+  }
+
+  /**
+   * apply attr data-currentView to all view btn element depending on the
+   * width of app
+   * algorithm is for when we want to go to "All" view after used clicked on
+   * un/checked btn and delete btn
+   * we want to find btn with data-currentView work from there
+   * **/
+
+  function applyDataCurrentViewAttrToBtn() {
+    const windowWidth = window.innerWidth;
+    if (windowWidth > 385) {
+      // desktop
+      document
+        .querySelector(".desktop-btn-all")
+        .setAttribute("data-currentView", "");
+    } else {
+      // mobile
+      document
+        .querySelector(".mobile-btn-all")
+        .setAttribute("data-currentView", "");
+    }
   }
 
   /**
@@ -998,7 +1309,9 @@
   function ourSelectors() {
     // main element
     const mainElement = document.querySelector("[role='main']");
-    // toglle button
+    // unorderedList
+    const unorderedList = document.querySelector(".list-style-wrapper > ul");
+    // toggle button
     const toggleThemeBtn = document.querySelector(".toggle-btn");
     // checked btn
     const checkedBtn = Array.prototype.slice.call(
@@ -1006,6 +1319,7 @@
     );
     return {
       mainElement,
+      unorderedList,
       toggleThemeBtn,
       checkedBtn,
     };
