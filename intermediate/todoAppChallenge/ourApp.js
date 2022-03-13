@@ -333,53 +333,181 @@
         removeCurrentListitemsAppendFragmentElement(unorderedList, allView);
         break;
       case "Active":
-        // update attr and create listitem
-        const activeView = assignAttrToArrayAndCreateListitem(
-          cachedData.arraysOfDifferentViews.activeViewArray,
-          updateAttrForTodoItemCheckedAndDeleteBtn,
-          createChildrenForUnorderedList
-        );
-        // remove current listitems of ul and append listitems in fragment
-        removeCurrentListitemsAppendFragmentElement(unorderedList, activeView);
         // check length of active array to see if we have to add top border to views container
+        // and which array we will render: active or allView
         if (cachedData.arraysOfDifferentViews.activeViewArray.length >= 1) {
-          // run func to create and append elements in active array
-          addOrRemoveTopBorderToViewsContainer("true");
+          // update attr and create listitem
+          // const activeView = assignAttrToArrayAndCreateListitem(
+          //   cachedData.arraysOfDifferentViews.activeViewArray,
+          //   updateAttrForTodoItemCheckedAndDeleteBtn,
+          //   createChildrenForUnorderedList
+          // );
+          // // remove current listitems of ul and append listitems in fragment
+          // // run func to create and append elements in active array
+          // removeCurrentListitemsAppendFragmentElement(
+          //   unorderedList,
+          //   activeView
+          // );
+          // if (
+          //   document
+          //     .querySelector("views-container")
+          //     .getAttribute("data-unorderedhasitems") == "false"
+          // ) {
+          //   addOrRemoveTopBorderToViewsContainer("true");
+          //   // we will still be on active view. we dont have to go to allView
+          //   // views container should have data-unorderedhasitems set to "true"
+          //   // if "false" is assigned to it change it to "true"
+          // }
+          /**
+           * move algorithm above to func. we plan to use more than one
+           * **/
+          dependingOnViewCreateAndAppendListitems(
+            cachedData.arraysOfDifferentViews.activeViewArray,
+            unorderedList,
+            document.querySelector("views-container"),
+            assignAttrToArrayAndCreateListitem,
+            removeCurrentListitemsAppendFragmentElement,
+            addOrRemoveTopBorderToViewsContainer
+          );
         } else {
+          // active view array will be empty
           // run func to create and append elements in allView array
-
-          addOrRemoveTopBorderToViewsContainer("false");
-          switch (cachedData.currentView) {
-            case "Active":
-              event.target.nextElementSibling.removeAttribute(
-                "data-currentView"
-              );
-              break;
-            case "Completed":
-              event.target.nextElementSibling.nextElementSibling.removeAttribute(
-                "data-currentView"
-              );
-              break;
-          }
+          // const goToAllViewArray = assignAttrToArrayAndCreateListitem(
+          //   cachedData.arraysOfDifferentViews.allViewArray,
+          //   updateAttrForTodoItemCheckedAndDeleteBtn,
+          //   createChildrenForUnorderedList
+          // );
+          // // remove current listitems of ul and append listitems in fragment
+          // removeCurrentListitemsAppendFragmentElement(
+          //   unorderedList,
+          //   goToAllViewArray
+          // );
+          // algorithm in if statement conditional check will return string or null
+          // if we wanted to keep user on active view after assign checked = true for checked btn
+          // we can remove top border by assign "false" to data-unorderedhasitems
+          // since we are going to all view, there will already be a top border style applied to views container
+          // if (
+          //   document
+          //     .querySelector("views-container")
+          //     .getAttribute("data-unorderedhasitems")
+          // )
+          //   addOrRemoveTopBorderToViewsContainer("false");
+          // we want to find current views btn with attr data-currentview
+          // which should be Active btn, remove it on that element / btn
+          // document
+          //   .querySelector("button[data-currentView]")
+          //   .removeAttribute("data-currentview");
+          // // apply it to its previous sibling
+          // document
+          //   .querySelector("button[data-currentView]")
+          //   .previousElementSibling.setAttribute("data-currentview", "");
+          // // assign "All" to cachedObj.currentView
+          // cachedData.currentView = "All";
+          /**
+           * move algorithm above to func. we plan to use more than one
+           * **/
+          const currentViewBtn = document.querySelector(
+            "button[data-currentView]"
+          );
+          appendAllViewElementsAndChangeToAllView(
+            cachedData.arraysOfDifferentViews.allViewArray,
+            assignAttrToArrayAndCreateListitem,
+            removeCurrentListitemsAppendFragmentElement,
+            currentViewBtn,
+            currentViewBtn.previousElementSibling,
+            unorderedList
+          );
         }
-
         break;
       case "Completed":
-        // update attr and create listitem
-        const completedView = assignAttrToArrayAndCreateListitem(
-          cachedData.arraysOfDifferentViews.completedViewArray,
-          updateAttrForTodoItemCheckedAndDeleteBtn,
-          createChildrenForUnorderedList
-        );
-        // remove current listitems of ul and append listitems in fragment
-        removeCurrentListitemsAppendFragmentElement(
-          unorderedList,
-          completedView
-        );
         // check length of completed array to see if we have to add top border to views container
-        cachedData.arraysOfDifferentViews.completedViewArray >= 1
-          ? addOrRemoveTopBorderToViewsContainer("true")
-          : addOrRemoveTopBorderToViewsContainer("false");
+        // and which array we will render: completed or allView
+        if (cachedData.arraysOfDifferentViews.completedViewArray.length >= 1) {
+          // update attr and create listitem
+          // const completedView = assignAttrToArrayAndCreateListitem(
+          //   cachedData.arraysOfDifferentViews.completedViewArray,
+          //   updateAttrForTodoItemCheckedAndDeleteBtn,
+          //   createChildrenForUnorderedList
+          // );
+          // // remove current listitems of ul and append listitems in fragment
+          // // run func to create and append elements in completed array
+          // removeCurrentListitemsAppendFragmentElement(
+          //   unorderedList,
+          //   completedView
+          // );
+          // if (
+          //   document
+          //     .querySelector("views-container")
+          //     .getAttribute("data-unorderedhasitems") == "false"
+          // ) {
+          //   addOrRemoveTopBorderToViewsContainer("true");
+          //   // we will still be on completed view. we dont have to go to allView
+          //   // views container should have data-unorderedhasitems set to "true"
+          //   // if "false" is assigned to it change it to "true"
+          // }
+          /**
+           * move algorithm above to func. we plan to use more than one
+           * **/
+          dependingOnViewCreateAndAppendListitems(
+            cachedData.arraysOfDifferentViews.completedViewArray,
+            unorderedList,
+            document.querySelector("views-container"),
+            assignAttrToArrayAndCreateListitem,
+            removeCurrentListitemsAppendFragmentElement,
+            addOrRemoveTopBorderToViewsContainer
+          );
+        } else {
+          // completed view array will be empty
+          // run func to create and append elements in allView array
+          // const goToAllViewArray = assignAttrToArrayAndCreateListitem(
+          //   cachedData.arraysOfDifferentViews.allViewArray,
+          //   updateAttrForTodoItemCheckedAndDeleteBtn,
+          //   createChildrenForUnorderedList
+          // );
+          // // remove current listitems of ul and append listitems in fragment
+          // removeCurrentListitemsAppendFragmentElement(
+          //   unorderedList,
+          //   goToAllViewArray
+          // );
+          // algorithm in if statement conditional check will return string or null
+          // if we wanted to keep user on completed view after assign checked = true for checked btn
+          // we can remove top border by assign "false" to data-unorderedhasitems
+          // since we are going to all view, there will already be a top border style applied to views container
+          // if (
+          //   document
+          //     .querySelector("views-container")
+          //     .getAttribute("data-unorderedhasitems")
+          // )
+          //   addOrRemoveTopBorderToViewsContainer("false");
+          // we want to find current views btn with attr data-currentview
+          // which should be completed btn, remove it on that element / btn
+          // document
+          //   .querySelector("button[data-currentView]")
+          //   .removeAttribute("data-currentview");
+          // // apply it to its previous previous sibling
+          // document
+          //   .querySelector("button[data-currentView]")
+          //   .previousElementSibling.previousElementSibling.setAttribute(
+          //     "data-currentview",
+          //     ""
+          //   );
+          // // assign "All" to cachedObj.currentView
+          // cachedData.currentView = "All";
+          /**
+           * move algorithm above to func. we plan to use more than one
+           * **/
+          const currentViewBtn = document.querySelector(
+            "button[data-currentView]"
+          );
+          appendAllViewElementsAndChangeToAllView(
+            cachedData.arraysOfDifferentViews.allViewArray,
+            assignAttrToArrayAndCreateListitem,
+            removeCurrentListitemsAppendFragmentElement,
+            currentViewBtn,
+            currentViewBtn.previousElementSibling.previousElementSibling,
+            unorderedList
+          );
+        }
         break;
     }
 
@@ -413,6 +541,22 @@
      * we assign length = 0 to allView,active,completed, active allViewIndex, completed allViewIndex
      * arrays in cachedObj to make arrays empty
      * **/
+    /**
+     * work with all view array. filter out completed and not completed items
+     * run our algorithm based on curent view user is on
+     * **/
+    /**
+     * run algorithm based on current view
+     * **/
+
+    switch (cachedData.currentView) {
+      case "All":
+        break;
+      case "Active":
+        break;
+      case "Completed":
+        break;
+    }
     console.log(event.target.parentElement.parentElement);
     console.log("delete");
   }
@@ -1274,6 +1418,55 @@
         .querySelector(".mobile-btn-all")
         .setAttribute("data-currentView", "");
     }
+  }
+
+  /**
+   * dependingOnViewCreateAndAppendListitems
+   * **/
+
+  function dependingOnViewCreateAndAppendListitems(
+    array,
+    listitemParent,
+    viewsContainer,
+    assignAttrFunc,
+    removeListitemFunc,
+    topBorderFunc
+  ) {
+    const currentViewArray = assignAttrFunc(
+      array,
+      updateAttrForTodoItemCheckedAndDeleteBtn,
+      createChildrenForUnorderedList
+    );
+    removeListitemFunc(listitemParent, currentViewArray);
+    if (viewsContainer.getAttribute("data-unorderedhasitems") == "false") {
+      topBorderFunc("true");
+    }
+  }
+
+  /**
+   * appendAllViewElementsAndChangeToAllView
+   * **/
+
+  function appendAllViewElementsAndChangeToAllView(
+    array,
+    assignFunc,
+    removeCurrentFunc,
+    currentView,
+    previousSibling,
+    todoItemParent
+  ) {
+    const showAllView = assignFunc(
+      array,
+      updateAttrForTodoItemCheckedAndDeleteBtn,
+      createChildrenForUnorderedList
+    );
+    removeCurrentFunc(todoItemParent, showAllView);
+    currentView.removeAttribute("data-currentview");
+    previousSibling.setAttribute("data-currentview", "");
+    // assign "All" to cachedObj.currentView
+    cachedData.currentView = "All";
+    // focus first element of todo list
+    todoItemParent.children[0].focus();
   }
 
   /**

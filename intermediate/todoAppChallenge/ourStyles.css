@@ -852,7 +852,8 @@ and button with aria-checked attr to true when user click on checked-btn
 
 /* focus ring for both mobile and desktop */
 
-[data-draggedSelected="true"]:focus {
+[data-draggedSelected="true"]:focus,
+[data-draggedSelected="true"] {
   outline: none;
   /* dark */
   box-shadow: inset 0 0 0 5px var(--color-primary-bright-blue);
