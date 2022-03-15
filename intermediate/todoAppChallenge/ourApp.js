@@ -288,6 +288,11 @@
     /***** get todo listitem for un/checked btn  *****/
 
     const todoListitemForActiveAndCompletedView = event.target.closest("li");
+    // when user click on checked or delete button we want to get
+    // all view index and array index of the closet li of the checked or delete btn
+    const [allViewIndex, arrayIndex] = getAllViewAndCurrentArrayIndexOfTodoItem(
+      todoListitemForActiveAndCompletedView
+    );
 
     const checkedBtnAriaChecked = event.target.getAttribute("aria-checked");
 
@@ -323,6 +328,8 @@
 
     switch (cachedData.currentView) {
       case "All":
+        // clicking on checked btn in all view
+        // will apply focus to that li of that checked btn that was clicked
         // update attr and create listitem
         const allView = assignAttrToArrayAndCreateListitem(
           cachedData.arraysOfDifferentViews.allViewArray,
@@ -331,6 +338,7 @@
         );
         // remove current listitems of ul and append listitems in fragment
         removeCurrentListitemsAppendFragmentElement(unorderedList, allView);
+        // once we append the listitems we can run algorithm to focus listitem
         break;
       case "Active":
         // check length of active array to see if we have to add top border to views container
@@ -369,6 +377,12 @@
             removeCurrentListitemsAppendFragmentElement,
             addOrRemoveTopBorderToViewsContainer
           );
+          // once we append the listitems we can run algorithm to focus listitem
+          // for both active and completed the arrayIndex will never be
+          // greater than length of active or complete array in cachedObj
+          // if arrayIndex < length of active array, use arrayIndex to get listitem in array and focus that element
+          // if arrayIndex == length of active array, focus first item in active array
+          // use switch statement
         } else {
           // active view array will be empty
           // run func to create and append elements in allView array
@@ -417,6 +431,8 @@
             currentViewBtn.previousElementSibling,
             unorderedList
           );
+          // once we append the listitems we can run algorithm to focus listitem
+          // focus first item in all view array
         }
         break;
       case "Completed":
@@ -456,6 +472,12 @@
             removeCurrentListitemsAppendFragmentElement,
             addOrRemoveTopBorderToViewsContainer
           );
+          // once we append the listitems we can run algorithm to focus listitem
+          // for both active and completed the arrayIndex will never be
+          // greater than length of active or completed array in cachedObj
+          // if arrayIndex < length of completed array, use arrayIndex to get listitem in array and focus that element
+          // if arrayIndex == length of completed array, focus first item in completed array
+          // use switch statement
         } else {
           // completed view array will be empty
           // run func to create and append elements in allView array
@@ -507,6 +529,8 @@
             currentViewBtn.previousElementSibling.previousElementSibling,
             unorderedList
           );
+          // once we append the listitems we can run algorithm to focus listitem
+          // focus first item in all view array
         }
         break;
     }
@@ -893,6 +917,17 @@
       // change first item in that array tabIndex to -1
       const [firstAllViewItem] = copiedAllViewArr;
       firstAllViewItem.setAttribute("tabindex", "-1");
+      // assign tabindex="-1" to checked btn and delete btn to make them not focusable
+      // checked btn
+      firstAllViewItem.firstElementChild.children[0].firstElementChild.setAttribute(
+        "tabindex",
+        -1
+      );
+      // delete btn
+      firstAllViewItem.firstElementChild.children[2].setAttribute(
+        "tabindex",
+        -1
+      );
       // add newly todo item to allView array;
       // more than one item in allView array assign allviewindex and grabdragindex
       cachedData.arraysOfDifferentViews.allViewArray = [
@@ -1395,6 +1430,23 @@
       "aria-checked",
       "false"
     );
+  }
+
+  /**
+   * get allView index and current view array index of li
+   * parent element of checked or delete btn user clicked on
+   * **/
+
+  function getAllViewAndCurrentArrayIndexOfTodoItem(listitem) {
+    //target will be either checked or delete button
+    // const todoListitemOfCheckedAndDeleteBtn = target.closest("li");
+    // allview index
+    const allViewIndex = listitem.getAttribute("data-allViewIndex");
+    // current view array index
+    const currentViewArrayIndex = listitem.getAttribute("data-grabDragIndex");
+    // data-grabDragIndex will be based on the items in the all,active or completed array
+    // in cachedObj
+    return [allViewIndex, currentViewArrayIndex];
   }
 
   /**
