@@ -852,15 +852,32 @@ and button with aria-checked attr to true when user click on checked-btn
 
 /* focus ring for both mobile and desktop */
 
+/* using different selector
+
 [data-draggedSelected="true"]:focus,
-[data-draggedSelected="true"] {
+[data-draggedSelected="true"]
+*/
+
+[data-draggedSelected="true"]:focus-within {
   outline: none;
   /* dark */
   box-shadow: inset 0 0 0 5px var(--color-primary-bright-blue);
   /* light */
   /* box-shadow: inset 0 0 0 2px var(--color-darktheme-todo-list-bg); */
 }
-[data-draggedSelected="false"]:focus {
+
+/* using different selector
+[data-draggedSelected="false"]
+*/
+
+/* when the TODO item does not have drag selected true
+but user is using keyboard up and down key to move up and down the list of todos
+that todo will have focus ring even when the user tab to checked and delete btn of
+that todo
+*/
+
+/* [data-draggedSelected="false"]:focus, */
+[data-draggedSelected="false"]:focus-within {
   outline: none;
   /* dark */
   box-shadow: inset 0 0 0 2px var(--color-primary-bright-blue);
