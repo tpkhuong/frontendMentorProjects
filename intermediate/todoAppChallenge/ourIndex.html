@@ -33,7 +33,7 @@
           <button
             class="toggle-btn"
             role="button"
-            user-clicked="false"
+            aria-pressed="false"
             aria-label="dark theme or light theme toggle"
           >
             <img src="./images/icon-moon.svg" alt="" />
@@ -103,8 +103,8 @@
             </p>
             <p>
               Hitting enter or space key on either Active view or completed
-              view, will apply focus to the TO DO item one position lower than
-              previous focused TO DO item.
+              view, will turn off drag mode and apply focus to the TO DO item
+              one position lower than previous focused TO DO item.
             </p>
             <p>
               If the TO DO item is the item at the bottom of the list in either
@@ -530,7 +530,7 @@
                     </button>
                   </div>
                   <!-- todo text -->
-                  <p>Complete Frontend Menter</p>
+                  <p>Complete Frontend Mentor</p>
                   <!-- delete button -->
                   <button
                     aria-labelledby="delete-todo-10 todo-item-10"
