@@ -116,6 +116,11 @@
     const mainElementClass = document.body.getAttribute("class");
     changeClassThemeOnMainElement(mainElementClass);
     toggleDarkAndLightThemeImage(mainElementClass);
+    // check if aria-pressed is false
+    const toggleBtnAriaPressed = this.getAttribute("aria-pressed");
+    toggleBtnAriaPressed == "false"
+      ? this.setAttribute("aria-pressed", "true")
+      : this.setAttribute("aria-pressed", "false");
   }
 
   // change main element theme class on toggle btn clicks
@@ -203,29 +208,7 @@
 
   // todo list item
 
-  function todoListitemClicked(event) {
-    // assign the value of "true" to clicked todo item data-draggedSelected
-    // assign value "false" to previous focus element
-    // assign value '-1" to previous focus element
-    // assign value "0" to clicked todo item
-    // apply focus to clicked todo item
-    const [previousFocusedElement] = [
-      ...event.target.closest("ul").children,
-    ].filter(function findElementWithTabIndexZero(listitem) {
-      const elementTabindex = listitem.getAttribute("tabindex");
-      return elementTabindex === "0";
-    });
-    if (cachedData.draggedItemSelected) {
-      // previousFocusedElement will have tabindex "0" and data-draggedSelected = "true"
-      previousFocusedElement.setAttribute("data-draggedSelected", "false");
-      event.target.parentElement.setAttribute("data-draggedSelected", "true");
-    }
-    // when user click on list item, we want to assign value "0" to that list item
-    // and assign value of "-1" to the previous list item that had tabindex "0"
-    previousFocusedElement.setAttribute("tabindex", "-1");
-    event.target.parentElement.setAttribute("tabindex", "0");
-    event.target.parentElement.focus();
-  }
+  function todoListitemClicked(event) {}
 
   // checked btn
 
@@ -287,23 +270,27 @@
 
     /***** get todo listitem for un/checked btn  *****/
 
-    const todoListitemForActiveAndCompletedView = event.target.closest("li");
+    const todoListitemOfClickedCheckedOrDeleteBtn = event.target.closest("li");
     // when user click on checked or delete button we want to get
     // all view index and array index of the closet li of the checked or delete btn
     const [allViewIndex, arrayIndex] = getAllViewAndCurrentArrayIndexOfTodoItem(
-      todoListitemForActiveAndCompletedView
+      todoListitemOfClickedCheckedOrDeleteBtn
     );
+    // also want to get the todo listitem tabindex it will be either "0" or "-1"
+    // for active and completed view
+    const todoItemTabIndex =
+      todoListitemOfClickedCheckedOrDeleteBtn.getAttribute("tabindex");
 
     const checkedBtnAriaChecked = event.target.getAttribute("aria-checked");
 
     if (checkedBtnAriaChecked == "false") {
       // algorithm/func below will change todoCompleted of todo listitem in allView array
-      changeTodoItemToCompleted(todoListitemForActiveAndCompletedView);
+      changeTodoItemToCompleted(allViewIndex);
       // change digit to items left text
       increaseOrDecreaseItemsLeftCounter("minus");
     } else {
       // algorithm/func below will change todoCompleted of todo listitem in allView array
-      changeTodoItemToNotCompleted(todoListitemForActiveAndCompletedView);
+      changeTodoItemToNotCompleted(allViewIndex);
       // change digit to items left text
       increaseOrDecreaseItemsLeftCounter("add");
     }
@@ -339,6 +326,14 @@
         // remove current listitems of ul and append listitems in fragment
         removeCurrentListitemsAppendFragmentElement(unorderedList, allView);
         // once we append the listitems we can run algorithm to focus listitem
+        // of the checked btn that was clicked
+        /**
+         * might have to use unorderedList.children[arrayIndex] pass in that listitem to
+         * applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked
+         * **/
+        applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
+          unorderedList.children[arrayIndex]
+        );
         break;
       case "Active":
         // check length of active array to see if we have to add top border to views container
@@ -377,12 +372,38 @@
             removeCurrentListitemsAppendFragmentElement,
             addOrRemoveTopBorderToViewsContainer
           );
+          // we also will check if the listitem of the clicked checked btn
+          // tabindex = "0"
           // once we append the listitems we can run algorithm to focus listitem
           // for both active and completed the arrayIndex will never be
           // greater than length of active or complete array in cachedObj
           // if arrayIndex < length of active array, use arrayIndex to get listitem in array and focus that element
           // if arrayIndex == length of active array, focus first item in active array
           // use switch statement
+          if (todoItemTabIndex == "0") {
+            // getting here means the todo item of the clicked checked btn has focused
+            // we want to apply focus to the listitem that is lower on the todo list
+            // also no listitem will have tabindex = "0" run applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked
+            const firstTodoItem = unorderedList.children[0];
+            arrayIndex == unorderedList.childElementCount
+              ? applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
+                  firstTodoItem
+                )
+              : applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
+                  unorderedList.children[arrayIndex]
+                );
+          } else {
+            // getting here means the todo item of the clicked checked btn does not have focused
+            // its tabindex will be "-1"
+            // we will find the listitem with tabindex of "0" and apply focus to that
+            const [listitemHasTabindexZero] = unorderedList.children.filter(
+              function findTabIndexZero(listitem) {
+                const tabindexOfTodo = listitem.getAttribute("tabindex");
+                return tabindexOfTodo === "0";
+              }
+            );
+            listitemHasTabindexZero.focus();
+          }
         } else {
           // active view array will be empty
           // run func to create and append elements in allView array
@@ -433,6 +454,7 @@
           );
           // once we append the listitems we can run algorithm to focus listitem
           // focus first item in all view array
+          unorderedList.children[0];
         }
         break;
       case "Completed":
@@ -472,6 +494,8 @@
             removeCurrentListitemsAppendFragmentElement,
             addOrRemoveTopBorderToViewsContainer
           );
+          // we also will check if the listitem of the clicked checked btn
+          // tabindex = "0"
           // once we append the listitems we can run algorithm to focus listitem
           // for both active and completed the arrayIndex will never be
           // greater than length of active or completed array in cachedObj
@@ -1196,6 +1220,75 @@
   }
 
   /**
+   * change data-dragselect to true or false
+   * make this work with event.target and todo listitem
+   * we will pass in the event.target or todo listitem
+   * **/
+
+  function applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
+    target
+  ) {
+    /**
+     * at least one todo item will have tabindex = "0"
+     * **/
+    // assign the value of "true" to clicked todo item data-draggedSelected
+    // assign value "false" to previous focus element
+    // assign value '-1" to previous focus element
+    // assign value "0" to clicked todo item
+    // apply focus to clicked todo item
+    /**
+     * we want this func to work for checked and delete btn of todo item
+     * **/
+    // previousFocusedElement will be a listitem
+    /** const clickedElementTagName = event.target.tagName;
+     * (clickedElementTagName == "LI" || clickedElementTagName == "BUTTON")
+     * work together code in () is for if statement
+     * **/
+    /**
+     * making this func work with event.target and todo listitem
+     * **/
+    const tabIndexOfTodoItemOfClickedCheckedBtnAndListitem = target
+      .closest("li")
+      .getAttribute("tabindex");
+    /**
+     * conditional check below is for when user click on checked btn with a mouse
+     * because for keyboard users when they have checked btn focused and hit enter or space key
+     * the current todo item will be focused or if drag is selected is true will have larger
+     * box-shadow around border
+     * **/
+    /**
+     * we could just check if the tabindex of todo item of checked btn clicked
+     * does not equal !== "0"
+     * **/
+    if (tabIndexOfTodoItemOfClickedCheckedBtnAndListitem !== "0") {
+      const [previousFocusedElement] = [
+        ...target.closest("ul").children,
+      ].filter(function findElementWithTabIndexZero(listitem) {
+        const elementTabindex = listitem.getAttribute("tabindex");
+        return elementTabindex === "0";
+      });
+      /**
+       * using event.target.closest("li"). when user click on checked btn or todo listitem
+       * we will target the li ancestor element of clicked element
+       * **/
+      if (cachedData.draggedItemSelected) {
+        // previousFocusedElement will have tabindex "0" and data-draggedSelected = "true"
+        previousFocusedElement.setAttribute("data-draggedSelected", "false");
+        target.closest("li").setAttribute("data-draggedSelected", "true");
+      }
+      // when user click on list item, we want to assign value "0" to that list item
+      // and assign value of "-1" to the previous list item that had tabindex "0"
+      previousFocusedElement.setAttribute("tabindex", "-1");
+      target.closest("li").setAttribute("tabindex", "0");
+      target.closest("li").focus();
+    }
+  }
+
+  /**
+   *
+   * **/
+
+  /**
    * assign data-allviewindex and data-grabdragindex for elements in allView array
    * when we create a todo item
    * **/
@@ -1371,16 +1464,24 @@
    * li todo item data-todocompleted to true
    * **/
 
-  function changeTodoItemToCompleted(todoListItem) {
+  function changeTodoItemToCompleted(allViewArrayIndex) {
     // get todo Li element allViewIndex
-    const todoOfClickedCheckedBtnAllViewIndexInActiveView = Number(
-      todoListItem.getAttribute("data-allViewIndex")
-    );
+    // const todoOfClickedCheckedBtnAllViewIndexInActiveView = Number(
+    //   todoListItem.getAttribute("data-allViewIndex")
+    // );
     // change attr to make it completed for that todo in the allView array
+    // const matchingAllViewIndexItemInAllViewArray =
+    //   cachedData.arraysOfDifferentViews.allViewArray[
+    //     todoOfClickedCheckedBtnAllViewIndexInActiveView
+    //   ];
+    /**
+     * another approach where we use a different func to get allViewArray index
+     * of todo item that had its aria-checked attr change to true
+     * **/
+
     const matchingAllViewIndexItemInAllViewArray =
-      cachedData.arraysOfDifferentViews.allViewArray[
-        todoOfClickedCheckedBtnAllViewIndexInActiveView
-      ];
+      cachedData.arraysOfDifferentViews.allViewArray[allViewArrayIndex];
+
     // todo item with todoCompleted
     matchingAllViewIndexItemInAllViewArray.setAttribute(
       "data-todocompleted",
@@ -1405,16 +1506,18 @@
    * li todo item data-todocompleted to false
    * **/
 
-  function changeTodoItemToNotCompleted(todoListItem) {
+  function changeTodoItemToNotCompleted(allViewArrayIndex) {
     // get todo Li element allViewIndex
-    const todoOfClickedCheckedBtnAllViewIndexInActiveView = Number(
-      todoListItem.getAttribute("data-allViewIndex")
-    );
+    // const todoOfClickedCheckedBtnAllViewIndexInActiveView = Number(
+    //   todoListItem.getAttribute("data-allViewIndex")
+    // );
+    /**
+     * another approach where we use a different func to get allViewArray index
+     * of todo item that had its aria-checked attr change to false
+     * **/
     // change attr to make it completed for that todo in the allView array
     const matchingAllViewIndexItemInAllViewArray =
-      cachedData.arraysOfDifferentViews.allViewArray[
-        todoOfClickedCheckedBtnAllViewIndexInActiveView
-      ];
+      cachedData.arraysOfDifferentViews.allViewArray[allViewArrayIndex];
     // todo item with todoCompleted
     matchingAllViewIndexItemInAllViewArray.setAttribute(
       "data-todocompleted",
