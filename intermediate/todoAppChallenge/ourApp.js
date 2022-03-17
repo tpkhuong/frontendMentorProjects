@@ -270,16 +270,22 @@
 
     /***** get todo listitem for un/checked btn  *****/
 
-    const todoListitemOfClickedCheckedOrDeleteBtn = event.target.closest("li");
+    const todoListitemOfClickedCheckedBtn = event.target.closest("li");
+    // get index of listitem with tabindex == "0"
+    // we want to use the index because we will use it after we mutate the all view array
+    // algorithm below is to switch focus on previous todo item to current clicked todo item
+    const indexOfELementWithTabindexZero = getIndexOfElementWithTabindexZero(
+      unorderedList.children
+    );
     // when user click on checked or delete button we want to get
     // all view index and array index of the closet li of the checked or delete btn
     const [allViewIndex, arrayIndex] = getAllViewAndCurrentArrayIndexOfTodoItem(
-      todoListitemOfClickedCheckedOrDeleteBtn
+      todoListitemOfClickedCheckedBtn
     );
     // also want to get the todo listitem tabindex it will be either "0" or "-1"
     // for active and completed view
     const todoItemTabIndex =
-      todoListitemOfClickedCheckedOrDeleteBtn.getAttribute("tabindex");
+      todoListitemOfClickedCheckedBtn.getAttribute("tabindex");
 
     const checkedBtnAriaChecked = event.target.getAttribute("aria-checked");
 
@@ -331,8 +337,12 @@
          * might have to use unorderedList.children[arrayIndex] pass in that listitem to
          * applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked
          * **/
+        /**
+         * we are handling adding border to view container in our keydown todo input algorithm
+         * **/
         applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
-          unorderedList.children[arrayIndex]
+          unorderedList.children[arrayIndex],
+          unorderedList.children[indexOfELementWithTabindexZero]
         );
         break;
       case "Active":
@@ -381,13 +391,16 @@
           // if arrayIndex == length of active array, focus first item in active array
           // use switch statement
           if (todoItemTabIndex == "0") {
+            // if user clicked on checked btn of todo item that has drag selected "true"
+            // we will reset drag selected to default
             // getting here means the todo item of the clicked checked btn has focused
             // we want to apply focus to the listitem that is lower on the todo list
             // also no listitem will have tabindex = "0" run applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked
-            const firstTodoItem = unorderedList.children[0];
+            cachedData.draggedItemSelected = false;
+            const firstTodoItemActiveView = unorderedList.children[0];
             arrayIndex == unorderedList.childElementCount
               ? applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
-                  firstTodoItem
+                  firstTodoItemActiveView
                 )
               : applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
                   unorderedList.children[arrayIndex]
@@ -396,11 +409,8 @@
             // getting here means the todo item of the clicked checked btn does not have focused
             // its tabindex will be "-1"
             // we will find the listitem with tabindex of "0" and apply focus to that
-            const [listitemHasTabindexZero] = unorderedList.children.filter(
-              function findTabIndexZero(listitem) {
-                const tabindexOfTodo = listitem.getAttribute("tabindex");
-                return tabindexOfTodo === "0";
-              }
+            const [listitemHasTabindexZero] = findElementWithTabindexZero(
+              unorderedList.children
             );
             listitemHasTabindexZero.focus();
           }
@@ -452,9 +462,10 @@
             currentViewBtn.previousElementSibling,
             unorderedList
           );
+          // our algorithm above is focusing the first element of allview array
           // once we append the listitems we can run algorithm to focus listitem
           // focus first item in all view array
-          unorderedList.children[0];
+          // unorderedList.children[0].focus();
         }
         break;
       case "Completed":
@@ -502,6 +513,30 @@
           // if arrayIndex < length of completed array, use arrayIndex to get listitem in array and focus that element
           // if arrayIndex == length of completed array, focus first item in completed array
           // use switch statement
+          if (todoItemTabIndex == "0") {
+            // if user clicked on checked btn of todo item that has drag selected "true"
+            // we will reset drag selected to default
+            // getting here means the todo item of the clicked checked btn has focused
+            // we want to apply focus to the listitem that is lower on the todo list
+            // also no listitem will have tabindex = "0" run applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked
+            cachedData.draggedItemSelected = false;
+            const [firstItemOfCompletedView] = unorderedList.children[0];
+            arrayIndex == unorderedList.childElementCount
+              ? applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
+                  firstItemOfCompletedView
+                )
+              : applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
+                  unorderedList.children[arrayIndex]
+                );
+          } else {
+            // getting here means the todo item of the clicked checked btn does not have focused
+            // its tabindex will be "-1"
+            // we will find the listitem with tabindex of "0" and apply focus to that
+            const [itemHasTabindexZero] = findElementWithTabindexZero(
+              unorderedList.children
+            );
+            itemHasTabindexZero.focus();
+          }
         } else {
           // completed view array will be empty
           // run func to create and append elements in allView array
@@ -555,6 +590,7 @@
           );
           // once we append the listitems we can run algorithm to focus listitem
           // focus first item in all view array
+          unorderedList.children[0];
         }
         break;
     }
@@ -568,7 +604,7 @@
     // will effect items left if the element has todoCompleted="false"
     // delete a todo item will effect allview array
     // depend on the current view, the active or completed array in cachedObj
-    // get for allViewIndex todo item being delete
+    // get allViewIndex todo item being deleted
     // filter out the todo item being delete fron allView array using delete item allViewIndex
     /** the allViewIndex of the todo item in "Active" or "Completed" view will match
      * the index of the value in the allView array we can use the allViewIndex of item being delete
@@ -596,13 +632,42 @@
     /**
      * run algorithm based on current view
      * **/
-
+    // todo item of clicked delete btn
+    const todoItemOfClickedDeleteBtn = event.target.closest("li");
+    // tabindex of todo item
+    const tabindexOfTodoItem =
+      todoItemOfClickedDeleteBtn.getAttribute("tabindex");
+    // allView and array index
+    const [allViewIndex, arrayIndex] = getAllViewAndCurrentArrayIndexOfTodoItem(
+      todoItemOfClickedDeleteBtn
+    );
+    // for all, active and completed views
+    // if tabindexOfTodoItem === "0"
+    // check the arrayIndex to length of unorderlist.children
+    // else means user clicked(using mouse) on delete btn while focus is on another todo item
+    // the todo item of the clicked delete btn could have a lower or higher index(position)
+    // than current focus todo item we would still
+    // find element with tabindex "0" focus that
     switch (cachedData.currentView) {
       case "All":
+        // append todo items to unorderlist
         break;
       case "Active":
+        // append todo items to unorderlist
+        if (cachedData.arraysOfDifferentViews.activeViewArray.length >= 1) {
+        } else {
+          // active array is empty create and append items in allview array
+          // focus first item
+        }
+
         break;
       case "Completed":
+        // append todo items to unorderlist
+        if (cachedData.arraysOfDifferentViews.completedViewArray.length >= 1) {
+        } else {
+          // completed array is empty create and append items in allview array
+          // focus first item
+        }
         break;
     }
     console.log(event.target.parentElement.parentElement);
@@ -1226,7 +1291,8 @@
    * **/
 
   function applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
-    target
+    target,
+    previousTarget
   ) {
     /**
      * at least one todo item will have tabindex = "0"
@@ -1246,10 +1312,10 @@
      * **/
     /**
      * making this func work with event.target and todo listitem
+     const tabIndexOfTodoItemOfClickedCheckedBtnAndListitem = target
+       .closest("li")
+       .getAttribute("tabindex");
      * **/
-    const tabIndexOfTodoItemOfClickedCheckedBtnAndListitem = target
-      .closest("li")
-      .getAttribute("tabindex");
     /**
      * conditional check below is for when user click on checked btn with a mouse
      * because for keyboard users when they have checked btn focused and hit enter or space key
@@ -1257,36 +1323,79 @@
      * box-shadow around border
      * **/
     /**
+     * tabIndexOfTodoItemOfClickedCheckedBtnAndListitem !== "0" && used in if statement
      * we could just check if the tabindex of todo item of checked btn clicked
-     * does not equal !== "0"
+     * does not equal !== "0" and check if there is a todo item that has tabindex = "0"
+     const [previousFocusedElement] = [...target.closest("ul").children].filter(
+       function findElementWithTabIndexZero(listitem) {
+         const elementTabindex = listitem.getAttribute("tabindex");
+         return elementTabindex === "0";
+       }
+     );
      * **/
-    if (tabIndexOfTodoItemOfClickedCheckedBtnAndListitem !== "0") {
-      const [previousFocusedElement] = [
-        ...target.closest("ul").children,
-      ].filter(function findElementWithTabIndexZero(listitem) {
-        const elementTabindex = listitem.getAttribute("tabindex");
-        return elementTabindex === "0";
-      });
+    if (previousTarget) {
       /**
        * using event.target.closest("li"). when user click on checked btn or todo listitem
        * we will target the li ancestor element of clicked element
        * **/
+      // we want this func to work when all listitem of unorderlist
+      // has tabindex of "-1". which is the case when user click on checked btn
+      // of todo item that has focus and drag selected value "true"
+      /**
+       * we will check if previousFocusedElement is undefined
+       * which is the case when our filter method loop through unorderlist children
+       * and find zero listitem with tabindex = "-1"
+       * **/
       if (cachedData.draggedItemSelected) {
-        // previousFocusedElement will have tabindex "0" and data-draggedSelected = "true"
-        previousFocusedElement.setAttribute("data-draggedSelected", "false");
+        // previousTarget will have tabindex "0" and data-draggedSelected = "true"
+        previousTarget.setAttribute("data-draggedSelected", "false");
         target.closest("li").setAttribute("data-draggedSelected", "true");
       }
       // when user click on list item, we want to assign value "0" to that list item
       // and assign value of "-1" to the previous list item that had tabindex "0"
-      previousFocusedElement.setAttribute("tabindex", "-1");
+      previousTarget.setAttribute("tabindex", "-1");
+      target.closest("li").setAttribute("tabindex", "0");
+      target.closest("li").focus();
+    } else {
+      // when we get here user clicked on checked btn of todo item that has focus
+      // or drag selected = "true"
+      // drag selected should reset. we will just assign tabindex = "0" and focus to target passed in
       target.closest("li").setAttribute("tabindex", "0");
       target.closest("li").focus();
     }
   }
 
   /**
-   *
+   * find element with tabindex zero
    * **/
+
+  function findElementWithTabindexZero(array) {
+    const copiedArray = [...array];
+    return copiedArray.children.filter(function findTabindexZero(listitem) {
+      const tabindexOfTodo = listitem.getAttribute("tabindex");
+      return tabindexOfTodo === "0";
+    });
+  }
+
+  /**
+   * get index of element with tabindex "0"
+   * **/
+
+  function getIndexOfElementWithTabindexZero(array) {
+    const copiedArray = [...array];
+    return copiedArray.reduce(function findElementIndex(
+      buildingUp,
+      currentValue,
+      index
+    ) {
+      const elementTabindex = currentValue.getAttribute("tabindex");
+      if (elementTabindex === "0") {
+        buildingUp = index;
+      }
+      return buildingUp;
+    },
+    0);
+  }
 
   /**
    * assign data-allviewindex and data-grabdragindex for elements in allView array
