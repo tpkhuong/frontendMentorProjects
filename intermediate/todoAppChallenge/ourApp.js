@@ -441,6 +441,7 @@
           // which should be Active btn, remove it on that element / btn
           // document
           //   .querySelector("button[data-currentView]")
+
           //   .removeAttribute("data-currentview");
           // // apply it to its previous sibling
           // document
@@ -451,15 +452,17 @@
           /**
            * move algorithm above to func. we plan to use more than one
            * **/
-          const currentViewBtn = document.querySelector(
+
+          const currentViewBtnActive = findCurrentViewBtn(
             "button[data-currentView]"
           );
+
           appendAllViewElementsAndChangeToAllView(
             cachedData.arraysOfDifferentViews.allViewArray,
             assignAttrToArrayAndCreateListitem,
             removeCurrentListitemsAppendFragmentElement,
-            currentViewBtn,
-            currentViewBtn.previousElementSibling,
+            currentViewBtnActive,
+            currentViewBtnActive.previousElementSibling,
             unorderedList
           );
           // our algorithm above is focusing the first element of allview array
@@ -577,15 +580,17 @@
           /**
            * move algorithm above to func. we plan to use more than one
            * **/
-          const currentViewBtn = document.querySelector(
+
+          const currentViewBtnCompleted = findCurrentViewBtn(
             "button[data-currentView]"
           );
           appendAllViewElementsAndChangeToAllView(
             cachedData.arraysOfDifferentViews.allViewArray,
             assignAttrToArrayAndCreateListitem,
             removeCurrentListitemsAppendFragmentElement,
-            currentViewBtn,
-            currentViewBtn.previousElementSibling.previousElementSibling,
+            currentViewBtnCompleted,
+            currentViewBtnCompleted.previousElementSibling
+              .previousElementSibling,
             unorderedList
           );
           // once we append the listitems we can run algorithm to focus listitem
@@ -641,6 +646,15 @@
     const [allViewIndex, arrayIndex] = getAllViewAndCurrentArrayIndexOfTodoItem(
       todoItemOfClickedDeleteBtn
     );
+    const todoItemStatus =
+      todoItemOfClickedDeleteBtn.getAttribute("data-todocompleted");
+    /**
+     * if user click delete btn and the todo has todocompleted false
+     * we want to decrease the items left since that item will be active
+     * **/
+    if (todoItemStatus == "false") {
+      increaseOrDecreaseItemsLeftCounter("minus");
+    }
     // for all, active and completed views
     // if tabindexOfTodoItem === "0"
     // check the arrayIndex to length of unorderlist.children
@@ -648,25 +662,207 @@
     // the todo item of the clicked delete btn could have a lower or higher index(position)
     // than current focus todo item we would still
     // find element with tabindex "0" focus that
+
+    /***** work with allview,active and completed here *****/
+
+    // filter out the listitem of the clicked delete btn
+    cachedData.arraysOfDifferentViews.allViewArray = filterOutTodoForDelection(
+      cachedData.arraysOfDifferentViews.allViewArray,
+      allViewIndex
+    );
+    /**
+     * update tabindex of each listitem in allView array befire we filter out the listitems
+     * for active and completed array
+     * **/
+    assignAllViewIndexElementsInAllViewArr(
+      cachedData.arraysOfDifferentViews.allViewArray
+    );
+    // filter out todocompleted = "false", active list
+    cachedData.arraysOfDifferentViews.activeViewArray =
+      filterOutActiveTodoItems(
+        cachedData.arraysOfDifferentViews.activeViewArray
+      );
+    // filter out todocompleted = "true", completed lsit
+    cachedData.arraysOfDifferentViews.completedViewArray =
+      filterOutCompletedTodoItems(
+        cachedData.arraysOfDifferentViews.completedViewArray
+      );
+
+    // save original order of allViewIndex for active and completed
+    // active view
+    cachedData.originalElementOrderInAllViewArray.activeViewOriginalOrder =
+      originalAllViewIndexForElementsInActiveOrCompletedArray(
+        cachedData.arraysOfDifferentViews.activeViewArray,
+        "activeView"
+      );
+    // completed view
+    cachedData.originalElementOrderInAllViewArray.completedViewOriginalOrder =
+      originalAllViewIndexForElementsInActiveOrCompletedArray(
+        cachedData.arraysOfDifferentViews.completedViewArray,
+        "completeView"
+      );
+
     switch (cachedData.currentView) {
       case "All":
-        // append todo items to unorderlist
+        if (cachedData.arraysOfDifferentViews.allViewArray.length >= 1) {
+          // append todo items in all view array to unorderlist
+          const deleteBtnAllView = assignAttrToArrayAndCreateListitem(
+            cachedData.arraysOfDifferentViews.allViewArray,
+            updateAttrForTodoItemCheckedAndDeleteBtn,
+            createChildrenForUnorderedList
+          );
+
+          removeCurrentListitemsAppendFragmentElement(
+            unorderedList,
+            deleteBtnAllView
+          );
+          // check if the listitem of the clicked delete btn tabindex is "-1" or "0"
+          if (tabindexOfTodoItem === "0") {
+            // use arrayIndex
+            cachedData.draggedItemSelected = false;
+            const firstItemAllView = unorderedList.children[0];
+            // applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked
+            // will apply tabindex = "0"
+            arrayIndex == unorderedList.childElementCount
+              ? applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
+                  firstItemAllView
+                )
+              : applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
+                  unorderedList.children[arrayIndex]
+                );
+          } else {
+            // find todo item with tabindex == "0"
+            const [listitemTabIndexZero] = findElementWithTabindexZero(
+              unorderedList.children
+            );
+            listitemTabIndexZero.focus();
+          }
+        } else {
+          unorderedList.replaceChildren();
+          addOrRemoveTopBorderToViewsContainer("false");
+        }
         break;
       case "Active":
-        // append todo items to unorderlist
+        // append todo items in active view array to unorderlist
         if (cachedData.arraysOfDifferentViews.activeViewArray.length >= 1) {
+          // change attrs
+          // create elements, remove current li elements
+          const deleteBtnActiveView = assignAttrToArrayAndCreateListitem(
+            cachedData.arraysOfDifferentViews.activeViewArray,
+            updateAttrForTodoItemCheckedAndDeleteBtn,
+            createChildrenForUnorderedList
+          );
+
+          removeCurrentListitemsAppendFragmentElement(
+            unorderedList,
+            deleteBtnActiveView
+          );
+          // focus element or look for it
+          if (tabindexOfTodoItem === "0") {
+            // use arrayIndex
+            cachedData.draggedItemSelected = false;
+            const firstItemActiveView = unorderedList.children[0];
+
+            arrayIndex == unorderedList.childElementCount
+              ? applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
+                  firstItemActiveView
+                )
+              : applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
+                  arrayIndex
+                );
+          } else {
+            // find todo item with tabindex == "0"
+            const [todoHasTabindexZero] = findElementWithTabindexZero(
+              unorderedList.children
+            );
+            todoHasTabindexZero.focus();
+          }
         } else {
           // active array is empty create and append items in allview array
           // focus first item
+          /**
+           * check if cachedObj.allView array length is == 0
+           * **/
+          const currViewBtnActive = findCurrentViewBtn(
+            "button[data-currentView]"
+          );
+          if (cachedData.arraysOfDifferentViews.allViewArray.length == 0) {
+            unorderedList.replaceChildren();
+            currViewBtnActive.removeAttribute("data-currentView");
+            currViewBtnActive.previousElementSibling.removeAttribute(
+              "data-currentView"
+            );
+          } else {
+            appendAllViewElementsAndChangeToAllView(
+              cachedData.arraysOfDifferentViews.allViewArray,
+              assignAttrToArrayAndCreateListitem,
+              removeCurrentListitemsAppendFragmentElement,
+              currViewBtnActive,
+              currViewBtnActive.previousElementSibling,
+              unorderedList
+            );
+          }
         }
 
         break;
       case "Completed":
-        // append todo items to unorderlist
+        // append todo items in completed view array to unorderlist
         if (cachedData.arraysOfDifferentViews.completedViewArray.length >= 1) {
+          // change attrs
+          // create li elements, remove unorderlist children, append elements
+          const deleteBtnCompletedView = assignAttrToArrayAndCreateListitem(
+            cachedData.arraysOfDifferentViews.completedViewArray,
+            updateAttrForTodoItemCheckedAndDeleteBtn,
+            createChildrenForUnorderedList
+          );
+          removeCurrentListitemsAppendFragmentElement(
+            unorderedList,
+            deleteBtnCompletedView
+          );
+          // focus element or look for it
+          if (tabindexOfTodoItem === "0") {
+            // use arrayIndex
+            cachedData.draggedItemSelected = false;
+            const firstItemCompletedView = unorderedList.children[0];
+            arrayIndex == unorderedList.childElementCount
+              ? applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
+                  firstItemCompletedView
+                )
+              : applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
+                  arrayIndex
+                );
+          } else {
+            // find todo item with tabindex == "0"
+            const [todoItemTabindexZero] = findElementWithTabindexZero(
+              unorderedList.children
+            );
+            todoItemTabindexZero.focus();
+          }
         } else {
           // completed array is empty create and append items in allview array
           // focus first item
+          /**
+           * check if cachedObj.allView array length is == 0
+           * **/
+          const currViewBtnCompleted = findCurrentViewBtn(
+            "button[data-currentView]"
+          );
+          if (cachedData.arraysOfDifferentViews.allViewArray.length == 0) {
+            unorderedList.replaceChildren();
+            currViewBtnCompleted.removeAttribute("data-currentView");
+            currViewBtnCompleted.previousElementSibling.previousElementSibling.removeAttribute(
+              "data-currentView"
+            );
+          } else {
+            appendAllViewElementsAndChangeToAllView(
+              cachedData.arraysOfDifferentViews.allViewArray,
+              assignAttrToArrayAndCreateListitem,
+              removeCurrentListitemsAppendFragmentElement,
+              currViewBtnCompleted,
+              currViewBtnCompleted.previousElementSibling,
+              unorderedList
+            );
+          }
         }
         break;
     }
@@ -698,9 +894,34 @@
     /**
      * another approach
      * **/
-    !checkForCurrentViewAttrOfElement
-      ? event.target.setAttribute("data-currentView", "")
-      : null;
+    /**
+     * we can check if an element is drag selected in ternary operator below
+     * because if either all,active or completed view btn is clicked and it does not have
+     * data-currentView attr, it will be it is not the current view
+     * **/
+    /**
+     * algorithm to reset cached.draggedItemSelected
+     * **/
+    const valueOfDraggedItemSelectedBoolean = cachedData.draggedItemSelected;
+    // !checkForCurrentViewAttrOfElement
+    //   ? (event.target.setAttribute("data-currentView", ""),
+    //     // if we get here it means we are switching views
+    //     // check if cached.draggedItemSelected = true
+    //     // if it is assign boolean false
+    //     valueOfDraggedItemSelectedBoolean
+    //       ? (cachedData.draggedItemSelected = false)
+    //       : null)
+    //   : null;
+    // if statement might be more readable
+    if (!checkForCurrentViewAttrOfElement) {
+      // if we get here it means we are switching views
+      // check if cached.draggedItemSelected = true
+      // if it is assign boolean false
+      event.target.setAttribute("data-currentView", "");
+      if (valueOfDraggedItemSelectedBoolean) {
+        cachedData.draggedItemSelected = false;
+      }
+    }
     switch (cachedData.currentView) {
       case "Active":
         event.target.nextElementSibling.removeAttribute("data-currentView");
@@ -714,8 +935,38 @@
 
     cachedData.currentView != "All" ? (cachedData.currentView = "All") : null;
     /**
+     * algorithm resetting cached.draggedItemSelected is false will be for when user
+     * has a todo as a draggable element and click all, active or complete view btn
+     * with mouse
+     * **/
+
+    /**
      * run func to create todo element using allView array in cachedObj
      * **/
+    // when we add items to list in our keyDownEventForTodoInput func
+    // allviewindex and original allviewindex of active and completed items
+    // will be in the array in cachedObj
+    // for our all,active,completed view btn algorithm
+    // we will assign the proper attrs
+    // create elements, remove ul children, append element
+    /**
+     * append items in array based on length of array
+     * **/
+    if (cachedData.arraysOfDifferentViews.allViewArray.length == 0) {
+      // remove items
+      unorderedList.replaceChildren();
+      // remove top border on views container
+      addOrRemoveTopBorderToViewsContainer("false");
+    } else {
+      // we will assign the proper attrs
+      // create elements, remove ul children, append element
+      const allViewArray = assignAttrToArrayAndCreateListitem(
+        cachedData.arraysOfDifferentViews.activeViewArray,
+        updateAttrForTodoItemCheckedAndDeleteBtn,
+        createChildrenForUnorderedList
+      );
+      removeCurrentListitemsAppendFragmentElement(unorderedList, allViewArray);
+    }
     /**
      * testing out algorithm
      * **/
@@ -754,9 +1005,35 @@
     /**
      * another approach
      * **/
-    !checkForCurrentViewAttrOfElement
-      ? event.target.setAttribute("data-currentView", "")
-      : null;
+    /**
+     * we can check if an element is drag selected in ternary operator below
+     * because if either all,active or completed view btn is clicked and it does not have
+     * data-currentView attr, it will be it is not the current view
+     * **/
+    /**
+     * algorithm to reset cached.draggedItemSelected
+     * **/
+    const valueOfDraggedItemSelectedBoolean = cachedData.draggedItemSelected;
+    // !checkForCurrentViewAttrOfElement
+    //   ? (event.target.setAttribute("data-currentView", ""),
+    //     // if we get here it means we are switching views
+    //     // check if cached.draggedItemSelected = true
+    //     // if it is assign boolean false
+    //     valueOfDraggedItemSelectedBoolean
+    //       ? (cachedData.draggedItemSelected = false)
+    //       : null)
+    //   : null;
+    // if statement might be more readable
+    if (!checkForCurrentViewAttrOfElement) {
+      // if we get here it means we are switching views
+      // check if cached.draggedItemSelected = true
+      // if it is assign boolean false
+      event.target.setAttribute("data-currentView", "");
+      if (valueOfDraggedItemSelectedBoolean) {
+        cachedData.draggedItemSelected = false;
+      }
+    }
+
     switch (cachedData.currentView) {
       case "All":
         event.target.previousElementSibling.removeAttribute("data-currentView");
@@ -766,13 +1043,44 @@
         break;
     }
 
+    cachedData.currentView = "Active";
     /**
      * run func to create todo element using activeView array in cachedObj
      * call/execute func that will update attr of todo listitem grabDragIndex
      * checked btn aria-labelledby
      * delete btn aria-labelledby and id
      * **/
-    cachedData.currentView = "Active";
+    /**
+     * run func to create todo element using allView array in cachedObj
+     * **/
+    // when we add items to list in our keyDownEventForTodoInput func
+    // allviewindex and original allviewindex of active and completed items
+    // will be in the array in cachedObj
+    // for our all,active,completed view btn algorithm
+    // we will assign the proper attrs
+    // create elements, remove ul children, append element
+    /**
+     * append items in array based on length of array
+     * **/
+    if (cachedData.arraysOfDifferentViews.activeViewArray.length == 0) {
+      // remove items
+      unorderedList.replaceChildren();
+      // remove top border on views container
+      addOrRemoveTopBorderToViewsContainer("false");
+    } else {
+      // we will assign the proper attrs
+      // create elements, remove ul children, append element
+      const activeViewBtnArray = assignAttrToArrayAndCreateListitem(
+        cachedData.arraysOfDifferentViews.activeViewArray,
+        updateAttrForTodoItemCheckedAndDeleteBtn,
+        createChildrenForUnorderedList
+      );
+
+      removeCurrentListitemsAppendFragmentElement(
+        unorderedList,
+        activeViewBtnArray
+      );
+    }
   }
 
   // Completed view btn
@@ -796,9 +1104,35 @@
     /**
      * another approach
      * **/
-    !checkForCurrentViewAttrOfElement
-      ? event.target.setAttribute("data-currentView", "")
-      : null;
+    /**
+     * we can check if an element is drag selected in ternary operator below
+     * because if either all,active or completed view btn is clicked and it does not have
+     * data-currentView attr, it will be it is not the current view
+     * **/
+    /**
+     * algorithm to reset cached.draggedItemSelected
+     * **/
+    const valueOfDraggedItemSelectedBoolean = cachedData.draggedItemSelected;
+    // !checkForCurrentViewAttrOfElement
+    //   ? (event.target.setAttribute("data-currentView", ""),
+    //     // if we get here it means we are switching views
+    //     // check if cached.draggedItemSelected = true
+    //     // if it is assign boolean false
+    //     valueOfDraggedItemSelectedBoolean
+    //       ? (cachedData.draggedItemSelected = false)
+    //       : null)
+    //   : null;
+    // if statement might be more readable
+    if (!checkForCurrentViewAttrOfElement) {
+      // if we get here it means we are switching views
+      // check if cached.draggedItemSelected = true
+      // if it is assign boolean false
+      event.target.setAttribute("data-currentView", "");
+      if (valueOfDraggedItemSelectedBoolean) {
+        cachedData.draggedItemSelected = false;
+      }
+    }
+
     switch (cachedData.currentView) {
       case "All":
         event.target.previousElementSibling.previousElementSibling.removeAttribute(
@@ -809,6 +1143,7 @@
         event.target.previousElementSibling.removeAttribute("data-currentView");
         break;
     }
+    cachedData.currentView = "Completed";
     /**
      * run func to create todo element using completed array in cachedObj
      * call/execute func that will update attr of todo listitem grabDragIndex
@@ -816,7 +1151,36 @@
      * delete btn aria-labelledby and id
      * **/
     // get previous sibling elements assign value "false" to data-currentView
-    cachedData.currentView = "Completed";
+    /**
+     * run func to create todo element using allView array in cachedObj
+     * **/
+    // when we add items to list in our keyDownEventForTodoInput func
+    // allviewindex and original allviewindex of active and completed items
+    // will be in the array in cachedObj
+    // for our all,active,completed view btn algorithm
+    // we will assign the proper attrs
+    // create elements, remove ul children, append element
+    /**
+     * append items in array based on length of array
+     * **/
+    if (cachedData.arraysOfDifferentViews.completedViewArray.length == 0) {
+      // remove items
+      unorderedList.replaceChildren();
+      // remove top border on views container
+      addOrRemoveTopBorderToViewsContainer("false");
+    } else {
+      // we will assign the proper attrs
+      // create elements, remove ul children, append element
+      const completedViewBtnArray = assignAttrToArrayAndCreateListitem(
+        cachedData.arraysOfDifferentViews.completedViewArray,
+        updateAttrForTodoItemCheckedAndDeleteBtn,
+        createChildrenForUnorderedList
+      );
+      removeCurrentListitemsAppendFragmentElement(
+        unorderedList,
+        completedViewBtnArray
+      );
+    }
   }
 
   // clear completed
@@ -1067,6 +1431,17 @@
     return allViewList.filter(function getCompleted(listitem) {
       const todoCompleteValue = listitem.getAttribute("data-todocompleted");
       return todoCompleteValue === "true";
+    });
+  }
+
+  /**
+   * filter out todo for deletion
+   * **/
+
+  function filterOutTodoForDelection(array, listitemIndex) {
+    return array.filter(function removeListitem(listitem, index) {
+      const listitemAllViewIndex = Number(listitemIndex);
+      return index !== listitemAllViewIndex;
     });
   }
 
@@ -1734,6 +2109,14 @@
   }
 
   /**
+   * find current view btn
+   * **/
+
+  function findCurrentViewBtn(element) {
+    return document.querySelector(element);
+  }
+
+  /**
    * cached our data
    * **/
 
@@ -1780,6 +2163,12 @@
       toggleThemeBtn,
       checkedBtn,
     };
+  }
+
+  cachedInLocalStorage(window.localStorage);
+
+  function cachedInLocalStorage(local) {
+    local.setItem("cachedObj", "{}");
   }
 
   /**
