@@ -302,19 +302,32 @@
     }
 
     /***** work with allview,active and completed here *****/
+    /**
+     * pass a copy of the all view array when we are filtering out completed and not completed todo
+     * **/
+
+    const copiedOfAllViewArray = [].concat(
+      cachedData.arraysOfDifferentViews.allViewArray
+    );
 
     // dont have to do anything to allView array
     // just filter out completed and not completed todo
 
     // active
     cachedData.arraysOfDifferentViews.activeViewArray =
-      filterOutActiveTodoItems(cachedData.arraysOfDifferentViews.allViewArray);
+      filterOutActiveTodoItems(copiedOfAllViewArray);
     // completed
     cachedData.arraysOfDifferentViews.completedViewArray =
-      filterOutCompletedTodoItems(
-        cachedData.arraysOfDifferentViews.allViewArray
-      );
-
+      filterOutCompletedTodoItems(copiedOfAllViewArray);
+    // assign tabindex of '0' to first item
+    // active
+    assignTabindexZeroToFirstElement(
+      cachedData.arraysOfDifferentViews.activeViewArray
+    );
+    // completed
+    assignTabindexZeroToFirstElement(
+      cachedData.arraysOfDifferentViews.completedViewArray
+    );
     /**
      * based on which view user is on
      * **/
@@ -331,6 +344,7 @@
         );
         // remove current listitems of ul and append listitems in fragment
         removeCurrentListitemsAppendFragmentElement(unorderedList, allView);
+
         // once we append the listitems we can run algorithm to focus listitem
         // of the checked btn that was clicked
         /**
@@ -670,6 +684,9 @@
       cachedData.arraysOfDifferentViews.allViewArray,
       allViewIndex
     );
+    // work with copy of all view when we filter out completed and not completed listitem
+    const copiedAllView =
+      cachedData.arraysOfDifferentViews.allViewArray.slice();
     /**
      * update tabindex of each listitem in allView array befire we filter out the listitems
      * for active and completed array
@@ -679,15 +696,19 @@
     );
     // filter out todocompleted = "false", active list
     cachedData.arraysOfDifferentViews.activeViewArray =
-      filterOutActiveTodoItems(
-        cachedData.arraysOfDifferentViews.activeViewArray
-      );
+      filterOutActiveTodoItems(copiedAllView);
     // filter out todocompleted = "true", completed lsit
     cachedData.arraysOfDifferentViews.completedViewArray =
-      filterOutCompletedTodoItems(
-        cachedData.arraysOfDifferentViews.completedViewArray
-      );
-
+      filterOutCompletedTodoItems(copiedAllView);
+    // assign tabindex of '0' to first item
+    // active
+    assignTabindexZeroToFirstElement(
+      cachedData.arraysOfDifferentViews.activeViewArray
+    );
+    // completed
+    assignTabindexZeroToFirstElement(
+      cachedData.arraysOfDifferentViews.completedViewArray
+    );
     // save original order of allViewIndex for active and completed
     // active view
     cachedData.originalElementOrderInAllViewArray.activeViewOriginalOrder =
@@ -1191,6 +1212,7 @@
     // user click this btn assign length = 0 to allView array and complete view array
     // call ul.replaceChildren to remove all li elements
     // run same algorithm when user is on completed view. assign "false" to data-unorderedhasitems
+    // of element with class views-container
     // run switch algorithm of allViewBtnClicked
     /** user is eiter on all or active view **/
     // if there are items in the active array, filter out the todoCompleted "true" for all view
@@ -1198,8 +1220,183 @@
     /** user is on completed view **/
     // if there are items in the active array, assign length = 0 to completed array in cachedObj
     // call ul.replaceChildren() to remove li elements
-    // run switch algorithm of allViewBtnClicked
+    /**
+     * we will want to update the allview index of each item in all view array
+     * filter out active todo items. todocompleted false
+     * get allview index of active items update allview index of items in originalElementOrderInAllViewArray active
+     * **/
+    // index of element with tabindex = "0"
+    // if we are updating tabindex in our allview array we would be working with allview array
+    // if not we will work with unorderedlist children
+    const indexOfElementTabindexIsZero = [
+      ...cachedData.arraysOfDifferentViews.allViewArray,
+    ].reduce(function findTabindexZero(buildingUp, currentValue, index) {
+      const elementTabindex = Number(currentValue.getAttribute("tabindex"));
+      if (elementTabindex == 0) {
+        buildingUp = index;
+      }
+      return buildingUp;
+    }, 0);
+    // find which todo item has tabindex = "0"
+    // if the todo item that has tabindex = "0" is completed
+    // find next active todo element with tabindex = "-1"
+    // using for loop
+    // get length of allview array in cachedobj
+    const indexOfTodoNotCompleted = usingForLoopToFindIndexOfTodoNotCompleted(
+      indexOfElementTabindexIsZero,
+      cachedData.arraysOfDifferentViews.allViewArray
+    );
+    const elementWithTabindexZero =
+      cachedData.arraysOfDifferentViews.allViewArray[
+        indexOfElementTabindexIsZero
+      ];
+    const elementTodoStatus =
+      elementWithTabindexZero.getAttribute("data-todoCompleted");
+    if (elementTodoStatus == "true") {
+      // getting here means the todo item with tabindex = "0" is completed
+      // which means the element will be filtered out of allview array
+      // assign tabindex = "0" to the first todo item that is still active
+      // starting from the element that had tabindex = "0" last
+      cachedData.arraysOfDifferentViews.allViewArray[
+        indexOfTodoNotCompleted
+      ].attributes["tabindex"].value = "0";
+    }
+    // or we could assign the first element of allview array with tabindex = "0"
+    // cachedData.arraysOfDifferentViews.allViewArray[
+    //   0
+    // ].attributes["tabindex"].value = "0";
+    // assign tabindex zero to element in allview array at indexOfTodoNotCompleted
+    /** 
+ * // active todo
+    cachedData.arraysOfDifferentViews.activeViewArray =
+      filterOutActiveTodoItems(copiedAllViewArray);
+    // completed todos
+
+    cachedData.arraysOfDifferentViews.completedViewArray =
+      filterOutCompletedTodoItems(copiedAllViewArray);
+ * **/
+    // work with copied allview array
+    const copiedAllViewArray = [
+      ...cachedData.arraysOfDifferentViews.allViewArray,
+    ];
+    /**
+     * we can mutate the allview array in cachedobj
+     * **/
+    // once we clear the completed todos, both allview array and active array will have the same items and length
+    // all is left will be active todos item
+    cachedData.arraysOfDifferentViews.activeViewArray =
+      filterOutActiveTodoItems(copiedAllViewArray);
+    // if filterOutActiveTodoItems(copiedAllViewArray) returns an empty array
+    // all the todos are completed or its empty
+    // check length of cachedData.arraysOfDifferentViews.activeViewArray
+    // if length is 0 make allview, active, and completed array in cachedObj 0
+    if (cachedData.arraysOfDifferentViews.activeViewArray.length == 0) {
+      cachedData.arraysOfDifferentViews.allViewArray.length = 0;
+      cachedData.arraysOfDifferentViews.activeViewArray.length = 0;
+      cachedData.arraysOfDifferentViews.completedViewArray.length = 0;
+    } else {
+      // update items in active view array in cachedObj using assignAllViewIndexElementsInAllViewArr
+      // since both all view and active view will be the same length, same item
+      // we can work with active view array first then assign a copy of active view array to allview array
+      // this way we will eliminate one step
+      assignAllViewIndexElementsInAllViewArr(
+        cachedData.arraysOfDifferentViews.activeViewArray
+      );
+      // update original allview index of active array in cachedObj
+      originalAllViewIndexForElementsInActiveOrCompletedArray(
+        cachedData.arraysOfDifferentViews.activeViewArray,
+        "activeView"
+      );
+      // copy the array of active todo to allview array in cachedObj
+      cachedData.arraysOfDifferentViews.allViewArray = [
+        ...cachedData.arraysOfDifferentViews.activeViewArray,
+      ];
+      // empty completed array in cachedobj
+      cachedData.arraysOfDifferentViews.completedViewArray.length = 0;
+      // allview array items will have the correct allview index
+      // with a todo item that has tabindex = "0"
+      // completed array will be empty
+      // in switch for "Active" view we will focus first item of that array
+      // find element in active array with tabindex = "0"
+      // assign value of tabindex = "-1" to that element
+      const [elementInActiveArrayWithTabindexZero] =
+        findElementWithTabindexZero(
+          cachedData.arraysOfDifferentViews.activeViewArray
+        );
+      elementInActiveArrayWithTabindexZero.setAttribute("tabindex", "-1");
+      // assign value of tabindex = "0" to first item in active array
+      cachedData.arraysOfDifferentViews.activeViewArray[0].setAttribute(
+        "tabindex",
+        "0"
+      );
+    }
+    //
+    switch (cachedData.currentView) {
+      case "All":
+        if (cachedData.arraysOfDifferentViews.activeViewArray.length == 0) {
+          unorderedList.replaceChildren();
+          addOrRemoveTopBorderToViewsContainer("false");
+        } else {
+          const allViewOfClearBtnFunc = assignAttrToArrayAndCreateListitem(
+            cachedData.arraysOfDifferentViews.allViewArray,
+            updateAttrForTodoItemCheckedAndDeleteBtn,
+            createChildrenForUnorderedList
+          );
+          // remove current listitems of ul and append listitems in fragment
+          removeCurrentListitemsAppendFragmentElement(
+            unorderedList,
+            allViewOfClearBtnFunc
+          );
+        }
+        break;
+      case "Active":
+        if (cachedData.arraysOfDifferentViews.activeViewArray.length == 0) {
+          unorderedList.replaceChildren();
+          addOrRemoveTopBorderToViewsContainer("false");
+        } else {
+          dependingOnViewCreateAndAppendListitems(
+            cachedData.arraysOfDifferentViews.activeViewArray,
+            unorderedList,
+            document.querySelector("views-container"),
+            assignAttrToArrayAndCreateListitem,
+            removeCurrentListitemsAppendFragmentElement,
+            addOrRemoveTopBorderToViewsContainer
+          );
+        }
+        break;
+      case "Completed":
+        // remove lisitems of unorderlist
+        // assign "false" to data-unorderedhasitems
+        // of element with class views-container to remove top border
+        unorderedList.replaceChildren();
+        addOrRemoveTopBorderToViewsContainer("false");
+        break;
+    }
     console.log("clear completed");
+  }
+
+  /**
+   * return index of element that is not complete todocompleted = "false"
+   * using for loop
+   * **/
+
+  function usingForLoopToFindIndexOfTodoNotCompleted(endingIndex, array) {
+    const copiedArray = [...array];
+    const length = copiedArray.length;
+    for (
+      let startIndex = endingIndex + 1;
+      startIndex != endingIndex;
+      startIndex++
+    ) {
+      const element = copiedArray[startIndex];
+      const elementTodoStatus = element.getAttribute("data-todoCompleted");
+      if (elementTodoStatus == "false") {
+        return startingIndex;
+      }
+      if (startIndex == length) {
+        startIndex = 0;
+      }
+    }
   }
 
   /**
@@ -1266,17 +1463,30 @@
       // build allView array
       const buildingAllViewArray =
         buildAllViewArrayForTodoInputFunc(newTodoItem);
+      /**
+       * we want to work with a copied array of all view array when we filter out
+       * completed todo and not completed todo
+       * **/
+      const copiedAllViewArray = [...buildingAllViewArray];
       // filter out completed and not completed todos
-      const buildingActiveArray =
-        filterOutActiveTodoItems(buildingAllViewArray);
+      const buildingActiveArray = filterOutActiveTodoItems(copiedAllViewArray);
       const buildingCompletedArray =
-        filterOutCompletedTodoItems(buildingAllViewArray);
+        filterOutCompletedTodoItems(copiedAllViewArray);
       // assign built arrays to array in cachedObj
       // active
       cachedData.arraysOfDifferentViews.activeViewArray = buildingActiveArray;
       // completed
       cachedData.arraysOfDifferentViews.completedViewArray =
         buildingCompletedArray;
+      // assign tabindex '0' to first element in array;
+      // active
+      assignTabindexZeroToFirstElement(
+        cachedData.arraysOfDifferentViews.activeViewArray
+      );
+      // completed
+      assignTabindexZeroToFirstElement(
+        cachedData.arraysOfDifferentViews.completedViewArray
+      );
       // save original order of allViewIndex for active and completed
       // active view
       originalAllViewIndexForElementsInActiveOrCompletedArray(
@@ -1443,6 +1653,14 @@
       const listitemAllViewIndex = Number(listitemIndex);
       return index !== listitemAllViewIndex;
     });
+  }
+
+  /**
+   * assign tabindex = "0" to first element in array
+   * **/
+
+  function assignTabindexZeroToFirstElement(array) {
+    array[0].attributes["tabindex"].value = "0";
   }
 
   /**
@@ -2163,12 +2381,6 @@
       toggleThemeBtn,
       checkedBtn,
     };
-  }
-
-  cachedInLocalStorage(window.localStorage);
-
-  function cachedInLocalStorage(local) {
-    local.setItem("cachedObj", "{}");
   }
 
   /**
