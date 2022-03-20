@@ -1228,15 +1228,16 @@
     // index of element with tabindex = "0"
     // if we are updating tabindex in our allview array we would be working with allview array
     // if not we will work with unorderedlist children
-    const indexOfElementTabindexIsZero = [
-      ...cachedData.arraysOfDifferentViews.allViewArray,
-    ].reduce(function findTabindexZero(buildingUp, currentValue, index) {
-      const elementTabindex = Number(currentValue.getAttribute("tabindex"));
-      if (elementTabindex == 0) {
-        buildingUp = index;
-      }
-      return buildingUp;
-    }, 0);
+    const indexOfElementTabindexIsZero = [...unorderedList.children].reduce(
+      function findTabindexZero(buildingUp, currentValue, index) {
+        const elementTabindex = Number(currentValue.getAttribute("tabindex"));
+        if (elementTabindex == 0) {
+          buildingUp = index;
+        }
+        return buildingUp;
+      },
+      0
+    );
     // find which todo item has tabindex = "0"
     // if the todo item that has tabindex = "0" is completed
     // find next active todo element with tabindex = "-1"
@@ -1244,12 +1245,10 @@
     // get length of allview array in cachedobj
     const indexOfTodoNotCompleted = usingForLoopToFindIndexOfTodoNotCompleted(
       indexOfElementTabindexIsZero,
-      cachedData.arraysOfDifferentViews.allViewArray
+      unorderedList.children
     );
     const elementWithTabindexZero =
-      cachedData.arraysOfDifferentViews.allViewArray[
-        indexOfElementTabindexIsZero
-      ];
+      unorderedList.children[indexOfElementTabindexIsZero];
     const elementTodoStatus =
       elementWithTabindexZero.getAttribute("data-todoCompleted");
     if (elementTodoStatus == "true") {
@@ -1460,6 +1459,14 @@
     // get allView index for completed or not completed todo items
     if (event.code == "Enter" || event.code == "NumpadEnter") {
       const newTodoItem = createTodoItem(event);
+      /**
+       * get index of todo with tabindex = "0";
+       * +1 to index for all and active view algorithm
+       * for completed view index of todo item with tabindex = "0" will not change
+       * **/
+      const useIndexToFocusTodoItem = getIndexOfElementWithTabindexZero(
+        unorderedList.children
+      );
       // build allView array
       const buildingAllViewArray =
         buildAllViewArrayForTodoInputFunc(newTodoItem);
@@ -1506,6 +1513,12 @@
          * and active and completed allViewIndex array in cachedObj
          * **/
         case "All":
+          /**
+           * todo item we want to assign tabindex = "0" will be the todo item with tabindex = "0"
+           * before we added item to allview array
+           * we will get the index of item with tabindex = "0" then +1 to that index to
+           * assign tabindex = "0" to the correct item
+           * **/
           // call func that will add attr to elements based on length of array
           // then run func to create element
           const allViewListitems = assignAttrToArrayAndCreateListitem(
@@ -1526,6 +1539,12 @@
           increaseOrDecreaseItemsLeftCounter("add");
           break;
         case "Active":
+          /**
+           * todo item we want to assign tabindex = "0" will be the todo item with tabindex = "0"
+           * before we added item to allview array
+           * we will get the index of item with tabindex = "0" then +1 to that index to
+           * assign tabindex = "0" to the correct item
+           * **/
           // call func that will add attr to elements based on length of array
           // then run func to create element
           const activeListitems = assignAttrToArrayAndCreateListitem(
@@ -1577,20 +1596,28 @@
       const copiedAllViewArr = [
         ...cachedData.arraysOfDifferentViews.allViewArray,
       ];
-      // change first item in that array tabIndex to -1
       const [firstAllViewItem] = copiedAllViewArr;
-      firstAllViewItem.setAttribute("tabindex", "-1");
+      /**
+       * change first item in that array tabIndex to -1
+       * since we want to handle the tabindex and focus of todo based on current view
+       * we want every todo item add to list to have its tabindex = "-1"
+       * firstAllViewItem.setAttribute("tabindex", "-1");
+       * **/
       // assign tabindex="-1" to checked btn and delete btn to make them not focusable
       // checked btn
-      firstAllViewItem.firstElementChild.children[0].firstElementChild.setAttribute(
-        "tabindex",
-        -1
-      );
-      // delete btn
-      firstAllViewItem.firstElementChild.children[2].setAttribute(
-        "tabindex",
-        -1
-      );
+      /**
+       * moving it to another func. we will change tabindex of checked and delete btn
+       * when we change the tabindex of the listitem(its parent element)
+       * **/
+      // firstAllViewItem.firstElementChild.children[0].firstElementChild.setAttribute(
+      //   "tabindex",
+      //   -1
+      // );
+      // // delete btn
+      // firstAllViewItem.firstElementChild.children[2].setAttribute(
+      //   "tabindex",
+      //   -1
+      // );
       // add newly todo item to allView array;
       // more than one item in allView array assign allviewindex and grabdragindex
       cachedData.arraysOfDifferentViews.allViewArray = [
@@ -1674,8 +1701,12 @@
      * we will always add the newly created todo to the front of the allView array
      * its allViewIndex and grabDragIndex will always be 0
      * **/
+    /**
+     * let's assign tabindex = "0" to the todo listitem in the switch()statement
+     * based on the current view
+     * **/
     const todoItem = createElementForTodoItem("LI", {
-      tabindex: "0",
+      tabindex: "-1",
       role: "option",
       class: "todo-item",
       "data-draggedSelected": "false",
@@ -1695,7 +1726,9 @@
       class: "circle-testing",
     });
     /** checked btn **/
+    // make checked btn not focusable at first
     const checkedBtn = createElementForTodoItem("BUTTON", {
+      tabindex: "-1",
       role: "checkbox",
       "aria-labelledby": "",
       "aria-checked": "false",
@@ -1709,7 +1742,9 @@
     /* paragraph text content of todo */
     const paragraphTextContent = createElementForTodoItem("P", { id: "" });
     /* delete btn */
+    // make delete btn not focusable at first
     const deleteBtn = createElementForTodoItem("BUTTON", {
+      tabindex: "-1",
       id: "",
       class: "delete-btn",
       "aria-labelledby": "",
@@ -1883,6 +1918,13 @@
    * we will pass in the event.target or todo listitem
    * **/
 
+  /*****
+   * if we dont change or work with the tabindex of the todo items and its checked and delete btn
+   * we dont have to change the previous todo listitem tabindex
+   * we can just change the tabindex of the current clicked listitem or checked btn
+   * also we always remove the current lisitem of the unorderlist
+   * *****/
+
   function applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
     target,
     previousTarget
@@ -1956,6 +1998,71 @@
       target.closest("li").setAttribute("tabindex", "0");
       target.closest("li").focus();
     }
+  }
+
+  /**
+   * apply focus to single target
+   * **/
+
+  function applyFocusChangeTabindexSingleTarget(target) {
+    if (cachedData.draggedItemSelected) {
+      // previousTarget will have tabindex "0" and data-draggedSelected = "true"
+      previousTarget.setAttribute("data-draggedSelected", "false");
+      target.closest("li").setAttribute("data-draggedSelected", "true");
+    }
+    // when user click on list item, we want to assign value "0" to that list item
+    // and assign value of "-1" to the previous list item that had tabindex "0"
+    previousTarget.setAttribute("tabindex", "-1");
+    target.closest("li").setAttribute("tabindex", "0");
+    target.closest("li").focus();
+  }
+
+  /**
+   * change tabindex of checked and delete btn of todo
+   * **/
+
+  function changeTabindexOfCheckedAndDeleteBtn(currentTarget, previousTarget) {
+    // currentTarget or previousTarget will be the todo listitem
+    if (previousTarget) {
+      // we will change current and previous checked and delete btn tabindex
+      previousTarget.firstElementChild.children[0].firstElementChild.attributes[
+        "tabindex"
+      ].value = "-1";
+      // delete btn
+      previousTarget.firstElementChild.children[2].attributes[
+        "tabindex"
+      ].value = "-1";
+      // checked btn
+      currentTarget.firstElementChild.children[0].firstElementChild.attributes[
+        "tabindex"
+      ].value = "0";
+      // delete btn
+      currentTarget.firstElementChild.children[2].attributes["tabindex"].value =
+        "0";
+    } else {
+      // we will only change current target checked and delete btn
+      // checked btn
+      currentTarget.firstElementChild.children[0].firstElementChild.attributes[
+        "tabindex"
+      ].value = "0";
+      // delete btn
+      currentTarget.firstElementChild.children[2].attributes["tabindex"].value =
+        "0";
+    }
+  }
+
+  /**
+   * single target change tabindex checked and delete
+   * **/
+
+  function singleTargetChangeTabindexCheckedAndDeleteBtn(target) {
+    // checked btn
+    currentTarget.firstElementChild.children[0].firstElementChild.attributes[
+      "tabindex"
+    ].value = "0";
+    // delete btn
+    currentTarget.firstElementChild.children[2].attributes["tabindex"].value =
+      "0";
   }
 
   /**

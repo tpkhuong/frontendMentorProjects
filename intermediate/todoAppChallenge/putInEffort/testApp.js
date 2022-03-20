@@ -119,10 +119,17 @@
 
     function elementDragDrop(event) {
       event.stopPropagation();
+      /**
+       * check which current view user is on
+       * work with array in cachedObj of that view
+       * **/
       // listItems
+      // alert("work with the array in cachedobj based on user current view");
       const arrayOfOriginalListItems = Array.prototype.slice.call(
         this.parentElement.children
       );
+      // alert("instead of working with event.target we will work with target");
+      // alert("get index of clicked/drag todo item");
       const unorderedListElement = event.target.closest("li").parentElement;
       // length of listItems;
       const lengthOfListItems = arrayOfOriginalListItems.length;
@@ -164,6 +171,24 @@
           updateListItemsBelowDropped,
           grabbedListItem,
           droppedListItem
+        );
+        alert(
+          "update arrays in cachedobj and attr of items in array before create element and append to ul"
+        );
+        alert(
+          "apply original allview index to items in either active or completed array in cachedobj"
+        );
+        alert(
+          "merge both active and completed array. sort items based of allview index"
+        );
+        alert(
+          "since we are not changing the tabindex of dragstart element or dragdrop/dragend element"
+        );
+        alert(
+          "we will not update tabindex of todo items of array in cachedObj based on current view"
+        );
+        alert(
+          "copy unorderlist.children based on current view to array in cachedobj based on current view"
         );
         const updateGrabbedGoesAbove =
           createChildrenForUnorderedListAndUpdateDataIndex(
