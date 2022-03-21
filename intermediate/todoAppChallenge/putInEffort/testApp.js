@@ -173,6 +173,9 @@
           droppedListItem
         );
         alert(
+          "make a copy of array above and change attr to default before we run our func to create element,assign correct value to attr and append elements"
+        );
+        alert(
           "update arrays in cachedobj and attr of items in array before create element and append to ul"
         );
         alert(
