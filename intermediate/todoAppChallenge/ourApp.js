@@ -372,7 +372,12 @@
         );
         // remove current listitems of ul and append listitems in fragment
         removeCurrentListitemsAppendFragmentElement(unorderedList, allView);
-
+        // check the value of views container data-unorderedhasitems attr
+        document
+          .querySelector("views-container")
+          .getAttribute("data-unorderedhasitems") != "true"
+          ? addOrRemoveTopBorderToViewsContainer("true")
+          : null;
         // once we append the listitems we can run algorithm to focus listitem
         // of the checked btn that was clicked
         /**
@@ -438,6 +443,12 @@
             removeCurrentListitemsAppendFragmentElement,
             addOrRemoveTopBorderToViewsContainer
           );
+          // check the value of views container data-unorderedhasitems attr
+          document
+            .querySelector("views-container")
+            .getAttribute("data-unorderedhasitems") != "true"
+            ? addOrRemoveTopBorderToViewsContainer("true")
+            : null;
           // we also will check if the listitem of the clicked checked btn
           // tabindex = "0"
           // once we append the listitems we can run algorithm to focus listitem
@@ -557,7 +568,7 @@
           /**
            * move algorithm above to func. we plan to use more than one
            * **/
-
+          alert("check the length of all view array in cachedObj");
           const currentViewBtnActive = findCurrentViewBtn(
             "button[data-currentView]"
           );
@@ -570,6 +581,12 @@
             currentViewBtnActive.previousElementSibling,
             unorderedList
           );
+          // check the value of views container data-unorderedhasitems attr
+          document
+            .querySelector("views-container")
+            .getAttribute("data-unorderedhasitems") != "true"
+            ? addOrRemoveTopBorderToViewsContainer("true")
+            : null;
           // our algorithm above is focusing the first element of allview array
           // once we append the listitems we can run algorithm to focus listitem
           // focus first item in all view array
@@ -618,6 +635,12 @@
             removeCurrentListitemsAppendFragmentElement,
             addOrRemoveTopBorderToViewsContainer
           );
+          // check the value of views container data-unorderedhasitems attr
+          document
+            .querySelector("views-container")
+            .getAttribute("data-unorderedhasitems") != "true"
+            ? addOrRemoveTopBorderToViewsContainer("true")
+            : null;
           // we also will check if the listitem of the clicked checked btn
           // tabindex = "0"
           // once we append the listitems we can run algorithm to focus listitem
@@ -752,6 +775,12 @@
               .previousElementSibling,
             unorderedList
           );
+          // check the value of views container data-unorderedhasitems attr
+          document
+            .querySelector("views-container")
+            .getAttribute("data-unorderedhasitems") != "true"
+            ? addOrRemoveTopBorderToViewsContainer("true")
+            : null;
           // once we append the listitems we can run algorithm to focus listitem
           // focus first item in all view array
           singleTargetChangeTabindexCheckedAndDeleteBtn(
@@ -979,7 +1008,14 @@
           // allview array is empty
           // else statement to this if statement. cachedData.arraysOfDifferentViews.allViewArray.length >= 1
           unorderedList.replaceChildren();
-          addOrRemoveTopBorderToViewsContainer("false");
+
+          // check attr unorderedhasitems of views container
+
+          document
+            .querySelector("views-container")
+            .getAttribute("data-unorderedhasitems") != "false"
+            ? addOrRemoveTopBorderToViewsContainer("false")
+            : null;
         }
         break;
       case "Active":
@@ -1079,32 +1115,41 @@
           /**
            * check if cachedObj.allView array length is == 0
            * **/
-          const currViewBtnActive = findCurrentViewBtn(
-            "button[data-currentView]"
-          );
-          if (cachedData.arraysOfDifferentViews.allViewArray.length == 0) {
-            unorderedList.replaceChildren();
-            currViewBtnActive.removeAttribute("data-currentView");
-            currViewBtnActive.previousElementSibling.removeAttribute(
-              "data-currentView"
+          if (cachedData.arraysOfDifferentViews.allViewArray.length > 0) {
+            const currViewBtnActive = findCurrentViewBtn(
+              "button[data-currentView]"
             );
+            if (cachedData.arraysOfDifferentViews.allViewArray.length == 0) {
+              unorderedList.replaceChildren();
+              currViewBtnActive.removeAttribute("data-currentView");
+              currViewBtnActive.previousElementSibling.removeAttribute(
+                "data-currentView"
+              );
+            } else {
+              appendAllViewElementsAndChangeToAllView(
+                cachedData.arraysOfDifferentViews.allViewArray,
+                assignAttrToArrayAndCreateListitem,
+                removeCurrentListitemsAppendFragmentElement,
+                currViewBtnActive,
+                currViewBtnActive.previousElementSibling,
+                unorderedList
+              );
+              /**
+               * assign value "0" to tabindex of first element of allview array
+               * **/
+              singleTargetChangeTabindexCheckedAndDeleteBtn(
+                unorderedList.children[0]
+              );
+              applyFocusChangeTabindexSingleTarget(unorderedList.children[0]);
+              unorderedList.children[0].focus();
+            }
           } else {
-            appendAllViewElementsAndChangeToAllView(
-              cachedData.arraysOfDifferentViews.allViewArray,
-              assignAttrToArrayAndCreateListitem,
-              removeCurrentListitemsAppendFragmentElement,
-              currViewBtnActive,
-              currViewBtnActive.previousElementSibling,
-              unorderedList
-            );
-            /**
-             * assign value "0" to tabindex of first element of allview array
-             * **/
-            singleTargetChangeTabindexCheckedAndDeleteBtn(
-              unorderedList.children[0]
-            );
-            applyFocusChangeTabindexSingleTarget(unorderedList.children[0]);
-            unorderedList.children[0].focus();
+            unorderedList.replaceChildren();
+            document
+              .querySelector("views-container")
+              .getAttribute("data-unorderedhasitems") != "false"
+              ? addOrRemoveTopBorderToViewsContainer("false")
+              : null;
           }
         }
 
@@ -1212,6 +1257,11 @@
             currViewBtnCompleted.previousElementSibling.previousElementSibling.removeAttribute(
               "data-currentView"
             );
+            document
+              .querySelector("views-container")
+              .getAttribute("data-unorderedhasitems") != "false"
+              ? addOrRemoveTopBorderToViewsContainer("false")
+              : null;
           } else {
             appendAllViewElementsAndChangeToAllView(
               cachedData.arraysOfDifferentViews.allViewArray,
@@ -1321,7 +1371,11 @@
         // remove items
         unorderedList.replaceChildren();
         // remove top border on views container
-        addOrRemoveTopBorderToViewsContainer("false");
+        document
+          .querySelector("views-container")
+          .getAttribute("data-unorderedhasitems") != "false"
+          ? addOrRemoveTopBorderToViewsContainer("false")
+          : null;
       } else {
         // we will assign the proper attrs
         // create elements, remove ul children, append element
@@ -1459,7 +1513,11 @@
         // remove items
         unorderedList.replaceChildren();
         // remove top border on views container
-        addOrRemoveTopBorderToViewsContainer("false");
+        document
+          .querySelector("views-container")
+          .getAttribute("data-unorderedhasitems") != "false"
+          ? addOrRemoveTopBorderToViewsContainer("false")
+          : null;
       } else {
         // we will assign the proper attrs
         // create elements, remove ul children, append element
@@ -1582,7 +1640,11 @@
         // remove items
         unorderedList.replaceChildren();
         // remove top border on views container
-        addOrRemoveTopBorderToViewsContainer("false");
+        document
+          .querySelector("views-container")
+          .getAttribute("data-unorderedhasitems") != "false"
+          ? addOrRemoveTopBorderToViewsContainer("false")
+          : null;
       } else {
         // we will assign the proper attrs
         // create elements, remove ul children, append element
@@ -1656,6 +1718,9 @@
     // index of element with tabindex = "0"
     // if we are updating tabindex in our allview array we would be working with allview array
     // if not we will work with unorderedlist children
+    /**
+     * we can use indexOfElementTabindexIsZero because this is based on the length of unorderlist.children in all,active and completed views
+     * **/
     const indexOfElementTabindexIsZero = [...unorderedList.children].reduce(
       function findTabindexZero(buildingUp, currentValue, index) {
         const elementTabindex = Number(currentValue.getAttribute("tabindex"));
@@ -1676,21 +1741,37 @@
     // using for loop
     // get length of allview array in cachedobj
     // algorithm below is for "All" currentView of switch() statement
+
+    const elementWithTabindexZero =
+      unorderedList.children[indexOfElementTabindexIsZero];
+
     const elementTodoStatus =
       elementWithTabindexZero.getAttribute("data-todoCompleted");
     /**
      * we want to find the next item that is not completed when the current todo item that has tabindex = "0"
      * is completed
      * **/
-    const indexOfTodoNotCompleted = usingForLoopToFindIndexOfTodoNotCompleted(
-      indexOfElementTabindexIsZero,
-      unorderedList.children
-    );
+    // const indexOfTodoNotCompleted = usingForLoopToFindIndexOfTodoNotCompleted(
+    //   indexOfElementTabindexIsZero,
+    //   unorderedList.children
+    // );
 
     // when elementTodoStatus == "true" run usingForLoopToFindIndexOfTodoNotCompleted(
     //   indexOfElementTabindexIsZero,
     //   unorderedList.children
     // );
+    /**
+     * if elementTodoStatus is "true" it means the todo item is completed
+     * when that is the case we want to look for the next todo item in unorderedlist.children
+     * that todocompleted value is "false".
+     * we start looking for that todo item at indexOfElementTabindexIsZero because this element will have its todocompleted attr value set to "true"
+     **/
+
+    /**
+     * when elementTodoStatus is "false" we won't run usingForLoopToFindIndexOfTodoNotCompleted func
+     * which means we can run a func that will return an array of active todos after running our conditional checks
+     * for if elementTodoStatus is "true"
+     * **/
 
     const indexOfTodoNotCompleted =
       elementTodoStatus == "true"
@@ -1700,24 +1781,70 @@
           )
         : null;
 
-    const elementWithTabindexZero =
-      unorderedList.children[indexOfElementTabindexIsZero];
-
-    alert("start here");
+    /**
+     * when above algorithm for variable indexOfTodoNotCompleted is null it means the element at indexOfElementTabindexIsZero
+     * todocompleted value is "false" if that is the case we want tabindex "0" to stay on that element/todo item
+     * we can assign indexOfElementTabindexIsZero to indexOfTodoNotCompleted and use indexOfTodoNotCompleted in our switch statement for "Active" view
+     * to apply tabindex = "0" to the element/todo at indexOfTodoNotCompleted
+     * or assign null to indexOfTodoNotCompleted if elementTodoStatus is "false" just use indexOfElementTabindexIsZero in our switch statement for "Active" view
+     * to apply tabindex = "0" to the element/todo at indexOfTodoNotCompleted
+     * **/
 
     /**
-     *
+     * when indexOfTodoNotCompleted value is not null it means the element at indexOfElementTabindexIsZero todocomplete value is "true"
+     * when want to assign tabindex = "0" to the element at the index that will be a return value from calling usingForLoopToFindIndexOfTodoNotCompleted
+     * our reason is we will run an algorithm that will return an array of the current active todos which means the todo item that is completed
+     * will not be a part of that array and only one todo item will have tabindex = "0" once we run a func that will return an array of active todos
      * **/
-    if (elementTodoStatus == "true") {
-      // getting here means the todo item with tabindex = "0" is completed
-      // which means the element will be filtered out of allview array
-      // assign tabindex = "0" to the first todo item that is still active
-      // starting from the element that had tabindex = "0" last
-      // which will be a todo listitem that is marked as completed
-      unorderedList.children[indexOfTodoNotCompleted].attributes[
-        "tabindex"
-      ].value = "0";
-    }
+
+    /**
+     * for allview algorithm we will look for the index of the todo item that has tabindex = "0" once we run a func that will return an array
+     * of "Active" todo items, its todocompleted value will be "false"
+     * **/
+
+    const elementOfTodoNotCompleted = indexOfTodoNotCompleted
+      ? unorderedList.children[indexOfTodoNotCompleted]
+      : null;
+
+    /**
+     * we only assign tabidnex = "0" to elementOfTodoNotCompleted when indexOfTodoNotCompleted and elementOfTodoNotCompleted are truthy
+     * **/
+
+    /**
+     * when indexOfTodoNotCompleted is falsy it will make elementOfTodoNotCompleted falsy which will get our algorithm to the null part of
+     * the ternary operator below
+     * which means the element with tabindex = "0" will be an active todo.
+     * run our func to return an array of active todo items
+     * **/
+
+    elementOfTodoNotCompleted
+      ? elementOfTodoNotCompleted.setAttribute("tabindex", "0")
+      : null;
+
+    const arrayOfActiveTodoItems = filterOutActiveTodoItems(
+      unorderedList.children
+    );
+
+    // find index based on length of arrayOfActiveTodoItems of the todo item with tabindex = "0"
+    // assign index to variable use it as a reference in all view switch statement algorithm
+
+    const indexToUseForAllViewSwitchStatmentAlgorithm =
+      getIndexOfElementWithTabindexZero(arrayOfActiveTodoItems);
+
+    /**
+     * using different algorithm
+     * **/
+
+    // if (elementTodoStatus == "true") {
+    //   // getting here means the todo item with tabindex = "0" is completed
+    //   // which means the element will be filtered out of allview array
+    //   // assign tabindex = "0" to the first todo item that is still active
+    //   // starting from the element that had tabindex = "0" last
+    //   // which will be a todo listitem that is marked as completed
+    //   unorderedList.children[indexOfTodoNotCompleted].attributes[
+    //     "tabindex"
+    //   ].value = "0";
+    // }
 
     /**
      * either tabindex = "0" is on an element that is completed or not completed
@@ -1753,13 +1880,13 @@
      * **/
     // once we clear the completed todos, both allview array and active array will have the same items and length
     // all is left will be active todos item
-    cachedData.arraysOfDifferentViews.activeViewArray =
-      filterOutActiveTodoItems(copiedAllViewArray);
+    // cachedData.arraysOfDifferentViews.activeViewArray =
+    //   filterOutActiveTodoItems(copiedAllViewArray);
     // if filterOutActiveTodoItems(copiedAllViewArray) returns an empty array
     // all the todos are completed or its empty
     // check length of cachedData.arraysOfDifferentViews.activeViewArray
     // if length is 0 make allview, active, and completed array in cachedObj 0
-    if (cachedData.arraysOfDifferentViews.activeViewArray.length == 0) {
+    if (arrayOfActiveTodoItems.length == 0) {
       cachedData.arraysOfDifferentViews.allViewArray.length = 0;
       cachedData.arraysOfDifferentViews.activeViewArray.length = 0;
       cachedData.arraysOfDifferentViews.completedViewArray.length = 0;
@@ -1768,6 +1895,17 @@
       // since both all view and active view will be the same length, same item
       // we can work with active view array first then assign a copy of active view array to allview array
       // this way we will eliminate one step
+      /**
+       * we will run func to assign tabindex to listitem at indexToUseForAllViewSwitchStatmentAlgorithm for all view
+       * and indexOfElementTabindexIsZero for active view
+       * **/
+      arrayOfActiveTodoItems[
+        indexToUseForAllViewSwitchStatmentAlgorithm
+      ].setAttribute("tabIndex", "-1");
+
+      cachedData.arraysOfDifferentViews.activeViewArray = [
+        ...arrayOfActiveTodoItems,
+      ];
       assignAllViewIndexElementsInAllViewArr(
         cachedData.arraysOfDifferentViews.activeViewArray
       );
@@ -1780,29 +1918,43 @@
       cachedData.arraysOfDifferentViews.allViewArray = [
         ...cachedData.arraysOfDifferentViews.activeViewArray,
       ];
+      /**
+       * we have the reference to which todo item had tabindex = "0" / focus
+       * outside of this if statement we could set the todo item at indexToUseForAllViewSwitchStatmentAlgorithm
+       * in allview array then run singleTargetChangeTabindexCheckedAndDeleteBtn(
+          unorderedList.children[indexToUseForAllViewSwitchStatmentAlgorithm]
+        );
+        applyFocusChangeTabindexSingleTarget(
+          unorderedList.children[indexToUseForAllViewSwitchStatmentAlgorithm]
+        );
+        in the "All" view of the switch statement
+       * **/
       // empty completed array in cachedobj
       cachedData.arraysOfDifferentViews.completedViewArray.length = 0;
+      /**
+       * going a different direction/algorithm
+       * **/
       // allview array items will have the correct allview index
       // with a todo item that has tabindex = "0"
       // completed array will be empty
       // in switch for "Active" view we will focus first item of that array
       // find element in active array with tabindex = "0"
       // assign value of tabindex = "-1" to that element
-      const [elementInActiveArrayWithTabindexZero] =
-        findElementWithTabindexZero(
-          cachedData.arraysOfDifferentViews.activeViewArray
-        );
-      elementInActiveArrayWithTabindexZero.setAttribute("tabindex", "-1");
-      // assign value of tabindex = "0" to first item in active array
-      cachedData.arraysOfDifferentViews.activeViewArray[0].setAttribute(
-        "tabindex",
-        "0"
-      );
+      // const [elementInActiveArrayWithTabindexZero] =
+      //   findElementWithTabindexZero(
+      //     cachedData.arraysOfDifferentViews.activeViewArray
+      //   );
+      // elementInActiveArrayWithTabindexZero.setAttribute("tabindex", "-1");
+      // // assign value of tabindex = "0" to first item in active array
+      // cachedData.arraysOfDifferentViews.activeViewArray[0].setAttribute(
+      //   "tabindex",
+      //   "0"
+      // );
     }
     //
     switch (cachedData.currentView) {
       case "All":
-        if (cachedData.arraysOfDifferentViews.activeViewArray.length == 0) {
+        if (cachedData.arraysOfDifferentViews.allViewArray.length == 0) {
           unorderedList.replaceChildren();
           addOrRemoveTopBorderToViewsContainer("false");
         } else {
@@ -1815,6 +1967,14 @@
           removeCurrentListitemsAppendFragmentElement(
             unorderedList,
             allViewOfClearBtnFunc
+          );
+
+          singleTargetChangeTabindexCheckedAndDeleteBtn(
+            unorderedList.children[indexToUseForAllViewSwitchStatmentAlgorithm]
+          );
+
+          applyFocusChangeTabindexSingleTarget(
+            unorderedList.children[indexToUseForAllViewSwitchStatmentAlgorithm]
           );
         }
         break;
@@ -1830,6 +1990,14 @@
             assignAttrToArrayAndCreateListitem,
             removeCurrentListitemsAppendFragmentElement,
             addOrRemoveTopBorderToViewsContainer
+          );
+
+          singleTargetChangeTabindexCheckedAndDeleteBtn(
+            unorderedList.children[indexOfElementTabindexIsZero]
+          );
+
+          applyFocusChangeTabindexSingleTarget(
+            unorderedList.children[indexOfElementTabindexIsZero]
           );
         }
         break;
