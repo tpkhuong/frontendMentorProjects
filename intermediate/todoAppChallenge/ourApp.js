@@ -1,4 +1,6 @@
 (function scopeOurVariables() {
+  // reset todo input to empty on load
+  document.querySelector(".todo-input-instructions-container input").value = "";
   // apply attr data-currentView
   applyDataCurrentViewAttrToBtn();
   // declare our selectors
@@ -35,6 +37,9 @@
   );
 
   // for checked focus event
+  /**
+   * we have to add this event listen after we create this element in our createTodoItem algorithm
+   * **/
   checkedBtn.forEach(function addFocus(eachButton) {
     applyEventListener(eachButton, "focus", function buttonHasFocus(event) {
       // change attr on parent element of checked btn. div with attr we want to change
@@ -200,6 +205,26 @@
         completedViewBtnClicked(event);
         break;
     }
+  }
+
+  /**
+   * checkbtn has focus
+   * **/
+
+  function checkedBtnHasFocus(event) {
+    // change attr on parent element of checked btn. div with attr we want to change
+    document.activeElement == event.target
+      ? (this.parentElement.attributes["user-focused-btn"].value = "true")
+      : null;
+  }
+
+  /**
+   * checkbtn does not have focus
+   * **/
+
+  function checkedBtnIsNotFocus(event) {
+    // change attr on parent element of checked btn. div with attr we want to change
+    this.parentElement.attributes["user-focused-btn"].value = "false";
   }
 
   /**
@@ -374,7 +399,7 @@
         removeCurrentListitemsAppendFragmentElement(unorderedList, allView);
         // check the value of views container data-unorderedhasitems attr
         document
-          .querySelector("views-container")
+          .querySelector(".views-container")
           .getAttribute("data-unorderedhasitems") != "true"
           ? addOrRemoveTopBorderToViewsContainer("true")
           : null;
@@ -424,7 +449,7 @@
           // );
           // if (
           //   document
-          //     .querySelector("views-container")
+          //     .querySelector(".views-container")
           //     .getAttribute("data-unorderedhasitems") == "false"
           // ) {
           //   addOrRemoveTopBorderToViewsContainer("true");
@@ -438,14 +463,14 @@
           dependingOnViewCreateAndAppendListitems(
             cachedData.arraysOfDifferentViews.activeViewArray,
             unorderedList,
-            document.querySelector("views-container"),
+            document.querySelector(".views-container"),
             assignAttrToArrayAndCreateListitem,
             removeCurrentListitemsAppendFragmentElement,
             addOrRemoveTopBorderToViewsContainer
           );
           // check the value of views container data-unorderedhasitems attr
           document
-            .querySelector("views-container")
+            .querySelector(".views-container")
             .getAttribute("data-unorderedhasitems") != "true"
             ? addOrRemoveTopBorderToViewsContainer("true")
             : null;
@@ -549,7 +574,7 @@
           // since we are going to all view, there will already be a top border style applied to views container
           // if (
           //   document
-          //     .querySelector("views-container")
+          //     .querySelector(".views-container")
           //     .getAttribute("data-unorderedhasitems")
           // )
           //   addOrRemoveTopBorderToViewsContainer("false");
@@ -568,34 +593,44 @@
           /**
            * move algorithm above to func. we plan to use more than one
            * **/
-          alert("check the length of all view array in cachedObj");
-          const currentViewBtnActive = findCurrentViewBtn(
-            "button[data-currentView]"
-          );
+          if (cachedData.arraysOfDifferentViews.allViewArray.length == 0) {
+            // remove items
+            unorderedList.replaceChildren();
+            // check the value of views container data-unorderedhasitems attr
+            document
+              .querySelector(".views-container")
+              .getAttribute("data-unorderedhasitems") != "false"
+              ? addOrRemoveTopBorderToViewsContainer("false")
+              : null;
+          } else {
+            const currentViewBtnActive = findCurrentViewBtn(
+              "button[data-currentView]"
+            );
 
-          appendAllViewElementsAndChangeToAllView(
-            cachedData.arraysOfDifferentViews.allViewArray,
-            assignAttrToArrayAndCreateListitem,
-            removeCurrentListitemsAppendFragmentElement,
-            currentViewBtnActive,
-            currentViewBtnActive.previousElementSibling,
-            unorderedList
-          );
-          // check the value of views container data-unorderedhasitems attr
-          document
-            .querySelector("views-container")
-            .getAttribute("data-unorderedhasitems") != "true"
-            ? addOrRemoveTopBorderToViewsContainer("true")
-            : null;
-          // our algorithm above is focusing the first element of allview array
-          // once we append the listitems we can run algorithm to focus listitem
-          // focus first item in all view array
-          // unorderedList.children[0].focus();
-          singleTargetChangeTabindexCheckedAndDeleteBtn(
-            unorderedList.children[0]
-          );
-          applyFocusChangeTabindexSingleTarget(unorderedList.children[0]);
-          unorderedList.children[0].focus();
+            appendAllViewElementsAndChangeToAllView(
+              cachedData.arraysOfDifferentViews.allViewArray,
+              assignAttrToArrayAndCreateListitem,
+              removeCurrentListitemsAppendFragmentElement,
+              currentViewBtnActive,
+              currentViewBtnActive.previousElementSibling,
+              unorderedList
+            );
+            // check the value of views container data-unorderedhasitems attr
+            document
+              .querySelector(".views-container")
+              .getAttribute("data-unorderedhasitems") != "true"
+              ? addOrRemoveTopBorderToViewsContainer("true")
+              : null;
+            // our algorithm above is focusing the first element of allview array
+            // once we append the listitems we can run algorithm to focus listitem
+            // focus first item in all view array
+            // unorderedList.children[0].focus();
+            singleTargetChangeTabindexCheckedAndDeleteBtn(
+              unorderedList.children[0]
+            );
+            applyFocusChangeTabindexSingleTarget(unorderedList.children[0]);
+            unorderedList.children[0].focus();
+          }
         }
         break;
       case "Completed":
@@ -616,7 +651,7 @@
           // );
           // if (
           //   document
-          //     .querySelector("views-container")
+          //     .querySelector(".views-container")
           //     .getAttribute("data-unorderedhasitems") == "false"
           // ) {
           //   addOrRemoveTopBorderToViewsContainer("true");
@@ -630,14 +665,14 @@
           dependingOnViewCreateAndAppendListitems(
             cachedData.arraysOfDifferentViews.completedViewArray,
             unorderedList,
-            document.querySelector("views-container"),
+            document.querySelector(".views-container"),
             assignAttrToArrayAndCreateListitem,
             removeCurrentListitemsAppendFragmentElement,
             addOrRemoveTopBorderToViewsContainer
           );
           // check the value of views container data-unorderedhasitems attr
           document
-            .querySelector("views-container")
+            .querySelector(".views-container")
             .getAttribute("data-unorderedhasitems") != "true"
             ? addOrRemoveTopBorderToViewsContainer("true")
             : null;
@@ -741,7 +776,7 @@
           // since we are going to all view, there will already be a top border style applied to views container
           // if (
           //   document
-          //     .querySelector("views-container")
+          //     .querySelector(".views-container")
           //     .getAttribute("data-unorderedhasitems")
           // )
           //   addOrRemoveTopBorderToViewsContainer("false");
@@ -763,31 +798,42 @@
            * move algorithm above to func. we plan to use more than one
            * **/
 
-          const currentViewBtnCompleted = findCurrentViewBtn(
-            "button[data-currentView]"
-          );
-          appendAllViewElementsAndChangeToAllView(
-            cachedData.arraysOfDifferentViews.allViewArray,
-            assignAttrToArrayAndCreateListitem,
-            removeCurrentListitemsAppendFragmentElement,
-            currentViewBtnCompleted,
-            currentViewBtnCompleted.previousElementSibling
-              .previousElementSibling,
-            unorderedList
-          );
-          // check the value of views container data-unorderedhasitems attr
-          document
-            .querySelector("views-container")
-            .getAttribute("data-unorderedhasitems") != "true"
-            ? addOrRemoveTopBorderToViewsContainer("true")
-            : null;
-          // once we append the listitems we can run algorithm to focus listitem
-          // focus first item in all view array
-          singleTargetChangeTabindexCheckedAndDeleteBtn(
-            unorderedList.children[0]
-          );
-          applyFocusChangeTabindexSingleTarget(unorderedList.children[0]);
-          unorderedList.children[0].focus();
+          if (cachedData.arraysOfDifferentViews.allViewArray.length == 0) {
+            // remove items
+            unorderedList.replaceChildren();
+            // check the value of views container data-unorderedhasitems attr
+            document
+              .querySelector(".views-container")
+              .getAttribute("data-unorderedhasitems") != "false"
+              ? addOrRemoveTopBorderToViewsContainer("false")
+              : null;
+          } else {
+            const currentViewBtnCompleted = findCurrentViewBtn(
+              "button[data-currentView]"
+            );
+            appendAllViewElementsAndChangeToAllView(
+              cachedData.arraysOfDifferentViews.allViewArray,
+              assignAttrToArrayAndCreateListitem,
+              removeCurrentListitemsAppendFragmentElement,
+              currentViewBtnCompleted,
+              currentViewBtnCompleted.previousElementSibling
+                .previousElementSibling,
+              unorderedList
+            );
+            // check the value of views container data-unorderedhasitems attr
+            document
+              .querySelector(".views-container")
+              .getAttribute("data-unorderedhasitems") != "true"
+              ? addOrRemoveTopBorderToViewsContainer("true")
+              : null;
+            // once we append the listitems we can run algorithm to focus listitem
+            // focus first item in all view array
+            singleTargetChangeTabindexCheckedAndDeleteBtn(
+              unorderedList.children[0]
+            );
+            applyFocusChangeTabindexSingleTarget(unorderedList.children[0]);
+            unorderedList.children[0].focus();
+          }
         }
         break;
     }
@@ -1012,7 +1058,7 @@
           // check attr unorderedhasitems of views container
 
           document
-            .querySelector("views-container")
+            .querySelector(".views-container")
             .getAttribute("data-unorderedhasitems") != "false"
             ? addOrRemoveTopBorderToViewsContainer("false")
             : null;
@@ -1146,7 +1192,7 @@
           } else {
             unorderedList.replaceChildren();
             document
-              .querySelector("views-container")
+              .querySelector(".views-container")
               .getAttribute("data-unorderedhasitems") != "false"
               ? addOrRemoveTopBorderToViewsContainer("false")
               : null;
@@ -1258,7 +1304,7 @@
               "data-currentView"
             );
             document
-              .querySelector("views-container")
+              .querySelector(".views-container")
               .getAttribute("data-unorderedhasitems") != "false"
               ? addOrRemoveTopBorderToViewsContainer("false")
               : null;
@@ -1372,7 +1418,7 @@
         unorderedList.replaceChildren();
         // remove top border on views container
         document
-          .querySelector("views-container")
+          .querySelector(".views-container")
           .getAttribute("data-unorderedhasitems") != "false"
           ? addOrRemoveTopBorderToViewsContainer("false")
           : null;
@@ -1514,7 +1560,7 @@
         unorderedList.replaceChildren();
         // remove top border on views container
         document
-          .querySelector("views-container")
+          .querySelector(".views-container")
           .getAttribute("data-unorderedhasitems") != "false"
           ? addOrRemoveTopBorderToViewsContainer("false")
           : null;
@@ -1641,7 +1687,7 @@
         unorderedList.replaceChildren();
         // remove top border on views container
         document
-          .querySelector("views-container")
+          .querySelector(".views-container")
           .getAttribute("data-unorderedhasitems") != "false"
           ? addOrRemoveTopBorderToViewsContainer("false")
           : null;
@@ -1702,7 +1748,7 @@
     // user click this btn assign length = 0 to allView array and complete view array
     // call ul.replaceChildren to remove all li elements
     // run same algorithm when user is on completed view. assign "false" to data-unorderedhasitems
-    // of element with class views-container
+    // of element with class .views-container
     // run switch algorithm of allViewBtnClicked
     /** user is eiter on all or active view **/
     // if there are items in the active array, filter out the todoCompleted "true" for all view
@@ -1729,7 +1775,7 @@
         }
         return buildingUp;
       },
-      0
+      null
     );
     /**
      * in switch statement for "Active" view we will use indexOfElementTabindexIsZero to apply tabindex = "0" and other attrs
@@ -1955,8 +2001,14 @@
     switch (cachedData.currentView) {
       case "All":
         if (cachedData.arraysOfDifferentViews.allViewArray.length == 0) {
+          // remove items
           unorderedList.replaceChildren();
-          addOrRemoveTopBorderToViewsContainer("false");
+          // remove top border on views container
+          document
+            .querySelector(".views-container")
+            .getAttribute("data-unorderedhasitems") != "false"
+            ? addOrRemoveTopBorderToViewsContainer("false")
+            : null;
         } else {
           const allViewOfClearBtnFunc = assignAttrToArrayAndCreateListitem(
             cachedData.arraysOfDifferentViews.allViewArray,
@@ -1980,13 +2032,19 @@
         break;
       case "Active":
         if (cachedData.arraysOfDifferentViews.activeViewArray.length == 0) {
+          // remove items
           unorderedList.replaceChildren();
-          addOrRemoveTopBorderToViewsContainer("false");
+          // remove top border on views container
+          document
+            .querySelector(".views-container")
+            .getAttribute("data-unorderedhasitems") != "false"
+            ? addOrRemoveTopBorderToViewsContainer("false")
+            : null;
         } else {
           dependingOnViewCreateAndAppendListitems(
             cachedData.arraysOfDifferentViews.activeViewArray,
             unorderedList,
-            document.querySelector("views-container"),
+            document.querySelector(".views-container"),
             assignAttrToArrayAndCreateListitem,
             removeCurrentListitemsAppendFragmentElement,
             addOrRemoveTopBorderToViewsContainer
@@ -2005,8 +2063,14 @@
         // remove lisitems of unorderlist
         // assign "false" to data-unorderedhasitems
         // of element with class views-container to remove top border
+        // remove items
         unorderedList.replaceChildren();
-        addOrRemoveTopBorderToViewsContainer("false");
+        // remove top border on views container
+        document
+          .querySelector(".views-container")
+          .getAttribute("data-unorderedhasitems") != "false"
+          ? addOrRemoveTopBorderToViewsContainer("false")
+          : null;
         break;
     }
     console.log("clear completed");
@@ -2104,12 +2168,25 @@
        * we want a reference to the element that had focus/tabindex = "0" by getting the index
        * of that element before we change attr,remove listitems, and append newly created listitem
        * **/
+      /**
+       * getIndexOfElementWithTabindexZero will always return 0 because we passed in 0
+       * as the initial value of our reduce func
+       * **/
       const useIndexToFocusTodoItem = getIndexOfElementWithTabindexZero(
         unorderedList.children
       );
       // build allView array
-      const buildingAllViewArray =
-        buildAllViewArrayForTodoInputFunc(newTodoItem);
+      /**
+       * algorithm in our buildAllViewArrayForTodoInputFunc we are making a copy of elements in
+       * cached.arraysOfDifferentViews.allViwsArray which will always have a todo with tabindex = "0"
+       * since we will have a reference of the index of which todo that has tabindex = "0"
+       * before we run algorithm that will work with arrays in cachedObj
+       * we can change every item tabindex to "-1" in arrays that are in cachedObj
+       * **/
+      const buildingAllViewArray = buildAllViewArrayForTodoInputFunc(
+        newTodoItem,
+        useIndexToFocusTodoItem
+      );
       /**
        * we want to work with a copied array of all view array when we filter out
        * completed todo and not completed todo
@@ -2125,15 +2202,18 @@
       // completed
       cachedData.arraysOfDifferentViews.completedViewArray =
         buildingCompletedArray;
+      /**
+       * handling assigning tabindex to items in active and completed array in our switch statement
+       * **/
       // assign tabindex '0' to first element in array;
       // active
-      assignTabindexZeroToFirstElement(
-        cachedData.arraysOfDifferentViews.activeViewArray
-      );
-      // completed
-      assignTabindexZeroToFirstElement(
-        cachedData.arraysOfDifferentViews.completedViewArray
-      );
+      // assignTabindexZeroToFirstElement(
+      //   cachedData.arraysOfDifferentViews.activeViewArray
+      // );
+      // // completed
+      // assignTabindexZeroToFirstElement(
+      //   cachedData.arraysOfDifferentViews.completedViewArray
+      // );
       // save original order of allViewIndex for active and completed
       // active view
       originalAllViewIndexForElementsInActiveOrCompletedArray(
@@ -2154,6 +2234,7 @@
        * also we will focus the correct todo listitem based on current view
        * **/
       // run func based on currentView
+
       switch (cachedData.currentView) {
         /**
          * doesnt matter which view user is on
@@ -2175,6 +2256,7 @@
             createChildrenForUnorderedList,
             true
           );
+
           // remove children of UL
           // append listitems in fragment to UL
           removeCurrentListitemsAppendFragmentElement(
@@ -2187,19 +2269,30 @@
           // if useIndexToFocusTodoItem is undefined or 0 focus first item
           if (useIndexToFocusTodoItem === 0 || !useIndexToFocusTodoItem) {
             singleTargetChangeTabindexCheckedAndDeleteBtn(
-              unorderedList.children[0]
-            );
-            applyFocusChangeTabindexSingleTarget(unorderedList.children[0]);
-          } else {
-            singleTargetChangeTabindexCheckedAndDeleteBtn(
-              unorderedList.children[useIndexToFocusTodoItem + 1]
+              unorderedList.children[0],
+              "0"
             );
             applyFocusChangeTabindexSingleTarget(
-              unorderedList.children[useIndexToFocusTodoItem + 1]
+              unorderedList.children[0],
+              "0"
+            );
+          } else {
+            singleTargetChangeTabindexCheckedAndDeleteBtn(
+              unorderedList.children[useIndexToFocusTodoItem + 1],
+              "0"
+            );
+            applyFocusChangeTabindexSingleTarget(
+              unorderedList.children[useIndexToFocusTodoItem + 1],
+              "0"
             );
           }
           // change value of data-unorderedhasitems on views-container to true
-          addOrRemoveTopBorderToViewsContainer("true");
+          // check the value of views container data-unorderedhasitems attr
+          document
+            .querySelector(".views-container")
+            .getAttribute("data-unorderedhasitems") != "true"
+            ? addOrRemoveTopBorderToViewsContainer("true")
+            : null;
           // add one to items left text
           increaseOrDecreaseItemsLeftCounter("add");
           break;
@@ -2240,8 +2333,13 @@
               unorderedList.children[useIndexToFocusTodoItem + 1]
             );
           }
-          // change value of data-unorderedhasitems on views-container to true
-          addOrRemoveTopBorderToViewsContainer("true");
+          // change value of data-unorderedhasitems on .views-container to true
+          // check the value of views container data-unorderedhasitems attr
+          document
+            .querySelector(".views-container")
+            .getAttribute("data-unorderedhasitems") != "true"
+            ? addOrRemoveTopBorderToViewsContainer("true")
+            : null;
           // add one to items left text
           increaseOrDecreaseItemsLeftCounter("add");
           break;
@@ -2286,7 +2384,10 @@
    * build allView array
    * **/
 
-  function buildAllViewArrayForTodoInputFunc(todoItem) {
+  function buildAllViewArrayForTodoInputFunc(
+    todoItem,
+    indexOfPreviousItemWithTabindexZero
+  ) {
     if (cachedData.arraysOfDifferentViews.allViewArray.length === 0) {
       cachedData.arraysOfDifferentViews.allViewArray.push(todoItem);
       return cachedData.arraysOfDifferentViews.allViewArray;
@@ -2296,6 +2397,27 @@
         ...cachedData.arraysOfDifferentViews.allViewArray,
       ];
       const [firstAllViewItem] = copiedAllViewArr;
+      /**
+       * we could reset tabindex of all todo items to "-1" in this function
+       * instead of loop through cachedData.arraysOfDifferentViews.allViewArray
+       * change every item tabindex = "-1"
+       * pass in the value of useIndexToFocusTodoItem which will be the index of the todo with tabindex = "0"
+       * before we run this func
+       * change tabindex of li, checked btn and delete btn of item at useIndexToFocusTodoItem to "-1"
+       * if useIndexToFocusTodoItem is null do nothing
+       * **/
+      singleTargetChangeTabindexCheckedAndDeleteBtn(
+        cachedData.arraysOfDifferentViews.allViewArray[
+          indexOfPreviousItemWithTabindexZero
+        ],
+        "-1"
+      );
+      applyFocusChangeTabindexSingleTarget(
+        cachedData.arraysOfDifferentViews.allViewArray[
+          indexOfPreviousItemWithTabindexZero
+        ],
+        "-1"
+      );
       /**
        * change first item in that array tabIndex to -1
        * since we want to handle the tabindex and focus of todo based on current view
@@ -2387,7 +2509,7 @@
    * **/
 
   function assignTabindexZeroToFirstElement(array) {
-    array[0].attributes["tabindex"].value = "0";
+    array[0].setAttribute("tabindex", "0");
   }
 
   /**
@@ -2476,6 +2598,8 @@
     });
     // append draggable div to Li
     todoItem.append(draggableDiv);
+    applyEventListener(checkedBtn, "focus", checkedBtnHasFocus);
+    applyEventListener(checkedBtn, "blur", checkedBtnIsNotFocus);
     return todoItem;
   }
 
@@ -2597,7 +2721,7 @@
       // checked btn
       listitem.firstElementChild.children[0].firstElementChild.attributes[
         "aria-labelledby"
-      ] = `todo-item-${index}`;
+      ].value = `todo-item-${index}`;
       // todo item text content
       listitem.firstElementChild.children[1].attributes[
         "id"
@@ -2704,17 +2828,17 @@
    * apply focus to single target
    * **/
 
-  function applyFocusChangeTabindexSingleTarget(target) {
+  function applyFocusChangeTabindexSingleTarget(target, tabindexValue) {
     if (cachedData.draggedItemSelected) {
       // previousTarget will have tabindex "0" and data-draggedSelected = "true"
-      previousTarget.setAttribute("data-draggedSelected", "false");
+      // previousTarget.setAttribute("data-draggedSelected", "false");
       target.closest("li").setAttribute("data-draggedSelected", "true");
     }
     // when user click on list item, we want to assign value "0" to that list item
     // and assign value of "-1" to the previous list item that had tabindex "0"
-    previousTarget.setAttribute("tabindex", "-1");
-    target.closest("li").setAttribute("tabindex", "0");
-    target.closest("li").focus();
+    // previousTarget.setAttribute("tabindex", "-1");
+    target.closest("li").setAttribute("tabindex", tabindexValue);
+    // target.closest("li").focus();
   }
 
   /**
@@ -2755,14 +2879,17 @@
    * single target change tabindex checked and delete
    * **/
 
-  function singleTargetChangeTabindexCheckedAndDeleteBtn(target) {
+  function singleTargetChangeTabindexCheckedAndDeleteBtn(
+    target,
+    tabindexValue
+  ) {
     // checked btn
-    currentTarget.firstElementChild.children[0].firstElementChild.attributes[
+    target.firstElementChild.children[0].firstElementChild.attributes[
       "tabindex"
-    ].value = "0";
+    ].value = tabindexValue;
     // delete btn
-    currentTarget.firstElementChild.children[2].attributes["tabindex"].value =
-      "0";
+    target.firstElementChild.children[2].attributes["tabindex"].value =
+      tabindexValue;
   }
 
   /**
@@ -2794,7 +2921,7 @@
       }
       return buildingUp;
     },
-    0);
+    null);
   }
 
   /**
@@ -2939,7 +3066,7 @@
    * **/
 
   function increaseOrDecreaseItemsLeftCounter(strInput) {
-    const digitElementForItemsLeft = document.querySelector(".views-counter");
+    const digitElementForItemsLeft = document.querySelector("#views-counter");
     const counterTextContent = digitElementForItemsLeft.innerText;
     var convertToNumber = Number(counterTextContent);
     switch (strInput) {
@@ -2962,7 +3089,7 @@
 
   function addOrRemoveTopBorderToViewsContainer(strInput) {
     document
-      .querySelector("views-container")
+      .querySelector(".views-container")
       .setAttribute("data-unorderedhasitems", strInput);
   }
 
