@@ -749,8 +749,8 @@ main {
 /* circle for input */
 
 .circle {
-  width: 22px;
-  height: 23px;
+  min-width: 25px;
+	min-height: 24px;
   border: 1.5px solid var(--color-darktheme-checked-crossed-out);
   border-radius: 100%;
 }
@@ -801,8 +801,8 @@ div[data-checked="true"] {
 
 .circle-testing {
   pointer-events: none;
-  width: 23px;
-  height: 22px;
+  min-width: 25px;
+	min-height: 24px;
   background-color: var(--clear-views-btns-text-below);
   /* background-image: var(--checked-button-gradient); */
   border-radius: 50%;
@@ -812,8 +812,8 @@ div[data-checked="true"] {
 }
 
 .checked-btn {
-  width: 19px;
-  height: 20px;
+  min-width: 23px;
+	min-height: 22px;
   border-radius: 100%;
   /* found a way we dont have to use border-width,border-style,border-color */
   /* border-width: 1.5px;
@@ -840,7 +840,7 @@ and button with aria-checked attr to true when user click on checked-btn
   display: none;
 }
 .checked-btn[aria-checked="true"] img {
-  display: revert;
+  display: revert;+
 }
 
 .list-style-wrapper p {
