@@ -236,6 +236,7 @@
   // todo list item
 
   function todoListitemClicked(event) {
+    console.log(event.target);
     /**
      * get index of todo with tabindex = "0";
      * +1 to index for all and active view algorithm
@@ -252,23 +253,78 @@
      * todo li tabindexat trs to "0"
      * **/
 
-    console.log(event.target.parentElement);
+    // console.log(event.target.parentElement);
+
     const currentTodoWithTabinexZero = getIndexOfElementWithTabindexZero(
       unorderedList.children
     );
-    console.log(
-      unorderedList.children[currentTodoWithTabinexZero] ==
-        event.target.parentElement
-    );
+
+    const todoListitemParentOfEventTarget = event.target.parentElement;
+
+    // console.log(
+    //   unorderedList.children[currentTodoWithTabinexZero] ==
+    //     event.target.parentElement
+    // );
+
     if (currentTodoWithTabinexZero != null) {
       // when we get here it means there will be more than one todo item on the current view
-      // we want to look for the todo item with tabindex = "0", get its index
+      // we want to look for the todo item with tabindex = "0",
+      // get its index in an array this case unorderedlist.children
       // check if the clicked todo item is the current todo item with tabindex = "0"
       // if they are the same do nothing
       // if the clicked todo item tabindex is not "0" change it
+      // change the element at currentTodoWithTabinexZero of unorderedlist.children tabindex = "-1"
+      // unorderedList.children[currentTodoWithTabinexZero] != todoListitemParentOfEventTarget
+      //   ? (singleTargetChangeTabindexCheckedAndDeleteBtn(
+      //     todoListitemParentOfEventTarget,
+      //     "0"
+      //   ), applyFocusChangeTabindexSingleTarget(
+      //     todoListitemParentOfEventTarget,
+      //     "0"
+      //   ), (singleTargetChangeTabindexCheckedAndDeleteBtn(
+      //     unorderedList.children[currentTodoWithTabinexZero],
+      //     "-1"
+      //   ), applyFocusChangeTabindexSingleTarget(
+      //     unorderedList.children[currentTodoWithTabinexZero],
+      //     "-1"
+      //       ))) : null;
+      // regular if statement
+      if (
+        unorderedList.children[currentTodoWithTabinexZero] !=
+        todoListitemParentOfEventTarget
+      ) {
+        // change element clicked tabindex to "0"
+        singleTargetChangeTabindexCheckedAndDeleteBtn(
+          todoListitemParentOfEventTarget,
+          "0"
+        );
+        applyFocusChangeTabindexSingleTarget(
+          todoListitemParentOfEventTarget,
+          "0"
+        );
+
+        // change current element with tabindex "0" to "-1"
+        singleTargetChangeTabindexCheckedAndDeleteBtn(
+          unorderedList.children[currentTodoWithTabinexZero],
+          "-1"
+        );
+        applyFocusChangeTabindexSingleTarget(
+          unorderedList.children[currentTodoWithTabinexZero],
+          "-1"
+        );
+      }
     } else {
       // when currentTodoWithTabinexZero is null we want to assign "0" to attr tabindex of
       // the li todo item that was clicked
+      // which should be the event.target.parentElement
+      singleTargetChangeTabindexCheckedAndDeleteBtn(
+        todoListitemParentOfEventTarget,
+        "0"
+      );
+      applyFocusChangeTabindexSingleTarget(
+        todoListitemParentOfEventTarget,
+        "0"
+      );
     }
   }
 
@@ -416,7 +472,7 @@
     /**
      * based on which view user is on
      * **/
-
+    console.log(cachedData);
     switch (cachedData.currentView) {
       case "All":
         // clicking on checked btn in all view
@@ -454,14 +510,60 @@
         // we create todo listitems and append them to unorderlist
         // pass in unorderedlist.children to funcs we will use below
         // use arrayIndex focus that element change tabindex of checked and delete btn of that todo listitem to "0"
-        singleTargetChangeTabindexCheckedAndDeleteBtn(
-          unorderedList.children[arrayIndex],
-          "0"
-        );
-        applyFocusChangeTabindexSingleTarget(
-          unorderedList.children[arrayIndex],
-          "0"
-        );
+        // singleTargetChangeTabindexCheckedAndDeleteBtn(
+        //   unorderedList.children[arrayIndex],
+        //   "0"
+        // );
+        // applyFocusChangeTabindexSingleTarget(
+        //   unorderedList.children[arrayIndex],
+        //   "0"
+        // );
+        /**
+         * even through we are assign tabindex = "0" to the element in the array of unorderedlist.children
+         * the items in unorderedlist.children are created using items in our cachedObj arrays
+         * looks like our algorithm still hold a reference to those items in cachedObj array
+         * when we make changes to items in unorderedlist.children it will effect that item in cachedObj array
+         * **/
+
+        if (indexOfELementWithTabindexZero != null) {
+          if (
+            unorderedList.children[indexOfELementWithTabindexZero] !=
+            todoListitemOfClickedCheckedBtn
+          ) {
+            // change element clicked tabindex to "0"
+            singleTargetChangeTabindexCheckedAndDeleteBtn(
+              todoListitemOfClickedCheckedBtn,
+              "0"
+            );
+            applyFocusChangeTabindexSingleTarget(
+              todoListitemOfClickedCheckedBtn,
+              "0"
+            );
+
+            // change current element with tabindex "0" to "-1"
+            singleTargetChangeTabindexCheckedAndDeleteBtn(
+              unorderedList.children[indexOfELementWithTabindexZero],
+              "-1"
+            );
+            applyFocusChangeTabindexSingleTarget(
+              unorderedList.children[indexOfELementWithTabindexZero],
+              "-1"
+            );
+          }
+        } else {
+          // when indexOfELementWithTabindexZero is null we want to assign "0" to attr tabindex of
+          // the li todo item of the clicked checked btn
+          // which should be the todoListitemOfClickedCheckedBtn
+          singleTargetChangeTabindexCheckedAndDeleteBtn(
+            todoListitemOfClickedCheckedBtn,
+            "0"
+          );
+          applyFocusChangeTabindexSingleTarget(
+            todoListitemOfClickedCheckedBtn,
+            "0"
+          );
+        }
+
         // focus that element
         unorderedList.children[arrayIndex].focus();
         break;
@@ -532,6 +634,17 @@
             //       unorderedList.children[arrayIndex]
             //   );
             // use if statement to make algorithm above more readable
+            // assign tabindex = "-1" to listitem of the clicked checked btn
+
+            singleTargetChangeTabindexCheckedAndDeleteBtn(
+              todoListitemOfClickedCheckedBtn,
+              "-1"
+            );
+            applyFocusChangeTabindexSingleTarget(
+              todoListitemOfClickedCheckedBtn,
+              "-1"
+            );
+
             if (arrayIndex == unorderedList.childElementCount) {
               singleTargetChangeTabindexCheckedAndDeleteBtn(
                 firstTodoItemActiveView,
@@ -575,6 +688,15 @@
              * if arrayindex is greater than > indexOfELementWithTabindexZero just use indexOfELementWithTabindexZero to assign tabindex = "0" to that element
              * when arrayIndex and indexOfELementWithTabindexZero equal to each other the if statement of this else statement will handle that situation
              * **/
+            // assign tabindex = "-1" to element at indexOfELementWithTabindexZero
+            singleTargetChangeTabindexCheckedAndDeleteBtn(
+              unorderedList.children[indexOfELementWithTabindexZero],
+              "-1"
+            );
+            applyFocusChangeTabindexSingleTarget(
+              unorderedList.children[indexOfELementWithTabindexZero],
+              "-1"
+            );
             if (arrayIndex < indexOfELementWithTabindexZero) {
               singleTargetChangeTabindexCheckedAndDeleteBtn(
                 unorderedList.children[indexOfELementWithTabindexZero - 1],
@@ -900,7 +1022,7 @@
         }
         break;
     }
-
+    console.log(cachedData);
     console.log("checked");
   }
 
@@ -2036,6 +2158,15 @@
       cachedData.arraysOfDifferentViews.allViewArray.length = 0;
       cachedData.arraysOfDifferentViews.activeViewArray.length = 0;
       cachedData.arraysOfDifferentViews.completedViewArray.length = 0;
+      /**
+       * we are handling the display of the elements to unorderlist in our switch statement algorithm
+       * **/
+      // remove top border to views container element
+      // document
+      //   .querySelector(".views-container")
+      //   .getAttribute("data-unorderedhasitems") != "false"
+      //   ? addOrRemoveTopBorderToViewsContainer("false")
+      //   : null;
     } else {
       // update items in active view array in cachedObj using assignAllViewIndexElementsInAllViewArr
       // since both all view and active view will be the same length, same item
@@ -2934,6 +3065,20 @@
    * also we always remove the current lisitem of the unorderlist
    * *****/
 
+  /**
+   * ************
+   * looks like there is a live link to the items in our allview, active and completed array
+   * in our cachedObj so when we change current view our algorithm is assigning tabindex = "0"
+   * to the top item of that view (its array) which is the item at index = 0
+   * but it is also assign tabindex = "0" to that item in allview array
+   * ************
+   * one solution is to loop through allview array change tabindex of all items to "-1"
+   * also change tabindex of the todo item checked and delete btn to "-1"
+   * ************
+   *
+   * ************
+   * **/
+
   function applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
     target,
     previousTarget
@@ -3551,4 +3696,11 @@ var curry = (fn, arity = fn.length, nextCurried) =>
   /* img cross */
   /* delete button */
   // div
+  {
+    // Read for 1 hour
+    // Jog around block
+    // Complete Challenges
+    // Walk dog
+    // Learn more a11y
+  }
 })();
