@@ -873,7 +873,7 @@
             // use if statement to make algorithm above more readable
             if (arrayIndex == unorderedList.childElementCount) {
               singleTargetChangeTabindexCheckedAndDeleteBtn(
-                firstTodoItemActiveView,
+                firstItemOfCompletedView,
                 "0"
               );
               applyFocusChangeTabindexSingleTarget(
@@ -1139,14 +1139,12 @@
     // active view
     cachedData.originalElementOrderInAllViewArray.activeViewOriginalOrder =
       originalAllViewIndexForElementsInActiveOrCompletedArray(
-        cachedData.arraysOfDifferentViews.activeViewArray,
-        "activeView"
+        cachedData.arraysOfDifferentViews.activeViewArray
       );
     // completed view
     cachedData.originalElementOrderInAllViewArray.completedViewOriginalOrder =
       originalAllViewIndexForElementsInActiveOrCompletedArray(
-        cachedData.arraysOfDifferentViews.completedViewArray,
-        "completeView"
+        cachedData.arraysOfDifferentViews.completedViewArray
       );
 
     switch (cachedData.currentView) {
@@ -1158,7 +1156,9 @@
             updateAttrForTodoItemCheckedAndDeleteBtn,
             createChildrenForUnorderedList
           );
-
+          alert(
+            "test our algorithm. all,active,completed view. checked and delete btn. clear completed btn"
+          );
           removeCurrentListitemsAppendFragmentElement(
             unorderedList,
             deleteBtnAllView
@@ -1178,6 +1178,11 @@
             //       unorderedList.children[arrayIndex]
             //     );
             // use if statement to make algorithm above more readable
+            /**
+             * we dont have to remove/search for previous todo item with tabindex = "0"
+             * because when user click on delete btn our algorithm will remove it from allview,active and completed array
+             * there should be no reference and any attr on that todo item will be remove with that todo item
+             * **/
             if (arrayIndex == unorderedList.childElementCount) {
               singleTargetChangeTabindexCheckedAndDeleteBtn(
                 firstItemAllView,
@@ -1213,6 +1218,11 @@
              * use that index to focus the current todo listitem after we create todo listitem and append listitem to unorderlist
              * if arrayindex is greater than > useIndexToFocusItemForDelBtnAlgorithm just use useIndexToFocusItemForDelBtnAlgorithm to assign tabindex = "0" to that element
              * when arrayIndex and useIndexToFocusItemForDelBtnAlgorithm equal to each other the if statement of this else statement will handle that situation
+             * **/
+            /**
+             * we dont have to remove/search for previous todo item with tabindex = "0"
+             * because when user click on delete btn our algorithm will remove it from allview,active and completed array
+             * there should be no reference and any attr on that todo item will be remove with that todo item
              * **/
             if (arrayIndex < useIndexToFocusItemForDelBtnAlgorithm) {
               singleTargetChangeTabindexCheckedAndDeleteBtn(
@@ -1287,6 +1297,11 @@
             //       arrayIndex
             //   );
             // using if statement because it is more readable
+            /**
+             * we dont have to remove/search for previous todo item with tabindex = "0"
+             * because when user click on delete btn our algorithm will remove it from allview,active and completed array
+             * there should be no reference and any attr on that todo item will be remove with that todo item
+             * **/
             if (arrayIndex == unorderedList.childElementCount) {
               // focus todo at index = 0
               singleTargetChangeTabindexCheckedAndDeleteBtn(
@@ -1652,6 +1667,17 @@
           unorderedList,
           allViewArray
         );
+        /**
+         * before we assign tabindex = "0" to the first item of the allview, active
+         * or completed view array. find the elements with tabindex = "0" and change it to tabindex "-1"
+         * also change tabindex to "-1" for checked and delete btn of that todo item
+         * **/
+
+        const todosWithTabindexZeroAllView = arrayOfItemsWithTabindexZero(
+          cachedData.arraysOfDifferentViews.allViewArray
+        );
+        changeListitemTabindexToNegativeOne(todosWithTabindexZeroAllView, "-1");
+
         singleTargetChangeTabindexCheckedAndDeleteBtn(
           unorderedList.children[0],
           "0"
@@ -1796,6 +1822,21 @@
           unorderedList,
           activeViewBtnArray
         );
+
+        /**
+         * before we assign tabindex = "0" to the first item of the allview, active
+         * or completed view array. find the elements with tabindex = "0" and change it to tabindex "-1"
+         * also change tabindex to "-1" for checked and delete btn of that todo item
+         * **/
+
+        const itemsWithTabindexZeroActiveView = arrayOfItemsWithTabindexZero(
+          cachedData.arraysOfDifferentViews.activeViewArray
+        );
+        changeListitemTabindexToNegativeOne(
+          itemsWithTabindexZeroActiveView,
+          "-1"
+        );
+
         singleTargetChangeTabindexCheckedAndDeleteBtn(
           unorderedList.children[0],
           "0"
@@ -1924,6 +1965,21 @@
           unorderedList,
           completedViewBtnArray
         );
+
+        /**
+         * before we assign tabindex = "0" to the first item of the allview, active
+         * or completed view array. find the elements with tabindex = "0" and change it to tabindex "-1"
+         * also change tabindex to "-1" for checked and delete btn of that todo item
+         * **/
+
+        const todosWithTabindexZeroCompletedView = arrayOfItemsWithTabindexZero(
+          cachedData.arraysOfDifferentViews.completedViewArray
+        );
+        changeListitemTabindexToNegativeOne(
+          todosWithTabindexZeroCompletedView,
+          "-1"
+        );
+
         singleTargetChangeTabindexCheckedAndDeleteBtn(
           unorderedList.children[0],
           "0"
@@ -2187,10 +2243,10 @@
         cachedData.arraysOfDifferentViews.activeViewArray
       );
       // update original allview index of active array in cachedObj
-      originalAllViewIndexForElementsInActiveOrCompletedArray(
-        cachedData.arraysOfDifferentViews.activeViewArray,
-        "activeView"
-      );
+      cachedData.originalElementOrderInAllViewArray.activeViewOriginalOrder =
+        originalAllViewIndexForElementsInActiveOrCompletedArray(
+          cachedData.arraysOfDifferentViews.activeViewArray
+        );
       // copy the array of active todo to allview array in cachedObj
       cachedData.arraysOfDifferentViews.allViewArray = [
         ...cachedData.arraysOfDifferentViews.activeViewArray,
@@ -2251,6 +2307,18 @@
             unorderedList,
             allViewOfClearBtnFunc
           );
+          /**
+           * our algorithm outside the switch statement, we are removing the items
+           * in completedview array in cachedObj by making array length equal 0
+           * that should remove the reference
+           * the algorithm is also checking if the current todo/focus item has tabindex = "0" or "-1"
+           * and if its todocompleted = "true"
+           * when the todocompleted = "true" that item will be removed from both allview and completed array
+           * when user click clear completed btn
+           * *******
+           * we won't have to search previous todo with tabindex = "0" and assign "-1" to it
+           * *******
+           * **/
 
           singleTargetChangeTabindexCheckedAndDeleteBtn(
             unorderedList.children[indexToUseForAllViewSwitchStatmentAlgorithm],
@@ -2282,6 +2350,18 @@
             removeCurrentListitemsAppendFragmentElement,
             addOrRemoveTopBorderToViewsContainer
           );
+          /**
+           * our algorithm outside the switch statement, we are removing the items
+           * in completedview array in cachedObj by making array length equal 0
+           * that should remove the reference
+           * the algorithm is also checking if the current todo/focus item has tabindex = "0" or "-1"
+           * and if its todocompleted = "true"
+           * when the todocompleted = "true" that item will be removed from both allview and completed array
+           * when user click clear completed btn
+           * *******
+           * we won't have to search previous todo with tabindex = "0" and assign "-1" to it
+           * *******
+           * **/
 
           singleTargetChangeTabindexCheckedAndDeleteBtn(
             unorderedList.children[indexOfElementTabindexIsZero],
@@ -2457,15 +2537,15 @@
       // );
       // save original order of allViewIndex for active and completed
       // active view
-      originalAllViewIndexForElementsInActiveOrCompletedArray(
-        buildingActiveArray,
-        "activeView"
-      );
+      cachedData.originalElementOrderInAllViewArray.activeViewOriginalOrder =
+        originalAllViewIndexForElementsInActiveOrCompletedArray(
+          buildingActiveArray
+        );
       // completed view
-      originalAllViewIndexForElementsInActiveOrCompletedArray(
-        buildingCompletedArray,
-        "completedView"
-      );
+      cachedData.originalElementOrderInAllViewArray.completedViewOriginalOrder =
+        originalAllViewIndexForElementsInActiveOrCompletedArray(
+          buildingCompletedArray
+        );
       // add one to items left text
       increaseOrDecreaseItemsLeftCounter("add");
       /**
@@ -3255,6 +3335,37 @@
   }
 
   /**
+   * filter out element with tabindex = "0"
+   * **/
+
+  function arrayOfItemsWithTabindexZero(array) {
+    // using filter method
+    return array.filter(function findElementWithTabindexZero(listitem) {
+      const elementTabindex = Number(listitem.getAttribute("tabindex"));
+      return elementTabindex == 0;
+    });
+    // usin reduce method
+    // return array.reduce(function findElementWithTabindexZero(buildingUp, currentListitem) {
+    //   const elementTabindex = Number(currentListitem.getAttribute("tabindex"));
+    //   if (elementTabindex == 0) {
+    //     buildingUp.push(currentListitem);
+    //   }
+    //   return buildingUp;
+    // }, []);
+  }
+
+  /**
+   * loop through array change tabindex to "-1"
+   * **/
+
+  function changeListitemTabindexToNegativeOne(array, stringValue) {
+    array.forEach(function changeTabindexValue(listitem) {
+      singleTargetChangeTabindexCheckedAndDeleteBtn(listitem, stringValue);
+      applyFocusChangeTabindexSingleTarget(listitem, stringValue);
+    });
+  }
+
+  /**
    * assign data-allviewindex and data-grabdragindex for elements in allView array
    * when we create a todo item
    * **/
@@ -3274,14 +3385,24 @@
     list,
     stringForObjAccess
   ) {
-    list.forEach(function addAllViewIndexToArray(listitem) {
-      const itemAllViewIndex = listitem.getAttribute("data-allviewindex");
-      // algorithm below will get array in cachedObj of obj originalElementOrderInAllViewArray
-      // based on string we pass in
-      cachedData.originalElementOrderInAllViewArray[
-        `${stringForObjAccess}OriginalOrder`
-      ].push(itemAllViewIndex);
-    });
+    // list.forEach(function addAllViewIndexToArray(listitem) {
+    //   const itemAllViewIndex = listitem.getAttribute("data-allviewindex");
+    //   // algorithm below will get array in cachedObj of obj originalElementOrderInAllViewArray
+    //   // based on string we pass in
+    //   cachedData.originalElementOrderInAllViewArray[
+    //     `${stringForObjAccess}OriginalOrder`
+    //   ].push(itemAllViewIndex);
+    // });
+    // use reduce to return an array of original allview index
+    return list.reduce(function addAllViewIndexToArray(
+      buildingUp,
+      currentValue
+    ) {
+      const itemAllViewIndex = currentValue.getAttribute("data-allviewindex");
+      buildingUp.push(itemAllViewIndex);
+      return buildingUp;
+    },
+    []);
   }
 
   /**
