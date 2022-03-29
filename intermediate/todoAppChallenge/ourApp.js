@@ -654,7 +654,7 @@
                 firstTodoItemActiveView,
                 "0"
               );
-              unorderedList.children[firstTodoItemActiveView].focus();
+              firstTodoItemActiveView.focus();
             } else {
               singleTargetChangeTabindexCheckedAndDeleteBtn(
                 unorderedList.children[arrayIndex],
@@ -777,9 +777,14 @@
               cachedData.arraysOfDifferentViews.allViewArray,
               assignAttrToArrayAndCreateListitem,
               removeCurrentListitemsAppendFragmentElement,
-              currentViewBtnActive,
-              currentViewBtnActive.previousElementSibling,
               unorderedList
+            );
+            // current should be "active" we want to remove data-currentView
+            currentViewBtnActive.removeAttribute("data-currentView");
+            // apply data-currentView to "allview" btn
+            currentViewBtnActive.previousElementSibling.setAttribute(
+              "data-currentView",
+              ""
             );
             // check the value of views container data-unorderedhasitems attr
             document
@@ -880,7 +885,7 @@
                 firstItemOfCompletedView,
                 "0"
               );
-              unorderedList.children[firstItemOfCompletedView].focus();
+              firstItemOfCompletedView.focus();
             } else {
               singleTargetChangeTabindexCheckedAndDeleteBtn(
                 unorderedList.children[arrayIndex],
@@ -996,10 +1001,14 @@
               cachedData.arraysOfDifferentViews.allViewArray,
               assignAttrToArrayAndCreateListitem,
               removeCurrentListitemsAppendFragmentElement,
-              currentViewBtnCompleted,
-              currentViewBtnCompleted.previousElementSibling
-                .previousElementSibling,
               unorderedList
+            );
+            // current should be "completed" we want to remove data-currentView
+            currentViewBtnCompleted.removeAttribute("data-currentView");
+            // apply data-currentView to "allview" btn
+            currentViewBtnCompleted.previousElementSibling.previousElementSibling.setAttribute(
+              "data-currentView",
+              ""
             );
             // check the value of views container data-unorderedhasitems attr
             document
@@ -1156,9 +1165,7 @@
             updateAttrForTodoItemCheckedAndDeleteBtn,
             createChildrenForUnorderedList
           );
-          alert(
-            "test our algorithm. all,active,completed view. checked and delete btn. clear completed btn"
-          );
+
           removeCurrentListitemsAppendFragmentElement(
             unorderedList,
             deleteBtnAllView
@@ -1189,7 +1196,7 @@
                 "0"
               );
               applyFocusChangeTabindexSingleTarget(firstItemAllView, "0");
-              unorderedList.children[firstItemAllView].focus();
+              firstItemAllView.focus();
             } else {
               singleTargetChangeTabindexCheckedAndDeleteBtn(
                 unorderedList.children[arrayIndex],
@@ -1305,14 +1312,11 @@
             if (arrayIndex == unorderedList.childElementCount) {
               // focus todo at index = 0
               singleTargetChangeTabindexCheckedAndDeleteBtn(
-                unorderedList.children[firstItemActiveView],
+                firstItemActiveView,
                 "0"
               );
-              applyFocusChangeTabindexSingleTarget(
-                unorderedList.children[firstItemActiveView],
-                "0"
-              );
-              unorderedList.children[firstItemActiveView].focus();
+              applyFocusChangeTabindexSingleTarget(firstItemActiveView, "0");
+              firstItemActiveView.focus();
             } else {
               singleTargetChangeTabindexCheckedAndDeleteBtn(
                 unorderedList.children[arrayIndex],
@@ -1378,51 +1382,56 @@
           /**
            * check if cachedObj.allView array length is == 0
            * **/
-          if (cachedData.arraysOfDifferentViews.allViewArray.length > 0) {
-            const currViewBtnActive = findCurrentViewBtn(
-              "button[data-currentView]"
-            );
-            if (cachedData.arraysOfDifferentViews.allViewArray.length == 0) {
-              unorderedList.replaceChildren();
-              currViewBtnActive.removeAttribute("data-currentView");
-              currViewBtnActive.previousElementSibling.removeAttribute(
-                "data-currentView"
-              );
-            } else {
-              appendAllViewElementsAndChangeToAllView(
-                cachedData.arraysOfDifferentViews.allViewArray,
-                assignAttrToArrayAndCreateListitem,
-                removeCurrentListitemsAppendFragmentElement,
-                currViewBtnActive,
-                currViewBtnActive.previousElementSibling,
-                unorderedList
-              );
-              /**
-               * assign value "0" to tabindex of first element of allview array
-               * **/
-              singleTargetChangeTabindexCheckedAndDeleteBtn(
-                unorderedList.children[0],
-                "0"
-              );
-              applyFocusChangeTabindexSingleTarget(
-                unorderedList.children[0],
-                "0"
-              );
-              unorderedList.children[0].focus();
-            }
-          } else {
+          const currViewBtnActive = findCurrentViewBtn(
+            "button[data-currentView]"
+          );
+          if (cachedData.arraysOfDifferentViews.allViewArray.length == 0) {
             unorderedList.replaceChildren();
+            // current should be "active" we want to remove data-currentView
+            currViewBtnActive.removeAttribute("data-currentView");
+            // apply data-currentView to "allview" btn
+            currViewBtnActive.previousElementSibling.setAttribute(
+              "data-currentView",
+              ""
+            );
             document
               .querySelector(".views-container")
               .getAttribute("data-unorderedhasitems") != "false"
               ? addOrRemoveTopBorderToViewsContainer("false")
               : null;
+          } else {
+            appendAllViewElementsAndChangeToAllView(
+              cachedData.arraysOfDifferentViews.allViewArray,
+              assignAttrToArrayAndCreateListitem,
+              removeCurrentListitemsAppendFragmentElement,
+              unorderedList
+            );
+            /**
+             * assign value "0" to tabindex of first element of allview array
+             * **/
+            // current should be "active" we want to remove data-currentView
+            currViewBtnActive.removeAttribute("data-currentView");
+            // apply data-currentView to "allview" btn
+            currViewBtnActive.previousElementSibling.setAttribute(
+              "data-currentView",
+              ""
+            );
+            singleTargetChangeTabindexCheckedAndDeleteBtn(
+              unorderedList.children[0],
+              "0"
+            );
+            applyFocusChangeTabindexSingleTarget(
+              unorderedList.children[0],
+              "0"
+            );
+            unorderedList.children[0].focus();
           }
         }
 
         break;
       case "Completed":
         // append todo items in completed view array to unorderlist
+
         if (cachedData.arraysOfDifferentViews.completedViewArray.length >= 1) {
           // change attrs
           // create li elements, remove unorderlist children, append elements
@@ -1450,14 +1459,11 @@
             // use if statement more readable
             if (arrayIndex == unorderedList.childElementCount) {
               singleTargetChangeTabindexCheckedAndDeleteBtn(
-                unorderedList.children[firstItemCompletedView],
+                firstItemCompletedView,
                 "0"
               );
-              applyFocusChangeTabindexSingleTarget(
-                unorderedList.children[firstItemCompletedView],
-                "0"
-              );
-              unorderedList.children[firstItemCompletedView].focus();
+              applyFocusChangeTabindexSingleTarget(firstItemCompletedView, "0");
+              firstItemCompletedView.focus();
             } else {
               singleTargetChangeTabindexCheckedAndDeleteBtn(
                 unorderedList.children[arrayIndex],
@@ -1528,9 +1534,12 @@
           );
           if (cachedData.arraysOfDifferentViews.allViewArray.length == 0) {
             unorderedList.replaceChildren();
+            // current should be "completed" we want to remove data-currentView
             currViewBtnCompleted.removeAttribute("data-currentView");
-            currViewBtnCompleted.previousElementSibling.previousElementSibling.removeAttribute(
-              "data-currentView"
+            // apply data-currentView to "allview" btn
+            currViewBtnCompleted.previousElementSibling.previousElementSibling.setAttribute(
+              "data-currentView",
+              ""
             );
             document
               .querySelector(".views-container")
@@ -1542,13 +1551,18 @@
               cachedData.arraysOfDifferentViews.allViewArray,
               assignAttrToArrayAndCreateListitem,
               removeCurrentListitemsAppendFragmentElement,
-              currViewBtnCompleted,
-              currViewBtnCompleted.previousElementSibling,
               unorderedList
             );
             /**
              * assign value "0" to tabindex of first element of allview array
              * **/
+            // current should be "completed" we want to remove data-currentView
+            currViewBtnCompleted.removeAttribute("data-currentView");
+            // apply data-currentView to "allview" btn
+            currViewBtnCompleted.previousElementSibling.previousElementSibling.setAttribute(
+              "data-currentView",
+              ""
+            );
             singleTargetChangeTabindexCheckedAndDeleteBtn(
               unorderedList.children[0],
               "0"
@@ -1646,6 +1660,8 @@
        * the way we had it which was outside of this if statement if (!checkForCurrentViewAttrOfElement) {}
        * algorithm will run every time we clicked allview btn
        * **/
+      console.log("before", cachedData);
+
       if (cachedData.arraysOfDifferentViews.allViewArray.length == 0) {
         // remove items
         unorderedList.replaceChildren();
@@ -1671,6 +1687,12 @@
          * before we assign tabindex = "0" to the first item of the allview, active
          * or completed view array. find the elements with tabindex = "0" and change it to tabindex "-1"
          * also change tabindex to "-1" for checked and delete btn of that todo item
+         * **/
+
+        /**
+         * we are looping through the current view array and looking to change any todo item
+         * that has tabindex = "0" to tabindex = "-1"
+         * WE ARE NOT CHANGING ANY OF THE TODO ITEMS IN THE OTHER ARRAYS IN OUR CACHEDOBJ`N
          * **/
 
         const todosWithTabindexZeroAllView = arrayOfItemsWithTabindexZero(
@@ -1714,6 +1736,7 @@
     //     return fn(outerStr, innerStr);
     //   };
     // });
+    console.log("after", cachedData);
   }
 
   // Active view btn
@@ -1800,6 +1823,7 @@
        * the way we had it which was outside of this if statement if (!checkForCurrentViewAttrOfElement) {}
        * algorithm will run every time we clicked allview btn
        * **/
+      console.log("before", cachedData);
       if (cachedData.arraysOfDifferentViews.activeViewArray.length == 0) {
         // remove items
         unorderedList.replaceChildren();
@@ -1827,6 +1851,12 @@
          * before we assign tabindex = "0" to the first item of the allview, active
          * or completed view array. find the elements with tabindex = "0" and change it to tabindex "-1"
          * also change tabindex to "-1" for checked and delete btn of that todo item
+         * **/
+
+        /**
+         * we are looping through the current view array and looking to change any todo item
+         * that has tabindex = "0" to tabindex = "-1"
+         * WE ARE NOT CHANGING ANY OF THE TODO ITEMS IN THE OTHER ARRAYS IN OUR CACHEDOBJ`N
          * **/
 
         const itemsWithTabindexZeroActiveView = arrayOfItemsWithTabindexZero(
@@ -1864,6 +1894,7 @@
     cachedData.currentView != "Active"
       ? (cachedData.currentView = "Active")
       : null;
+    console.log("after", cachedData);
   }
 
   // Completed view btn
@@ -1943,7 +1974,7 @@
        * the way we had it which was outside of this if statement if (!checkForCurrentViewAttrOfElement) {}
        * algorithm will run every time we clicked allview btn
        * **/
-      console.log(cachedData);
+      console.log("before", cachedData);
       if (cachedData.arraysOfDifferentViews.completedViewArray.length == 0) {
         // remove items
         unorderedList.replaceChildren();
@@ -1970,6 +2001,12 @@
          * before we assign tabindex = "0" to the first item of the allview, active
          * or completed view array. find the elements with tabindex = "0" and change it to tabindex "-1"
          * also change tabindex to "-1" for checked and delete btn of that todo item
+         * **/
+
+        /**
+         * we are looping through the current view array and looking to change any todo item
+         * that has tabindex = "0" to tabindex = "-1"
+         * WE ARE NOT CHANGING ANY OF THE TODO ITEMS IN THE OTHER ARRAYS IN OUR CACHEDOBJ`N
          * **/
 
         const todosWithTabindexZeroCompletedView = arrayOfItemsWithTabindexZero(
@@ -2009,6 +2046,7 @@
     cachedData.currentView != "Completed"
       ? (cachedData.currentView = "Completed")
       : null;
+    console.log("after", cachedData);
   }
 
   // clear completed
@@ -3631,9 +3669,11 @@
     //target will be either checked or delete button
     // const todoListitemOfCheckedAndDeleteBtn = target.closest("li");
     // allview index
-    const allViewIndex = listitem.getAttribute("data-allViewIndex");
+    const allViewIndex = Number(listitem.getAttribute("data-allViewIndex"));
     // current view array index
-    const currentViewArrayIndex = listitem.getAttribute("data-grabDragIndex");
+    const currentViewArrayIndex = Number(
+      listitem.getAttribute("data-grabDragIndex")
+    );
     // data-grabDragIndex will be based on the items in the all,active or completed array
     // in cachedObj
     return [allViewIndex, currentViewArrayIndex];
@@ -3693,8 +3733,6 @@
     array,
     assignFunc,
     removeCurrentFunc,
-    currentView,
-    previousSibling,
     todoItemParent
   ) {
     const showAllView = assignFunc(
@@ -3703,8 +3741,8 @@
       createChildrenForUnorderedList
     );
     removeCurrentFunc(todoItemParent, showAllView);
-    currentView.removeAttribute("data-currentview");
-    previousSibling.setAttribute("data-currentview", "");
+    // currentView.removeAttribute("data-currentview");
+    // previousSibling.setAttribute("data-currentview", "");
     // assign "All" to cachedObj.currentView
     cachedData.currentView = "All";
     // focus first element of todo list
