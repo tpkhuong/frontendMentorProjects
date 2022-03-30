@@ -326,6 +326,7 @@
         "0"
       );
     }
+    console.log(cachedData);
   }
 
   // checked btn
@@ -422,6 +423,7 @@
     // if user is ONLY using keyboard tabindex of clicked checked btn will be "0"
     // if user is using keyboard and mouse, when user have a todo item focus then they clicked on checked btn
     // tabindex of todo item will be "-1"
+
     const todoItemTabIndex =
       todoListitemOfClickedCheckedBtn.getAttribute("tabindex");
 
@@ -1394,6 +1396,9 @@
               "data-currentView",
               ""
             );
+            // assign "All" to cachedObj.currentView
+            cachedData.currentView = "All";
+
             document
               .querySelector(".views-container")
               .getAttribute("data-unorderedhasitems") != "false"
@@ -1541,6 +1546,8 @@
               "data-currentView",
               ""
             );
+            // assign "All" to cachedObj.currentView
+            cachedData.currentView = "All";
             document
               .querySelector(".views-container")
               .getAttribute("data-unorderedhasitems") != "false"
@@ -1576,6 +1583,7 @@
         }
         break;
     }
+    console.log(cachedData);
     console.log(event.target.parentElement.parentElement);
     console.log("delete");
   }
@@ -1588,6 +1596,7 @@
   // All view btn
 
   function allViewBtnClicked(event) {
+    alert("look at views container top border algorithm");
     /**
      * get index of todo with tabindex = "0";
      * +1 to index for all and active view algorithm
@@ -2083,6 +2092,7 @@
     /**
      * we can use indexOfElementTabindexIsZero because this is based on the length of unorderlist.children in all,active and completed views
      * **/
+
     const indexOfElementTabindexIsZero = [...unorderedList.children].reduce(
       function findTabindexZero(buildingUp, currentValue, index) {
         const elementTabindex = Number(currentValue.getAttribute("tabindex"));
@@ -2093,106 +2103,179 @@
       },
       null
     );
-    /**
-     * in switch statement for "Active" view we will use indexOfElementTabindexIsZero to apply tabindex = "0" and other attrs
-     * to element at indexOfElementTabindexIsZero
-     * **/
-    // find which todo item has tabindex = "0"
-    // if the todo item that has tabindex = "0" is completed
-    // find next active todo element with tabindex = "-1"
-    // using for loop
-    // get length of allview array in cachedobj
-    // algorithm below is for "All" currentView of switch() statement
-
-    const elementWithTabindexZero =
-      unorderedList.children[indexOfElementTabindexIsZero];
-
-    const elementTodoStatus =
-      elementWithTabindexZero.getAttribute("data-todoCompleted");
-    /**
-     * we want to find the next item that is not completed when the current todo item that has tabindex = "0"
-     * is completed
-     * **/
-    // const indexOfTodoNotCompleted = usingForLoopToFindIndexOfTodoNotCompleted(
-    //   indexOfElementTabindexIsZero,
-    //   unorderedList.children
-    // );
-
-    // when elementTodoStatus == "true" run usingForLoopToFindIndexOfTodoNotCompleted(
-    //   indexOfElementTabindexIsZero,
-    //   unorderedList.children
-    // );
-    /**
-     * if elementTodoStatus is "true" it means the todo item is completed
-     * when that is the case we want to look for the next todo item in unorderedlist.children
-     * that todocompleted value is "false".
-     * we start looking for that todo item at indexOfElementTabindexIsZero because this element will have its todocompleted attr value set to "true"
-     **/
 
     /**
-     * when elementTodoStatus is "false" we won't run usingForLoopToFindIndexOfTodoNotCompleted func
-     * which means we can run a func that will return an array of active todos after running our conditional checks
-     * for if elementTodoStatus is "true"
+     * loop through allview or unorderedlist.children check if there is at least
+     * one item with data-todocompleted "false"
      * **/
 
-    const indexOfTodoNotCompleted =
-      elementTodoStatus == "true"
-        ? usingForLoopToFindIndexOfTodoNotCompleted(
-            indexOfElementTabindexIsZero,
-            unorderedList.children
-          )
+    const atLeastOneActiveTodoItem =
+      cachedData.arraysOfDifferentViews.allViewArray.some(function findActive(
+        listitem
+      ) {
+        const todoItemStatus = listitem.getAttribute("data-todoCompleted");
+        return todoItemStatus == "false";
+      });
+
+    /**
+     * loop through allview or unorderedlist.children check if there is at least
+     * one item with data-todocompleted "true"
+     * **/
+
+    const atLeastOneCompletedTodoItem =
+      cachedData.arraysOfDifferentViews.allViewArray.some(
+        function findCompleted(listitem) {
+          const todoStatus = listitem.getAttribute("data-todoCompleted");
+          return todoStatus == "true";
+        }
+      );
+
+    if (atLeastOneCompletedTodoItem && atLeastOneActiveTodoItem) {
+      /**
+       * in switch statement for "Active" view we will use indexOfElementTabindexIsZero to apply tabindex = "0" and other attrs
+       * to element at indexOfElementTabindexIsZero
+       * **/
+      // find which todo item has tabindex = "0"
+      // if the todo item that has tabindex = "0" is completed
+      // find next active todo element with tabindex = "-1"
+      // using for loop
+      // get length of allview array in cachedobj
+      // algorithm below is for "All" currentView of switch() statement
+
+      const elementWithTabindexZero =
+        unorderedList.children[indexOfElementTabindexIsZero];
+
+      const elementTodoStatus =
+        elementWithTabindexZero.getAttribute("data-todoCompleted");
+      /**
+       * ********
+       * we want to find the next item that has attr data-todoCompleted "false"
+       * when there is at least one item in the allview array in our cachedObj that has
+       * data-todoCompleted set to "false" and there is at least one completed todo
+       * ********
+       * **/
+      /**
+       * we want to find the next item that is not completed when the current todo item that has tabindex = "0"
+       * is completed
+       * **/
+      // const indexOfTodoNotCompleted = usingForLoopToFindIndexOfTodoNotCompleted(
+      //   indexOfElementTabindexIsZero,
+      //   unorderedList.children
+      // );
+
+      // when elementTodoStatus == "true" run usingForLoopToFindIndexOfTodoNotCompleted(
+      //   indexOfElementTabindexIsZero,
+      //   unorderedList.children
+      // );
+      /**
+       * if elementTodoStatus is "true" it means the todo item is completed
+       * when that is the case we want to look for the next todo item in unorderedlist.children
+       * that todocompleted value is "false".
+       * we start looking for that todo item at indexOfElementTabindexIsZero because this element will have its todocompleted attr value set to "true"
+       **/
+
+      /**
+       * when elementTodoStatus is "false" we won't run usingForLoopToFindIndexOfTodoNotCompleted func
+       * which means we can run a func that will return an array of active todos after running our conditional checks
+       * for if elementTodoStatus is "true"
+       * **/
+
+      /**
+       * we can pass in allview array in cachedObj
+       * since the items in the allview array will have updated todoCompleted value
+       * instead of passing in unorderedlist.children
+       * **/
+
+      const indexOfTodoNotCompleted =
+        elementTodoStatus == "true"
+          ? usingForLoopToFindIndexOfTodoNotCompleted(
+              indexOfElementTabindexIsZero,
+              cachedData.arraysOfDifferentViews.allViewArray
+            )
+          : null;
+
+      /**
+       * when above algorithm for variable indexOfTodoNotCompleted is null it means the element at indexOfElementTabindexIsZero
+       * todocompleted value is "false" if that is the case we want tabindex "0" to stay on that element/todo item
+       * we can assign indexOfElementTabindexIsZero to indexOfTodoNotCompleted and use indexOfTodoNotCompleted in our switch statement for "Active" view
+       * to apply tabindex = "0" to the element/todo at indexOfTodoNotCompleted
+       * or assign null to indexOfTodoNotCompleted if elementTodoStatus is "false" just use indexOfElementTabindexIsZero in our switch statement for "Active" view
+       * to apply tabindex = "0" to the element/todo at indexOfTodoNotCompleted
+       * **/
+
+      /**
+       * when indexOfTodoNotCompleted value is not null it means the element at indexOfElementTabindexIsZero todocomplete value is "true"
+       * when want to assign tabindex = "0" to the element at the index that will be a return value from calling usingForLoopToFindIndexOfTodoNotCompleted
+       * our reason is we will run an algorithm that will return an array of the current active todos which means the todo item that is completed
+       * will not be a part of that array and only one todo item will have tabindex = "0" once we run a func that will return an array of active todos
+       * **/
+
+      /**
+       * for allview algorithm we will look for the index of the todo item that has tabindex = "0" once we run a func that will return an array
+       * of "Active" todo items, its todocompleted value will be "false"
+       * **/
+
+      const elementOfTodoNotCompleted = indexOfTodoNotCompleted
+        ? cachedData.arraysOfDifferentViews.allViewArray[
+            indexOfTodoNotCompleted
+          ]
         : null;
 
-    /**
-     * when above algorithm for variable indexOfTodoNotCompleted is null it means the element at indexOfElementTabindexIsZero
-     * todocompleted value is "false" if that is the case we want tabindex "0" to stay on that element/todo item
-     * we can assign indexOfElementTabindexIsZero to indexOfTodoNotCompleted and use indexOfTodoNotCompleted in our switch statement for "Active" view
-     * to apply tabindex = "0" to the element/todo at indexOfTodoNotCompleted
-     * or assign null to indexOfTodoNotCompleted if elementTodoStatus is "false" just use indexOfElementTabindexIsZero in our switch statement for "Active" view
-     * to apply tabindex = "0" to the element/todo at indexOfTodoNotCompleted
-     * **/
+      /**
+       * assign tabindex = "-1" to all items in element before we assign tabindex = "0"
+       * to element of this identifier/variable elementOfTodoNotCompleted
+       * **/
 
-    /**
-     * when indexOfTodoNotCompleted value is not null it means the element at indexOfElementTabindexIsZero todocomplete value is "true"
-     * when want to assign tabindex = "0" to the element at the index that will be a return value from calling usingForLoopToFindIndexOfTodoNotCompleted
-     * our reason is we will run an algorithm that will return an array of the current active todos which means the todo item that is completed
-     * will not be a part of that array and only one todo item will have tabindex = "0" once we run a func that will return an array of active todos
-     * **/
+      /**
+       * we are looping through the current view array and looking to change any todo item
+       * that has tabindex = "0" to tabindex = "-1"
+       * WE ARE NOT CHANGING ANY OF THE TODO ITEMS IN THE OTHER ARRAYS IN OUR CACHEDOBJ`N
+       * **/
 
-    /**
-     * for allview algorithm we will look for the index of the todo item that has tabindex = "0" once we run a func that will return an array
-     * of "Active" todo items, its todocompleted value will be "false"
-     * **/
+      const todosWithTabindexZeroAllView = arrayOfItemsWithTabindexZero(
+        cachedData.arraysOfDifferentViews.allViewArray
+      );
 
-    const elementOfTodoNotCompleted = indexOfTodoNotCompleted
-      ? unorderedList.children[indexOfTodoNotCompleted]
-      : null;
+      changeListitemTabindexToNegativeOne(todosWithTabindexZeroAllView, "-1");
 
-    /**
-     * we only assign tabidnex = "0" to elementOfTodoNotCompleted when indexOfTodoNotCompleted and elementOfTodoNotCompleted are truthy
-     * **/
+      /**
+       * we only assign tabidnex = "0" to elementOfTodoNotCompleted when indexOfTodoNotCompleted and elementOfTodoNotCompleted are truthy
+       * **/
 
-    /**
-     * when indexOfTodoNotCompleted is falsy it will make elementOfTodoNotCompleted falsy which will get our algorithm to the null part of
-     * the ternary operator below
-     * which means the element with tabindex = "0" will be an active todo.
-     * run our func to return an array of active todo items
-     * **/
+      /**
+       * when indexOfTodoNotCompleted is falsy it will make elementOfTodoNotCompleted falsy which will get our algorithm to the null part of
+       * the ternary operator below
+       * which means the element with tabindex = "0" will be an active todo.
+       * run our func to return an array of active todo items
+       * **/
 
-    elementOfTodoNotCompleted
-      ? elementOfTodoNotCompleted.setAttribute("tabindex", "0")
-      : null;
+      /**
+       * elementOfTodoNotCompleted is an element a part of allview array
+       * **/
+      elementOfTodoNotCompleted
+        ? elementOfTodoNotCompleted.setAttribute("tabindex", "0")
+        : null;
+
+      /**
+       * we can pass in allview array in cachedObj
+       * since the items in the allview array will have updated todoCompleted value
+       * instead of passing in unorderedlist.children
+       * **/
+    }
 
     const arrayOfActiveTodoItems = filterOutActiveTodoItems(
-      unorderedList.children
+      cachedData.arraysOfDifferentViews.allViewArray
     );
 
     // find index based on length of arrayOfActiveTodoItems of the todo item with tabindex = "0"
     // assign index to variable use it as a reference in all view switch statement algorithm
-
+    /**
+     * there is chance value of indexToUseForAllViewSwitchStatmentAlgorithm will be null
+     * when arrayOfActiveTodoItems is empty.
+     * if arrayOfActiveTodoItems is empty getIndexOfElementWithTabindexZero will return null
+     * **/
     const indexToUseForAllViewSwitchStatmentAlgorithm =
       getIndexOfElementWithTabindexZero(arrayOfActiveTodoItems);
-
     /**
      * using different algorithm
      * **/
@@ -2270,9 +2353,23 @@
        * we will run func to assign tabindex to listitem at indexToUseForAllViewSwitchStatmentAlgorithm for all view
        * and indexOfElementTabindexIsZero for active view
        * **/
-      arrayOfActiveTodoItems[
-        indexToUseForAllViewSwitchStatmentAlgorithm
-      ].setAttribute("tabIndex", "-1");
+      /**
+       * what algorithm to run when indexToUseForAllViewSwitchStatmentAlgorithm is null
+       arrayOfActiveTodoItems[
+         indexToUseForAllViewSwitchStatmentAlgorithm
+       ].setAttribute("tabIndex", "-1")
+       * **/
+
+      /**
+       * we will assign tabindex to element at indexToUseForAllViewSwitchStatmentAlgorithm of
+       * arrayOfActiveTodoItems when indexToUseForAllViewSwitchStatmentAlgorithm is truthy
+       * **/
+
+      indexToUseForAllViewSwitchStatmentAlgorithm
+        ? arrayOfActiveTodoItems[
+            indexToUseForAllViewSwitchStatmentAlgorithm
+          ].setAttribute("tabIndex", "0")
+        : null;
 
       cachedData.arraysOfDifferentViews.activeViewArray = [
         ...arrayOfActiveTodoItems,
@@ -2445,12 +2542,28 @@
       const element = copiedArray[startIndex];
       const elementTodoStatus = element.getAttribute("data-todoCompleted");
       if (elementTodoStatus == "false") {
-        return startingIndex;
+        return startIndex;
       }
       if (startIndex == length) {
         startIndex = 0;
       }
     }
+    /**
+     * in completed view with two items all data-todoCompleted will have "true"
+     * first item of unorderedlist.children in completed view will have tabindex = "0"
+     * first iteration
+     * endingIndex of this func will be 0
+     * startIndex will be 1
+     * second iteration
+     * endingIndex of this func will be 0
+     * startIndex will be 2
+     * startIndex = 0
+     * third iteration
+     * startIndex = 0
+     * startIndex != endingIndex will be false we break out of for loop
+     * return null
+     * **/
+    return null;
   }
 
   /**
@@ -2569,7 +2682,6 @@
       // assignTabindexZeroToFirstElement(
       //   cachedData.arraysOfDifferentViews.activeViewArray
       // );
-      // // completed
       // assignTabindexZeroToFirstElement(
       //   cachedData.arraysOfDifferentViews.completedViewArray
       // );
