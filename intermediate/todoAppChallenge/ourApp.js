@@ -55,8 +55,8 @@
 
   // add event listener helper
 
-  function applyEventListener(element, listener, func) {
-    element.addEventListener(listener, func);
+  function applyEventListener(element, listener, func, dragBoolean) {
+    element.addEventListener(listener, func, dragBoolean);
   }
 
   // control theme
@@ -1596,7 +1596,6 @@
   // All view btn
 
   function allViewBtnClicked(event) {
-    alert("look at views container top border algorithm");
     /**
      * get index of todo with tabindex = "0";
      * +1 to index for all and active view algorithm
@@ -1721,6 +1720,12 @@
          * we want them to have the option of not having to tab back to the view btns after they changed the current view
          * this way keyboard users can decide on the view they want then use shift tab to focus the first item of that view
          * **/
+        // add top border on views container
+        document
+          .querySelector(".views-container")
+          .getAttribute("data-unorderedhasitems") != "true"
+          ? addOrRemoveTopBorderToViewsContainer("true")
+          : null;
       }
     }
     switch (cachedData.currentView) {
@@ -1887,6 +1892,12 @@
          * we want them to have the option of not having to tab back to the view btns after they changed the current view
          * this way keyboard users can decide on the view they want then use shift tab to focus the first item of that view
          * **/
+        // add top border on views container
+        document
+          .querySelector(".views-container")
+          .getAttribute("data-unorderedhasitems") != "true"
+          ? addOrRemoveTopBorderToViewsContainer("true")
+          : null;
       }
     }
 
@@ -2037,6 +2048,12 @@
          * we want them to have the option of not having to tab back to the view btns after they changed the current view
          * this way keyboard users can decide on the view they want then use shift tab to focus the first item of that view
          * **/
+        // add top border on views container
+        document
+          .querySelector(".views-container")
+          .getAttribute("data-unorderedhasitems") != "true"
+          ? addOrRemoveTopBorderToViewsContainer("true")
+          : null;
       }
     }
 
@@ -2572,7 +2589,28 @@
 
   /**
    * build assistive text string
+   * run func that build assistive text in accessibilityDragAndDrop
+   * when user hit space or enter key to select a item to drap and drop
+   * when user hit space or enter key to select new position where they want the todo item to be
    * **/
+
+  function buildingAssistiveTextString() {
+    // "todo item text content"
+    // "grabbed, current" or "dropped, final"
+    // "position"
+    // "of" or "to"
+    // unorderedlist.children length
+    /**
+     * two text content is dependent on whether user hit space/enter to select todo to start drag process
+     * "grabbed, current" or "dropped, final" and "of" or "to"
+     * **/
+    /**
+     * parameters we want to pass into this func will be:
+     * todo item text content
+     * value of cachedData.draggedItemSelected: which we will use to assign string to two of our variables/identifiers
+     * length of current view. we can use unorderlist.childElementCount
+     * **/
+  }
 
   /**
    * get grabbed element grabDragIndex
@@ -2586,25 +2624,9 @@
    * get grabbed element TODO text
    * **/
 
-  /**
-   * get value of input for todo list
-   * **/
-
-  /**
-   * working with arrays in cachedObj
-   * **/
-
-  /**
-   * all view
-   * **/
-
-  /**
-   * active view
-   * **/
-
-  /**
-   * completed view
-   * **/
+  function grabbedElementTextContent(todoItem) {
+    return todoItem.firstElementChild.children[1].innerText;
+  }
 
   /**
    * building listitem element for todo item, checked btn, and delete btn
@@ -3192,41 +3214,156 @@
   // accessibilityDragAndDrop
 
   function accessibilityDragAndDrop(event) {
+    // target the UL and its children count
+    const unorderedChildren = Array.prototype.slice.call(
+      document.activeElement.parentElement.children
+    );
+    // for "ArrowDown" algorithm
+    const lengthOfUnorderedListMinusOne = unorderedChildren.length - 1;
+    /**
+     * we will separate the algorithm for space/enter key from arrow down and arrow up key
+     * **/
+
     if (document.activeElement.tagName == "LI") {
       // when we get here the focus element will be the todo listitem
-      // target the UL and its children count
-      const unorderedChildren = Array.prototype.slice.call(
-        document.activeElement.parentElement.children
-      );
-      // for "ArrowDown" algorithm
-      const lengthOfUnorderedListMinusOne = unorderedChildren.length - 1;
+
       switch (event.code) {
         case "Space":
         case "Enter":
           event.preventDefault();
           console.log(getGrabDragIndexAttr(document.activeElement));
+          const grabbedElement = document.activeElement;
+          console.log(grabbedElement);
           if (!cachedData.draggedItemSelected) {
             document.activeElement.setAttribute("data-draggedselected", "true");
             cachedData.draggedItemSelected = true;
+            // "grabbed, Current" because users hit space or enter on a todo item
+            // grabbed position
           } else {
             document.activeElement.setAttribute(
               "data-draggedselected",
               "false"
             );
             cachedData.draggedItemSelected = false;
+            // "dropped, final"
           }
+        case "ArrowDown":
+          // use document.activeElement.closest("li")
+          // to get parent and next sibling
+          break;
+        case "ArrowUp":
+          // use document.activeElement.closest("li")
+          // get parent and previous sibling
           break;
       }
     }
+
+    /**
+     * for arrow up and arrow down we want to target closet("li") of focus item
+     * since we have three elements that can be focus the li, checked btn and delete btn
+     * this way when user has checked or delete btn focus we will run algorithm to focus item/drag drop element
+     * **/
+
+    if (document.activeElement.closest("li")) {
+    }
+  }
+
+  /**
+   * mouse drag and drop
+   * **/
+
+  /**
+   * add drag start event
+   * **/
+
+  function applyDragStartEventToDiv(divElement) {
+    //
+  }
+
+  /**
+   * add drag drop
+   * **/
+
+  function applyDragDropEventToListitem(listitem) {
+    //
   }
 
   /**
    * more helper func
    * **/
 
+  /**
+   * mouse drag helper
+   * **/
+
+  /**
+   * mouse drag start
+   * **/
+
+  function mouseDragStart() {}
+
+  /**
+   * mouse drag enter
+   * **/
+
+  function mouseDragEnter() {}
+
+  /**
+   * mouse drag drop
+   * **/
+
+  function mouseDragDrop() {}
+
+  /**
+   * mouse drag leave
+   * **/
+
+  function mouseDragLeave() {}
+
+  /**
+   * mouse drag over
+   * **/
+
+  function mouseDragOver() {}
+
+  /**
+   * keyboard drag helper
+   * **/
+
+  /**
+   * get drag index attr
+   * **/
+
   function getGrabDragIndexAttr(element) {
     return element.getAttribute("data-grabDragIndex");
   }
+
+  /**
+   * swap items child element
+   * **/
+
+  function keyboardSwapTodoItemChild(currentFocusElement, replaceElement) {}
+
+  /**
+   * change tabindex dragged class and focus
+   * **/
+
+  function keyboardChangeTabindexDraggedClassFocusElement(
+    currentElement,
+    focusElement
+  ) {}
+
+  /**
+   * keyboardMoveBottomItemToTopOfList
+   * **/
+
+  function keyboardMoveBottomItemToTopOfList(unorderedList) {}
+
+  /**
+   * keyboardMoveTopItemToBottomOfList
+   * **/
+
+  function keyboardMoveTopItemToBottomOfList(unorderedList) {}
 
   /**
    * func to update todo listitem grabdragindex
