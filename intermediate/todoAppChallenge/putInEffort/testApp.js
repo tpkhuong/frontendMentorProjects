@@ -552,7 +552,7 @@
   /**
    * cached our data
    * **/
-
+  cachedData.draggedItemSelected;
   function scopeOurData() {
     const dataObj = {
       grabbedItemDataIndex: null,

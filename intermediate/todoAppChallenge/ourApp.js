@@ -162,31 +162,61 @@
 
   function todoListitemsWithAttachedViewsBtnsClick(event) {
     const targetClass = event.target.getAttribute("class");
-    switch (targetClass) {
-      case "checked-btn":
-        checkedBtnClicked(event);
-        break;
-      case "delete-btn":
-        deleteBtnClicked(event);
-        break;
-      case "desktop-btn-all":
-        allViewBtnClicked(event);
-        break;
-      case "desktop-btn-active":
-        activeViewBtnClicked(event);
-        break;
-      case "desktop-btn-completed":
-        completedViewBtnClicked(event);
-        break;
-      case "clear-btn":
-        clearCompletedBtnClicked(event);
-        break;
-    }
+    // switch (targetClass) {
+    //   case "checked-btn":
+    //     checkedBtnClicked(event);
+    //     break;
+    //   case "delete-btn":
+    //     deleteBtnClicked(event);
+    //     break;
+    //   case "desktop-btn-all":
+    //     allViewBtnClicked(event);
+    //     break;
+    //   case "desktop-btn-active":
+    //     activeViewBtnClicked(event);
+    //     break;
+    //   case "desktop-btn-completed":
+    //     completedViewBtnClicked(event);
+    //     break;
+    //   case "clear-btn":
+    //     clearCompletedBtnClicked(event);
+    //     break;
+    // }
     // target li(todo listitem)
     // the event.target will be the div element with attr draggable="true"
     // its parent is the li todo item
-    if (event.target.parentElement.tagName == "LI") {
-      todoListitemClicked(event);
+    // if (event.target.parentElement.tagName == "LI") {
+    //   todoListitemClicked(event);
+    // }
+
+    /**
+     * another approach
+     * the way we had it the if statement with this condition
+     * event.target.parentElement.tagName == "LI" always ran
+     * **/
+    alert("check these conditionals");
+    switch (true) {
+      case targetClass == "checked-btn":
+        checkedBtnClicked(event);
+        break;
+      case targetClass == "delete-btn":
+        deleteBtnClicked(event);
+        break;
+      case targetClass == "desktop-btn-all":
+        allViewBtnClicked(event);
+        break;
+      case targetClass == "desktop-btn-active":
+        activeViewBtnClicked(event);
+        break;
+      case targetClass == "desktop-btn-completed":
+        completedViewBtnClicked(event);
+        break;
+      case targetClass == "clear-btn":
+        clearCompletedBtnClicked(event);
+        break;
+      case event.target.parentElement.tagName == "LI":
+        todoListitemClicked(event);
+        break;
     }
   }
 
@@ -313,6 +343,12 @@
           "-1"
         );
       }
+      // change draggedSelected to false for current element with draggedSelected true
+      // change draggedSelected to true to clicked div with draggable true parent element that todo listitem
+      // keyboardAndMouseChangeDraggedClass(
+      //   unorderedList.children[currentTodoWithTabinexZero],
+      //   todoListitemParentOfEventTarget
+      // );
     } else {
       // when currentTodoWithTabinexZero is null we want to assign "0" to attr tabindex of
       // the li todo item that was clicked
@@ -626,7 +662,9 @@
             // getting here means the todo item of the clicked checked btn has focused
             // we want to apply focus to the listitem that is lower on the todo list
             // also no listitem will have tabindex = "0" run applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked
-            cachedData.draggedItemSelected = false;
+            cachedData.draggedItemSelected
+              ? (cachedData.draggedItemSelected = false)
+              : null;
             const firstTodoItemActiveView = unorderedList.children[0];
             // arrayIndex == unorderedList.childElementCount
             //   ? applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
@@ -3166,8 +3204,12 @@
     });
     // append draggable div to Li
     todoItem.append(draggableDiv);
+    // add event listeners to button, listitem and div with draggable "true"
     applyEventListener(checkedBtn, "focus", checkedBtnHasFocus);
     applyEventListener(checkedBtn, "blur", checkedBtnIsNotFocus);
+    // drag events
+    applyDragStartEventToDiv(draggableDiv);
+    applyDragDropEventToListitem(todoItem);
     return todoItem;
   }
 
@@ -3278,6 +3320,7 @@
 
   function applyDragStartEventToDiv(divElement) {
     //
+    applyEventListener(divElement, "dragstart", mouseDragStart, false);
   }
 
   /**
@@ -3286,6 +3329,10 @@
 
   function applyDragDropEventToListitem(listitem) {
     //
+    applyEventListener(listitem, "dragenter", mouseDragEnter, false);
+    applyEventListener(listitem, "drop", mouseDragDrop, false);
+    applyEventListener(listitem, "dragleave", mouseDragLeave, false);
+    applyEventListener(listitem, "dragover", mouseDragOver, false);
   }
 
   /**
@@ -3300,31 +3347,33 @@
    * mouse drag start
    * **/
 
-  function mouseDragStart() {}
+  function mouseDragStart(event) {
+    console.log(event.target);
+  }
 
   /**
    * mouse drag enter
    * **/
 
-  function mouseDragEnter() {}
+  function mouseDragEnter(event) {}
 
   /**
    * mouse drag drop
    * **/
 
-  function mouseDragDrop() {}
+  function mouseDragDrop(event) {}
 
   /**
    * mouse drag leave
    * **/
 
-  function mouseDragLeave() {}
+  function mouseDragLeave(event) {}
 
   /**
    * mouse drag over
    * **/
 
-  function mouseDragOver() {}
+  function mouseDragOver(event) {}
 
   /**
    * keyboard drag helper
@@ -3364,6 +3413,20 @@
    * **/
 
   function keyboardMoveTopItemToBottomOfList(unorderedList) {}
+
+  /**
+   * changeDraggedClass
+   * **/
+
+  function keyboardAndMouseChangeDraggedClass(previousElement, currentTarget) {
+    if (cachedData.draggedItemSelected) {
+      // both previous element and current target have to be the todo listitem
+      // change draggedSelected to false for previousElement with draggedSelected true
+      previousElement.setAttribute("data-draggedSelected", "false");
+      // change draggedSelected to true to currentTarget which is clicked div with draggable true parent element that todo listitem
+      currentTarget.setAttribute("data-draggedSelected", "true");
+    }
+  }
 
   /**
    * func to update todo listitem grabdragindex
