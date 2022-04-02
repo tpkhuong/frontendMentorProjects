@@ -194,7 +194,7 @@
      * the way we had it the if statement with this condition
      * event.target.parentElement.tagName == "LI" always ran
      * **/
-    alert("check these conditionals");
+
     switch (true) {
       case targetClass == "checked-btn":
         checkedBtnClicked(event);
@@ -343,8 +343,8 @@
           "-1"
         );
       }
-      // change draggedSelected to false for current element with draggedSelected true
-      // change draggedSelected to true to clicked div with draggable true parent element that todo listitem
+      // change dragSelected to false for current element with dragSelected true
+      // change dragSelected to true to clicked div with draggable true parent element that todo listitem
       // keyboardAndMouseChangeDraggedClass(
       //   unorderedList.children[currentTodoWithTabinexZero],
       //   todoListitemParentOfEventTarget
@@ -377,12 +377,12 @@
      * **/
     // if we want to always focus on todo listitem when user click on checked-btn
     event.target.parentElement.parentElement.parentElement.focus();
-    // check if todo(Listitem) has "true" assigned to data-draggedSelected
-    // const todoListitemDraggedSelected =
+    // check if todo(Listitem) has "true" assigned to data-dragSelected
+    // const todoListitemDragSelected =
     //   event.target.parentElement.parentElement.parentElement.getAttribute(
-    //     "data-draggedSelected"
+    //     "data-dragSelected"
     //   );
-    // if (todoListitemDraggedSelected == "true") {
+    // if (todoListitemDragSelected == "true") {
     //   event.target.parentElement.parentElement.parentElement.focus();
     // }
     // we will change div[data-checked], .checked-btn[aria-checked], and li[data-todoCompleted="true"]
@@ -588,6 +588,11 @@
               "-1"
             );
           }
+          // assign correct value to drag selected attr
+          keyboardAndMouseChangeDraggedClass(
+            unorderedList.children[indexOfELementWithTabindexZero],
+            todoListitemOfClickedCheckedBtn
+          );
         } else {
           // when indexOfELementWithTabindexZero is null we want to assign "0" to attr tabindex of
           // the li todo item of the clicked checked btn
@@ -665,6 +670,11 @@
             cachedData.draggedItemSelected
               ? (cachedData.draggedItemSelected = false)
               : null;
+            // assign string "false" to attr dragged selected to the todo listitem of clicked checked btn
+            todoListitemOfClickedCheckedBtn.setAttribute(
+              "data-dragSelected",
+              "false"
+            );
             const firstTodoItemActiveView = unorderedList.children[0];
             // arrayIndex == unorderedList.childElementCount
             //   ? applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
@@ -746,6 +756,13 @@
                 unorderedList.children[indexOfELementWithTabindexZero - 1],
                 "0"
               );
+
+              cachedData.draggedItemSelected
+                ? unorderedList.children[
+                    indexOfELementWithTabindexZero - 1
+                  ].setAttribute("data-dragSelected", "true")
+                : null;
+
               unorderedList.children[
                 indexOfELementWithTabindexZero - 1
               ].focus();
@@ -758,10 +775,25 @@
                 unorderedList.children[indexOfELementWithTabindexZero],
                 "0"
               );
+
+              cachedData.draggedItemSelected
+                ? unorderedList.children[
+                    indexOfELementWithTabindexZero
+                  ].setAttribute("data-dragSelected", "true")
+                : null;
+
               unorderedList.children[indexOfELementWithTabindexZero].focus();
             }
           }
         } else {
+          /**
+           * we dont have to work with cached.draggedItemSelected or change
+           * value of the attr dragSelected because when user click on the checked btn
+           * of the last item in active array in active view
+           * the algorithm that handle when user click on checked btn the attr of tabindex of
+           * that todo item will be "0"
+           * we handle drag selected etc in that algorithm
+           * **/
           // active view array will be empty
           // run func to create and append elements in allView array
           // const goToAllViewArray = assignAttrToArrayAndCreateListitem(
@@ -796,6 +828,11 @@
           //   .previousElementSibling.setAttribute("data-currentview", "");
           // // assign "All" to cachedObj.currentView
           // cachedData.currentView = "All";
+          /**
+           * when user click on the checked btn of the last active item in the active view
+           * we want to reset dragged selected to default
+           * cached.draggedItemSelected to false
+           * **/
           /**
            * move algorithm above to func. we plan to use more than one
            * **/
@@ -906,7 +943,14 @@
             // getting here means the todo item of the clicked checked btn has focused
             // we want to apply focus to the listitem that is lower on the todo list
             // also no listitem will have tabindex = "0" run applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked
-            cachedData.draggedItemSelected = false;
+            cachedData.draggedItemSelected
+              ? (cachedData.draggedItemSelected = false)
+              : null;
+            // assign string "false" to attr dragged selected to the todo listitem of clicked checked btn
+            todoListitemOfClickedCheckedBtn.setAttribute(
+              "data-dragSelected",
+              "false"
+            );
             const firstItemOfCompletedView = unorderedList.children[0];
             // arrayIndex == unorderedList.childElementCount
             //   ? applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
@@ -968,6 +1012,13 @@
                 unorderedList.children[indexOfELementWithTabindexZero - 1],
                 "0"
               );
+
+              cachedData.draggedItemSelected
+                ? unorderedList.children[
+                    indexOfELementWithTabindexZero - 1
+                  ].setAttribute("data-dragSelected", "true")
+                : null;
+
               unorderedList.children[
                 indexOfELementWithTabindexZero - 1
               ].focus();
@@ -980,10 +1031,26 @@
                 unorderedList.children[indexOfELementWithTabindexZero],
                 "0"
               );
+
+              cachedData.draggedItemSelected
+                ? unorderedList.children[
+                    indexOfELementWithTabindexZero
+                  ].setAttribute("data-dragSelected", "true")
+                : null;
+
               unorderedList.children[indexOfELementWithTabindexZero].focus();
             }
           }
         } else {
+          /**
+           * we dont have to work with cached.draggedItemSelected or change
+           * value of the attr dragSelected because when user click on the checked btn
+           * of the last item in completed array in completed view
+           * the algorithm that handle when user click on checked btn the attr of tabindex of
+           * that todo item will be "0"
+           * we handle drag selected etc in that algorithm
+           * **/
+
           // completed view array will be empty
           // run func to create and append elements in allView array
           // const goToAllViewArray = assignAttrToArrayAndCreateListitem(
@@ -1097,25 +1164,30 @@
     // update attr of todo items in allView array
     // filter out items based on todoCompleted value true or false
     // get allView values for todoCompleted items and not completed items
+
     /**
      * user is on active or completed view, one todo item
      * user click delete to remove item
      * run switch algorithm in allViewBtnClick func
      * run func to create Li elements in allView array in cachedObj
      * **/
+
     /**
      * we will check if there is only one todo item left
      * and user is either one active or completed view
      * we assign length = 0 to allView,active,completed, active allViewIndex, completed allViewIndex
      * arrays in cachedObj to make arrays empty
      * **/
+
     /**
      * work with all view array. filter out completed and not completed items
      * run our algorithm based on curent view user is on
      * **/
+
     /**
      * run algorithm based on current view
      * **/
+
     const useIndexToFocusItemForDelBtnAlgorithm =
       getIndexOfElementWithTabindexZero(unorderedList.children);
     // todo item of clicked delete btn
@@ -1129,10 +1201,12 @@
     );
     const todoItemStatus =
       todoItemOfClickedDeleteBtn.getAttribute("data-todocompleted");
+
     /**
      * if user click delete btn and the todo has todocompleted false
      * we want to decrease the items left since that item will be active
      * **/
+
     if (todoItemStatus == "false") {
       increaseOrDecreaseItemsLeftCounter("minus");
     }
@@ -1213,7 +1287,15 @@
           // check if the listitem of the clicked delete btn tabindex is "-1" or "0"
           if (tabindexOfTodoItem === "0") {
             // use arrayIndex
-            cachedData.draggedItemSelected = false;
+            cachedData.draggedItemSelected
+              ? (cachedData.draggedItemSelected = false)
+              : null;
+            /**
+             * we dont have to search a todo item and assign string "true" to attr dragSelected
+             * of a todo item because when the todo item of the clicked delete btn
+             * has tabindex = "0", our algorithm will remove that todo item/element along with its children
+             * and its attrs
+             * **/
             const firstItemAllView = unorderedList.children[0];
             // applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked
             // will apply tabindex = "0"
@@ -1249,6 +1331,10 @@
               unorderedList.children[arrayIndex].focus();
             }
           } else {
+            /**
+             * if cachedData.draggedItemSelected is true, we want to assign "true" to dragSelected attr
+             * of that todo item
+             * **/
             // find todo item with tabindex == "0"
             // const [listitemTabIndexZero] = findElementWithTabindexZero(
             //   unorderedList.children
@@ -1284,6 +1370,13 @@
                 ],
                 "0"
               );
+
+              cachedData.draggedItemSelected
+                ? unorderedList.children[
+                    useIndexToFocusItemForDelBtnAlgorithm - 1
+                  ].setAttribute("data-dragSelected", "true")
+                : null;
+
               unorderedList.children[
                 useIndexToFocusItemForDelBtnAlgorithm - 1
               ].focus();
@@ -1296,12 +1389,27 @@
                 unorderedList.children[useIndexToFocusItemForDelBtnAlgorithm],
                 "0"
               );
+
+              cachedData.draggedItemSelected
+                ? unorderedList.children[
+                    useIndexToFocusItemForDelBtnAlgorithm
+                  ].setAttribute("data-dragSelected", "true")
+                : null;
+
               unorderedList.children[
                 useIndexToFocusItemForDelBtnAlgorithm
               ].focus();
             }
           }
         } else {
+          /**
+           * we dont have to work with cached.draggedItemSelected or change
+           * value of the attr dragSelected because when user click on the checked btn
+           * of the last item in allview array in all view
+           * the algorithm that handle when user click on checked btn the attr of tabindex of
+           * that todo item will be "0"
+           * we handle drag selected etc in that algorithm
+           * **/
           // allview array is empty
           // else statement to this if statement. cachedData.arraysOfDifferentViews.allViewArray.length >= 1
           unorderedList.replaceChildren();
@@ -1333,7 +1441,10 @@
           // focus element using reference index of the clicked delete btn todo item
           if (tabindexOfTodoItem === "0") {
             // use arrayIndex
-            cachedData.draggedItemSelected = false;
+            cachedData.draggedItemSelected
+              ? (cachedData.draggedItemSelected = false)
+              : null;
+
             const firstItemActiveView = unorderedList.children[0];
 
             // arrayIndex == unorderedList.childElementCount
@@ -1369,6 +1480,10 @@
               unorderedList.children[arrayIndex].focus();
             }
           } else {
+            /**
+             * if cachedData.draggedItemSelected is true, we want to assign "true" to dragSelected attr
+             * of that todo item
+             * **/
             // find todo item with tabindex == "0"
             // const [todoHasTabindexZero] = findElementWithTabindexZero(
             //   unorderedList.children
@@ -1399,6 +1514,13 @@
                 ],
                 "0"
               );
+
+              cachedData.draggedItemSelected
+                ? unorderedList.children[
+                    useIndexToFocusItemForDelBtnAlgorithm - 1
+                  ].setAttribute("data-dragSelected", "true")
+                : null;
+
               unorderedList.children[
                 useIndexToFocusItemForDelBtnAlgorithm - 1
               ].focus();
@@ -1411,12 +1533,27 @@
                 unorderedList.children[useIndexToFocusItemForDelBtnAlgorithm],
                 "0"
               );
+
+              cachedData.draggedItemSelected
+                ? unorderedList.children[
+                    useIndexToFocusItemForDelBtnAlgorithm
+                  ].setAttribute("data-dragSelected", "true")
+                : null;
+
               unorderedList.children[
                 useIndexToFocusItemForDelBtnAlgorithm
               ].focus();
             }
           }
         } else {
+          /**
+           * we dont have to work with cached.draggedItemSelected or change
+           * value of the attr dragSelected because when user click on the checked btn
+           * of the last item in active array in active view
+           * the algorithm that handle when user click on checked btn the attr of tabindex of
+           * that todo item will be "0"
+           * we handle drag selected etc in that algorithm
+           * **/
           // active array is empty create and append items in allview array
           // focus first item
           /**
@@ -1490,7 +1627,10 @@
           // focus element using reference index of the clicked delete btn todo item
           if (tabindexOfTodoItem === "0") {
             // use arrayIndex
-            cachedData.draggedItemSelected = false;
+            cachedData.draggedItemSelected
+              ? (cachedData.draggedItemSelected = false)
+              : null;
+
             const firstItemCompletedView = unorderedList.children[0];
             // arrayIndex == unorderedList.childElementCount
             //   ? applyFocusToSelectedTodoWhenCheckedDeleteBtnOrListitemIsClicked(
@@ -1519,6 +1659,10 @@
               unorderedList.children[arrayIndex].focus();
             }
           } else {
+            /**
+             * if cachedData.draggedItemSelected is true, we want to assign "true" to dragSelected attr
+             * of that todo item
+             * **/
             // find todo item with tabindex == "0"
             // const [todoItemTabindexZero] = findElementWithTabindexZero(
             //   unorderedList.children
@@ -1549,6 +1693,13 @@
                 ],
                 "0"
               );
+
+              cachedData.draggedItemSelected
+                ? unorderedList.children[
+                    useIndexToFocusItemForDelBtnAlgorithm - 1
+                  ].setAttribute("data-dragSelected", "true")
+                : null;
+
               unorderedList.children[
                 useIndexToFocusItemForDelBtnAlgorithm - 1
               ].focus();
@@ -1561,12 +1712,27 @@
                 unorderedList.children[useIndexToFocusItemForDelBtnAlgorithm],
                 "0"
               );
+
+              cachedData.draggedItemSelected
+                ? unorderedList.children[
+                    useIndexToFocusItemForDelBtnAlgorithm
+                  ].setAttribute("data-dragSelected", "true")
+                : null;
+
               unorderedList.children[
                 useIndexToFocusItemForDelBtnAlgorithm
               ].focus();
             }
           }
         } else {
+          /**
+           * we dont have to work with cached.draggedItemSelected or change
+           * value of the attr dragSelected because when user click on the checked btn
+           * of the last item in completed array in completed view
+           * the algorithm that handle when user click on checked btn the attr of tabindex of
+           * that todo item will be "0"
+           * we handle drag selected etc in that algorithm
+           * **/
           // completed array is empty create and append items in allview array
           // focus first item
           /**
@@ -1746,6 +1912,23 @@
         );
         changeListitemTabindexToNegativeOne(todosWithTabindexZeroAllView, "-1");
 
+        /**
+         * we can make an array with todo items that have attr dragged selected "true"
+         * and assign string "false" to the items in that array
+         * like we did with tabindex = "0". we will use the array in cached obj
+         * of the view btn the user clicked
+         * **/
+
+        const todoItemsWithDragSelectedTrueAllView =
+          arrayOfItemsWithDragSelectedTrue(
+            cachedData.arraysOfDifferentViews.allViewArray
+          );
+
+        changeAllItemDragSelected(
+          todoItemsWithDragSelectedTrueAllView,
+          "false"
+        );
+
         singleTargetChangeTabindexCheckedAndDeleteBtn(
           unorderedList.children[0],
           "0"
@@ -1919,6 +2102,20 @@
           "-1"
         );
 
+        /**
+         * we can make an array with todo items that have attr dragged selected "true"
+         * and assign string "false" to the items in that array
+         * like we did with tabindex = "0". we will use the array in cached obj
+         * of the view btn the user clicked
+         * **/
+
+        const itemsWithDragSelectedTrueActiveView =
+          arrayOfItemsWithDragSelectedTrue(
+            cachedData.arraysOfDifferentViews.activeViewArray
+          );
+
+        changeAllItemDragSelected(itemsWithDragSelectedTrueActiveView, "false");
+
         singleTargetChangeTabindexCheckedAndDeleteBtn(
           unorderedList.children[0],
           "0"
@@ -2073,6 +2270,23 @@
         changeListitemTabindexToNegativeOne(
           todosWithTabindexZeroCompletedView,
           "-1"
+        );
+
+        /**
+         * we can make an array with todo items that have attr dragged selected "true"
+         * and assign string "false" to the items in that array
+         * like we did with tabindex = "0". we will use the array in cached obj
+         * of the view btn the user clicked
+         * **/
+
+        const itemsWithDragSelectedTrueCompletedView =
+          arrayOfItemsWithDragSelectedTrue(
+            cachedData.arraysOfDifferentViews.completedViewArray
+          );
+
+        changeAllItemDragSelected(
+          itemsWithDragSelectedTrueCompletedView,
+          "false"
         );
 
         singleTargetChangeTabindexCheckedAndDeleteBtn(
@@ -2519,6 +2733,13 @@
             unorderedList.children[indexToUseForAllViewSwitchStatmentAlgorithm],
             "0"
           );
+
+          // if cached.draggedItemSelected is truthy assign string "true" to unorderedList.children[indexToUseForAllViewSwitchStatmentAlgorithm]
+          cachedData.draggedItemSelected
+            ? unorderedList.children[
+                indexToUseForAllViewSwitchStatmentAlgorithm
+              ].setAttribute("data-dragSelected", "true")
+            : null;
         }
         break;
       case "Active":
@@ -2562,6 +2783,13 @@
             unorderedList.children[indexOfElementTabindexIsZero],
             "0"
           );
+          // if cached.draggedItemSelected is truthy assign string "true" to unorderedList.children[indexOfElementTabindexIsZero]
+          cachedData.draggedItemSelected
+            ? unorderedList.children[indexOfElementTabindexIsZero].setAttribute(
+                "data-dragSelected",
+                "true"
+              )
+            : null;
         }
         break;
       case "Completed":
@@ -2575,6 +2803,11 @@
           .querySelector(".views-container")
           .getAttribute("data-unorderedhasitems") != "false"
           ? addOrRemoveTopBorderToViewsContainer("false")
+          : null;
+
+        // change dragSelected in cachedObj to false
+        cachedData.draggedItemSelected
+          ? (cachedData.draggedItemSelected = false)
           : null;
         break;
     }
@@ -2938,7 +3171,7 @@
           } else {
             /**
              * we thought we had to assign tabindex to first element in all view array in caachedObj
-             * but every time the user switches views we reset tabindex/draggedSelected to default
+             * but every time the user switches views we reset tabindex/dragSelected to default
              * which means the first item will have tabindex = "0" for the view(all,active,completed) the user clicked
              * we dont else statement
              * **/
@@ -3137,7 +3370,7 @@
       tabindex: "-1",
       role: "option",
       class: "todo-item",
-      "data-draggedSelected": "false",
+      "data-dragSelected": "false",
       "data-todoCompleted": "false",
       "data-allViewIndex": "0",
       "data-grabDragIndex": "0",
@@ -3277,15 +3510,12 @@
           const grabbedElement = document.activeElement;
           console.log(grabbedElement);
           if (!cachedData.draggedItemSelected) {
-            document.activeElement.setAttribute("data-draggedselected", "true");
+            document.activeElement.setAttribute("data-dragselected", "true");
             cachedData.draggedItemSelected = true;
             // "grabbed, Current" because users hit space or enter on a todo item
             // grabbed position
           } else {
-            document.activeElement.setAttribute(
-              "data-draggedselected",
-              "false"
-            );
+            document.activeElement.setAttribute("data-dragselected", "false");
             cachedData.draggedItemSelected = false;
             // "dropped, final"
           }
@@ -3421,10 +3651,10 @@
   function keyboardAndMouseChangeDraggedClass(previousElement, currentTarget) {
     if (cachedData.draggedItemSelected) {
       // both previous element and current target have to be the todo listitem
-      // change draggedSelected to false for previousElement with draggedSelected true
-      previousElement.setAttribute("data-draggedSelected", "false");
-      // change draggedSelected to true to currentTarget which is clicked div with draggable true parent element that todo listitem
-      currentTarget.setAttribute("data-draggedSelected", "true");
+      // change dragSelected to false for previousElement with dragSelected true
+      previousElement.setAttribute("data-dragSelected", "false");
+      // change dragSelected to true to currentTarget which is clicked div with draggable true parent element that todo listitem
+      currentTarget.setAttribute("data-dragSelected", "true");
     }
   }
 
@@ -3516,7 +3746,7 @@
     /**
      * at least one todo item will have tabindex = "0"
      * **/
-    // assign the value of "true" to clicked todo item data-draggedSelected
+    // assign the value of "true" to clicked todo item data-dragSelected
     // assign value "false" to previous focus element
     // assign value '-1" to previous focus element
     // assign value "0" to clicked todo item
@@ -3566,9 +3796,9 @@
        * and find zero listitem with tabindex = "-1"
        * **/
       if (cachedData.draggedItemSelected) {
-        // previousTarget will have tabindex "0" and data-draggedSelected = "true"
-        previousTarget.setAttribute("data-draggedSelected", "false");
-        target.closest("li").setAttribute("data-draggedSelected", "true");
+        // previousTarget will have tabindex "0" and data-dragSelected = "true"
+        previousTarget.setAttribute("data-dragSelected", "false");
+        target.closest("li").setAttribute("data-dragSelected", "true");
       }
       // when user click on list item, we want to assign value "0" to that list item
       // and assign value of "-1" to the previous list item that had tabindex "0"
@@ -3590,9 +3820,9 @@
 
   function applyFocusChangeTabindexSingleTarget(target, tabindexValue) {
     if (cachedData.draggedItemSelected) {
-      // previousTarget will have tabindex "0" and data-draggedSelected = "true"
-      // previousTarget.setAttribute("data-draggedSelected", "false");
-      target.closest("li").setAttribute("data-draggedSelected", "true");
+      // previousTarget will have tabindex "0" and data-dragSelected = "true"
+      // previousTarget.setAttribute("data-dragSelected", "false");
+      target.closest("li").setAttribute("data-dragSelected", "true");
     }
     // when user click on list item, we want to assign value "0" to that list item
     // and assign value of "-1" to the previous list item that had tabindex "0"
@@ -3669,6 +3899,12 @@
    * **/
 
   function getIndexOfElementWithTabindexZero(array) {
+    /**
+     * instead of looping through array of items looking for element with tabindex = "0"
+     * we can use document.querySelector("li[tabindex='0']");
+     * since there should only be one element/todo item with attr
+     * tabindex = "0"
+     * **/
     const copiedArray = [...array];
     return copiedArray.reduce(function findElementIndex(
       buildingUp,
@@ -3712,6 +3948,27 @@
     array.forEach(function changeTabindexValue(listitem) {
       singleTargetChangeTabindexCheckedAndDeleteBtn(listitem, stringValue);
       applyFocusChangeTabindexSingleTarget(listitem, stringValue);
+    });
+  }
+
+  /**
+   * filter out element with attr dragged selected value "true"
+   * **/
+
+  function arrayOfItemsWithDragSelectedTrue(array) {
+    return array.filter(function findDragSelectedTrue(listitem) {
+      const dragSelectedValue = listitem.getAttribute("data-dragSelected");
+      return dragSelectedValue == "true";
+    });
+  }
+
+  /**
+   * change drag selected to string "false"
+   * **/
+
+  function changeAllItemDragSelected(array, strValue) {
+    array.forEach(function changeDragSelected(listitem) {
+      listitem.setAttribute("data-dragSelected", strValue);
     });
   }
 
