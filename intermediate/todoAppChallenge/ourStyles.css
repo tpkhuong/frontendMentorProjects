@@ -854,11 +854,11 @@ and button with aria-checked attr to true when user click on checked-btn
 
 /* using different selector
 
-[data-draggedSelected="true"]:focus,
-[data-draggedSelected="true"]
+[data-dragselected="true"]:focus,
+[data-dragselected="true"]
 */
 
-[data-draggedSelected="true"]:focus-within {
+[data-dragselected="true"]:focus-within {
   outline: none;
   /* dark */
   box-shadow: inset 0 0 0 5px var(--color-primary-bright-blue);
@@ -867,7 +867,7 @@ and button with aria-checked attr to true when user click on checked-btn
 }
 
 /* using different selector
-[data-draggedSelected="false"]
+[data-dragselected="false"]
 */
 
 /* when the TODO item does not have drag selected true
@@ -876,8 +876,8 @@ that todo will have focus ring even when the user tab to checked and delete btn 
 that todo
 */
 
-/* [data-draggedSelected="false"]:focus, */
-[data-draggedSelected="false"]:focus-within {
+/* [data-dragselected="false"]:focus, */
+[data-dragselected="false"]:focus-within {
   outline: none;
   /* dark */
   box-shadow: inset 0 0 0 2px var(--color-primary-bright-blue);
@@ -885,11 +885,11 @@ that todo
   /* box-shadow: inset 0 0 0 2px var(--color-darktheme-todo-list-bg); */
 }
 
-/* [data-draggedSelected="true"] {
+/* [data-dragselected="true"] {
   background-color: var(--draggedTodoSelected);
 } */
 
-[data-draggedSelected="true"] p {
+[data-dragselected="true"] p {
   /* color: var(--color-primary-bright-blue); */
   font-weight: 700;
 }

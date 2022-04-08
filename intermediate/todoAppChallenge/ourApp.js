@@ -2887,7 +2887,6 @@
      * **/
     // when dragItemSelected is true build text with "grabbed, current" and "of"
     // when dragItemSelected is falsy build text with "dropped, final" and "to"
-    alert("look at line 3505");
 
     const grabbedOrDropped = selectedGrabItem
       ? "grabbed, current"
@@ -3513,34 +3512,59 @@
      * we will separate the algorithm for space/enter key from arrow down and arrow up key
      * **/
 
-    if (document.activeElement.tagName == "LI") {
-      // when we get here the focus element will be the todo listitem
+    // if (document.activeElement.tagName == "LI") {
+    //   // when we get here the focus element will be the todo listitem
 
-      switch (event.code) {
-        case "Space":
-        case "Enter":
-          event.preventDefault();
-          console.log(getGrabDragIndexAttr(document.activeElement));
-          const grabbedElement = document.activeElement;
-          console.log(grabbedElement);
-          if (!cachedData.dragItemSelected) {
-            document.activeElement.setAttribute("data-dragselected", "true");
-            cachedData.dragItemSelected = true;
-            // "grabbed, Current" because users hit space or enter on a todo item
-            // grabbed position
-          } else {
-            document.activeElement.setAttribute("data-dragselected", "false");
-            cachedData.dragItemSelected = false;
-            // "dropped, final"
-          }
-        case "ArrowDown":
-          // use document.activeElement.closest("li")
-          // to get parent and next sibling
-          break;
-        case "ArrowUp":
-          // use document.activeElement.closest("li")
-          // get parent and previous sibling
-          break;
+    //   switch (event.code) {
+    //     case "Space":
+    //     case "Enter":
+    //       event.preventDefault();
+    //       console.log(getGrabDragIndexAttr(document.activeElement));
+    //       const grabbedElement = document.activeElement;
+    //       console.log(grabbedElement);
+    //       if (!cachedData.dragItemSelected) {
+    //         document.activeElement.setAttribute("data-dragselected", "true");
+    //         cachedData.dragItemSelected = true;
+    //         // "grabbed, Current" because users hit space or enter on a todo item
+    //         // grabbed position
+    //       } else {
+    //         document.activeElement.setAttribute("data-dragselected", "false");
+    //         cachedData.dragItemSelected = false;
+    //         // "dropped, final"
+    //       }
+    //       break;
+    //     case "ArrowDown":
+    //       // use document.activeElement.closest("li")
+    //       // to get parent and next sibling
+    //       console.log(event.target);
+    //       break;
+    //     case "ArrowUp":
+    //       console.log(event.target);
+    //       // use document.activeElement.closest("li")
+    //       // get parent and previous sibling
+    //       break;
+    //   }
+    // }
+    /**
+     * another approach
+     * **/
+
+    if (document.activeElement.tagName == "LI") {
+      if (event.code == "Space" || event.code == "Enter") {
+        event.preventDefault();
+        console.log(getGrabDragIndexAttr(document.activeElement));
+        const grabbedElement = document.activeElement;
+        console.log(grabbedElement);
+        if (!cachedData.dragItemSelected) {
+          document.activeElement.setAttribute("data-dragselected", "true");
+          cachedData.dragItemSelected = true;
+          // "grabbed, Current" because users hit space or enter on a todo item
+          // grabbed position
+        } else {
+          document.activeElement.setAttribute("data-dragselected", "false");
+          cachedData.dragItemSelected = false;
+          // "dropped, final"
+        }
       }
     }
 
@@ -3551,6 +3575,19 @@
      * **/
 
     if (document.activeElement.closest("li")) {
+      switch (event.code) {
+        case "ArrowDown":
+          // use document.activeElement.closest("li")
+          // to get parent and next sibling
+          console.log(event.target);
+          break;
+        case "ArrowUp":
+          // use document.activeElement.closest("li")
+          // to get parent and previous sibling
+          console.log(event.target);
+
+          break;
+      }
     }
   }
 
@@ -3635,7 +3672,18 @@
    * swap items child element
    * **/
 
-  function keyboardSwapTodoItemChild(currentFocusElement, replaceElement) {}
+  function keyboardSwapTodoItemChild(currentFocusElement, replaceElement) {
+    // get current list item child
+    const currentTodoItemChild = currentFocusElement.firstElementChild;
+    // get replaceElement item child
+    const replaceElementTodoItemChild = replaceElement.firstElementChild;
+    // remove current list item child
+    currentFocusElement.removeChild(currentTodoItemChild);
+    // append replaceElement item child to current list item element
+    currentFocusElement.append(replaceElementTodoItemChild);
+    // append current list item child to replaceElement list item element
+    replaceElement.append(currentTodoItemChild);
+  }
 
   /**
    * change tabindex dragged class and focus
@@ -3644,7 +3692,20 @@
   function keyboardChangeTabindexDraggedClassFocusElement(
     currentElement,
     focusElement
-  ) {}
+  ) {
+    if (cachedData.dragItemSelected) {
+      // assign "true" focusElement
+      currentElement.setAttribute("data-dragselected", "true");
+      // assign "false" currentElement
+      focusElement.setAttribute("data-dragselected", "false");
+    }
+    // assign value "-1" to tabindex attr of currentElement
+    currentElement.setAttribute("tabindex", "-1");
+    // assign value "0" to tabindex attr of focusElement
+    focusElement.setAttribute("tabindex", "0");
+    // call method .focus on focusElement
+    focusElement.focus();
+  }
 
   /**
    * keyboardMoveBottomItemToTopOfList
