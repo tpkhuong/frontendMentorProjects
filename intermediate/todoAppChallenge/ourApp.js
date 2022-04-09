@@ -1,4 +1,9 @@
 (function scopeOurVariables() {
+  /**
+   * ********
+   * alert("use aria-activedescendant for 3d with HTML canvas or arrow keys");
+   * ********
+   * **/
   // reset todo input to empty on load
   document.querySelector(".todo-input-instructions-container input").value = "";
   // apply attr data-currentView
@@ -345,10 +350,10 @@
       }
       // change dragSelected to false for current element with dragSelected true
       // change dragSelected to true to clicked div with draggable true parent element that todo listitem
-      // keyboardAndMouseChangeDraggedClass(
-      //   unorderedList.children[currentTodoWithTabinexZero],
-      //   todoListitemParentOfEventTarget
-      // );
+      keyboardAndMouseChangeDraggedClass(
+        unorderedList.children[currentTodoWithTabinexZero],
+        todoListitemParentOfEventTarget
+      );
     } else {
       // when currentTodoWithTabinexZero is null we want to assign "0" to attr tabindex of
       // the li todo item that was clicked
@@ -3579,11 +3584,37 @@
         case "ArrowDown":
           // use document.activeElement.closest("li")
           // to get parent and next sibling
+          // swap todo items
+          // make copy of ul children
+          // apply original tabindex to items in the copy array of ul children
+          // combine copied array of ul children with original tabindex applied with array in cachedObj based on current view
+          // sort items in array to correct order basded on original tabindex
+          /**
+           * will use switch run algorithm based on current view since
+           * all view algorithm will be different from active and completed view algorithm
+           * **/
+          switch (cachedData.currentView) {
+            case "All":
+              break;
+            case "Active":
+              break;
+            case "Completed":
+              break;
+          }
           console.log(event.target);
           break;
         case "ArrowUp":
           // use document.activeElement.closest("li")
           // to get parent and previous sibling
+
+          switch (cachedData.currentView) {
+            case "All":
+              break;
+            case "Active":
+              break;
+            case "Completed":
+              break;
+          }
           console.log(event.target);
 
           break;
@@ -3689,22 +3720,29 @@
    * change tabindex dragged class and focus
    * **/
 
-  function keyboardChangeTabindexDraggedClassFocusElement(
-    currentElement,
-    focusElement
+  function keyboardChangeTabindexDraggedClassFocusElementAndCheckedDeleteBtnChildren(
+    previousElement,
+    focusElement,
+    focusTarget
   ) {
-    if (cachedData.dragItemSelected) {
-      // assign "true" focusElement
-      currentElement.setAttribute("data-dragselected", "true");
-      // assign "false" currentElement
-      focusElement.setAttribute("data-dragselected", "false");
-    }
-    // assign value "-1" to tabindex attr of currentElement
-    currentElement.setAttribute("tabindex", "-1");
+    // if (cachedData.dragItemSelected) {
+    //   // assign "true" focusElement
+    //   previousElement.setAttribute("data-dragselected", "true");
+    //   // assign "false" previousElement
+    //   focusElement.setAttribute("data-dragselected", "false");
+    // }
+    keyboardAndMouseChangeDraggedClass(previousElement, focusElement);
+    // change checked and delete btn tabindex to -1
+    singleTargetChangeTabindexCheckedAndDeleteBtn(previousElement, "-1");
+    // change checked and delete btn tabindex to 0
+    singleTargetChangeTabindexCheckedAndDeleteBtn(focusElement, "0");
+    // assign value "-1" to tabindex attr of previousElement
+    previousElement.setAttribute("tabindex", "-1");
     // assign value "0" to tabindex attr of focusElement
     focusElement.setAttribute("tabindex", "0");
-    // call method .focus on focusElement
-    focusElement.focus();
+    // call method .focus on focusTarget
+    // focusTarget could be todoListItem, checkedBtn, and deleteBtn
+    focusTarget.focus();
   }
 
   /**
@@ -4131,13 +4169,13 @@
 
   function updateAllViewArrayWithCorrectOrderAfterDragDropInActiveOrCompletedView(
     firstArray,
-    SecondArray
+    secondArray
   ) {
     /** when user is on active or completed view **/
     // spread active array and completed array in cachedObj into one array
     // run sort method on array. we will sort by allView index of items in array
     const copiedActive = firstArray;
-    const copiedCompleted = SecondArray;
+    const copiedCompleted = secondArray;
     const combineBothArrays = [...copiedActive, ...copiedCompleted];
     const correctOrderOfTodoItems = combineBothArrays.sort(
       function correcrTheOrderOfTodo(firstItem, secondItem) {
@@ -4146,8 +4184,37 @@
         return 0;
       }
     );
+    /**
+     * different approach since we will be working with ul children instead
+     * of arrays in cachedObj
+     * **/
+    // const copiedArray = [...array];
+    let combinedArrays = [];
+    // const copiedArray = [].concat(array);
+    // const copiedArray = array.slice();
+
     return correctOrderOfTodoItems;
   }
+
+  /**
+   * combine arrays based on current view
+   * **/
+
+  function combineArraysBasedOnCurrentView(array) {
+    const copiedArray = [...array];
+    switch (cachedData.currentView) {
+      case "Active":
+        return;
+      case "Completed":
+        return;
+    }
+  }
+
+  /**
+   * correct order of todo items after swapping
+   * **/
+
+  function correctOrderOfTodoItemsAfterSwapping(combinedArray) {}
 
   /**
    * func will loop through list/array, create li element, append to fragment

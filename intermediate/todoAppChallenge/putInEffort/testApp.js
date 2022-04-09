@@ -381,7 +381,7 @@
               // get next sibling
               const nextSibling = document.activeElement.nextElementSibling;
               // check data-index of current focus element
-              // check if its 4
+              // check if its 4 or last item in array of ul children
               if (cachedData.draggedItemSelected) {
                 if (getDataIndexAttr(document.activeElement) == "4") {
                   moveBottomItemToTopOfList(
@@ -418,7 +418,7 @@
               const previousSibling =
                 document.activeElement.previousElementSibling;
               // check data-index of current focus element
-              // check if its 1
+              // check if its 0 first item in array of ul children
               if (cachedData.draggedItemSelected) {
                 if (getDataIndexAttr(document.activeElement) === "0") {
                   moveTopItemToBottomOfList(
