@@ -1239,7 +1239,7 @@
     const copiedAllView =
       cachedData.arraysOfDifferentViews.allViewArray.slice();
     /**
-     * update tabindex of each listitem in allView array befire we filter out the listitems
+     * update tabindex of each listitem in allView array before we filter out the listitems
      * for active and completed array
      * **/
     assignAllViewIndexElementsInAllViewArr(
@@ -3507,10 +3507,13 @@
   // accessibilityDragAndDrop
 
   function accessibilityDragAndDrop(event) {
+    // event.preventDefault();
     // target the UL and its children count
     const unorderedChildren = Array.prototype.slice.call(
-      document.activeElement.parentElement.children
+      document.activeElement.closest("LI").parentElement.children
     );
+    const unorderedChildrenCount =
+      document.activeElement.closest("li").parentElement.childElementCount;
     // for "ArrowDown" algorithm
     const lengthOfUnorderedListMinusOne = unorderedChildren.length - 1;
     /**
@@ -3556,7 +3559,6 @@
 
     if (document.activeElement.tagName == "LI") {
       if (event.code == "Space" || event.code == "Enter") {
-        event.preventDefault();
         console.log(getGrabDragIndexAttr(document.activeElement));
         const grabbedElement = document.activeElement;
         console.log(grabbedElement);
@@ -3582,41 +3584,327 @@
     if (document.activeElement.closest("li")) {
       switch (event.code) {
         case "ArrowDown":
+          event.preventDefault();
           // use document.activeElement.closest("li")
           // to get parent and next sibling
+          const nextSibling =
+            document.activeElement.closest("li").nextElementSibling;
           // swap todo items
           // make copy of ul children
           // apply original tabindex to items in the copy array of ul children
           // combine copied array of ul children with original tabindex applied with array in cachedObj based on current view
           // sort items in array to correct order basded on original tabindex
+          const ulChildrenArrayAfterSwappingTodoItems =
+            cachedData.dragItemSelected
+              ? Number(
+                  getGrabDragIndexAttr(document.activeElement.closest("li")) ==
+                    unorderedChildrenCount - 1
+                )
+                ? keyboardMoveBottomItemToTopOfList(unorderedChildren)
+                : keyboardSwapTodoItemChild(
+                    document.activeElement.closest("li"),
+                    nextSibling
+                  )
+              : null;
           /**
            * will use switch run algorithm based on current view since
            * all view algorithm will be different from active and completed view algorithm
            * **/
-          switch (cachedData.currentView) {
-            case "All":
-              break;
-            case "Active":
-              break;
-            case "Completed":
-              break;
+
+          if (cachedData.dragItemSelected) {
+            switch (cachedData.currentView) {
+              case "All":
+                cachedData.arraysOfDifferentViews.allViewArray = [
+                  ...ulChildrenArrayAfterSwappingTodoItems,
+                ];
+                const arrowDownCopiedAllViewArray =
+                  cachedData.arraysOfDifferentViews.allViewArray;
+                // filter out todocompleted = "false", active list
+                cachedData.arraysOfDifferentViews.activeViewArray =
+                  filterOutActiveTodoItems(arrowDownCopiedAllViewArray);
+                // filter out todocompleted = "true", completed lsit
+                cachedData.arraysOfDifferentViews.completedViewArray =
+                  filterOutCompletedTodoItems(arrowDownCopiedAllViewArray);
+                // save original order of allViewIndex for active and completed
+                // active view
+                cachedData.originalElementOrderInAllViewArray.activeViewOriginalOrder =
+                  originalAllViewIndexForElementsInActiveOrCompletedArray(
+                    cachedData.arraysOfDifferentViews.activeViewArray
+                  );
+                // completed view
+                cachedData.originalElementOrderInAllViewArray.completedViewOriginalOrder =
+                  originalAllViewIndexForElementsInActiveOrCompletedArray(
+                    cachedData.arraysOfDifferentViews.completedViewArray
+                  );
+                // append todo items in all view array to unorderlist
+                const arrowDownAllView = assignAttrToArrayAndCreateListitem(
+                  ulChildrenArrayAfterSwappingTodoItems,
+                  updateAttrForTodoItemCheckedAndDeleteBtn,
+                  createChildrenForUnorderedList
+                );
+                removeCurrentListitemsAppendFragmentElement(
+                  unorderedList,
+                  arrowDownAllView
+                );
+                break;
+              // const ;
+              case "Active":
+                const arrowDownCopiedUnorderChildrenActiveView = [
+                  ...ulChildrenArrayAfterSwappingTodoItems,
+                ];
+                allViewIndexForReorderOfActiveOrCompletedArray(
+                  arrowDownCopiedUnorderChildrenActiveView
+                );
+                const correctOrderOfTodo =
+                  updateAllViewArrayWithCorrectOrderAfterDragDropInActiveOrCompletedView(
+                    arrowDownCopiedUnorderChildrenActiveView,
+                    cachedData.arraysOfDifferentViews.completedViewArray
+                  );
+                cachedData.arraysOfDifferentViews.allViewArray = [
+                  ...correctOrderOfTodo,
+                ];
+                const copiedAllViewArrowDownActive = Array.prototype.slice.call(
+                  cachedData.arraysOfDifferentViews.allViewArray
+                );
+                // filter out todocompleted = "false", active list
+                cachedData.arraysOfDifferentViews.activeViewArray =
+                  filterOutActiveTodoItems(copiedAllViewArrowDownActive);
+                // filter out todocompleted = "true", completed lsit
+                cachedData.arraysOfDifferentViews.completedViewArray =
+                  filterOutCompletedTodoItems(copiedAllViewArrowDownActive);
+                const arrowDownActiveView = assignAttrToArrayAndCreateListitem(
+                  ulChildrenArrayAfterSwappingTodoItems,
+                  updateAttrForTodoItemCheckedAndDeleteBtn,
+                  createChildrenForUnorderedList
+                );
+                removeCurrentListitemsAppendFragmentElement(
+                  unorderedList,
+                  arrowDownActiveView
+                );
+                break;
+              case "Completed":
+                const arrowDownCopiedUnorderChildrenCompletedView = [
+                  ...ulChildrenArrayAfterSwappingTodoItems,
+                ];
+                allViewIndexForReorderOfActiveOrCompletedArray(
+                  arrowDownCopiedUnorderChildrenCompletedView
+                );
+                const correctOrderOfItems =
+                  updateAllViewArrayWithCorrectOrderAfterDragDropInActiveOrCompletedView(
+                    arrowDownCopiedUnorderChildrenCompletedView,
+                    cachedData.arraysOfDifferentViews.activeViewArray
+                  );
+                cachedData.arraysOfDifferentViews.allViewArray = [
+                  ...correctOrderOfItems,
+                ];
+                const copiedAllViewArrowDownCompleted =
+                  Array.prototype.slice.call(
+                    cachedData.arraysOfDifferentViews.allViewArray
+                  );
+                // filter out todocompleted = "false", active list
+                cachedData.arraysOfDifferentViews.activeViewArray =
+                  filterOutActiveTodoItems(copiedAllViewArrowDownCompleted);
+                // filter out todocompleted = "true", completed lsit
+                cachedData.arraysOfDifferentViews.completedViewArray =
+                  filterOutCompletedTodoItems(copiedAllViewArrowDownCompleted);
+                const arrowDownCompletedView =
+                  assignAttrToArrayAndCreateListitem(
+                    ulChildrenArrayAfterSwappingTodoItems,
+                    updateAttrForTodoItemCheckedAndDeleteBtn,
+                    createChildrenForUnorderedList
+                  );
+                removeCurrentListitemsAppendFragmentElement(
+                  unorderedList,
+                  arrowDownCompletedView
+                );
+                break;
+            }
           }
-          console.log(event.target);
+
+          // change tabindex of todo item and its children checked and delete btn
+          if (nextSibling == null) {
+            const firstTodoItem = unorderedChildren[0];
+            // focus first todo item
+            keyboardChangeTabindexDraggedClassFocusElementAndCheckedDeleteBtnChildren(
+              event.target.closest("li"),
+              firstTodoItem,
+              event.target
+            );
+          } else {
+            // focus next sibling
+            keyboardChangeTabindexDraggedClassFocusElementAndCheckedDeleteBtnChildren(
+              event.target.closest("li"),
+              nextSibling,
+              event.target
+            );
+          }
+          // console.log(event.target);
+          // focus element here
+          // console.log(event.target);
+          // event.target.focus();
+          // check for border top on views container
+          document
+            .querySelector(".views-container")
+            .getAttribute("data-unorderedhasitems") != "true"
+            ? addOrRemoveTopBorderToViewsContainer("true")
+            : null;
           break;
         case "ArrowUp":
+          event.preventDefault();
           // use document.activeElement.closest("li")
           // to get parent and previous sibling
-
-          switch (cachedData.currentView) {
-            case "All":
-              break;
-            case "Active":
-              break;
-            case "Completed":
-              break;
+          const previousSibling =
+            document.activeElement.closest("li").previousElementSibling;
+          const unorderedListChildrenAfterSwappingTodoItems =
+            cachedData.dragItemSelected
+              ? Number(
+                  getGrabDragIndexAttr(document.activeElement.closest("li")) ==
+                    0
+                )
+                ? keyboardMoveTopItemToBottomOfList(unorderedChildren)
+                : keyboardSwapTodoItemChild(
+                    document.activeElement.closest("li"),
+                    previousSibling
+                  )
+              : null;
+          if (cachedData.dragItemSelected) {
+            switch (cachedData.currentView) {
+              case "All":
+                cachedData.arraysOfDifferentViews.allViewArray = [
+                  ...unorderedListChildrenAfterSwappingTodoItems,
+                ];
+                const arrowUpCopiedAllViewArray =
+                  cachedData.arraysOfDifferentViews.allViewArray;
+                // filter out todocompleted = "false", active list
+                cachedData.arraysOfDifferentViews.activeViewArray =
+                  filterOutActiveTodoItems(arrowUpCopiedAllViewArray);
+                // filter out todocompleted = "true", completed lsit
+                cachedData.arraysOfDifferentViews.completedViewArray =
+                  filterOutCompletedTodoItems(arrowUpCopiedAllViewArray);
+                // save original order of allViewIndex for active and completed
+                // active view
+                cachedData.originalElementOrderInAllViewArray.activeViewOriginalOrder =
+                  originalAllViewIndexForElementsInActiveOrCompletedArray(
+                    cachedData.arraysOfDifferentViews.activeViewArray
+                  );
+                // completed view
+                cachedData.originalElementOrderInAllViewArray.completedViewOriginalOrder =
+                  originalAllViewIndexForElementsInActiveOrCompletedArray(
+                    cachedData.arraysOfDifferentViews.completedViewArray
+                  );
+                // append todo items in all view array to unorderlist
+                const arrowUpAllView = assignAttrToArrayAndCreateListitem(
+                  unorderedListChildrenAfterSwappingTodoItems,
+                  updateAttrForTodoItemCheckedAndDeleteBtn,
+                  createChildrenForUnorderedList
+                );
+                removeCurrentListitemsAppendFragmentElement(
+                  unorderedList,
+                  arrowUpAllView
+                );
+                break;
+              // const ;
+              case "Active":
+                const arrowUpCopiedUnorderChildrenActiveView = [
+                  ...unorderedListChildrenAfterSwappingTodoItems,
+                ];
+                allViewIndexForReorderOfActiveOrCompletedArray(
+                  arrowUpCopiedUnorderChildrenActiveView
+                );
+                const correctOrderOfTodo =
+                  updateAllViewArrayWithCorrectOrderAfterDragDropInActiveOrCompletedView(
+                    arrowUpCopiedUnorderChildrenActiveView,
+                    cachedData.arraysOfDifferentViews.completedViewArray
+                  );
+                cachedData.arraysOfDifferentViews.allViewArray = [
+                  ...correctOrderOfTodo,
+                ];
+                const copiedAllViewArrowUpActive = Array.prototype.slice.call(
+                  cachedData.arraysOfDifferentViews.allViewArray
+                );
+                // filter out todocompleted = "false", active list
+                cachedData.arraysOfDifferentViews.activeViewArray =
+                  filterOutActiveTodoItems(copiedAllViewArrowUpActive);
+                // filter out todocompleted = "true", completed lsit
+                cachedData.arraysOfDifferentViews.completedViewArray =
+                  filterOutCompletedTodoItems(copiedAllViewArrowUpActive);
+                const arrowUpActiveView = assignAttrToArrayAndCreateListitem(
+                  unorderedListChildrenAfterSwappingTodoItems,
+                  updateAttrForTodoItemCheckedAndDeleteBtn,
+                  createChildrenForUnorderedList
+                );
+                removeCurrentListitemsAppendFragmentElement(
+                  unorderedList,
+                  arrowUpActiveView
+                );
+                break;
+              case "Completed":
+                const arrowUpCopiedUnorderChildrenCompletedView = [
+                  ...unorderedListChildrenAfterSwappingTodoItems,
+                ];
+                allViewIndexForReorderOfActiveOrCompletedArray(
+                  arrowUpCopiedUnorderChildrenCompletedView
+                );
+                const correctOrderOfItems =
+                  updateAllViewArrayWithCorrectOrderAfterDragDropInActiveOrCompletedView(
+                    arrowUpCopiedUnorderChildrenCompletedView,
+                    cachedData.arraysOfDifferentViews.activeViewArray
+                  );
+                cachedData.arraysOfDifferentViews.allViewArray = [
+                  ...correctOrderOfItems,
+                ];
+                const copiedAllViewArrowUpCompleted =
+                  Array.prototype.slice.call(
+                    cachedData.arraysOfDifferentViews.allViewArray
+                  );
+                // filter out todocompleted = "false", active list
+                cachedData.arraysOfDifferentViews.activeViewArray =
+                  filterOutActiveTodoItems(copiedAllViewArrowUpCompleted);
+                // filter out todocompleted = "true", completed lsit
+                cachedData.arraysOfDifferentViews.completedViewArray =
+                  filterOutCompletedTodoItems(copiedAllViewArrowUpCompleted);
+                const arrowUpCompletedView = assignAttrToArrayAndCreateListitem(
+                  unorderedListChildrenAfterSwappingTodoItems,
+                  updateAttrForTodoItemCheckedAndDeleteBtn,
+                  createChildrenForUnorderedList
+                );
+                removeCurrentListitemsAppendFragmentElement(
+                  unorderedList,
+                  arrowUpCompletedView
+                );
+                break;
+            }
           }
-          console.log(event.target);
 
+          // change tabindex of todo item and its children checked and delete btn
+          if (previousSibling == null) {
+            // last todo item
+            const lastTodoItem =
+              unorderedChildren[lengthOfUnorderedListMinusOne];
+            // focus last todo item
+            alert("use event.target instead of document.activeElement");
+            keyboardChangeTabindexDraggedClassFocusElementAndCheckedDeleteBtnChildren(
+              document.activeElement.closest("li"),
+              lastTodoItem,
+              event.target
+            );
+          } else {
+            // focus previous sibling
+            keyboardChangeTabindexDraggedClassFocusElementAndCheckedDeleteBtnChildren(
+              document.activeElement.closest("li"),
+              previousSibling,
+              event.target
+            );
+          }
+          // focus element here
+          // console.log(event.target);
+          // event.target.focus();
+          // check for border top on views container
+          document
+            .querySelector(".views-container")
+            .getAttribute("data-unorderedhasitems") != "true"
+            ? addOrRemoveTopBorderToViewsContainer("true")
+            : null;
           break;
       }
     }
@@ -3714,6 +4002,10 @@
     currentFocusElement.append(replaceElementTodoItemChild);
     // append current list item child to replaceElement list item element
     replaceElement.append(currentTodoItemChild);
+
+    return Array.prototype.slice.call(
+      currentFocusElement.parentElement.children
+    );
   }
 
   /**
@@ -3723,7 +4015,7 @@
   function keyboardChangeTabindexDraggedClassFocusElementAndCheckedDeleteBtnChildren(
     previousElement,
     focusElement,
-    focusTarget
+    eventTarget
   ) {
     // if (cachedData.dragItemSelected) {
     //   // assign "true" focusElement
@@ -3742,20 +4034,70 @@
     focusElement.setAttribute("tabindex", "0");
     // call method .focus on focusTarget
     // focusTarget could be todoListItem, checkedBtn, and deleteBtn
+    // focusTarget.focus();
+
+    const focusTarget = keyboardFocusDragAndDropHelper(
+      eventTarget,
+      focusElement
+    );
     focusTarget.focus();
+  }
+
+  /**
+   * focus drag and drop helper
+   * **/
+
+  function keyboardFocusDragAndDropHelper(keydownTarget, focusListitem) {
+    const targetTagName = keydownTarget.tagName;
+    if (targetTagName == "LI") {
+      return focusListitem;
+    }
+    if (targetTagName == "BUTTON") {
+      const classOfBtn = keydownTarget.getAttribute("class");
+      if (classOfBtn == "checked-btn") {
+        return focusListitem.firstElementChild.children[0].firstElementChild;
+      }
+      if (classOfBtn == "delete-btn") {
+        return focusListitem.firstElementChild.children[2];
+      }
+    }
   }
 
   /**
    * keyboardMoveBottomItemToTopOfList
    * **/
 
-  function keyboardMoveBottomItemToTopOfList(unorderedList) {}
+  function keyboardMoveBottomItemToTopOfList(unorderedList) {
+    // calling keyboardChangeTabindexDraggedClassFocusElementAndCheckedDeleteBtnChildren
+    // after running algorithm that will move top item to bottom of list
+    /**
+     * dont have to call func above because we are swapping the li and not the div that is a child of the todo item
+     * the todo item(li) will keep its tabindex value either "0" or "-1"
+     * **/
+    // const arrayOfItems = Array.prototype.slice.call(unorderedList);
+    const arrayOfItems = unorderedList;
+    const lengthOfArray = arrayOfItems.length;
+    const lastItem = arrayOfItems[lengthOfArray - 1];
+    const topOfList = arrayOfItems.slice(0, lengthOfArray - 1);
+    return [lastItem, ...topOfList];
+  }
 
   /**
    * keyboardMoveTopItemToBottomOfList
    * **/
 
-  function keyboardMoveTopItemToBottomOfList(unorderedList) {}
+  function keyboardMoveTopItemToBottomOfList(unorderedList) {
+    // calling keyboardChangeTabindexDraggedClassFocusElementAndCheckedDeleteBtnChildren
+    // after running algorithm that will move bottom item to top of list
+    /**
+     * dont have to call func above because we are swapping the li and not the div that is a child of the todo item
+     * the todo item(li) will keep its tabindex value either "0" or "-1"
+     * **/
+    // const lengthOfTodoItems = unorderedList.length;
+    // const [firstItem, ...bottomOfTodoItemsList] = Array.prototype.slice.call(unorderedList);
+    const [firstItem, ...bottomOfTodoItemsList] = unorderedList;
+    return [...bottomOfTodoItemsList, firstItem];
+  }
 
   /**
    * changeDraggedClass
@@ -4187,9 +4529,10 @@
     /**
      * different approach since we will be working with ul children instead
      * of arrays in cachedObj
+     * sticking with original algorithm for now
      * **/
     // const copiedArray = [...array];
-    let combinedArrays = [];
+    // let combinedArrays = [];
     // const copiedArray = [].concat(array);
     // const copiedArray = array.slice();
 
