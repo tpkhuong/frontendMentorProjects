@@ -61,7 +61,7 @@
     function elementClickEvent(event) {}
 
     function elementDragStart(event) {
-      event.stopPropagation();
+      // event.stopPropagation();
       console.log("dragstart");
 
       //another approach
@@ -111,14 +111,14 @@
 
     function elementDragOver(event) {
       event.preventDefault();
-      event.stopPropagation();
+      // event.stopPropagation();
 
       event.target.closest("li").classList.add("drag-over");
       // console.log(dragSourceElement);
     }
 
     function elementDragDrop(event) {
-      event.stopPropagation();
+      // event.stopPropagation();
       /**
        * check which current view user is on
        * work with array in cachedObj of that view
