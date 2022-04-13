@@ -3403,6 +3403,7 @@
       "data-todoCompleted": "false",
       "data-allViewIndex": "0",
       "data-grabDragIndex": "0",
+      "data-dragOver": "false",
     });
     // div draggable element
     const draggableDiv = createElementForTodoItem("DIV", {
@@ -3971,25 +3972,39 @@
    * mouse drag enter
    * **/
 
-  function mouseDragEnter(event) {}
+  function mouseDragEnter(event) {
+    event.target.closest("li").setAttribute("data-dragOver", "true");
+
+    console.log(event.target);
+  }
 
   /**
    * mouse drag drop
    * **/
 
-  function mouseDragDrop(event) {}
+  function mouseDragDrop(event) {
+    //
+  }
 
   /**
    * mouse drag leave
    * **/
 
-  function mouseDragLeave(event) {}
+  function mouseDragLeave(event) {
+    //
+    event.target.closest("li").setAttribute("data-dragOver", "false");
+  }
 
   /**
    * mouse drag over
    * **/
 
-  function mouseDragOver(event) {}
+  function mouseDragOver(event) {
+    //
+    event.preventDefault();
+
+    event.target.closest("li").setAttribute("data-dragOver", "true");
+  }
 
   /**
    * keyboard drag helper

@@ -894,6 +894,12 @@ that todo
   font-weight: 700;
 }
 
+[data-dragover="true"] {
+  /* background-color: var(--color-primary-first-half); */
+  outline: 3px solid var(--color-primary-first-half);
+  /* border: 3px solid #f2571a; */
+}
+
 li[data-todoCompleted="true"] p {
   position: relative;
   width: max-content;
