@@ -9,8 +9,13 @@
   // apply attr data-currentView
   applyDataCurrentViewAttrToBtn();
   // declare our selectors
-  const { mainElement, unorderedList, toggleThemeBtn, checkedBtn } =
-    ourSelectors();
+  const {
+    mainElement,
+    unorderedList,
+    toggleThemeBtn,
+    checkedBtn,
+    assistiveTextContainer,
+  } = ourSelectors();
   // call our cached func
   const accessData = scopeOurData();
   const cachedData = accessData();
@@ -755,14 +760,14 @@
              * when arrayIndex and indexOfELementWithTabindexZero equal to each other the if statement of this else statement will handle that situation
              * **/
             // assign tabindex = "-1" to element at indexOfELementWithTabindexZero
-            singleTargetChangeTabindexCheckedAndDeleteBtn(
-              unorderedList.children[indexOfELementWithTabindexZero],
-              "-1"
-            );
-            applyFocusChangeTabindexSingleTarget(
-              unorderedList.children[indexOfELementWithTabindexZero],
-              "-1"
-            );
+            // singleTargetChangeTabindexCheckedAndDeleteBtn(
+            //   unorderedList.children[indexOfELementWithTabindexZero],
+            //   "-1"
+            // );
+            // applyFocusChangeTabindexSingleTarget(
+            //   unorderedList.children[indexOfELementWithTabindexZero],
+            //   "-1"
+            // );
             if (arrayIndex < indexOfELementWithTabindexZero) {
               singleTargetChangeTabindexCheckedAndDeleteBtn(
                 unorderedList.children[indexOfELementWithTabindexZero - 1],
@@ -3521,6 +3526,9 @@
   function accessibilityDragAndDrop(event) {
     // event.preventDefault();
     // target the UL and its children count
+    // current todoItem
+    const todoElement = event.target.closest("li");
+
     const beforeSwapUnorderedChildren = Array.prototype.slice.call(
       unorderedList.children
     );
@@ -3593,42 +3601,50 @@
      * this way when user has checked or delete btn focus we will run algorithm to focus item/drag drop element
      * **/
 
-    if (event.target.closest("li")) {
+    if (todoElement) {
+      const indexOfCurrentTodoItem = [...unorderedList.children].indexOf(
+        todoElement
+      );
+      const eventTargetClassName = event.target.className;
       switch (event.code) {
         case "ArrowDown":
-          const element = event.target.closest("li");
-          console.log([...unorderedList.children].indexOf(element));
+          console.log(indexOfCurrentTodoItem);
           event.preventDefault();
           // use event.target.closest("li")
           // to get parent and next sibling
-          const nextSibling = event.target.closest("li").nextElementSibling;
+          const nextSibling = todoElement.nextElementSibling;
           // swap todo items
           // make copy of ul children
           // apply original tabindex to items in the copy array of ul children
           // combine copied array of ul children with original tabindex applied with array in cachedObj based on current view
           // sort items in array to correct order basded on original tabindex
 
-          const ulChildrenArrayAfterSwappingTodoItems =
-            cachedData.dragItemSelected
-              ? Number(
-                  getGrabDragIndexAttr(event.target.closest("li")) ==
-                    beforeSwapUnorderedChildrenCount - 1
-                )
-                ? keyboardMoveBottomItemToTopOfList([...unorderedList.children])
-                : keyboardSwapTodoItemChild(
-                    event.target.closest("li"),
-                    nextSibling
-                  )
-              : null;
+          // const ulChildrenArrayAfterSwappingTodoItems =
+          //   cachedData.dragItemSelected
+          //     ? Number(
+          //         getGrabDragIndexAttr(todoElement) ==
+          //           beforeSwapUnorderedChildrenCount - 1
+          //       )
+          //       ? keyboardMoveBottomItemToTopOfList([...unorderedList.children])
+          //       : keyboardSwapTodoItemChild(
+          //           event.target.closest("li"),
+          //           nextSibling
+          //         )
+          //     : null;
           /**
            * will use switch run algorithm based on current view since
            * all view algorithm will be different from active and completed view algorithm
            * **/
 
           if (cachedData.dragItemSelected) {
+            // empty assistive text content
+            assistiveTextContainer.innerText = "";
             // arrowUpAndDownSwappingItemsHelper(view, array) pass in view as
             // first argument and array as second argument
-            // arrowUpAndDownSwappingItemsHelper(cachedData.currentView,ulChildrenArrayAfterSwappingTodoItems);
+            // arrowUpAndDownSwappingItemsHelper(
+            //   cachedData.currentView,
+            //   ulChildrenArrayAfterSwappingTodoItems
+            // );
             switch (cachedData.currentView) {
               case "All":
                 cachedData.arraysOfDifferentViews.allViewArray = [
@@ -3743,7 +3759,11 @@
           if (nextSibling == null) {
             const firstTodoItem = [...unorderedList.children][0];
             // focus first todo item
-            firstTodoItem.focus();
+            const focusTodoArrowDown = keyboardFocusDragAndDropHelper(
+              eventTargetClassName,
+              firstTodoItem
+            );
+            focusTodoArrowDown.focus();
             // keyboardChangeTabindexDraggedClassFocusElementAndCheckedDeleteBtnChildren(
             //   event.target.closest("li"),
             //   firstTodoItem,
@@ -3752,9 +3772,10 @@
           } else {
             // focus next sibling
             keyboardChangeTabindexDraggedClassFocusElementAndCheckedDeleteBtnChildren(
-              event.target.closest("li"),
-              nextSibling,
-              event.target
+              [...unorderedList.children],
+              indexOfCurrentTodoItem,
+              event.code,
+              eventTargetClassName
             );
           }
           // console.log(event.target);
@@ -3772,19 +3793,23 @@
           event.preventDefault();
           // use event.target.closest("li")
           // to get parent and previous sibling
-          const previousSibling =
-            event.target.closest("li").previousElementSibling;
-          const unorderedListChildrenAfterSwappingTodoItems =
-            cachedData.dragItemSelected
-              ? Number(getGrabDragIndexAttr(event.target.closest("li")) == 0)
-                ? keyboardMoveTopItemToBottomOfList([...unorderedList.children])
-                : keyboardSwapTodoItemChild(
-                    event.target.closest("li"),
-                    previousSibling
-                  )
-              : null;
+          const previousSibling = todoElement.previousElementSibling;
+          // const unorderedListChildrenAfterSwappingTodoItems =
+          //   cachedData.dragItemSelected
+          //     ? Number(getGrabDragIndexAttr(todoElement) == 0)
+          //       ? keyboardMoveTopItemToBottomOfList([...unorderedList.children])
+          //       : keyboardSwapTodoItemChild(
+          //           event.target.closest("li"),
+          //           previousSibling
+          //         )
+          //     : null;
           if (cachedData.dragItemSelected) {
-            // arrowUpAndDownSwappingItemsHelper(cachedData.currentView, unorderedListChildrenAfterSwappingTodoItems)
+            // empty assistive text content
+            assistiveTextContainer.innerText = "";
+            // arrowUpAndDownSwappingItemsHelper(
+            //   cachedData.currentView,
+            //   unorderedListChildrenAfterSwappingTodoItems
+            // );
             switch (cachedData.currentView) {
               case "All":
                 cachedData.arraysOfDifferentViews.allViewArray = [
@@ -3899,7 +3924,12 @@
             const lastTodoItem =
               unorderedList.children[lengthOfUnorderedListMinusOne];
             // focus last todo item
-            lastTodoItem.focus();
+            // lastTodoItem.focus();
+            const focusTodoArrowUp = keyboardFocusDragAndDropHelper(
+              eventTargetClassName,
+              lastTodoItem
+            );
+            focusTodoArrowUp.focus();
             // keyboardChangeTabindexDraggedClassFocusElementAndCheckedDeleteBtnChildren(
             //   event.target.closest("li"),
             //   lastTodoItem,
@@ -3908,9 +3938,10 @@
           } else {
             // focus previous sibling
             keyboardChangeTabindexDraggedClassFocusElementAndCheckedDeleteBtnChildren(
-              event.target.closest("li"),
-              previousSibling,
-              event.target
+              [...unorderedList.children],
+              indexOfCurrentTodoItem,
+              event.code,
+              eventTargetClassName
             );
           }
           // focus element here
@@ -3965,7 +3996,11 @@
    * **/
 
   function mouseDragStart(event) {
-    console.log(event.target);
+    // saving reference of todo item in cachedObj
+    cachedData.dragSourceElement = event.target.parentElement;
+    // getting grabbedItemDataIndex for swapping algorithm
+    cachedData.grabbedItemDataIndex =
+      event.target.parentElement.getAttribute("data-grabDragIndex");
   }
 
   /**
@@ -3974,8 +4009,6 @@
 
   function mouseDragEnter(event) {
     event.target.closest("li").setAttribute("data-dragOver", "true");
-
-    console.log(event.target);
   }
 
   /**
@@ -3983,7 +4016,12 @@
    * **/
 
   function mouseDragDrop(event) {
-    //
+    /**
+     * we could use keyword this because only the todo listitem should have the event drop
+     * applied to it
+     * **/
+    event.target.closest("li").setAttribute("data-dragOver", "false");
+    console.log(this);
   }
 
   /**
@@ -4007,6 +4045,77 @@
   }
 
   /**
+   * mouse drag helper
+   * **/
+
+  /**
+   * items above dropped area element
+   * **/
+
+  function itemsAboveDroppedArea(array, droppedElementIndex) {
+    // [0,1,2,3,4]
+    //dropppedIndex is 2
+    // func will return [0,1]
+    const copiedArray = [...array];
+    return copiedArray.slice(0, droppedElementIndex);
+  }
+
+  /**
+   * items below dropped area element
+   * **/
+
+  function itemsBelowDroppedArea(array, droppedElementIndex) {
+    // [0,1,2,3,4]
+    //dropppedIndex is 2
+    // func will return [3,4]
+    const copyOfArray = [].concat(array);
+    return copyOfArray.slice(droppedElementIndex + 1);
+  }
+
+  /**
+   * filter out grabbed element
+   * **/
+
+  function filteroutGrabbedTodoItem(array, grabbedDataIndex) {
+    // filter method will eiter return an array without listitem that matches dataIndex
+    // or original array;
+    return array.filter(function removeTodoItem(listItem) {
+      const elementgrabbedIndex = listItem.getAttribute("data-grabDragIndex");
+      return elementgrabbedIndex != grabbedDataIndex;
+    });
+  }
+
+  /**
+   * making array of reordered todo items
+   * **/
+
+  /**
+   * grabbed element goes above
+   * **/
+
+  function grabbedElementGoesAbove(
+    itemsAbove,
+    itemsBelow,
+    grabbedElement,
+    droppedElement
+  ) {
+    return [...itemsAbove, grabbedElement, droppedElement, ...itemsBelow];
+  }
+
+  /**
+   * grabbed element goes below
+   * **/
+
+  function grabbedElementGoesBelow(
+    itemsAbove,
+    itemsBelow,
+    grabbedElement,
+    droppedElement
+  ) {
+    return [...itemsAbove, droppedElement, grabbedElement, ...itemsBelow];
+  }
+
+  /**
    * keyboard drag helper
    * **/
 
@@ -4022,7 +4131,11 @@
    * swap items child element
    * **/
 
-  function keyboardSwapTodoItemChild(currentFocusElement, replaceElement) {
+  function keyboardSwapTodoItemChild(
+    array,
+    todoItemIndex,
+    arrowUpOrDownKeyCode
+  ) {
     /**
      * working with swapping value of data-todoCompleted
      * another approach copy unorderlist children array
@@ -4031,22 +4144,32 @@
      * get next sibling item to current item
      * make copy of array with item(s) after next sibling of current item
      * make this array [beforeItems, nextSibling, currentItem, afteritems]
-     *
+     * **/
+    const beforeItems =
+      arrowUpOrDownKeyCode == "ArrowDown"
+        ? array.slice(0, todoItemIndex)
+        : array.slice(0, todoItemIndex - 1);
+    // const prevOrNextSibling;
+    // const arrayOfSiblingAndCurrentTodoItem;
+    // const afterItems;
+    /**
+     * algorithm below we swapped todo listitem firstChildElement
+     * the div container of text,checked and delete btn
      * **/
     // get current list item child
-    const currentTodoItemChild = currentFocusElement.firstElementChild;
-    // get replaceElement item child
-    const replaceElementTodoItemChild = replaceElement.firstElementChild;
-    // remove current list item child
-    currentFocusElement.removeChild(currentTodoItemChild);
-    // append replaceElement item child to current list item element
-    currentFocusElement.append(replaceElementTodoItemChild);
-    // append current list item child to replaceElement list item element
-    replaceElement.append(currentTodoItemChild);
+    // const currentTodoItemChild = currentFocusElement.firstElementChild;
+    // // get replaceElement item child
+    // const replaceElementTodoItemChild = replaceElement.firstElementChild;
+    // // remove current list item child
+    // currentFocusElement.removeChild(currentTodoItemChild);
+    // // append replaceElement item child to current list item element
+    // currentFocusElement.append(replaceElementTodoItemChild);
+    // // append current list item child to replaceElement list item element
+    // replaceElement.append(currentTodoItemChild);
 
-    return Array.prototype.slice.call(
-      currentFocusElement.parentElement.children
-    );
+    // return Array.prototype.slice.call(
+    //   currentFocusElement.parentElement.children
+    // );
   }
 
   /**
@@ -4054,53 +4177,85 @@
    * **/
 
   function keyboardChangeTabindexDraggedClassFocusElementAndCheckedDeleteBtnChildren(
-    previousElement,
-    focusElement,
-    eventTarget
+    ulChildren,
+    elementIndex,
+    arrowUpOrDownKeyPressed,
+    targetClassName
   ) {
+    /**
+     * elementIndex will by number type
+     * **/
+    const prevElement = ulChildren[elementIndex];
+    // when arrowUpOrDownKeyPressed is ArrowDown take elementIndex subtract 1
+    // when it is ArrowUp take elementIndex add 1
+    const focusElementIndex =
+      arrowUpOrDownKeyPressed == "ArrowDown"
+        ? elementIndex + 1
+        : elementIndex - 1;
+    const focusTodoElement = ulChildren[focusElementIndex];
+    // const focusElement
     // if (cachedData.dragItemSelected) {
     //   // assign "true" focusElement
     //   previousElement.setAttribute("data-dragselected", "true");
     //   // assign "false" previousElement
     //   focusElement.setAttribute("data-dragselected", "false");
     // }
-    keyboardAndMouseChangeDraggedClass(previousElement, focusElement);
-    // change checked and delete btn tabindex to -1
-    singleTargetChangeTabindexCheckedAndDeleteBtn(previousElement, "-1");
-    // change checked and delete btn tabindex to 0
-    singleTargetChangeTabindexCheckedAndDeleteBtn(focusElement, "0");
-    // assign value "-1" to tabindex attr of previousElement
-    previousElement.setAttribute("tabindex", "-1");
-    // assign value "0" to tabindex attr of focusElement
-    focusElement.setAttribute("tabindex", "0");
-    // call method .focus on focusTarget
-    // focusTarget could be todoListItem, checkedBtn, and deleteBtn
-    // focusTarget.focus();
+    if (cachedData.dragItemSelected) {
+      const focusThisElement = keyboardFocusDragAndDropHelper(
+        targetClassName,
+        focusTodoElement
+      );
+      focusThisElement.focus();
+    } else {
+      keyboardAndMouseChangeDraggedClass(prevElement, focusTodoElement);
+      // change checked and delete btn tabindex to -1
+      singleTargetChangeTabindexCheckedAndDeleteBtn(prevElement, "-1");
+      // change checked and delete btn tabindex to 0
+      singleTargetChangeTabindexCheckedAndDeleteBtn(focusTodoElement, "0");
+      // call method .focus on focusTarget
+      // focusTarget could be todoListItem, checkedBtn, and deleteBtn
+      // focusTarget.focus();
 
-    const focusTarget = keyboardFocusDragAndDropHelper(
-      eventTarget,
-      focusElement
-    );
-    focusTarget.focus();
+      const focusTarget = keyboardFocusDragAndDropHelper(
+        targetClassName,
+        focusTodoElement
+      );
+      focusTarget.focus();
+    }
   }
 
   /**
    * focus drag and drop helper
    * **/
 
-  function keyboardFocusDragAndDropHelper(keydownTarget, focusListitem) {
-    const targetTagName = keydownTarget.tagName;
-    if (targetTagName == "LI") {
-      return focusListitem;
-    }
-    if (targetTagName == "BUTTON") {
-      const classOfBtn = keydownTarget.getAttribute("class");
-      if (classOfBtn == "checked-btn") {
+  function keyboardFocusDragAndDropHelper(elementClass, focusListitem) {
+    // const targetTagName = keydownTarget.tagName;
+    /**
+     * algorithm when we were using tagName
+     **/
+    // if (tagName == "LI") {
+    //   return focusListitem;
+    // }
+    // if (tagName == "BUTTON") {
+    //   const classOfBtn = keydownTarget.getAttribute("class");
+    //   if (classOfBtn == "checked-btn") {
+    //     return focusListitem.firstElementChild.children[0].firstElementChild;
+    //   }
+    //   if (classOfBtn == "delete-btn") {
+    //     return focusListitem.firstElementChild.children[2];
+    //   }
+    // }
+    /**
+     * since our todo item class will always be todo-item we will use
+     * element class name instead of element tagName
+     * **/
+    switch (elementClass) {
+      case "todo-item":
+        return focusListitem;
+      case "checked-btn":
         return focusListitem.firstElementChild.children[0].firstElementChild;
-      }
-      if (classOfBtn == "delete-btn") {
+      case "delete-btn":
         return focusListitem.firstElementChild.children[2];
-      }
     }
   }
 
@@ -4166,7 +4321,7 @@
         cachedData.arraysOfDifferentViews.completedViewArray =
           filterOutCompletedTodoItems(copiedAllViewArrowActive);
         const arrowActiveView = assignAttrToArrayAndCreateListitem(
-          ulChildrenArrayAfterSwappingTodoItems,
+          array,
           updateAttrForTodoItemCheckedAndDeleteBtn,
           createChildrenForUnorderedList
         );
@@ -4176,9 +4331,7 @@
         );
         break;
       case "Completed":
-        const arrowCopiedUnorderChildrenCompletedView = [
-          ...ulChildrenArrayAfterSwappingTodoItems,
-        ];
+        const arrowCopiedUnorderChildrenCompletedView = [...array];
         allViewIndexForReorderOfActiveOrCompletedArray(
           arrowCopiedUnorderChildrenCompletedView
         );
@@ -4201,7 +4354,7 @@
         cachedData.arraysOfDifferentViews.completedViewArray =
           filterOutCompletedTodoItems(copiedAllViewArrowCompleted);
         const arrowCompletedView = assignAttrToArrayAndCreateListitem(
-          ulChildrenArrayAfterSwappingTodoItems,
+          array,
           updateAttrForTodoItemCheckedAndDeleteBtn,
           createChildrenForUnorderedList
         );
@@ -5022,11 +5175,14 @@
     const checkedBtn = Array.prototype.slice.call(
       document.querySelectorAll(".checked-btn")
     );
+    // assistive-text element
+    const assistiveTextContainer = document.querySelector(".assistive-text");
     return {
       mainElement,
       unorderedList,
       toggleThemeBtn,
       checkedBtn,
+      assistiveTextContainer,
     };
   }
 
