@@ -579,5 +579,352 @@
     });
 
     list.appendChild(fragment);
+
+    /**
+     * switch algorithm for arrowdown ourApp.js for todoAppChallenge
+     * **/
+
+    // switch (cachedData.currentView) {
+    //   case "All":
+    //     cachedData.arraysOfDifferentViews.allViewArray = [
+    //       ...ulChildrenArrayAfterSwappingTodoItems,
+    //     ];
+    //     const arrowDownCopiedAllViewArray =
+    //       cachedData.arraysOfDifferentViews.allViewArray;
+    //     /**
+    //      * update tabindex of each listitem in allView array before we filter out the listitems
+    //      * for active and completed array
+    //      * **/
+    //     assignAllViewIndexElementsInAllViewArr(
+    //       arrowDownCopiedAllViewArray
+    //     );
+    //     // filter out todocompleted = "false", active list
+    //     cachedData.arraysOfDifferentViews.activeViewArray =
+    //       filterOutActiveTodoItems(arrowDownCopiedAllViewArray);
+    //     // filter out todocompleted = "true", completed lsit
+    //     cachedData.arraysOfDifferentViews.completedViewArray =
+    //       filterOutCompletedTodoItems(arrowDownCopiedAllViewArray);
+    //     // save original order of allViewIndex for active and completed
+    //     // active view
+    //     cachedData.originalElementOrderInAllViewArray.activeViewOriginalOrder =
+    //       originalAllViewIndexForElementsInActiveOrCompletedArray(
+    //         cachedData.arraysOfDifferentViews.activeViewArray
+    //       );
+    //     // completed view
+    //     cachedData.originalElementOrderInAllViewArray.completedViewOriginalOrder =
+    //       originalAllViewIndexForElementsInActiveOrCompletedArray(
+    //         cachedData.arraysOfDifferentViews.completedViewArray
+    //       );
+    //     // append todo items in all view array to unorderlist
+    //     const arrowDownAllView = assignAttrToArrayAndCreateListitem(
+    //       arrowDownCopiedAllViewArray,
+    //       updateAttrForTodoItemCheckedAndDeleteBtn,
+    //       createChildrenForUnorderedList
+    //     );
+    //     removeCurrentListitemsAppendFragmentElement(
+    //       unorderedList,
+    //       arrowDownAllView
+    //     );
+    //     break;
+    //   // const ;
+    //   case "Active":
+    //     const arrowDownCopiedUnorderChildrenActiveView = [
+    //       ...ulChildrenArrayAfterSwappingTodoItems,
+    //     ];
+    //     allViewIndexForReorderOfActiveOrCompletedArray(
+    //       arrowDownCopiedUnorderChildrenActiveView
+    //     );
+    //     const correctOrderOfTodo =
+    //       updateAllViewArrayWithCorrectOrderAfterDragDropInActiveOrCompletedView(
+    //         arrowDownCopiedUnorderChildrenActiveView,
+    //         cachedData.arraysOfDifferentViews.completedViewArray
+    //       );
+    //     cachedData.arraysOfDifferentViews.allViewArray = [
+    //       ...correctOrderOfTodo,
+    //     ];
+    //     const copiedAllViewArrowDownActive = Array.prototype.slice.call(
+    //       cachedData.arraysOfDifferentViews.allViewArray
+    //     );
+    //     // filter out todocompleted = "false", active list
+    //     cachedData.arraysOfDifferentViews.activeViewArray =
+    //       filterOutActiveTodoItems(copiedAllViewArrowDownActive);
+    //     // filter out todocompleted = "true", completed lsit
+    //     cachedData.arraysOfDifferentViews.completedViewArray =
+    //       filterOutCompletedTodoItems(copiedAllViewArrowDownActive);
+    //     const arrowDownActiveView = assignAttrToArrayAndCreateListitem(
+    //       cachedData.arraysOfDifferentViews.activeViewArray,
+    //       updateAttrForTodoItemCheckedAndDeleteBtn,
+    //       createChildrenForUnorderedList
+    //     );
+    //     removeCurrentListitemsAppendFragmentElement(
+    //       unorderedList,
+    //       arrowDownActiveView
+    //     );
+    //     break;
+    //   case "Completed":
+    //     const arrowDownCopiedUnorderChildrenCompletedView = [
+    //       ...ulChildrenArrayAfterSwappingTodoItems,
+    //     ];
+    //     allViewIndexForReorderOfActiveOrCompletedArray(
+    //       arrowDownCopiedUnorderChildrenCompletedView
+    //     );
+
+    //     const correctOrderOfItems =
+    //       updateAllViewArrayWithCorrectOrderAfterDragDropInActiveOrCompletedView(
+    //         arrowDownCopiedUnorderChildrenCompletedView,
+    //         cachedData.arraysOfDifferentViews.activeViewArray
+    //       );
+    //     cachedData.arraysOfDifferentViews.allViewArray = [
+    //       ...correctOrderOfItems,
+    //     ];
+    //     const copiedAllViewArrowDownCompleted =
+    //       Array.prototype.slice.call(
+    //         cachedData.arraysOfDifferentViews.allViewArray
+    //       );
+    //     // filter out todocompleted = "false", active list
+    //     cachedData.arraysOfDifferentViews.activeViewArray =
+    //       filterOutActiveTodoItems(copiedAllViewArrowDownCompleted);
+    //     // filter out todocompleted = "true", completed lsit
+    //     cachedData.arraysOfDifferentViews.completedViewArray =
+    //       filterOutCompletedTodoItems(copiedAllViewArrowDownCompleted);
+    //     const arrowDownCompletedView =
+    //       assignAttrToArrayAndCreateListitem(
+    //         cachedData.arraysOfDifferentViews.completedViewArray,
+    //         updateAttrForTodoItemCheckedAndDeleteBtn,
+    //         createChildrenForUnorderedList
+    //       );
+    //     removeCurrentListitemsAppendFragmentElement(
+    //       unorderedList,
+    //       arrowDownCompletedView
+    //     );
+    //     break;
+    // }
+
+    /**
+     * switch algorithm for arrowup ourApp.js for todoAppChallenge
+     * **/
+
+    // switch (cachedData.currentView) {
+    //   case "All":
+    //     cachedData.arraysOfDifferentViews.allViewArray = [
+    //       ...ulChildrenArrayAfterSwappingTodoItems,
+    //     ];
+    //     const arrowDownCopiedAllViewArray =
+    //       cachedData.arraysOfDifferentViews.allViewArray;
+    //     /**
+    //      * update tabindex of each listitem in allView array before we filter out the listitems
+    //      * for active and completed array
+    //      * **/
+    //     assignAllViewIndexElementsInAllViewArr(
+    //       arrowDownCopiedAllViewArray
+    //     );
+    //     // filter out todocompleted = "false", active list
+    //     cachedData.arraysOfDifferentViews.activeViewArray =
+    //       filterOutActiveTodoItems(arrowDownCopiedAllViewArray);
+    //     // filter out todocompleted = "true", completed lsit
+    //     cachedData.arraysOfDifferentViews.completedViewArray =
+    //       filterOutCompletedTodoItems(arrowDownCopiedAllViewArray);
+    //     // save original order of allViewIndex for active and completed
+    //     // active view
+    //     cachedData.originalElementOrderInAllViewArray.activeViewOriginalOrder =
+    //       originalAllViewIndexForElementsInActiveOrCompletedArray(
+    //         cachedData.arraysOfDifferentViews.activeViewArray
+    //       );
+    //     // completed view
+    //     cachedData.originalElementOrderInAllViewArray.completedViewOriginalOrder =
+    //       originalAllViewIndexForElementsInActiveOrCompletedArray(
+    //         cachedData.arraysOfDifferentViews.completedViewArray
+    //       );
+    //     // append todo items in all view array to unorderlist
+    //     const arrowDownAllView = assignAttrToArrayAndCreateListitem(
+    //       arrowDownCopiedAllViewArray,
+    //       updateAttrForTodoItemCheckedAndDeleteBtn,
+    //       createChildrenForUnorderedList
+    //     );
+    //     removeCurrentListitemsAppendFragmentElement(
+    //       unorderedList,
+    //       arrowDownAllView
+    //     );
+    //     break;
+    //   // const ;
+    //   case "Active":
+    //     const arrowDownCopiedUnorderChildrenActiveView = [
+    //       ...ulChildrenArrayAfterSwappingTodoItems,
+    //     ];
+    //     allViewIndexForReorderOfActiveOrCompletedArray(
+    //       arrowDownCopiedUnorderChildrenActiveView
+    //     );
+    //     const correctOrderOfTodo =
+    //       updateAllViewArrayWithCorrectOrderAfterDragDropInActiveOrCompletedView(
+    //         arrowDownCopiedUnorderChildrenActiveView,
+    //         cachedData.arraysOfDifferentViews.completedViewArray
+    //       );
+    //     cachedData.arraysOfDifferentViews.allViewArray = [
+    //       ...correctOrderOfTodo,
+    //     ];
+    //     const copiedAllViewArrowDownActive = Array.prototype.slice.call(
+    //       cachedData.arraysOfDifferentViews.allViewArray
+    //     );
+    //     // filter out todocompleted = "false", active list
+    //     cachedData.arraysOfDifferentViews.activeViewArray =
+    //       filterOutActiveTodoItems(copiedAllViewArrowDownActive);
+    //     // filter out todocompleted = "true", completed lsit
+    //     cachedData.arraysOfDifferentViews.completedViewArray =
+    //       filterOutCompletedTodoItems(copiedAllViewArrowDownActive);
+    //     const arrowDownActiveView = assignAttrToArrayAndCreateListitem(
+    //       cachedData.arraysOfDifferentViews.activeViewArray,
+    //       updateAttrForTodoItemCheckedAndDeleteBtn,
+    //       createChildrenForUnorderedList
+    //     );
+    //     removeCurrentListitemsAppendFragmentElement(
+    //       unorderedList,
+    //       arrowDownActiveView
+    //     );
+    //     break;
+    //   case "Completed":
+    //     const arrowDownCopiedUnorderChildrenCompletedView = [
+    //       ...ulChildrenArrayAfterSwappingTodoItems,
+    //     ];
+    //     allViewIndexForReorderOfActiveOrCompletedArray(
+    //       arrowDownCopiedUnorderChildrenCompletedView
+    //     );
+
+    //     const correctOrderOfItems =
+    //       updateAllViewArrayWithCorrectOrderAfterDragDropInActiveOrCompletedView(
+    //         arrowDownCopiedUnorderChildrenCompletedView,
+    //         cachedData.arraysOfDifferentViews.activeViewArray
+    //       );
+    //     cachedData.arraysOfDifferentViews.allViewArray = [
+    //       ...correctOrderOfItems,
+    //     ];
+    //     const copiedAllViewArrowDownCompleted =
+    //       Array.prototype.slice.call(
+    //         cachedData.arraysOfDifferentViews.allViewArray
+    //       );
+    //     // filter out todocompleted = "false", active list
+    //     cachedData.arraysOfDifferentViews.activeViewArray =
+    //       filterOutActiveTodoItems(copiedAllViewArrowDownCompleted);
+    //     // filter out todocompleted = "true", completed lsit
+    //     cachedData.arraysOfDifferentViews.completedViewArray =
+    //       filterOutCompletedTodoItems(copiedAllViewArrowDownCompleted);
+    //     const arrowDownCompletedView =
+    //       assignAttrToArrayAndCreateListitem(
+    //         cachedData.arraysOfDifferentViews.completedViewArray,
+    //         updateAttrForTodoItemCheckedAndDeleteBtn,
+    //         createChildrenForUnorderedList
+    //       );
+    //     removeCurrentListitemsAppendFragmentElement(
+    //       unorderedList,
+    //       arrowDownCompletedView
+    //     );
+    //     break;
+    // }
+
+    // switch (cachedData.currentView) {
+    //   case "All":
+    //     cachedData.arraysOfDifferentViews.allViewArray = [
+    //       ...unorderedListChildrenAfterSwappingTodoItems,
+    //     ];
+    //     const arrowUpCopiedAllViewArray =
+    //       cachedData.arraysOfDifferentViews.allViewArray;
+    //     // filter out todocompleted = "false", active list
+    //     cachedData.arraysOfDifferentViews.activeViewArray =
+    //       filterOutActiveTodoItems(arrowUpCopiedAllViewArray);
+    //     // filter out todocompleted = "true", completed lsit
+    //     cachedData.arraysOfDifferentViews.completedViewArray =
+    //       filterOutCompletedTodoItems(arrowUpCopiedAllViewArray);
+    //     // save original order of allViewIndex for active and completed
+    //     // active view
+    //     cachedData.originalElementOrderInAllViewArray.activeViewOriginalOrder =
+    //       originalAllViewIndexForElementsInActiveOrCompletedArray(
+    //         cachedData.arraysOfDifferentViews.activeViewArray
+    //       );
+    //     // completed view
+    //     cachedData.originalElementOrderInAllViewArray.completedViewOriginalOrder =
+    //       originalAllViewIndexForElementsInActiveOrCompletedArray(
+    //         cachedData.arraysOfDifferentViews.completedViewArray
+    //       );
+    //     // append todo items in all view array to unorderlist
+    //     const arrowUpAllView = assignAttrToArrayAndCreateListitem(
+    //       unorderedListChildrenAfterSwappingTodoItems,
+    //       updateAttrForTodoItemCheckedAndDeleteBtn,
+    //       createChildrenForUnorderedList
+    //     );
+    //     removeCurrentListitemsAppendFragmentElement(
+    //       unorderedList,
+    //       arrowUpAllView
+    //     );
+    //     break;
+    //   // const ;
+    //   case "Active":
+    //     const arrowUpCopiedUnorderChildrenActiveView = [
+    //       ...unorderedListChildrenAfterSwappingTodoItems,
+    //     ];
+    //     allViewIndexForReorderOfActiveOrCompletedArray(
+    //       arrowUpCopiedUnorderChildrenActiveView
+    //     );
+    //     const correctOrderOfTodo =
+    //       updateAllViewArrayWithCorrectOrderAfterDragDropInActiveOrCompletedView(
+    //         arrowUpCopiedUnorderChildrenActiveView,
+    //         cachedData.arraysOfDifferentViews.completedViewArray
+    //       );
+    //     cachedData.arraysOfDifferentViews.allViewArray = [
+    //       ...correctOrderOfTodo,
+    //     ];
+    //     const copiedAllViewArrowUpActive = Array.prototype.slice.call(
+    //       cachedData.arraysOfDifferentViews.allViewArray
+    //     );
+    //     // filter out todocompleted = "false", active list
+    //     cachedData.arraysOfDifferentViews.activeViewArray =
+    //       filterOutActiveTodoItems(copiedAllViewArrowUpActive);
+    //     // filter out todocompleted = "true", completed lsit
+    //     cachedData.arraysOfDifferentViews.completedViewArray =
+    //       filterOutCompletedTodoItems(copiedAllViewArrowUpActive);
+    //     const arrowUpActiveView = assignAttrToArrayAndCreateListitem(
+    //       unorderedListChildrenAfterSwappingTodoItems,
+    //       updateAttrForTodoItemCheckedAndDeleteBtn,
+    //       createChildrenForUnorderedList
+    //     );
+    //     removeCurrentListitemsAppendFragmentElement(
+    //       unorderedList,
+    //       arrowUpActiveView
+    //     );
+    //     break;
+    //   case "Completed":
+    //     const arrowUpCopiedUnorderChildrenCompletedView = [
+    //       ...unorderedListChildrenAfterSwappingTodoItems,
+    //     ];
+    //     allViewIndexForReorderOfActiveOrCompletedArray(
+    //       arrowUpCopiedUnorderChildrenCompletedView
+    //     );
+    //     const correctOrderOfItems =
+    //       updateAllViewArrayWithCorrectOrderAfterDragDropInActiveOrCompletedView(
+    //         arrowUpCopiedUnorderChildrenCompletedView,
+    //         cachedData.arraysOfDifferentViews.activeViewArray
+    //       );
+    //     cachedData.arraysOfDifferentViews.allViewArray = [
+    //       ...correctOrderOfItems,
+    //     ];
+    //     const copiedAllViewArrowUpCompleted =
+    //       Array.prototype.slice.call(
+    //         cachedData.arraysOfDifferentViews.allViewArray
+    //       );
+    //     // filter out todocompleted = "false", active list
+    //     cachedData.arraysOfDifferentViews.activeViewArray =
+    //       filterOutActiveTodoItems(copiedAllViewArrowUpCompleted);
+    //     // filter out todocompleted = "true", completed lsit
+    //     cachedData.arraysOfDifferentViews.completedViewArray =
+    //       filterOutCompletedTodoItems(copiedAllViewArrowUpCompleted);
+    //     const arrowUpCompletedView = assignAttrToArrayAndCreateListitem(
+    //       unorderedListChildrenAfterSwappingTodoItems,
+    //       updateAttrForTodoItemCheckedAndDeleteBtn,
+    //       createChildrenForUnorderedList
+    //     );
+    //     removeCurrentListitemsAppendFragmentElement(
+    //       unorderedList,
+    //       arrowUpCompletedView
+    //     );
+    //     break;
+    // }
   }
 })();
