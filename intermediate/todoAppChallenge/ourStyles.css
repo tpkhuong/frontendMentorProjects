@@ -694,6 +694,15 @@ main {
     background: var(--desktop-img-top) var(--bottom-bg-color);
     background-repeat: no-repeat;
   }
+
+  .margin-block-start-small {
+    margin-block-start: 2px;
+  }
+
+  .todo-input-instructions-container input,
+  .list-style-wrapper p {
+    font-size: 1.05rem;
+  }
 }
 
 /* app wrapper */
@@ -725,6 +734,15 @@ main {
 
 .toggle-btn {
   width: 20px;
+}
+
+@media screen and (min-width: 43.75rem) {
+  [id="section-title"] {
+    font-size: 2.4rem;
+  }
+  .toggle-btn {
+    width: 28px;
+  }
 }
 
 /* app sections */

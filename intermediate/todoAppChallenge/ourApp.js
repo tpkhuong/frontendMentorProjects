@@ -386,7 +386,7 @@
      * of that element before we change attr,remove listitems, and append newly created listitem
      * **/
     // if we want to always focus on todo listitem when user click on checked-btn
-    event.target.parentElement.parentElement.parentElement.focus();
+    // event.target.parentElement.parentElement.parentElement.focus();
     // check if todo(Listitem) has "true" assigned to data-dragSelected
     // const todoListitemDragSelected =
     //   event.target.parentElement.parentElement.parentElement.getAttribute(
@@ -3837,18 +3837,37 @@
     const currentUnorderedListChildren = [...unorderedList.children];
     // find todo item that has tabindex 0
     // todo item with tabindex = "0"
+    console.log(currentUnorderedListChildren);
     const [todoWithTabindexZero] = currentUnorderedListChildren.filter(
       function findItemWithTabindexZero(listitem, index) {
         const listitemTabindex = Number(listitem.getAttribute("tabindex"));
-        return listitemTabindex != 0;
+        return listitemTabindex == 0;
       }
     );
     // parent listitem of draggable div
     const parentOfDraggableDiv = event.target.closest("li");
+    console.log(todoWithTabindexZero);
+    console.log(parentOfDraggableDiv);
     // check to see if draggable div parent listitem does not equal != to item with tabindex 0
     if (todoWithTabindexZero != parentOfDraggableDiv) {
       // when todo item with tabindex = "0" and draggable div element parent listitem
-      // not equal to each swap attrs
+      // not equal to each swap attrs: tabindex, dragselected
+      // checked and delete btn tabindex
+      // drag selected of todo item
+      keyboardAndMouseChangeDraggedClass(
+        todoWithTabindexZero,
+        parentOfDraggableDiv
+      );
+      // tabindex of todo item
+      todoWithTabindexZero.setAttribute("tabindex", "-1");
+      parentOfDraggableDiv.setAttribute("tabindex", "0");
+      // tabindex of checked and delete btns
+      // current todo with tabindex 0 change it to -1
+      singleTargetChangeTabindexCheckedAndDeleteBtn(todoWithTabindexZero, "-1");
+      // parent todo item of draggable div change assign "0" to attr tabindex
+      singleTargetChangeTabindexCheckedAndDeleteBtn(parentOfDraggableDiv, "0");
+      // focus parent todo item
+      parentOfDraggableDiv.focus();
     }
   }
 
@@ -3870,7 +3889,74 @@
      * applied to it
      * **/
     event.target.closest("li").setAttribute("data-dragOver", "false");
-    console.log(this);
+    // copy unorderedlist children
+    const copyOfUnorderedListChildren = [...unorderedList.children];
+    // grabbed todo item
+    const grabbedTodoElement = cachedData.dragSourceElement;
+    // dropped todo item
+    const droppedEventTodoElement = event.target.closest("li");
+    /**
+     * run algorithm below when grabbed todo element does not equal (!=)
+     * to dropped todo element
+     **/
+    if (grabbedTodoElement != droppedEventTodoElement) {
+      // access grabbed item grabdragindex from cachedData obj
+      const grabbedTodoElementGrabDragIndex = cachedData.grabbedItemDataIndex;
+      // get data-grabdragindex of dropped todo item
+      const droppedEventElementGrabDragIndex = Number(
+        droppedEventTodoElement.getAttribute("data-grabDragIndex")
+      );
+      // array of items above dropped element index
+      const itemsAboveDroppedEventTodo = itemsAboveDroppedArea(
+        copyOfUnorderedListChildren,
+        droppedEventElementGrabDragIndex
+      );
+      // array of items below dropped element index
+      const itemsBelowDroppedEventTodo = itemsBelowDroppedArea(
+        copyOfUnorderedListChildren,
+        droppedEventElementGrabDragIndex
+      );
+      /**
+       * filter out grabbed todo item from array above
+       * **/
+
+      // array of items above dropped element index without grabbed todo item
+      const listitemsAboveDroppedWithOutGrabbedTodo = filterOutGrabbedTodoItem(
+        itemsAboveDroppedEventTodo,
+        grabbedTodoElement
+      );
+      // array of items below dropped element index without grabbed todo item
+      const listitemBelowDroppedWithoutGrabbedTodo = filterOutGrabbedTodoItem(
+        itemsBelowDroppedEventTodo,
+        grabbedTodoElement
+      );
+      // use ternary operator to run func that will return an array with grabbed item above dropped item
+      // and array with grabbed item below dropped item
+      // dropped element data-index less then < grabbed data index, grabbed element goes above dropped element
+      // dropped element data-index greater than > grabbed data index, grabbed element goes below dropped element
+      const arrayOfItemsAfterRearrangeTodos =
+        droppedEventElementGrabDragIndex < grabbedTodoElementGrabDragIndex
+          ? grabbedElementGoesAbove(
+              listitemsAboveDroppedWithOutGrabbedTodo,
+              listitemBelowDroppedWithoutGrabbedTodo,
+              grabbedTodoElement,
+              droppedEventTodoElement
+            )
+          : grabbedElementGoesBelow(
+              listitemsAboveDroppedWithOutGrabbedTodo,
+              listitemBelowDroppedWithoutGrabbedTodo,
+              grabbedTodoElement,
+              droppedEventTodoElement
+            );
+      // use array in switch algorithm where we will run algorithm based on current view
+      arrowUpAndDownSwappingItemsHelper(
+        cachedData.currentView,
+        arrayOfItemsAfterRearrangeTodos
+      );
+    }
+    // since we saved a reference to grabbed todo item we can call/execute/run .focus() method
+    // on that reference
+    grabbedTodoElement.focus();
   }
 
   /**
@@ -3925,12 +4011,15 @@
    * filter out grabbed element
    * **/
 
-  function filteroutGrabbedTodoItem(array, grabbedDataIndex) {
+  function filterOutGrabbedTodoItem(array, grabbedTodoItem) {
     // filter method will eiter return an array without listitem that matches dataIndex
+    // instead of passing the grabbed todo item index saved as a reference in cachedData
+    // we will use saved reference of the actually grabbed todo item
     // or original array;
+
     return array.filter(function removeTodoItem(listItem) {
-      const elementgrabbedIndex = listItem.getAttribute("data-grabDragIndex");
-      return elementgrabbedIndex != grabbedDataIndex;
+      // const elementgrabbedIndex = listItem.getAttribute("data-grabDragIndex");
+      return listItem != grabbedTodoItem;
     });
   }
 
@@ -4296,15 +4385,17 @@
       currentTarget.setAttribute("data-dragSelected", "true");
       /**
        * we can swap data-todocomplete attr here
+       * our swap algorithm will swap todo listitem instead of the div that holds the todo item content
+       * we dont have to swap the todo item completed status
        * **/
       // get todoCompleted value
-      const pervElementStatus =
-        previousElement.getAttribute("data-todoCompleted");
-      const currentElementStatus =
-        currentTarget.getAttribute("data-todoCompleted");
-      // set todoCompleted value
-      previousElement.setAttribute("data-todoCompleted", currentElementStatus);
-      currentTarget.setAttribute("data-todoCompleted", pervElementStatus);
+      // const pervElementStatus =
+      //   previousElement.getAttribute("data-todoCompleted");
+      // const currentElementStatus =
+      //   currentTarget.getAttribute("data-todoCompleted");
+      // // set todoCompleted value
+      // previousElement.setAttribute("data-todoCompleted", currentElementStatus);
+      // currentTarget.setAttribute("data-todoCompleted", pervElementStatus);
     }
   }
 
