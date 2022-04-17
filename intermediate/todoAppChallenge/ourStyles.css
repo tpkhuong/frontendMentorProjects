@@ -764,6 +764,16 @@ main {
   margin-block-start: 48px;
 }
 
+/* instructions div */
+
+[data-showInstructions="false"] .wrapper {
+  display: none;
+}
+
+[data-showInstructions="true"] .wrapper {
+  display: revert;
+}
+
 /* circle for input */
 
 .circle {
@@ -937,16 +947,25 @@ li[data-todoCompleted="true"] p::before {
 
 /* hover on li will show checked circle border and "X" btn */
 
+/* delete btn wrapper */
+
+.delete-btn-wrapper {
+  display: inline-flex;
+  margin-inline-start: auto;
+}
+
 /* delete btn */
 
 .delete-btn {
   width: 14px;
   margin-inline-start: auto;
+  display: flex;
 }
 
 @media screen and (min-width: 43.75rem) {
   /* spacing */
   .todo-input-instructions-container {
+    padding-block: 18px;
   }
   /* checked btn */
   .checked-btn:focus {
@@ -958,14 +977,17 @@ li[data-todoCompleted="true"] p::before {
   div[user-focused-btn="true"] {
     background-image: var(--checked-button-gradient);
   }
-  /* delete btn */
-  li[role="option"] p + button {
-    clip-path: polygon(0px 0px, 0px 0px, 0px 0px, 0px 0px);
+
+  /* delete btn image algorithm for a11y */
+  li[role="option"] p + button img {
+    /* clip-path: polygon(0px 0px, 0px 0px, 0px 0px, 0px 0px); */
+    display: none;
   }
 
-  li[role="option"] p + button:focus,
-  li[role="option"]:hover p + button {
-    clip-path: revert;
+  li[role="option"] p + button:focus img,
+  li[role="option"]:hover p + button img {
+    /* clip-path: revert; */
+    display: revert;
   }
 }
 

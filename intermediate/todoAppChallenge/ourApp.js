@@ -46,6 +46,14 @@
     separateViewsBtnsClickEvent
   );
 
+  // instructions button
+
+  applyEventListener(
+    document.querySelector("#open-instructions"),
+    "click",
+    showDragAnDropInstructionsAccessibility
+  );
+
   // for checked focus event
   /**
    * we have to add this event listen after we create this element in our createTodoItem algorithm
@@ -121,6 +129,29 @@
           "./images/icon-moon.svg";
       }
     });
+  }
+
+  /**
+   * show instructions for a11y
+   * **/
+
+  function showDragAnDropInstructionsAccessibility(event) {
+    const instructionsContainer = document.querySelector("#instructions");
+    // const toggleStatus = instructionsContainer.getAttribute(
+    //   "data-showInstructions"
+    // );
+    const toggleStatus = this.getAttribute("aria-checked");
+    // if (toggleStatus == "false") {
+    //   instructionsContainer.setAttribute("data-showInstructions", "true");
+    // } else {
+    //   instructionsContainer.setAttribute("data-showInstructions", "false");
+    // }
+    // ternary operator
+    toggleStatus == "false"
+      ? (instructionsContainer.setAttribute("data-showInstructions", "true"),
+        this.setAttribute("aria-checked", "true"))
+      : (instructionsContainer.setAttribute("data-showInstructions", "false"),
+        this.setAttribute("aria-checked", "false"));
   }
 
   /**
@@ -2957,6 +2988,7 @@
     // get allView index for completed or not completed todo items
     if (event.code == "Enter" || event.code == "NumpadEnter") {
       const newTodoItem = createTodoItem(event);
+
       /**
        * get index of todo with tabindex = "0";
        * +1 to index for all and active view algorithm
@@ -3440,24 +3472,31 @@
     });
     /* paragraph text content of todo */
     const paragraphTextContent = createElementForTodoItem("P", { id: "" });
+    /* delete btn wrapper for screen reader */
+    const wrapperElementOfDeleteBtn = createElementForTodoItem("DIV", {
+      class: "delete-btn-wrapper",
+    });
     /* delete btn */
     // make delete btn not focusable at first
     const deleteBtn = createElementForTodoItem("BUTTON", {
       tabindex: "-1",
-      id: "",
+      // id: "",
       class: "delete-btn",
       "aria-labelledby": "",
-      "aria-label": "delete to do item",
+      // "aria-label": "delete to do item",
     });
     /** img element for delete btn **/
     const imageForDeleteBtn = createElementForTodoItem("IMG", {
       src: "./images/icon-cross.svg",
-      alt: "",
+      id: "",
+      alt: "delete to do item",
     });
     // append element to its parent element
     /** work our way up the parent tree **/
     // image to delete btn
     deleteBtn.append(imageForDeleteBtn);
+    // delete btn to wrapper for delete btn
+    // wrapperElementOfDeleteBtn.append(deleteBtn);
     // image to checked btn
     checkedBtn.append(imageForCheckedBtn);
     // checked btn to its wrapper parent
@@ -4447,7 +4486,7 @@
       listitem.firstElementChild.children[2].attributes[
         "aria-labelledby"
       ].value = `delete-todo-${index} todo-item-${index}`;
-      listitem.firstElementChild.children[2].attributes[
+      listitem.firstElementChild.children[2].firstElementChild.attributes[
         "id"
       ].value = `delete-todo-${index}`;
     });

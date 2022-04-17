@@ -67,91 +67,102 @@
         <div class="todo-list-views-container">
           <h2 class="visually-hidden">To Do List</h2>
           <div class="visually-hidden">
-            <div id="instructions">
+            <div
+              id="instructions"
+              aria-live="assertive"
+              data-showInstructions="false"
+            >
               <!-- drag instructions -->
-              Press space key or enter key to toggle drag drop mode, use arrow
-              keys to move selected elements.
+              <div class="wrapper">
+                Press space key or enter key to toggle drag drop mode, use arrow
+                keys to move selected elements.
+                <p>There are Three views:</p>
+                <p>All View</p>
+                <p>Active View</p>
+                <p>Completed View</p>
+                <p>
+                  If Drag mode is turned on, changing views will turn off drag
+                  mode and focus will be set on first item of the view selected.
+                </p>
+                <p>There are two buttons associated with each TO DO item</p>
+                <p>Checked Button</p>
+                <p>
+                  When user is on Active view and checked button has focus,
+                  hitting enter key or space key will make that TO DO item to a
+                  completed item. Moving TO DO Item to completed list.
+                </p>
+                <p>
+                  When user is on Completed view and checked button has focus,
+                  hitting enter key or space key will make that TO DO item
+                  active. Moving TO DO Item to active list.
+                </p>
+                <p>Delete Button</p>
+                <p>
+                  When delete button has focus, hitting enter or space key will
+                  remove that TO DO item off the TO DO list.
+                </p>
+                <p>
+                  If Drag mode is turned on and focus is either on the checked
+                  button or delete button of a TO DO item.
+                </p>
+                <p>
+                  Hitting enter or space key on either Active view or completed
+                  view, will turn off drag mode and apply focus to the TO DO
+                  item one position lower than previous focused TO DO item.
+                </p>
+                <p>
+                  If the TO DO item is the item at the bottom of the list in
+                  either active view or completed view
+                </p>
+                <p>
+                  hitting enter or space key on either checked button or delete
+                  button
+                </p>
+                <p>
+                  will apply focus to the top item of either active view or
+                  completed view list depends on which view the user is
+                  currently on.
+                </p>
+                <p>Arrow Up or Arrow down functionality</p>
+                <p>
+                  If drag mode is turned on and focus is either on checked
+                  button or delete button
+                </p>
+                <p>
+                  Hitting Arrow Up key will move the TO DO item up one position
+                  on active view list or completed view list
+                </p>
+                <p>
+                  Hitting Arrow Down key will move the TO DO item down one
+                  position on active view list or completed view list
+                </p>
+                <p>
+                  If drag mode is turned off and focus is either on checked
+                  button or delete button
+                </p>
+                <p>
+                  Hitting Arrow Up key will move focus to one position up on
+                  either active view list or completed view list
+                </p>
+                <p>
+                  Hitting Arrow Down key will move focus to one position down on
+                  either active view list or completed view list
+                </p>
+              </div>
             </div>
-            <p>There are Three views:</p>
-            <p>All View</p>
-            <p>Active View</p>
-            <p>Completed View</p>
-            <p>
-              If Drag mode is turned on, changing views will turn off drag mode
-              and focus will be set on first item of the view selected.
-            </p>
-            <p>There are two buttons associated with each TO DO item</p>
-            <p>Checked Button</p>
-            <p>
-              When user is on Active view and checked button has focus, hitting
-              enter key or space key will make that TO DO item to a completed
-              item. Moving TO DO Item to completed list.
-            </p>
-            <p>
-              When user is on Completed view and checked button has focus,
-              hitting enter key or space key will make that TO DO item active.
-              Moving TO DO Item to active list.
-            </p>
-            <p>Delete Button</p>
-            <p>
-              When delete button has focus, hitting enter or space key will
-              remove that TO DO item off the TO DO list.
-            </p>
-            <p>
-              If Drag mode is turned on and focus is either on the checked
-              button or delete button of a TO DO item.
-            </p>
-            <p>
-              Hitting enter or space key on either Active view or completed
-              view, will turn off drag mode and apply focus to the TO DO item
-              one position lower than previous focused TO DO item.
-            </p>
-            <p>
-              If the TO DO item is the item at the bottom of the list in either
-              active view or completed view
-            </p>
-            <p>
-              hitting enter or space key on either checked button or delete
-              button
-            </p>
-            <p>
-              will apply focus to the top item of either active view or
-              completed view list depends on which view the user is currently
-              on.
-            </p>
-            <p>Arrow Up or Arrow down functionality</p>
-            <p>
-              If drag mode is turned on and focus is either on checked button or
-              delete button
-            </p>
-            <p>
-              Hitting Arrow Up key will move the TO DO item up one position on
-              active view list or completed view list
-            </p>
-            <p>
-              Hitting Arrow Down key will move the TO DO item down one position
-              on active view list or completed view list
-            </p>
-            <p>
-              If drag mode is turned off and focus is either on checked button
-              or delete button
-            </p>
-            <p>
-              Hitting Arrow Up key will move focus to one position up on either
-              active view list or completed view list
-            </p>
-            <p>
-              Hitting Arrow Down key will move focus to one position down on
-              either active view list or completed view list
-            </p>
             <div class="assistive-text" aria-live="assertive"></div>
           </div>
           <div class="list-style-wrapper">
-            <ul
-              aria-label="to do list"
-              role="listbox"
+            <button
+              role="checkbox"
+              id="open-instructions"
               aria-describedby="instructions"
-            ></ul>
+              class="visually-hidden"
+              aria-checked="false"
+            >
+              Announce Long Instructions
+            </button>
+            <ul aria-label="to do list" role="listbox"></ul>
             <div data-unorderedHasItems="false" class="views-container">
               <div class="views-item-left">
                 <span id="views-counter">0</span>
