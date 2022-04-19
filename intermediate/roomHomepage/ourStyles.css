@@ -1,0 +1,223 @@
+@import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;600;700&display=swap");
+
+:root {
+  /* primary */
+  --color-primary-bright-blue: hsl(220, 98%, 61%);
+  --color-primary-title: hsl(300, 100%, 99%);
+  --color-primary-first-half: hsl(192, 100%, 67%);
+  --color-primary-second-half: hsl(280, 87%, 65%);
+  --checked-button-gradient: linear-gradient(
+    var(--color-primary-first-half),
+    var(--color-primary-second-half)
+  );
+  /* light theme */
+  /* todo input, btn views and clear similar shade */
+  /* --color-lighttheme-very-light-grayish-blue: hsl(236, 33%, 92%); */
+  /* crossed out and left item similar shade */
+  --color-lighttheme-bottom-bg: hsl(0, 0%, 98%);
+  --color-lighttheme-todo-list-bg: hsl(0, 0%, 100%);
+  --color-lighttheme-checked-crossed-out: hsl(233, 11%, 84%);
+  --color-lighttheme-hover-todoitem: hsl(233, 9%, 35%);
+  --color-lighttheme-typing-input-hover-btns: hsl(240, 5%, 38%);
+  --color-lighttheme-todoinput-completed-btns-below: hsl(236, 9%, 61%);
+  /* --color-lighttheme-todo-listitem: blue; */
+  --color-lighttheme-todo-listitem: hsl(235, 19%, 35%);
+  /* dark theme */
+  --color-darktheme-bottom-bg: hsl(235, 21%, 11%);
+  --color-darktheme-todo-list-bg: hsl(235, 24%, 19%);
+  /* --color-darktheme-todo-text-typing-btn-hover: red; */
+  --color-darktheme-todo-text-typing-btn-hover: hsl(234, 39%, 85%);
+  --color-darktheme-hover: hsl(236, 33%, 92%);
+  --color-darktheme-todo-input: hsl(234, 11%, 52%);
+  --color-darktheme-clear-active-complete-below: hsl(233, 14%, 35%);
+  --color-darktheme-checked-crossed-out: hsl(235, 14%, 32%);
+  /* dark theme */
+  --darktheme-mobile-bg-img: url("./images/bg-mobile-dark.jpg");
+  --darktheme-desktop-bg-img: url("./images/bg-desktop-dark.jpg");
+  --dark-bg-color-bottom: var(--color-darktheme-bottom-bg);
+
+  /* light theme */
+  --lighttheme-mobile-bg-img: url("./images/bg-mobile-light.jpg");
+  --lighttheme-desktop-bg-img: url("./images/bg-desktop-light.jpg");
+  --light-bg-color-bottom: var(--color-lighttheme-bottom-bg);
+  /* below works */
+  /* --todo-input-foreground: var(
+    --color-lighttheme-todo-listitem,
+    var(--color-darktheme-todo-text-typing-btn-hover)
+  ); */
+  /* or */
+
+  /***** background *****/
+  --mobile-img-top: var(--lighttheme-mobile-bg-img);
+  --desktop-img-top: var(--lighttheme-desktop-bg-img);
+  --bottom-bg-color: var(--light-bg-color-bottom);
+  --todoitems-views-btns-bg: var(--color-lighttheme-todo-list-bg);
+
+  /***** checked button *****/
+  --circle-checked-btn: var(--color-lighttheme-todoinput-completed-btns-below);
+  /***** social media hover/background *****/
+  --social-media: var(--color-darktheme-bottom-bg);
+  --social-media-hover: var(--color-primary-bright-blue);
+  /***** foreground *****/
+  --input-placeholder-foreground: var(
+    --color-lighttheme-todoinput-completed-btns-below
+  );
+  --todo-input-foreground: var(--color-lighttheme-typing-input-hover-btns);
+  --todo-listitem-foreground: var(--color-lighttheme-todo-listitem);
+  --clear-views-btns-text-below: var(
+    --color-lighttheme-todoinput-completed-btns-below
+  );
+  --todo-completed-crossed-out: var(--color-lighttheme-checked-crossed-out);
+  /* foreground hover */
+  --todo-listitem-hover: var(--color-lighttheme-hover-todoitem);
+  --views-btns-hover: var(--color-lighttheme-typing-input-hover-btns);
+  /* li focus */
+  --todo-listitem-keyboard-focus: var(--color-darktheme-todo-list-bg);
+  /* --clear-btn-itemsleft-foreground: var(--color-lighttheme-todoinput-completed-btns-below);
+  --views-btns-foreground:var(--color-lighttheme-todoinput-completed-btns-below); 
+  --text-below-todo-foreground: var(--color-lighttheme-todoinput-completed-btns-below); */
+
+  --box-shadow: 0px 0.3px 0.7px rgba(0, 0, 0, 0.02),
+    0px 0.7px 1.7px rgba(0, 0, 0, 0.028), 0px 1.4px 3.3px rgba(0, 0, 0, 0.035),
+    0px 2.5px 5.8px rgba(0, 0, 0, 0.042), 0px 4.6px 10.9px rgba(0, 0, 0, 0.05),
+    0px 11px 26px rgba(0, 0, 0, 0.07);
+
+  /***** background *****/
+  /* bg-img top and bg-color-bottom */
+  /* todo input,todo listitem,items left/complete, views btns(mobile) */
+  /***** foreground *****/
+  /***** example for foreground: *****/
+  /* --todo-input-foreground: var(--color-lighttheme-todo-listitem, var(--color-darktheme-todo-text-typing-btn-hover) */
+  /* input placeholder, input typing, todo list text, items left, views btns(mobile)  
+  todo list crossed-out, todo list hover, views btns and clear btn hover, text below todo list
+  */
+
+  /* headings */
+  /* --font-family-poppins: "Poppins", sans-serif; */
+  /* body, call-to-actions */
+  --font-family-josefin: "Josefin Sans", sans-serif;
+}
+
+/* reset */
+
+/*
+  1. Use a more-intuitive box-sizing model.
+*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+/*
+  2. Remove default margin
+*/
+* {
+  margin: 0;
+}
+/*
+  3. Allow percentage-based heights in the application
+*/
+html,
+body {
+  height: 100%;
+}
+/*
+  Typographic tweaks!
+  4. Add accessible line-height
+  5. Improve text rendering
+*/
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+/*
+  6. Improve media defaults
+*/
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+/*
+  7. Remove built-in form typography styles
+*/
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+/*
+  8. Avoid text overflows
+*/
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+/*
+  9. Create a root stacking context
+*/
+#root,
+#__next {
+  isolation: isolate;
+}
+
+button {
+  border: none;
+}
+
+/* utilities */
+
+.max-width {
+  /* or the width we want our container/parent element to be */
+  max-width: 1250px;
+  margin-inline-start: auto;
+  margin-inline-end: auto;
+  /* padding-inline-start: 16px;
+  padding-inline-end: 16px; */
+}
+
+.visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+}
+
+[href="#main-content"] {
+  position: absolute;
+  top: 0;
+  right: 100%; /* move of the screen */
+}
+
+[href="#main-content"]:focus {
+  right: auto;
+}
+
+.skip-link {
+  display: none;
+  border: 1px solid red;
+  padding-block: 16px;
+  padding-inline: 32px;
+}
+
+@media screen and (min-width: 70rem) {
+  .skip-link {
+    display: inline-block;
+  }
+}
+/* general style */
+
+/* individual sections */
