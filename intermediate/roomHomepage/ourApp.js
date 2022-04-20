@@ -3,6 +3,26 @@
   const accessData = scopeOurData();
   const cachedData = accessData();
 
+  // add open modal func to hamburger button
+  applyEventListener(
+    document.querySelector(".open-modal"),
+    "click",
+    openMobileModal
+  );
+  // add close moda func to close button
+  applyEventListener(
+    document.querySelector(".close-modal"),
+    "click",
+    closeMobileModal
+  );
+
+  // control img slider
+  applyEventListener(
+    document.querySelector(".btn-controller-container"),
+    "click",
+    sliderImgControlFunc
+  );
+
   // apply event listener
   function applyEventListener(element, eventListener, func) {
     element.addEventListener(eventListener, func);
@@ -10,16 +30,64 @@
     return func;
   }
 
+  /** modal open/close **/
+
+  function openMobileModal(event) {
+    if (event.target.closest("BUTTON")) {
+      cachedData.selectors.mobileModalElement.setAttribute(
+        "data-status",
+        "true"
+      );
+    }
+  }
+
+  function closeMobileModal(event) {
+    if (event.target.closest("BUTTON")) {
+      cachedData.selectors.mobileModalElement.setAttribute(
+        "data-status",
+        "false"
+      );
+    }
+  }
+
+  /** slider button controls **/
+
+  function sliderImgControlFunc(event) {
+    if (event.target.closest("BUTTON")) {
+      // get carousel item aria-label and convert to number type
+      const carouselItemAriaLabel = Number(
+        cachedData.selectors.carouselItemElement
+          .getAttribute("aria-label")
+          .split(" ")[0]
+      );
+      console.log(carouselItemAriaLabel);
+      const [previousOrNextBtn] = event.target
+        .closest("BUTTON")
+        .getAttribute("aria-label")
+        .split(" ");
+      switch (previousOrNextBtn) {
+        case "previous":
+          console.log(cachedData[previousOrNextBtn]());
+          break;
+        case "next":
+          console.log(cachedData[previousOrNextBtn]);
+          break;
+      }
+    }
+  }
+
   function scopeOurData() {
     const data = {
+      indexCounter: 0,
       selectors: {
-        bodyElement: document.querySelector("body"),
+        mobileModalElement: document.querySelector(".mobile-nav-menu"),
+        carouselItemElement: document.querySelector(".carousel-item"),
       },
       sliderData: [
         {
           ariaLabel: "1 of 3",
           imgContainer: {
-            pictureSrcset: "./images/desktop-image-hero-1.jpg",
+            sourceElementSrcset: "./images/desktop-image-hero-1.jpg",
             imgInfo: {
               src: "./images/mobile-image-hero-1.jpg",
               alt: "Two white chairs facing brown table with tree plant",
@@ -34,7 +102,7 @@
         {
           ariaLabel: "2 of 3",
           imgContainer: {
-            pictureSrcset: "./images/desktop-image-hero-2.jpg",
+            sourceElementSrcset: "./images/desktop-image-hero-2.jpg",
             imgInfo: {
               src: "./images/mobile-image-hero-2.jpg",
               alt: "Three chairs: one teal,one yellow, one white",
@@ -49,7 +117,7 @@
         {
           ariaLabel: "3 of 3",
           imgContainer: {
-            pictureSrcset: "./images/desktop-image-hero-3.jpg",
+            sourceElementSrcset: "./images/desktop-image-hero-3.jpg",
             imgInfo: {
               src: "./images/mobile-image-hero-3.jpg",
               alt: "Single black chair",
@@ -62,6 +130,12 @@
           },
         },
       ],
+      previous: function prevSlide() {
+        console.log(this.sliderData);
+      },
+      next: function nextSlide() {
+        console.log(this.sliderData);
+      },
     };
     return function closureOverOurData() {
       return data;
