@@ -401,12 +401,21 @@ header {
     margin-block: auto;
   }
 
-  .shop-arrow-container a:hover,
+  .shop-arrow-container {
+    cursor: pointer;
+  }
+
+  .shop-arrow-container:hover a {
+    color: var(--color-primary-dark-gray);
+  }
+
+  .shop-arrow-container:hover a + svg path {
+    fill: var(--color-primary-dark-gray);
+  }
   .shop-arrow-container a:focus {
     color: var(--color-primary-dark-gray);
   }
 
-  .shop-arrow-container a:hover + svg path,
   .shop-arrow-container a:focus + svg path {
     fill: var(--color-primary-dark-gray);
   }
