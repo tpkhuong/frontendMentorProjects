@@ -1,0 +1,57 @@
+/* hide h2 which are title for our section element */
+.visually-hidden:not(:focus):not(:active) {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* .visually-hidden{
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  clip: rect(1px 1px 1px 1px)
+} */
+
+.visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  width: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+}
+
+.flex {
+  background-color: antiquewhite;
+  max-width: 600px;
+  display: flex;
+}
+
+.line-container {
+  flex-grow: 1;
+  display: flex;
+}
+
+.line {
+  display: inline-block;
+  width: 5px;
+  background-color: black;
+  margin-inline: auto;
+}
+
+.test-container {
+  min-width: 550px;
+  min-height: 250px;
+  background-color: aqua;
+}
+
+.comments-container {
+  margin-inline-start: auto;
+}

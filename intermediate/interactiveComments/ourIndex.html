@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html" />
+    <meta name="author" content="KhuongCorp" />
+    <meta name="description" content="Learning Nodejs" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link
+      rel="shortcut icon"
+      href="./images/favicon-32x32.png"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="ourStyles.css" />
+    <title>Interactive Comments</title>
+  </head>
+  <body>
+    <h1 class="visually-hidden">Interactive Comments</h1>
+    <div class="flex">
+      <div class="line-container">
+        <!-- make line-container a flex parent element -->
+        <!-- line will be a flex item. the default is flex-direction row -->
+        <!-- cross-axis vertical will be default which is stretch -->
+        <!-- making the line height be its parent container height -->
+        <!-- the line-container element -->
+        <!-- its height will be controlled by the items in comments-container -->
+        <span class="line"></span>
+      </div>
+      <div class="comments-container">
+        <div class="test-container"></div>
+        <div class="test-container"></div>
+        <div class="test-container"></div>
+      </div>
+    </div>
+    <script src="ourApp.js"></script>
+  </body>
+</html>
