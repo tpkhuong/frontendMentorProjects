@@ -5,6 +5,9 @@
   // adding data obj to localStorage
   // usingLocalStorage(cachedData);
 
+  const callDataFunc = scopedData();
+  const memoryData = callDataFunc();
+
   const mobileModalElement = document.querySelector(".mobile-nav-menu");
   const carouselItemElement = document.querySelector(".carousel-item");
 
@@ -14,7 +17,7 @@
 
   // apply initial slide content when app load
   // console.log(storedData);
-  initialCarouselItemContent(localStorage.getItem("dataObj"));
+  initialCarouselItemContent(localStorage.getItem("dataObj"), memoryData);
 
   // add open modal func to hamburger button
   applyEventListener(
@@ -61,20 +64,24 @@
 
   /** initial slide content **/
 
-  function initialCarouselItemContent(storage) {
+  function initialCarouselItemContent(storage, cachedData) {
     // will be first obj in slider data array
+    const copyCached = { ...cachedData };
     const obj = JSON.parse(storage);
     const copyOfObj = { ...obj };
-    const { indexCounter, sliderData } = copyOfObj;
-    console.log(copyOfObj.hasOwnProperty("indexCounter"));
-    alert(
-      "start here. figure out a way to not reset indexCounter in localstorage"
-    );
-    if (copyOfObj.hasOwnProperty("indexCounter")) {
-      assignValuesFromCachedDataToSliderElements(sliderData[indexCounter]);
-    } else {
-      assignValuesFromCachedDataToSliderElements(sliderData[0]);
-    }
+    const { sliderData } = copyOfObj;
+    const { indexCounter } = copyCached;
+    /**
+     * working with indexCounter in localStorage. have to update key dataObj in localStorage
+     * when user click on prev or next button
+     * **/
+    // console.log(copyOfObj.hasOwnProperty("indexCounter"));
+    // if (copyOfObj.hasOwnProperty("indexCounter")) {
+    //   assignValuesFromCachedDataToSliderElements(sliderData[indexCounter]);
+    // } else {
+    //   assignValuesFromCachedDataToSliderElements(sliderData[0]);
+    // }
+    assignValuesFromCachedDataToSliderElements(sliderData[indexCounter]);
   }
 
   /** slider button controls **/
@@ -122,7 +129,8 @@
           console.log(JSON.parse(window.localStorage.getItem("dataObj")));
           const prevObjData = prevSlide(
             carouselItemAriaLabelMinusOne,
-            storeDataArrowBtn
+            storeDataArrowBtn,
+            memoryData
           );
           assignValuesFromCachedDataToSliderElements(prevObjData);
           break;
@@ -131,7 +139,8 @@
           const nextObjData = nextSlide(
             carouselItemAriaLabelMinusOne,
             lengthOfSliderDataArrayMinusOne,
-            storeDataArrowBtn
+            storeDataArrowBtn,
+            memoryData
           );
           assignValuesFromCachedDataToSliderElements(nextObjData);
           break;
@@ -180,39 +189,55 @@
 
   /** store our data in localStorage **/
 
-  function nextSlide(valueOfAriaLabelMinusOne, lengthOfItemsMinusOne, dataObj) {
+  function nextSlide(
+    valueOfAriaLabelMinusOne,
+    lengthOfItemsMinusOne,
+    dataObj,
+    memoryData
+  ) {
     // when user is at third slide, pressing next btn will take user to first slide at index 0 in array
     if (valueOfAriaLabelMinusOne == lengthOfItemsMinusOne) {
-      dataObj.indexCounter = 0;
+      memoryData.indexCounter = 0;
     } else {
       // add one
-      dataObj.indexCounter = addOne(valueOfAriaLabelMinusOne);
+      memoryData.indexCounter = addOne(valueOfAriaLabelMinusOne);
     }
-    localStorage.setItem("dataObj", JSON.stringify(dataObj));
+    /**
+     * working with indexCounter in localStorage. have to update key dataObj in localStorage
+     * when user click on prev or next button
+     * **/
+    // localStorage.setItem("dataObj", JSON.stringify(dataObj));
     // console.log(JSON.parse(localStorage.getItem("dataObj")));
-    return dataObj.sliderData[dataObj.indexCounter];
+    return dataObj.sliderData[memoryData.indexCounter];
   }
 
-  function prevSlide(valueOfAriaLabelMinusOne, dataObj) {
-    console.log(dataObj.selectors.mobileModalElement);
+  function prevSlide(valueOfAriaLabelMinusOne, dataObj, memoryData) {
+    // console.log(dataObj.selectors.mobileModalElement);
     if (valueOfAriaLabelMinusOne == 0) {
       // when user is at first slide, pressing prev btn will take user to third slide at index 2 in array
-      dataObj.indexCounter = 2;
+      memoryData.indexCounter = 2;
     } else {
       // subtract one
-      dataObj.indexCounter = subtractOne(valueOfAriaLabelMinusOne);
+      memoryData.indexCounter = subtractOne(valueOfAriaLabelMinusOne);
     }
-    localStorage.setItem("dataObj", JSON.stringify(dataObj));
+    /**
+     * working with indexCounter in localStorage. have to update key dataObj in localStorage
+     * when user click on prev or next button
+     * **/
+    // localStorage.setItem("dataObj", JSON.stringify(dataObj));
     // console.log(JSON.parse(localStorage.getItem("dataObj")));
-    return dataObj.sliderData[dataObj.indexCounter];
+    return dataObj.sliderData[memoryData.indexCounter];
   }
 
   // function usingLocalStorage(data) {
   //   window.localStorage.setItem("dataObj", JSON.stringify(data));
   // }
-  function usingLocalStorage(element) {
+  function usingLocalStorage() {
     const data = {
-      indexCounter: 0,
+      /** for better performance place indexCounter in cachedObj
+       * use localStorage for our slider data
+       *  **/
+      // indexCounter: 0,
       sliderData: [
         {
           ariaLabel: "1 of 3",
@@ -310,7 +335,21 @@
       //   return dataObj.sliderData[dataObj.indexCounter];
       // },
     };
+    /** working with indexCounter in localStorage **/
+    // if (localStorage.getItem("dataObj") == null) {
+    //   localStorage.setItem("dataObj", JSON.stringify(data));
+    // }
     localStorage.setItem("dataObj", JSON.stringify(data));
+  }
+
+  function scopedData() {
+    const memory = {
+      indexCounter: 0,
+    };
+
+    return function usingClosure() {
+      return memory;
+    };
   }
 
   /** using closure obj **/
