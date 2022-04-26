@@ -1,26 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- displays site properly based on user's device -->
 
-  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
-  
-  <title>Frontend Mentor | Interactive comments section</title>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./images/favicon-32x32.png"
+    />
 
-  <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
-  <style>
-    .attribution { font-size: 11px; text-align: center; }
-    .attribution a { color: hsl(228, 45%, 44%); }
-  </style>
-</head>
-<body>
+    <title>Frontend Mentor | Interactive comments section</title>
 
-  <!-- Pull dynamic content from the data.json file -->
-  
-  <div class="attribution">
-    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
-    Coded by <a href="#">Your Name Here</a>.
-  </div>
-</body>
+    <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
+    <style>
+      .attribution {
+        font-size: 11px;
+        text-align: center;
+      }
+      .attribution a {
+        color: hsl(228, 45%, 44%);
+      }
+      .flex {
+        background-color: antiquewhite;
+        max-width: 600px;
+        display: flex;
+      }
+
+      .line-container {
+        flex-grow: 1;
+        display: flex;
+      }
+
+      .line {
+        display: inline-block;
+        width: 5px;
+        background-color: black;
+        margin-inline: auto;
+      }
+
+      .test-container {
+        min-width: 550px;
+        min-height: 250px;
+        background-color: aqua;
+      }
+
+      .comments-container {
+        margin-inline-start: auto;
+      }
+
+      .text-content {
+        max-width: 250px;
+        min-height: 150px;
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="flex">
+      <div class="line-container">
+        <!-- make line-container a flex parent element -->
+        <!-- line will be a flex item. the default is flex-direction row -->
+        <!-- cross-axis vertical will be default which is stretch -->
+        <!-- making the line height be its parent container height -->
+        <!-- the line-container element -->
+        <!-- its height will be controlled by the items in comments-container -->
+        <span class="line"></span>
+      </div>
+      <div class="comments-container">
+        <div class="test-container"></div>
+        <div class="test-container"></div>
+        <div class="test-container"></div>
+        <div class="test-container"></div>
+        <div class="test-container"></div>
+        <div class="test-container"></div>
+        <!-- our dataobj we have comments first replies
+          will be first level replies to first reply will be second level 
+        selector could be comment first level then first level uniqueID
+        each comment/reply will have a wrapper/element with uniqueID instead of putting
+        the uniqueID on the element with the comment/reply content
+        -->
+      </div>
+    </div>
+    <div class="text-content"></div>
+    <button>
+      <svg width="14" height="13" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M.227 4.316 5.04.16a.657.657 0 0 1 1.085.497v2.189c4.392.05 7.875.93 7.875 5.093 0 1.68-1.082 3.344-2.279 4.214-.373.272-.905-.07-.767-.51 1.24-3.964-.588-5.017-4.829-5.078v2.404c0 .566-.664.86-1.085.496L.227 5.31a.657.657 0 0 1 0-.993Z"
+          fill="#5357B6"
+        />
+      </svg>
+      <span>Reply</span>
+    </button>
+
+    <!-- Pull dynamic content from the data.json file -->
+
+    <div class="attribution">
+      Challenge by
+      <a href="https://www.frontendmentor.io?ref=challenge" target="_blank"
+        >Frontend Mentor</a
+      >. Coded by <a href="#">Your Name Here</a>.
+    </div>
+  </body>
 </html>

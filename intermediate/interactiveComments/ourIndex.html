@@ -20,22 +20,92 @@
   </head>
   <body>
     <h1 class="visually-hidden">Interactive Comments</h1>
-    <div class="flex">
-      <div class="line-container">
-        <!-- make line-container a flex parent element -->
-        <!-- line will be a flex item. the default is flex-direction row -->
-        <!-- cross-axis vertical will be default which is stretch -->
-        <!-- making the line height be its parent container height -->
-        <!-- the line-container element -->
-        <!-- its height will be controlled by the items in comments-container -->
-        <span class="line"></span>
-      </div>
-      <div class="comments-container">
-        <div class="test-container"></div>
-        <div class="test-container"></div>
-        <div class="test-container"></div>
+    <!-- app wrapper -->
+
+    <div id="app-wrapper">
+      <!-- comments -->
+      <div class="comments"></div>
+      <!-- comments -->
+      <!-- user select comment text  box -->
+      <div class="user-select-btns-comment-text-box">
+        <div class="comment-text-box">
+          <h2 class="visually-hidden"></h2>
+          <div class="avatar-textbox">
+            <img src="./images/avatars/image-amyrobson.png" alt="" />
+            <button class="select-user-btn">SELECT USER</button>
+          </div>
+          <!-- modal of select users -->
+          <div
+            aria-modal="true"
+            role="dialog1"
+            class="user-select-btns"
+            userClickSelectUser="false"
+          >
+            <h2 class="visually-hidden">Select user buttons</h2>
+            <div class="select-user-modal-wrapper">
+              <button
+                class="close-select-user-modal"
+                aria-label="close select user option modal"
+              >
+                <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M14.364.222l1.414 1.414L9.414 8l6.364 6.364-1.414 1.414L8 9.414l-6.364 6.364-1.414-1.414L6.586 8 .222 1.636 1.636.222 8 6.586 14.364.222z"
+                    fill="#000"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+              </button>
+              <div class="select-user-buttons-wrapper">
+                <button
+                  data-currentUser="true"
+                  selectUser="amyrobson"
+                  aria-label="click to select user amy robson"
+                >
+                  <img src="./images/avatars/image-amyrobson.png" alt="" />
+                </button>
+                <button
+                  data-currentUser="false"
+                  selectUser="juliusomo"
+                  aria-label="click to select user juliu somo"
+                >
+                  <img src="./images/avatars/image-juliusomo.png" alt="" />
+                </button>
+                <button
+                  data-currentUser="false"
+                  selectUser="maxblagun"
+                  aria-label="click to select user max blagun"
+                >
+                  <img src="./images/avatars/image-maxblagun.png" alt="" />
+                </button>
+                <button
+                  data-currentUser="false"
+                  selectUser="ramsesmiro"
+                  aria-label="click to select user ramses miron"
+                >
+                  <img src="./images/avatars/image-ramsesmiron.png" alt="" />
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- <label class="visually-hidden" for="enter-comment"></label> -->
+          <div class="comment-text-wrapper">
+            <textarea
+              name="enter-comment"
+              id=""
+              cols="30"
+              rows="2"
+              aria-label="Entry current user text"
+              placeholder="Add a comment..."
+            >
+            </textarea>
+          </div>
+
+          <button class="post-send-btn">SEND</button>
+        </div>
+        <!-- user select comment text  box -->
       </div>
     </div>
+    <!-- app wrapper -->
     <script src="ourApp.js"></script>
   </body>
 </html>
