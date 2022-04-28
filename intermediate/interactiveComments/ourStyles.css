@@ -3,18 +3,26 @@
 :root {
   /* primary */
   --color-primary-moderate-blue: hsl(238, 40%, 52%);
-  --color-primary-soft-red: hsl(358, 79%, 66%);
+  --color-primary-soft-red: hsl(358, 79%, 66%); /* delete btn bg */
   --color-primary-light-grayish-blue: hsl(239, 57%, 85%);
   --color-primary-pale-red: hsl(357, 100%, 86%);
 
   --color-neutral-dark-blue: hsl(212, 24%, 26%);
-  --color-neutral-grayish-blue: hsl(211, 10%, 45%);
+  --color-neutral-grayish-blue: hsl(211, 10%, 45%); /* cancel btn*/
   --color-neutral-light-gray: hsl(223, 19%, 93%);
   --color-neutral-very-light-gray: hsl(228, 33%, 97%); /* app background */
   --color-neutral-black: hsl(0, 0%, 0%);
   --color-neutral-white: hsl(0, 0%, 100%);
   --matching-gap-padding: 16px;
   --brdr-radius: 8px;
+  /* padding */
+  --padding-small: 8px;
+  --padding-medium: 16px;
+  --padding-large: 24px;
+  /* margin */
+  --margin-small: 8px;
+  --margin-medium: 16px;
+  --margin-large: 24px;
 
   --color-hsl-black: 0, 0%, 0%;
 
@@ -175,12 +183,19 @@ body {
 }
 
 p {
-  color: var(--color-primary-dark-gray);
+  color: var(--color-neutral-grayish-blue);
   line-height: 1;
 }
 
 button {
   background-color: transparent;
+  cursor: pointer;
+}
+
+button[class*="post"]:focus,
+.select-user-btn:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 5px var(--color-neutral-black);
 }
 
 textarea {
@@ -198,14 +213,158 @@ textarea {
   border-radius: var(--brdr-radius);
 }
 
+.comment-text-box,
+.content,
+.reply-textbox {
+  background-color: var(--color-neutral-white);
+}
+
 /* individual sections */
 
 [id="app-wrapper"] {
   padding-inline: 12px;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-block-end: 32px;
+  max-width: 750px;
+  margin-inline: auto;
 }
 
+/* comments container */
+
+.comments {
+  margin-block-start: auto;
+}
+
+/* current user container grid */
+
+.content {
+  padding: var(--padding-medium);
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-areas:
+    "user-info user-info user-info user-info user-info user-info user-info ."
+    "textarea textarea textarea textarea textarea textarea textarea textarea"
+    "counter counter . . . . reply-btn reply-btn";
+}
+
+[data-currentuser="true"] {
+  /* build grid use currentuser is true */
+}
+
+/* counter */
+
+.like-counter {
+  background-color: var(--color-neutral-light-gray);
+  color: var(--color-primary-moderate-blue);
+  font-weight: 500;
+  width: max-content;
+  display: flex;
+  align-items: center;
+  grid-area: counter;
+}
+
+.like-counter button {
+  padding: 14px;
+}
+
+/* user-info */
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  grid-area: user-info;
+}
+
+.user-info img,
+.avatar img {
+  width: 32px;
+}
+
+.name {
+  font-weight: 500;
+}
+
+.status {
+  background-color: var(--color-primary-moderate-blue);
+  color: var(--color-neutral-white);
+  font-size: 0.9rem;
+  padding-inline: 6px;
+}
+
+.createdat {
+  color: var(--color-neutral-grayish-blue);
+}
+
+/* reply,delete,edit btn */
+
+.reply-btn {
+  grid-area: reply-btn;
+}
+
+.reply-btn,
+.delete-trash-btn,
+.edit-btn {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: var(--edit-delete-reply);
+  gap: 8px;
+}
+
+.delete-edit-img-container {
+  display: flex;
+  grid-area: delete-edit;
+}
+
+.reply-btn,
+.edit-btn {
+  --edit-delete-reply: var(--color-primary-moderate-blue);
+}
+
+.delete-trash-btn {
+  --edit-delete-reply: var(--color-primary-soft-red);
+}
+
+/* current user delete/edit btn */
+
+[data-currentuser="false"] .delete-edit-img-container {
+  display: none;
+}
+
+/* edit btn click update/textarea */
+
+.paragraph-edit-box-container {
+  grid-area: textarea;
+}
+
+.paragraph-edit-box-container .update-post-btn {
+  grid-area: update-btn;
+}
+
+[editbtnclick="false"] .textarea-wrapper,
+[editbtnclick="false"] + button {
+  display: none;
+}
+
+/* reply text box */
+
+[replybtnclick="false"] {
+  display: none;
+}
+
+/* [data-currentuser="false"] .update-post-btn,{} */
+
+/* on hover/focus +/- sign will be moderate-blue */
+
+/* have two display: grid declarations */
+/* one for data-currentUser="true" and one data-currentUser="false"*/
+
+/* comments entry text container */
+
 .comment-text-box {
-  max-width: 750px;
   background-color: var(--color-neutral-white);
 }
 
@@ -227,7 +386,8 @@ textarea {
 }
 
 .avatar-textbox img {
-  width: 42px;
+  width: 32px;
+  align-self: center;
 }
 
 .select-user-btn {
@@ -269,6 +429,10 @@ textarea {
     flex-direction: column;
     align-items: center;
   }
+
+  .avatar-textbox img {
+    width: 42px;
+  }
 }
 
 /* modals */
@@ -281,9 +445,10 @@ textarea {
   position: fixed;
   inset: 0;
   background-color: hsla(0, 0%, 0%, 0.7);
-  display: flex;
+  /* center trick using position absolute */
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
 }
 
 [userclickselectuser="false"] {
@@ -291,6 +456,12 @@ textarea {
 }
 
 .select-user-modal-wrapper {
+  /* center trick using position absolute */
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  height: min-content;
+  width: max-content;
   /* margin-inline: 16px; */
   border-radius: var(--brdr-radius);
   padding: 16px;
@@ -329,4 +500,68 @@ textarea {
 .select-user-buttons-wrapper button {
   border-radius: 50%;
   padding: 0px;
+}
+
+/* delete comment modal */
+
+.delete-comment-reply-modal-wrapper {
+  position: fixed;
+  inset: 0;
+  background-color: hsla(0, 0%, 0%, 0.7);
+  display: none;
+  /*! display: none; */
+}
+
+[deletebtnclick="true"] {
+  display: revert;
+}
+
+.delete-comment-replay-container {
+  background-color: var(--color-neutral-white);
+  color: var(--color-neutral-dark-blue);
+  padding: var(--padding-large);
+  position: absolute;
+  height: min-content;
+  margin: auto;
+  width: 350px;
+  inset: 0;
+  border-radius: var(--brdr-radius);
+}
+
+/* delete modal title */
+
+.delete-comment-replay-container h2 {
+  font-size: 1.3rem;
+}
+
+/* delete modal paragraph */
+
+.delete-comment-replay-container p {
+  line-height: 1.5;
+  margin-block: var(--margin-small);
+}
+
+/* delete modal buttons */
+
+.cancel-delete-container button {
+  background-color: var(--delete-modal-btn-bg);
+  color: var(--color-neutral-white);
+  padding: calc(var(--padding-medium) - 4px);
+  padding-inline: var(--padding-large);
+  border-radius: var(--brdr-radius);
+}
+
+.cancel-btn {
+  --delete-modal-btn-bg: var(--color-neutral-grayish-blue);
+  margin-inline-end: var(--margin-small);
+}
+
+.delete-btn {
+  --delete-modal-btn-bg: var(--color-primary-soft-red);
+}
+
+@media screen and (min-width: 46.845rem) {
+  .delete-comment-replay-container p {
+    line-height: 1.2;
+  }
 }

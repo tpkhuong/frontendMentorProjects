@@ -1,6 +1,7 @@
 (function scopeOurVariables() {
   // our selectors
   const selectBtnModal = document.querySelector(".user-select-btns");
+  const selectUserBtn = document.querySelector(".select-user-btn");
   const closeBtnModal = document.querySelector(".close-select-user-modal");
   const commentTextBoxAvatarImg = document.querySelector(
     ".comment-text-box .avatar-textbox img"
@@ -19,11 +20,14 @@
   // add click event to select user btns wrapper
   applyEvent(selectUserModalWrapper, "click", clickEventForUserBtnsModal);
   // add click to select user button
-  applyEvent(
-    document.querySelector(".select-user-btn"),
-    "click",
-    showSelectUserButtons
-  );
+  applyEvent(selectUserBtn, "click", showSelectUserButtons);
+  // add focus and blur listen to select user btn and close modal btn
+  // open modal
+  //   applyEvent(selectUserBtn, "focus", changeAttrToShowOutlineRing);
+  //   applyEvent(selectUserBtn, "blur", changeAttrToHideOutlineRing);
+  //   // close modal
+  //   applyEvent(closeBtnModal, "focus", changeAttrToShowOutlineRing);
+  //   applyEvent(closeBtnModal, "blur", changeAttrToHideOutlineRing);
   // show select user buttons modal
   function showSelectUserButtons(event) {
     const statusOfSelectUserModal = selectBtnModal.getAttribute(
@@ -31,58 +35,69 @@
     );
     if (statusOfSelectUserModal == "false") {
       selectBtnModal.setAttribute("userclickselectuser", "true");
+      closeBtnModal.focus();
     }
   }
   // listen to click event for select user btns
   function clickEventForUserBtnsModal(event) {
-    const btnInUserModalClicked = event.target.closest("BUTTON");
-    if (
-      btnInUserModalClicked.getAttribute("class") ==
-        "close-select-user-modal" ||
-      btnInUserModalClicked.getAttribute("selectuser") != null
-    ) {
-      console.log(cachedData.currentUser);
+    if (event.target.closest("BUTTON")) {
+      const btnInUserModalClicked = event.target.closest("BUTTON");
       if (
-        btnInUserModalClicked.getAttribute("class") != "close-select-user-modal"
+        btnInUserModalClicked.getAttribute("class") ==
+          "close-select-user-modal" ||
+        btnInUserModalClicked.getAttribute("selectuser") != null
       ) {
-        console.log("hello");
-        // get btn select name
-        const userBtnSelectname =
-          btnInUserModalClicked.getAttribute("selectuser");
-        // get img src
-        const userBtnChildImgSrc =
-          btnInUserModalClicked.firstElementChild.getAttribute("src");
-        console.log(userBtnSelectname, userBtnChildImgSrc);
-        //   update current user info in dataobj
-        updateCurrentUserInCachedObj(
-          userBtnSelectname,
-          userBtnChildImgSrc,
-          cachedData
-        );
-
-        // array of items to assign values to
-        const arrayOfObjWithValues = filterOutUserClicked(
-          userBtnSelectname,
-          cachedData.contentForSelectUserButtons
-        );
-        console.log(arrayOfObjWithValues);
-        // assign values to select user btns
-        assignValuesSelectUserBtns(arrayOfSelectUserBtns, arrayOfObjWithValues);
-        // change avatar img
-        commentTextBoxAvatarImg.setAttribute(
-          "src",
-          cachedData.currentUser.imgSrc
-        );
         console.log(cachedData.currentUser);
+        if (
+          btnInUserModalClicked.getAttribute("class") !=
+          "close-select-user-modal"
+        ) {
+          console.log("hello");
+          // get btn select name
+          const userBtnSelectname =
+            btnInUserModalClicked.getAttribute("selectuser");
+          // get img src
+          const userBtnChildImgSrc =
+            btnInUserModalClicked.firstElementChild.getAttribute("src");
+          console.log(userBtnSelectname, userBtnChildImgSrc);
+          //   update current user info in dataobj
+          updateCurrentUserInCachedObj(
+            userBtnSelectname,
+            userBtnChildImgSrc,
+            cachedData
+          );
+
+          // array of items to assign values to
+          const arrayOfObjWithValues = filterOutUserClicked(
+            userBtnSelectname,
+            cachedData.contentForSelectUserButtons
+          );
+          console.log(arrayOfObjWithValues);
+          // assign values to select user btns
+          assignValuesSelectUserBtns(
+            arrayOfSelectUserBtns,
+            arrayOfObjWithValues
+          );
+          // change avatar img
+          commentTextBoxAvatarImg.setAttribute(
+            "src",
+            cachedData.currentUser.imgSrc
+          );
+          console.log(cachedData.currentUser);
+        }
+        // hide user buttons modal when user click on close modal button or user btn
+        hideSelectUserButtons(selectBtnModal);
+        localStoragedata.comments[0].commentUser =
+          cachedData.currentUser.userName;
+        console.log(localStoragedata);
+        localStorage.setItem(
+          "commentDataObj",
+          JSON.stringify(localStoragedata)
+        );
+        //   focus select user btn when user click on close modal btn or a user btn
+        selectUserBtn.focus();
+        console.log(localStorage.getItem("commentDataObj"));
       }
-      // hide user buttons modal when user click on close modal button or user btn
-      hideSelectUserButtons(selectBtnModal);
-      localStoragedata.comments[0].commentUser =
-        cachedData.currentUser.userName;
-      console.log(localStoragedata);
-      localStorage.setItem("commentDataObj", JSON.stringify(localStoragedata));
-      console.log(localStorage.getItem("commentDataObj"));
-      alert("localstorage is updating with select user clicked");
     }
   }
   // hide select user buttons modal
@@ -129,6 +144,22 @@
       return nameProperty != username;
     });
   }
+  // change attr to show select btn or close btn apply outline ring
+  //   function changeAttrToShowOutlineRing(event) {
+  //     if (this.getAttribute("buttonHasFocus") != null) {
+  //       this.getAttribute("buttonHasFocus") == "false"
+  //         ? this.setAttribute("buttonHasFocus", "true")
+  //         : null;
+  //     }
+  //   }
+  // change attr to hide select btn or close btn apply outline ring
+  //   function changeAttrToHideOutlineRing(event) {
+  //     if (this.getAttribute("buttonHasFocus") != null) {
+  //       this.getAttribute("buttonHasFocus") == "true"
+  //         ? this.setAttribute("buttonHasFocus", "false")
+  //         : null;
+  //     }
+  //   }
   // create button and append to user buttons wrapper
   function useLocalStorage() {
     // data obj
