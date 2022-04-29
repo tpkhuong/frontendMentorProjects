@@ -4,7 +4,7 @@
   const selectUserBtn = document.querySelector(".select-user-btn");
   const closeBtnModal = document.querySelector(".close-select-user-modal");
   const commentTextBoxAvatarImg = document.querySelector(
-    ".comment-text-box .avatar-textbox img"
+    ".comment-textbox .avatar img"
   );
   const selectUserModalWrapper = document.querySelector(
     ".select-user-modal-wrapper"

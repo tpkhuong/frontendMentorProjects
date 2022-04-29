@@ -184,7 +184,7 @@ body {
 
 p {
   color: var(--color-neutral-grayish-blue);
-  line-height: 1;
+  line-height: 1.5;
 }
 
 button {
@@ -202,6 +202,8 @@ textarea {
   width: 100%;
   height: 100%;
   resize: none;
+  border-radius: var(--brdr-radius);
+  border: 1px solid var(--color-neutral-black);
 }
 
 [class*="post"],
@@ -213,10 +215,26 @@ textarea {
   border-radius: var(--brdr-radius);
 }
 
-.comment-text-box,
+.comment-textbox,
 .content,
 .reply-textbox {
   background-color: var(--color-neutral-white);
+  border-radius: var(--brdr-radius);
+}
+
+.reply-textbox {
+  margin-block-start: 8px;
+}
+
+.comment > * + *,
+[class*="replies"] > * + * {
+  margin-block-start: var(--margin-medium);
+}
+
+@media screen and (min-width: 46.845rem) {
+  p {
+    line-height: 1.2;
+  }
 }
 
 /* individual sections */
@@ -246,11 +264,16 @@ textarea {
   grid-template-areas:
     "user-info user-info user-info user-info user-info user-info user-info ."
     "textarea textarea textarea textarea textarea textarea textarea textarea"
-    "counter counter . . . . reply-btn reply-btn";
+    "counter counter . . . reply-btn reply-btn reply-btn";
 }
 
 [data-currentuser="true"] {
   /* build grid use currentuser is true */
+  grid-template-areas:
+    "user-info user-info user-info user-info user-info user-info user-info user-info"
+    "textarea textarea textarea textarea textarea textarea textarea textarea"
+    ". . . . . update-btn update-btn update-btn"
+    "counter counter . delete-edit delete-edit delete-edit delete-edit delete-edit";
 }
 
 /* counter */
@@ -263,10 +286,59 @@ textarea {
   display: flex;
   align-items: center;
   grid-area: counter;
+  border-radius: var(--brdr-radius);
 }
 
 .like-counter button {
   padding: 14px;
+}
+
+.like-counter button:nth-of-type(1) {
+  border-top-left-radius: var(--brdr-radius);
+  border-bottom-left-radius: var(--brdr-radius);
+}
+.like-counter button:nth-of-type(2) {
+  border-top-right-radius: var(--brdr-radius);
+  border-bottom-right-radius: var(--brdr-radius);
+}
+
+@media screen and (min-width: 48.845rem) {
+  .like-counter {
+    flex-direction: column;
+  }
+  .like-counter button:nth-of-type(1) {
+    border-top-left-radius: var(--brdr-radius);
+    border-top-right-radius: var(--brdr-radius);
+    border-bottom-left-radius: revert;
+  }
+  .like-counter button:nth-of-type(2) {
+    border-top-right-radius: revert;
+    border-bottom-left-radius: var(--brdr-radius);
+    border-bottom-right-radius: var(--brdr-radius);
+  }
+  .content {
+    grid-template-columns: min-content repeat(7, 1fr);
+    gap: 10px 16px;
+    grid-template-areas:
+      "counter user-info user-info user-info user-info user-info reply-btn reply-btn"
+      "counter textarea textarea textarea textarea textarea textarea textarea"
+      "counter textarea textarea textarea textarea textarea textarea textarea"
+      ". textarea textarea textarea textarea textarea textarea textarea";
+  }
+  /* "user-info user-info user-info user-info user-info user-info user-info user-info"
+    "textarea textarea textarea textarea textarea textarea textarea textarea"
+    ". . . . . update-btn update-btn update-btn"
+    "counter counter . delete-edit delete-edit delete-edit delete-edit delete-edit"; */
+  [data-currentuser="true"] {
+    grid-template-areas:
+      "counter user-info user-info user-info user-info delete-edit delete-edit delete-edit"
+      "counter textarea textarea textarea textarea textarea textarea textarea"
+      ". textarea textarea textarea textarea textarea textarea textarea"
+      ". . . . . . update-btn update-btn";
+  }
+  .update-post-btn {
+    justify-self: end;
+  }
 }
 
 /* user-info */
@@ -274,7 +346,7 @@ textarea {
 .user-info {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
   grid-area: user-info;
 }
 
@@ -287,11 +359,16 @@ textarea {
   font-weight: 500;
 }
 
+[data-currentuser="false"] .status {
+  display: none;
+}
+
 .status {
   background-color: var(--color-primary-moderate-blue);
   color: var(--color-neutral-white);
   font-size: 0.9rem;
   padding-inline: 6px;
+  border-radius: 5px;
 }
 
 .createdat {
@@ -302,6 +379,11 @@ textarea {
 
 .reply-btn {
   grid-area: reply-btn;
+  justify-self: end;
+}
+
+[data-currentuser="true"] .reply-btn {
+  display: none;
 }
 
 .reply-btn,
@@ -317,6 +399,8 @@ textarea {
 .delete-edit-img-container {
   display: flex;
   grid-area: delete-edit;
+  justify-content: end;
+  gap: 8px;
 }
 
 .reply-btn,
@@ -338,10 +422,20 @@ textarea {
 
 .paragraph-edit-box-container {
   grid-area: textarea;
+  margin-block: var(--margin-small);
 }
 
-.paragraph-edit-box-container .update-post-btn {
+.update-post-btn {
   grid-area: update-btn;
+}
+
+[editbtnclick="true"] .textarea-wrapper,
+[editbtnclick="true"] + button {
+  display: revert;
+}
+
+[editbtnclick="true"] p {
+  display: none;
 }
 
 [editbtnclick="false"] .textarea-wrapper,
@@ -351,7 +445,7 @@ textarea {
 
 /* reply text box */
 
-[replybtnclick="false"] {
+div[replybtnclick="false"] {
   display: none;
 }
 
@@ -362,30 +456,95 @@ textarea {
 /* have two display: grid declarations */
 /* one for data-currentUser="true" and one data-currentUser="false"*/
 
-/* comments entry text container */
+/* div with attr linerepliesbox */
 
-.comment-text-box {
-  background-color: var(--color-neutral-white);
+div[linerepliesbox] {
+  margin-block-start: var(--margin-medium);
+  display: flex;
 }
 
-.comment-text-box {
+div[hasReplies="false"] {
+  display: none;
+}
+
+[class*="-firstlevel-replies"] {
+  max-width: 330px;
+}
+
+/* line container */
+
+[linerepliesbox="firstlevel"] .line-container {
+  flex-grow: 1;
+  display: flex;
+}
+
+[linerepliesbox="firstlevel"] .line {
+  width: 2px;
+  display: inline-block;
+  background-color: var(--color-neutral-light-gray);
+}
+
+/* second level */
+
+[class*="-secondlevel-replies"] {
+  max-width: 315px;
+}
+
+@media screen and (min-width: 46.845rem) {
+  [class*="-firstlevel-replies"] {
+    min-width: 650px;
+  }
+  [class*="-secondlevel-replies"] {
+    min-width: 575px;
+  }
+
+  [linerepliesbox="firstlevel"] .line {
+    margin-inline: auto;
+  }
+  .paragraph-edit-box-container {
+    margin-block: revert;
+  }
+
+  .paragraph-edit-box-container p,
+  .paragraph-edit-box-container textarea {
+    line-height: 1.5;
+  }
+  .paragraph-edit-box-container textarea {
+    height: calc(4rem + 2.5rem);
+  }
+}
+
+/* user select btns comment wrapper */
+
+.user-select-btns-comment-text-box {
+  margin-block-start: var(--margin-medium);
+}
+
+/* comments entry text container */
+
+.comment-textbox,
+.reply-textbox {
   display: grid;
-  border-radius: var(--brdr-radius);
   padding: var(--matching-gap-padding);
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: var(--matching-gap-padding);
   grid-template-areas:
-    "comment-textbox comment-textbox comment-textbox comment-textbox"
-    "comment-avatar comment-avatar comment-avatar post-btn";
+    "textbox textbox textbox textbox"
+    "avatar avatar avatar post-btn";
 }
 
-.avatar-textbox {
+.comment-textbox .avatar,
+.reply-textbox .avatar {
+  grid-area: avatar;
+}
+
+.comment-textbox .avatar {
   display: flex;
   gap: var(--matching-gap-padding);
-  grid-area: comment-avatar;
 }
 
-.avatar-textbox img {
+.comment-textbox .avatar img,
+.reply-textbox .avatar img {
   width: 32px;
   align-self: center;
 }
@@ -397,40 +556,38 @@ textarea {
   margin-inline: auto;
 }
 
-.comment-text-wrapper {
-  grid-area: comment-textbox;
-}
-
-.comment-text-wrapper textarea {
-  border-radius: var(--brdr-radius);
-  border: 1px solid var(--color-neutral-black);
+.comment-textbox .textarea-wrapper,
+.reply-textbox .textarea-wrapper {
+  grid-area: textbox;
 }
 
 /* grid */
 
-.post-send-btn {
+.post-send-btn,
+.reply-post-btn {
   grid-area: post-btn;
   justify-self: end;
 }
 
 @media screen and (min-width: 46.845rem) {
-  .comment-text-box {
-    display: grid;
+  .comment-textbox,
+  .reply-textbox {
     --matching-gap-padding: 16px;
-    grid-template-columns: min-content 1fr min-content;
-    grid-template-areas: "comment-avatar comment-textbox post-btn";
+    grid-template-columns: max-content 1fr min-content;
+    grid-template-areas: "avatar textbox post-btn";
   }
-  .post-send-btn {
-    grid-area: post-btn;
+  .post-send-btn,
+  .reply-post-btn {
     align-self: start;
   }
-  .avatar-textbox {
+  .comment-textbox .avatar {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
-  .avatar-textbox img {
+  .comment-textbox .avatar img,
+  .reply-textbox .avatar img {
     width: 42px;
   }
 }
@@ -537,7 +694,6 @@ textarea {
 /* delete modal paragraph */
 
 .delete-comment-replay-container p {
-  line-height: 1.5;
   margin-block: var(--margin-small);
 }
 
@@ -561,7 +717,4 @@ textarea {
 }
 
 @media screen and (min-width: 46.845rem) {
-  .delete-comment-replay-container p {
-    line-height: 1.2;
-  }
 }
