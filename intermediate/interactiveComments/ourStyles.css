@@ -473,12 +473,13 @@ div[hasReplies="false"] {
 
 /* line container */
 
-[linerepliesbox="firstlevel"] .line-container {
+[linerepliesbox*="level"] .line-container {
   flex-grow: 1;
   display: flex;
+  flex-basis: 25%;
 }
 
-[linerepliesbox="firstlevel"] .line {
+[linerepliesbox*="level"] .line {
   width: 2px;
   display: inline-block;
   background-color: var(--color-neutral-light-gray);
@@ -490,17 +491,19 @@ div[hasReplies="false"] {
   max-width: 315px;
 }
 
-@media screen and (min-width: 46.845rem) {
+@media screen and (min-width: 25.3125rem) {
   [class*="-firstlevel-replies"] {
-    min-width: 650px;
+    max-width: 650px;
   }
   [class*="-secondlevel-replies"] {
-    min-width: 575px;
+    max-width: 575px;
   }
-
-  [linerepliesbox="firstlevel"] .line {
+  [linerepliesbox*="level"] .line {
     margin-inline: auto;
   }
+}
+
+@media screen and (min-width: 46.845rem) {
   .paragraph-edit-box-container {
     margin-block: revert;
   }

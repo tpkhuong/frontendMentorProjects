@@ -1,8 +1,12 @@
 (function scopeOurVariables() {
   // our selectors
+  /** when we build content/container with reply, delete, **/
   const selectBtnModal = document.querySelector(".user-select-btns");
   const selectUserBtn = document.querySelector(".select-user-btn");
   const closeBtnModal = document.querySelector(".close-select-user-modal");
+  const sendPostBtn = document.querySelector(".post-send-btn");
+  const replyPostBtn = document.querySelector(".reply-post-btn");
+  // const commentTextBox = document.querySelector(".comment-textbox");
   const commentTextBoxAvatarImg = document.querySelector(
     ".comment-textbox .avatar img"
   );
@@ -19,6 +23,9 @@
   useLocalStorage();
   // add click event to select user btns wrapper
   applyEvent(selectUserModalWrapper, "click", clickEventForUserBtnsModal);
+  // add click event to comment/reply element
+  applyEvent(sendPostBtn, "click", runFuncForSendOrReplyBtn);
+  applyEvent(replyPostBtn, "click", runFuncForSendOrReplyBtn);
   // add click to select user button
   applyEvent(selectUserBtn, "click", showSelectUserButtons);
   // add focus and blur listen to select user btn and close modal btn
@@ -37,6 +44,20 @@
       selectBtnModal.setAttribute("userclickselectuser", "true");
       closeBtnModal.focus();
     }
+  }
+  // send post comment/reply post event func
+  function runFuncForSendOrReplyBtn(event) {
+    const classOfBtn = event.target.className;
+    if (classOfBtn == "post-send-btn") {
+      console.log("send");
+    }
+    if (classOfBtn == "reply-post-btn") {
+      console.log("reply");
+    }
+  }
+  // send/reply comment
+  function postCommentOrReply(container) {
+    // append coment/reply to container
   }
   // listen to click event for select user btns
   function clickEventForUserBtnsModal(event) {
@@ -131,6 +152,10 @@
       eachBtn.setAttribute("selectuser", name);
       eachBtn.setAttribute("aria-label", label);
     });
+  }
+  // find path of element clicked. could be comment/replies
+  function TODO(stuff) {
+    //
   }
   // add event listener
   function applyEvent(element, eventListener, func) {
