@@ -20,7 +20,7 @@
   const callOurCachedFunc = useLocalStorage();
   const { data: cachedData, localStoragedata } = callOurCachedFunc();
   // call our local storage func
-  useLocalStorage();
+  //   useLocalStorage();
   // add click event to select user btns wrapper
   applyEvent(selectUserModalWrapper, "click", clickEventForUserBtnsModal);
   // add click event to comment/reply element
@@ -49,7 +49,11 @@
   function runFuncForSendOrReplyBtn(event) {
     const classOfBtn = event.target.className;
     if (classOfBtn == "post-send-btn") {
-      console.log("send");
+      //   console.log(createUniqueId(cachedData.currentUser.userName));
+      const newUniqueId = createUniqueId(cachedData.currentUser.userName);
+      cachedData.uniqueID = newUniqueId;
+      console.log(newUniqueId);
+      console.log(cachedData);
     }
     if (classOfBtn == "reply-post-btn") {
       console.log("reply");
@@ -57,7 +61,7 @@
   }
   // send/reply comment
   function postCommentOrReply(container) {
-    // append coment/reply to container
+    // append comment/reply to container
   }
   // listen to click event for select user btns
   function clickEventForUserBtnsModal(event) {
@@ -187,13 +191,75 @@
   //     }
   //   }
   // create button and append to user buttons wrapper
+
+  /**
+   * create uniqueId with current username
+   * **/
+
+  function createUniqueId(user) {
+    const randomNumber = `${generateRandomNumber()}`.slice(0, 5);
+    return `${user}${randomNumber}`;
+  }
+  /**
+   * generate random number using current time
+   * **/
+
+  function generateRandomNumber() {
+    return Math.random() * new Date().getTime();
+  }
+  /**
+   * time property of element obj: duration property(current time - createdAt) and createdAt property(May 2 2022 11:30)
+   * **/
+  /**
+   * make a func that will check and return plural form of day,week,month,year
+   * **/
+
   function useLocalStorage() {
     // data obj
     const data = {
+      repliesLevel: {
+        base: "first",
+        first: "second",
+        second: "third",
+        third: "fourth",
+        fourth: "fifth",
+      },
+      monthInNumber: {
+        Jan: 1,
+        Feb: 2,
+        Mar: 3,
+        Apr: 4,
+        May: 5,
+        Jun: 6,
+        Jul: 7,
+        Aug: 8,
+        Sep: 9,
+        Oct: 10,
+        Nov: 11,
+        Dec: 12,
+      },
+      numOfDaysOfMonths: {
+        Jan: 31,
+        Feb:
+          this.currentYear % 4 === 0
+            ? 29
+            : 28 /** get year of current date and createdAt date **/,
+        Mar: 31,
+        Apr: 30,
+        May: 31,
+        Jun: 30,
+        Jul: 31,
+        Aug: 31,
+        Sep: 30,
+        Oct: 31,
+        Nov: 30,
+        Dec: 31,
+      },
       currentUser: {
         imgSrc: "./images/avatars/image-amyrobson.png",
         userName: "amyrobson",
       },
+      uniqueID: null,
       contentForSelectUserButtons: [
         {
           name: "amyrobson",
@@ -233,210 +299,214 @@
   /**
    * testing our ideas
    * **/
-  const repliesLevel = {
-    base: "first",
-    first: "second",
-    second: "third",
-  };
-  function nestedLooping(list) {
-    list.forEach(function printStuff(eachObj) {
-      //   build element
-      //   const buildingAccessPropStr = repliesLevel[eachObj.level];
-      if (
-        eachObj.hasOwnProperty(`${repliesLevel[eachObj.level]}LevelReplies`) &&
-        eachObj[`${repliesLevel[eachObj.level]}LevelReplies`].length > 0
-      ) {
-        nestedLooping(eachObj[`${repliesLevel[eachObj.level]}LevelReplies`]);
-      }
-      /**
-       * order of console.log() print when console.log(eachObj.print); is below
-       * if (eachObj.hasOwnProperty("replies") && eachObj.replies.length > 0) {
-       * nestedLooping(eachObj.replies);
-       * }
-       * secondlevel first obj
-       * firstlevel first obj
-       * thirdlevel second obj
-       * secondlevel second obj
-       * number
-       * string
-       * second level
-       * secondlevel
-       * firstlevel second obj
-       * thirdlevel
-       * secondlevel third obj
-       * thirdlevel
-       * secondlevel third obj
-       * firstlevel third obj
-       * **/
-      if (eachObj.hasOwnProperty("uniqueID")) {
-        eachObj.uniqueID = "hello we changed the value of the string";
-      }
-      console.log(eachObj?.uniqueID);
-      console.log(eachObj.print);
-    });
-  }
-
-  const testArr = [
-    {
-      print: "firstlevel first obj",
-      level: "base",
-      firstLevelReplies: [{ print: "secondlevel first obj" }],
-    },
-    {
-      print: "firstlevel second obj",
-      level: "base",
-      firstLevelReplies: [
-        {
-          print: "secondlevel second obj",
-          level: "first",
-          secondLevelReplies: [{ print: "thirdlevel second obj" }],
-        },
-        {
-          print: "second level",
-          level: "first",
-          secondLevelReplies: [
-            { print: "number", level: "second", thirdLevelReplies: [] },
-            { print: "string", level: "second", thirdLevelReplies: [] },
-          ],
-        },
-        {
-          print: "secondlevel",
-          level: "first",
-          secondLevelReplies: [],
-          uniqueID: "helloThis is a test",
-        },
-      ],
-    },
-    {
-      print: "firstlevel third obj",
-      level: "base",
-      firstLevelReplies: [
-        {
-          print: "secondlevel third obj",
-          level: "first",
-          secondLevelReplies: [{ print: "thirdlevel" }],
-        },
-        {
-          print: "secondlevel third obj",
-          level: "first",
-          secondLevelReplies: [{ print: "thirdlevel" }],
-        },
-      ],
-    },
-  ];
-  const findPath = (ob, key) => {
-    const path = [];
-    const keyExists = (obj) => {
-      if (!obj || (typeof obj !== "object" && !Array.isArray(obj))) {
-        return false;
-      } else if (obj.hasOwnProperty(key)) {
-        return true;
-      } else if (Array.isArray(obj)) {
-        let parentKey = path.length ? path.pop() : "";
-
-        for (let i = 0; i < obj.length; i++) {
-          path.push(`${parentKey}[${i}]`);
-          const result = keyExists(obj[i], key);
-          if (result) {
-            return result;
-          }
-          path.pop();
-        }
-      } else {
-        for (const k in obj) {
-          path.push(k);
-          const result = keyExists(obj[k], key);
-          if (result) {
-            return result;
-          }
-          path.pop();
-        }
-      }
-      return false;
+  function testingIdeas() {
+    const repliesLevel = {
+      base: "first",
+      first: "second",
+      second: "third",
     };
+    function nestedLooping(list) {
+      list.forEach(function printStuff(eachObj) {
+        //   build element
+        //   const buildingAccessPropStr = repliesLevel[eachObj.level];
+        if (
+          eachObj.hasOwnProperty(
+            `${repliesLevel[eachObj.level]}LevelReplies`
+          ) &&
+          eachObj[`${repliesLevel[eachObj.level]}LevelReplies`].length > 0
+        ) {
+          nestedLooping(eachObj[`${repliesLevel[eachObj.level]}LevelReplies`]);
+        }
+        /**
+         * order of console.log() print when console.log(eachObj.print); is below
+         * if (eachObj.hasOwnProperty("replies") && eachObj.replies.length > 0) {
+         * nestedLooping(eachObj.replies);
+         * }
+         * secondlevel first obj
+         * firstlevel first obj
+         * thirdlevel second obj
+         * secondlevel second obj
+         * number
+         * string
+         * second level
+         * secondlevel
+         * firstlevel second obj
+         * thirdlevel
+         * secondlevel third obj
+         * thirdlevel
+         * secondlevel third obj
+         * firstlevel third obj
+         * **/
+        if (eachObj.hasOwnProperty("uniqueID")) {
+          eachObj.uniqueID = "hello we changed the value of the string";
+        }
+        console.log(eachObj?.uniqueID);
+        console.log(eachObj.print);
+      });
+    }
 
-    keyExists(ob);
+    const testArr = [
+      {
+        print: "firstlevel first obj",
+        level: "base",
+        firstLevelReplies: [{ print: "secondlevel first obj" }],
+      },
+      {
+        print: "firstlevel second obj",
+        level: "base",
+        firstLevelReplies: [
+          {
+            print: "secondlevel second obj",
+            level: "first",
+            secondLevelReplies: [{ print: "thirdlevel second obj" }],
+          },
+          {
+            print: "second level",
+            level: "first",
+            secondLevelReplies: [
+              { print: "number", level: "second", thirdLevelReplies: [] },
+              { print: "string", level: "second", thirdLevelReplies: [] },
+            ],
+          },
+          {
+            print: "secondlevel",
+            level: "first",
+            secondLevelReplies: [],
+            uniqueID: "helloThis is a test",
+          },
+        ],
+      },
+      {
+        print: "firstlevel third obj",
+        level: "base",
+        firstLevelReplies: [
+          {
+            print: "secondlevel third obj",
+            level: "first",
+            secondLevelReplies: [{ print: "thirdlevel" }],
+          },
+          {
+            print: "secondlevel third obj",
+            level: "first",
+            secondLevelReplies: [{ print: "thirdlevel" }],
+          },
+        ],
+      },
+    ];
+    const findPath = (ob, key) => {
+      const path = [];
+      const keyExists = (obj) => {
+        if (!obj || (typeof obj !== "object" && !Array.isArray(obj))) {
+          return false;
+        } else if (obj.hasOwnProperty(key)) {
+          return true;
+        } else if (Array.isArray(obj)) {
+          let parentKey = path.length ? path.pop() : "";
 
-    return path.join(".");
-  };
-  const resolvePath = (object, path, defaultValue) =>
-    path
-      .split(/[\.\[\]\'\"]/)
-      .filter((p) => p)
-      .reduce((o, p) => (o ? o[p] : defaultValue), object);
+          for (let i = 0; i < obj.length; i++) {
+            path.push(`${parentKey}[${i}]`);
+            const result = keyExists(obj[i], key);
+            if (result) {
+              return result;
+            }
+            path.pop();
+          }
+        } else {
+          for (const k in obj) {
+            path.push(k);
+            const result = keyExists(obj[k], key);
+            if (result) {
+              return result;
+            }
+            path.pop();
+          }
+        }
+        return false;
+      };
 
-  const originalTestArr = [
-    {
-      print: "firstlevel first obj",
-      replies: [{ print: "secondlevel first obj" }],
-    },
-    {
-      print: "firstlevel second obj",
-      replies: [
-        {
-          print: "secondlevel second obj",
-          replies: [{ print: "thirdlevel second obj" }],
-        },
-        {
-          print: "second level",
-          replies: [
-            { print: "number", replies: [] },
-            { print: "string", replies: [] },
-          ],
-        },
-        {
-          print: "secondlevel",
-          replies: [],
-          uniqueID: "helloThis is a test",
-        },
-      ],
-    },
-    {
-      print: "firstlevel third obj",
-      replies: [
-        {
-          print: "secondlevel third obj",
-          replies: [{ print: "thirdlevel" }],
-        },
-        {
-          print: "secondlevel third obj",
-          replies: [{ print: "thirdlevel" }],
-        },
-      ],
-    },
-  ];
-  function originalNestedLooping(list) {
-    list.forEach(function buildElements(eachObj, index) {
-      //   build element
+      keyExists(ob);
 
-      if (eachObj.hasOwnProperty("replies") && eachObj.replies.length > 0) {
-        originalNestedLooping(eachObj.replies);
-      }
-      /**
-       * order of console.log() print when console.log(eachObj.print); is below
-       * if (eachObj.hasOwnProperty("replies") && eachObj.replies.length > 0) {
-       * nestedLooping(eachObj.replies);
-       * }
-       * secondlevel first obj
-       * firstlevel first obj
-       * thirdlevel second obj
-       * secondlevel second obj
-       * number
-       * string
-       * second level
-       * secondlevel
-       * firstlevel second obj
-       * thirdlevel
-       * secondlevel third obj
-       * thirdlevel
-       * secondlevel third obj
-       * firstlevel third obj
-       * **/
-      if (eachObj.hasOwnProperty("uniqueID")) {
-        eachObj.uniqueID = "hello we changed the value of the string";
-      }
-      console.log(eachObj?.uniqueID);
-      console.log(eachObj.print);
-    });
+      return path.join(".");
+    };
+    const resolvePath = (object, path, defaultValue) =>
+      path
+        .split(/[\.\[\]\'\"]/)
+        .filter((p) => p)
+        .reduce((o, p) => (o ? o[p] : defaultValue), object);
+
+    const originalTestArr = [
+      {
+        print: "firstlevel first obj",
+        replies: [{ print: "secondlevel first obj" }],
+      },
+      {
+        print: "firstlevel second obj",
+        replies: [
+          {
+            print: "secondlevel second obj",
+            replies: [{ print: "thirdlevel second obj" }],
+          },
+          {
+            print: "second level",
+            replies: [
+              { print: "number", replies: [] },
+              { print: "string", replies: [] },
+            ],
+          },
+          {
+            print: "secondlevel",
+            replies: [],
+            uniqueID: "helloThis is a test",
+          },
+        ],
+      },
+      {
+        print: "firstlevel third obj",
+        replies: [
+          {
+            print: "secondlevel third obj",
+            replies: [{ print: "thirdlevel" }],
+          },
+          {
+            print: "secondlevel third obj",
+            replies: [{ print: "thirdlevel" }],
+          },
+        ],
+      },
+    ];
+    function originalNestedLooping(list) {
+      list.forEach(function buildElements(eachObj, index) {
+        //   build element
+
+        if (eachObj.hasOwnProperty("replies") && eachObj.replies.length > 0) {
+          originalNestedLooping(eachObj.replies);
+        }
+        /**
+         * order of console.log() print when console.log(eachObj.print); is below
+         * if (eachObj.hasOwnProperty("replies") && eachObj.replies.length > 0) {
+         * nestedLooping(eachObj.replies);
+         * }
+         * secondlevel first obj
+         * firstlevel first obj
+         * thirdlevel second obj
+         * secondlevel second obj
+         * number
+         * string
+         * second level
+         * secondlevel
+         * firstlevel second obj
+         * thirdlevel
+         * secondlevel third obj
+         * thirdlevel
+         * secondlevel third obj
+         * firstlevel third obj
+         * **/
+        if (eachObj.hasOwnProperty("uniqueID")) {
+          eachObj.uniqueID = "hello we changed the value of the string";
+        }
+        console.log(eachObj?.uniqueID);
+        console.log(eachObj.print);
+      });
+    }
   }
 })();
