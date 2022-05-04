@@ -210,9 +210,122 @@
   /**
    * time property of element obj: duration property(current time - createdAt) and createdAt property(May 2 2022 11:30)
    * **/
+
+  /**
+   * func that will return obj with difference in day,month,year
+   * **/
+
+  function calculateDifferenceInDayMonthYear(createdAtObj, currentTimeObj) {
+    // calculate difference in year
+    const differenceInYear = currentTimeObj.year - createdAtObj.year;
+    // calculate difference in month
+    /**
+     * for month we will get month in number here using month in str form
+     * "May","June" and etc
+     * **/
+    const differenceInMonth =
+      cachedData.monthInNumber[currentTimeObj.month] -
+      cachedData.monthInNumber[createdAtObj.month];
+    // calculate difference in day
+    const differenceInDay = currentTimeObj.day - createdAtObj.day;
+    return {
+      differenceInYear,
+      differenceInMonth,
+      differenceInDay,
+    };
+  }
+
+  /**
+   * run func based on conditions
+   * **/
+
+  function callFuncCalculateDurationBasedOnConditions(createdAt, currentTime) {
+    // call func calculateDifferenceInDayMonthYear destructure values
+    // if year and month equal to 0 pass diff in days to calculateDayAndWeek
+    /** **/
+    // if year equal 0 && month >= 1
+    // check diff in days
+    // if diff in days >= 0 pass value of diff in month to checkifneedplural
+    // else
+    // calculate total days left in createdAt month + days of currentdate month
+    // pass that value to calculateDayAndWeek
+    const daysInCreatedAtMonth =
+      createdAt.month == "Feb"
+        ? createdAt.year % 4 == 0
+          ? 29
+          : 28
+        : cachedData.numOfDaysOfMonths[createdAt.month];
+    const totalDaysLeftInMonth = daysInCreatedAtMonth + currentTime.day;
+    /** **/
+    // if year == 1
+    // check month
+    // if month is >= 0 pass value of diff in year to checkifneedplural
+    // else month is < 0
+    // pass value of createdAt month and currentTime month in number form to monthCalcuation
+    /** **/
+    // if year > 1 pass diff in year value to checkifneedplural
+  }
+
+  /**
+   * func to calculate day and week
+   * **/
+
+  function calculateDayAndWeek(differenceInDays) {
+    // call day calculation or week calculation based on conditions
+    if (differenceInDays <= 7) {
+      // call daysCalculation
+      daysCalculation(differenceInDays);
+    }
+    if (differenceInDays >= 8 && differenceInDays <= 31) {
+      // call weeksCalculation
+      weeksCalculation(differenceInDays);
+    }
+  }
+
+  /**
+   * day calculation
+   * **/
+
+  function daysCalculation(totalDays) {
+    // totaldays will be number between 0 and 7
+    return checkIfNeedPluralFormOfCreatedAtDuration(totalDays, "days");
+  }
+
+  /**
+   * week calculation
+   * **/
+
+  function weeksCalculation(daysTotal) {
+    switch (true) {
+      case daysTotal >= 8 && daysTotal <= 14:
+        return checkIfNeedPluralFormOfCreatedAtDuration(1, "week");
+      case daysTotal >= 15 && daysTotal <= 21:
+        return checkIfNeedPluralFormOfCreatedAtDuration(2, "week");
+      case daysTotal >= 22 && daysTotal <= 28:
+        return checkIfNeedPluralFormOfCreatedAtDuration(3, "week");
+      case daysTotal >= 29 && daysTotal <= 31:
+        return checkIfNeedPluralFormOfCreatedAtDuration(4, "week");
+    }
+  }
+
+  /**
+   * month calculation
+   * **/
+
+  function monthCalcuation(createdAtMonth, currentTimeMonth) {
+    // calculate months left in createdAtYear by subtract createdAtMonth value from 12
+    const monthsLeftInCreatedAtTime = 12 - createdAtMonth;
+    // take that value + currentTimeMonth value to get total months
+    return monthsLeftInCreatedAtTime + currentTimeMonth;
+  }
+
   /**
    * make a func that will check and return plural form of day,week,month,year
    * **/
+
+  function checkIfNeedPluralFormOfCreatedAtDuration(digit, dayFormStr) {
+    return digit > 1 ? `${digit} ${dayFormStr}s` : `${digit} ${dayFormStr}`;
+  }
 
   function useLocalStorage() {
     // data obj
