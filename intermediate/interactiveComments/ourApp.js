@@ -52,8 +52,15 @@
       //   console.log(createUniqueId(cachedData.currentUser.userName));
       const newUniqueId = createUniqueId(cachedData.currentUser.userName);
       cachedData.uniqueID = newUniqueId;
-      console.log(newUniqueId);
-      console.log(cachedData);
+      const testObj = createUserDataObj(
+        cachedData.uniqueID,
+        "Hello world",
+        undefined,
+        createTimeObj(),
+        cachedData.repliesLevel
+      );
+      localStoragedata.comments.push(testObj);
+      localStorage.setItem("commentDataObj", JSON.stringify(localStoragedata));
     }
     if (classOfBtn == "reply-post-btn") {
       console.log("reply");
@@ -207,6 +214,7 @@
   function generateRandomNumber() {
     return Math.random() * new Date().getTime();
   }
+
   /**
    * time property of element obj: duration property(current time - createdAt) and createdAt property(May 2 2022 11:30)
    * **/
@@ -217,17 +225,19 @@
 
   function calculateDifferenceInDayMonthYear(createdAtObj, currentTimeObj) {
     // calculate difference in year
-    const differenceInYear = currentTimeObj.year - createdAtObj.year;
+    const differenceInYear =
+      Number(currentTimeObj.year) - Number(createdAtObj.year);
     // calculate difference in month
     /**
      * for month we will get month in number here using month in str form
      * "May","June" and etc
      * **/
     const differenceInMonth =
-      cachedData.monthInNumber[currentTimeObj.month] -
-      cachedData.monthInNumber[createdAtObj.month];
+      Number(cachedData.monthInNumber[currentTimeObj.month]) -
+      Number(cachedData.monthInNumber[createdAtObj.month]);
     // calculate difference in day
-    const differenceInDay = currentTimeObj.day - createdAtObj.day;
+    const differenceInDay =
+      Number(currentTimeObj.day) - Number(createdAtObj.day);
     return {
       differenceInYear,
       differenceInMonth,
@@ -240,30 +250,63 @@
    * **/
 
   function callFuncCalculateDurationBasedOnConditions(createdAt, currentTime) {
+    /**
+     * this func will return a string of "1 day" or "2 days" etc
+     * which will allow us to use the returned value to assign it to createdAt duration property
+     * in the uniqueId element data obj or use it to assign value to span with class digit and span with class days
+     * **/
     // call func calculateDifferenceInDayMonthYear destructure values
+    const { differenceInYear, differenceInMonth, differenceInDay } =
+      calculateDifferenceInDayMonthYear(createdAt, currentTime);
     // if year and month equal to 0 pass diff in days to calculateDayAndWeek
+    if (differenceInYear == 0 && differenceInMonth == 0) {
+      return calculateDayAndWeek(differenceInDay);
+    }
     /** **/
     // if year equal 0 && month >= 1
-    // check diff in days
-    // if diff in days >= 0 pass value of diff in month to checkifneedplural
-    // else
-    // calculate total days left in createdAt month + days of currentdate month
-    // pass that value to calculateDayAndWeek
-    const daysInCreatedAtMonth =
-      createdAt.month == "Feb"
-        ? createdAt.year % 4 == 0
-          ? 29
-          : 28
-        : cachedData.numOfDaysOfMonths[createdAt.month];
-    const totalDaysLeftInMonth = daysInCreatedAtMonth + currentTime.day;
+    if (differenceInYear == 0 && differenceInMonth >= 1) {
+      if (differenceInDay >= 0) {
+        // check diff in days
+        // if diff in days >= 0 pass value of diff in month to checkifneedplural
+        return checkIfNeedPluralFormOfCreatedAtDuration(
+          differenceInMonth,
+          "month"
+        );
+      } else {
+        // else
+        // calculate total days left in createdAt month + days of currentdate month
+        // pass that value to calculateDayAndWeek
+        const daysInCreatedAtMonth =
+          createdAt.month == "Feb"
+            ? createdAt.year % 4 == 0
+              ? 29
+              : 28
+            : cachedData.numOfDaysOfMonths[createdAt.month];
+        const totalDaysLeftInMonth = daysInCreatedAtMonth + currentTime.day;
+        return checkIfNeedPluralFormOfCreatedAtDuration(totalDaysLeftInMonth);
+      }
+    }
     /** **/
     // if year == 1
-    // check month
-    // if month is >= 0 pass value of diff in year to checkifneedplural
-    // else month is < 0
-    // pass value of createdAt month and currentTime month in number form to monthCalcuation
+    if (differenceInYear == 1) {
+      if (differenceInMonth >= 0) {
+        // check month
+        // if month is >= 0 pass value of diff in year to checkifneedplural
+        return checkIfNeedPluralFormOfCreatedAtDuration(differenceInMonth);
+      } else {
+        // else month is < 0
+        // pass value of createdAt month and currentTime month in number form to monthCalcuation
+        return monthCalcuation(
+          cachedData.monthInNumber[createdAt.month],
+          cachedData.monthInNumber[currentTime.month]
+        );
+      }
+    }
     /** **/
     // if year > 1 pass diff in year value to checkifneedplural
+    if (differenceInYear > 1) {
+      return checkIfNeedPluralFormOfCreatedAtDuration(differenceInYear);
+    }
   }
 
   /**
@@ -274,11 +317,11 @@
     // call day calculation or week calculation based on conditions
     if (differenceInDays <= 7) {
       // call daysCalculation
-      daysCalculation(differenceInDays);
+      return daysCalculation(differenceInDays);
     }
     if (differenceInDays >= 8 && differenceInDays <= 31) {
       // call weeksCalculation
-      weeksCalculation(differenceInDays);
+      return weeksCalculation(differenceInDays);
     }
   }
 
@@ -313,10 +356,11 @@
    * **/
 
   function monthCalcuation(createdAtMonth, currentTimeMonth) {
-    // calculate months left in createdAtYear by subtract createdAtMonth value from 12
+    // calculate months left in createdAtYear by subtracting createdAtMonth value from 12
     const monthsLeftInCreatedAtTime = 12 - createdAtMonth;
     // take that value + currentTimeMonth value to get total months
-    return monthsLeftInCreatedAtTime + currentTimeMonth;
+    const totalOfMonths = monthsLeftInCreatedAtTime + currentTimeMonth;
+    return checkIfNeedPluralFormOfCreatedAtDuration(totalOfMonths, "month");
   }
 
   /**
@@ -325,6 +369,44 @@
 
   function checkIfNeedPluralFormOfCreatedAtDuration(digit, dayFormStr) {
     return digit > 1 ? `${digit} ${dayFormStr}s` : `${digit} ${dayFormStr}`;
+  }
+
+  /**
+   * create user data obj when user click send on comment box or reply for reply box
+   * **/
+
+  function createUserDataObj(
+    userUniqueID,
+    usercontent,
+    level = "base",
+    timeObj,
+    replyObj
+  ) {
+    //
+    const userObj = {};
+    userObj.uniqueID = userUniqueID;
+    userObj[`${userUniqueID}content`] = usercontent;
+    userObj[`${userUniqueID}score`] = 0;
+    userObj[`${userUniqueID}time`] = timeObj;
+    userObj.level = level;
+    userObj[`${replyObj[userObj.level]}LevelReplies`] = [];
+    return userObj;
+  }
+
+  /**
+   * create time obj
+   * **/
+
+  function createTimeObj(dateString = new Date().toDateString()) {
+    const [month, date, year] = dateString.slice(4).split(" ");
+    return {
+      createdAt: dateString,
+      dateObj: {
+        year,
+        month,
+        date,
+      },
+    };
   }
 
   function useLocalStorage() {
@@ -398,11 +480,10 @@
     };
     // local storage
     const localStoragedata = {
-      comments: [
-        {
-          commentUser: data.currentUser.userName,
-        },
-      ],
+      /**
+       * we will add obj to comment property dynamically
+       * **/
+      comments: [],
     };
     localStorage.setItem("commentDataObj", JSON.stringify(localStoragedata));
     return function closureOurData() {
