@@ -6,6 +6,7 @@
   const closeBtnModal = document.querySelector(".close-select-user-modal");
   const sendPostBtn = document.querySelector(".post-send-btn");
   const replyPostBtn = document.querySelector(".reply-post-btn");
+  const commentsContainer = document.querySelector(".comments");
   // const commentTextBox = document.querySelector(".comment-textbox");
   const commentTextBoxAvatarImg = document.querySelector(
     ".comment-textbox .avatar img"
@@ -50,20 +51,65 @@
     const classOfBtn = event.target.className;
     if (classOfBtn == "post-send-btn") {
       //   console.log(createUniqueId(cachedData.currentUser.userName));
-      const newUniqueId = createUniqueId(cachedData.currentUser.userName);
-      cachedData.uniqueID = newUniqueId;
-      const testObj = createUserDataObj(
-        cachedData.uniqueID,
-        "Hello world",
+      //   const newUniqueId = createUniqueId(cachedData.currentUser.userName);
+      //   cachedData.uniqueID = newUniqueId;
+      // user entered comment data/value
+      const commentTextareaValue = document.querySelector(
+        ".comment-textbox textarea"
+      ).value;
+      const commentUserDataObj = createUserDataObj(
+        createUniqueId(cachedData.currentUser.userName),
+        commentTextareaValue,
         undefined,
         createTimeObj(),
-        cachedData.repliesLevel
+        cachedData.repliesLevel,
+        cachedData.currentUser
       );
-      localStoragedata.comments.push(testObj);
+      document.querySelector(".comment-textbox textarea").value = "";
+      commentUserDataObj[
+        `${cachedData.repliesLevel[commentUserDataObj.level]}LevelReplies`
+      ].push("hello react world");
+      console.log(
+        commentUserDataObj[
+          `${cachedData.repliesLevel[commentUserDataObj.level]}LevelReplies`
+        ]
+      );
+      //   localStoragedata.comments.push(commentUserDataObj);
       localStorage.setItem("commentDataObj", JSON.stringify(localStoragedata));
     }
     if (classOfBtn == "reply-post-btn") {
       console.log("reply");
+      /**
+       * use uniqueID to select reply-textbox and linerepliesbox element
+       * **/
+      // use .closest method to find element with attr uniqueID, get value of that attr
+      // use that uniqueID, run func that will loop through array of objs
+      // and find the obj that matches uniqueID
+      // pass value of uniqueID
+      const replyboxTextareaValue = document.querySelector(
+        ".uniqueId-wrapper .reply-textbox textarea"
+      ).value;
+      const replyUserDataObj = createUserDataObj(
+        createUniqueId(cachedData.currentUser.userName),
+        replyboxTextareaValue,
+        // value of uniqueID obj level will go here
+        "first",
+        createTimeObj(),
+        cachedData.repliesLevel,
+        cachedData.currentUser
+      );
+      // empty textarea text
+      document.querySelector(
+        ".uniqueId-wrapper .reply-textbox textarea"
+      ).value = "";
+      // once we get the obj of data we will use that obj level property along with obj replieslevel
+      // to build a string that will match the value of the div element's linerepliesbox attr
+      // since we have the obj that matches the uniqueID we can add the userDataObj that is created
+      // when user clicked on reply post btn
+      // another option we can run func that will loop through objs in array
+      // find the obj with uniqueID that matches the
+      // uniqueID of container of our content,reply box and replies element
+      // add the userDataObj created when user clicked on reply post btn
     }
   }
   // send/reply comment
@@ -115,20 +161,62 @@
             "src",
             cachedData.currentUser.imgSrc
           );
+          // select all element with user attr
+          // filter out element with user attr that match current user
+          // use foreach to loop through array and set value "true" to attr currentuser
+          // and filter out element with user attr that does not match current user
+          // use foreach to loop through array and set value "false" to attr currentuser
+          const [changeValueToTrue, changeValueToFalse] = Array.prototype.slice
+            .call(document.querySelectorAll("[user]"))
+            .reduce(
+              function makeTwoArrays(buildingUp, currentValue) {
+                // get value of attr user for each elemetn
+                const userAttValue = currentValue.getAttribute("user");
+                userAttValue == cachedData.currentUser.userName
+                  ? buildingUp[0].push(currentValue)
+                  : buildingUp[1].push(currentValue);
+                return buildingUp;
+                // if else statement
+                // if (userAttValue == cachedData.currentUser.userName) {
+                //     buildingUp[0].push(currentValue);
+                // } else {
+                //     buildingUp[1].push(currentValue);
+                // }
+                // return buildingUp;
+              },
+              [[], []]
+            );
+          alert("for reply btn aria-label say reply to post made by");
+          alert(
+            "when use hit send or reply btn. say comment or reply posted for a11y"
+          );
+          // use foreach to loop through array and set value "true" to attr currentuser
+          changeValueToTrue.forEach(function showDeleteAndEditBtn(element) {
+            if (element.getAttribute("data-currentUser") != "true") {
+              element.setAttribute("data-currentUser", "true");
+            }
+          });
+          // use foreach to loop through array and set value "false" to attr currentuser
+          changeValueToFalse.forEach(function showReplyBtn(element) {
+            if (element.getAttribute("data-currentUser") != "false") {
+              element.setAttribute("data-currentUser", "false");
+            }
+          });
+          // select all all element with this selector .reply-textbox .avatar img
+          // set src attr of each img element current user img file
+          // use value in cachedData.currentUser
+          Array.prototype.slice
+            .call(document.querySelectorAll(".reply-textbox .avatar img"))
+            .forEach(function changeImgSrc(eachImg) {
+              eachImg.setAttribute("src", cachedData.currentUser.imgSrc);
+            });
           console.log(cachedData.currentUser);
         }
         // hide user buttons modal when user click on close modal button or user btn
         hideSelectUserButtons(selectBtnModal);
-        localStoragedata.comments[0].commentUser =
-          cachedData.currentUser.userName;
-        console.log(localStoragedata);
-        localStorage.setItem(
-          "commentDataObj",
-          JSON.stringify(localStoragedata)
-        );
+        console.log(cachedData);
         //   focus select user btn when user click on close modal btn or a user btn
         selectUserBtn.focus();
-        console.log(localStorage.getItem("commentDataObj"));
       }
     }
   }
@@ -380,7 +468,8 @@
     usercontent,
     level = "base",
     timeObj,
-    replyObj
+    replyObj,
+    usernameAngImgObj
   ) {
     //
     const userObj = {};
@@ -388,6 +477,7 @@
     userObj[`${userUniqueID}content`] = usercontent;
     userObj[`${userUniqueID}score`] = 0;
     userObj[`${userUniqueID}time`] = timeObj;
+    userObj.userInfo = usernameAngImgObj;
     userObj.level = level;
     userObj[`${replyObj[userObj.level]}LevelReplies`] = [];
     return userObj;
@@ -409,9 +499,14 @@
     };
   }
 
+  /**
+   * create
+   * **/
+
   function useLocalStorage() {
     // data obj
     const data = {
+      objMatchingUniqueID: null,
       repliesLevel: {
         base: "first",
         first: "second",
@@ -498,6 +593,7 @@
       base: "first",
       first: "second",
       second: "third",
+      arrOfObj: [],
     };
     function nestedLooping(list) {
       list.forEach(function printStuff(eachObj) {
@@ -539,10 +635,57 @@
       });
     }
 
+    function nestedLoopingReturnArray(list, repliesLevelObj) {
+      const result = [];
+      list.forEach(function printStuff(eachObj) {
+        //   build element
+        //   const buildingAccessPropStr = repliesLevelObj[eachObj.level];
+        if (
+          eachObj.hasOwnProperty(
+            `${repliesLevelObj[eachObj.level]}LevelReplies`
+          ) &&
+          eachObj[`${repliesLevelObj[eachObj.level]}LevelReplies`].length > 0
+        ) {
+          nestedLoopingReturnArray(
+            eachObj[`${repliesLevelObj[eachObj.level]}LevelReplies`],
+            repliesLevelObj
+          );
+        }
+        /**
+         * order of console.log() print when console.log(eachObj.print); is below
+         * if (eachObj.hasOwnProperty("replies") && eachObj.replies.length > 0) {
+         * nestedLooping(eachObj.replies);
+         * }
+         * secondlevel first obj
+         * firstlevel first obj
+         * thirdlevel second obj
+         * secondlevel second obj
+         * number
+         * string
+         * second level
+         * secondlevel
+         * firstlevel second obj
+         * thirdlevel
+         * secondlevel third obj
+         * thirdlevel
+         * secondlevel third obj
+         * firstlevel third obj
+         * **/
+        if (eachObj.hasOwnProperty("uniqueID") && eachObj.uniqueID == "123") {
+          //   eachObj.uniqueID = "hello we changed the value of the string";
+          repliesLevelObj.arrOfObj.push(eachObj);
+        }
+        console.log(eachObj?.uniqueID);
+        console.log(eachObj.print);
+      });
+      //   return result;
+    }
+
     const testArr = [
       {
         print: "firstlevel first obj",
         level: "base",
+        uniqueID: "123",
         firstLevelReplies: [{ print: "secondlevel first obj" }],
       },
       {
@@ -552,6 +695,7 @@
           {
             print: "secondlevel second obj",
             level: "first",
+            uniqueID: "123",
             secondLevelReplies: [{ print: "thirdlevel second obj" }],
           },
           {
@@ -573,15 +717,18 @@
       {
         print: "firstlevel third obj",
         level: "base",
+        uniqueID: "123",
         firstLevelReplies: [
           {
             print: "secondlevel third obj",
             level: "first",
+            uniqueID: "123",
             secondLevelReplies: [{ print: "thirdlevel" }],
           },
           {
             print: "secondlevel third obj",
             level: "first",
+            uniqueID: "123",
             secondLevelReplies: [{ print: "thirdlevel" }],
           },
         ],
