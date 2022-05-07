@@ -7,6 +7,7 @@
   const sendPostBtn = document.querySelector(".post-send-btn");
   const replyPostBtn = document.querySelector(".reply-post-btn");
   const commentsContainer = document.querySelector(".comments");
+  const assistiveTextContainer = document.querySelector(".assistive-text");
   // const commentTextBox = document.querySelector(".comment-textbox");
   const commentTextBoxAvatarImg = document.querySelector(
     ".comment-textbox .avatar img"
@@ -74,6 +75,7 @@
           `${cachedData.repliesLevel[commentUserDataObj.level]}LevelReplies`
         ]
       );
+      console.log(commentUserDataObj);
       //   localStoragedata.comments.push(commentUserDataObj);
       localStorage.setItem("commentDataObj", JSON.stringify(localStoragedata));
     }
@@ -82,9 +84,13 @@
       /**
        * use uniqueID to select reply-textbox and linerepliesbox element
        * **/
+      /**
+       *
+       * **/
       // use .closest method to find element with attr uniqueID, get value of that attr
       // use that uniqueID, run func that will loop through array of objs
       // and find the obj that matches uniqueID
+      // assign that obj to property objMatchingUniqueID in cachedObj
       // pass value of uniqueID
       const replyboxTextareaValue = document.querySelector(
         ".uniqueId-wrapper .reply-textbox textarea"
@@ -110,6 +116,12 @@
       // find the obj with uniqueID that matches the
       // uniqueID of container of our content,reply box and replies element
       // add the userDataObj created when user clicked on reply post btn
+      /**
+       * working with uniqueID obj for push reply content obj to array
+       * select element with class uniqueID-level-replies to append reply content element to it
+       * use uniqueID obj with repliesLevel obj to select element with linerepliesbox
+       * then build our class string to target element with class uniqueID-level-replies
+       * **/
     }
   }
   // send/reply comment
@@ -137,11 +149,18 @@
           // get img src
           const userBtnChildImgSrc =
             btnInUserModalClicked.firstElementChild.getAttribute("src");
-          console.log(userBtnSelectname, userBtnChildImgSrc);
+          // get full name from aria-label
+          const [firstName, lastName] = btnInUserModalClicked
+            .getAttribute("aria-label")
+            .split(" ")
+            .slice(4);
+          const userFullname = `${firstName} ${lastName}`;
+          console.log(userBtnSelectname, userBtnChildImgSrc, userFullname);
           //   update current user info in dataobj
           updateCurrentUserInCachedObj(
             userBtnSelectname,
             userBtnChildImgSrc,
+            userFullname,
             cachedData
           );
 
@@ -188,7 +207,7 @@
             );
           alert("for reply btn aria-label say reply to post made by");
           alert(
-            "when use hit send or reply btn. say comment or reply posted for a11y"
+            "when user hit send or reply btn. say comment or reply posted for a11y"
           );
           // use foreach to loop through array and set value "true" to attr currentuser
           changeValueToTrue.forEach(function showDeleteAndEditBtn(element) {
@@ -235,9 +254,10 @@
   }
 
   // updateCurrentUserInCachedObj
-  function updateCurrentUserInCachedObj(user, imgSrc, data) {
+  function updateCurrentUserInCachedObj(user, imgSrc, name, data) {
     data.currentUser.userName = user;
     data.currentUser.imgSrc = imgSrc;
+    data.currentUser.name = name;
   }
   // assign values to select user btns
   function assignValuesSelectUserBtns(btnsArray, arrayOfObj) {
@@ -500,8 +520,354 @@
   }
 
   /**
-   * create
+   * create elements
    * **/
+
+  function createElementForCommentOrReply(tag, objectOfAttr, contentValue) {
+    // create element
+    const elementForCommentOrReply = document.createElement(tag);
+    // turn obj of attr into an array of subarrays with [attr,attrValue]
+    const arrayOfSubarrayOfAttrAndAttrValue = Object.entries(objectOfAttr);
+    // use forEach to assign attr to element
+    arrayOfSubarrayOfAttrAndAttrValue.forEach(function assignAttr(subarray) {
+      const [attr, attrValue] = subarray;
+      elementForCommentOrReply.setAttribute(attr, attrValue);
+    });
+    elementForCommentOrReply.innerText = contentValue ? contentValue : "";
+    return elementForCommentOrReply;
+  }
+
+  /**
+   * create div with uniqueID attr
+   * **/
+
+  /**
+   * children of div with uniqueID
+   * **/
+
+  /**
+   * div with class content
+   *
+   * **/
+
+  function contentContainer(uniqueIdObj, userContent) {
+    // content container
+    const contentContainer = createElementForCommentOrReply("DIV", {
+      class: "content",
+      "data-currentUser": "false",
+      user: `${uniqueIdObj.userInfo.userName}`,
+    });
+    // div .like-counter
+    const likeCounter = createElementForCommentOrReply("DIV", {
+      class: "like-counter",
+    });
+    // button .plus > img plus
+    const plusBtn = createElementForCommentOrReply("BUTTON", {
+      class: "plus",
+      "aria-label": "increase score",
+    });
+    const plusImg = createElementForCommentOrReply("IMG", {
+      src: "./images/icon-plus.svg",
+      alt: "",
+    });
+    // append plus img to button
+    plusBtn.append(plusImg);
+    // span .number
+    const contentOfCounter = createElementForCommentOrReply(
+      "SPAN",
+      { class: "number" },
+      "0"
+    );
+    // button .minus > img minus
+    const minusBtn = createElementForCommentOrReply("BUTTON", {
+      class: "minus",
+      "aria-label": "decrease score",
+    });
+    const minusImg = createElementForCommentOrReply("IMG", {
+      src: "./images/icon-minus.svg",
+      alt: "",
+    });
+    // append minus img to button
+    minusBtn.append(minusImg);
+    // append children to likeCounter
+    appendChildrenToParent(likeCounter), [plusBtn, contentOfCounter, minusBtn];
+    // div .user-info
+    const userInfoContainer = createElementForCommentOrReply("DIV", {
+      class: "user-info",
+    });
+    // > img
+    const userImg = createElementForCommentOrReply("IMG", {
+      src: `${uniqueIdObj.userInfo.imgSrc}`,
+      alt: "",
+    });
+    // > span .name
+    const nameElement = createElementForCommentOrReply(
+      "SPAN",
+      { class: "name" },
+      uniqueIdObj.userInfo.userName
+    );
+    // > div .status
+    const statusWrapper = createElementForCommentOrReply("DIV", {
+      class: "status",
+    });
+    // > > span content you
+    const statusContent = createElementForCommentOrReply("SPAN", {}, "you");
+    // append status text to wrapper
+    statusWrapper.append(statusContent);
+    // > div .createdAt
+    const createdWrapper = createElementForCommentOrReply("DIV", {
+      class: "createdAt",
+    });
+    // > > span .duration + span content ago
+    const durationElement = createElementForCommentOrReply(
+      "SPAN",
+      { class: "duration" },
+      "0 day"
+    );
+    const durationTextContent = createElementForCommentOrReply(
+      "SPAN",
+      {},
+      "ago"
+    );
+    // append children to createdWrapper
+    appendChildrenToParent(createdWrapper, [
+      durationElement,
+      durationTextContent,
+    ]);
+    // append children to user-info
+    appendChildrenToParent(userInfoContainer, [
+      userImg,
+      nameElement,
+      statusWrapper,
+      createdWrapper,
+    ]);
+    // button .reply-btn use teneray operator for aria label value
+    const replyBtn = createElementForCommentOrReply("BUTTON", {
+      class: "reply-btn",
+      "aria-label":
+        uniqueIdObj.level == "base"
+          ? `reply to ${uniqueIdObj.userInfo.name} comment post`
+          : `reply to ${uniqueIdObj.userInfo.name} reply post`,
+    });
+    const replyBtnImg = createElementForCommentOrReply("IMG", {
+      src: "./images/icon-reply.svg",
+    });
+    const replyBtnText = createElementForCommentOrReply("SPAN", {}, "Reply");
+    // append children to reply btn
+    appendChildrenToParent(replyBtn, [replyBtnImg, replyBtnText]);
+    // div .delete-edit-img-container
+    const deleteEditBtnContainer = createElementForCommentOrReply("DIV", {
+      class: "delete-edit-img-container",
+    });
+    // > button .delete-trash-btn use teneray operator for aria label value
+    // > > img + span content DELETE
+    const deleteBtn = createElementForCommentOrReply("BUTTON", {
+      class: "delete-trash-btn",
+      "aria-label":
+        uniqueIdObj.level == "base"
+          ? `delete your comment post`
+          : `delete your reply post to ${uniqueIdObj.user.name}`,
+    });
+    const deleteBtnImg = createElementForCommentOrReply("IMG", {
+      src: "./images/icon-delete.svg",
+    });
+    const deleteBtnText = createElementForCommentOrReply("SPAN", {}, "Delete");
+    // append children to deleteBtn
+    appendChildrenToParent(deleteBtn, [deleteBtnImg, deleteBtnText]);
+    // > button .edit-btn use teneray operator for aria label value
+    // > > img + span content EDIT
+    const editBtn = createElementForCommentOrReply("BUTTON", {
+      class: "edit-btn",
+      "aria-label":
+        uniqueIdObj.level == "base"
+          ? `edit your comment post`
+          : `edit your reply post to ${uniqueIdObj.user.name}`,
+    });
+    const editBtnImg = createElementForCommentOrReply("IMG", {
+      src: "./images/icon-edit.svg",
+    });
+    const editBtnText = createElementForCommentOrReply("SPAN", {}, "Edit");
+    // append children to editBtn
+    appendChildrenToParent(editBtn, [editBtnImg, editBtnText]);
+    // append children to deleteEditBtnContainer
+    appendChildrenToParent(deleteEditBtnContainer, [deleteBtn, editBtn]);
+    // div .paragraph-edit-box-container attr editbtnclick
+    const paragraphEditBoxContainer = createElementForCommentOrReply("DIV", {
+      class: "paragraph-edit-box-container",
+      editbtnclick: "false",
+    });
+    // > p .text-content
+    const paragraphWrapper = createElementForCommentOrReply("P", {
+      class: "text-content",
+    });
+    // > > span .atUser + span .text
+    const spanAtUser = createElementForCommentOrReply(
+      "SPAN",
+      { class: "atUser" },
+      uniqueIdObj.level != "base" ? `@${uniqueIdObj.userInfo.userName}` : null
+    );
+    const commentReplyContent = createElementForCommentOrReply(
+      "SPAN",
+      { class: "text" },
+      userContent
+    );
+    // use teneray operator to append span with class .atUser to p .text-content or not
+    uniqueIdObj.level == "base"
+      ? paragraphWrapper.append(commentReplyContent)
+      : (paragraphWrapper.append(spanAtUser),
+        paragraphWrapper.append(commentReplyContent));
+    // > div .textarea-wrapper
+    const textareaContainer = createElementForCommentOrReply("DIV", {
+      class: "textarea-wrapper",
+    });
+    // > > textarea
+    const textareaElement = createElementForCommentOrReply("TEXTAREA", {
+      name: "enter-edit",
+      cols: "30",
+      rows: "3",
+    });
+    // append textarea element to wrapper
+    textareaContainer.append(textareaElement);
+    // append children to paragraphEditBoxContainer
+    appendChildrenToParent(paragraphEditBoxContainer, [
+      paragraphWrapper,
+      textareaContainer,
+    ]);
+    // button .update-post-btn cotent UPDATE
+    const updateBtn = createElementForCommentOrReply(
+      "BUTTON",
+      {
+        class: "update-post-btn",
+      },
+      "UPDATE"
+    );
+    // append children to content wrapper
+    appendChildrenToParent(contentContainer, [
+      likeCounter,
+      userInfoContainer,
+      replyBtn,
+      deleteEditBtnContainer,
+      paragraphEditBoxContainer,
+      updateBtn,
+    ]);
+    return contentContainer;
+  }
+
+  /**
+   * div with class reply-textbox
+   * **/
+
+  function replyTextboxContainer() {
+    // parent element with attr .reply-textbox and replybtnclick="false"
+    const textboxParent = createElementForCommentOrReply("DIV", {
+      class: "reply-textbox",
+      replybtnclick: "false",
+    });
+    // div .avatar with img as child
+    const avatarWrapper = createElementForCommentOrReply("DIV", {
+      class: "avatar",
+    });
+    const avatarImg = createElementForCommentOrReply("IMG", {
+      alt: "",
+      src: "",
+    });
+    avatarWrapper.append(avatarImg);
+    // div .textarea-wrapper with textarea as child
+    const textareaContainer = createElementForCommentOrReply("DIV", {
+      class: "textarea-wrapper",
+    });
+    const textareaElement = createElementForCommentOrReply("TEXTAREA", {
+      name: "enter-reply",
+      cols: "30",
+      rows: "3",
+    });
+    textareaContainer.append(textareaElement);
+    // button .reply-post-btn content REPLY
+    const replyPostBtn = createElementForCommentOrReply(
+      "BUTTON",
+      { class: "reply-post-btn" },
+      "REPLY"
+    );
+    // add click event listener to reply btn here
+    // append children to parent
+    appendChildrenToParent(textboxParent, [
+      avatarWrapper,
+      textareaContainer,
+      replyPostBtn,
+    ]);
+    return textboxParent;
+  }
+
+  /**
+   * children of reply-textbox element
+   * **/
+
+  /**
+   * div with attr hasreplies and linerepliesbox
+   * **/
+
+  function lineAndRepliesContainer(uniqueIdObj, repliesLevelObj) {
+    // div parent element attr hasreplies and linerepliesbox
+    const lineRepliesParent = createElementForCommentOrReply("DIV", {
+      hasreplies: "false",
+      linerepliesbox: `${repliesLevelObj[uniqueIdObj.level]}level`,
+    });
+    // div .line-container
+    const lineParent = createElementForCommentOrReply("DIV", {
+      class: "line-container",
+    });
+    const lineElement = createElementForCommentOrReply("SPAN", {
+      class: "line",
+    });
+    lineParent.append(lineElement);
+    // div .uniqueId-level-replies
+    const levelRepliesContainer = createElementForCommentOrReply("DIV", {
+      class: `${uniqueIdObj.uniqueID}-${
+        repliesLevelObj[uniqueIdObj.level]
+      }-replies`,
+    });
+    // append children to parent
+    appendChildrenToParent(lineRepliesParent, [
+      lineParent,
+      levelRepliesContainer,
+    ]);
+    return lineRepliesParent;
+  }
+
+  /**
+   * children of hasreplies element
+   * **/
+
+  /**
+   * append elements to parent element
+   * **/
+
+  function appendChildrenToParent(parentElement, childrenArray) {
+    childrenArray.forEach(function addChildToParent(child) {
+      parentElement.append(child);
+    });
+  }
+
+  /**
+   * postReplyAndUpdateHelper
+   * **/
+
+  function postReplyAndUpdateHelper(textareaValue) {
+    // make copy of username string and text content
+    const textString = textareaValue.split(" ");
+    const atUserNameBeforeRemovingLastChar = textString.slice(0, 1);
+    // get content for element with class text
+    const restOfTextContent = textString.slice(1);
+    // get @username and remove last char of string
+    const atUserName = atUserNameBeforeRemovingLastChar.slice(
+      0,
+      atUserNameBeforeRemovingLastChar.length - 1
+    );
+    return {
+      valueForTextElement: restOfTextContent,
+      atUserName,
+    };
+  }
 
   function useLocalStorage() {
     // data obj
@@ -548,6 +914,7 @@
       currentUser: {
         imgSrc: "./images/avatars/image-amyrobson.png",
         userName: "amyrobson",
+        name: "Amy Robson",
       },
       uniqueID: null,
       contentForSelectUserButtons: [
@@ -555,21 +922,25 @@
           name: "amyrobson",
           src: "./images/avatars/image-amyrobson.png",
           label: "click to select user amy robson",
+          fullName: "Amy Robson",
         },
         {
           name: "juliusomo",
           src: "./images/avatars/image-juliusomo.png",
           label: "click to select user juliu somo",
+          fullName: "Julius Somo",
         },
         {
           name: "maxblagun",
           src: "./images/avatars/image-maxblagun.png",
           label: "click to select user max blagun",
+          fullName: "Max Blagun",
         },
         {
           name: "ramsesmiron",
           src: "./images/avatars/image-ramsesmiron.png",
           label: "click to select user ramses miron",
+          fullName: "Ramses Miron",
         },
       ],
     };
