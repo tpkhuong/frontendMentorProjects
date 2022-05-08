@@ -26,8 +26,13 @@
   // add click event to select user btns wrapper
   applyEvent(selectUserModalWrapper, "click", clickEventForUserBtnsModal);
   // add click event to comment/reply element
-  applyEvent(sendPostBtn, "click", runFuncForSendOrReplyBtn);
-  applyEvent(replyPostBtn, "click", runFuncForSendOrReplyBtn);
+  applyEvent(sendPostBtn, "click", sendBtnCommentTextBox);
+  // add event below to reply post btn when we create the reply post btn
+  /**
+   * moved event listener algorithm for reply post btn to
+   * replyTextboxContainer function algorithm
+   * **/
+  // applyEvent(replyPostBtn, "click", runFuncForSendOrReplyBtn);
   // add click to select user button
   applyEvent(selectUserBtn, "click", showSelectUserButtons);
   // add focus and blur listen to select user btn and close modal btn
@@ -48,82 +53,275 @@
     }
   }
   // send post comment/reply post event func
-  function runFuncForSendOrReplyBtn(event) {
-    const classOfBtn = event.target.className;
-    if (classOfBtn == "post-send-btn") {
-      //   console.log(createUniqueId(cachedData.currentUser.userName));
-      //   const newUniqueId = createUniqueId(cachedData.currentUser.userName);
-      //   cachedData.uniqueID = newUniqueId;
-      // user entered comment data/value
-      const commentTextareaValue = document.querySelector(
-        ".comment-textbox textarea"
-      ).value;
-      const commentUserDataObj = createUserDataObj(
-        createUniqueId(cachedData.currentUser.userName),
-        commentTextareaValue,
-        undefined,
-        createTimeObj(),
-        cachedData.repliesLevel,
-        cachedData.currentUser
-      );
-      document.querySelector(".comment-textbox textarea").value = "";
-      commentUserDataObj[
-        `${cachedData.repliesLevel[commentUserDataObj.level]}LevelReplies`
-      ].push("hello react world");
-      console.log(
-        commentUserDataObj[
-          `${cachedData.repliesLevel[commentUserDataObj.level]}LevelReplies`
-        ]
-      );
-      console.log(commentUserDataObj);
-      //   localStoragedata.comments.push(commentUserDataObj);
-      localStorage.setItem("commentDataObj", JSON.stringify(localStoragedata));
-    }
-    if (classOfBtn == "reply-post-btn") {
-      console.log("reply");
-      /**
-       * use uniqueID to select reply-textbox and linerepliesbox element
-       * **/
-      /**
-       *
-       * **/
-      // use .closest method to find element with attr uniqueID, get value of that attr
-      // use that uniqueID, run func that will loop through array of objs
-      // and find the obj that matches uniqueID
-      // assign that obj to property objMatchingUniqueID in cachedObj
-      // pass value of uniqueID
-      const replyboxTextareaValue = document.querySelector(
-        ".uniqueId-wrapper .reply-textbox textarea"
-      ).value;
-      const replyUserDataObj = createUserDataObj(
-        createUniqueId(cachedData.currentUser.userName),
-        replyboxTextareaValue,
-        // value of uniqueID obj level will go here
-        "first",
-        createTimeObj(),
-        cachedData.repliesLevel,
-        cachedData.currentUser
-      );
-      // empty textarea text
+  // function runFuncForSendOrReplyBtn(event) {
+  //   const classOfBtn = event.target.className;
+  //   if (classOfBtn == "post-send-btn") {
+  //     //   console.log(createUniqueId(cachedData.currentUser.userName));
+  //     //   const newUniqueId = createUniqueId(cachedData.currentUser.userName);
+  //     //   cachedData.uniqueID = newUniqueId;
+  //     // user entered comment data/value
+  //     const commentTextareaValue = document.querySelector(
+  //       ".comment-textbox textarea"
+  //     ).value;
+  //     const commentUserDataObj = createUserDataObj(
+  //       createUniqueId(cachedData.currentUser.userName),
+  //       commentTextareaValue,
+  //       undefined,
+  //       createTimeObj(),
+  //       cachedData.repliesLevel,
+  //       cachedData.currentUser
+  //     );
+  //     document.querySelector(".comment-textbox textarea").value = "";
+  //     commentUserDataObj[
+  //       `${cachedData.repliesLevel[commentUserDataObj.level]}LevelReplies`
+  //     ].push("hello react world");
+  //     console.log(
+  //       commentUserDataObj[
+  //         `${cachedData.repliesLevel[commentUserDataObj.level]}LevelReplies`
+  //       ]
+  //     );
+  //     console.log(commentUserDataObj);
+  //     //   localStoragedata.comments.push(commentUserDataObj);
+  //     localStorage.setItem("commentDataObj", JSON.stringify(localStoragedata));
+  //   }
+  //   if (classOfBtn == "reply-post-btn") {
+  //     console.log("reply");
+  //     /**
+  //      * use uniqueID to select reply-textbox and linerepliesbox element
+  //      * **/
+  //     /**
+  //      *
+  //      * **/
+  //     // use .closest method to find element with attr uniqueID, get value of that attr
+  //     // use that uniqueID, run func that will loop through array of objs
+  //     // and find the obj that matches uniqueID
+  //     // assign that obj to property objMatchingUniqueID in cachedObj
+  //     // pass value of uniqueID
+  //     const replyboxTextareaValue = document.querySelector(
+  //       ".uniqueId-wrapper .reply-textbox textarea"
+  //     ).value;
+  //     const replyUserDataObj = createUserDataObj(
+  //       createUniqueId(cachedData.currentUser.userName),
+  //       replyboxTextareaValue,
+  //       // value of uniqueID obj level will go here
+  //       "first",
+  //       createTimeObj(),
+  //       cachedData.repliesLevel,
+  //       cachedData.currentUser
+  //     );
+  //     // empty textarea text
+  //     document.querySelector(
+  //       ".uniqueId-wrapper .reply-textbox textarea"
+  //     ).value = "";
+  //     // once we get the obj of data we will use that obj level property along with obj replieslevel
+  //     // to build a string that will match the value of the div element's linerepliesbox attr
+  //     // since we have the obj that matches the uniqueID we can add the userDataObj that is created
+  //     // when user clicked on reply post btn
+  //     // another option we can run func that will loop through objs in array
+  //     // find the obj with uniqueID that matches the
+  //     // uniqueID of container of our content,reply box and replies element
+  //     // add the userDataObj created when user clicked on reply post btn
+  //     /**
+  //      * working with uniqueID obj for push reply content obj to array
+  //      * select element with class uniqueID-level-replies to append reply content element to it
+  //      * use uniqueID obj with repliesLevel obj to select element with linerepliesbox
+  //      * then build our class string to target element with class uniqueID-level-replies
+  //      * **/
+  //   }
+  // }
+
+  /**
+   * send btn algorithm
+   * **/
+
+  function sendBtnCommentTextBox(event) {
+    const dataInLocalStorage =
+      localStorage.getItem("commentDataObj") != null
+        ? JSON.parse(localStorage.getItem("commentDataObj"))
+        : null;
+    console.log(dataInLocalStorage);
+    //   console.log(createUniqueId(cachedData.currentUser.userName));
+    //   const newUniqueId = createUniqueId(cachedData.currentUser.userName);
+    //   cachedData.uniqueID = newUniqueId;
+    // user entered comment data/value
+    const commentTextareaValue = document.querySelector(
+      ".comment-textbox textarea"
+    ).value;
+    const commentUserDataObj = createUserDataObj(
+      createUniqueId(cachedData.currentUser.userName),
+      commentTextareaValue,
+      undefined,
+      createTimeObj(),
+      cachedData.repliesLevel,
+      cachedData.currentUser
+    );
+    document.querySelector(".comment-textbox textarea").value = "";
+    // add userDataObj to comment array in localStorage
+    // commentUserDataObj[
+    //   `${cachedData.repliesLevel[commentUserDataObj.level]}LevelReplies`
+    // ].push("hello react world");
+    // console.log(
+    //   commentUserDataObj[
+    //     `${cachedData.repliesLevel[commentUserDataObj.level]}LevelReplies`
+    //   ]
+    // );
+    /**
+     * create our three children for div with atr uniqueID element
+     * **/
+    const uniqueIdWrapper = createElementForCommentOrReply("DIV", {
+      uniqueID: commentUserDataObj.uniqueID,
+    });
+    // three children
+    const contentWrapper = contentContainer(commentUserDataObj);
+    const replyBoxWrapper = replyTextboxContainer(
+      commentUserDataObj,
+      cachedData.repliesLevel
+    );
+    const verticalLineRepliesWrapper = lineAndRepliesContainer(
+      commentUserDataObj,
+      cachedData.repliesLevel
+    );
+    // append childen to uniqueID wrapper
+    appendChildrenToParent(uniqueIdWrapper, [
+      contentWrapper,
+      replyBoxWrapper,
+      verticalLineRepliesWrapper,
+    ]);
+    // append uniqueId wrapper to div .comment element
+    document.querySelector(".comments").append(uniqueIdWrapper);
+    console.log(commentUserDataObj);
+    console.log(document.querySelector(".comment"));
+    // dataInLocalStorage.push(commentUserDataObj);
+    // localStoragedata.comments.push(commentUserDataObj);
+    localStorage.setItem("commentDataObj", JSON.stringify(localStoragedata));
+  }
+
+  /**
+   * bind for reply post btn
+   * **/
+
+  function bindUniqueObjForReplyPostBtn(event) {
+    // we want to get data from our local storage commentDataObj key
+    const dataFromLocalStorage = JSON.parse(
+      localStorage.getItem("commentDataObj")
+    );
+    console.log(this);
+    console.log(
       document.querySelector(
-        ".uniqueId-wrapper .reply-textbox textarea"
-      ).value = "";
-      // once we get the obj of data we will use that obj level property along with obj replieslevel
-      // to build a string that will match the value of the div element's linerepliesbox attr
-      // since we have the obj that matches the uniqueID we can add the userDataObj that is created
-      // when user clicked on reply post btn
-      // another option we can run func that will loop through objs in array
-      // find the obj with uniqueID that matches the
-      // uniqueID of container of our content,reply box and replies element
-      // add the userDataObj created when user clicked on reply post btn
-      /**
-       * working with uniqueID obj for push reply content obj to array
-       * select element with class uniqueID-level-replies to append reply content element to it
-       * use uniqueID obj with repliesLevel obj to select element with linerepliesbox
-       * then build our class string to target element with class uniqueID-level-replies
-       * **/
+        `[uniqueID=${this.uniqueObj.uniqueID}] [linerepliesbox=${
+          this.repliesLevelObj[this.uniqueObj.level]
+        }level]`
+      )
+    );
+    console.log(dataFromLocalStorage);
+    // pushing the obj to the right array in a nested obj
+    // since the "this" obj will have the uniqueID and repliesLevel obj
+    // call our func that will recusive loop through our obj and array
+    // if the obj has matching uniqueID take that obj[`${repliesLevelObj[uniqueIdObj.level]}LevelReplies`]
+    // which will be an array push userDataObj to that array
+  }
+
+  /**
+   * bind unique Obj for content container
+   * **/
+
+  function bindUniqueObjForContentContainer(event) {
+    const classOfElementClick = event.target
+      .closest("[class]")
+      .getAttribute("class");
+    // console.log(this);
+    switch (classOfElementClick) {
+      case "plus":
+        plusCounterBtn(this);
+        break;
+      case "minus":
+        minusCounterBtn(this);
+        break;
+      case "reply-btn":
+        showReplyBoxBtn(this);
+        break;
+      case "delete-trash-btn":
+        deleteCommentOrReplyBtn(this);
+        break;
+      case "edit-btn":
+        showEditBoxBtn(this);
+        break;
+      case "update-post-btn":
+        updateCommentOrReplyContentBtn(this);
+        break;
     }
   }
+
+  /**
+   * plusBtn
+   * **/
+
+  function plusCounterBtn(obj) {
+    console.log(obj);
+    console.log("plus");
+  }
+
+  /**
+   * minusBtn
+   * **/
+
+  function minusCounterBtn(obj) {
+    console.log(obj);
+    console.log("minus");
+  }
+
+  /**
+   * replyBtn
+   * **/
+
+  function showReplyBoxBtn(obj) {
+    console.log(obj);
+    console.log("reply");
+    // get username from obj.userInfo.userName
+    // select textarea. [uniqueID] .reply-textbox textarea
+    // assign value of @username
+    const textareaElement = document.querySelector(
+      `[uniqueID=${obj.uniqueID}] .reply-textbox textarea`
+    );
+    textareaElement.value = `@${obj.userInfo.userName}, `;
+    // setTimeout(function focusTextarea() {
+    //   textareaElement.focus();
+    // }, 500);
+    const replyBox = document.querySelector(
+      `[uniqueID=${obj.uniqueID}] .reply-textbox`
+    );
+    // show reply box
+    replyBox.setAttribute("replybtnclick", "true");
+    textareaElement.focus();
+  }
+
+  /**
+   * deletebtn
+   * **/
+
+  function deleteCommentOrReplyBtn(obj) {
+    console.log(obj);
+    console.log("delete");
+  }
+
+  /**
+   * editBtn
+   * **/
+
+  function showEditBoxBtn(obj) {
+    console.log(obj);
+    console.log("edit");
+  }
+
+  /**
+   * updateBtn
+   * **/
+
+  function updateCommentOrReplyContentBtn(obj) {
+    console.log(obj);
+    console.log("update");
+  }
+
   // send/reply comment
   function postCommentOrReply(container) {
     // append comment/reply to container
@@ -205,10 +403,6 @@
               },
               [[], []]
             );
-          alert("for reply btn aria-label say reply to post made by");
-          alert(
-            "when user hit send or reply btn. say comment or reply posted for a11y"
-          );
           // use foreach to loop through array and set value "true" to attr currentuser
           changeValueToTrue.forEach(function showDeleteAndEditBtn(element) {
             if (element.getAttribute("data-currentUser") != "true") {
@@ -550,11 +744,16 @@
    *
    * **/
 
-  function contentContainer(uniqueIdObj, userContent) {
+  function contentContainer(uniqueIdObj) {
     // content container
+    /**
+     * add click event listener to content container parent element to our
+     * like counter btns, reply, edit, delete btn and post update btn
+     * **/
+
     const contentContainer = createElementForCommentOrReply("DIV", {
       class: "content",
-      "data-currentUser": "false",
+      "data-currentUser": "true",
       user: `${uniqueIdObj.userInfo.userName}`,
     });
     // div .like-counter
@@ -590,7 +789,7 @@
     // append minus img to button
     minusBtn.append(minusImg);
     // append children to likeCounter
-    appendChildrenToParent(likeCounter), [plusBtn, contentOfCounter, minusBtn];
+    appendChildrenToParent(likeCounter, [plusBtn, contentOfCounter, minusBtn]);
     // div .user-info
     const userInfoContainer = createElementForCommentOrReply("DIV", {
       class: "user-info",
@@ -616,7 +815,7 @@
     statusWrapper.append(statusContent);
     // > div .createdAt
     const createdWrapper = createElementForCommentOrReply("DIV", {
-      class: "createdAt",
+      class: "createdat",
     });
     // > > span .duration + span content ago
     const durationElement = createElementForCommentOrReply(
@@ -627,7 +826,7 @@
     const durationTextContent = createElementForCommentOrReply(
       "SPAN",
       {},
-      "ago"
+      " ago"
     );
     // append children to createdWrapper
     appendChildrenToParent(createdWrapper, [
@@ -709,7 +908,7 @@
     const commentReplyContent = createElementForCommentOrReply(
       "SPAN",
       { class: "text" },
-      userContent
+      uniqueIdObj[`${uniqueIdObj.uniqueID}content`]
     );
     // use teneray operator to append span with class .atUser to p .text-content or not
     uniqueIdObj.level == "base"
@@ -750,6 +949,13 @@
       paragraphEditBoxContainer,
       updateBtn,
     ]);
+    /**
+     * calling .bind() passing the obj we want "this" to reference here
+     * **/
+    // add event listener here after we append children to contentContainer element
+    const contentContainerListener =
+      bindUniqueObjForContentContainer.bind(uniqueIdObj);
+    applyEvent(contentContainer, "click", contentContainerListener);
     return contentContainer;
   }
 
@@ -757,7 +963,7 @@
    * div with class reply-textbox
    * **/
 
-  function replyTextboxContainer() {
+  function replyTextboxContainer(uniqueObj, repliesLevelObj) {
     // parent element with attr .reply-textbox and replybtnclick="false"
     const textboxParent = createElementForCommentOrReply("DIV", {
       class: "reply-textbox",
@@ -769,7 +975,7 @@
     });
     const avatarImg = createElementForCommentOrReply("IMG", {
       alt: "",
-      src: "",
+      src: uniqueObj.userInfo.imgSrc,
     });
     avatarWrapper.append(avatarImg);
     // div .textarea-wrapper with textarea as child
@@ -788,7 +994,13 @@
       { class: "reply-post-btn" },
       "REPLY"
     );
-    // add click event listener to reply btn here
+    // add click event listener to reply btn here: we want to pass in the uniqueID obj and repliesLevel obj
+    // calling .bind() passing the obj we want "this" to reference here
+    const replyBtnListener = bindUniqueObjForReplyPostBtn.bind({
+      uniqueObj,
+      repliesLevelObj,
+    });
+    applyEvent(replyPostBtn, "click", replyBtnListener);
     // append children to parent
     appendChildrenToParent(textboxParent, [
       avatarWrapper,
@@ -824,7 +1036,7 @@
     const levelRepliesContainer = createElementForCommentOrReply("DIV", {
       class: `${uniqueIdObj.uniqueID}-${
         repliesLevelObj[uniqueIdObj.level]
-      }-replies`,
+      }level-replies`,
     });
     // append children to parent
     appendChildrenToParent(lineRepliesParent, [
@@ -868,6 +1080,10 @@
       atUserName,
     };
   }
+
+  /**
+   * loop through local storage data
+   * **/
 
   function useLocalStorage() {
     // data obj
@@ -951,14 +1167,18 @@
        * **/
       comments: [],
     };
-    localStorage.setItem("commentDataObj", JSON.stringify(localStoragedata));
+    if (localStorage.getItem("commentDataObj") == null) {
+      localStorage.setItem("commentDataObj", JSON.stringify(localStoragedata));
+    }
     return function closureOurData() {
       return { data, localStoragedata };
     };
   }
+
   /**
    * testing our ideas
    * **/
+
   function testingIdeas() {
     const repliesLevel = {
       base: "first",
@@ -966,6 +1186,42 @@
       second: "third",
       arrOfObj: [],
     };
+
+    /**
+     * passing data obj to event listener of our element using .bind()
+     * **/
+
+    function bindObjForContentContainer(event) {
+      console.log(this);
+      console.log(this.uniqueID);
+      console.log(event.target);
+    }
+
+    function bindObjForReplyBtn(event) {
+      console.log(this);
+      console.log(this.base);
+      console.log(event.target);
+    }
+
+    const contentListener = bindObjForContentContainer.bind({
+      ...repliesLevel,
+      uniqueID: "12345678",
+    });
+
+    const replyBtnListener = bindObjForReplyBtn.bind({
+      base: "first",
+      first: "second",
+      second: "third",
+    });
+
+    document
+      .querySelector(".content")
+      .addEventListener("click", contentListener);
+
+    document
+      .querySelector(".reply-post-btn")
+      .addEventListener("click", replyBtnListener);
+
     function nestedLooping(list) {
       list.forEach(function printStuff(eachObj) {
         //   build element

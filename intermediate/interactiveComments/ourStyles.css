@@ -228,7 +228,7 @@ textarea {
   margin-block-start: 8px;
 }
 
-.comment > * + *,
+.comments > * + *,
 [class*="replies"] > * + * {
   margin-block-start: var(--margin-medium);
 }
