@@ -1085,9 +1085,71 @@
    * loop through local storage data
    * **/
 
+  function nestedLoopingThroughData(
+    list,
+    levelsObj,
+    matchID,
+    endOfObjProp,
+    updateValue,
+    parentID = 0
+  ) {
+    list.forEach(function findObjWithMatchingID(eachObj) {
+      // for delete btn we want to pass the uniqueID into each recursive func call of
+      // nestedLoopingThroughData
+      if (
+        eachObj.hasOwnProperty(`${levelsObj[eachObj.level]}LevelReplies`) &&
+        eachObj[`${levelsObj[eachObj.level]}LevelReplies`].length > 0
+      ) {
+        // recursive loop
+        nestedLoopingThroughData(
+          eachObj[`${levelsObj[eachObj.level]}LevelReplies`],
+          levelsObj,
+          matchID,
+          endOfObjProp,
+          updateValue,
+          eachObj.uniqueID
+        );
+        // for delete btn we wont pass argument/value for updateValue parameter
+        if (eachObj.hasOwnProperty("uniqueID") && eachObj.uniqueID == matchID) {
+          // if update value is undefined assign value of parentId to parentIdForDeleteAlgorithm
+          // in cachedObj
+          if (!updateValue) {
+            cachedData.parentIdForDeleteAlgorithm = parentID;
+          } else {
+            // need uniqueID of obj to select obj property we want to update
+            eachObj[`${eachObj.uniqueID}${endOfObjProp}`] = updateValue;
+          }
+          // or
+          // updateValue == undefined
+          //   ? (cachedData.parentIdForDeleteAlgorithm = parentID)
+          //   : (eachObj[`${eachObj.uniqueID}${endOfObjProp}`] = updateValue);
+        }
+      }
+    });
+  }
+
+  /**
+   * filter func algorithm for delete btn
+   * deleting comment or reply post will require different algorithm
+   * the array we pass in will be different
+   * **/
+
+  /**
+   * when we call filterOutObjOfMatchingUniqueID if parentIdForDeleteAlgorithm is 0
+   * or the default value we assign to parentID of nestedLoopingThroughData func
+   * **/
+
+  function filterOutObjOfMatchingUniqueID(list, matchingID) {
+    //
+    return list.filter(function removeObj(eachObj) {
+      return eachObj.uniqueID != matchingID;
+    });
+  }
+
   function useLocalStorage() {
     // data obj
     const data = {
+      parentIdForDeleteAlgorithm: null,
       objMatchingUniqueID: null,
       repliesLevel: {
         base: "first",
@@ -1262,8 +1324,13 @@
       });
     }
 
-    function nestedLoopingReturnArray(list, repliesLevelObj) {
-      const result = [];
+    function nestedLoopingReturnArray(
+      list,
+      repliesLevelObj,
+      matchUniqueID,
+      parentID = 0
+    ) {
+      // const result = [];
       list.forEach(function printStuff(eachObj) {
         //   build element
         //   const buildingAccessPropStr = repliesLevelObj[eachObj.level];
@@ -1275,7 +1342,9 @@
         ) {
           nestedLoopingReturnArray(
             eachObj[`${repliesLevelObj[eachObj.level]}LevelReplies`],
-            repliesLevelObj
+            repliesLevelObj,
+            matchUniqueID,
+            eachObj.uniqueID
           );
         }
         /**
@@ -1298,9 +1367,12 @@
          * secondlevel third obj
          * firstlevel third obj
          * **/
-        if (eachObj.hasOwnProperty("uniqueID") && eachObj.uniqueID == "123") {
+        if (
+          eachObj.hasOwnProperty("uniqueID") &&
+          eachObj.uniqueID == matchUniqueID
+        ) {
           //   eachObj.uniqueID = "hello we changed the value of the string";
-          repliesLevelObj.arrOfObj.push(eachObj);
+          repliesLevelObj.arrOfObj.push(parentID);
         }
         console.log(eachObj?.uniqueID);
         console.log(eachObj.print);
@@ -1322,8 +1394,10 @@
           {
             print: "secondlevel second obj",
             level: "first",
-            uniqueID: "123",
-            secondLevelReplies: [{ print: "thirdlevel second obj" }],
+            uniqueID: "323",
+            secondLevelReplies: [
+              { uniqueID: "213", print: "thirdlevel second obj" },
+            ],
           },
           {
             print: "second level",
