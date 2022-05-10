@@ -191,9 +191,9 @@
     document.querySelector(".comments").append(uniqueIdWrapper);
     console.log(commentUserDataObj);
     console.log(document.querySelector(".comment"));
-    // dataInLocalStorage.push(commentUserDataObj);
+    dataInLocalStorage.comments.push(commentUserDataObj);
     // localStoragedata.comments.push(commentUserDataObj);
-    localStorage.setItem("commentDataObj", JSON.stringify(localStoragedata));
+    localStorage.setItem("commentDataObj", JSON.stringify(dataInLocalStorage));
   }
 
   /**
@@ -202,21 +202,66 @@
 
   function bindUniqueObjForReplyPostBtn(event) {
     // we want to get data from our local storage commentDataObj key
+    /**
+     * "this" obj will have two properties
+     * uniqueObj and repliesLevelObj
+     * **/
     const dataFromLocalStorage = JSON.parse(
       localStorage.getItem("commentDataObj")
     );
-    console.log(this);
-    console.log(
-      document.querySelector(
-        `[uniqueID=${this.uniqueObj.uniqueID}] [linerepliesbox=${
-          this.repliesLevelObj[this.uniqueObj.level]
-        }level]`
-      )
+    /**
+     * create elements for reply content
+     * **/
+
+    /** **/
+
+    /**
+     * append it to the correct element class "uniqueID-firstlevel-replies"
+     * the "firstlevel" string will be dynamic
+     * use this selector document.querySelector(`.${}`)
+     * or we can select the parent element of div with class "uniqueID-firstlevel-replies"
+     * use element.firstChildElement.nextElementSibling
+     * to select element with class "uniqueID-firstlevel-replies"
+     * since we want to change the value of attr hasreplies to "true"
+     * to display the replies content
+     * **/
+    const verticalLineRepliesWrapper = document.querySelector(
+      `[uniqueID=${this.uniqueObj.uniqueID}] [linerepliesbox=${
+        this.repliesLevelObj[this.uniqueObj.level]
+      }level]`
     );
+    /**
+     * select element to append replies content
+     * **/
+
+    const repliesContentWrapper = document.querySelector(
+      `.${this.uniqueObj.uniqueID}-${
+        this.repliesLevelObj[this.uniqueObj.level]
+      }level-replies`
+    );
+    /**
+     * another way to select element to append replies
+     * content verticalLineRepliesWrapper.firstElementChild.nextElementSibling;
+     * **/
+    /**
+     * we will push/add user data obj to correct array in dataFromLocalStroage obj
+     * it will be the property "base" or "firstLevelReplies"
+     * **/
+    // console.log(this);
+    // console.log(
+    //   document.querySelector(
+    //     `[uniqueID=${this.uniqueObj.uniqueID}] [linerepliesbox=${
+    //       this.repliesLevelObj[this.uniqueObj.level]
+    //     }level]`
+    //   )
+    // );
+    // console.log(event);
     console.log(dataFromLocalStorage);
+    // check if level property of obj == "base"
+    // if it is we wont have to call our nestedLoop func
     // pushing the obj to the right array in a nested obj
     // since the "this" obj will have the uniqueID and repliesLevel obj
-    // call our func that will recusive loop through our obj and array
+    // call our func that will recursive loop through our obj and array
     // if the obj has matching uniqueID take that obj[`${repliesLevelObj[uniqueIdObj.level]}LevelReplies`]
     // which will be an array push userDataObj to that array
   }
@@ -226,28 +271,28 @@
    * **/
 
   function bindUniqueObjForContentContainer(event) {
-    const classOfElementClick = event.target
-      .closest("[class]")
-      .getAttribute("class");
-    // console.log(this);
-    switch (classOfElementClick) {
+    // const classOfElementClick = event.target
+    //   .closest("[class]")
+    //   .getAttribute("class");
+    const elementWithClassAttrClicked = event.target.closest("[class]");
+    switch (elementWithClassAttrClicked.getAttribute("class")) {
       case "plus":
-        plusCounterBtn(this);
+        plusCounterBtn(this, elementWithClassAttrClicked);
         break;
       case "minus":
-        minusCounterBtn(this);
+        minusCounterBtn(this, elementWithClassAttrClicked);
         break;
       case "reply-btn":
-        showReplyBoxBtn(this);
+        showReplyBoxBtn(this, elementWithClassAttrClicked);
         break;
       case "delete-trash-btn":
-        deleteCommentOrReplyBtn(this);
+        deleteCommentOrReplyBtn(this, elementWithClassAttrClicked);
         break;
       case "edit-btn":
-        showEditBoxBtn(this);
+        showEditBoxBtn(this, elementWithClassAttrClicked);
         break;
       case "update-post-btn":
-        updateCommentOrReplyContentBtn(this);
+        updateCommentOrReplyContentBtn(this, elementWithClassAttrClicked);
         break;
     }
   }
@@ -256,70 +301,318 @@
    * plusBtn
    * **/
 
-  function plusCounterBtn(obj) {
+  function plusCounterBtn(obj, eventTarget) {
+    /**
+     * get current state of data in localStorage
+     * **/
+    const dataOfLocalStoragePlusBtn = JSON.parse(
+      localStorage.getItem("commentDataObj")
+    );
     console.log(obj);
     console.log("plus");
+    console.log(eventTarget.nextElementSibling);
+    /**
+     * update score for like counter
+     * **/
+
+    const currentLikeCounter = Number(eventTarget.nextElementSibling.innerText);
+    const addOneToLikeCounter = currentLikeCounter + 1;
+    // update element with number class, the element keeping score of likes
+    eventTarget.nextElementSibling.innerText = String(addOneToLikeCounter);
+    /**
+     * if obj.level == "base" we want to pass in top level/first array of data object
+     * else run nestedlooping algorithm
+     * **/
+
+    if (obj.level == "base") {
+      // using filter method
+      const [objWithMatchingID] = filterOutObjOfMatchingUniqueID(
+        dataOfLocalStoragePlusBtn.comments,
+        obj.uniqueID
+      );
+      // instead of adding one to score property of obj
+      // we can add 1 to number element between plus and minus btn
+      // get that value of the number element convert it to a number and assign it to score
+      // property of obj
+      objWithMatchingID[`${obj.uniqueID}score`] = addOneToLikeCounter;
+      // using foreach method
+      // dataOfLocalStoragePlusBtn.comments.forEach(function updateValueInDataObj(eachObj) {
+      //   // looping through each obj in comments array
+      //   // once we encounter the obj that match obj.uniqueID
+      //   // update score value
+      //   if (eachObj.uniqueID == obj.uniqueID) {
+      //     // using uniqueID to build the string to select our property
+      //     eachObj[`${obj.uniqueID}score`] = addOneToLikeCounter;
+      //   }
+      // });
+    } else {
+      //
+    }
+    console.log(dataOfLocalStoragePlusBtn);
+    /**
+     * after updating value of data obj we want to saving updates to localStorage
+     * **/
+    localStorage.setItem(
+      "commentDataObj",
+      JSON.stringify(dataOfLocalStoragePlusBtn)
+    );
   }
 
   /**
    * minusBtn
    * **/
 
-  function minusCounterBtn(obj) {
-    console.log(obj);
+  function minusCounterBtn(obj, eventTarget) {
+    /**
+     * get current state of data in localStorage
+     * **/
+    const dataOfLocalStorageMinusBtn = JSON.parse(
+      localStorage.getItem("commentDataObj")
+    );
+    console.log(eventTarget.previousElementSibling);
     console.log("minus");
+    /**
+     * update score for like counter
+     * **/
+
+    const currentLikes = Number(event.target.previousElementSibling.innerText);
+    const subtractOneFromLikes = currentLikes - 1;
+    event.target.previousElementSibling.innerText =
+      String(subtractOneFromLikes);
+
+    /**
+     * if obj.level == "base" we want to pass in top level/first array of data object
+     * else run nestedlooping algorithm
+     * **/
+    if (obj.level == "base") {
+      //
+      const [objWithMatchingID] = filterOutObjOfMatchingUniqueID(
+        dataOfLocalStorageMinusBtn.comments,
+        obj.uniqueID
+      );
+      // instead of subtracting one to score property of obj
+      // we can subtract 1 to number element between plus and minus btn
+      // get that value of the number element convert it to a number and assign it to score
+      // property of obj
+      objWithMatchingID[`${obj.uniqueID}score`] = subtractOneFromLikes;
+      // using foreach
+      // dataOfLocalStorageMinusBtn.comments.forEach(function minusOneToScore(eachObj) {
+      //   if (eachObj.uniqueID == obj.uniqueID) {
+      //     eachObj[`${obj.uniqueID}score`] = subtractOneFromLikes;
+      //   }
+      // });
+    } else {
+      //
+    }
+    console.log(dataOfLocalStorageMinusBtn);
+    /**
+     * after updating value of data obj we want to saving updates to localStorage
+     * **/
+    localStorage.setItem(
+      "commentDataObj",
+      JSON.stringify(dataOfLocalStorageMinusBtn)
+    );
   }
 
   /**
    * replyBtn
    * **/
 
-  function showReplyBoxBtn(obj) {
-    console.log(obj);
+  function showReplyBoxBtn(obj, eventTarget) {
+    /**
+     * get current state of data in localStorage
+     * **/
+    const dataOfLocalStorageShowReplyBtn = JSON.parse(
+      localStorage.getItem("commentDataObj")
+    );
+    console.log(eventTarget);
     console.log("reply");
+    /**
+     * if obj.level == "base" we want to pass in top level/first array of data object
+     * else run nestedlooping algorithm
+     * **/
     // get username from obj.userInfo.userName
     // select textarea. [uniqueID] .reply-textbox textarea
     // assign value of @username
     const textareaElement = document.querySelector(
       `[uniqueID=${obj.uniqueID}] .reply-textbox textarea`
     );
-    textareaElement.value = `@${obj.userInfo.userName}, `;
-    // setTimeout(function focusTextarea() {
-    //   textareaElement.focus();
-    // }, 500);
     const replyBox = document.querySelector(
       `[uniqueID=${obj.uniqueID}] .reply-textbox`
     );
-    // show reply box
-    replyBox.setAttribute("replybtnclick", "true");
-    textareaElement.focus();
+    editReplyBtnBoxHelper(
+      replyBox,
+      textareaElement,
+      "replyBtnClick",
+      `@${obj.userInfo.userName}, `
+    );
+    // if (replyBox.getAttribute("replyBtnClick") == "false") {
+    //   if (textareaElement.value === "") {
+    //     // if textarea is empty or empty string we want to add @username to textarea value
+    //     textareaElement.value = `@${obj.userInfo.userName}, `;
+    //     // show reply box
+    //     replyBox.setAttribute("replybtnclick", "true");
+    //     textareaElement.focus();
+    //   } else {
+    //     replyBox.setAttribute("replybtnclick", "true");
+    //   }
+    // } else {
+    //   // if element with replybtnclick is "true" set value to "false"
+    //   replyBox.setAttribute("replybtnclick", "false");
+    // }
+    // setTimeout(function focusTextarea() {
+    //   textareaElement.focus();
+    // }, 500);
+    /**
+     * after updating value of data obj we want to saving updates to localStorage
+     * **/
   }
 
   /**
    * deletebtn
    * **/
 
-  function deleteCommentOrReplyBtn(obj) {
-    console.log(obj);
+  function deleteCommentOrReplyBtn(obj, eventTarget) {
+    /**
+     * get current state of data in localStorage
+     * **/
+    const dataOfLocalStorageDeleteBtn = JSON.parse(
+      localStorage.getItem("commentDataObj")
+    );
+    console.log(eventTarget);
     console.log("delete");
+    /**
+     * if obj.level == "base" we want to pass in top level/first array of data object
+     * else run nestedlooping algorithm
+     * **/
+    if (obj.level == "base") {
+      //
+      const objWithMatchingID = filterOutObjOfMatchingUniqueID(
+        dataOfLocalStorageDeleteBtn.comments,
+        obj.uniqueID
+      );
+    } else {
+      //
+    }
+    /**
+     * after updating value of data obj we want to saving updates to localStorage
+     * **/
   }
 
   /**
    * editBtn
    * **/
 
-  function showEditBoxBtn(obj) {
-    console.log(obj);
+  function showEditBoxBtn(obj, eventTarget) {
+    /**
+     * get current state of data in localStorage
+     * **/
+    const dataOfLocalStorageShowEditBtn = JSON.parse(
+      localStorage.getItem("commentDataObj")
+    );
+    console.log(eventTarget);
     console.log("edit");
+    /**
+     * if obj.level == "base" we want to pass in top level/first array of data object
+     * else run nestedlooping algorithm
+     * **/
+    // target uniqueID attr editbtnclick
+    const editBoxContainer = document.querySelector(
+      `[uniqueID=${obj.uniqueID}] [editbtnclick]`
+    );
+    // we can use value/element assigned to editBoxContainer to change value of attr editbtnclick
+    // and apply value to textarea
+    // assign value @username to textarea
+    const textareaEditBox = document.querySelector(
+      `[uniqueID=${obj.uniqueID}] [editbtnclick] textarea`
+    );
+    editReplyBtnBoxHelper(
+      editBoxContainer,
+      textareaEditBox,
+      "editBtnClick",
+      `@${obj.userInfo.userName}, `
+    );
+    /**
+     * moved algorithm below into editReplyBtnBoxHelper
+     * **/
+    // textareaEditBox.value = `@${obj.userInfo.userName}, `;
+    // // focus textarea elemetn
+    // editBoxContainer.setAttribute("editBtnClick", "true");
+    // textareaEditBox.focus();
+    /**
+     * after updating value of data obj we want to saving updates to localStorage
+     * **/
   }
 
   /**
    * updateBtn
    * **/
 
-  function updateCommentOrReplyContentBtn(obj) {
-    console.log(obj);
+  function updateCommentOrReplyContentBtn(obj, eventTarget) {
+    /**
+     * get current state of data in localStorage
+     * **/
+    const dataOfLocalStorageUpdateBtn = JSON.parse(
+      localStorage.getItem("commentDataObj")
+    );
+    console.log(eventTarget);
     console.log("update");
+    /**
+     * if obj.level == "base" we want to pass in top level/first array of data object
+     * else run nestedlooping algorithm
+     * **/
+    if (obj.level == "base") {
+      //
+      const objWithMatchingID = filterOutObjOfMatchingUniqueID(
+        dataOfLocalStorageUpdateBtn.comments,
+        obj.uniqueID
+      );
+    } else {
+      //
+    }
+    /**
+     * after updating value of data obj we want to saving updates to localStorage
+     * **/
+  }
+
+  /**
+   * reply and edit select btn helper
+   * **/
+
+  function replyEditBtnForSelectBtn(element, selector) {
+    // have to account for when user click on multiple reply or edit btn
+    // then change current user
+    // call this func in a foreach
+    if (element.getAttribute(selector) == "true") {
+      element.setAttribute(selector, "false");
+      element.firstElementChild.nextElementSibling.firstElementChild.value = "";
+    }
+  }
+
+  /**
+   * reply edit btn box helper
+   * **/
+
+  function editReplyBtnBoxHelper(
+    replyOrEdit,
+    textarea,
+    attrSelector,
+    textValue
+  ) {
+    if (replyOrEdit.getAttribute(attrSelector) == "false") {
+      if (textarea.value === "") {
+        // if textarea is empty or empty string we want to add @username to textarea value
+        textarea.value = textValue;
+        // show reply box
+        replyOrEdit.setAttribute(attrSelector, "true");
+        textarea.focus();
+      } else {
+        replyOrEdit.setAttribute(attrSelector, "true");
+      }
+    } else {
+      // if element with replybtnclick is "true" set value to "false"
+      replyOrEdit.setAttribute(attrSelector, "false");
+    }
   }
 
   // send/reply comment
@@ -424,6 +717,37 @@
               eachImg.setAttribute("src", cachedData.currentUser.imgSrc);
             });
           console.log(cachedData.currentUser);
+          // we want to reset the reply box value to empty str and
+          // not show the reply box textarea
+          // target element with replybtnclick "true"
+          const arrayOfReplyTextboxWrapper = Array.from(
+            document.querySelectorAll("[replybtnclick='true']")
+          );
+          if (arrayOfReplyTextboxWrapper.length > 0) {
+            arrayOfReplyTextboxWrapper.forEach(function changeAttrValueReplyBtn(
+              eachWrapper
+            ) {
+              replyEditBtnForSelectBtn(eachWrapper, "replybtnclick");
+              // if (replyTextboxWrapper.getAttribute("replybtnclick") == "true") {
+              //   replyTextboxWrapper.setAttribute("replybtnclick", "false");
+              //   replyTextboxWrapper.firstElementChild.nextElementSibling.firstElementChild.value =
+              //     "";
+              // }
+            });
+          }
+          // we want to reset the edit box value to empty str and
+          // not show the edit box textarea
+          // target element with editbtnclick "true"
+          const arrayOfEditTextboxWrapper = Array.prototype.slice.call(
+            document.querySelectorAll("[editBtnClick='true']")
+          );
+          if (arrayOfEditTextboxWrapper.length > 0) {
+            arrayOfEditTextboxWrapper.forEach(function changeAttrEditBtn(
+              eachWrapper
+            ) {
+              replyEditBtnForSelectBtn(eachWrapper, "editBtnClick");
+            });
+          }
         }
         // hide user buttons modal when user click on close modal button or user btn
         hideSelectUserButtons(selectBtnModal);
@@ -455,6 +779,7 @@
   }
   // assign values to select user btns
   function assignValuesSelectUserBtns(btnsArray, arrayOfObj) {
+    // items/length of both array both are the same
     const copyOfBtns = [...btnsArray];
     const copyArrayOfObj = [...arrayOfObj];
     copyOfBtns.forEach(function assignValues(eachBtn, index) {
@@ -1116,6 +1441,17 @@
           if (!updateValue) {
             cachedData.parentIdForDeleteAlgorithm = parentID;
           } else {
+            // when we want to push/add data obj to array
+            // we can check if endOfObjProp == undefined or
+            // if typeof is object, it is not an array and its not a function
+            if (!endOfObjProp) {
+              eachObj[`${levelsObj[eachObj.level]}LevelReplies`].push(
+                updateValue
+              );
+            }
+            // if (typeof updateValue == "object" && !Array.isArray(updateValue) && typeof updateValue != "function") {
+            //   eachObj[`${levelsObj[eachObj.level]}LevelReplies`].push(updateValue);
+            // }
             // need uniqueID of obj to select obj property we want to update
             eachObj[`${eachObj.uniqueID}${endOfObjProp}`] = updateValue;
           }
@@ -1139,10 +1475,24 @@
    * or the default value we assign to parentID of nestedLoopingThroughData func
    * **/
 
-  function filterOutObjOfMatchingUniqueID(list, matchingID) {
+  function makeArrayOfObjsNotMatchingUniqueID(list, matchingID) {
     //
     return list.filter(function removeObj(eachObj) {
       return eachObj.uniqueID != matchingID;
+    });
+  }
+
+  /**
+   * use filter method to get obj in array that matches uniqueID
+   * when obj.level == "base" we know it is the array assigned to comment property of dataobj
+   * ***** might want to use foreach loop through array and update value *****
+   * ***** instead of using filter since filter method will return a new array *****
+   * ***** could eliminate one step *****
+   * **/
+
+  function filterOutObjOfMatchingUniqueID(list, matchingID) {
+    return list.filter(function findObjThatMatchUniqueID(eachObj) {
+      return eachObj.uniqueID == matchingID;
     });
   }
 
