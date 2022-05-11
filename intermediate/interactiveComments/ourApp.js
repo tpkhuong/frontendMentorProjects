@@ -147,6 +147,9 @@
     const commentTextareaValue = document.querySelector(
       ".comment-textbox textarea"
     ).value;
+    /**
+     * data obj created from comment textbox
+     * **/
     const commentUserDataObj = createUserDataObj(
       createUniqueId(cachedData.currentUser.userName),
       commentTextareaValue,
@@ -175,7 +178,8 @@
     const contentWrapper = contentContainer(commentUserDataObj);
     const replyBoxWrapper = replyTextboxContainer(
       commentUserDataObj,
-      cachedData.repliesLevel
+      cachedData.repliesLevel,
+      cachedData.currentUser.userName
     );
     const verticalLineRepliesWrapper = lineAndRepliesContainer(
       commentUserDataObj,
@@ -209,44 +213,166 @@
     const dataFromLocalStorage = JSON.parse(
       localStorage.getItem("commentDataObj")
     );
+
     /**
-     * create elements for reply content
+     * reply text box wrapper
      * **/
 
-    /** **/
+    const replyTextboxWrapper = document.querySelector(
+      `[uniqueID=${this.uniqueObj.uniqueID}] .reply-textbox`
+    );
+    /**
+     * reply textbox textarea
+     *  **/
+
+    const replyTextarea = document.querySelector(
+      `[uniqueID=${this.uniqueObj.uniqueID}] .reply-textbox textarea`
+    );
 
     /**
      * append it to the correct element class "uniqueID-firstlevel-replies"
      * the "firstlevel" string will be dynamic
-     * use this selector document.querySelector(`.${}`)
+     * use this selector document.querySelector(`.${this.uniqueObj.uniqueID}-${this.repliesLevelObj[this.uniqueObj.uniqueID]}-replies`)
      * or we can select the parent element of div with class "uniqueID-firstlevel-replies"
      * use element.firstChildElement.nextElementSibling
      * to select element with class "uniqueID-firstlevel-replies"
      * since we want to change the value of attr hasreplies to "true"
      * to display the replies content
      * **/
+
     const verticalLineRepliesWrapper = document.querySelector(
       `[uniqueID=${this.uniqueObj.uniqueID}] [linerepliesbox=${
         this.repliesLevelObj[this.uniqueObj.level]
       }level]`
     );
+
     /**
      * select element to append replies content
      * **/
 
-    const repliesContentWrapper = document.querySelector(
-      `.${this.uniqueObj.uniqueID}-${
-        this.repliesLevelObj[this.uniqueObj.level]
-      }level-replies`
-    );
     /**
      * another way to select element to append replies
      * content verticalLineRepliesWrapper.firstElementChild.nextElementSibling;
      * **/
+
+    const repliesContentWrapper =
+      verticalLineRepliesWrapper.firstElementChild.nextElementSibling;
+
     /**
+     * create data obj from user entered text in reply textbox
+     * **/
+    /**
+     * pass in only content into createUserDataObj
+     * without @userName for reply content replyTextarea value
+     * **/
+    console.log(replyTextarea.value);
+    const { restOfTextContent } = postReplyAndUpdateHelper(replyTextarea.value);
+
+    console.log(restOfTextContent);
+
+    const replytextUserDataObj = createUserDataObj(
+      createUniqueId(cachedData.currentUser.userName),
+      restOfTextContent,
+      // need to pass in level of
+      this.repliesLevelObj[this.uniqueObj.level],
+      createTimeObj(),
+      this.repliesLevelObj,
+      cachedData.currentUser
+    );
+    console.log(this);
+    console.log(replytextUserDataObj);
+
+    /**
+     * create elements for reply content
+     * **/
+
+    /**
+     * create our three children for div with attr uniqueID element
+     * **/
+
+    // div with attr uniqueID element parent to three children elements
+
+    const replyUserUniqueIdWrapper = createElementForCommentOrReply("DIV", {
+      uniqueID: replytextUserDataObj.uniqueID,
+    });
+    // three children
+    // content wrapper
+
+    const replyContentWrapper = contentContainer(
+      replytextUserDataObj,
+      this.uniqueObj.userInfo
+    );
+
+    // reply box wrapper
+
+    const replyContentTextareaWrapper = replyTextboxContainer(
+      replytextUserDataObj,
+      this.repliesLevelObj,
+      cachedData.currentUser.userName
+    );
+
+    // vertical line/replies wrapper
+
+    const userReplyContentVerticalRepliesWrapper = lineAndRepliesContainer(
+      replytextUserDataObj,
+      this.repliesLevelObj
+    );
+
+    // append childen to uniqueID wrapper
+    appendChildrenToParent(replyUserUniqueIdWrapper, [
+      replyContentWrapper,
+      replyContentTextareaWrapper,
+      userReplyContentVerticalRepliesWrapper,
+    ]);
+
+    /**
+     * append element with uniqueID to repliy level element
+     * **/
+
+    repliesContentWrapper.append(replyUserUniqueIdWrapper);
+
+    // const repliesContentWrapper = document.querySelector(
+    //   `.${this.uniqueObj.uniqueID}-${
+    //     this.repliesLevelObj[this.uniqueObj.level]
+    //   }level-replies`
+    // );
+
+    /**
+     * set textbox value to empty string
+     * **/
+
+    replyTextarea.value = "";
+
+    /**
+     * show replies
+     * **/
+
+    verticalLineRepliesWrapper.getAttribute("hasReplies") == "false"
+      ? verticalLineRepliesWrapper.setAttribute("hasReplies", "true")
+      : null;
+
+    /**
+     * hide reply textbox
+     * **/
+
+    replyTextboxWrapper.getAttribute("replyBtnClick") == "true"
+      ? replyTextboxWrapper.setAttribute("replyBtnClick", "false")
+      : null;
+
+    /**
+     * focus reply btn. the btn that show/hide textbox
+     * **/
+
+    document
+      .querySelector(`[uniqueID=${this.uniqueObj.uniqueID}] .reply-btn`)
+      .focus();
+
+    /**
+     * doing this last because it will be the backend of our app
      * we will push/add user data obj to correct array in dataFromLocalStroage obj
      * it will be the property "base" or "firstLevelReplies"
      * **/
+
     // console.log(this);
     // console.log(
     //   document.querySelector(
@@ -257,6 +383,15 @@
     // );
     // console.log(event);
     console.log(dataFromLocalStorage);
+
+    /**
+     * push dataobj for user reply last after we create the user data obj
+     * create the elements to append to element with uniqueID-"level"-replies
+     * not show reply textbox
+     * set text box to empty string
+     * pushing the obj to the right array in a nested obj
+     * **/
+
     // check if level property of obj == "base"
     // if it is we wont have to call our nestedLoop func
     // pushing the obj to the right array in a nested obj
@@ -427,6 +562,7 @@
     );
     console.log(eventTarget);
     console.log("reply");
+    console.log(obj);
     /**
      * if obj.level == "base" we want to pass in top level/first array of data object
      * else run nestedlooping algorithm
@@ -440,7 +576,7 @@
     const replyBox = document.querySelector(
       `[uniqueID=${obj.uniqueID}] .reply-textbox`
     );
-    editReplyBtnBoxHelper(
+    replyBtnBoxHelper(
       replyBox,
       textareaElement,
       "replyBtnClick",
@@ -526,14 +662,27 @@
     const textareaEditBox = document.querySelector(
       `[uniqueID=${obj.uniqueID}] [editbtnclick] textarea`
     );
-    editReplyBtnBoxHelper(
-      editBoxContainer,
-      textareaEditBox,
-      "editBtnClick",
-      `@${obj.userInfo.userName}, `
-    );
+    console.log(obj.userInfo.userName);
+    console.log(obj[`${obj.uniqueID}content`]);
     /**
-     * moved algorithm below into editReplyBtnBoxHelper
+     * the textarea for edit btn should never be empty
+     * **/
+
+    editBoxContainer.getAttribute("editBtnClick") == "false"
+      ? editBoxContainer.setAttribute("editBtnClick", "true")
+      : editBoxContainer.setAttribute("editBtnClick", "false");
+
+    /**
+     * the textarea for edit btn should never be empty
+     * **/
+    // replyBtnBoxHelper(
+    //   editBoxContainer,
+    //   textareaEditBox,
+    //   "editBtnClick",
+    //   `@${obj.userInfo.userName}, `
+    // );
+    /**
+     * moved algorithm below into replyBtnBoxHelper
      * **/
     // textareaEditBox.value = `@${obj.userInfo.userName}, `;
     // // focus textarea elemetn
@@ -579,7 +728,7 @@
    * reply and edit select btn helper
    * **/
 
-  function replyEditBtnForSelectBtn(element, selector) {
+  function replyBtnForSelectBtn(element, selector) {
     // have to account for when user click on multiple reply or edit btn
     // then change current user
     // call this func in a foreach
@@ -593,15 +742,11 @@
    * reply edit btn box helper
    * **/
 
-  function editReplyBtnBoxHelper(
-    replyOrEdit,
-    textarea,
-    attrSelector,
-    textValue
-  ) {
+  function replyBtnBoxHelper(replyOrEdit, textarea, attrSelector, textValue) {
     if (replyOrEdit.getAttribute(attrSelector) == "false") {
       if (textarea.value === "") {
         // if textarea is empty or empty string we want to add @username to textarea value
+        // edit btn algorithm should never be an empty string for textarea.value
         textarea.value = textValue;
         // show reply box
         replyOrEdit.setAttribute(attrSelector, "true");
@@ -727,7 +872,7 @@
             arrayOfReplyTextboxWrapper.forEach(function changeAttrValueReplyBtn(
               eachWrapper
             ) {
-              replyEditBtnForSelectBtn(eachWrapper, "replybtnclick");
+              replyBtnForSelectBtn(eachWrapper, "replybtnclick");
               // if (replyTextboxWrapper.getAttribute("replybtnclick") == "true") {
               //   replyTextboxWrapper.setAttribute("replybtnclick", "false");
               //   replyTextboxWrapper.firstElementChild.nextElementSibling.firstElementChild.value =
@@ -745,13 +890,13 @@
             arrayOfEditTextboxWrapper.forEach(function changeAttrEditBtn(
               eachWrapper
             ) {
-              replyEditBtnForSelectBtn(eachWrapper, "editBtnClick");
+              eachWrapper.setAttribute("editBtnClick", "false");
             });
           }
         }
         // hide user buttons modal when user click on close modal button or user btn
         hideSelectUserButtons(selectBtnModal);
-        console.log(cachedData);
+        console.log("after", cachedData);
         //   focus select user btn when user click on close modal btn or a user btn
         selectUserBtn.focus();
       }
@@ -1069,14 +1214,14 @@
    *
    * **/
 
-  function contentContainer(uniqueIdObj) {
+  function contentContainer(uniqueIdObj, userInfoObj) {
     // content container
     /**
      * add click event listener to content container parent element to our
      * like counter btns, reply, edit, delete btn and post update btn
      * **/
 
-    const contentContainer = createElementForCommentOrReply("DIV", {
+    const contentContainerElement = createElementForCommentOrReply("DIV", {
       class: "content",
       "data-currentUser": "true",
       user: `${uniqueIdObj.userInfo.userName}`,
@@ -1165,7 +1310,14 @@
       statusWrapper,
       createdWrapper,
     ]);
-    // button .reply-btn use teneray operator for aria label value
+
+    /**
+     * for reply,edit,delete when level != "base"
+     * we want the username of obj that is bind to the  keyword "this"
+     * of the func bindUniqueObjForReplyPostBtn
+     * button .reply-btn use teneray operator for aria label value
+     * **/
+
     const replyBtn = createElementForCommentOrReply("BUTTON", {
       class: "reply-btn",
       "aria-label":
@@ -1190,7 +1342,7 @@
       "aria-label":
         uniqueIdObj.level == "base"
           ? `delete your comment post`
-          : `delete your reply post to ${uniqueIdObj.user.name}`,
+          : `delete your reply post to ${userInfoObj.name}`,
     });
     const deleteBtnImg = createElementForCommentOrReply("IMG", {
       src: "./images/icon-delete.svg",
@@ -1205,7 +1357,7 @@
       "aria-label":
         uniqueIdObj.level == "base"
           ? `edit your comment post`
-          : `edit your reply post to ${uniqueIdObj.user.name}`,
+          : `edit your reply post to ${userInfoObj.name}`,
     });
     const editBtnImg = createElementForCommentOrReply("IMG", {
       src: "./images/icon-edit.svg",
@@ -1228,7 +1380,7 @@
     const spanAtUser = createElementForCommentOrReply(
       "SPAN",
       { class: "atUser" },
-      uniqueIdObj.level != "base" ? `@${uniqueIdObj.userInfo.userName}` : null
+      uniqueIdObj.level != "base" ? `@${uniqueIdObj.userInfo.userName} ` : null
     );
     const commentReplyContent = createElementForCommentOrReply(
       "SPAN",
@@ -1266,7 +1418,7 @@
       "UPDATE"
     );
     // append children to content wrapper
-    appendChildrenToParent(contentContainer, [
+    appendChildrenToParent(contentContainerElement, [
       likeCounter,
       userInfoContainer,
       replyBtn,
@@ -1277,11 +1429,15 @@
     /**
      * calling .bind() passing the obj we want "this" to reference here
      * **/
-    // add event listener here after we append children to contentContainer element
-    const contentContainerListener =
+    // add event listener here after we append children to contentContainerElement element
+    const contentContainerElementListener =
       bindUniqueObjForContentContainer.bind(uniqueIdObj);
-    applyEvent(contentContainer, "click", contentContainerListener);
-    return contentContainer;
+    applyEvent(
+      contentContainerElement,
+      "click",
+      contentContainerElementListener
+    );
+    return contentContainerElement;
   }
 
   /**
@@ -1394,14 +1550,15 @@
     const textString = textareaValue.split(" ");
     const atUserNameBeforeRemovingLastChar = textString.slice(0, 1);
     // get content for element with class text
-    const restOfTextContent = textString.slice(1);
+    // join into string
+    const restOfTextContent = textString.slice(1).join(" ");
     // get @username and remove last char of string
     const atUserName = atUserNameBeforeRemovingLastChar.slice(
       0,
       atUserNameBeforeRemovingLastChar.length - 1
     );
     return {
-      valueForTextElement: restOfTextContent,
+      restOfTextContent,
       atUserName,
     };
   }

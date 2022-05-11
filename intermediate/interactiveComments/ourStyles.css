@@ -470,7 +470,9 @@ div[hasReplies="false"] {
 }
 
 [class*="-firstlevel-replies"] {
-  max-width: 330px;
+  /* min-width is for the textarea */
+  /* max-width: 330px; */
+  flex-basis: 95%;
 }
 
 /* line container */
@@ -478,7 +480,7 @@ div[hasReplies="false"] {
 [linerepliesbox*="level"] .line-container {
   flex-grow: 1;
   display: flex;
-  flex-basis: 25%;
+  /* flex-basis: 5%; */
 }
 
 [linerepliesbox*="level"] .line {
@@ -490,15 +492,19 @@ div[hasReplies="false"] {
 /* second level */
 
 [class*="-secondlevel-replies"] {
-  max-width: 315px;
+  /* max-width: 315px; */
+  flex-basis: calc(355 / 375 * 100%);
 }
 
 @media screen and (min-width: 25.3125rem) {
   [class*="-firstlevel-replies"] {
-    max-width: 650px;
+    /* min-width is for the textarea */
+    /* max-width: 650px; */
+    flex-basis: calc(680 / 750 * 100%);
   }
   [class*="-secondlevel-replies"] {
-    max-width: 575px;
+    /* max-width: 575px; */
+    flex-basis: calc(665 / 750 * 100%);
   }
   [linerepliesbox*="level"] .line {
     margin-inline: auto;
