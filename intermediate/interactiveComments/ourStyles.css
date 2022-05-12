@@ -333,7 +333,7 @@ textarea {
     "counter counter . delete-edit delete-edit delete-edit delete-edit delete-edit"; */
   [data-currentuser="true"] {
     grid-template-areas:
-      "counter user-info user-info user-info user-info delete-edit delete-edit delete-edit"
+      "counter user-info user-info user-info user-info user-info delete-edit delete-edit"
       "counter textarea textarea textarea textarea textarea textarea textarea"
       ". textarea textarea textarea textarea textarea textarea textarea"
       ". . . . . . update-btn update-btn";
