@@ -135,6 +135,10 @@
    * **/
 
   function sendBtnCommentTextBox(event) {
+    /**
+     * comment/reply content we are passing in the user info to the reply post
+     * to be use for aria-label: delete,edit etc
+     * **/
     const dataInLocalStorage =
       localStorage.getItem("commentDataObj") != null
         ? JSON.parse(localStorage.getItem("commentDataObj"))
@@ -177,11 +181,13 @@
     // three children
     // content container for the comments obj we dont need to know who the user is replying to since
     // comment elements are the top level content
-    const contentWrapper = contentContainer(commentUserDataObj);
+    const contentWrapper = contentContainer(
+      commentUserDataObj,
+      cachedData.repliesLevel
+    );
     const replyBoxWrapper = replyTextboxContainer(
       commentUserDataObj,
-      cachedData.repliesLevel,
-      contentWrapper.contentContainerElement.getAttribute("user")
+      cachedData.repliesLevel
     );
     const verticalLineRepliesWrapper = lineAndRepliesContainer(
       commentUserDataObj,
@@ -189,7 +195,7 @@
     );
     // append childen to uniqueID wrapper
     appendChildrenToParent(uniqueIdWrapper, [
-      contentWrapper.contentContainerElement,
+      contentWrapper,
       replyBoxWrapper,
       verticalLineRepliesWrapper,
     ]);
@@ -214,6 +220,9 @@
      * uniqueObj,repliesLevelObj parent content username
      * **/
     /**
+     * ***** reason for binding user data obj to comment content and reply content element *****
+     * ***** we want to use the uniqueID to select the array to push reply user data to local storage *****
+     * ***** and the element to append the replies. using repliesLevel obj and uniqueObj.level value *****
      * we call bindUniqueObjForReplyPostBtn when we create our replyTextboxContainer
      * we want the username of the element assign to user attr of element with class content
      * **/
@@ -274,9 +283,25 @@
      * without @userName for reply content replyTextarea value
      * **/
     console.log(replyTextarea.value);
-    const { restOfTextContent } = postReplyAndUpdateHelper(replyTextarea.value);
+    const { restOfTextContent, atUserName } = postReplyAndUpdateHelper(
+      replyTextarea.value
+    );
 
+    /**
+     * we could pass in atUserName from the return obj we get for calling postReplyAndUpdateHelper
+     * to contentContainer() to be used for aria-label for delete,edit btn
+     * ***** instead of doing this *****
+     * const parentContentElementUniqueID = event.target
+      .closest("[uniqueID]")
+      .getAttribute("uniqueID");
+    
+      const elementWithUserAttr = document.querySelector(
+      `[uniqueID=${parentContentElementUniqueID}] [user]`
+    );
+    *****CANT DO THIS because it will be @amyrobson so we would have to remove @ and add space between first and last name *****
+     * **/
     console.log(restOfTextContent);
+    console.log(atUserName);
 
     const replytextUserDataObj = createUserDataObj(
       createUniqueId(cachedData.currentUser.userName),
@@ -332,8 +357,14 @@
     const usernameUseForBtnsInReplyContentElement =
       elementWithUserAttr.getAttribute("user");
 
+    /**
+     * usernameUseForBtnsInReplyContentElement will be used for the delete,edit and atUser element
+     * in contentContainer func
+     * **/
+
     const replyContentWrapper = contentContainer(
       replytextUserDataObj,
+      this.repliesLevelObj,
       usernameUseForBtnsInReplyContentElement
     );
     console.log("this.parentContentUserName", this.parentContentUserName);
@@ -360,7 +391,7 @@
 
     // append childen to uniqueID wrapper
     appendChildrenToParent(replyUserUniqueIdWrapper, [
-      replyContentWrapper.contentContainerElement,
+      replyContentWrapper,
       replyContentTextareaWrapper,
       userReplyContentVerticalRepliesWrapper,
     ]);
@@ -411,7 +442,43 @@
      * doing this last because it will be the backend of our app
      * we will push/add user data obj to correct array in dataFromLocalStroage obj
      * it will be the property "base" or "firstLevelReplies"
+     * check the value of this.uniqueObj.level if it == "base" pass in dataFromLocalStorage.comments
+     * find the obj that match this.uniqueObj.uniqueID then push replytextUserDataObj in to levelReplies array
+     * we will use the [key selector] this.uniqueObj[`${this.repliesLevelObj[${this.uniqueObj.level}]}LevelReplies`]
+     * if this.uniqueObj.level != "base" run nestedLooping func
      * **/
+
+    if (this.uniqueObj.level == "base") {
+      // loop through objs in comments array
+      // the ID we want to match will be in the this.uniqueObj.uniqueID
+      // if we want to use "this" in the foreach we will use an arrow func
+      // or else "this" in the foreach func will be undefined
+      dataFromLocalStorage.comments.forEach((eachObj) => {
+        if (eachObj.uniqueID == this.uniqueObj.uniqueID) {
+          eachObj[
+            `${this.repliesLevelObj[this.uniqueObj.level]}LevelReplies`
+          ].push(replytextUserDataObj);
+        }
+      });
+    } else {
+      // find obj in data storage that match this.uniqueObj.uniqueID
+      nestedLoopingThroughData(
+        dataFromLocalStorage.comments,
+        this.repliesLevelObj,
+        this.uniqueObj.uniqueID,
+        undefined,
+        replytextUserDataObj,
+        undefined
+      );
+    }
+    /**
+     * update values in local storage
+     * **/
+
+    localStorage.setItem(
+      "commentDataObj",
+      JSON.stringify(dataFromLocalStorage)
+    );
 
     // console.log(this);
     // console.log(
@@ -422,7 +489,7 @@
     //   )
     // );
     // console.log(event);
-    console.log(dataFromLocalStorage);
+    // console.log(dataFromLocalStorage);
 
     /**
      * push dataobj for user reply last after we create the user data obj
@@ -523,7 +590,15 @@
       //   }
       // });
     } else {
-      //
+      // loop through nested data obj and find matching uniqueID
+      nestedLoopingThroughData(
+        dataOfLocalStoragePlusBtn.comments,
+        obj.levelObj,
+        obj.uniqueObj.uniqueID,
+        "score",
+        addOneToLikeCounter,
+        undefined
+      );
     }
     console.log(dataOfLocalStoragePlusBtn);
     /**
@@ -579,7 +654,15 @@
       //   }
       // });
     } else {
-      //
+      // loop through nested data obj and find matching uniqueID
+      nestedLoopingThroughData(
+        dataOfLocalStorageMinusBtn.comments,
+        obj.levelObj,
+        obj.uniqueObj.uniqueID,
+        "score",
+        subtractOneFromLikes,
+        undefined
+      );
     }
     console.log(dataOfLocalStorageMinusBtn);
     /**
@@ -602,9 +685,9 @@
     const dataOfLocalStorageShowReplyBtn = JSON.parse(
       localStorage.getItem("commentDataObj")
     );
-    console.log(eventTarget);
-    console.log("reply");
-    console.log(obj);
+    // console.log(eventTarget);
+    // console.log("reply");
+    // console.log(obj);
     /**
      * if obj.level == "base" we want to pass in top level/first array of data object
      * else run nestedlooping algorithm
@@ -622,7 +705,7 @@
      * remove the space of username
      * **/
 
-    const userNameWithoutSpace = obj.nameForEditDeleteReplyPostBtn
+    const userNameWithoutSpace = obj.contentForReplyAtUsernameTextbox
       .split(" ")
       .join("");
 
@@ -651,6 +734,7 @@
     // }, 500);
     /**
      * after updating value of data obj we want to saving updates to localStorage
+     * dont have to updating any data in localstorage we user click reply to shoe reply textbox
      * **/
   }
 
@@ -696,8 +780,8 @@
     const dataOfLocalStorageShowEditBtn = JSON.parse(
       localStorage.getItem("commentDataObj")
     );
-    console.log(eventTarget);
-    console.log("edit");
+    // console.log(eventTarget);
+    // console.log("edit");
     /**
      * if obj.level == "base" we want to pass in top level/first array of data object
      * else run nestedlooping algorithm
@@ -712,18 +796,54 @@
     const textareaEditBox = document.querySelector(
       `[uniqueID=${obj.uniqueIdObj.uniqueID}] [editbtnclick] textarea`
     );
-    console.log(obj.uniqueIdObj.userInfo.userName);
-    console.log(obj[`${obj.uniqueIdObj.uniqueID}content`]);
+
+    const userTextContent =
+      obj.uniqueIdObj[`${obj.uniqueIdObj.uniqueID}content`];
+    /**
+     * no @ for edit textbox for comment content
+     * add @ sign for edit textboxfor reply content
+     * **/
+
+    obj.uniqueIdObj.level == "base"
+      ? (textareaEditBox.value = userTextContent)
+      : (textareaEditBox.value = `@${obj.parentUsername} ${userTextContent}`);
+
+    /**
+     * obj will be {uniqueIdObj, contentForReplyAtUsernameTextbox} for comment content element
+     * obj will be {uniqueIdObj, contentForReplyAtUsernameTextbox: used for show reply func where we add @username to reply textarea,
+     * parentUsername: will be used for show edit btn to build update textarea using data obj instead of selecting element using uniqueID then user attr
+     * or select the <p> and get its innerText
+     * we can build the textbox content by using parentUsername and value of property uniqueIDcontent in the user data obj
+     * bind to the content container element which is passed to this func and other funcs
+     * }
+     * **/
+    // console.log("showeditbtn", obj);
+    // console.log(obj.uniqueIdObj.userInfo.userName);
+    // console.log(obj.uniqueIdObj[`${obj.uniqueIdObj.uniqueID}content`]);
     /**
      * the textarea for edit btn should never be empty
+     * we want to get the innerText of <p> inside div .paragraph-edit-box-container
      * **/
+
+    // console.log(textareaEditBox);
 
     editBoxContainer.getAttribute("editBtnClick") == "false"
       ? editBoxContainer.setAttribute("editBtnClick", "true")
       : editBoxContainer.setAttribute("editBtnClick", "false");
 
     /**
+     * ***** *****
+     * content of edit textbox will be different for comment content and reply content
+     * comment content will not have @username while reply content will
+     * ***** *****
+     * **/
+
+    /**
      * the textarea for edit btn should never be empty
+     * two options: for edit text content
+     * we can get the content of the <p> of div .paragraph-edit-box-container
+     * or get value of uniqueIDcontent in the user content data obj and the user info of parent content element
+     * to build edit textarea content
      * **/
     // replyBtnBoxHelper(
     //   editBoxContainer,
@@ -756,6 +876,17 @@
     );
     console.log(eventTarget);
     console.log("update");
+    /**
+     * we want to call postReplyAndUpdateHelper
+     * get the restofcontent,remove @amyrobson etc
+     * select element with attr editbtnclick which is the element with .paragraph-edit-box-container
+     * then select span with class .text use element.lastElementChild or element.firstElementChild.nextElementSibling
+     * reason we want to target element with attr editbtnclick is we want to change value of editbtnclick to false
+     * to hide update textbox
+     * after we update the content to span element with .text
+     * change value of editbtnclick to false
+     * then handle back end
+     * **/
     /**
      * if obj.level == "base" we want to pass in top level/first array of data object
      * else run nestedlooping algorithm
@@ -1276,7 +1407,7 @@
    *
    * **/
 
-  function contentContainer(uniqueIdObj, parentUsername) {
+  function contentContainer(uniqueIdObj, levelObj, parentUsername) {
     /**
      * the value of parentUsername is being passed in when we call contentContainer
      * in our bindUniqueObjForReplyPostBtn to create our element for the reply content
@@ -1382,13 +1513,18 @@
      * for reply,edit,delete when level != "base"
      * we want the vale of attr user of the element with class content
      * button .reply-btn use teneray operator for aria label value
-     * nameForEditDeleteReplyPostBtn is to be used by edit,delete reply textbox show btn
+     * contentForReplyAtUsernameTextbox is to be used by edit,delete reply textbox show btn
      * for the aria-label to let user know which user comment/reply they are responding to
      * **/
 
-    const nameForEditDeleteReplyPostBtn =
+    console.log("parentUsername", parentUsername);
+
+    const contentForReplyAtUsernameTextbox =
       contentContainerElement.getAttribute("user");
-    console.log("nameForEditDeleteReplyPostBtn", nameForEditDeleteReplyPostBtn);
+    console.log(
+      "contentForReplyAtUsernameTextbox",
+      contentForReplyAtUsernameTextbox
+    );
 
     const replyBtn = createElementForCommentOrReply("BUTTON", {
       class: "reply-btn",
@@ -1506,21 +1642,46 @@
      * **/
     // add event listener here after we append children to contentContainerElement element
     /**
-     * passing nameForEditDeleteReplyPostBtn into bindUniqueObjForContentContainer which is attached to our click listener
+     * contentForReplyAtUsernameTextbox will always be the username of the comment/reply content element
+     * passing contentForReplyAtUsernameTextbox into bindUniqueObjForContentContainer which is attached to our click listener
      * for the element with class content
      * so when we click on edit,delete, reply etc we have access to that data obj
+     * this is used for aria-label text for delete, edit btns
+     * **/
+    /**
+     * contentForReplyAtUsernameTextbox: is used for the reply textbox for the atusername text content
+     *
+     * **/
+    /**
+     * parentUsername: different for comment content and reply content
+     * for comment content it will be undefined we are not passing an value when we call contentContainer func
+     * in send btn click algorithm
+     * when we call contentcontainer in bind to reply post btn algorithm
+     * we pass in the value we get using event.target.closest("[uniqueID]")
+     * getting the value of user attr of div .content to assign that username to reply textarea textbox
+     * **/
+    /**
+     * note: we create user data obj using func createUserDataObj then pass that obj into contentContainer
      * **/
     const contentContainerElementListener =
-      bindUniqueObjForContentContainer.bind({
-        uniqueIdObj,
-        nameForEditDeleteReplyPostBtn,
-      });
+      uniqueIdObj.level == "base"
+        ? bindUniqueObjForContentContainer.bind({
+            uniqueIdObj,
+            contentForReplyAtUsernameTextbox,
+            levelObj,
+          })
+        : bindUniqueObjForContentContainer.bind({
+            uniqueIdObj,
+            contentForReplyAtUsernameTextbox,
+            parentUsername,
+            levelObj,
+          });
     applyEvent(
       contentContainerElement,
       "click",
       contentContainerElementListener
     );
-    return { contentContainerElement, nameForEditDeleteReplyPostBtn };
+    return contentContainerElement;
   }
 
   /**
@@ -1530,6 +1691,8 @@
   function replyTextboxContainer(uniqueObj, repliesLevelObj) {
     // console.log("testing", testing);
     // parent element with attr .reply-textbox and replybtnclick="false"
+    // at first avatar img will be the user that submitted the comment/reply content
+    // then we let our user change the current user by click on select user btn
     const textboxParent = createElementForCommentOrReply("DIV", {
       class: "reply-textbox",
       replybtnclick: "false",
@@ -1641,9 +1804,9 @@
     // join into string
     const restOfTextContent = textString.slice(1).join(" ");
     // get @username and remove last char of string
-    const atUserName = atUserNameBeforeRemovingLastChar.slice(
+    const atUserName = atUserNameBeforeRemovingLastChar[0].slice(
       0,
-      atUserNameBeforeRemovingLastChar.length - 1
+      atUserNameBeforeRemovingLastChar[0].length - 1
     );
     return {
       restOfTextContent,
@@ -1679,32 +1842,48 @@
           updateValue,
           eachObj.uniqueID
         );
-        // for delete btn we wont pass argument/value for updateValue parameter
-        if (eachObj.hasOwnProperty("uniqueID") && eachObj.uniqueID == matchID) {
-          // if update value is undefined assign value of parentId to parentIdForDeleteAlgorithm
-          // in cachedObj
-          if (!updateValue) {
-            cachedData.parentIdForDeleteAlgorithm = parentID;
-          } else {
-            // when we want to push/add data obj to array
-            // we can check if endOfObjProp == undefined or
-            // if typeof is object, it is not an array and its not a function
-            if (!endOfObjProp) {
-              eachObj[`${levelsObj[eachObj.level]}LevelReplies`].push(
-                updateValue
-              );
-            }
-            // if (typeof updateValue == "object" && !Array.isArray(updateValue) && typeof updateValue != "function") {
-            //   eachObj[`${levelsObj[eachObj.level]}LevelReplies`].push(updateValue);
-            // }
-            // need uniqueID of obj to select obj property we want to update
-            eachObj[`${eachObj.uniqueID}${endOfObjProp}`] = updateValue;
+      }
+      /**
+       * moving conditional checks outside of this if statement
+       * because when the levelReplies array is empty/length == 0 whic is not greater than 0
+       * we dont enter this if statement
+       * **/
+      /**
+       * with the conditionals outside of the if statement of checking the LevelReplies
+       * and the length of the LevelReplies array we still loop if there is objs in the array
+       * still update the objs based on matching uniqueID
+       * **/
+      // for delete btn we wont pass argument/value for updateValue parameter
+      if (eachObj.hasOwnProperty("uniqueID") && eachObj.uniqueID == matchID) {
+        // if update value is undefined assign value of parentId to parentIdForDeleteAlgorithm
+        // in cachedObj
+        if (!updateValue) {
+          cachedData.parentIdForDeleteAlgorithm = parentID;
+        } else {
+          // when we want to push/add data obj to array
+          // we can check if endOfObjProp == undefined or
+          // when we want to push the data obj into the array of LevelReplies
+          // we will pass in undefined for parameter endOfObjProp
+          // we pass in a value for endOfObjProp when we want to update score and content
+          // if typeof is object, it is not an array and its not a function
+          if (!endOfObjProp) {
+            eachObj[`${levelsObj[eachObj.level]}LevelReplies`].push(
+              updateValue
+            );
           }
-          // or
-          // updateValue == undefined
-          //   ? (cachedData.parentIdForDeleteAlgorithm = parentID)
-          //   : (eachObj[`${eachObj.uniqueID}${endOfObjProp}`] = updateValue);
+          // if (typeof updateValue == "object" && !Array.isArray(updateValue) && typeof updateValue != "function") {
+          //   eachObj[`${levelsObj[eachObj.level]}LevelReplies`].push(updateValue);
+          // }
+          // need uniqueID of obj to select obj property we want to update
+          eachObj[`${eachObj.uniqueID}${endOfObjProp}`] = updateValue;
         }
+        // or
+        // updateValue == undefined
+        //   ? (cachedData.parentIdForDeleteAlgorithm = parentID)
+        //   : (eachObj[`${eachObj.uniqueID}${endOfObjProp}`] = updateValue);
+        /**
+         * once we find the obj with the matching uniqueID we can return
+         * **/
       }
     });
   }

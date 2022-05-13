@@ -472,6 +472,10 @@ div[hasReplies="false"] {
 [class*="-firstlevel-replies"] {
   /* min-width is for the textarea */
   /* max-width: 330px; */
+  /* using flex-basis % so both textarea and <p> will be similar width */
+  /* when we use min-width for textarea and <p> the two containers were not responsive */
+  /* when we used max-width the <p> was the width we wanted but the textarea was smaller */
+  /* because it didnt have any content/text content applied to it */
   flex-basis: 95%;
 }
 
