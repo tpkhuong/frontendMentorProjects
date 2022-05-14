@@ -427,6 +427,11 @@ textarea {
   margin-block: var(--margin-small);
 }
 
+.atUser {
+  color: var(--color-primary-moderate-blue);
+  font-weight: 500;
+}
+
 .update-post-btn {
   grid-area: update-btn;
 }

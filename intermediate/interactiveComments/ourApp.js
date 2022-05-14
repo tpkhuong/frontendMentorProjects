@@ -8,6 +8,10 @@
   const replyPostBtn = document.querySelector(".reply-post-btn");
   const commentsContainer = document.querySelector(".comments");
   const assistiveTextContainer = document.querySelector(".assistive-text");
+  const deleteModal = document.querySelector(
+    ".delete-comment-replay-container"
+  );
+  const deleteModalWrapper = document.querySelector("[deletebtnclick]");
   // const commentTextBox = document.querySelector(".comment-textbox");
   const commentTextBoxAvatarImg = document.querySelector(
     ".comment-textbox .avatar img"
@@ -365,7 +369,8 @@
     const replyContentWrapper = contentContainer(
       replytextUserDataObj,
       this.repliesLevelObj,
-      usernameUseForBtnsInReplyContentElement
+      usernameUseForBtnsInReplyContentElement,
+      this.uniqueObj
     );
     console.log("this.parentContentUserName", this.parentContentUserName);
     console.log("replyContentWrapper", replyContentWrapper);
@@ -516,6 +521,21 @@
     // const classOfElementClick = event.target
     //   .closest("[class]")
     //   .getAttribute("class");
+    /**
+     * the values we pass into this func when we call/execute/invoke
+     * for reply post content are
+     * uniqueIdObj,
+     * contentForReplyAtUsernameTextbox,
+     * parentUsername,
+     * levelObj,
+     * parentDataObj,
+     * **/
+    if (cachedData.savedDeleteContentElement) {
+      console.log("hello");
+      document
+        .querySelector(".testing-container")
+        .append(cachedData.savedDeleteContentElement);
+    }
     console.log(this);
     const elementWithClassAttrClicked = event.target.closest("[class]");
     switch (elementWithClassAttrClicked.getAttribute("class")) {
@@ -751,6 +771,58 @@
     );
     console.log(eventTarget);
     console.log("delete");
+
+    // show delete modal
+    deleteModalWrapper.getAttribute("deletebtnclick") == "false"
+      ? deleteModalWrapper.setAttribute("deletebtnclick", "true")
+      : null;
+
+    const deleteModalListener = bindDataObjToDeleteModal.bind({
+      obj,
+      eventTarget,
+      dataOfLocalStorageDeleteBtn,
+    });
+
+    console.log(obj);
+
+    console.log(
+      // reply or comment content element
+      document.querySelector(`[uniqueID=${obj.uniqueIdObj.uniqueID}]`)
+    );
+
+    cachedData.savedDeleteContentElement = document.querySelector(
+      `[uniqueID=${obj.uniqueIdObj.uniqueID}]`
+    );
+
+    // save a reference to deleteModalListener in our cached obj
+    // use it in our delete modal bind func to remove listener
+    // every time we click on delete btn next to edit btn
+    // we will add click listener to delete modal
+    cachedData.removeClickListenerOnDeleteModal = deleteModalListener;
+    applyEvent(deleteModal, "click", deleteModalListener);
+    /**
+     * we will bind the obj pass into deleteCommentOrReplyBtn
+     * to the click event callback attached to the delete btn of the modal with class
+     * delete-comment-reply-modal-wrapper
+     * we will add the click listener to that modal
+     * **/
+
+    /**
+     * letting user undo a deleted comment/reply
+     * since our obj parameter will have the reference to the parent data obj(obj.parentDataObj)
+     * which will have the parent uniqueID and the parent level property
+     * we can build this selector to select the element that our reply content element is appended to
+     * document.querySelector(`.${obj.parentDataObj.uniqueID}-${obj.levelObj[obj.parentDataObj.level]}level-replies`)
+     * we have a way to select the element that our reply content element appends to or we want to append to
+     * **/
+
+    console.log(
+      document.querySelector(
+        `.${obj.parentDataObj.uniqueID}-${
+          obj.levelObj[obj.parentDataObj.level]
+        }level-replies`
+      )
+    );
     /**
      * if obj.level == "base" we want to pass in top level/first array of data object
      * else run nestedlooping algorithm
@@ -765,8 +837,90 @@
       //
     }
     /**
-     * after updating value of data obj we want to saving updates to localStorage
+     * after updating value of data obj we want to save the updates to localStorage
      * **/
+  }
+
+  function bindDataObjToDeleteModal(event) {
+    // the obj bind to "this" will be obj with properties uniqueIdObj
+    console.log(this.obj.uniqueIdObj);
+    console.log(this.dataOfLocalStorageDeleteBtn);
+    // levelObj, contentForReplyAtUsernameTextbox(username bind to comment/reply content element)
+    // parentUsername(username of the parent comment/reply content element)
+    // check if data obj level is "base"
+    /**
+     * Are you sure you want to delete this comment?
+     * This will remove the comment and can't be undone.
+     * **/
+    // if it is have modal text be Are you sure you want to delete this comment? This will remove the
+    // comment and can't be undone.
+    // else have text be Are you sure you want to delete your reply to username? This will remove the
+    // comment and can't be undone.
+    //will be the delete-trash-btn that display modal
+    // it is the delete btn next to the edit btn
+    console.log(this.eventTarget);
+    if (event.target.tagName == "BUTTON") {
+      if (event.target.getAttribute("class", "cancel-btn")) {
+      }
+      if (event.target.getAttribute("class", "delete-btn")) {
+        // console.log(
+        //   document.querySelector(`[uniqueID=${this.obj.uniqueIdObj.uniqueID}]`)
+        // );
+        // document
+        //   .querySelector(`[uniqueID=${this.obj.uniqueIdObj.uniqueID}]`)
+        //   .remove();
+      }
+      // hide delete modal
+      deleteModalWrapper.getAttribute("deletebtnclick") == "true"
+        ? deleteModalWrapper.setAttribute("deletebtnclick", "false")
+        : null;
+      // remove click listener from delete modal
+      // console.log(cachedData.testing);
+      deleteModal.removeEventListener(
+        "click",
+        cachedData.removeClickListenerOnDeleteModal
+      );
+    }
+
+    if (this.obj.uniqueIdObj.level == "base") {
+      //
+      const objWithMatchingID = filterOutObjOfMatchingUniqueID(
+        dataOfLocalStorageDeleteBtn.comments,
+        this.obj.uniqueIdObj.uniqueID
+      );
+    } else {
+      /**
+       * ***** *****
+       * since we are passing in the parentObj into deleteCommentOrReplyBtn then passing that
+       * obj to bindDataObjToDeleteModal(this func)
+       * we can use data/value in that parentObj to access the array in that parentObj
+       * to remove the obj with the uniqueID that matched
+       * the uniqueID of the reply content element(where the user clicked delete btn)
+       * we dont have to run nestedLoopingThroughData to look for the uniqueID of the parent obj
+       * with the array assigned to "levelObj"LevelReplies with an obj(as a value in the array)
+       * that has the uniqueID of the reply post we are looking to delete
+       * ***** *****
+       * **/
+      /**
+       * *******
+       * running nestedLoopingThroughData will assign the correct
+       * uniqueID to cachedData.parentIdForDeleteAlgorithm
+       * that we will use to find the obj in our local storage that match
+       * cachedData.parentIdForDeleteAlgorithm so we can run filter on the array assigned to
+       * "levelObj"LevelReplies property to remove the obj with matching uniqueID
+       * in this.obj.uniqueIdObj
+       * ********
+       * **/
+      nestedLoopingThroughData(
+        this.dataOfLocalStorageDeleteBtn.comments,
+        this.obj.levelObj,
+        this.obj.uniqueIdObj.uniqueID,
+        undefined,
+        undefined,
+        undefined
+      );
+    }
+    console.log(cachedData);
   }
 
   /**
@@ -797,16 +951,34 @@
       `[uniqueID=${obj.uniqueIdObj.uniqueID}] [editbtnclick] textarea`
     );
 
-    const userTextContent =
-      obj.uniqueIdObj[`${obj.uniqueIdObj.uniqueID}content`];
+    // we want to use the data in localStorage not the
+    // uniqueIdObj that is bind to the content container(the obj that is created when user click on send/reply post btn)
+    // since we dont update that obj, we will access the data in the localStorage
+    /**
+     * instead of getting the content value in data obj which we might have to perform nested loops
+     * find a way to return the content value or assign that value to a property in our cachedobj
+     * we will get the innerText of the span with class text
+     * **/
+    const userTextContent = document.querySelector(
+      `[uniqueID=${obj.uniqueIdObj.uniqueID}] [editbtnclick] .text`
+    ).innerText;
+
     /**
      * no @ for edit textbox for comment content
      * add @ sign for edit textboxfor reply content
      * **/
 
+    console.log(obj);
+
+    // const removeSpaceForUsername = obj.uniqueIdObj.level == "base" ? obj.parentUsername
+    //   .split(" ")
+    //   .join("") : null;
+
     obj.uniqueIdObj.level == "base"
       ? (textareaEditBox.value = userTextContent)
-      : (textareaEditBox.value = `@${obj.parentUsername} ${userTextContent}`);
+      : (textareaEditBox.value = `@${obj.parentUsername
+          .split(" ")
+          .join("")} ${userTextContent}`);
 
     /**
      * obj will be {uniqueIdObj, contentForReplyAtUsernameTextbox} for comment content element
@@ -876,6 +1048,47 @@
     );
     console.log(eventTarget);
     console.log("update");
+    // select div with class paragraph-edit-box-container
+    const contentAndTextboxWrapper = document.querySelector(
+      `[uniqueID=${obj.uniqueIdObj.uniqueID}] [editbtnclick]`
+    );
+
+    // get value of textarea
+
+    const updateTextareaBoxValue =
+      obj.uniqueIdObj.level == "base"
+        ? contentAndTextboxWrapper.firstElementChild.nextElementSibling
+            .firstElementChild.value
+        : postReplyAndUpdateHelper(
+            contentAndTextboxWrapper.firstElementChild.nextElementSibling
+              .firstElementChild.value
+          );
+
+    // select the span with class text
+    // to assign user enter data to content element
+
+    const paragraphTextContentContainer =
+      obj.uniqueIdObj.level == "base"
+        ? contentAndTextboxWrapper.firstElementChild.firstElementChild
+        : contentAndTextboxWrapper.firstElementChild.firstElementChild
+            .nextElementSibling;
+
+    console.log(paragraphTextContentContainer);
+
+    paragraphTextContentContainer.innerText =
+      obj.uniqueIdObj.level == "base"
+        ? updateTextareaBoxValue
+        : updateTextareaBoxValue.restOfTextContent;
+
+    // change editbtnclick value to false to hide update textbox
+
+    contentAndTextboxWrapper.setAttribute("editBtnClick", "false");
+
+    // focus edit btn
+    document
+      .querySelector(`[uniqueID=${obj.uniqueIdObj.uniqueID}] .edit-btn`)
+      .focus();
+
     /**
      * we want to call postReplyAndUpdateHelper
      * get the restofcontent,remove @amyrobson etc
@@ -887,21 +1100,44 @@
      * change value of editbtnclick to false
      * then handle back end
      * **/
+
     /**
      * if obj.level == "base" we want to pass in top level/first array of data object
      * else run nestedlooping algorithm
      * **/
     if (obj.uniqueIdObj.level == "base") {
       //
-      const objWithMatchingID = filterOutObjOfMatchingUniqueID(
+      const [objWithMatchingID] = filterOutObjOfMatchingUniqueID(
         dataOfLocalStorageUpdateBtn.comments,
         obj.uniqueIdObj.uniqueID
       );
+
+      objWithMatchingID[`${obj.uniqueIdObj.uniqueID}content`] =
+        updateTextareaBoxValue;
+
+      localStorage.setItem(
+        "commentDataObj",
+        JSON.stringify(dataOfLocalStorageUpdateBtn)
+      );
     } else {
-      //
+      // here we will use updateTextareaBoxValue.restOfTextContent to update
+      // user content property in data obj
+      nestedLoopingThroughData(
+        dataOfLocalStorageUpdateBtn.comments,
+        obj.levelObj,
+        obj.uniqueIdObj.uniqueID,
+        "content",
+        updateTextareaBoxValue.restOfTextContent,
+        undefined
+      );
+      localStorage.setItem(
+        "commentDataObj",
+        JSON.stringify(dataOfLocalStorageUpdateBtn)
+      );
     }
     /**
      * after updating value of data obj we want to saving updates to localStorage
+     * comprehensive & collision
      * **/
   }
 
@@ -1407,7 +1643,12 @@
    *
    * **/
 
-  function contentContainer(uniqueIdObj, levelObj, parentUsername) {
+  function contentContainer(
+    uniqueIdObj,
+    levelObj,
+    parentUsername,
+    parentDataObj
+  ) {
     /**
      * the value of parentUsername is being passed in when we call contentContainer
      * in our bindUniqueObjForReplyPostBtn to create our element for the reply content
@@ -1675,6 +1916,7 @@
             contentForReplyAtUsernameTextbox,
             parentUsername,
             levelObj,
+            parentDataObj,
           });
     applyEvent(
       contentContainerElement,
@@ -1923,6 +2165,8 @@
   function useLocalStorage() {
     // data obj
     const data = {
+      savedDeleteContentElement: null,
+      removeClickListenerOnDeleteModal: null,
       parentIdForDeleteAlgorithm: null,
       objMatchingUniqueID: null,
       repliesLevel: {
