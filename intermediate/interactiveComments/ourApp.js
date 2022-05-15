@@ -816,13 +816,19 @@
      * we have a way to select the element that our reply content element appends to or we want to append to
      * **/
 
-    console.log(
-      document.querySelector(
-        `.${obj.parentDataObj.uniqueID}-${
-          obj.levelObj[obj.parentDataObj.level]
-        }level-replies`
-      )
-    );
+    /** 
+     * if obj.uniqueIdObj.level == "base" we will target element div with class comments
+     * document.querySelector(".comments")
+     * else look for element with class uniqueId-"levelObj"level-replies
+     console.log(
+       document.querySelector(
+         `.${obj.parentDataObj.uniqueID}-${
+           obj.levelObj[obj.parentDataObj.level]
+         }level-replies`
+       )
+     );
+     * **/
+    console.log(dataOfLocalStorageDeleteBtn);
     /**
      * if obj.level == "base" we want to pass in top level/first array of data object
      * else run nestedlooping algorithm
@@ -842,9 +848,14 @@
   }
 
   function bindDataObjToDeleteModal(event) {
+    /**
+     * inside deleteCommentOrReplyBtn we are passing a reference to dataOfLocalStorageDeleteBtn
+     * when we mutate data/value of that obj in this func it will affect the original obj assigned to dataOfLocalStorageDeleteBtn
+     * **/
+    console.log(this);
     // the obj bind to "this" will be obj with properties uniqueIdObj
     console.log(this.obj.uniqueIdObj);
-    console.log(this.dataOfLocalStorageDeleteBtn);
+    // console.log(this.dataOfLocalStorageDeleteBtn);
     // levelObj, contentForReplyAtUsernameTextbox(username bind to comment/reply content element)
     // parentUsername(username of the parent comment/reply content element)
     // check if data obj level is "base"
@@ -869,6 +880,26 @@
         // document
         //   .querySelector(`[uniqueID=${this.obj.uniqueIdObj.uniqueID}]`)
         //   .remove();
+        // to remove the comment/reply content element when user click "Yes,DELETE"
+        // select div with .comment if this.obj.uniqueIdObj.level == "base"
+        // select element div with class uniqueID- "levelObj"level - replies using values / data in this.obj.parentDataObj
+        const parentElementOfChildElementToRemove =
+          this.obj.uniqueIdObj.level == "base"
+            ? document.querySelector(".comments")
+            : document.querySelector(
+                `.${this.obj.parentDataObj.uniqueID}-${
+                  this.obj.levelObj[this.obj.parentDataObj.level]
+                }level-replies`
+              );
+        // select the child element of the above element that we want to remove using data/value in this.obj.uniqueIdObj
+        // the parent element will be different but can select the children for both obj.level == "base" || obj.level != "base"
+        // the child element will be div [`uniqueID=${this.obj.uniqueIdObj.uniqueID}`]
+        const childElementWeWantRemoved = document.querySelector(
+          `[uniqueID=${this.obj.uniqueIdObj.uniqueID}]`
+        );
+        alert(
+          "test our algorithm of remove the comment/reply content element of the delete btn that user clicked"
+        );
       }
       // hide delete modal
       deleteModalWrapper.getAttribute("deletebtnclick") == "true"
@@ -883,11 +914,29 @@
     }
 
     if (this.obj.uniqueIdObj.level == "base") {
-      //
-      const objWithMatchingID = filterOutObjOfMatchingUniqueID(
-        dataOfLocalStorageDeleteBtn.comments,
-        this.obj.uniqueIdObj.uniqueID
-      );
+      // when we get here we are looping through the data/obj/values in the comments array
+      // not nestedLooping
+      /**
+       * we dont need to change any data/value of the objWithMatchingID which will be the obj that matched the uniqueID
+       * of the comment content element (parent wrapper of the delete btn that was clicked). we want to remove it from 
+       * this.dataOfLocalStorageDeleteBtn.comments
+       const [objWithMatchingID] = filterOutObjOfMatchingUniqueID(
+         this.dataOfLocalStorageDeleteBtn.comments,
+         this.obj.uniqueIdObj.uniqueID
+       );
+       * **/
+      // access the array assigned to "levelObj"LevelReplies of objWithMatchingID
+      // we dont have to access the array, since this is the base level we will loop through comments array
+      // and remove obj that match uniqueID
+      this.dataOfLocalStorageDeleteBtn.comments =
+        this.dataOfLocalStorageDeleteBtn.comments.filter((eachObj) => {
+          return eachObj.uniqueID != this.obj.uniqueIdObj.uniqueID;
+        });
+      // another way to write above algorithm
+      // this.dataOfLocalStorageDeleteBtn.comments =
+      //   this.dataOfLocalStorageDeleteBtn.comments.filter(
+      //     (eachObj) => eachObj.uniqueID != this.obj.uniqueIdObj.uniqueID
+      //   );
     } else {
       /**
        * ***** *****
@@ -896,9 +945,10 @@
        * we can use data/value in that parentObj to access the array in that parentObj
        * to remove the obj with the uniqueID that matched
        * the uniqueID of the reply content element(where the user clicked delete btn)
-       * we dont have to run nestedLoopingThroughData to look for the uniqueID of the parent obj
-       * with the array assigned to "levelObj"LevelReplies with an obj(as a value in the array)
-       * that has the uniqueID of the reply post we are looking to delete
+       * we do have to run nestedLoopingThroughData to get access to the obj that matched the parentID
+       * because we want to assign an array without the obj that matched the uniqueID of the comment/reply content.
+       * the uniqueID that we can access using this.obj.uniqueIdObj.uniqueID of this func or
+       * obj.uniqueIdObj.uniqueID in deleteCommentOrReplyBtn
        * ***** *****
        * **/
       /**
@@ -914,13 +964,40 @@
       nestedLoopingThroughData(
         this.dataOfLocalStorageDeleteBtn.comments,
         this.obj.levelObj,
-        this.obj.uniqueIdObj.uniqueID,
+        this.obj.parentDataObj.uniqueID,
         undefined,
         undefined,
         undefined
       );
+      // cachedData.objMatchingUniqueID is the obj we want to work on
+      // it will have the array assigned to "levelObj"LevelReplies that we want to mutate
+      // we want to build an array without the obj with the uniqueID that matched the uniqueID
+      // of the userDataObj that is bind to comment/reply content element. the userDataObj that these
+      // element has access to: delete, edit, reply, like plus and minus, update post btn
+      // we want to get the array assigned
+      // remove the obj
+      // then assign new array to "levelObj"LevelReplies
+      // using this.obj.parentDataObj to access the array
+      // build property using uniqueID and levelObj
+      cachedData.objMatchingUniqueID[
+        `${this.obj.levelObj[this.obj.parentDataObj.level]}LevelReplies`
+      ] = cachedData.objMatchingUniqueID[
+        `${this.obj.levelObj[this.obj.parentDataObj.level]}LevelReplies`
+      ].filter((eachObj) => {
+        /**
+         * since we are using "this" inside another func, we want the obj bind to "this"
+         * of the parent scope which is the func bindDataObjToDeleteModal we want to use arrow func
+         * **/
+        return eachObj.uniqueID != this.obj.uniqueIdObj.uniqueID;
+      });
+      // update local storage
+      localStorage.setItem(
+        "commentDataObj",
+        JSON.stringify(this.dataOfLocalStorageDeleteBtn)
+      );
     }
-    console.log(cachedData);
+    // update local storage outside of the if else statement. make our code less DRY
+    console.log(this.dataOfLocalStorageDeleteBtn);
   }
 
   /**
@@ -2068,6 +2145,14 @@
     updateValue,
     parentID = 0
   ) {
+    // var result;
+    /**
+     * reason result is undefined is this func scope resets everytime we call it recursively
+     * if we want the obj with that matching parentUniqueID, we would
+     * want to declare a func(we will call recursively) in this nestloopingthoughdata func
+     * once we find the obj with that matching uniqueID assign that obj to result variable
+     * have nestedLoopingThroughData func return it
+     * **/
     list.forEach(function findObjWithMatchingID(eachObj) {
       // for delete btn we want to pass the uniqueID into each recursive func call of
       // nestedLoopingThroughData
@@ -2100,7 +2185,7 @@
         // if update value is undefined assign value of parentId to parentIdForDeleteAlgorithm
         // in cachedObj
         if (!updateValue) {
-          cachedData.parentIdForDeleteAlgorithm = parentID;
+          cachedData.objMatchingUniqueID = eachObj;
         } else {
           // when we want to push/add data obj to array
           // we can check if endOfObjProp == undefined or
@@ -2119,6 +2204,7 @@
           // need uniqueID of obj to select obj property we want to update
           eachObj[`${eachObj.uniqueID}${endOfObjProp}`] = updateValue;
         }
+        // cachedData.objMatchingUniqueID = eachObj;
         // or
         // updateValue == undefined
         //   ? (cachedData.parentIdForDeleteAlgorithm = parentID)
