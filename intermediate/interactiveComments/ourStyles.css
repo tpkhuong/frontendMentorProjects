@@ -206,6 +206,7 @@ textarea {
   padding-inline: 16px;
   border-radius: var(--brdr-radius);
   border: 1px solid var(--color-neutral-black);
+  cursor: pointer;
 }
 
 [class*="post"],
@@ -237,6 +238,18 @@ textarea {
   p {
     line-height: 1.2;
   }
+  .plus:hover svg path,
+  .minus:hover svg path {
+    fill: var(--color-primary-moderate-blue);
+  }
+  [class$="-btn"]:hover,
+  [class$="-btn"]:focus {
+    opacity: 0.5;
+  }
+  textarea:hover,
+  textarea:focus {
+    border-color: var(--color-primary-moderate-blue);
+  }
 }
 
 /* individual sections */
@@ -264,7 +277,7 @@ textarea {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-template-areas:
-    "user-info user-info user-info user-info user-info user-info user-info ."
+    "user-info user-info user-info user-info user-info user-info user-info user-info"
     "textarea textarea textarea textarea textarea textarea textarea textarea"
     "counter counter . . . reply-btn reply-btn reply-btn";
 }
@@ -319,13 +332,13 @@ textarea {
     border-bottom-right-radius: var(--brdr-radius);
   }
   .content {
-    grid-template-columns: min-content repeat(7, 1fr);
+    grid-template-columns: min-content repeat(8, 1fr);
     gap: 10px 16px;
     grid-template-areas:
-      "counter user-info user-info user-info user-info user-info reply-btn reply-btn"
-      "counter textarea textarea textarea textarea textarea textarea textarea"
-      "counter textarea textarea textarea textarea textarea textarea textarea"
-      ". textarea textarea textarea textarea textarea textarea textarea";
+      "counter user-info user-info user-info user-info user-info reply-btn reply-btn reply-btn"
+      "counter textarea textarea textarea textarea textarea textarea textarea textarea"
+      "counter textarea textarea textarea textarea textarea textarea textarea textarea"
+      ". textarea textarea textarea textarea textarea textarea textarea textarea";
   }
   /* "user-info user-info user-info user-info user-info user-info user-info user-info"
     "textarea textarea textarea textarea textarea textarea textarea textarea"
@@ -333,10 +346,10 @@ textarea {
     "counter counter . delete-edit delete-edit delete-edit delete-edit delete-edit"; */
   [data-currentuser="true"] {
     grid-template-areas:
-      "counter user-info user-info user-info user-info user-info delete-edit delete-edit"
-      "counter textarea textarea textarea textarea textarea textarea textarea"
-      ". textarea textarea textarea textarea textarea textarea textarea"
-      ". . . . . . update-btn update-btn";
+      "counter user-info user-info user-info user-info user-info delete-edit delete-edit delete-edit"
+      "counter textarea textarea textarea textarea textarea textarea textarea textarea"
+      ". textarea textarea textarea textarea textarea textarea textarea textarea"
+      ". . . . . . update-btn update-btn update-btn";
   }
   .update-post-btn {
     justify-self: end;
@@ -348,7 +361,7 @@ textarea {
 .user-info {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   grid-area: user-info;
 }
 
@@ -734,6 +747,10 @@ div[hasReplies="false"] {
 
 .delete-btn {
   --delete-modal-btn-bg: var(--color-primary-soft-red);
+}
+
+.delete-comment-reply-modal-wrapper.show {
+  display: revert;
 }
 
 @media screen and (min-width: 46.845rem) {

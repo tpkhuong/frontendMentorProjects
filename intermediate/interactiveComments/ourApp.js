@@ -11,7 +11,9 @@
   const deleteModal = document.querySelector(
     ".delete-comment-replay-container"
   );
+  const deleteModalText = document.querySelector(".dynamic-text");
   const deleteModalWrapper = document.querySelector("[deletebtnclick]");
+  const cancelBtnInDeleteModal = document.querySelector(".cancel-btn");
   // const commentTextBox = document.querySelector(".comment-textbox");
   const commentTextBoxAvatarImg = document.querySelector(
     ".comment-textbox .avatar img"
@@ -19,6 +21,7 @@
   const selectUserModalWrapper = document.querySelector(
     ".select-user-modal-wrapper"
   );
+
   const arrayOfSelectUserBtns = Array.prototype.slice.call(
     document.querySelectorAll(".select-user-buttons-wrapper [selectuser]")
   );
@@ -610,6 +613,9 @@
     const addOneToLikeCounter = currentLikeCounter + 1;
     // update element with number class, the element keeping score of likes
     eventTarget.nextElementSibling.innerText = String(addOneToLikeCounter);
+
+    // assistive text
+    assistiveTextContainer.innerText = `${obj.uniqueIdObj.userInfo.name} increase likes counter of ${obj.contentForReplyAtUsernameTextbox} to ${addOneToLikeCounter} likes.`;
     /**
      * if obj.level == "base" we want to pass in top level/first array of data object
      * else run nestedlooping algorithm
@@ -678,6 +684,10 @@
     const currentLikes = Number(eventTarget.previousElementSibling.innerText);
     const subtractOneFromLikes = currentLikes - 1;
     eventTarget.previousElementSibling.innerText = String(subtractOneFromLikes);
+
+    // assistive text
+
+    assistiveTextContainer.innerText = `${obj.uniqueIdObj.userInfo.name} decrease likes counter of ${obj.contentForReplyAtUsernameTextbox} to ${subtractOneFromLikes} likes.`;
 
     /**
      * if obj.level == "base" we want to pass in top level/first array of data object
@@ -800,10 +810,31 @@
     console.log(eventTarget);
     console.log("delete");
 
+    // dynamic text for modal
+
+    const fullnameUppercased =
+      obj.uniqueIdObj.level != "base"
+        ? uppercaseFirstChar(obj.parentUsername)
+        : null;
+
+    deleteModalText.innerText =
+      obj.uniqueIdObj.level == "base"
+        ? `Are you sure you want to delete your comment? This will remove the comment and can't be undone.`
+        : `Are you sure you want to delete your reply post to ${fullnameUppercased}? This will remove the comment and can't be undone.`;
+
     // show delete modal
+
+    // document
+    //   .querySelector(".delete-comment-reply-modal-wrapper")
+    //   .classList.add("show");
+
     deleteModalWrapper.getAttribute("deletebtnclick") == "false"
       ? deleteModalWrapper.setAttribute("deletebtnclick", "true")
       : null;
+
+    // focus cancel btn in delete modal
+
+    deleteModal.focus();
 
     // select div with .comment if obj.uniqueIdObj.level == "base"
     // select element div with class uniqueID- "levelObj"level - replies using values / data in obj.parentDataObj
@@ -885,7 +916,13 @@
     // every time we click on delete btn next to edit btn
     // we will add click listener to delete modal
     cachedData.removeClickListenerOnDeleteModal = deleteModalListener;
-    applyEvent(deleteModal, "click", deleteModalListener);
+    /**
+     * adding click event listener to delete modal when user click on delete btn
+     * is making NVDA announce "clickable"
+     * **/
+    setTimeout(function addClick() {
+      applyEvent(deleteModal, "click", deleteModalListener);
+    }, 80);
     /**
      * we will bind the obj pass into deleteCommentOrReplyBtn
      * to the click event callback attached to the delete btn of the modal with class
@@ -1027,7 +1064,7 @@
      * when we mutate data/value of that obj in this func it will affect the original obj assigned to dataOfLocalStorageDeleteBtn
      * **/
 
-    console.log(this);
+    console.log(this.obj.parentUsername);
     // the obj bind to "this" will be obj with properties uniqueIdObj
     console.log(this.obj.uniqueIdObj);
     // console.log(this.dataOfLocalStorageDeleteBtn);
@@ -1056,6 +1093,15 @@
         //   .querySelector(`[uniqueID=${this.obj.uniqueIdObj.uniqueID}]`)
         //   .remove();
         /**
+         * level == "base" "your comment deleted"
+         * else "your reply post to username deleted"
+         * **/
+
+        assistiveTextContainer.innerText =
+          this.obj.uniqueIdObj.level == "base"
+            ? `your comment deleted`
+            : `your reply post to user ${this.obj.parentUsername} deleted`;
+        /**
          * we will handle selecting the parentElement and child element in deleteCommentOrReplyBtn where we bind this func
          * to the delete modal element click event listener
          * **/
@@ -1064,16 +1110,6 @@
         this.parentElementOfChildElementToRemove.removeChild(
           this.childElementWeWantRemoved
         );
-
-        /**
-         * level == "base" "your comment deleted"
-         * else "your reply post to username deleted"
-         * **/
-
-        assistiveTextContainer.innerText =
-          this.obj.uniqueIdObj.level == "base"
-            ? `your comment deleted`
-            : `your reply post to user ${this.parentUsername} deleted`;
 
         /**
          * does not effect UI, update the array of the uniqueID obj
@@ -1177,6 +1213,9 @@
         //   }
       }
       // hide delete modal
+      // document
+      //   .querySelector(".delete-comment-reply-modal-wrapper")
+      //   .classList.remove("show");
       deleteModalWrapper.getAttribute("deletebtnclick") == "true"
         ? deleteModalWrapper.setAttribute("deletebtnclick", "false")
         : null;
@@ -1267,9 +1306,19 @@
 
     // console.log(textareaEditBox);
 
+    /**
+     * show or hide edit textarea
+     * **/
+
     editBoxContainer.getAttribute("editBtnClick") == "false"
       ? editBoxContainer.setAttribute("editBtnClick", "true")
       : editBoxContainer.setAttribute("editBtnClick", "false");
+
+    /**
+     * focus edit textarea
+     * **/
+
+    textareaEditBox.focus();
 
     /**
      * ***** *****
@@ -1353,9 +1402,10 @@
      * else "edit your reply to username updated"
      * **/
 
-    obj.uniqueIdObj.level == "base"
-      ? `changes to your comment updated`
-      : `changes to your reply post to user ${this.parentUsername} updated`;
+    assistiveTextContainer.innerText =
+      obj.uniqueIdObj.level == "base"
+        ? `changes to your comment updated`
+        : `changes to your reply post to user ${obj.parentUsername} updated`;
 
     // change editbtnclick value to false to hide update textbox
 
@@ -1950,10 +2000,16 @@
       class: "plus",
       "aria-label": "increase score",
     });
+    /**
+     *  add svg element to change cover on hover
+     *  **/
+
     const plusImg = createElementForCommentOrReply("IMG", {
       src: "./images/icon-plus.svg",
       alt: "",
     });
+    // svg element
+    // append path element to svg
     // append plus img to button
     plusBtn.append(plusImg);
     // span .number
@@ -1967,10 +2023,15 @@
       class: "minus",
       "aria-label": "decrease score",
     });
+    /**
+     *  add svg element to change cover on hover
+     *  **/
     const minusImg = createElementForCommentOrReply("IMG", {
       src: "./images/icon-minus.svg",
       alt: "",
     });
+    // svg element
+    // append path element to svg
     // append minus img to button
     minusBtn.append(minusImg);
     // append children to likeCounter
@@ -2447,6 +2508,22 @@
     return list.filter(function findObjThatMatchUniqueID(eachObj) {
       return eachObj.uniqueID == matchingID;
     });
+  }
+
+  /**
+   * uppercase first char helper
+   * **/
+
+  function uppercaseFirstChar(str) {
+    const arrOfNames = str.split(" ");
+    const firstCharOfFirstname = arrOfNames[0].slice(0, 1).toUpperCase();
+    const restOfFirstname = arrOfNames[0].slice(1);
+    const firstCharOfLastname = arrOfNames[1].slice(0, 1).toUpperCase();
+    const restOfLastname = arrOfNames[1].slice(1);
+    const firstName = [firstCharOfFirstname, restOfFirstname].join("");
+    const lastName = [firstCharOfLastname, restOfLastname].join("");
+    const fullName = [firstName, lastName].join(" ");
+    return fullName;
   }
 
   function useLocalStorage() {
