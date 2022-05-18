@@ -28,6 +28,26 @@
   // access our cached data
   const callOurCachedFunc = useLocalStorage();
   const { data: cachedData, localStoragedata } = callOurCachedFunc();
+
+  /**
+   * check the length of comments array in local storage
+   * we will call JSON.parse(localStorage.getItem("commentDataObj"))
+   * assign the return value to a variable/identifer
+   * then if length of comments array is > 0 we will run nestedLooping building element func
+   * else do nothing
+   * **/
+
+  const contentOfLocalStorage = JSON.parse(
+    localStorage.getItem("commentDataObj")
+  );
+
+  contentOfLocalStorage.comments.length > 0
+    ? loopThroughDataInLocalStorageAndCreateElements(
+        contentOfLocalStorage.comments,
+        cachedData.repliesLevel
+      )
+    : null;
+
   // call our local storage func
   //   useLocalStorage();
   // add click event to select user btns wrapper
@@ -381,6 +401,11 @@
     /**
      * usernameUseForBtnsInReplyContentElement will be used for the delete,edit and atUser element
      * in contentContainer func
+     * **/
+
+    /**
+     * creating the content element when user click on reply post btn, we want access to the parent obj data
+     * and the data obj created in bindUniqueObjForReplyPostBtn on line 336
      * **/
 
     const replyContentWrapper = contentContainer(
@@ -759,10 +784,12 @@
     const replyBox = document.querySelector(
       `[uniqueID=${obj.uniqueIdObj.uniqueID}] .reply-textbox`
     );
+
     /**
      * remove the space of username
      * **/
 
+    // contentForReplyAtUsernameTextbox is parentUsername that we pass in as a value to contentContainer in bindUniqueObjForReplyPostBtn
     const userNameWithoutSpace = obj.contentForReplyAtUsernameTextbox
       .split(" ")
       .join("");
@@ -1679,6 +1706,10 @@
     data.currentUser.name = name;
   }
   // assign values to select user btns
+  /**
+   * as long as we dont update property userInfo in localStorage when user click on a profile to select a user
+   * each userDataObj in comments array or "leveObj"LevelReplies array will have the username. name and img we can use
+   * **/
   function assignValuesSelectUserBtns(btnsArray, arrayOfObj) {
     // items/length of both array both are the same
     const copyOfBtns = [...btnsArray];
@@ -1765,7 +1796,7 @@
       Number(cachedData.monthInNumber[createdAtObj.month]);
     // calculate difference in day
     const differenceInDay =
-      Number(currentTimeObj.day) - Number(createdAtObj.day);
+      Number(currentTimeObj.date) - Number(createdAtObj.date);
     return {
       differenceInYear,
       differenceInMonth,
@@ -1777,7 +1808,7 @@
    * run func based on conditions
    * **/
 
-  function callFuncCalculateDurationBasedOnConditions(createdAt, currentTime) {
+  function calculateDurationBasedOnConditions(createdAt, currentTime) {
     /**
      * this func will return a string of "1 day" or "2 days" etc
      * which will allow us to use the returned value to assign it to createdAt duration property
@@ -1943,9 +1974,19 @@
    * create elements
    * **/
 
-  function createElementForCommentOrReply(tag, objectOfAttr, contentValue) {
+  function createElementForCommentOrReply(
+    tag,
+    objectOfAttr,
+    contentValue,
+    xmlnsValue
+  ) {
     // create element
-    const elementForCommentOrReply = document.createElement(tag);
+    const elementForCommentOrReply = !xmlnsValue
+      ? document.createElement(tag)
+      : document.createElementNS(xmlnsValue, tag);
+    /**
+     * or check if xmlnsValue is truthy then we will call document.createELementNS else if its falsy we will call document.createElement
+     * **/
     // turn obj of attr into an array of subarrays with [attr,attrValue]
     const arrayOfSubarrayOfAttrAndAttrValue = Object.entries(objectOfAttr);
     // use forEach to assign attr to element
@@ -2000,18 +2041,36 @@
       class: "plus",
       "aria-label": "increase score",
     });
+    // const plusImg = createElementForCommentOrReply("IMG", {
+    //   src: "./images/icon-plus.svg",
+    //   alt: "",
+    // });
     /**
      *  add svg element to change cover on hover
      *  **/
-
-    const plusImg = createElementForCommentOrReply("IMG", {
-      src: "./images/icon-plus.svg",
-      alt: "",
-    });
     // svg element
+    const svgFormOfPlusImg = createElementForCommentOrReply(
+      "svg",
+      {
+        width: "11",
+        height: "11",
+      },
+      undefined,
+      "http://www.w3.org/2000/svg"
+    );
+    const pathOfSvgPlugImg = createElementForCommentOrReply(
+      "path",
+      {
+        d: "M6.33 10.896c.137 0 .255-.05.354-.149.1-.1.149-.217.149-.354V7.004h3.315c.136 0 .254-.05.354-.149.099-.1.148-.217.148-.354V5.272a.483.483 0 0 0-.148-.354.483.483 0 0 0-.354-.149H6.833V1.4a.483.483 0 0 0-.149-.354.483.483 0 0 0-.354-.149H4.915a.483.483 0 0 0-.354.149c-.1.1-.149.217-.149.354v3.37H1.08a.483.483 0 0 0-.354.15c-.1.099-.149.217-.149.353v1.23c0 .136.05.254.149.353.1.1.217.149.354.149h3.333v3.39c0 .136.05.254.15.353.098.1.216.149.353.149H6.33Z",
+        fill: "#C5C6EF",
+      },
+      undefined,
+      "http://www.w3.org/2000/svg"
+    );
     // append path element to svg
+    svgFormOfPlusImg.append(pathOfSvgPlugImg);
     // append plus img to button
-    plusBtn.append(plusImg);
+    plusBtn.append(svgFormOfPlusImg);
     // span .number
     const contentOfCounter = createElementForCommentOrReply(
       "SPAN",
@@ -2023,17 +2082,38 @@
       class: "minus",
       "aria-label": "decrease score",
     });
+    // const minusImg = createElementForCommentOrReply("IMG", {
+    //   src: "./images/icon-minus.svg",
+    //   alt: "",
+    // });
     /**
      *  add svg element to change cover on hover
      *  **/
-    const minusImg = createElementForCommentOrReply("IMG", {
-      src: "./images/icon-minus.svg",
-      alt: "",
-    });
+
     // svg element
+    const svgFormOfMinusImg = createElementForCommentOrReply(
+      "svg",
+      {
+        width: "11",
+        height: "3",
+      },
+      undefined,
+      "http://www.w3.org/2000/svg"
+    );
+
+    const pathOfSvgMinusImg = createElementForCommentOrReply(
+      "path",
+      {
+        d: "M9.256 2.66c.204 0 .38-.056.53-.167.148-.11.222-.243.222-.396V.722c0-.152-.074-.284-.223-.395a.859.859 0 0 0-.53-.167H.76a.859.859 0 0 0-.53.167C.083.437.009.57.009.722v1.375c0 .153.074.285.223.396a.859.859 0 0 0 .53.167h8.495Z",
+        fill: "#C5C6EF",
+      },
+      undefined,
+      "http://www.w3.org/2000/svg"
+    );
     // append path element to svg
+    svgFormOfMinusImg.append(pathOfSvgMinusImg);
     // append minus img to button
-    minusBtn.append(minusImg);
+    minusBtn.append(svgFormOfMinusImg);
     // append children to likeCounter
     appendChildrenToParent(likeCounter, [plusBtn, contentOfCounter, minusBtn]);
     // div .user-info
@@ -2061,6 +2141,34 @@
     // append status text to wrapper
     statusWrapper.append(statusContent);
     // > div .createdAt
+
+    /**
+     * we will handle calculating user's createdAt here.
+     * our duration func takes the createdAt value and currentTime value
+     * calculateDurationBasedOnConditions
+     * when we call contentContainer func when user click on "send" or "reply" btn the time will be 0 days because the data obj passed into this contentContainer
+     * func will have the date/time of when the user clicked on "send" or "reply" btn
+     * when we call contentContainer in our func that will build elements based on data in local storage
+     * the date/time unchanged since the user clicked on "send" or "reply" btn
+     * **/
+    /**
+     * pass in obj of createAt obj and currentTime obj
+     * we will use createTimeObj func to get currentTime obj
+     * uniqueIdObj[`${uniqueIdObj.uniqueId}time`].dateObj
+     * **/
+
+    const createAtObj = uniqueIdObj[`${uniqueIdObj.uniqueID}time`].dateObj;
+    const currentTimeObj = createTimeObj();
+
+    /**
+     * pass in obj {year: "2021", month: "August", date: "8"}
+     * to test our calculateDurationBasedOnConditions func
+     * **/
+
+    const durationValue = calculateDurationBasedOnConditions(
+      createAtObj,
+      currentTimeObj.dateObj
+    );
     const createdWrapper = createElementForCommentOrReply("DIV", {
       class: "createdat",
     });
@@ -2068,7 +2176,7 @@
     const durationElement = createElementForCommentOrReply(
       "SPAN",
       { class: "duration" },
-      "0 day"
+      durationValue
     );
     const durationTextContent = createElementForCommentOrReply(
       "SPAN",
@@ -2256,6 +2364,7 @@
             levelObj,
             parentDataObj,
           });
+
     applyEvent(
       contentContainerElement,
       "click",
@@ -2524,6 +2633,103 @@
     const lastName = [firstCharOfLastname, restOfLastname].join("");
     const fullName = [firstName, lastName].join(" ");
     return fullName;
+  }
+
+  /**
+   * func to build element based on data in localstorage
+   * **/
+
+  function loopThroughDataInLocalStorageAndCreateElements(
+    list,
+    repliesLevel,
+    parentObj = {}
+  ) {
+    /**
+     * comment content element
+     * we want div with uniqueID attr
+     * content element
+     * reply textbox
+     * vertical line replies wrapper
+     * append these elements to div with uniqueID attr
+     * we pass in dataObj and repliesLevelObj to all three funcs that create the three elements
+     * **/
+    list.forEach(function createElementFromDataStorage(eachObj) {
+      // create elements before we loop recursively
+      // check if level is base or not here
+      // uniqueId element
+      const uniqueIdElement = createElementForCommentOrReply("DIV", {
+        uniqueID: eachObj.uniqueID,
+      });
+      // content element
+      const contentELement =
+        eachObj.level == "base"
+          ? contentContainer(eachObj, cachedData.repliesLevel)
+          : contentContainer(
+              eachObj,
+              cachedData.repliesLevel,
+              parentObj.userInfo.name,
+              parentObj
+            );
+      // reply textbox
+      const replyTextbox = replyTextboxContainer(
+        eachObj,
+        cachedData.repliesLevel
+      );
+      // vertical and replies
+      const verticalLineAndReplies = lineAndRepliesContainer(
+        eachObj,
+        cachedData.repliesLevel
+      );
+      // uniqueIdElementParent
+      const uniqueIdElementParent =
+        eachObj.level == "base"
+          ? document.querySelector(".comments")
+          : document.querySelector(
+              `.${parentObj.uniqueID}-${
+                repliesLevel[parentObj.level]
+              }level-replies`
+            );
+      // append children to uniqueIdElement
+      uniqueIdElement.append(contentELement);
+      uniqueIdElement.append(replyTextbox);
+      uniqueIdElement.append(verticalLineAndReplies);
+      // append uniqueIdElement to correct parent element
+      uniqueIdElementParent.append(uniqueIdElement);
+      // element to append uniqueID element, either element with .comments or .uniqueID-levelObjLevel-replies
+      if (
+        eachObj.hasOwnProperty([
+          `${repliesLevel[eachObj.level]}LevelReplies`,
+        ]) &&
+        eachObj[`${repliesLevel[eachObj.level]}LevelReplies`].length > 0
+      ) {
+        loopThroughDataInLocalStorageAndCreateElements(
+          eachObj[`${repliesLevel[eachObj.level]}LevelReplies`],
+          repliesLevel,
+          eachObj
+        );
+      }
+    });
+    /**
+     * reply content elements
+     * we want div with uniqueID attr
+     * content element
+     * reply textbox
+     * vertical line replies wrapper
+     * append these elements to div with uniqueID attr
+     * for func that create content element we will pass in dataobj currentuser, repliesLevelObj,parentUserName,parent data obj
+     * for func that create reply textbox and vertical line replies wrapper elements
+     * we will pass in dataObj and repliesLevelObj
+     * we will append content element, reply textbox, vertical line replies wrapper to div with uniqueID attr element
+     * append the uniqueID attr element to element with this selector
+     * document.querySelector(`.${parentUniqueID}-${levelObj[parentLevel]}level-repies`)
+     * first level replies will have a parentLevel of base then we can use that value to access the value in levelObj
+     * which is will give us first
+     * base > first
+     * first > second etc
+     * **/
+    // check if level of obj base or not
+    // if base create comment content
+    // else create reply content
   }
 
   function useLocalStorage() {
