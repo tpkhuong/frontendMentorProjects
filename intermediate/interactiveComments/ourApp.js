@@ -48,6 +48,37 @@
       )
     : null;
 
+  console.log(contentOfLocalStorage);
+
+  /**
+   * change hasReplies attr of div with hasReplies and linerepliesbox attr
+   * use .querySelectorAll("[hasReplies]") then loop through array checking lastchild length if its greater than 0
+   * if it is greater change assign value "true" to attr hasReplies
+   * **/
+
+  Array.prototype.slice
+    .call(document.querySelectorAll("[hasreplies]"))
+    .forEach(function findOutLength(eachElement) {
+      if (eachElement.lastElementChild.childElementCount > 0) {
+        eachElement.getAttribute("hasReplies") == "false"
+          ? eachElement.setAttribute("hasReplies", "true")
+          : null;
+      }
+    });
+
+  /**
+   * when there is values in comments array of local storage, we will update currentUser info in cachedData with the data from localStorage
+   * run our changeCommentUserImgSelectBtnsReplyTextboxImg
+   * we will just have to pass in the current userName to func changeCommentUserImgSelectBtnsReplyTextboxImg
+   * **/
+
+  contentOfLocalStorage.comments.length > 0
+    ? ((cachedData.currentUser = contentOfLocalStorage.currUser),
+      changeCommentUserImgSelectBtnsReplyTextboxImg(
+        contentOfLocalStorage.currUser.userName
+      ))
+    : null;
+
   // call our local storage func
   //   useLocalStorage();
   // add click event to select user btns wrapper
@@ -1549,6 +1580,9 @@
           btnInUserModalClicked.getAttribute("class") !=
           "close-select-user-modal"
         ) {
+          const dataOfLocalStorageForSelectBtns = JSON.parse(
+            localStorage.getItem("commentDataObj")
+          );
           console.log("hello", cachedData.currentUser);
           /**
            * previous user algorithm works
@@ -1579,71 +1613,94 @@
             userFullname,
             cachedData
           );
+          /**
+           * ***** *****
+           * we can update the currUser property in local storage here
+           * ***** *****
+           * **/
 
+          dataOfLocalStorageForSelectBtns.currUser = cachedData.currentUser;
+
+          localStorage.setItem(
+            "commentDataObj",
+            JSON.stringify(dataOfLocalStorageForSelectBtns)
+          );
+
+          changeCommentUserImgSelectBtnsReplyTextboxImg(userBtnSelectname);
+          /**
+           * ***** *****
+           * code in this bracket moved to changeCommentUserImgSelectBtnsReplyTextboxImg
+           * ***** *****
+           **/
           // array of items to assign values to
-          const arrayOfObjWithValues = filterOutUserClicked(
-            userBtnSelectname,
-            cachedData.contentForSelectUserButtons
-          );
-          console.log(userBtnSelectname);
+          // const arrayOfObjWithValues = filterOutUserClicked(
+          //   userBtnSelectname,
+          //   cachedData.contentForSelectUserButtons
+          // );
+          // console.log(userBtnSelectname);
 
-          // console.log(previousSelectedUser);
-          console.log(arrayOfObjWithValues);
-          // assign values to select user btns
-          assignValuesSelectUserBtns(
-            arrayOfSelectUserBtns,
-            arrayOfObjWithValues
-          );
-          // change avatar img
-          commentTextBoxAvatarImg.setAttribute(
-            "src",
-            cachedData.currentUser.imgSrc
-          );
-          // select all element with user attr
-          // filter out element with user attr that match current user
-          // use foreach to loop through array and set value "true" to attr currentuser
-          // and filter out element with user attr that does not match current user
-          // use foreach to loop through array and set value "false" to attr currentuser
-          const [changeValueToTrue, changeValueToFalse] = Array.prototype.slice
-            .call(document.querySelectorAll("[user]"))
-            .reduce(
-              function makeTwoArrays(buildingUp, currentValue) {
-                // get value of attr user for each element
-                const userAttrValue = currentValue.getAttribute("user");
-                userAttrValue == cachedData.currentUser.name
-                  ? buildingUp[0].push(currentValue)
-                  : buildingUp[1].push(currentValue);
-                return buildingUp;
-                // if else statement
-                // if (userAttrValue == cachedData.currentUser.userName) {
-                //     buildingUp[0].push(currentValue);
-                // } else {
-                //     buildingUp[1].push(currentValue);
-                // }
-                // return buildingUp;
-              },
-              [[], []]
-            );
-          // use foreach to loop through array and set value "true" to attr currentuser
-          changeValueToTrue.forEach(function showDeleteAndEditBtn(element) {
-            if (element.getAttribute("data-currentUser") != "true") {
-              element.setAttribute("data-currentUser", "true");
-            }
-          });
-          // use foreach to loop through array and set value "false" to attr currentuser
-          changeValueToFalse.forEach(function showReplyBtn(element) {
-            if (element.getAttribute("data-currentUser") != "false") {
-              element.setAttribute("data-currentUser", "false");
-            }
-          });
-          // select all all element with this selector .reply-textbox .avatar img
-          // set src attr of each img element current user img file
-          // use value in cachedData.currentUser
-          Array.prototype.slice
-            .call(document.querySelectorAll(".reply-textbox .avatar img"))
-            .forEach(function changeImgSrc(eachImg) {
-              eachImg.setAttribute("src", cachedData.currentUser.imgSrc);
-            });
+          // // console.log(previousSelectedUser);
+          // console.log(arrayOfObjWithValues);
+          // // assign values to select user btns
+          // assignValuesSelectUserBtns(
+          //   arrayOfSelectUserBtns,
+          //   arrayOfObjWithValues
+          // );
+          // // change avatar img
+          // commentTextBoxAvatarImg.setAttribute(
+          //   "src",
+          //   cachedData.currentUser.imgSrc
+          // );
+          // // select all element with user attr
+          // // filter out element with user attr that match current user
+          // // use foreach to loop through array and set value "true" to attr currentuser
+          // // and filter out element with user attr that does not match current user
+          // // use foreach to loop through array and set value "false" to attr currentuser
+          // const [changeValueToTrue, changeValueToFalse] = Array.prototype.slice
+          //   .call(document.querySelectorAll("[user]"))
+          //   .reduce(
+          //     function makeTwoArrays(buildingUp, currentValue) {
+          //       // get value of attr user for each element
+          //       const userAttrValue = currentValue.getAttribute("user");
+          //       userAttrValue == cachedData.currentUser.name
+          //         ? buildingUp[0].push(currentValue)
+          //         : buildingUp[1].push(currentValue);
+          //       return buildingUp;
+          //       // if else statement
+          //       // if (userAttrValue == cachedData.currentUser.userName) {
+          //       //     buildingUp[0].push(currentValue);
+          //       // } else {
+          //       //     buildingUp[1].push(currentValue);
+          //       // }
+          //       // return buildingUp;
+          //     },
+          //     [[], []]
+          //   );
+          // // use foreach to loop through array and set value "true" to attr currentuser
+          // changeValueToTrue.forEach(function showDeleteAndEditBtn(element) {
+          //   if (element.getAttribute("data-currentUser") != "true") {
+          //     element.setAttribute("data-currentUser", "true");
+          //   }
+          // });
+          // // use foreach to loop through array and set value "false" to attr currentuser
+          // changeValueToFalse.forEach(function showReplyBtn(element) {
+          //   if (element.getAttribute("data-currentUser") != "false") {
+          //     element.setAttribute("data-currentUser", "false");
+          //   }
+          // });
+          // // select all all element with this selector .reply-textbox .avatar img
+          // // set src attr of each img element current user img file
+          // // use value in cachedData.currentUser
+          // Array.prototype.slice
+          //   .call(document.querySelectorAll(".reply-textbox .avatar img"))
+          //   .forEach(function changeImgSrc(eachImg) {
+          //     eachImg.setAttribute("src", cachedData.currentUser.imgSrc);
+          //   });
+          /**
+           * ***** *****
+           * code in this bracket moved to changeCommentUserImgSelectBtnsReplyTextboxImg
+           * ***** *****
+           **/
           console.log(cachedData.currentUser);
           // we want to reset the reply box value to empty str and
           // not show the reply box textarea
@@ -1685,6 +1742,75 @@
       }
     }
   }
+  /**
+   * changing comment textbox userImg, values in select user btns wrapper, img of reply textbox
+   * **/
+
+  function changeCommentUserImgSelectBtnsReplyTextboxImg(currUser) {
+    // array of items to assign values to
+    /**
+     * when app starts/loads we will update the currentUser value in cachedData from localStorage
+     * before running this func
+     * **/
+    const arrayOfObjWithValues = filterOutUserClicked(
+      currUser,
+      cachedData.contentForSelectUserButtons
+    );
+    console.log(currUser);
+
+    // console.log(previousSelectedUser);
+    console.log(arrayOfObjWithValues);
+    // assign values to select user btns
+    assignValuesSelectUserBtns(arrayOfSelectUserBtns, arrayOfObjWithValues);
+    // change avatar img
+    commentTextBoxAvatarImg.setAttribute("src", cachedData.currentUser.imgSrc);
+    // select all element with user attr
+    // filter out element with user attr that match current user
+    // use foreach to loop through array and set value "true" to attr currentuser
+    // and filter out element with user attr that does not match current user
+    // use foreach to loop through array and set value "false" to attr currentuser
+    const [changeValueToTrue, changeValueToFalse] = Array.prototype.slice
+      .call(document.querySelectorAll("[user]"))
+      .reduce(
+        function makeTwoArrays(buildingUp, currentValue) {
+          // get value of attr user for each element
+          const userAttrValue = currentValue.getAttribute("user");
+          userAttrValue == cachedData.currentUser.name
+            ? buildingUp[0].push(currentValue)
+            : buildingUp[1].push(currentValue);
+          return buildingUp;
+          // if else statement
+          // if (userAttrValue == cachedData.currentUser.userName) {
+          //     buildingUp[0].push(currentValue);
+          // } else {
+          //     buildingUp[1].push(currentValue);
+          // }
+          // return buildingUp;
+        },
+        [[], []]
+      );
+    // use foreach to loop through array and set value "true" to attr currentuser
+    changeValueToTrue.forEach(function showDeleteAndEditBtn(element) {
+      if (element.getAttribute("data-currentUser") != "true") {
+        element.setAttribute("data-currentUser", "true");
+      }
+    });
+    // use foreach to loop through array and set value "false" to attr currentuser
+    changeValueToFalse.forEach(function showReplyBtn(element) {
+      if (element.getAttribute("data-currentUser") != "false") {
+        element.setAttribute("data-currentUser", "false");
+      }
+    });
+    // select all all element with this selector .reply-textbox .avatar img
+    // set src attr of each img element current user img file
+    // use value in cachedData.currentUser
+    Array.prototype.slice
+      .call(document.querySelectorAll(".reply-textbox .avatar img"))
+      .forEach(function changeImgSrc(eachImg) {
+        eachImg.setAttribute("src", cachedData.currentUser.imgSrc);
+      });
+  }
+
   // hide select user buttons modal
   function hideSelectUserButtons(userModal) {
     const statusOfSelectUserModalCloseBtn = userModal.getAttribute(
@@ -1842,7 +1968,10 @@
               : 28
             : cachedData.numOfDaysOfMonths[createdAt.month];
         const totalDaysLeftInMonth = daysInCreatedAtMonth + currentTime.day;
-        return checkIfNeedPluralFormOfCreatedAtDuration(totalDaysLeftInMonth);
+        return checkIfNeedPluralFormOfCreatedAtDuration(
+          totalDaysLeftInMonth,
+          "month"
+        );
       }
     }
     /** **/
@@ -1851,7 +1980,12 @@
       if (differenceInMonth >= 0) {
         // check month
         // if month is >= 0 pass value of diff in year to checkifneedplural
-        return checkIfNeedPluralFormOfCreatedAtDuration(differenceInMonth);
+        // if both year and month is "2022" "May" and the other is "2021" "May"
+        // that will be one year since content was created
+        return checkIfNeedPluralFormOfCreatedAtDuration(
+          differenceInYear,
+          "year"
+        );
       } else {
         // else month is < 0
         // pass value of createdAt month and currentTime month in number form to monthCalcuation
@@ -1864,7 +1998,7 @@
     /** **/
     // if year > 1 pass diff in year value to checkifneedplural
     if (differenceInYear > 1) {
-      return checkIfNeedPluralFormOfCreatedAtDuration(differenceInYear);
+      return checkIfNeedPluralFormOfCreatedAtDuration(differenceInYear, "year");
     }
   }
 
@@ -1890,7 +2024,7 @@
 
   function daysCalculation(totalDays) {
     // totaldays will be number between 0 and 7
-    return checkIfNeedPluralFormOfCreatedAtDuration(totalDays, "days");
+    return checkIfNeedPluralFormOfCreatedAtDuration(totalDays, "day");
   }
 
   /**
@@ -2027,6 +2161,10 @@
      * like counter btns, reply, edit, delete btn and post update btn
      * **/
 
+    /**
+     * when user click on "send" or "reply" btn, the user is the currentUser
+     * but when we run func to create elements from data in local storage we want to check the current user in cachedData
+     **/
     const contentContainerElement = createElementForCommentOrReply("DIV", {
       class: "content",
       "data-currentUser": "true",
@@ -2164,9 +2302,9 @@
      * pass in obj {year: "2021", month: "August", date: "8"}
      * to test our calculateDurationBasedOnConditions func
      * **/
-
+    alert("check date");
     const durationValue = calculateDurationBasedOnConditions(
-      createAtObj,
+      { year: "2022", month: "Apr", date: "27" },
       currentTimeObj.dateObj
     );
     const createdWrapper = createElementForCommentOrReply("DIV", {
@@ -2654,6 +2792,7 @@
      * we pass in dataObj and repliesLevelObj to all three funcs that create the three elements
      * **/
     list.forEach(function createElementFromDataStorage(eachObj) {
+      console.log(cachedData.currentUser);
       // create elements before we loop recursively
       // check if level is base or not here
       // uniqueId element
@@ -2694,6 +2833,12 @@
       uniqueIdElement.append(replyTextbox);
       uniqueIdElement.append(verticalLineAndReplies);
       // append uniqueIdElement to correct parent element
+      /**
+       * we are appending the correct reply content element to uniqueIdElementParent
+       * but the parent element of uniqueIdElementParent has a attr hasreplies="false" which has display none
+       * we change it to "true" when user click on "reply" post btn
+       * find a way to assign value "true" to hasReplies attr
+       **/
       uniqueIdElementParent.append(uniqueIdElement);
       // element to append uniqueID element, either element with .comments or .uniqueID-levelObjLevel-replies
       if (
@@ -2815,6 +2960,7 @@
       /**
        * we will add obj to comment property dynamically
        * **/
+      currUser: null,
       comments: [],
     };
     if (localStorage.getItem("commentDataObj") == null) {
