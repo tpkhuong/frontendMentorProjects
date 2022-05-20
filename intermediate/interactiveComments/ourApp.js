@@ -72,7 +72,7 @@
    * we will just have to pass in the current userName to func changeCommentUserImgSelectBtnsReplyTextboxImg
    * **/
 
-  contentOfLocalStorage.comments.length > 0
+  contentOfLocalStorage.comments.length > 0 && contentOfLocalStorage.currUser
     ? ((cachedData.currentUser = contentOfLocalStorage.currUser),
       changeCommentUserImgSelectBtnsReplyTextboxImg(
         contentOfLocalStorage.currUser.userName
@@ -1967,11 +1967,11 @@
               ? 29
               : 28
             : cachedData.numOfDaysOfMonths[createdAt.month];
-        const totalDaysLeftInMonth = daysInCreatedAtMonth + currentTime.day;
-        return checkIfNeedPluralFormOfCreatedAtDuration(
-          totalDaysLeftInMonth,
-          "month"
-        );
+        const daysLeftInCreatedAtMonth =
+          daysInCreatedAtMonth - Number(createdAt.date);
+        const totalDaysLeft =
+          daysLeftInCreatedAtMonth + Number(currentTime.date);
+        return calculateDayAndWeek(totalDaysLeft);
       }
     }
     /** **/
@@ -2210,10 +2210,11 @@
     // append plus img to button
     plusBtn.append(svgFormOfPlusImg);
     // span .number
+
     const contentOfCounter = createElementForCommentOrReply(
       "SPAN",
       { class: "number" },
-      "0"
+      `${uniqueIdObj[`${uniqueIdObj.uniqueID}score`]}`
     );
     // button .minus > img minus
     const minusBtn = createElementForCommentOrReply("BUTTON", {
@@ -2302,9 +2303,9 @@
      * pass in obj {year: "2021", month: "August", date: "8"}
      * to test our calculateDurationBasedOnConditions func
      * **/
-    alert("check date");
+
     const durationValue = calculateDurationBasedOnConditions(
-      { year: "2022", month: "Apr", date: "27" },
+      { year: "2022", month: "Apr", date: "20" },
       currentTimeObj.dateObj
     );
     const createdWrapper = createElementForCommentOrReply("DIV", {
