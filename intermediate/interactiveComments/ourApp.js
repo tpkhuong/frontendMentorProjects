@@ -14,6 +14,7 @@
   const deleteModalText = document.querySelector(".dynamic-text");
   const deleteModalWrapper = document.querySelector("[deletebtnclick]");
   const cancelBtnInDeleteModal = document.querySelector(".cancel-btn");
+  const deleteBtnInDeleteModal = document.querySelector(".delete-btn");
   // const commentTextBox = document.querySelector(".comment-textbox");
   const commentTextBoxAvatarImg = document.querySelector(
     ".comment-textbox .avatar img"
@@ -973,13 +974,18 @@
     // use it in our delete modal bind func to remove listener
     // every time we click on delete btn next to edit btn
     // we will add click listener to delete modal
-    cachedData.removeClickListenerOnDeleteModal = deleteModalListener;
+    cachedData.removeClickListenerOnDeleteModal = [
+      deleteModalListener,
+      tabOrderDeleteModal,
+    ];
+    cachedData.focusElementForEscapeKey = eventTarget;
     /**
      * adding click event listener to delete modal when user click on delete btn
      * is making NVDA announce "clickable"
      * **/
     setTimeout(function addClick() {
       applyEvent(deleteModal, "click", deleteModalListener);
+      applyEvent(deleteModal, "keydown", tabOrderDeleteModal);
     }, 80);
     /**
      * we will bind the obj pass into deleteCommentOrReplyBtn
@@ -1279,13 +1285,46 @@
         : null;
       // remove click listener from delete modal
       // console.log(cachedData.testing);
-      deleteModal.removeEventListener(
-        "click",
-        cachedData.removeClickListenerOnDeleteModal
-      );
+      const [removeClick, removeKeydown] =
+        cachedData.removeClickListenerOnDeleteModal;
+      deleteModal.removeEventListener("click", removeClick);
+      deleteModal.removeEventListener("keydown", removeKeydown);
       // focus the delete btn that launch delete modal
       this.eventTarget.focus();
     }
+  }
+
+  /**
+   * tabbing order for delete modal
+   * **/
+
+  function tabOrderDeleteModal(event) {
+    // hitting escape key
+    if (event.code == "Escape") {
+      deleteModalWrapper.getAttribute("deletebtnclick") == "true"
+        ? deleteModalWrapper.setAttribute("deletebtnclick", "false")
+        : null;
+      const [removeClick, removeKeydown] =
+        cachedData.removeClickListenerOnDeleteModal;
+      deleteModal.removeEventListener("click", removeClick);
+      deleteModal.removeEventListener("keydown", removeKeydown);
+      // focus delete btn next to edit btn
+      cachedData.focusElementForEscapeKey.focus();
+    }
+    // use holding shift key
+    if (event.shiftKey) {
+      // user is holding down shift key
+
+      event.code == "Tab" && document.activeElement == cancelBtnInDeleteModal
+        ? (deleteBtnInDeleteModal.focus(), event.preventDefault())
+        : null;
+    } else {
+      // user not holding down shift key
+      event.code == "Tab" && document.activeElement == deleteBtnInDeleteModal
+        ? (cancelBtnInDeleteModal.focus(), event.preventDefault())
+        : null;
+    }
+    console.log(event);
   }
 
   /**
@@ -2881,6 +2920,7 @@
   function useLocalStorage() {
     // data obj
     const data = {
+      focusElementForEscapeKey: null,
       savedDeleteContentElement: null,
       removeClickListenerOnDeleteModal: null,
       parentIdForDeleteAlgorithm: null,
