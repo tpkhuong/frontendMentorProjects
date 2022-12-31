@@ -1,2 +1,4 @@
 /node_modules/
 .env
+/intermediate/ipAddressTracker/.env
+/advanced/mernProjects/rpsGame/node_modules/

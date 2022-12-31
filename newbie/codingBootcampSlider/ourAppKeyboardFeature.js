@@ -1,14 +1,80 @@
 function ourSelectors() {
+  var parentElementOfProfileDisplay = document.querySelector(".testimonials");
   var sectionElementContentContainers = document.querySelectorAll(
     ".testimonial"
   );
 
   return {
     sectionElementContentContainers,
+    parentElementOfProfileDisplay,
   };
 }
 
-touchFuntionality();
+keyboardSwitchProfile();
+
+function keyboardSwitchProfile(
+  {
+    parentElementOfProfileDisplay,
+    sectionElementContentContainers,
+  } = ourSelectors()
+) {
+  parentElementOfProfileDisplay.addEventListener(
+    "keydown",
+    function switchingProfileArrowKeys(event) {
+      /***** ArrowDown: code = "ArrowDown" key: "ArrowDown" keyCode: 40 *****/
+      /***** ArrowUp: code = "ArrowUp" key: "ArrowUp" keyCode: 38 *****/
+      /***** ArrowLeft: code = "ArrowLeft" key: "ArrowLeft" keyCode: 37 *****/
+      /***** ArrowRight: code = "ArrowRight" key: "ArrowRight" keyCode: 39 *****/
+
+      // var classOfProfileDisplay = event.target.parentElement.parentElement.parentElement.className.split(
+      //   " "
+      // )[1];
+      console.log(event);
+      if (
+        event.code == "ArrowDown" ||
+        event.key == "ArrowDown" ||
+        event.keyCode == 40
+      ) {
+        findIndexAndApplyMoveOffScreen(sectionElementContentContainers);
+      } else if (
+        event.code == "ArrowUp" ||
+        event.key == "ArrowUp" ||
+        event.keyCode == 38
+      ) {
+        findIndexAndApplyMoveOffScreen(sectionElementContentContainers);
+      } else if (
+        event.code == "ArrowLeft" ||
+        event.key == "ArrowLeft" ||
+        event.keyCode == 37
+      ) {
+        findIndexAndApplyMoveOffScreen(sectionElementContentContainers);
+      } else if (
+        event.code == "ArrowRight" ||
+        event.key == "ArrowRight" ||
+        event.keyCode == 39
+      ) {
+        findIndexAndApplyMoveOffScreen(sectionElementContentContainers);
+      }
+    }
+  );
+}
+
+function findIndexAndApplyMoveOffScreen(arrOfProfileContainers) {
+  var strToPassToIndexFunc = "move-off-screen";
+  var convertToArrProfileElements = Array.from(arrOfProfileContainers);
+  var indexOfElementWithMoveOffScreen = findIndexOfElement(
+    convertToArrProfileElements,
+    strToPassToIndexFunc
+  );
+
+  applyClassMoveOffScreen(
+    convertToArrProfileElements,
+    indexOfElementWithMoveOffScreen
+  );
+  console.log(indexOfElementWithMoveOffScreen);
+}
+
+// touchFuntionality();
 
 function touchFuntionality(
   { sectionElementContentContainers } = ourSelectors()
@@ -123,12 +189,12 @@ function applyClassMoveOffScreen(
 
   switch (indexOfElementWithClass) {
     case 0:
-      firstProfile.classList.add("move-off-screen");
-      secondProfile.classList.remove("move-off-screen");
-      break;
-    case 1:
       firstProfile.classList.remove("move-off-screen");
       secondProfile.classList.add("move-off-screen");
+      break;
+    case 1:
+      firstProfile.classList.add("move-off-screen");
+      secondProfile.classList.remove("move-off-screen");
   }
 }
 

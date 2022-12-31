@@ -7,20 +7,20 @@
     <meta name="description" content="Learning Nodejs" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="stylesheet" href="ourStyles.css" />
+    <link rel="stylesheet" href="ourStylesSwipeFeature.css" />
     <title>Coding Bootcamp Testimonials Slider</title>
   </head>
   <body>
     <div class="testimonials">
-      <section role="region" class="testimonial female">
+      <section role="region" class="testimonial first-profile-display">
         <article class="img-container">
           <img
             src="images/image-tanya.jpg"
             alt="female wearing white t-shirt, black coat with a red scarf"
           />
           <div class="arrows">
-            <span class="left-arrow"></span>
-            <span class="right-arrow"></span>
+            <button class="left-arrow"></button>
+            <button class="right-arrow"></button>
           </div>
         </article>
         <article class="text-container">
@@ -36,15 +36,18 @@
           </div>
         </article>
       </section>
-      <section role="region" class="testimonial male">
+      <section
+        role="region"
+        class="testimonial second-profile-display move-off-screen"
+      >
         <article class="img-container">
           <img
             src="images/image-john.jpg"
             alt="male wearing faded navy blue t-shirt with fitbit and crossed arms."
           />
           <div class="arrows">
-            <span class="left-arrow"></span>
-            <span class="right-arrow"></span>
+            <button class="left-arrow"></button>
+            <button class="right-arrow"></button>
           </div>
         </article>
         <article class="text-container">

@@ -49,6 +49,14 @@ body {
   font-size: var(--fs-200);
 }
 
+button {
+  border: none;
+  background-color: transparent;
+}
+
+button:focus {
+  outline: 2px solid red;
+}
 /* utilities */
 
 .flow-content > * + * {
@@ -298,4 +306,8 @@ body {
     margin: 0.9rem;
     padding: 0.7rem;
   }
+}
+
+.second-profile-display .img-container .arrows:focus-within {
+  /* margin: 3em; */
 }

@@ -49,6 +49,11 @@ body {
   font-size: var(--fs-200);
 }
 
+button {
+  border: none;
+  background-color: transparent;
+}
+
 /* utilities */
 
 .flow-content > * + * {
@@ -149,8 +154,8 @@ body {
   background-size: cover;
   padding: 2.5em;
 
-  /* giving our img container a position: relative it was cover our text when we use transform: translateX() on our 
-  class of text-content div element. fix was to add z-index on the siling element to img-container which is text-container
+  /* giving our img container a position: relative it was covering our text when we use transform: translateX() on our 
+  class of text-content div element. fix was to add z-index on the silbing element to img-container which is text-container
   */
   position: relative;
 }
