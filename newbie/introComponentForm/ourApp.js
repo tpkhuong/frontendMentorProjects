@@ -7,6 +7,7 @@ function ourSelectors() {
   var arrInputElementsWithRequiredAttr =
     document.querySelectorAll("input[required]");
   var bodyElement = document.querySelector("body");
+  var submitBtn = document.getElementById("submit-btn");
 
   return {
     bodyElement,
@@ -16,6 +17,7 @@ function ourSelectors() {
     passwordInput,
     formElement,
     arrInputElementsWithRequiredAttr,
+    submitBtn,
   };
 }
 
@@ -31,12 +33,13 @@ function customeValidMessage(
     passwordInput,
     formElement,
     arrInputElementsWithRequiredAttr,
+    submitBtn,
   } = ourSelectors()
 ) {
   let spanElementInErrorContainer;
   let imgContainerWithErrorImg;
   var testStr;
-  formElement.addEventListener("submit", function showInvalidMessage(event) {
+  submitBtn.addEventListener("click", function showInvalidMessage(event) {
     // event.preventDefault();
     console.log(event);
     /***** loop through the input elements *****/

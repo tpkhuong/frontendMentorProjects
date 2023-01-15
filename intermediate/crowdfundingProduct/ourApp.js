@@ -692,7 +692,6 @@ function eventFeaturesOnModalDialogOne(eventInput) {
     eventInput.target.parentElement.className.includes("close-dialog1")
   ) {
     /* idea: when close btn clicked or escape btn is pressed we access to the arr with the first clicked element from fundriser or pledge selected */
-
     if (clickedElement != undefined) {
       ourArray = clickedElement();
       // console.log(this);
@@ -1281,7 +1280,6 @@ function updateTotalAmtDisplay(strInput) {
   }
 }
 
-alert("refactor our app.js file");
 function updateProgressBar(strInput) {
   var convertStrToNum = Number(strInput);
   var calculatedPercentForProgressBar = (convertStrToNum / 100000) * 100;

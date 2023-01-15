@@ -7,6 +7,8 @@
   --clr-dark-blue: hsl(249, 10%, 26%);
   --clr-grayish-blue: hsl(246, 25%, 77%);
 
+  --box-shadow: 0 8px rgba(0, 0, 0, 0.1);
+
   --fs-200: 0.9375rem;
   --fs-300: 1rem;
   --fs-400: 1.25rem;
@@ -285,17 +287,26 @@ a:focus {
     font-weight: 100;
     text-align: left;
   }
+  .form-component {
+    background-image: url("images/bg-intro-mobile.png");
+    background-color: var(--clr-primary-red);
+    min-height: 100vh;
+    padding-inline: 80px;
+    padding-block-start: 64px;
+  }
+  .wrapper {
+    padding: revert;
+  }
 }
 
 /* form */
 form[action="#"] {
   background-color: #fff;
-  border: 0.1em solid blue;
   /* display: flex;
   flex-flow: column; */
   padding: 1.3em;
   margin: 1.7em 0 0 0;
-  box-shadow: inset 0 -0.3em rgb(0, 0, 0, 0.2);
+  box-shadow: var(--box-shadow);
 }
 
 /* form[action="#"] > * {
@@ -342,7 +353,7 @@ label[for] {
   --btn-fg: #fff;
   padding: 1.5em 3em;
   margin: 4.3em 0 0 0;
-  box-shadow: inset 0 -0.3em rgb(107, 148, 107, 0.3);
+  box-shadow: var(--box-shadow);
   min-width: 100%;
 }
 

@@ -533,7 +533,13 @@ there won't be a empty space above the .slider-icon-wrapper with these codes
 
 /* toggle feature: when button is pressed/clicked set aria-checked to true then move span circle right */
 
+.toggle-button[aria-checked="false"] .toggle-circle {
+  transition: transform 500ms linear;
+  transform: translateX(0);
+}
+
 .toggle-button[aria-checked="true"] .toggle-circle {
+  transition: transform 500ms linear;
   transform: translateX(100%);
 }
 
