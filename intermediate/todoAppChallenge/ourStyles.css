@@ -827,7 +827,7 @@ div[data-checked="true"] {
   background-image: var(--checked-button-gradient);
 }
 
-.circle-testing {
+.circle-indicator {
   pointer-events: none;
   min-width: 25px;
   min-height: 24px;

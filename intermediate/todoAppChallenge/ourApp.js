@@ -5000,7 +5000,7 @@
       "data-todocompleted",
       "true"
     );
-    // div with circle-testing
+    // div with circle-indicator
     matchingAllViewIndexItemInAllViewArray.firstElementChild.children[0].setAttribute(
       "data-checked",
       "true"
